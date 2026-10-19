@@ -19,6 +19,10 @@ def fetch(url,target,expected,size):
     partial=target.with_name(target.name+'.download')
     offset=partial.stat().st_size if partial.exists() else 0
     if offset>size:partial.unlink();offset=0
+    if offset==size and partial.exists():
+        if sha(partial)==expected:
+            partial.replace(target);print('Verified completed download:',target.name,flush=True);return
+        partial.unlink();offset=0
     headers={'User-Agent':'ContractEdge-download/1'}
     if offset:headers['Range']='bytes='+str(offset)+'-'
     with urllib.request.urlopen(urllib.request.Request(url,headers=headers),timeout=120) as response:
