@@ -1,0 +1,7 @@
+datasets/
+*.tar
+*.tar.gz
+*.part-*
+*.download
+__pycache__/
+.env
