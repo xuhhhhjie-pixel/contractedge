@@ -2,7 +2,7 @@
 
 真实云原生声明式部署与配置缺陷修复 Benchmark。当前冻结资源为 **R1–R5各30条，共150条**；R1另27条备用保留于原资源池，不进入本实验分母。
 
-**GitHub发布准备中。** 仓库保存说明、成员索引与下载工具；完整实验包使用Releases分卷提供，待全部附件上传及核验后发布。
+**完整实验包已发布。** 仓库保存说明、成员索引与下载工具；五类完整包见 [Benchmark v1 Release](https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/benchmark-v1-20261019)。每个上传附件的远端SHA-256已与服务器产生的字节核对。
 
 ## Benchmark分类
 

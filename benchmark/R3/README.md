@@ -4,7 +4,7 @@
 
 正式成员：**30条**。分类依据生产故障边界；verifier观察终点另行记录。case_id中的历史前缀不自动决定当前类别。
 
-本目录是成员索引，完整实验包位于本仓库Releases（发布完成后可下载），包含源码、公开任务、私有评分材料、离线依赖和固定镜像。
+本目录是成员索引，完整实验包位于本仓库Releases，包含源码、公开任务、私有评分材料、离线依赖和固定镜像。
 
 ```bash
 python3 tools/download_benchmark.py --class R3 --dest ./datasets --extract

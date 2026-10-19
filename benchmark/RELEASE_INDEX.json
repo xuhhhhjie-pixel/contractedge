@@ -1,0 +1,199 @@
+{
+  "schema_version": "contractedge.github_release_assets.v1",
+  "status": "COMPLETE",
+  "repo": "xuhhhhjie-pixel/contractedge",
+  "tag": "benchmark-v1-20261019",
+  "cases": 150,
+  "created_at": "2026-10-19T19:36:25.487489+08:00",
+  "classes": {
+    "R1": {
+      "status": "COMPLETE",
+      "case_count": 30,
+      "archive_name": "R1-quality30-full-20261019.tar.gz",
+      "archive_root": "R1-quality30-full-20261019",
+      "archive_bytes": 174069602,
+      "archive_sha256": "cba76b08d50c5711e1994a373edc3a884545f6cc1589f9425b4d10c2220965fe",
+      "parts": [
+        {
+          "name": "R1-quality30-full-20261019.tar.gz",
+          "bytes": 174069602,
+          "sha256": "cba76b08d50c5711e1994a373edc3a884545f6cc1589f9425b4d10c2220965fe",
+          "asset_id": 656100985,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R1-quality30-full-20261019.tar.gz",
+          "remote_digest": "sha256:cba76b08d50c5711e1994a373edc3a884545f6cc1589f9425b4d10c2220965fe"
+        }
+      ],
+      "package_entry_sha256": "538956af7215ab02db0e45a734f72b53f63f739ccab53ff2ca9536f3f9bbf438",
+      "payload_checksums_sha256": "cf552cfd92c436f0458dac24c9880e7ecb9454bb130bc6e676c806819af2c292"
+    },
+    "R2": {
+      "status": "COMPLETE",
+      "case_count": 30,
+      "archive_name": "R2-quality30-full-20261019.tar.gz",
+      "archive_root": "R2-quality30-full-20261019",
+      "archive_bytes": 8340347170,
+      "archive_sha256": "d95fe24f5286fdff6797b28476c256152038bb56cb495b29854770b2549a5fa5",
+      "parts": [
+        {
+          "name": "R2-quality30-full-20261019.tar.gz.part-001",
+          "bytes": 1800000000,
+          "sha256": "e2868b8bdfb16dda82ec1258d77c863b566db75446258bfbc26cca1b2caa63e8",
+          "asset_id": 656102218,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R2-quality30-full-20261019.tar.gz.part-001",
+          "remote_digest": "sha256:e2868b8bdfb16dda82ec1258d77c863b566db75446258bfbc26cca1b2caa63e8"
+        },
+        {
+          "name": "R2-quality30-full-20261019.tar.gz.part-002",
+          "bytes": 1800000000,
+          "sha256": "382b58833756c4fe5f8c86892ebbc701258268569a1592e18b77780625764e5a",
+          "asset_id": 656113012,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R2-quality30-full-20261019.tar.gz.part-002",
+          "remote_digest": "sha256:382b58833756c4fe5f8c86892ebbc701258268569a1592e18b77780625764e5a"
+        },
+        {
+          "name": "R2-quality30-full-20261019.tar.gz.part-003",
+          "bytes": 1800000000,
+          "sha256": "6349babccb14576e8a7ce14dbd6eb29ade2f29788731256abf0ee83f96a6b752",
+          "asset_id": 656120602,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R2-quality30-full-20261019.tar.gz.part-003",
+          "remote_digest": "sha256:6349babccb14576e8a7ce14dbd6eb29ade2f29788731256abf0ee83f96a6b752"
+        },
+        {
+          "name": "R2-quality30-full-20261019.tar.gz.part-004",
+          "bytes": 1800000000,
+          "sha256": "5cef0e0d7cb36eec19ece36218d78094e4a71d20fd8a7ab821a05a188ffaad90",
+          "asset_id": 656129095,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R2-quality30-full-20261019.tar.gz.part-004",
+          "remote_digest": "sha256:5cef0e0d7cb36eec19ece36218d78094e4a71d20fd8a7ab821a05a188ffaad90"
+        },
+        {
+          "name": "R2-quality30-full-20261019.tar.gz.part-005",
+          "bytes": 1140347170,
+          "sha256": "9f6c800eafbcea3033e6a8c99e3d8527e967fbc1458acce707dd055b6ece775b",
+          "asset_id": 656135843,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R2-quality30-full-20261019.tar.gz.part-005",
+          "remote_digest": "sha256:9f6c800eafbcea3033e6a8c99e3d8527e967fbc1458acce707dd055b6ece775b"
+        }
+      ],
+      "package_entry_sha256": "d61a88a4129a549688ccd62a255c3e747c2e0f1118f9578e89ae26ef845c0e5e",
+      "payload_checksums_sha256": "2ae09c88c495af6a66aa78495a0208c4629ad243c0102d1a2d44cc6cdf0fb4b6"
+    },
+    "R3": {
+      "status": "COMPLETE",
+      "case_count": 30,
+      "archive_name": "R3-quality30-full-20261019.tar.gz",
+      "archive_root": "R3-quality30-full-20261019",
+      "archive_bytes": 4763700044,
+      "archive_sha256": "63a48a7a41e8cb80e317e3728376329212ef72a66d092fbb747b1437b7e910db",
+      "parts": [
+        {
+          "name": "R3-quality30-full-20261019.tar.gz.part-001",
+          "bytes": 1800000000,
+          "sha256": "867b61c226546b8b99fd489c3c576c9fab822fb36e2037d606f7f8684b6c5edb",
+          "asset_id": 656140188,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R3-quality30-full-20261019.tar.gz.part-001",
+          "remote_digest": "sha256:867b61c226546b8b99fd489c3c576c9fab822fb36e2037d606f7f8684b6c5edb"
+        },
+        {
+          "name": "R3-quality30-full-20261019.tar.gz.part-002",
+          "bytes": 1800000000,
+          "sha256": "b366c917640711c06495a3e679934d73aa09e9fe204d062dbc85ae41d01d1d1b",
+          "asset_id": 656147415,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R3-quality30-full-20261019.tar.gz.part-002",
+          "remote_digest": "sha256:b366c917640711c06495a3e679934d73aa09e9fe204d062dbc85ae41d01d1d1b"
+        },
+        {
+          "name": "R3-quality30-full-20261019.tar.gz.part-003",
+          "bytes": 1163700044,
+          "sha256": "aa9a40952fdad02d4857329943cf6e952ce86e241eaef46a9a1149302178eccb",
+          "asset_id": 656154186,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R3-quality30-full-20261019.tar.gz.part-003",
+          "remote_digest": "sha256:aa9a40952fdad02d4857329943cf6e952ce86e241eaef46a9a1149302178eccb"
+        }
+      ],
+      "package_entry_sha256": "ac97cf0296bb03ef5dd3a6888581954ba6f26b5732e30dd0c08263d8da9c974c",
+      "payload_checksums_sha256": "2732d189fe3a11ad7a5663f64bf1f06ae87df4733adb2efa565c79f9daa320bc"
+    },
+    "R4": {
+      "status": "COMPLETE",
+      "case_count": 30,
+      "archive_name": "R4-quality30-full-20261019.tar.gz",
+      "archive_root": "R4-quality30-full-20261019",
+      "archive_bytes": 4451782646,
+      "archive_sha256": "222c48a516785f6bb4cb52746530dca2813d960cca6e2cb3c8361e57441c5db1",
+      "parts": [
+        {
+          "name": "R4-quality30-full-20261019.tar.gz.part-001",
+          "bytes": 1800000000,
+          "sha256": "dce83e08fca60df298ffaec2d4064e773b1085579164d9d15da158a18b714bb6",
+          "asset_id": 656160121,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R4-quality30-full-20261019.tar.gz.part-001",
+          "remote_digest": "sha256:dce83e08fca60df298ffaec2d4064e773b1085579164d9d15da158a18b714bb6"
+        },
+        {
+          "name": "R4-quality30-full-20261019.tar.gz.part-002",
+          "bytes": 1800000000,
+          "sha256": "5082888e2c2c269fbb19a4feccb4639b54e5253581c495b28cb8ebde52b9e1f5",
+          "asset_id": 656168913,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R4-quality30-full-20261019.tar.gz.part-002",
+          "remote_digest": "sha256:5082888e2c2c269fbb19a4feccb4639b54e5253581c495b28cb8ebde52b9e1f5"
+        },
+        {
+          "name": "R4-quality30-full-20261019.tar.gz.part-003",
+          "bytes": 851782646,
+          "sha256": "f9bd2b111491071634a0a7f1a93c5c9ff391c27cf6bcca4484adde6d4e4d21bc",
+          "asset_id": 656178082,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R4-quality30-full-20261019.tar.gz.part-003",
+          "remote_digest": "sha256:f9bd2b111491071634a0a7f1a93c5c9ff391c27cf6bcca4484adde6d4e4d21bc"
+        }
+      ],
+      "package_entry_sha256": "2bc23d61df0176c5809b8b8c61a2b06abb995d16837c73db18cf35f95e6ee3b5",
+      "payload_checksums_sha256": "5c912d30aa9ec003555cc6e83a9b1e3608a08e70d49a8107e7a56941928ae932"
+    },
+    "R5": {
+      "status": "COMPLETE",
+      "case_count": 30,
+      "archive_name": "R5-quality30-full-20261019.tar.gz",
+      "archive_root": "R5-quality30-full-20261019",
+      "archive_bytes": 6689774133,
+      "archive_sha256": "02ce2a05465ce337a7b0911522a024c5455697b9e97b94dcc6ed2a7d8d3625a4",
+      "parts": [
+        {
+          "name": "R5-quality30-full-20261019.tar.gz.part-001",
+          "bytes": 1800000000,
+          "sha256": "d27b818cbeb9aad44b9fb1630ce05fb9c5eb0674a7cffbe9f70c5117c4b4a572",
+          "asset_id": 656183205,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R5-quality30-full-20261019.tar.gz.part-001",
+          "remote_digest": "sha256:d27b818cbeb9aad44b9fb1630ce05fb9c5eb0674a7cffbe9f70c5117c4b4a572"
+        },
+        {
+          "name": "R5-quality30-full-20261019.tar.gz.part-002",
+          "bytes": 1800000000,
+          "sha256": "0c3fb5bae00fa020d81df7a51ca090b7c0c556c6c70efd51f2c238173ce0b7c1",
+          "asset_id": 656193478,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R5-quality30-full-20261019.tar.gz.part-002",
+          "remote_digest": "sha256:0c3fb5bae00fa020d81df7a51ca090b7c0c556c6c70efd51f2c238173ce0b7c1"
+        },
+        {
+          "name": "R5-quality30-full-20261019.tar.gz.part-003",
+          "bytes": 1800000000,
+          "sha256": "1036478ec31a40b985601fd0d3167cb4e1ed84611d8fb6ebe378797ab19afa55",
+          "asset_id": 656204356,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R5-quality30-full-20261019.tar.gz.part-003",
+          "remote_digest": "sha256:1036478ec31a40b985601fd0d3167cb4e1ed84611d8fb6ebe378797ab19afa55"
+        },
+        {
+          "name": "R5-quality30-full-20261019.tar.gz.part-004",
+          "bytes": 1289774133,
+          "sha256": "f24404de9ef9e800f7a336906f87ac50fccbd8c737fc9f4bae55e793101600a3",
+          "asset_id": 656213314,
+          "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/benchmark-v1-20261019/R5-quality30-full-20261019.tar.gz.part-004",
+          "remote_digest": "sha256:f24404de9ef9e800f7a336906f87ac50fccbd8c737fc9f4bae55e793101600a3"
+        }
+      ],
+      "package_entry_sha256": "c59f02dd1a7f5c534ce3a92f05f7077582067a896feff33653c05ec5f17d7875",
+      "payload_checksums_sha256": "9ca30358be314304f46af402845c5cde4781797b1138a7ce445299cfa3fb48b8"
+    }
+  },
+  "platform": "Linux/amd64; rootless Docker; task-specific resources; no all-case fresh-machine/model baseline claim"
+}
