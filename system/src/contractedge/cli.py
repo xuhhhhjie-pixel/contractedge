@@ -242,6 +242,12 @@ def _prepare(args: argparse.Namespace) -> dict[str, Any]:
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="contractedge", description="ContractEdge frozen-benchmark planning, source repair and public feedback")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    runtime = subparsers.add_parser('runtime-check', help='diagnose Docker and verify actual CPU/memory limits')
+    runtime.add_argument('--cpus', type=float, default=2)
+    runtime.add_argument('--memory-mib', type=int, default=2048)
+    runtime.add_argument('--context')
+    runtime.add_argument('--image', help='trusted cached digest-pinned image for actual cgroup verification')
+    runtime.add_argument('--timeout-seconds', type=float, default=20)
     validate = subparsers.add_parser("validate-input", help="validate one MethodInput and its public Broken archive")
     validate.add_argument("--method-input", required=True)
     validate.add_argument("--public-root", required=True)
@@ -316,6 +322,12 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     try:
+        if args.command == 'runtime-check':
+            from contractedge.execution.runtime_preflight import check_runtime
+            report = check_runtime(cpus=args.cpus, memory_mib=args.memory_mib, context=args.context,
+                                   verify_image=args.image, timeout_seconds=args.timeout_seconds)
+            print(json.dumps(report, ensure_ascii=False, sort_keys=True))
+            return 0 if report['status'] == 'PASS' else 1
         if args.command == "validate-input":
             report = validate_public_input(args.method_input, args.public_root)
             print(json.dumps(report, ensure_ascii=False, sort_keys=True))

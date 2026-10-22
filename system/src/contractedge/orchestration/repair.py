@@ -8,6 +8,7 @@ from __future__ import annotations
 from dataclasses import asdict, replace
 import json
 import os
+import time
 from pathlib import Path
 import uuid
 from typing import Mapping
@@ -16,6 +17,7 @@ from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset
 from contractedge.changeset.prompt import build_changeset_request
 from contractedge.changeset.topomen import translate_for_topomen
 from contractedge.changeset.validate import validate_semantic_changeset
+from contractedge.execution.runtime_preflight import check_runtime, scoped_runtime_environment
 from contractedge.contracts.models import RunContext
 from contractedge.contracts.validation import canonical_digest, parse_method_input, validate_run_trace
 from contractedge.dataset.benchmark import execution_contract, editable_policy, file_sha, method_input_from_task, public_task
@@ -214,6 +216,32 @@ def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
                 output: str | Path, provider, token_counter, config: Mapping, *,
                 initial_trace: Mapping | None = None, public_runner=None,
                 executor=None, reviewer=None) -> dict:
+    # Frozen public runtime helpers inherit environment. Keep API/context changes
+    # scoped to this serial task process, including method probes and cleanup.
+    with scoped_runtime_environment():
+        settings = config.get('runtime_preflight')
+        result, started = None, None
+        if settings is not None:
+            if not isinstance(settings, Mapping) or set(settings) - {'cpus', 'memory_mib', 'context', 'verify_image', 'timeout_seconds'}:
+                raise ValueError('runtime_preflight contains unsupported settings')
+            started = time.monotonic()
+            options = dict(settings)
+            configured_timeout = options.get('timeout_seconds', 20)
+            if type(configured_timeout) not in {int, float} or not 0 < configured_timeout <= 120:
+                raise ValueError('runtime_preflight timeout_seconds must be within (0,120]')
+            options['timeout_seconds'] = min(configured_timeout,
+                                            float(config.get('max_elapsed_seconds', 2400)))
+            result = check_runtime(**options)
+        with scoped_runtime_environment((result or {}).get('environment_overrides')):
+            return _repair_case_impl(public_root, tools_root, case_id, output, provider, token_counter, config,
+                initial_trace=initial_trace, public_runner=public_runner, executor=executor, reviewer=reviewer,
+                _runtime_preflight=result, _runtime_started=started)
+
+
+def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: str,
+                output: str | Path, provider, token_counter, config: Mapping, *,
+                initial_trace: Mapping | None = None, public_runner=None,
+                executor=None, reviewer=None, _runtime_preflight=None, _runtime_started=None) -> dict:
     root = Path(public_root).resolve(strict=True)
     from contractedge.dataset.admission import check_case_admission
     check_case_admission(root, case_id, config)
@@ -230,6 +258,8 @@ def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
     budget = BudgetedProvider(provider, token_counter, max_tokens=int(config.get('max_total_tokens', 160000)),
         max_seconds=float(config.get('max_elapsed_seconds', 2400)), max_calls=int(config.get('max_model_calls', 24)),
         on_update=lambda calls: write_json(out / 'model_calls.json', calls))
+    if _runtime_started is not None:
+        budget.started = _runtime_started
     runner = public_runner or BenchmarkPublicRunner(root, tools_root,
         lock_root=config.get('lock_root', '/tmp/contractedge-system-native-locks'),
         timeout_seconds=float(config.get('public_timeout_seconds', 600)), query=method_input.requirement_text,
@@ -283,6 +313,11 @@ def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
             budget.started -= max((float(c['elapsed_seconds']) for c in calls), default=0)
             if budget.reserved_tokens > budget.max_tokens or budget.prior_calls >= budget.max_calls:
                 raise BudgetExceeded('Resumed trace already exhausted the declared model budget')
+        if _runtime_preflight is not None:
+            write_json(out / 'runtime-preflight.json', _runtime_preflight)
+            if _runtime_preflight.get('status') != 'PASS' or _runtime_preflight.get('runtime_verified') is not True:
+                raise RuntimeError('RUNTIME_PREFLIGHT_FAILED: ' + '; '.join(_runtime_preflight.get('errors', []))
+                                   + '; inspect ' + str(out / 'runtime-preflight.json'))
         write_json(out / 'state.json', {'status': 'PREPARING', 'case_id': case_id})
         reserve_public_time()
         record = runner.prepare(case_id, workspace, out / 'prepare')
