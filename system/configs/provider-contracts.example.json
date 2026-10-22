@@ -1,0 +1,18 @@
+{
+  "provider": "openai_compatible",
+  "base_url": "https://provider.example/v1",
+  "model": "requested-model-id",
+  "tokenizer": "contractedge.tokenizers:utf8_byte_token_bound",
+  "api_key_env": "CONTRACTEDGE_API_KEY",
+  "output_mode": "json_object",
+  "supports_json_schema": false,
+  "schema_fallback": "error",
+  "schema_in_prompt": true,
+  "model_identity_policy": "require_match",
+  "model_aliases": {
+    "requested-model-id": [
+      "approved-reported-model-id"
+    ]
+  },
+  "development_only": true
+}

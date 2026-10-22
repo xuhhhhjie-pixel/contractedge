@@ -132,19 +132,31 @@ def _build_provider(config: Mapping[str, Any]):
     for key in required:
         if not isinstance(config.get(key), str) or not config[key].strip():
             raise ValueError(f"model configuration requires non-empty {key!r}")
+    counter = _token_counter(config["tokenizer"])
+    identity = {'model_identity_policy': config.get('model_identity_policy', 'record'),
+                'model_aliases': config.get('model_aliases')}
     if provider_name == "ollama_native":
+        if config.get('output_mode', 'native_schema') != 'native_schema':
+            raise ValueError('Ollama output_mode is native_schema; OpenAI format options do not apply')
         provider = OllamaNativeProvider(str(config["base_url"]), int(config.get("timeout_seconds", 600)),
-                                        config.get('model_context_tokens'))
+                                        config.get('model_context_tokens'), **identity)
     else:
-        if config.get('schema_in_prompt') is False:
-            raise ValueError('schema_in_prompt=false requires a native schema-constrained provider')
+        strict = (config.get('output_mode', 'json_object') == 'json_schema'
+                  and config.get('supports_json_schema') is True
+                  and config.get('schema_fallback', 'error') == 'error')
+        if config.get('schema_in_prompt') is False and not strict:
+            raise ValueError('schema_in_prompt=false requires a native schema-constrained provider or strict JSON Schema without fallback')
         provider = OpenAICompatibleProvider(str(config["base_url"]), str(config["api_key_env"]),
                                             int(config.get("timeout_seconds", 120)), thinking=config.get('thinking'),
-                                            reasoning_effort=config.get('reasoning_effort'))
+                                            reasoning_effort=config.get('reasoning_effort'),
+                                            output_mode=config.get('output_mode', 'json_object'),
+                                            supports_json_schema=config.get('supports_json_schema', False),
+                                            schema_fallback=config.get('schema_fallback', 'error'),
+                                            context_tokens=config.get('model_context_tokens'), token_counter=counter, **identity)
         if config.get('money_budget') is not None:
             from contractedge.model.money import MoneyBudget
             provider.money_budget = MoneyBudget(**config['money_budget'])
-    return provider, _token_counter(config["tokenizer"])
+    return provider, counter
 
 
 def _load_public_member(public_root: Path, case_id: str) -> tuple[dict[str, Any], Path]:
