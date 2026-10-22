@@ -12,6 +12,7 @@ from contractedge.contracts.validation import canonical_digest
 from contractedge.model.provider import ModelRequest
 from contractedge.model.schema import constrained_output_schema
 from contractedge.contracts.permissions import target_permission_error
+from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
 
 
 CHANGESET_SYSTEM_PROMPT = """Produce one ContractEdge SemanticChangeSet v1.1 JSON object. Plan only changes that restore supported planned violations. Every change must cite a supported violation and postcondition. Preserve already satisfied outcomes and list unresolved obligations. Existing targets must use current snapshot paths/digests. A missing target may be NEW only when an EXPECTED_MISSING role and evidence justify it. Read-only source evidence does not grant edit permission: existing_target_paths contains only publicly editable targets. Do not write patch code or claim that any edit has been applied."""
@@ -55,7 +56,7 @@ def _unit_ids_by_source_path(raw: Mapping[str, Any]) -> dict[str, set[str]]:
     return unit_ids_by_path
 
 
-def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = None, frontier=None, probe_ids=None, prerequisites=None) -> dict[str, Any]:
+def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = None, frontier=None, probe_ids=None, prerequisites=None, capabilities=None) -> dict[str, Any]:
     schema = deepcopy(_output_schema())
     raw = diagnosis.raw
     units = [item for item in raw.get("units", []) if isinstance(item, Mapping) and item.get("id")]
@@ -90,6 +91,7 @@ def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = Non
     unresolved_ids = sorted({str(outcome_id) for row in raw.get("outcome_coverage", [])
                              if isinstance(row, Mapping) for outcome_id in row.get("unresolved", [])})
     properties = schema["properties"]
+    properties["changes"]["items"]["properties"]["operation"]["enum"] = resolve_execution_capabilities(capabilities)["supported_operations"]
     if prerequisites:
         schema['required'].append('precondition_review')
         properties['precondition_review']['minItems'] = len(prerequisites)
@@ -166,7 +168,7 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
                 or not isinstance(record.get('excerpt'), str)
                 or hashlib.sha256(record['excerpt'].encode()).hexdigest() != record.get('content_digest')):
             raise ValueError('Planning source support must bind fresh exact source evidence')
-    capabilities = getattr(run_context, 'retrieval_config', {}).get('public_execution_capabilities') or {}
+    capabilities = resolve_execution_capabilities(getattr(run_context, 'retrieval_config', {}).get('public_execution_capabilities'))
     policy = capabilities.get('editable_policy')
     frontier = getattr(run_context, 'retrieval_config', {}).get('production_path_frontier', [])
     probe_ids = [p['id']+':'+cid for p in capabilities.get('method_behavior_probes',[]) for cid in p['checks']]
@@ -174,7 +176,7 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
                         if target_permission_error(path, policy) is None}
     user_payload = {
         "schema_version": "ce.semantic_changeset.v1_1",
-        "output_schema": _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites),
+        "output_schema": _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities),
         "run_context": {"run_id": run_context.run_id, "case_id": run_context.case_id,
                         "snapshot_id": run_context.snapshot_id, "input_digest": run_context.input_digest},
         "diagnosis_packet": dict(diagnosis.raw),
@@ -184,14 +186,17 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
         "existing_target_paths": [{"path": path, "unit_ids": sorted(unit_ids)}
                                    for path, unit_ids in sorted(editable_targets.items())],
         "diagnosis_digest": canonical_digest(diagnosis.raw),
-        "public_execution_capabilities": getattr(run_context, 'retrieval_config', {}).get('public_execution_capabilities'),
+        "public_execution_capabilities": capabilities,
         "validation_feedback": list(validation_feedback or []),
         "output_contract": "Return only a SemanticChangeSet v1.1 JSON object; no markdown fences.",
     }
     if not run_context.model_config.get('schema_in_prompt', True):
         user_payload.pop('output_schema')
-        user_payload['output_fields'] = list(_case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites)['properties'])
+        user_payload['output_fields'] = list(_case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)['properties'])
     system_prompt = CHANGESET_SYSTEM_PROMPT + (COVERAGE_PROMPT + IMPACT_PROMPT if diagnosis.raw.get('requirement_spec',{}).get('traceability_required') else '') + (FRONTIER_PROMPT if frontier else "")
+    system_prompt += (" Current execution consumer " + capabilities["consumer_id"] + " supports only "
+                      + ", ".join(capabilities["supported_operations"])
+                      + ". Do not propose unsupported operations; retain genuinely unresolved obligations instead.")
     if support:
         system_prompt += (' Explicitly plan each new local helper in an authorized owning file, including caller dependencies. '
             'A proposed helper implementation is not required to pre-exist: distinguish an evidenced defect and a planned '
@@ -220,12 +225,13 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
         system_prompt += " Registered method_behavior_probes are additional public method-owned observations, not frozen independent scorers. For obligations actually covered by these probe assertions choose PUBLIC_BEHAVIOR, set verification_scope.scenario to the registered method scenario and predeclare all necessary behavior_check_refs. Missing, failed or unrelated check results cannot establish PASS. Respect each probe boundary; do not infer external runtime coverage from local stand-ins."
     model = str(run_context.model_config.get("model", "UNCONFIGURED"))
     max_tokens = int(run_context.budget.get("max_output_tokens", 4096))
-    output_schema = _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites)
-    return ModelRequest(model=model, prompt_version="changeset.v1.1.9" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.8",
+    output_schema = _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)
+    return ModelRequest(model=model, prompt_version="changeset.v1.1.11" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.10",
                         messages=({"role": "system", "content": system_prompt},
                                   {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False, sort_keys=True)}),
                         max_output_tokens=max_tokens, temperature=0.0,
                         metadata={"run_id": run_context.run_id, "snapshot_id": run_context.snapshot_id,
                                   "input_digest": run_context.input_digest,
+                                  "execution_capabilities_digest": canonical_digest(capabilities),
                                   "system_prompt_sha256": hashlib.sha256(system_prompt.encode()).hexdigest()},
                         output_schema=output_schema)
