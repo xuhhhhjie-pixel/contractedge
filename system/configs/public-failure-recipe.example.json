@@ -1,0 +1,19 @@
+{
+  "scope": "front_semantic_failure",
+  "semantic_reviewer": "disabled",
+  "tokenizer": "REPLACE_WITH_ORIGINAL_TOKENIZER_ID",
+  "method_source_sha256": "REPLACE_WITH_ORIGINAL_ATTEMPT_SOURCE_SHA256",
+  "broken_snapshot_id": "REPLACE_WITH_ORIGINAL_BROKEN_SNAPSHOT_ID",
+  "input_digest": "REPLACE_WITH_ORIGINAL_METHOD_INPUT_DIGEST",
+  "run_id": "REPLACE_WITH_ORIGINAL_RUN_ID",
+  "model_call_range": null,
+  "source_files": ["REPLACE_WITH_COMPLETE_EXPLICIT_PUBLIC_SOURCE_FILE_LIST"],
+  "files": {
+    "method_input": "method_input.json",
+    "model_calls": "model_calls.json",
+    "front_trace": "rounds/0/front.trace.json",
+    "front_config": "rounds/0/front.config.json",
+    "public_observations": "rounds/0/front.public_observations.json",
+    "execution_feedback": "rounds/0/front.execution_feedback.json"
+  }
+}

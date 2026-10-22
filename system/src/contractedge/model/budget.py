@@ -39,6 +39,10 @@ class BudgetedProvider:
         record = {'prompt_version': request.prompt_version, 'prompt_tokens_reserved': prompt_tokens,
                   'output_tokens_reserved': request.max_output_tokens,
                   'messages': [dict(m) for m in request.messages], 'model': request.model}
+        # Preserve every final provider-boundary parameter for exact offline replay.
+        # Older ledgers remain readable but cannot certify absent parameters.
+        from dataclasses import asdict
+        record['request'] = asdict(request)
         record['request_metadata'] = dict(request.metadata)
         record['output_schema'] = dict(request.output_schema) if request.output_schema is not None else None
         self.calls.append(record)

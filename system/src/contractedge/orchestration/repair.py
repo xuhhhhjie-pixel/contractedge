@@ -46,6 +46,23 @@ def write_json(path: Path, value):
         os.close(descriptor)
 
 
+def run_front_recorded(method_input, workspace, provider, config, token_counter, *,
+                       directory, execution_feedback=None, public_observations=()):
+    """Persist exact effective front inputs, without synthesizing legacy traces."""
+    directory = Path(directory)
+    write_json(directory / 'front.config.json', dict(config))
+    write_json(directory / 'front.public_observations.json', list(public_observations))
+    write_json(directory / 'front.execution_feedback.json', execution_feedback)
+    start = len(provider.calls)
+    try:
+        return run_front_half(method_input, workspace, provider, config, token_counter,
+                              execution_feedback=execution_feedback, public_observations=public_observations)
+    finally:
+        write_json(directory / 'front.replay.json', {'schema_version': 'ce.front_replay_inputs.v1',
+            'model_call_range': [start, len(provider.calls)],
+            'scope': 'front_semantic_failure', 'semantic_reviewer': 'disabled'})
+
+
 def select_observations(observations, query: str, token_counter, max_tokens: int = 4000):
     """Fit public evidence independently of source retrieval, retaining exact quotes."""
     import re
@@ -328,9 +345,9 @@ def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
                     'max_elapsed_seconds': budget.remaining_seconds,
                     'model': {'model': config['model'], 'provider': config.get('provider', 'configured'),
                               'schema_in_prompt': config.get('schema_in_prompt', True)}}
-                trace = run_front_half(method_input, source if method_input.source_root == '.' else source.parent,
+                trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
                     budget, round_config, token_counter, execution_feedback=feedback,
-                    public_observations=observations).to_wire()
+                    public_observations=observations, directory=directory).to_wire()
                 plan = None
             if trace['status'] not in {'READY', 'READY_PARTIAL'}:
                 write_json(directory / 'front.trace.json', trace)
@@ -345,10 +362,10 @@ def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
                     # Old source evidence cannot be relabelled as current solely to reuse a diagnosis.
                     feedback = {**feedback, 'route': 'DIAGNOSIS', 'failure_kind': 'DIAGNOSIS',
                                 'rationale': 'Plan feedback requires rediagnosis because source evidence is stale.'}
-                    trace = run_front_half(method_input, source if method_input.source_root == '.' else source.parent,
+                    trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
                         budget, {**dict(config), 'run_id': run_id, 'model': {'model': config['model'],
                             'schema_in_prompt': config.get('schema_in_prompt', True)}},
-                        token_counter, execution_feedback=feedback, public_observations=observations).to_wire()
+                        token_counter, execution_feedback=feedback, public_observations=observations, directory=directory).to_wire()
                     plan = None
             write_json(directory / 'front.trace.json', trace)
             if trace['status'] not in {'READY', 'READY_PARTIAL'}:
