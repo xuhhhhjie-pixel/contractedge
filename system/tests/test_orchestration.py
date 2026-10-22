@@ -267,7 +267,7 @@ class OneChangeSetRevisionProvider(PipelineFixtureProvider):
 
     def complete_json(self, request):
         response = super().complete_json(request)
-        if request.prompt_version == "changeset.v1.1.8":
+        if request.prompt_version.startswith("changeset."):
             self.changeset_count += 1
             if self.changeset_count == 1:
                 return ModelResponse("invalid plan", {"provider": "revision-fixture", "call": 1})

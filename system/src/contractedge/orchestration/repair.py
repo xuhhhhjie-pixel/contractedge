@@ -16,6 +16,7 @@ from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset
 from contractedge.changeset.prompt import build_changeset_request
 from contractedge.changeset.topomen import translate_for_topomen
 from contractedge.changeset.validate import validate_semantic_changeset
+from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
 from contractedge.contracts.models import RunContext
 from contractedge.contracts.validation import canonical_digest, parse_method_input, validate_run_trace
 from contractedge.dataset.benchmark import execution_contract, editable_policy, file_sha, method_input_from_task, public_task
@@ -93,7 +94,7 @@ def select_observations(observations, query: str, token_counter, max_tokens: int
     return tuple(result)
 
 
-def validate_ready_trace(trace: Mapping, method_input, source: Path):
+def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabilities: Mapping | None = None):
     validate_run_trace(trace)
     snapshot = compute_snapshot(source)
     if (trace['case_id'] != method_input.case_id or trace['input_digest'] != method_input.input_digest
@@ -102,6 +103,11 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path):
     if trace['status'] not in {'READY', 'READY_PARTIAL'} or not trace.get('candidate_set'):
         raise ValueError('Trace does not contain a validated executable plan')
     context = RunContext(**trace['run_context'])
+    recorded = resolve_execution_capabilities(context.retrieval_config.get('public_execution_capabilities'))
+    if capabilities is not None:
+        current = resolve_execution_capabilities(capabilities)
+        if any(recorded[key] != current[key] for key in ('consumer_id', 'supported_operations')):
+            raise ValueError('Ready trace execution capabilities differ from current consumer')
     candidates = CandidateSet(**trace['candidate_set'])
     # Revalidate source excerpts in a resumed trace against actual current files.
     for candidate in candidates.candidates:
@@ -132,7 +138,8 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path):
     validation = validate_semantic_changeset(trace['changeset'], packet, snapshot,
         policy=(context.retrieval_config.get('public_execution_capabilities') or {}).get('editable_policy'),
         frontier=context.retrieval_config.get('production_path_frontier'),
-        prerequisites=context.retrieval_config.get('source_prerequisites'))
+        prerequisites=context.retrieval_config.get('source_prerequisites'),
+        capabilities=context.retrieval_config.get('public_execution_capabilities'))
     if not validation.valid:
         raise ValueError('Ready trace plan failed consumer preflight: ' + str(validation.errors))
     return packet, context
@@ -145,7 +152,7 @@ def canonical_text_digest(text):
 
 def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
                 provider, token_counter, config: Mapping) -> dict:
-    packet, context = validate_ready_trace(trace, method_input, source)
+    packet, context = validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
     request = build_changeset_request(packet, context, [{'code': 'PUBLIC_EXECUTION_PLAN_FEEDBACK',
                                                         'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}])
     if sum(token_counter(m['content']) for m in request.messages) + request.max_output_tokens > config['max_context_tokens']:
@@ -157,7 +164,8 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
     validation = validate_semantic_changeset(payload, packet, compute_snapshot(source),
         policy=(config.get('public_execution_capabilities') or {}).get('editable_policy'),
         frontier=context.retrieval_config.get('production_path_frontier'),
-        prerequisites=context.retrieval_config.get('source_prerequisites'))
+        prerequisites=context.retrieval_config.get('source_prerequisites'),
+        capabilities=context.retrieval_config.get('public_execution_capabilities'))
     if not validation.valid:
         raise PlanRejected('Feedback plan revision failed: ' + str(validation.errors))
     call = {'stage': 'EXECUTION_PLAN_REVISION', 'prompt_version': request.prompt_version,
@@ -222,7 +230,11 @@ def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
         raise ValueError('Repair output must be independent of frozen public tasks')
     out.mkdir(parents=True, exist_ok=False)
     method_value, projection = method_input_from_task(root, case_id)
-    config = {**dict(config), 'public_execution_capabilities': projection.get('public_execution_capabilities')}
+    backend = config.get('execution_backend', 'direct')
+    configured = resolve_execution_capabilities(config.get('public_execution_capabilities'), backend=backend)
+    projected = resolve_execution_capabilities(projection.get('public_execution_capabilities'), backend=backend)
+    projected['supported_operations'] = [op for op in projected['supported_operations'] if op in configured['supported_operations']]
+    config = {**dict(config), 'public_execution_capabilities': resolve_execution_capabilities(projected, backend=backend)}
     method_input = parse_method_input(method_value)
     _, task_root, task, manifest = public_task(root, case_id)
     policy = editable_policy(task, execution_contract(task_root, task, manifest))
@@ -303,7 +315,7 @@ def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
                 'registered_public_observation_adapters': adapters}
             write_json(out / 'public-observation-adapters.json', adapters)
         if initial_trace:
-            validate_ready_trace(initial_trace, method_input, source)
+            validate_ready_trace(initial_trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
             trace = dict(initial_trace)
             # Resuming a real development trace does not replenish model budgets.
             write_json(out / 'initial-front.trace.json', trace)
@@ -358,7 +370,7 @@ def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
             if ((feedback and feedback['route'] == 'EXECUTE') or retry_restored_candidate) and plan:
                 plan = rebind_execution_plan(plan, source, feedback or {}, prior_execution=last_applied_execution)
             else:
-                validate_ready_trace(trace, method_input, source)
+                validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
                 plan = translate_for_topomen(trace['changeset'], 'contractedge.topomen_plan.v1',
                     diagnosis=trace.get('diagnosis'), public_capabilities=config.get('public_execution_capabilities'),
                     source_support=trace['run_context']['retrieval_config'].get('necessary_source_support'))

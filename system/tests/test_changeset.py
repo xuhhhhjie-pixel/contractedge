@@ -40,7 +40,7 @@ class SemanticChangeSetTests(unittest.TestCase):
             input_digest="a" * 64, model_config={"model": "fixture"}, budget={"max_output_tokens": 1000})
         request = build_changeset_request(self.diagnosis, context)
         packet = json.loads(request.messages[1]["content"])
-        self.assertEqual(request.prompt_version, "changeset.v1.1.8")
+        self.assertEqual(request.prompt_version, "changeset.v1.1.10")
         self.assertEqual(packet["output_schema"]["type"], "object")
         self.assertNotIn("$defs", packet["output_schema"])
         target = packet["output_schema"]["properties"]["changes"]["items"]["properties"]["target"]
@@ -79,7 +79,7 @@ class SemanticChangeSetTests(unittest.TestCase):
         self.assertIn("every unit in that change must resolve to that one source_path", request.messages[0]["content"])
         self.assertIn("Trace each proposed setting or field through its production consumer to the generated or runtime outcome", request.messages[0]["content"])
         self.assertIn("Do not add an unused value or declaration whose consumer path is absent from the supplied evidence", request.messages[0]["content"])
-        self.assertEqual(request.prompt_version, "changeset.v1.1.8")
+        self.assertEqual(request.prompt_version, "changeset.v1.1.10")
 
     def test_rejects_dependency_cycle(self):
         plan = valid_plan()

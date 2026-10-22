@@ -18,13 +18,14 @@ from typing import Mapping
 from jsonschema import Draft202012Validator
 
 from contractedge.contracts.validation import canonical_digest
+from contractedge.contracts.execution_capabilities import SOURCE_CONSUMER_ID, resolve_execution_capabilities
 from contractedge.model.provider import ModelRequest
 from contractedge.orchestration.feedback import feedback_prompt_view
 from contractedge.source.snapshot import compute_snapshot
 from contractedge.contracts.permissions import target_permission_error
 
 
-CONSUMER_ID = 'contractedge.topomen_source_consumer.v1'
+CONSUMER_ID = SOURCE_CONSUMER_ID
 
 
 class PlanRejected(ValueError):
@@ -59,6 +60,10 @@ def accept_plan(plan: Mapping, source: str | Path, policy: Mapping) -> dict:
     snapshot = compute_snapshot(root)
     if snapshot.snapshot_id != plan['snapshot_id']:
         raise PlanRejected('Plan snapshot is stale')
+    try:
+        capabilities = resolve_execution_capabilities(plan.get('public_execution_capabilities'))
+    except ValueError as exc:
+        raise PlanRejected(str(exc)) from exc
     operations = plan.get('operations', [])
     ids = [op['change_id'] for op in operations]
     if not operations or len(ids) != len(set(ids)):
@@ -82,6 +87,8 @@ def accept_plan(plan: Mapping, source: str | Path, policy: Mapping) -> dict:
             raise PlanRejected('Target is forbidden: ' + relative)
         if op['operation'] == 'REMOVE':
             raise PlanRejected('Current benchmark patch protocol rejects whole-file deletion; revise the plan explicitly')
+        if op['operation'] not in capabilities['supported_operations']:
+            raise PlanRejected('Execution consumer rejects unsupported operation: ' + op['operation'])
         target = op['target']
         if target['kind'] == 'EXISTING':
             if (op['operation'] != 'MODIFY' or not path.is_file()
@@ -95,7 +102,7 @@ def accept_plan(plan: Mapping, source: str | Path, policy: Mapping) -> dict:
             'decision': 'ACCEPT', 'plan_digest': canonical_digest(plan),
             'snapshot_id': snapshot.snapshot_id, 'input_digest': plan['input_digest'],
             'operation_order': ordered, 'scope_policy': dict(policy),
-            'supported_operations': ['MODIFY', 'CREATE']}
+            'supported_operations': capabilities['supported_operations']}
 
 
 def apply_edits(plan: Mapping, source: str | Path, policy: Mapping, response: Mapping, *, require_behavior_change=False) -> dict:
