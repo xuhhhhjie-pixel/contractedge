@@ -56,7 +56,7 @@ class MoneyBudgetTests(unittest.TestCase):
         class Handler(BaseHTTPRequestHandler):
             def do_POST(self):
                 calls.append(json.loads(self.rfile.read(int(self.headers['Content-Length']))))
-                raw = json.dumps({'choices':[{'message':{'content':'{}'},'finish_reason':'stop'}],
+                raw = json.dumps({'model':'test','choices':[{'message':{'content':'{}'},'finish_reason':'stop'}],
                                   'usage':{'prompt_tokens':10,'completion_tokens':2}}).encode()
                 self.send_response(200)
                 self.end_headers()

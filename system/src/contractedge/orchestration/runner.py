@@ -22,7 +22,7 @@ from contractedge.diagnosis.parse import parse_diagnosis_response, parse_json_re
 from contractedge.diagnosis.evidence import bind_evidence_ids, build_evidence_catalog, field_contract_contexts
 from contractedge.diagnosis.prompt import build_diagnosis_request
 from contractedge.diagnosis.validate import validate_diagnosis
-from contractedge.model.provider import ModelProvider
+from contractedge.model.provider import ModelProvider, ModelResponse
 from contractedge.model.budget import BudgetExceeded
 from contractedge.orchestration.feedback import feedback_prompt_view
 from contractedge.requirement.normalize import normalize_requirement
@@ -539,6 +539,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                 'origin_stage': origin, 'scope': 'CURRENT_FRONT_HALF_PROMPT_VERSION'}})
 
     def complete_recorded(request, stage: str):
+        prompt_reservation = request_tokens(request)
         previous_timeout = getattr(provider, 'timeout_seconds', None)
         response = None
         try:
@@ -552,12 +553,16 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                 raise BudgetExceeded('Model response exceeded the run deadline')
             return response
         except Exception as exc:
+            received = getattr(exc, 'response', None)
+            if response is None and isinstance(received, ModelResponse):
+                response = received
             calls.append({"stage": stage, "prompt_version": request.prompt_version,
                           "request_metadata": dict(request.metadata),
                           "response_content": response.content if response is not None else None,
                           "response_metadata": dict(response.metadata) if response is not None else None,
-                          "prompt_tokens_reserved": request_tokens(request),
+                          "prompt_tokens_reserved": prompt_reservation,
                           "output_tokens_reserved": request.max_output_tokens,
+                          "provider_error_metadata": dict(getattr(exc, "provider_metadata", {}) or {}),
                           "error": f"{type(exc).__name__}: {exc}",
                           "elapsed_seconds": time.monotonic() - started})
             if time.monotonic() - started >= max_elapsed_seconds and not isinstance(exc, BudgetExceeded):
@@ -571,8 +576,12 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
         if token_counter is None:
             raise ValueError("an explicit model tokenizer/token counter is required")
         count = sum(int(token_counter(str(message.get("content", "")))) for message in request.messages)
-        if count < 0:
+        hook = getattr(provider, 'request_overhead', None)
+        overhead = hook(request) if callable(hook) else ''
+        extra = int(token_counter(overhead)) if overhead else 0
+        if count < 0 or extra < 0:
             raise ValueError("token counter cannot return a negative count")
+        count += extra
         return count
 
     def within_budget(request, prompt_tokens: int) -> bool:
