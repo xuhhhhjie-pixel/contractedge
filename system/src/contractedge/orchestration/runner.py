@@ -14,6 +14,7 @@ import yaml
 from contractedge.changeset.prompt import build_changeset_request
 from contractedge.retrieval.frontier import production_frontier
 from contractedge.changeset.validate import validate_semantic_changeset
+from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
 from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset_envelope
 from contractedge.contracts.models import ContractError, MethodInput, RunContext, ValidationResult, ValidationIssue
 from contractedge.contracts.validation import parse_method_input, canonical_digest
@@ -707,6 +708,8 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                     structural_validation,semantic_review,tuple(retrieval_rounds),run_context_wire)
         return None
     try:
+        consumer_capabilities = resolve_execution_capabilities(config.get('public_execution_capabilities'),
+            backend=config.get('execution_backend', 'direct'))
         workspace_root = Path(workspace).resolve()
         source_root = workspace_root if parsed.source_root == "." else (workspace_root / parsed.source_root).resolve()
         try:
@@ -864,7 +867,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
             retrieval_config={"top_n": candidate_set.top_n,
                              "operation_consistency_enabled": config.get("operation_consistency_enabled",False),
                              "production_path_review_enabled": config.get("production_path_review_enabled", False),
-                             "public_execution_capabilities": config.get('public_execution_capabilities'),
+                             "public_execution_capabilities": consumer_capabilities,
                              "max_context_tokens": candidate_set.max_context_tokens,
                              "max_scope_search_files": max(0, int(config.get("max_scope_search_files", DEFAULT_SCOPE_SEARCH_FILES))),
                              "max_scope_search_bytes": max(0, int(config.get("max_scope_search_bytes", DEFAULT_SCOPE_SEARCH_BYTES))),
@@ -1196,7 +1199,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                 validation = validate_semantic_changeset(changeset_payload, diagnosis, snapshot,
                 policy=(config.get('public_execution_capabilities') or {}).get('editable_policy'),
                     frontier=context.retrieval_config.get('production_path_frontier'),
-                    prerequisites=context.retrieval_config.get('source_prerequisites'))
+                    prerequisites=context.retrieval_config.get('source_prerequisites'), capabilities=consumer_capabilities)
             feedback = [{"code": issue.code, "path": issue.path, "message": issue.message}
                         for issue in validation.errors]
             if feedback:
