@@ -1,0 +1,17 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_direct_packet_validation_rejects_scope_refs_absent_from_bound_evidence __
+
+    def test_direct_packet_validation_rejects_scope_refs_absent_from_bound_evidence():
+        from contractedge.contracts.models import ContractError
+        from contractedge.contracts.validation import validate_diagnosis
+        payload = valid_diagnosis()
+        payload['operation_assessments'] = [dict(operation_id='OP-control', disposition='UNRELATED',
+            outcome_refs=[], rationale='Different trigger', scope_evidence_refs=['FORGED'])]
+>       with pytest.raises(ContractError, match='REFERENCE_NOT_FOUND'):
+E       Failed: DID NOT RAISE ContractError
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_operation_scope_preflight.py:65: Failed
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_operation_scope_preflight.py::test_direct_packet_validation_rejects_scope_refs_absent_from_bound_evidence
+1 failed, 7 deselected in 0.13s

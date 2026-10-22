@@ -1,0 +1,19 @@
+{
+  "results": [
+    {
+      "support_cap": 24000,
+      "status": "REJECTED_BEFORE_API",
+      "reason": "Prerequisite source was not delivered to execution: SRC-CU-2270885228292a93, SRC-CU-fb1cea16e61ccaff"
+    },
+    {
+      "support_cap": 48000,
+      "status": "DELIVERED",
+      "request_plus_output_bound": 122408,
+      "owner_type_delivered": true,
+      "non_target_source_bytes": 29506,
+      "target_source_exact": true,
+      "api_calls": 0
+    }
+  ],
+  "scope": "Saved public .25 accepted plan is used solely as an existing executor-input carrier. Its repair strategy previously failed; no correctness or new .27 model plan is inferred. Source support comes from the actual current .26 failure replay, not a grader or successful patch."
+}

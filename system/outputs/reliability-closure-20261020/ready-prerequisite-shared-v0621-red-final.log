@@ -1,0 +1,62 @@
+....F...F                                                                [100%]
+=================================== FAILURES ===================================
+______ test_actual_exception_plan_passes_the_same_ready_consumer_contract ______
+
+    def test_actual_exception_plan_passes_the_same_ready_consumer_contract():
+        trace,method,source=kopf_ready_fixture()
+>       packet,context=validate_ready_trace(trace,method,source)
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+trace = {'run_id': '8c712293-b2e9-49f8-a78d-a1cfb299e9c8', 'case_id': 'R3-KOPF-726', 'input_digest': 'f6b578d68c32e9fd85a8a48c...16fb46011ffb11d446c0089283ae6', 'snapshot_id': '91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de', ...}
+method_input = MethodInput(schema_version='ce.method_input.v1_1', case_id='R3-KOPF-726', release_id='ContractEdge-benchmark150-v1-202...ic_evidence=(), declared_artifacts=(), input_digest='f6b578d68c32e9fd85a8a48cd9504d12fa516fb46011ffb11d446c0089283ae6')
+source = PosixPath('outputs/reliability-closure-20261020/kopf-closure-replay-v0620/S0/kopf-e90ceaa9faeb000ea1ede52067b4389dd5609c92')
+
+    def validate_ready_trace(trace: Mapping, method_input, source: Path):
+        validate_run_trace(trace)
+        snapshot = compute_snapshot(source)
+        if (trace['case_id'] != method_input.case_id or trace['input_digest'] != method_input.input_digest
+                or trace['snapshot_id'] != snapshot.snapshot_id):
+            raise ValueError('Ready trace belongs to another case/input/source snapshot')
+        if trace['status'] not in {'READY', 'READY_PARTIAL'} or not trace.get('candidate_set'):
+            raise ValueError('Trace does not contain a validated executable plan')
+        context = RunContext(**trace['run_context'])
+        candidates = CandidateSet(**trace['candidate_set'])
+        # Revalidate source excerpts in a resumed trace against actual current files.
+        for candidate in candidates.candidates:
+            if candidate.get('origin_kind') == 'DECLARED_ARTIFACT':
+                continue
+            if candidate['path'] not in snapshot.file_digests:
+                raise ValueError('Resumed trace cites a path outside the current source inventory')
+            path = (source / candidate['path']).resolve(strict=True)
+            path.relative_to(source.resolve())
+            text = path.read_text()
+            fragment = candidate['text']
+            if fragment not in text or canonical_text_digest(fragment) != candidate['content_digest']:
+                raise ValueError('Resumed trace source excerpt does not match current source')
+        # Runtime evidence lives in the trace, not a mutation of original MethodInput.
+        public = tuple(e for e in trace['diagnosis']['evidence_refs'] if e['kind'] == 'PUBLIC_OBSERVATION')
+        run_input = replace(method_input, public_evidence=public or method_input.public_evidence)
+        expected_support = required_planning_source_support(run_input,candidates,snapshot.snapshot_id)
+        expected_prerequisites = [dict(source_evidence_ref='SRC-'+u['id'],
+            reason='Review source-supported initialization, readiness and state preservation; lexical relevance only')
+            for u in candidates.candidates if u.get('precondition_review_required')]
+        if (context.retrieval_config.get('necessary_source_support', []) != expected_support
+                or context.retrieval_config.get('source_prerequisites', []) != expected_prerequisites):
+>           raise ValueError('Ready trace prerequisite context differs from actually supplied current source')
+E           ValueError: Ready trace prerequisite context differs from actually supplied current source
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/orchestration/repair.py:127: ValueError
+_ test_shared_prerequisite_projection_distinguishes_roles_without_adding_requirements _
+
+    def test_shared_prerequisite_projection_distinguishes_roles_without_adding_requirements():
+        from types import SimpleNamespace
+>       from contractedge.orchestration.runner import required_source_prerequisites
+E       ImportError: cannot import name 'required_source_prerequisites' from 'contractedge.orchestration.runner' (/home/xhj/contractedge-system/.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/orchestration/runner.py)
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py:66: ImportError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py::test_actual_exception_plan_passes_the_same_ready_consumer_contract
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py::test_shared_prerequisite_projection_distinguishes_roles_without_adding_requirements
+2 failed, 7 passed in 0.49s

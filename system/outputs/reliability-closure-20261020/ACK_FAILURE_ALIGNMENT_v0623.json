@@ -1,0 +1,76 @@
+{
+  "version": "0.6.23",
+  "case_id": "R4-ACK-CLOUDWATCH-2985",
+  "method_status": "BUDGET_EXHAUSTED",
+  "errors": [
+    "BudgetExceeded: Planning evidence extension output was truncated"
+  ],
+  "calls": [
+    {
+      "index": 1,
+      "stage": "DIAGNOSIS",
+      "finish_reason": "length",
+      "effective_thinking": "enabled",
+      "completion_tokens": 16384,
+      "reasoning_tokens": 14789,
+      "response_sha256": "d7961cef854d7b5fb763b179ddbdabea8fd1047bdfaf129abafb64c0e8524672",
+      "validation_feedback": null
+    },
+    {
+      "index": 2,
+      "stage": "PLANNING_TRUNCATION_FORMAT_RETRY",
+      "finish_reason": "stop",
+      "effective_thinking": "disabled",
+      "completion_tokens": 2853,
+      "reasoning_tokens": 0,
+      "response_sha256": "a2cddba0e0adad7d3f66f8385612f6348e37d73747385ad163a2aec892806598",
+      "validation_feedback": "Diagnosis status contradicts its coverage or evidence_gaps. Recheck all outcome dispositions and remove only gaps that the cited evidence actually resolves. READY requires supported coverage for every outcome, no unresolved outcomes, and no evidence_gaps. PARTIAL_READY requires supported work plus a distinct open outcome. EVIDENCE_GAP requires that no supported actionable Violation be linked to the unresolved outcome. Return one internally consistent full DiagnosisPacket."
+    },
+    {
+      "index": 3,
+      "stage": "DIAGNOSIS_FORMAT_RETRY",
+      "finish_reason": "stop",
+      "effective_thinking": "enabled",
+      "completion_tokens": 3581,
+      "reasoning_tokens": 815,
+      "response_sha256": "90bb2608605cdb706540ca23f0b6c701bc4241466692fb3d45a3b1a6db1e6d33",
+      "validation_feedback": null
+    },
+    {
+      "index": 4,
+      "stage": "SEMANTIC_CHANGESET",
+      "finish_reason": "stop",
+      "effective_thinking": "enabled",
+      "completion_tokens": 8084,
+      "reasoning_tokens": 6323,
+      "response_sha256": "99fd73f112ddb99c9dbb8d8bbecea29e098e14d9441ac2babf24e6082815e83f",
+      "validation_feedback": [
+        {
+          "code": "PRESERVATION_IMPACT_INVALID",
+          "path": "preservation_impact",
+          "message": "CHANGES needs real influencing changes; GLOBAL has no speculative change ids"
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "stage": "DIAGNOSIS_EXTENSION",
+      "finish_reason": "length",
+      "effective_thinking": "enabled",
+      "completion_tokens": 16384,
+      "reasoning_tokens": 14260,
+      "response_sha256": "5b9d1c0d9ba79711a0fe22f7e11f21986cc2b72a5d15bf783df91cdf9e7fd503",
+      "validation_feedback": null
+    }
+  ],
+  "api_calls": 5,
+  "max_calls": 12,
+  "independent_status": "NO_CANDIDATE",
+  "baseline_status": "PASS",
+  "patch_bytes": 0,
+  "earliest_transport_loss": "Request3 rebuilt the original diagnosis request and restored enabled thinking after completed disabled recovery; request5 rebuilt an expanded diagnosis with enabled thinking and truncated again.",
+  "scope": "Transport root cause of terminal truncation only. Does not prove a completed diagnosis would generate a correct repair.",
+  "replay_before": "ack-generation-mode-v0623-before/summary.json",
+  "replay_after": "ack-generation-mode-v0624-after/summary.json",
+  "next_gate": "Candidate full regression, immutable freeze, fresh registered original-Broken ACK attempt with public and independent result; no reuse of old PASS scores."
+}

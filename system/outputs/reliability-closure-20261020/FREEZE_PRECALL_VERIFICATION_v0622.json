@@ -1,0 +1,13 @@
+{
+  "verified_at": "2026-10-22T05:39:52.524341+00:00",
+  "method_digest": "aaea5af48569e078b81834398e2c7f6a0615ce0159c69a9b9e869d093670b36c",
+  "all_source_config_harness_verified": true,
+  "registration_and_all_46_slots_written": true,
+  "no_worker_started_by_setup_script": true,
+  "no_results_observed_for_new_version": true,
+  "source_delta": [
+    "contractedge/__init__.py",
+    "contractedge/execution/topomen.py",
+    "contractedge/orchestration/feedback.py"
+  ]
+}

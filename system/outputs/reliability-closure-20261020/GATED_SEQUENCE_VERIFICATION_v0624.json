@@ -1,0 +1,9 @@
+{
+  "api_calls": 0,
+  "first_gate_failure_stops": true,
+  "candidate_failure_stops": true,
+  "all_preceding_groups_required": true,
+  "B_closed": true,
+  "formal150_closed": true,
+  "common_guard_unchanged": true
+}

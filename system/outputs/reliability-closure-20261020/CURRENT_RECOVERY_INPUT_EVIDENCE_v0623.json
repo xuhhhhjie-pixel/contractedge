@@ -1,0 +1,22 @@
+{
+  "version": "0.6.23",
+  "group": "recovery",
+  "case_id": "R3-KPT-4673",
+  "repeat": 0,
+  "scope": "Actual paid native execution input identity/evidence audit; output behavior/independent result pending",
+  "source_snapshot": "d51cb7e7f27f3842dd448c2814080d19e4a048870d57730c1998f05ebd55777a",
+  "target_files": [
+    {
+      "path": "pkg/lib/kptops/render_executor.go",
+      "exact_seed_source": true
+    }
+  ],
+  "source_support_count": 5,
+  "failed_predicates_with_exact_actual_values": 4,
+  "shared_observation_metadata_refs": 40,
+  "shared_lineage_matches_original_feedback": true,
+  "shared_public_capabilities_match_original_feedback": true,
+  "prompt_tokens_reserved": 175241,
+  "output_tokens_reserved": 16384,
+  "execution_thinking_policy": "COMPLEX_PLAN_REASONING"
+}

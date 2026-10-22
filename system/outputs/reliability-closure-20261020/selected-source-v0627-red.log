@@ -1,0 +1,41 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+__ test_extension_preserves_uncited_selected_type_without_new_edit_permission __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-242/test_extension_preserves_uncit0')
+
+    def test_extension_preserves_uncited_selected_type_without_new_edit_permission(tmp_path):
+        (tmp_path/'owner.go').write_text('package p\ntype Owner struct { client *ExternalClient }\n')
+        snapshot=compute_snapshot(tmp_path)
+        units=parse_source_units('owner.go',(tmp_path/'owner.go').read_text(),snapshot.snapshot_id)
+        selected=build_candidate_set('Owner',None,units,[],top_n=12,max_context_tokens=12000,token_counter=len)
+        method=SimpleNamespace(declared_artifacts=(),public_evidence=())
+        # Initial context retains the existing opt-in support policy. Once evidence
+        # acquisition has been spent, all finally selected source stays available.
+        assert required_planning_source_support(method,selected,snapshot.snapshot_id)==[]
+        selected=replace(selected,extension_used=True)
+        support=required_planning_source_support(method,selected,snapshot.snapshot_id)
+>       assert len(support)==1 and support[0]['excerpt']==units[0]['text']
+E       assert (0 == 1)
+E        +  where 0 = len([])
+
+tests/test_selected_source_continuity.py:27: AssertionError
+__________ test_literal_gap_miss_is_not_reported_as_a_found_endpoint ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-242/test_literal_gap_miss_is_not_r0')
+
+    def test_literal_gap_miss_is_not_reported_as_a_found_endpoint(tmp_path):
+        (tmp_path/'update.go').write_text('package p\nfunc Update() { buildPayload() }\n')
+        units,audit=locate_gap_roles(compute_snapshot(tmp_path),[
+            dict(id='G',summary='Update request handling',locator_hint=dict(path='update.go',search_term='ReplaceLabels'))],{})
+        rows=[r for r in audit['records'] if r.get('gap_id')=='G']
+        assert not any(r['status']=='FOUND' for r in rows)
+>       assert any(r['status']=='EXACT_QUERY_NOT_FOUND_IN_FILE' for r in rows)
+E       assert False
+E        +  where False = any(<generator object test_literal_gap_miss_is_not_reported_as_a_found_endpoint.<locals>.<genexpr> at 0x7f37799368f0>)
+
+tests/test_selected_source_continuity.py:47: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_selected_source_continuity.py::test_extension_preserves_uncited_selected_type_without_new_edit_permission
+FAILED tests/test_selected_source_continuity.py::test_literal_gap_miss_is_not_reported_as_a_found_endpoint
+2 failed in 0.18s

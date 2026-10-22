@@ -1,0 +1,15 @@
+agent:
+  agent_class: topology_repair_memory
+  experiment_group: topology-prefill
+  experiment_runs_path: experiments/results/runs/topology_prefill_experiment_runs.jsonl
+  record_successful_repairs: false
+  topology_enabled: true
+  topology_artifacts_dir: experiments/results/topologies
+  topology_max_workers: 4
+  topology_prefill_dockerfile: true
+  topology_repair_scope: node_block
+  track_command_timing: true
+  agent_wall_clock_timeout_seconds: 3600
+  command_timeout_seconds: 180
+  docker_build_timeout_seconds: 1800
+  docker_run_timeout_seconds: 900

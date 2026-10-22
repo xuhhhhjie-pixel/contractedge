@@ -1,0 +1,10 @@
+{
+  "as_of": "2026-10-22T05:52:24.830178+00:00",
+  "role": "EXPERIMENT_DISPATCH_ONLY; not method input or grader",
+  "controller_sha256": "c6a34a06db8afc4c31b159a1a6ce50cc4faa1d38829200db31e5c68c5bb87976",
+  "verification": "GUARDED_DISPATCH_VERIFICATION.json",
+  "policy": "Same immutable registered order and slots; finalized candidate+independent aggregate PASS required before next slot; baseline model/behavior failure retained as comparator; scorer infrastructure failure or missing output stops dispatch. No automatic retries; no formal150/B dispatch.",
+  "method_source_unchanged": true,
+  "common_worker_harness_unchanged": true,
+  "G4_still_running": true
+}

@@ -1,0 +1,399 @@
+{
+  "as_of": "2026-10-22T05:57:20.300373+00:00",
+  "version": "0.6.22",
+  "case_id": "R3-KPT-4673",
+  "group": "A",
+  "repeat": 0,
+  "method_digest": "aaea5af48569e078b81834398e2c7f6a0615ce0159c69a9b9e869d093670b36c",
+  "frozen_source_and_harness_match": true,
+  "calls": [
+    {
+      "index": 0,
+      "prompt_version": "diagnosis.v1.1.26",
+      "response_received": true,
+      "finish_reason": "stop",
+      "error": null,
+      "prompt_tokens_reserved": 117303,
+      "json_parseable": true,
+      "source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "gap_delivery": {
+        "status": "DELIVERED",
+        "records": [],
+        "missing_required_ids": [],
+        "interpretation": "Exact endpoint excerpts delivered; does not prove causal relevance or resolve gaps"
+      }
+    },
+    {
+      "index": 1,
+      "prompt_version": "diagnosis.v1.1.26",
+      "response_received": true,
+      "finish_reason": "stop",
+      "error": null,
+      "prompt_tokens_reserved": 130496,
+      "json_parseable": true,
+      "source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "gap_delivery": {
+        "status": "DELIVERED",
+        "records": [],
+        "missing_required_ids": [],
+        "interpretation": "Exact endpoint excerpts delivered; does not prove causal relevance or resolve gaps"
+      }
+    },
+    {
+      "index": 2,
+      "prompt_version": "changeset.v1.1.9",
+      "response_received": true,
+      "finish_reason": "length",
+      "error": null,
+      "prompt_tokens_reserved": 123602,
+      "json_parseable": false,
+      "source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "gap_delivery": null
+    },
+    {
+      "index": 3,
+      "prompt_version": "changeset.v1.1.9",
+      "response_received": true,
+      "finish_reason": "stop",
+      "error": null,
+      "prompt_tokens_reserved": 130842,
+      "json_parseable": true,
+      "source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "gap_delivery": null
+    },
+    {
+      "index": 4,
+      "prompt_version": "topomen-source-execution.v1",
+      "response_received": true,
+      "finish_reason": "length",
+      "error": null,
+      "prompt_tokens_reserved": 137437,
+      "json_parseable": false,
+      "source_snapshot": null,
+      "gap_delivery": null
+    },
+    {
+      "index": 5,
+      "prompt_version": "topomen-source-execution.v1",
+      "response_received": true,
+      "finish_reason": "stop",
+      "error": null,
+      "prompt_tokens_reserved": 139886,
+      "json_parseable": true,
+      "source_snapshot": null,
+      "gap_delivery": null
+    },
+    {
+      "index": 6,
+      "prompt_version": "public-postcondition-review.v1",
+      "response_received": true,
+      "finish_reason": "length",
+      "error": null,
+      "prompt_tokens_reserved": 77742,
+      "json_parseable": false,
+      "source_snapshot": null,
+      "gap_delivery": null
+    },
+    {
+      "index": 7,
+      "prompt_version": "public-postcondition-review.v1",
+      "response_received": true,
+      "finish_reason": "stop",
+      "error": null,
+      "prompt_tokens_reserved": 83590,
+      "json_parseable": true,
+      "source_snapshot": null,
+      "gap_delivery": null
+    }
+  ],
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "patch": {
+    "patch_path": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.22-A-R3-KPT-4673-0-candidate/cases/R3-KPT-4673/candidate.patch",
+    "patch_sha256": "a6562622049b5ea035ab3e4696a79a48c24ecec56320dbd811a81653c8386431",
+    "patch_bytes": 3574,
+    "tool": {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019/tools/collect_patch.py",
+        "--workspace",
+        "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.22-A-R3-KPT-4673-0-candidate/cases/R3-KPT-4673/workspace",
+        "--output",
+        "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.22-A-R3-KPT-4673-0-candidate/cases/R3-KPT-4673/candidate.patch"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "stdout_sha256": "b47e82505fd7dfa786a7eee0fa228c1712388f9a5001eccfd1fae86391072928",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "errors": [],
+  "independent_status": "PASS",
+  "rounds": [
+    {
+      "round_id": "0",
+      "front.trace.json": {
+        "status": "READY_PARTIAL",
+        "violations": [
+          {
+            "id": "V1",
+            "causal_status": "SUPPORTED",
+            "causal_explanation": "hydrate gathers all package resources including config into ordinary input; runMutators/runValidators select from that input without removing the configPath resource, so the owning function sees config as an ordinary input item."
+          }
+        ],
+        "prerequisites": [],
+        "precondition_review": []
+      },
+      "feedback.json": {
+        "semantic_outcome": "UNKNOWN",
+        "build_state": "PASSED",
+        "route": "STOP",
+        "failure_kind": "UNKNOWN",
+        "public_check_results": [
+          {
+            "id": "P1",
+            "status": "UNKNOWN",
+            "rationale": "Public probes for the owning mutator show the configPath-designated resource is excluded from ordinary inputs in no-selector, selector, and exclusion variants, while owner_binding remains the configPath resource. This satisfies the observable part of P1 in the fixed public scenario.",
+            "evidence": [
+              {
+                "observation_id": "OBS4",
+                "quote": "\"id\":\"mutator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]}"
+              },
+              {
+                "observation_id": "OBS8",
+                "quote": "\"id\":\"mutator_selector.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"workload\"]}"
+              },
+              {
+                "observation_id": "OBS9",
+                "quote": "\"id\":\"mutator_exclusion.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]}"
+              },
+              {
+                "observation_id": "OBS15",
+                "quote": "\"id\":\"mutator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"}"
+              },
+              {
+                "observation_id": "OBS21",
+                "quote": "\"id\":\"mutator_selector.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"}"
+              },
+              {
+                "observation_id": "OBS24",
+                "quote": "\"id\":\"mutator_exclusion.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"}"
+              }
+            ],
+            "submitted_status": "PASS",
+            "evidence_validation": "CHECK_COVERAGE_INSUFFICIENT"
+          },
+          {
+            "id": "P2",
+            "status": "UNKNOWN",
+            "rationale": "The public validator probe shows the owning validator's ordinary input excludes the configPath resource while the same resource remains bound as functionConfig. This satisfies the observable part of P2 for the fixed public validator scenario.",
+            "evidence": [
+              {
+                "observation_id": "OBS5",
+                "quote": "\"id\":\"validator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]}"
+              },
+              {
+                "observation_id": "OBS18",
+                "quote": "\"id\":\"validator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"}"
+              }
+            ],
+            "submitted_status": "PASS",
+            "evidence_validation": "CHECK_COVERAGE_INSUFFICIENT"
+          },
+          {
+            "id": "preserve:PC1",
+            "status": "UNKNOWN",
+            "rationale": "Owner binding to the configPath resource is observed as PASS for mutator, validator, selector, and exclusion variants. Thus the preservation constraint that the configPath resource continues to be supplied as owning functionConfig is satisfied for the fixed public scenario.",
+            "evidence": [
+              {
+                "observation_id": "OBS15",
+                "quote": "\"id\":\"mutator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"}"
+              },
+              {
+                "observation_id": "OBS18",
+                "quote": "\"id\":\"validator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"}"
+              },
+              {
+                "observation_id": "OBS21",
+                "quote": "\"id\":\"mutator_selector.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"}"
+              },
+              {
+                "observation_id": "OBS24",
+                "quote": "\"id\":\"mutator_exclusion.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"}"
+              }
+            ],
+            "submitted_status": "PASS",
+            "evidence_validation": "CHECK_COVERAGE_INSUFFICIENT"
+          },
+          {
+            "id": "preserve:PC2",
+            "status": "PASS",
+            "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+            "evidence": [
+              {
+                "observation_id": "OBS22",
+                "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/28/observed\",\"raw_source\":\"stdout\"}\n"
+              },
+              {
+                "observation_id": "OBS25",
+                "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/37/observed\",\"raw_source\":\"stdout\"}\n"
+              },
+              {
+                "observation_id": "OBS16",
+                "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/8/observed\",\"raw_source\":\"stdout\"}\n"
+              }
+            ],
+            "decision_method": "BOUND_CHECK_AGGREGATION"
+          },
+          {
+            "id": "preserve:PC3",
+            "status": "UNKNOWN",
+            "rationale": "Public probes show later functions still see the config resource in ordinary inputs after the owning mutator, and later transformations of the config resource are retained in final output for mutator, validator, selector, and exclusion variants. This satisfies the observable part of PC3.",
+            "evidence": [
+              {
+                "observation_id": "OBS1",
+                "quote": "\"id\":\"mutator.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\",\"settings\"]}"
+              },
+              {
+                "observation_id": "OBS2",
+                "quote": "\"id\":\"mutator_selector.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"settings\",\"workload\"]}"
+              },
+              {
+                "observation_id": "OBS3",
+                "quote": "\"id\":\"mutator_exclusion.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"settings\",\"workload\"]}"
+              },
+              {
+                "observation_id": "OBS10",
+                "quote": "\"id\":\"mutator.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}}"
+              },
+              {
+                "observation_id": "OBS11",
+                "quote": "\"id\":\"validator.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}}"
+              },
+              {
+                "observation_id": "OBS12",
+                "quote": "\"id\":\"mutator_selector.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}}"
+              },
+              {
+                "observation_id": "OBS13",
+                "quote": "\"id\":\"mutator_exclusion.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}}"
+              }
+            ],
+            "submitted_status": "PASS",
+            "evidence_validation": "CHECK_COVERAGE_INSUFFICIENT"
+          },
+          {
+            "id": "preserve:PC4",
+            "status": "UNKNOWN",
+            "rationale": "Public probes show final retention of config and workload resources across control, mutator, selector, and exclusion variants, with declared data.initial fields present. This satisfies the observable part of PC4.",
+            "evidence": [
+              {
+                "observation_id": "OBS7",
+                "quote": "\"id\":\"control.final_resources\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"rendered\":{\"settings\":{\"apiVersion\":\"v1\",\"data\":{\"initial\":\"config\"},\"kind\":\"ConfigMap\",\"metadata\":{\"name\":\"settings\"}},\"workload\":{\"apiVersion\":\"v1\",\"data\":{\"initial\":\"workload\"},\"kind\":\"ConfigMap\",\"metadata\":{\"name\":\"workload\"}}}}"
+              },
+              {
+                "observation_id": "OBS27",
+                "quote": "\"id\":\"mutator.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}}"
+              },
+              {
+                "observation_id": "OBS28",
+                "quote": "\"id\":\"mutator.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}}"
+              },
+              {
+                "observation_id": "OBS34",
+                "quote": "\"id\":\"mutator_selector.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}}"
+              },
+              {
+                "observation_id": "OBS35",
+                "quote": "\"id\":\"mutator_selector.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}}"
+              },
+              {
+                "observation_id": "OBS37",
+                "quote": "\"id\":\"mutator_exclusion.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}}"
+              },
+              {
+                "observation_id": "OBS38",
+                "quote": "\"id\":\"mutator_exclusion.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}}"
+              }
+            ],
+            "submitted_status": "PASS",
+            "evidence_validation": "CHECK_COVERAGE_INSUFFICIENT"
+          },
+          {
+            "id": "preserve:PC5",
+            "status": "UNKNOWN",
+            "rationale": "Public probes show resource inventory retains exactly three uniquely identified resources with zero identity annotations across control, mutator, validator, selector, and exclusion variants. This satisfies the observable part of PC5.",
+            "evidence": [
+              {
+                "observation_id": "OBS14",
+                "quote": "\"id\":\"mutator.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3}"
+              },
+              {
+                "observation_id": "OBS17",
+                "quote": "\"id\":\"validator.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3}"
+              },
+              {
+                "observation_id": "OBS19",
+                "quote": "\"id\":\"control.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3}"
+              },
+              {
+                "observation_id": "OBS20",
+                "quote": "\"id\":\"mutator_selector.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3}"
+              },
+              {
+                "observation_id": "OBS23",
+                "quote": "\"id\":\"mutator_exclusion.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3}"
+              },
+              {
+                "observation_id": "OBS26",
+                "quote": "\"id\":\"mutator.identity_annotations_cleaned\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"inventory\":{\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"annotations\":{\"settings\":{},\"workload\":{}}}"
+              },
+              {
+                "observation_id": "OBS29",
+                "quote": "\"id\":\"validator.identity_annotations_cleaned\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"inventory\":{\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"annotations\":{\"settings\":{},\"workload\":{}}}"
+              },
+              {
+                "observation_id": "OBS32",
+                "quote": "\"id\":\"control.identity_annotations_cleaned\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"inventory\":{\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"annotations\":{\"settings\":{},\"workload\":{}}}"
+              }
+            ],
+            "submitted_status": "PASS",
+            "evidence_validation": "CHECK_COVERAGE_INSUFFICIENT"
+          },
+          {
+            "id": "open:O1",
+            "status": "UNKNOWN",
+            "rationale": "The open obligation states that full branch coverage across all selector/exclusion combinations and validator modes is not exhaustively observed. The public probes do show the fixed scenario's mutator, validator, selector, and exclusion variants passing for owner_excludes_config, so the observed satisfaction of the fixed-scenario probes is acknowledged; this does not establish exhaustive branch coverage.",
+            "evidence": [
+              {
+                "observation_id": "OBS4",
+                "quote": "\"id\":\"mutator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]}"
+              },
+              {
+                "observation_id": "OBS5",
+                "quote": "\"id\":\"validator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]}"
+              },
+              {
+                "observation_id": "OBS8",
+                "quote": "\"id\":\"mutator_selector.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"workload\"]}"
+              },
+              {
+                "observation_id": "OBS9",
+                "quote": "\"id\":\"mutator_exclusion.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]}"
+              }
+            ],
+            "submitted_status": "PASS",
+            "evidence_validation": "CHECK_COVERAGE_INSUFFICIENT"
+          }
+        ]
+      },
+      "candidate-decision.json": {},
+      "execution.json": {
+        "status": "APPLIED"
+      }
+    }
+  ],
+  "scope": "One fresh development G4, not complete same-version panel/repetition/recovery acceptance",
+  "formal_ready": false,
+  "worker_before_after_identity_verified": true,
+  "committed_cny_including_reservations": 81.834448
+}

@@ -1,0 +1,33 @@
+{
+  "version": "0.6.21",
+  "case_id": "R3-KPT-4673",
+  "method_status": "CANDIDATE_REGRESSION_REJECTED",
+  "independent_status": "NO_CANDIDATE",
+  "first_patch_sha256": "70b3b272108e32fff25638d502477c7b7dfaad9cf9f4a7f2518eaada6a98b85a",
+  "identical_trial_responses": true,
+  "same_rejected_trial_snapshot": true,
+  "causal_boundary": "Raw failed public behavior records lost at feedback_prompt_view/historical_trial_prompt_view; no failure_tasks without exceptions/helper conflicts",
+  "first_failed_fact": {
+    "observation_id": "OBS1",
+    "snapshot_id": "4d004e4f024ccf9bfa0454144e27f018a3141f38381dea4b083699ae53a225d6",
+    "actual_ordinary_inputs": [
+      "demo",
+      "workload"
+    ],
+    "expected_requirement": "Later function retains access to configuration resource"
+  },
+  "prior_request": {
+    "execution_feedback_is_none": true,
+    "historical_rationale_delivered": true,
+    "failed_predicate_actual_objects_delivered": false,
+    "execution_thinking": "disabled"
+  },
+  "root_cause_limit": "Missing actual feedback and disabled reasoning can contribute; cannot establish unique causal explanation for stochastic identical output. First bad implementation retains from selectionInput after excluding config, hence cannot restore the absent config.",
+  "next_fix_scope": "Bounded source-bound behavior failure tasks preserved through historical compaction; existing reasoning policy for verified rollback, not additional calls",
+  "other_interruptions": {
+    "dispatcher_worker_scorer_processes_absent": true,
+    "Alert_partial_batch_retained": true,
+    "ACK_native_aggregate_PASS_cohort_incomplete": true,
+    "upstream_exit_cause": "UNKNOWN"
+  }
+}

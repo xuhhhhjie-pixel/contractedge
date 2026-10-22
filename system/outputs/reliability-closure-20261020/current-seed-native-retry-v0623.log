@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/replay_current_seed_retry_v0623.py", line 20, in <module>
+    assert compute_snapshot(source).snapshot_id==method.initial_snapshot_id
+AssertionError

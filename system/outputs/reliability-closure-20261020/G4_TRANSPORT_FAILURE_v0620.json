@@ -1,0 +1,24 @@
+{
+  "as_of": "2026-10-22T03:28:50.648496+00:00",
+  "version": "0.6.20",
+  "failed_primary": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.20-A-R3-KOPF-726-0-candidate",
+  "failure": "IncompleteRead: IncompleteRead(64278 bytes read)",
+  "failure_layer": "HTTP response body read before JSON decoding or any completed diagnosis",
+  "upstream_cause": "UNDETERMINED; no server-side telemetry available",
+  "failed_primary_remains_in_denominator": true,
+  "first_response_received": false,
+  "primary_replacement": false,
+  "registered_replication": {
+    "case_id": "R3-KOPF-726",
+    "repeat": 1,
+    "variant": "candidate",
+    "name": "delivery-0.6.20-repeat-R3-KOPF-726-1-candidate",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate"
+  },
+  "identities_verified": true,
+  "source_changes": false,
+  "harness_changes": false,
+  "committed_micro_cny": 75107974,
+  "disk_free_gib": 24.95827865600586,
+  "ruling": "Use only the already registered repeat=1 attempt as G4 mechanism validation; preserve primary infrastructure failure. A complete primary+repeat success gate is NOT passed even if this repeat succeeds. No extra retries or altered outcome definitions."
+}

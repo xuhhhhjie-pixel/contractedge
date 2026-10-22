@@ -1,0 +1,12 @@
+{
+  "status": "HELD_GROUP_REQUIRES_AUDIT",
+  "version": "0.6.23",
+  "freeze_sha256": "75b9d39b1a913b4c01015747e4d35d1a74e3ca2853c2df3fd582efed45f2be35",
+  "controller_sha256": "953c029a5d4a9eb33cce052d6abf1ac67679ec27f32cef1c28be6fb021125757",
+  "sequence_sha256": "7fca23b44822374c450e185f91c4e0c84ace7686c967e0f032f5b35a66bf23b1",
+  "updated_at_unix": 1792657740.3915818,
+  "B_opened": false,
+  "formal_ready": false,
+  "group": "A",
+  "group_status": "HELD_CANDIDATE_FAILURE"
+}

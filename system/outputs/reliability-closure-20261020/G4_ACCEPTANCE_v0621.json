@@ -1,0 +1,83 @@
+{
+  "version": "0.6.21",
+  "case_id": "R3-KOPF-726",
+  "group": "A",
+  "repeat": 0,
+  "method_status": "PUBLIC_REVIEW_COMPLETE",
+  "independent_status": "PASS",
+  "patch_bytes": 1240,
+  "patch_sha256": "1bd0b7dc9134f2c43d2a3c7ec6762750e909c09967db1189a5d40c02d0afc524",
+  "model_calls": 6,
+  "edit_rounds": 1,
+  "public_operations_successful": 3,
+  "public_checks": [
+    {
+      "id": "P1",
+      "status": "PASS",
+      "rationale": "The registered public adapter observed both cluster-scoped-owner cases with exception null. OBS3 and OBS4 both contain ownerReferences to Parent global-parent/parent-uid-1. This satisfies the observed no-LookupError and owner-reference requirements for those finite public cases.",
+      "evidence": [
+        {
+          "observation_id": "OBS3",
+          "quote": "\"exception\": null"
+        },
+        {
+          "observation_id": "OBS3",
+          "quote": "\"uid\": \"parent-uid-1\""
+        },
+        {
+          "observation_id": "OBS4",
+          "quote": "\"exception\": null"
+        },
+        {
+          "observation_id": "OBS4",
+          "quote": "\"uid\": \"parent-uid-1\""
+        }
+      ]
+    },
+    {
+      "id": "P2",
+      "status": "PASS",
+      "rationale": "OBS3 shows the cluster-child Namespace case with exception null and metadata containing labels/name/ownerReferences but no metadata.namespace key. This supports that the cluster-scoped child remained namespace-less in the public local-adopt observation.",
+      "evidence": [
+        {
+          "observation_id": "OBS3",
+          "quote": "\"exception\": null"
+        },
+        {
+          "observation_id": "OBS3",
+          "quote": "\"kind\": \"Namespace\""
+        },
+        {
+          "observation_id": "OBS3",
+          "quote": "\"metadata\": {\n      \"labels\": {\n        \"team\": \"research\"\n      },\n      \"name\": \"child\",\n      \"ownerReferences\": ["
+        }
+      ]
+    },
+    {
+      "id": "P3",
+      "status": "PASS",
+      "rationale": "OBS4 shows the explicit-child-namespace ConfigMap case with exception null and metadata.namespace still set to work-ns, while also carrying the owner reference. This supports namespace preservation for that public case.",
+      "evidence": [
+        {
+          "observation_id": "OBS4",
+          "quote": "\"exception\": null"
+        },
+        {
+          "observation_id": "OBS4",
+          "quote": "\"kind\": \"ConfigMap\""
+        },
+        {
+          "observation_id": "OBS4",
+          "quote": "\"namespace\": \"work-ns\""
+        }
+      ]
+    }
+  ],
+  "source_harness_and_patch_identity_verified": true,
+  "single_g4_accepted": true,
+  "full_repetition_and_delivery_gate_passed": false,
+  "formal_ready": false,
+  "preregistration": "FREEZE_PRECALL_VERIFICATION_v0621.json",
+  "audit": "G4_LIVE_AUDIT_v0621.json",
+  "scope": "Fresh original Broken end-to-end G4 only; one registered A candidate slot, never counted twice; all earlier version failures retained separately"
+}

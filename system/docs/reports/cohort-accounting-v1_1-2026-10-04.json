@@ -1,0 +1,661 @@
+{
+  "class_counts": {
+    "R1": 57,
+    "R2": 30,
+    "R5": 30
+  },
+  "decisions": [
+    {
+      "case_id": "RW-CAND-067",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-068",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-070",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-071",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-072",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-073",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-076-AGGREGATE-VERIFIER-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-077",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-081",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-082",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-086",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-088",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-091",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-093",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-094",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-095-AGGREGATE-VERIFIER-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-102",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-103",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-104",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-105-AGGREGATE-VERIFIER-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-106",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-109",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-111",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-118",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-120",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-124",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-126-AGGREGATE-VERIFIER-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-127",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-128",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-129",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-135",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-136",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-137",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CAND-171",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-ARGO-CD-REDIS-HA-SECRET-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-ARGO-EVENTS-WEBHOOK-PORT-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-ARGO-IU-CONFIG-NAME-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-ARGO-IU-DUALSTACK-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-ARGO-ROLLOUT-INGRESS-PORT-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-GRAFANA-HPA-TARGET-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-GRAFANA-HTTPS-ROUTE-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-GRAFANA-MCP-INGRESS-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-GRAFANA-PVC-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-GRAFANA-RENDERER-NETPOL-NS-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-EMPTY-ANNOTATIONS-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-HTTP-LOGGING-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-HTTP-SELECTOR-STABILITY-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-POD-NAMESPACE-ENV-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-RBAC-DISABLED-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-PROM-ES-COLLECTOR-FLAGS-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-PROM-ES-PULLSECRET-FORMAT-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-PROM-KSM-EMPTY-HEADERS-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-PROM-KSM-RBAC-PROBES-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-PROM-MEMCACHED-SERVICE-METADATA-001",
+      "release_id": "R1",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-ARGO-CD-23823",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-ARGO-CD-29827",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9118",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9128",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CLUSTER-API-12341",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CLUSTER-API-13937",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7733",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7789",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7860",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-PROVIDER-AWS-2256",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-RUNTIME-1088",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-DAPR-10132",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1411",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1412",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-IMAGE-REFLECTOR-824",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-KEDA-7777",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-KEDA-7928",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-KEDA-8125",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-KUSTOMIZE-CONTROLLER-1614",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-KYVERNO-17395",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8727",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8739",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-PROVIDER-AWS-2343",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-SOURCE-CONTROLLER-2054",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-SOURCE-CONTROLLER-2124",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-SOURCE-WATCHER-371",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-SOURCE-WATCHER-373",
+      "release_id": "R2",
+      "status": "PREPARED"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-ALERTMANAGER-4705",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-5040",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-ALERTMANAGER-5040",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-ALLOY-6818",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-ALLOY-6818",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-CONTAINERD-14207",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-CONTAINERD-14207",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-COREDNS-7562",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-COREDNS-7562",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-DAPR-10220",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-DAPR-10220",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-DAPR-9173",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-DAPR-9173",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-DAPR-9612",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-DAPR-9612",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-10720",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-FLUENT-BIT-10720",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-12495",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-FLUENT-BIT-12495",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-ISTIO-2944",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-ISTIO-2944",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2918",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-KUBE-STATE-METRICS-2918",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2955",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-KUBE-STATE-METRICS-2955",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-KUBELET-126806",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-KUBELET-126806",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-KUBELET-133072",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-KUBELET-133072",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-KUBELET-139275",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-KUBELET-139275",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-KYVERNO-17310",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-KYVERNO-17310",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-NATS-SERVER-6609",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-OPENCLAW-111511",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-OPENCLAW-111511",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-10795",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-OTEL-COLLECTOR-10795",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15572",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-OTEL-COLLECTOR-15572",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15868",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-OTEL-COLLECTOR-15868",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-OTEL-OPERATOR-2171",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-OTEL-OPERATOR-2171",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-16340",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-PROMETHEUS-16340",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-17807",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-PROMETHEUS-17807",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-PROMETHEUS-19838",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-TEMPO-6435",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-TEMPO-6435",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-TEMPO-6481",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-TEMPO-6481",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-TEMPO-6509",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-TEMPO-6509",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    },
+    {
+      "case_id": "RW-THANOS-6503",
+      "reason": "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED: RW-THANOS-6503",
+      "release_id": "R5-v28",
+      "status": "HELD"
+    }
+  ],
+  "frozen_member_count": 117,
+  "held_reason_counts": {
+    "PUBLIC_REQUIREMENT_ORIGIN_UNVERIFIED": 30
+  },
+  "prepared_release_audit": {
+    "errors": [],
+    "evaluator_case_count": 87,
+    "expected_member_count": 87,
+    "hash_entries": {
+      "evaluator": 88,
+      "public": 231
+    },
+    "output_root": "/home/xhj/contractedge-system/outputs/pilot-v1_1-r1-r2-v2",
+    "public_case_count": 87,
+    "schema_version": "ce.release_audit.v1",
+    "status": "PASS"
+  },
+  "r5_public_integrity": {
+    "candidate_status_values": {
+      "NON_FORMAL_CANDIDATE; final cohort admission remains pending.": 1,
+      "NON_FORMAL_CANDIDATE_PREVIEW; cohort membership and final classification are pending.": 17
+    },
+    "formal_manifest_members": 30,
+    "input_hashes_verified": 30,
+    "metadata_findings": [
+      "PUBLIC_README_IDENTIFIES_CANDIDATE_V17_WHILE_MANIFEST_MARKS_30_FORMAL",
+      "PUBLIC_TASK_FIELD_INCOMPLETE_19_OF_30",
+      "PUBLIC_NONFORMAL_CANDIDATE_STATUS_18_OF_30"
+    ],
+    "public_task_fields": 19,
+    "readme_excerpt": "# R5 case-level candidate method view v17\n\nThis view contains only public repair inputs, Broken source archives, and public trigger/control fixtures for the 30 current R5 candidates. It excludes Fixed source, upstream patches, expected/violated relation answers, private verifiers, and evaluation scripts. This is a candidate method view, not a formal 30-case R5 release."
+  },
+  "schema_version": "ce.cohort_accounting.v1",
+  "status": "PASS_WITH_HELD_MEMBERS",
+  "unique_case_id_count": 117,
+  "v1_1_held_case_count": 30,
+  "v1_1_prepared_case_count": 87
+}

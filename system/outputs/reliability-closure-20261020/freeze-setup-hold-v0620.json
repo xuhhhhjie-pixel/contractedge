@@ -1,0 +1,31 @@
+{
+  "reason": "Registration development_changes is legacy string; freeze metadata setup paused worker until finalization",
+  "workers": [
+    {
+      "pid": 3965162,
+      "args": [
+        "python3",
+        "scripts/run_reliability_worker_v8.py",
+        "--method-root",
+        ".superpowers/sdd/2026-10-21-cross-stage-repair-closure/frozen-v0.6.20",
+        "--config",
+        "configs/deepseek-reliability-closure-v6-budget150.json",
+        "--output",
+        "outputs/reliability-closure-20261020/runs/delivery-0.6.20-A-R3-KOPF-726-0-candidate",
+        "--case",
+        "R3-KOPF-726"
+      ]
+    }
+  ],
+  "finalized_at": "2026-10-22T03:23:33.933106+00:00",
+  "physical_source_snapshot_preceded_first_request": true,
+  "source_latest_creation_timestamp": 1792639253.088299,
+  "first_request_log_timestamp": 1792639269.6884785,
+  "source_and_common_harness_verified": true,
+  "runtime_method_identity_verified": true,
+  "first_response_unobserved_at_metadata_finalization": true,
+  "model_calls_started": 1,
+  "model_calls_repeated": 0,
+  "ruling": "Retain the same physically frozen development attempt with explicit administrative timing deviation; no source/config/harness or case-selection change, no outcome read before metadata finalization",
+  "resumed": true
+}

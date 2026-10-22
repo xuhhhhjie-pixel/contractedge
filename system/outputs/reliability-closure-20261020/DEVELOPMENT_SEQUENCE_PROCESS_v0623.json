@@ -1,0 +1,17 @@
+{
+  "started_at": "2026-10-22T06:31:39.617445+00:00",
+  "pid": 397005,
+  "log": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/development-sequence-v0623-resumed.log",
+  "state": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/development-sequence-v0.6.23-state.json",
+  "first_gate": "recovery/R3-KPT-4673/0/candidate independentPASS",
+  "allowed_groups": [
+    "A",
+    "repeat",
+    "recovery"
+  ],
+  "B_closed": true,
+  "formal150_closed": true,
+  "new_attempts_outside_registration": 0,
+  "resumed_at": "2026-10-22T06:39:28.745135+00:00",
+  "reason_for_controller_restart": "Before any group dispatch, add known-public-failure gate even when independent scorePASS; no model worker interrupted, no attempt repeated"
+}

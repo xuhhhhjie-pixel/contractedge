@@ -1,0 +1,963 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ContractEdge SemanticChangeSet v1.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "snapshot_id",
+    "input_digest",
+    "diagnosis_digest",
+    "goal",
+    "planned_violation_ids",
+    "changes",
+    "postconditions",
+    "preserve_constraints",
+    "open_obligations",
+    "outcome_coverage",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ce.semantic_changeset.v1_1"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "snapshot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "diagnosis_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "planned_violation_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/change"
+      }
+    },
+    "postconditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/postcondition"
+      }
+    },
+    "preserve_constraints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/preserveConstraint"
+      }
+    },
+    "open_obligations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/openObligation"
+      }
+    },
+    "outcome_coverage": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/coverage"
+      }
+    },
+    "status": {
+      "enum": [
+        "READY",
+        "READY_PARTIAL",
+        "NEEDS_EVIDENCE",
+        "INVALID_PLAN"
+      ]
+    },
+    "evidence_gaps": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "summary",
+          "locator_hint"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "locator_hint": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "search_term": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "production_path_review": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_evidence_id",
+          "disposition",
+          "rationale",
+          "change_refs",
+          "open_obligation_refs"
+        ],
+        "properties": {
+          "source_evidence_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "disposition": {
+            "type": "string",
+            "enum": [
+              "MODIFY",
+              "PRESERVE",
+              "OUT_OF_SCOPE",
+              "UNRESOLVED"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 3000
+          },
+          "change_refs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 32
+          },
+          "open_obligation_refs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 32
+          }
+        }
+      }
+    },
+    "preservation_impact": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "preserve_id",
+          "scope",
+          "change_refs",
+          "rationale"
+        ],
+        "properties": {
+          "preserve_id": {
+            "type": "string"
+          },
+          "scope": {
+            "enum": [
+              "CHANGES",
+              "GLOBAL"
+            ]
+          },
+          "change_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "obligation_lineage": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "input_digest",
+        "requirement_digest",
+        "nodes",
+        "events",
+        "bindings",
+        "snapshot_id"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "ce.obligation_lineage.v1"
+        },
+        "input_digest": {
+          "type": "string"
+        },
+        "requirement_digest": {
+          "type": "string"
+        },
+        "nodes": {
+          "type": "object"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "bindings": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "snapshot_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "precondition_review": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_evidence_ref",
+          "condition",
+          "disposition",
+          "verification_refs",
+          "open_obligation_refs",
+          "rationale"
+        ],
+        "properties": {
+          "source_evidence_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "condition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1600
+          },
+          "disposition": {
+            "type": "string",
+            "enum": [
+              "REQUIRED",
+              "UNRESOLVED",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "verification_refs": {
+            "type": "array",
+            "uniqueItems": true,
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "open_obligation_refs": {
+            "type": "array",
+            "uniqueItems": true,
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1600
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "existingTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "path",
+        "locator",
+        "unit_refs",
+        "snapshot_id",
+        "content_digest"
+      ],
+      "properties": {
+        "kind": {
+          "const": "EXISTING"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator": {
+          "type": "object"
+        },
+        "unit_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "snapshot_id": {
+          "type": "string"
+        },
+        "content_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "newTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent_path",
+        "proposed_path",
+        "expected_role",
+        "anchor_unit_refs",
+        "missing_unit_refs",
+        "justification_refs"
+      ],
+      "properties": {
+        "kind": {
+          "const": "NEW"
+        },
+        "parent_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "proposed_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "anchor_unit_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "missing_unit_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "justification_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "target",
+        "operation",
+        "semantic_action",
+        "intent",
+        "violation_refs",
+        "postcondition_refs",
+        "depends_on"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "target": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/existingTarget"
+            },
+            {
+              "$ref": "#/$defs/newTarget"
+            }
+          ]
+        },
+        "operation": {
+          "enum": [
+            "MODIFY",
+            "CREATE",
+            "REMOVE"
+          ]
+        },
+        "semantic_action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "violation_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "postcondition_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "postcondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "statement",
+        "requirement_refs",
+        "obligation_refs",
+        "relation_refs",
+        "planned_check",
+        "check_scope"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requirement_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "obligation_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^A[1-9][0-9]*$"
+          }
+        },
+        "relation_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "planned_check": {
+          "type": "string",
+          "minLength": 1
+        },
+        "check_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_kind": {
+          "type": "string",
+          "enum": [
+            "PUBLIC_STRUCTURE",
+            "PUBLIC_BEHAVIOR",
+            "BUILD_ONLY",
+            "NOT_PUBLICLY_OBSERVABLE",
+            "UNKNOWN",
+            "DECLARED_INPUT_EQUALITY"
+          ]
+        },
+        "verification_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scenario": {
+              "type": "string",
+              "minLength": 1
+            },
+            "resource": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "namespace": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "comparison_requirements": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "artifact_id",
+              "input_pointer",
+              "output_pointer"
+            ],
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "input_pointer": {
+                "type": "string"
+              },
+              "output_pointer": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "behavior_check_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 32,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "check_coverage": {
+          "type": "string",
+          "enum": [
+            "ALL_OF",
+            "NECESSARY_ONLY",
+            "SUPPORTING"
+          ]
+        },
+        "coverage_rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1600
+        },
+        "stable_obligation_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "semantic_statements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Runner-preserved conjunctive statements; aliasing does not establish equivalence or sufficient coverage."
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome_id",
+        "repair_supported",
+        "preserve_required",
+        "unresolved"
+      ],
+      "properties": {
+        "outcome_id": {
+          "type": "string"
+        },
+        "repair_supported": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "preserve_required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unresolved": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "preserveConstraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "outcome_id",
+        "obligation_refs",
+        "statement",
+        "current_satisfaction",
+        "evidence_refs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "outcome_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "obligation_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^A[1-9][0-9]*$"
+          }
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "current_satisfaction": {
+          "enum": [
+            "OBSERVED",
+            "INFERRED",
+            "UNKNOWN"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "verification_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scenario": {
+              "type": "string",
+              "minLength": 1
+            },
+            "resource": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "namespace": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "verification_kind": {
+          "type": "string",
+          "enum": [
+            "PUBLIC_STRUCTURE",
+            "PUBLIC_BEHAVIOR",
+            "BUILD_ONLY",
+            "NOT_PUBLICLY_OBSERVABLE",
+            "UNKNOWN",
+            "DECLARED_INPUT_EQUALITY"
+          ]
+        },
+        "comparison_requirements": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "artifact_id",
+              "input_pointer",
+              "output_pointer"
+            ],
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "input_pointer": {
+                "type": "string"
+              },
+              "output_pointer": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "behavior_check_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 32,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "check_coverage": {
+          "type": "string",
+          "enum": [
+            "ALL_OF",
+            "NECESSARY_ONLY",
+            "SUPPORTING"
+          ]
+        },
+        "coverage_rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1600
+        },
+        "stable_obligation_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "semantic_statements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Runner-preserved conjunctive statements; aliasing does not establish equivalence or sufficient coverage."
+        }
+      }
+    },
+    "openObligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "outcome_id",
+        "obligation_refs",
+        "statement",
+        "reason"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "outcome_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "obligation_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^A[1-9][0-9]*$"
+          }
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scenario": {
+              "type": "string",
+              "minLength": 1
+            },
+            "resource": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "namespace": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "verification_kind": {
+          "type": "string",
+          "enum": [
+            "PUBLIC_STRUCTURE",
+            "PUBLIC_BEHAVIOR",
+            "BUILD_ONLY",
+            "NOT_PUBLICLY_OBSERVABLE",
+            "UNKNOWN",
+            "DECLARED_INPUT_EQUALITY"
+          ]
+        },
+        "comparison_requirements": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "artifact_id",
+              "input_pointer",
+              "output_pointer"
+            ],
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "input_pointer": {
+                "type": "string"
+              },
+              "output_pointer": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "behavior_check_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 32,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "check_coverage": {
+          "type": "string",
+          "enum": [
+            "ALL_OF",
+            "NECESSARY_ONLY",
+            "SUPPORTING"
+          ]
+        },
+        "coverage_rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1600
+        },
+        "stable_obligation_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "interpretation_disputed": {
+          "type": "boolean"
+        },
+        "semantic_statements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Runner-preserved conjunctive statements; aliasing does not establish equivalence or sufficient coverage."
+        }
+      }
+    }
+  }
+}

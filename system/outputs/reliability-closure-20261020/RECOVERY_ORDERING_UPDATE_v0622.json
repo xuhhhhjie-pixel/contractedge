@@ -1,0 +1,18 @@
+{
+  "as_of": "2026-10-22T05:58:26.145988+00:00",
+  "version": "0.6.22",
+  "source_config_or_limits_changed": false,
+  "registered_membership_or_outcomes_changed": false,
+  "ordering_update": "After G4 fresh KPT PASS, execute already registered KPT recovery0 candidate before A expansion; first repair had no rejected trial, so real feedback-driven recovery remains the more uncertain gate",
+  "attempt": {
+    "case_id": "R3-KPT-4673",
+    "repeat": 0,
+    "variant": "candidate",
+    "name": "delivery-0.6.22-recovery-R3-KPT-4673-0-candidate",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.22-recovery-R3-KPT-4673-0-candidate"
+  },
+  "seed_registration": "experiment-registration-v0.6.22.json",
+  "budget_cap_cny": 150,
+  "selection_scope": "Already exposed, prespecified development case/seed; not new trial or best-of retry",
+  "B_remains_closed": true
+}

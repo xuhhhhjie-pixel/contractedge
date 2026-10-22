@@ -1,0 +1,10 @@
+{
+  "version": "0.6.24",
+  "closed_at": "2026-10-22T08:54:25.952140+00:00",
+  "finalized_and_independently_scored": 1,
+  "not_run": 45,
+  "ACK": "NO_CANDIDATE",
+  "transport_recovery": "Completed, empty length response16384 reasoning tokens -> complete2223token disabled response",
+  "B_opened": false,
+  "formal_ready": false
+}

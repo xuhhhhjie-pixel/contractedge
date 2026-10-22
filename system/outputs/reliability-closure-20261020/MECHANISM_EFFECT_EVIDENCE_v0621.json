@@ -1,0 +1,423 @@
+{
+  "version": "0.6.21",
+  "case_id": "R3-KOPF-726",
+  "scope": "Actual single-run operational linkage; no isolated component causal effect or failure-recovery claim",
+  "stages": [
+    {
+      "call_index": 0,
+      "prompt_version": "diagnosis.v1.1.26",
+      "required_function_body_delivery": {
+        "_guess_owner": true,
+        "adjust_namespace": true,
+        "adopt": true
+      },
+      "source_records": [
+        {
+          "id": "SRC-CU-856add59cc973a48",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "73b39950551c17829dd8ce03374a13241b011d4f0e917d7b1230815f0c5b0a66",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-b9c851e226597227",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "5a1da8a2898f5f577d34b8c03f21041b62f85c119cf9571f4196340ff2cd60ea",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-9ab2354c53ef95ad",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "3247d26835a797e6da999d744c8f53c4ff6c0aa23e2111b2cbc1da590185b879",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-e0bd863fc8423d64",
+          "path": "kopf/clients/watching.py",
+          "excerpt_sha256": "023ee50df578d92887a013906393cd3f30731ebe81efe427d78e63c56cdf0b0a",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-67aff561ca7b92ba",
+          "path": "README.md",
+          "excerpt_sha256": "d1bbcd4c106d65929d9f9e758141429d71d9e0a416124eb040d2fc4fd34e5d8f",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-c0493544a9dcc6f6",
+          "path": "kopf/reactor/running.py",
+          "excerpt_sha256": "248e6ac5871d84d404e26f080a931269355cf9547141b8ae22022696c0057c58",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-ae77d4572cdba77a",
+          "path": "kopf/structs/references.py",
+          "excerpt_sha256": "1e35131f03e348667d956cdd445a7ad3c0cb0c615dc8b2d7bedf4aaa237e254c",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-2cb562270ff4b32c",
+          "path": "docs/walkthrough/updates.rst",
+          "excerpt_sha256": "f65d98f8cb3d84043640634425d51457a56f03d0346cc7a4195c2eea20264203",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-4f734f622a766a44",
+          "path": "docs/kwargs.rst",
+          "excerpt_sha256": "a039e743a16306becd7c713b52798e1794eaba27c211e583366a21015acd7141",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-95ef85414ff770e1",
+          "path": "docs/hierarchies.rst",
+          "excerpt_sha256": "68018093243e767d5c7475e6679766e8c483328b69b282d0ee716a79510babe8",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-aeb084ca1cee76a5",
+          "path": "docs/walkthrough/deletion.rst",
+          "excerpt_sha256": "bc3d014be70a177b1a374a50a876cd4a1b1036a2d0fa4807d71ad58d6fd242bf",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-812bf3c15a1a2b65",
+          "path": "docs/configuration.rst",
+          "excerpt_sha256": "d3e2991ae195f976a14c1b4a1d6739eef0b1c677b8097d657d50ff78119363ff",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        }
+      ],
+      "current_target_files_exact": []
+    },
+    {
+      "call_index": 1,
+      "prompt_version": "diagnosis.v1.1.26",
+      "required_function_body_delivery": {
+        "_guess_owner": true,
+        "adjust_namespace": true,
+        "adopt": true
+      },
+      "source_records": [
+        {
+          "id": "SRC-CU-856add59cc973a48",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "73b39950551c17829dd8ce03374a13241b011d4f0e917d7b1230815f0c5b0a66",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-b9c851e226597227",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "5a1da8a2898f5f577d34b8c03f21041b62f85c119cf9571f4196340ff2cd60ea",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-9ab2354c53ef95ad",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "3247d26835a797e6da999d744c8f53c4ff6c0aa23e2111b2cbc1da590185b879",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-e0bd863fc8423d64",
+          "path": "kopf/clients/watching.py",
+          "excerpt_sha256": "023ee50df578d92887a013906393cd3f30731ebe81efe427d78e63c56cdf0b0a",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-67aff561ca7b92ba",
+          "path": "README.md",
+          "excerpt_sha256": "d1bbcd4c106d65929d9f9e758141429d71d9e0a416124eb040d2fc4fd34e5d8f",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-c0493544a9dcc6f6",
+          "path": "kopf/reactor/running.py",
+          "excerpt_sha256": "248e6ac5871d84d404e26f080a931269355cf9547141b8ae22022696c0057c58",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-ae77d4572cdba77a",
+          "path": "kopf/structs/references.py",
+          "excerpt_sha256": "1e35131f03e348667d956cdd445a7ad3c0cb0c615dc8b2d7bedf4aaa237e254c",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-2cb562270ff4b32c",
+          "path": "docs/walkthrough/updates.rst",
+          "excerpt_sha256": "f65d98f8cb3d84043640634425d51457a56f03d0346cc7a4195c2eea20264203",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-4f734f622a766a44",
+          "path": "docs/kwargs.rst",
+          "excerpt_sha256": "a039e743a16306becd7c713b52798e1794eaba27c211e583366a21015acd7141",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-95ef85414ff770e1",
+          "path": "docs/hierarchies.rst",
+          "excerpt_sha256": "68018093243e767d5c7475e6679766e8c483328b69b282d0ee716a79510babe8",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-aeb084ca1cee76a5",
+          "path": "docs/walkthrough/deletion.rst",
+          "excerpt_sha256": "bc3d014be70a177b1a374a50a876cd4a1b1036a2d0fa4807d71ad58d6fd242bf",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-812bf3c15a1a2b65",
+          "path": "docs/configuration.rst",
+          "excerpt_sha256": "d3e2991ae195f976a14c1b4a1d6739eef0b1c677b8097d657d50ff78119363ff",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        }
+      ],
+      "current_target_files_exact": []
+    },
+    {
+      "call_index": 2,
+      "prompt_version": "diagnosis.v1.1.26",
+      "required_function_body_delivery": {
+        "_guess_owner": true,
+        "adjust_namespace": true,
+        "adopt": true
+      },
+      "source_records": [
+        {
+          "id": "SRC-CU-856add59cc973a48",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "73b39950551c17829dd8ce03374a13241b011d4f0e917d7b1230815f0c5b0a66",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-b9c851e226597227",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "5a1da8a2898f5f577d34b8c03f21041b62f85c119cf9571f4196340ff2cd60ea",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-9ab2354c53ef95ad",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "3247d26835a797e6da999d744c8f53c4ff6c0aa23e2111b2cbc1da590185b879",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-e0bd863fc8423d64",
+          "path": "kopf/clients/watching.py",
+          "excerpt_sha256": "023ee50df578d92887a013906393cd3f30731ebe81efe427d78e63c56cdf0b0a",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-67aff561ca7b92ba",
+          "path": "README.md",
+          "excerpt_sha256": "d1bbcd4c106d65929d9f9e758141429d71d9e0a416124eb040d2fc4fd34e5d8f",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-c0493544a9dcc6f6",
+          "path": "kopf/reactor/running.py",
+          "excerpt_sha256": "248e6ac5871d84d404e26f080a931269355cf9547141b8ae22022696c0057c58",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-ae77d4572cdba77a",
+          "path": "kopf/structs/references.py",
+          "excerpt_sha256": "1e35131f03e348667d956cdd445a7ad3c0cb0c615dc8b2d7bedf4aaa237e254c",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-2cb562270ff4b32c",
+          "path": "docs/walkthrough/updates.rst",
+          "excerpt_sha256": "f65d98f8cb3d84043640634425d51457a56f03d0346cc7a4195c2eea20264203",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-4f734f622a766a44",
+          "path": "docs/kwargs.rst",
+          "excerpt_sha256": "a039e743a16306becd7c713b52798e1794eaba27c211e583366a21015acd7141",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-95ef85414ff770e1",
+          "path": "docs/hierarchies.rst",
+          "excerpt_sha256": "68018093243e767d5c7475e6679766e8c483328b69b282d0ee716a79510babe8",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-aeb084ca1cee76a5",
+          "path": "docs/walkthrough/deletion.rst",
+          "excerpt_sha256": "bc3d014be70a177b1a374a50a876cd4a1b1036a2d0fa4807d71ad58d6fd242bf",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-812bf3c15a1a2b65",
+          "path": "docs/configuration.rst",
+          "excerpt_sha256": "d3e2991ae195f976a14c1b4a1d6739eef0b1c677b8097d657d50ff78119363ff",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        }
+      ],
+      "current_target_files_exact": []
+    },
+    {
+      "call_index": 3,
+      "prompt_version": "changeset.v1.1.9",
+      "required_function_body_delivery": {
+        "_guess_owner": true,
+        "adjust_namespace": true,
+        "adopt": true
+      },
+      "source_records": [
+        {
+          "id": "SRC-CU-856add59cc973a48",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "73b39950551c17829dd8ce03374a13241b011d4f0e917d7b1230815f0c5b0a66",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-b9c851e226597227",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "5a1da8a2898f5f577d34b8c03f21041b62f85c119cf9571f4196340ff2cd60ea",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        },
+        {
+          "id": "SRC-CU-9ab2354c53ef95ad",
+          "path": "kopf/toolkits/hierarchies.py",
+          "excerpt_sha256": "3247d26835a797e6da999d744c8f53c4ff6c0aa23e2111b2cbc1da590185b879",
+          "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+          "matches_public_S0": true
+        }
+      ],
+      "current_target_files_exact": []
+    },
+    {
+      "call_index": 4,
+      "prompt_version": "topomen-source-execution.v1",
+      "required_function_body_delivery": {
+        "_guess_owner": true,
+        "adjust_namespace": true,
+        "adopt": true
+      },
+      "source_records": [],
+      "current_target_files_exact": [
+        "kopf/toolkits/hierarchies.py"
+      ]
+    }
+  ],
+  "diagnosis_violations": [
+    {
+      "id": "V1",
+      "causal_status": "SUPPORTED",
+      "evidence_refs": [
+        "SRC-CU-856add59cc973a48",
+        "SRC-CU-b9c851e226597227",
+        "SRC-CU-9ab2354c53ef95ad",
+        "OBS3",
+        "OBS4"
+      ],
+      "causal_explanation": "adopt() passes the cluster-scoped owner's None namespace to adjust_namespace, which calls _guess_owner(None); outside a handler _guess_owner raises LookupError, so no manifest or owner reference is produced."
+    }
+  ],
+  "changes": [
+    {
+      "id": "C1",
+      "violation_refs": [
+        "V1"
+      ],
+      "postcondition_refs": [
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "unit_refs": [
+        "U1",
+        "U2"
+      ]
+    }
+  ],
+  "precondition_review": [
+    {
+      "source_evidence_ref": "SRC-CU-9ab2354c53ef95ad",
+      "condition": "_guess_owner raises LookupError when owner is None and handling.cause_var has no ResourceCause.",
+      "disposition": "NOT_APPLICABLE",
+      "verification_refs": [],
+      "open_obligation_refs": [],
+      "rationale": "The planned repair routes cluster-scoped adoption away from _guess_owner(None) by passing allow_missing_namespace=True from adopt; the existing guard remains for callers that do not use the flag, so it is not a prerequisite for this repaired path."
+    }
+  ],
+  "native_backend": {
+    "source_root": "/home/xhj/contractedge-integrations/topomen",
+    "source_sha256": "3dfc43754d4bae6dbc99051ed607d4cc756b26049b79b7f5cc2f9865ee17b2dd",
+    "python_modules": 44,
+    "package_version": "1.1.2",
+    "agent_class": "topomen.collaboration.base_agent.DefaultAgent",
+    "agent_module_path": "/home/xhj/contractedge-integrations/topomen/src/topomen/collaboration/base_agent.py",
+    "global_config_isolated": true,
+    "bytecode_cache_isolated": true,
+    "source_rechecked_after_import": true,
+    "budget_owner": "contractedge.shared_budget",
+    "docker_deployment_scheduler_invoked": false
+  },
+  "actual_change_ids": [
+    "C1"
+  ],
+  "actual_changed_paths": [
+    "kopf/toolkits/hierarchies.py"
+  ],
+  "feedback_public_checks": [
+    {
+      "id": "P1",
+      "status": "PASS"
+    },
+    {
+      "id": "P2",
+      "status": "PASS"
+    },
+    {
+      "id": "P3",
+      "status": "PASS"
+    }
+  ],
+  "feedback_route": "STOP",
+  "feedback_semantic_outcome": "PUBLIC_REVIEW_PASS",
+  "remaining_effect_gates": [
+    "Same-version original-success regression",
+    "Two independent registered critical-case attempts",
+    "Two-repository saved-failure recovery",
+    "Fixed B migration and paired improvement"
+  ]
+}

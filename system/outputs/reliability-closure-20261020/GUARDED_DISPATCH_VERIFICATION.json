@@ -1,0 +1,44 @@
+{
+  "api_calls": 0,
+  "actual_workers_started": 0,
+  "checks": [
+    {
+      "scenario": "candidate_failure",
+      "controller_status": "HELD_CANDIDATE_FAILURE",
+      "worker_starts": [
+        "case0",
+        "case1"
+      ]
+    },
+    {
+      "scenario": "existing_pass_skip",
+      "controller_status": "COMPLETE",
+      "worker_starts": []
+    },
+    {
+      "scenario": "partial_existing",
+      "controller_status": "INCOMPLETE_RUN_REQUIRES_AUDIT",
+      "worker_starts": []
+    },
+    {
+      "scenario": "bad_identity",
+      "controller_status": "FROZEN_IDENTITY_MISMATCH",
+      "worker_starts": []
+    },
+    {
+      "scenario": "score_missing",
+      "controller_status": "SCORING_INCOMPLETE_REQUIRES_AUDIT",
+      "worker_starts": [
+        "case0"
+      ]
+    },
+    {
+      "scenario": "public_failure",
+      "controller_status": "HELD_CANDIDATE_PUBLIC_FAILURE",
+      "worker_starts": [
+        "case0"
+      ]
+    }
+  ],
+  "controller_sha256": "953c029a5d4a9eb33cce052d6abf1ac67679ec27f32cef1c28be6fb021125757"
+}

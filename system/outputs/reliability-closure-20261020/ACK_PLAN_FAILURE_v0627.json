@@ -1,0 +1,290 @@
+{
+  "version": "0.6.27",
+  "status": "INVALID_PLAN",
+  "errors": [
+    "PRESERVATION_IMPACT_INVALID:preservation_impact:CHANGES needs real influencing changes; GLOBAL has no speculative change ids"
+  ],
+  "changeset": {
+    "schema_version": "ce.semantic_changeset.v1_1",
+    "run_id": "c5e8cc0a-a696-4b75-a08b-2766e79206c3",
+    "snapshot_id": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+    "input_digest": "ec803df45cf09fe570dec3956e006145e531988c771cbd233a3ab3c4d78e638c",
+    "diagnosis_digest": "6612f531dc1e88e6d4c0ad74057919b1d1dd9216177bdc1417eb99cfab792023",
+    "goal": "Restore observed tag update convergence for existing MetricAlarm resources by making the update path apply declared tag additions, value changes, and removals externally, while preserving tags when unchanged.",
+    "planned_violation_ids": [],
+    "changes": [],
+    "postconditions": [],
+    "preserve_constraints": [
+      {
+        "id": "P-A3",
+        "outcome_id": "O1",
+        "obligation_refs": [
+          "A3"
+        ],
+        "statement": "When the desired tags remain unchanged, the update path must preserve the existing external tag set.",
+        "current_satisfaction": "INFERRED",
+        "evidence_refs": [
+          "SRC-CU-be754c069fb990ae",
+          "SRC-CU-527fe5429a26f69f",
+          "SRC-CU-99686d29bed27b32"
+        ],
+        "verification_kind": "NOT_PUBLICLY_OBSERVABLE",
+        "verification_scope": {},
+        "check_coverage": "NECESSARY_ONLY",
+        "coverage_rationale": "Current update path sends tags only in PutMetricAlarmInput, which the supplied field contract says is ignored for existing alarms; unchanged desired tags therefore do not trigger an external tag mutation, preserving the existing tag set. External tag state is not publicly observable.",
+        "semantic_statements": [
+          "If desired tags equal latest tags, no effective tag mutation is sent."
+        ],
+        "stable_obligation_keys": [
+          "OB-3a33088a7e614cf4757bf39e"
+        ]
+      }
+    ],
+    "open_obligations": [
+      {
+        "id": "OB-A1",
+        "outcome_id": "O1",
+        "obligation_refs": [
+          "A1"
+        ],
+        "statement": "When a MetricAlarm declaration changes the tags of an existing managed alarm, its update path must make the externally stored tag keys and values match the declaration.",
+        "reason": "Requires evidence of the SDK tag mutation client bindings and current-tag retrieval before an executable production change can be planned.",
+        "semantic_statements": [
+          "Declared tag changes must converge externally."
+        ],
+        "verification_kind": "NOT_PUBLICLY_OBSERVABLE",
+        "stable_obligation_keys": [
+          "OB-234084b1705b797c8a6fdc21"
+        ]
+      },
+      {
+        "id": "OB-A2",
+        "outcome_id": "O1",
+        "obligation_refs": [
+          "A2"
+        ],
+        "statement": "Tag additions, value changes, and removals on an existing managed alarm must take effect externally.",
+        "reason": "Requires evidence of the SDK tag mutation client bindings and current-tag retrieval before an executable production change can be planned.",
+        "semantic_statements": [
+          "Additions, value changes, and removals must all be applied."
+        ],
+        "verification_kind": "NOT_PUBLICLY_OBSERVABLE",
+        "stable_obligation_keys": [
+          "OB-aa891c1cbe08e25706d45762"
+        ]
+      }
+    ],
+    "outcome_coverage": [
+      {
+        "outcome_id": "O1",
+        "repair_supported": [],
+        "preserve_required": [
+          "O1"
+        ],
+        "unresolved": [
+          "O1"
+        ]
+      }
+    ],
+    "status": "NEEDS_EVIDENCE",
+    "precondition_review": [
+      {
+        "source_evidence_ref": "SRC-CU-99686d29bed27b32",
+        "condition": "The supplied Tags field contract states that PutMetricAlarm ignores supplied tags for an existing alarm and directs tag changes to TagResource/UntagResource.",
+        "disposition": "UNRESOLVED",
+        "verification_refs": [],
+        "open_obligation_refs": [
+          "OB-A1",
+          "OB-A2"
+        ],
+        "rationale": "This source is the basis for the violation but does not evidence the SDK client methods or how current tags are read; those missing contracts are tracked in open obligations."
+      }
+    ],
+    "preservation_impact": [
+      {
+        "preserve_id": "P-A3",
+        "scope": "CHANGES",
+        "change_refs": [],
+        "rationale": "No executable changes proposed this round; any future tag reconciliation must avoid mutations when desired tags are unchanged."
+      }
+    ],
+    "production_path_review": [
+      {
+        "source_evidence_id": "SRC-CU-be754c069fb990ae",
+        "disposition": "UNRESOLVED",
+        "rationale": "newUpdateRequestPayload currently copies Spec.Tags into PutMetricAlarmInput.Tags, but the supplied contract says those tags are ignored for an existing alarm; the repair strategy depends on missing SDK tag-operation bindings and current-tag retrieval, so this branch is unresolved.",
+        "change_refs": [],
+        "open_obligation_refs": [
+          "OB-A1",
+          "OB-A2"
+        ]
+      },
+      {
+        "source_evidence_id": "SRC-CU-df0ba524743b197d",
+        "disposition": "OUT_OF_SCOPE",
+        "rationale": "newCreateRequestPayload builds the create request; the obligation trigger is an existing managed alarm update, so this create-path branch is not the update-path consumer under repair.",
+        "change_refs": [],
+        "open_obligation_refs": []
+      }
+    ],
+    "evidence_gaps": [
+      {
+        "id": "EG1",
+        "summary": "Missing evidence of SDK client bindings for TagResource/UntagResource used by the metric_alarm update path.",
+        "locator_hint": {
+          "path": "pkg/resource/metric_alarm/sdk.go",
+          "symbol": "sdkUpdate",
+          "search_term": "TagResource"
+        }
+      },
+      {
+        "id": "EG2",
+        "summary": "Missing evidence of how current external tags are populated on the latest/alarm resource for computing removals.",
+        "locator_hint": {
+          "path": "pkg/resource/metric_alarm/sdk.go",
+          "symbol": "sdkReadMany",
+          "search_term": "Tags"
+        }
+      }
+    ],
+    "obligation_lineage": {
+      "schema_version": "ce.obligation_lineage.v1",
+      "input_digest": "ec803df45cf09fe570dec3956e006145e531988c771cbd233a3ab3c4d78e638c",
+      "requirement_digest": "924165647082812e3831efd83877b59d6dbd17853cf15f80e080afb5548b6d8a",
+      "nodes": {
+        "OB-234084b1705b797c8a6fdc21": {
+          "id": "OB-234084b1705b797c8a6fdc21",
+          "definition": {
+            "id": "A1",
+            "outcome_id": "O1",
+            "statement": "When a MetricAlarm declaration changes the tags of an existing managed alarm, its update path must make the externally stored tag keys and values match the declaration.",
+            "source_refs": [
+              "requirement_text:0:168"
+            ],
+            "support": "EXPLICIT",
+            "source_quote": "When a MetricAlarm declaration changes the tags of an existing managed alarm, its update path must make the externally stored tag keys and values match the declaration.",
+            "stable_obligation_key": "OB-234084b1705b797c8a6fdc21"
+          },
+          "aliases": [],
+          "sources": [
+            {
+              "source_refs": [
+                "requirement_text:0:168"
+              ],
+              "source_quote": "When a MetricAlarm declaration changes the tags of an existing managed alarm, its update path must make the externally stored tag keys and values match the declaration.",
+              "scope_quote": null
+            }
+          ],
+          "parents": [],
+          "children": [],
+          "residual": null,
+          "kind": "OBLIGATION"
+        },
+        "OB-aa891c1cbe08e25706d45762": {
+          "id": "OB-aa891c1cbe08e25706d45762",
+          "definition": {
+            "id": "A2",
+            "outcome_id": "O1",
+            "statement": "Tag additions, value changes, and removals on an existing managed alarm must take effect externally.",
+            "source_refs": [
+              "requirement_text:169:229"
+            ],
+            "support": "EXPLICIT",
+            "source_quote": "Tag additions, value changes, and removals must take effect.",
+            "stable_obligation_key": "OB-aa891c1cbe08e25706d45762"
+          },
+          "aliases": [],
+          "sources": [
+            {
+              "source_refs": [
+                "requirement_text:169:229"
+              ],
+              "source_quote": "Tag additions, value changes, and removals must take effect.",
+              "scope_quote": null
+            }
+          ],
+          "parents": [],
+          "children": [],
+          "residual": null,
+          "kind": "OBLIGATION"
+        },
+        "OB-3a33088a7e614cf4757bf39e": {
+          "id": "OB-3a33088a7e614cf4757bf39e",
+          "definition": {
+            "id": "A3",
+            "outcome_id": "O1",
+            "statement": "When the desired tags remain unchanged, the update path must preserve the existing external tag set.",
+            "source_refs": [
+              "requirement_text:230:330"
+            ],
+            "support": "EXPLICIT",
+            "source_quote": "When the desired tags remain unchanged, the update path must preserve the existing external tag set.",
+            "stable_obligation_key": "OB-3a33088a7e614cf4757bf39e"
+          },
+          "aliases": [],
+          "sources": [
+            {
+              "source_refs": [
+                "requirement_text:230:330"
+              ],
+              "source_quote": "When the desired tags remain unchanged, the update path must preserve the existing external tag set.",
+              "scope_quote": null
+            }
+          ],
+          "parents": [],
+          "children": [],
+          "residual": null,
+          "kind": "OBLIGATION"
+        }
+      },
+      "events": [
+        {
+          "kind": "REGISTER",
+          "id": "LE-5fa6afd1e8fd63d24a1d46bd",
+          "parent_ids": [],
+          "atom_refs": [
+            "A1"
+          ],
+          "resolved_ids": {
+            "A1": "OB-234084b1705b797c8a6fdc21"
+          },
+          "snapshot_id": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+          "rationale": "Exact runner-bound source identity; original semantics retained"
+        },
+        {
+          "kind": "REGISTER",
+          "id": "LE-38954ac3b2de9c190f1ddbc5",
+          "parent_ids": [],
+          "atom_refs": [
+            "A2"
+          ],
+          "resolved_ids": {
+            "A2": "OB-aa891c1cbe08e25706d45762"
+          },
+          "snapshot_id": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+          "rationale": "Exact runner-bound source identity; original semantics retained"
+        },
+        {
+          "kind": "REGISTER",
+          "id": "LE-ed42f8db039bd5e3829e44c4",
+          "parent_ids": [],
+          "atom_refs": [
+            "A3"
+          ],
+          "resolved_ids": {
+            "A3": "OB-3a33088a7e614cf4757bf39e"
+          },
+          "snapshot_id": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+          "rationale": "Exact runner-bound source identity; original semantics retained"
+        }
+      ],
+      "bindings": {
+        "A1": "OB-234084b1705b797c8a6fdc21",
+        "A2": "OB-aa891c1cbe08e25706d45762",
+        "A3": "OB-3a33088a7e614cf4757bf39e"
+      },
+      "snapshot_id": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60"
+    }
+  },
+  "scope": "Public method result excerpt; not hidden grader contents"
+}

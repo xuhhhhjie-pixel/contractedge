@@ -1,0 +1,14 @@
+{
+  "api_calls": 0,
+  "input_upper_bound": 201152,
+  "reserved_output": 16384,
+  "limit": 220000,
+  "historical_helper_conflicts": 1,
+  "read_only_helper_count": 8,
+  "merge_helper_delivered": true,
+  "full_historical_feedback_digest": "e6196ceb2a275e290d8f0a710e733ab4e35b932f947019e70241fd36052076fa",
+  "history_characters": 19036,
+  "historical_failed_predicates": 7,
+  "shared_current_observation_refs": 40,
+  "execution_thinking": "enabled"
+}

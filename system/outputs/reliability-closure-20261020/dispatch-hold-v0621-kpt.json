@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-22T05:31:02.804145+00:00",
+  "reason": "KPT candidate NO_CANDIDATE; hold dispatch for saved-trace root cause before more paid expansion",
+  "stopped_dispatchers": [],
+  "active_workers_allowed_to_finish": [],
+  "source_config_and_harness_unchanged": true,
+  "no_managed_dispatcher_worker_or_scorer_process_found": true,
+  "meaning": "No SIGSTOP applied; stale active Alert RUNNING artifact retained, no available worker finally manifest. Cause of process exit unknown."
+}

@@ -1,0 +1,49 @@
+................................................................... [ 10%]
+..................................................................... [ 20%]
+................................................................. [ 30%]
+..................................................................... [ 41%]
+...................................................................... [ 52%]
+.................................................................F...... [ 63%]
+........................................................................ [ 74%]
+........................................................................ [ 85%]
+........................................................................ [ 96%]
+.........................                                              [100%]
+=================================== FAILURES ===================================
+__ OrchestrationTests.test_evidence_gap_runs_one_bounded_diagnosis_extension ___
+
+self = <tests.test_orchestration.OrchestrationTests testMethod=test_evidence_gap_runs_one_bounded_diagnosis_extension>
+
+    def test_evidence_gap_runs_one_bounded_diagnosis_extension(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "templates/serviceaccount.yaml"
+            source.parent.mkdir()
+            source.write_text("apiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: default\n", encoding="utf-8")
+            PipelineFixtureProvider._snapshot_digests = {"templates/serviceaccount.yaml": hashlib.sha256(source.read_bytes()).hexdigest()}
+            method = valid_method_input()
+            method["requirement_text"] = "When enabled, render the selected ServiceAccount."
+            method["public_observable_text"] = "The rendered ServiceAccount name is default instead of selected."
+            method["scope_hints"] = [{"kind": "path", "value": "templates/serviceaccount.yaml",
+                                      "raw_text": "templates/serviceaccount.yaml", "origin_ref": "artifact_scope[0]"}]
+            method["initial_snapshot_id"] = compute_snapshot(root).snapshot_id
+            method["public_evidence"] = [{"id": "PUB1", "snapshot_id": method["initial_snapshot_id"],
+                "kind": "PUBLIC_OBSERVATION", "locator": {"path": "evidence/PUB1.json"},
+                "content_digest": hashlib.sha256(b"public observation").hexdigest(),
+                "excerpt": method["public_observable_text"], "origin": "fixture"}]
+            method.pop("input_digest", None)
+            method["input_digest"] = canonical_digest(method)
+            provider = InvalidExtensionThenCorrectedProvider()
+            trace = run_front_half(method, root, provider,
+                {"run_id": "run-extension", "model": {"model": "fixture"}, "top_n": 1,
+                 "max_context_tokens": 5000, "max_format_retries": 1},
+                token_counter=lambda text: len(text.split()))
+>       self.assertEqual(trace.status, "READY", f"{trace.errors}")
+E       AssertionError: 'BUDGET_EXHAUSTED' != 'READY'
+E       - BUDGET_EXHAUSTED
+E       + READY
+E        : ('ChangeSet request exceeds the total token or time budget',)
+
+tests/test_orchestration.py:649: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_orchestration.py::OrchestrationTests::test_evidence_gap_runs_one_bounded_diagnosis_extension
+1 failed, 652 passed, 22 subtests passed in 55.80s

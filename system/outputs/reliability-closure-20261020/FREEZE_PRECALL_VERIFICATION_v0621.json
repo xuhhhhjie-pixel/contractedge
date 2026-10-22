@@ -1,0 +1,13 @@
+{
+  "verified_at": "2026-10-22T03:36:50.667932+00:00",
+  "method_digest": "057ba0f8b51d832e70d820647936226a8bd5f0a9c9ab8e16fddde5629b28dcb2",
+  "all_source_config_harness_verified": true,
+  "registration_and_all_46_slots_written": true,
+  "no_worker_started_by_setup_script": true,
+  "no_results_observed_for_new_version": true,
+  "source_delta": [
+    "contractedge/__init__.py",
+    "contractedge/orchestration/repair.py",
+    "contractedge/orchestration/runner.py"
+  ]
+}

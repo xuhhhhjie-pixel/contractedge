@@ -1,0 +1,20 @@
+{
+  "as_of": "2026-10-22T09:42:55.027807+00:00",
+  "role": "EXPERIMENT_DISPATCH_ONLY",
+  "controller_sha256": "953c029a5d4a9eb33cce052d6abf1ac67679ec27f32cef1c28be6fb021125757",
+  "sequence_sha256": "8894516ac974f9b59ddf4e5fc4096b12ca4648ba451d9068d9ca001b8090367d",
+  "first_gate": {
+    "group": "A",
+    "case_id": "R4-ACK-CLOUDWATCH-2985",
+    "repeat": 0,
+    "variant": "candidate"
+  },
+  "verification": [
+    "GUARDED_DISPATCH_VERIFICATION.json",
+    "GATED_SEQUENCE_VERIFICATION_v0624.json"
+  ],
+  "policy": "First validate current registered original-Broken ACK candidate. Only independent PASS with no current verified public failure admits registered A/repeat/recovery. Failed or incomplete slots stop, never retried. B/formal150 closed. No model or scoring changes.",
+  "method_source_unchanged": true,
+  "superseded_method_stops_dispatch": true,
+  "known_public_failure_also_stops_dispatch": true
+}

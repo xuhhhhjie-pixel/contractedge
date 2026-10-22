@@ -1,0 +1,13 @@
+
+==================================== ERRORS ====================================
+_ ERROR collecting .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_planning_truncation_recovery.py _
+import file mismatch:
+imported module 'tests.test_planning_truncation_recovery' has this __file__ attribute:
+  /home/xhj/contractedge-system/tests/test_planning_truncation_recovery.py
+which is not the same as the test file we want to collect:
+  /home/xhj/contractedge-system/.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_planning_truncation_recovery.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+=========================== short test summary info ============================
+ERROR .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_planning_truncation_recovery.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.49s

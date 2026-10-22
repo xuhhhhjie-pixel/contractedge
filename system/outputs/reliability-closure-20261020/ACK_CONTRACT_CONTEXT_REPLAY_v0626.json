@@ -1,0 +1,41 @@
+{
+  "api_calls": 0,
+  "input_bound": 117422,
+  "output_reserved": 16384,
+  "snapshot_unchanged": true,
+  "initial_actual_request_captured": true,
+  "producer_body_still_delivered": true,
+  "field_contexts": 1,
+  "api_update_contract": {
+    "candidate_id": "CU-99686d29bed27b32",
+    "excerpt": "\t// A list of key-value pairs to associate with the alarm. You can associate\n\t// as many as 50 tags with an alarm. To be able to associate tags with the alarm\n\t// when you create the alarm, you must have the cloudwatch:TagResource permission.\n\t//\n\t// Tags can help you organize and categorize your resources. You can also use\n\t// them to scope user permissions by granting a user permission to access or\n\t// change only resources with certain tag values.\n\t//\n\t// If you are using this operation to update an existing alarm, any tags you\n\t// specify in this parameter are ignored. To change the tags of an existing\n\t// alarm, use TagResource (https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_TagResource.html)\n\t// or UntagResource (https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_UntagResource.html).\n\t//\n\t// To use this field to set tags for an alarm when you create it, you must be\n\t// signed on with both the cloudwatch:PutMetricAlarm and cloudwatch:TagResource\n\t// permissions.\n\tTags []*Tag `json:\"tags,omitempty\"`\n",
+    "excerpt_digest": "4b2f713a4486c855789b4c3675b99a43b76a727d36945df14308a38ebc70e3b9",
+    "field_name": "Tags",
+    "interpretation": "Exact selected-source comment/field window; applicability requires review. Not runtime evidence, causal proof or edit permission.",
+    "json_key": "tags",
+    "locator": {
+      "end_line": 337,
+      "path": "apis/v1alpha1/metric_alarm.go",
+      "start_line": 321
+    },
+    "snapshot_id": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+    "source_content_digest": "8668d6f27417a7c5be3e98a24b5206f303bf02bd742c02b2648e687bf4730589",
+    "source_evidence_ref": "SRC-CU-99686d29bed27b32"
+  },
+  "gap_delivery": {
+    "status": "DELIVERED",
+    "records": [
+      {
+        "unit_id": "CU-99686d29bed27b32",
+        "roles": [
+          "SOURCE_CONTRACT:CU-99686d29bed27b32"
+        ],
+        "selected": true,
+        "delivered": true
+      }
+    ],
+    "missing_required_ids": [],
+    "interpretation": "Exact endpoint excerpts delivered; does not prove causal relevance or resolve gaps"
+  },
+  "scope": "Actual current-snapshot source, public Broken observations and full initial request fitter. No model response, repair result or independent score invented. Separate generic integration verifies Ready and execution delivery."
+}

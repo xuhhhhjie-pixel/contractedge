@@ -1,0 +1,38 @@
+......F.....F                                                            [100%]
+=================================== FAILURES ===================================
+_ test_single_operation_observed_regression_enables_existing_repair_reasoning[candidate_decision] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-213/test_single_operation_observed1')
+decision_key = 'candidate_decision'
+
+    @pytest.mark.parametrize('decision_key',['decision','candidate_decision'])
+    def test_single_operation_observed_regression_enables_existing_repair_reasoning(tmp_path,decision_key):
+        plan,config=fixture(tmp_path);previous=rejected_predicate_attempt(plan)
+        if decision_key!='decision':
+            trial=previous['rejected_trial'];trial[decision_key]=trial.pop('decision')
+        result=request(tmp_path,plan,config,previous_attempt=previous)
+>       assert result.thinking=='enabled' and result.max_output_tokens==16384
+E       AssertionError: assert ('disabled' == 'enabled'
+E         
+E         - enabled
+E         + disabled)
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py:74: AssertionError
+____ test_conflicting_shared_harness_decisions_never_enable_trial_reasoning ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-213/test_conflicting_shared_harnes0')
+
+    def test_conflicting_shared_harness_decisions_never_enable_trial_reasoning(tmp_path):
+        plan,config=fixture(tmp_path);previous=rejected_predicate_attempt(plan)
+        previous['rejected_trial']['candidate_decision']={'decision':'PROMOTE'}
+>       assert request(tmp_path,plan,config,previous_attempt=previous).thinking=='disabled'
+E       AssertionError: assert 'enabled' == 'disabled'
+E         
+E         - disabled
+E         + enabled
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py:95: AssertionError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py::test_single_operation_observed_regression_enables_existing_repair_reasoning[candidate_decision]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py::test_conflicting_shared_harness_decisions_never_enable_trial_reasoning
+2 failed, 11 passed in 0.20s

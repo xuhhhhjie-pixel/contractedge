@@ -1,0 +1,13 @@
+{
+  "version": "0.6.23",
+  "closed_at": "2026-10-22T08:36:19.332737+00:00",
+  "finalized_and_independently_scored": 11,
+  "not_run": 35,
+  "A_candidate_pass": 4,
+  "A_candidate_fail": 1,
+  "registered_KPT_recovery0_candidate": "PASS",
+  "reason": "ACK generation mode continuity failure",
+  "scorer_stopped_pid": 356198,
+  "B_opened": false,
+  "formal_ready": false
+}

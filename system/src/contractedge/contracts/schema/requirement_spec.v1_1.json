@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ContractEdge RequirementSpec v1.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "raw_text",
+    "intent_summary",
+    "outcomes",
+    "constraints",
+    "trigger",
+    "unknowns",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ce.requirement_spec.v1_1"
+    },
+    "raw_text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "intent_summary": {
+      "type": "string"
+    },
+    "outcomes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/outcome"
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "trigger": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "enum": [
+        "READY",
+        "UNDER_SPECIFIED",
+        "INVALID_INPUT"
+      ]
+    },
+    "clauses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text",
+          "source_ref"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "source_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "traceability_required": {
+      "type": "boolean"
+    },
+    "lineage_required": {
+      "type": "boolean"
+    },
+    "operation_consistency_required": {
+      "type": "boolean"
+    },
+    "prior_obligation_lineage": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "statement",
+        "condition",
+        "source_refs",
+        "support"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^O[1-9][0-9]*$"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "condition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "support": {
+          "enum": [
+            "EXPLICIT",
+            "DERIVED"
+          ]
+        },
+        "derivation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

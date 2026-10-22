@@ -1,0 +1,150 @@
+..............FFFFFFF................FF.                                 [100%]
+=================================== FAILURES ===================================
+__ test_supplied_observation_identity_is_referenced_once_without_losing_facts __
+
+    def test_supplied_observation_identity_is_referenced_once_without_losing_facts():
+        from contractedge.contracts.validation import canonical_digest
+        from copy import deepcopy
+        row=predicate_record();value=dict(to_snapshot='TRIAL',public_observations=[row],pending_obligations=[{'id':'P','statement':'Still open'}]);before=deepcopy(value)
+>       view=feedback_prompt_view(value,supplied_observations=[row])
+E       TypeError: feedback_prompt_view() got an unexpected keyword argument 'supplied_observations'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py:112: TypeError
+_ test_ambiguous_or_different_observation_keeps_full_feedback_reference[snapshot] _
+
+change = 'snapshot'
+
+    @pytest.mark.parametrize('change',['snapshot','digest','locator','duplicate','missing_excerpt'])
+    def test_ambiguous_or_different_observation_keeps_full_feedback_reference(change):
+        from copy import deepcopy
+        row=predicate_record();supplied=deepcopy(row)
+        if change=='snapshot':supplied['snapshot_id']='CURRENT'
+        elif change=='digest':supplied['content_digest']='b'*64
+        elif change=='locator':supplied['locator']['path']='another.json'
+        elif change=='missing_excerpt':supplied.pop('excerpt')
+        rows=[supplied,supplied] if change=='duplicate' else [supplied]
+>       view=feedback_prompt_view(dict(to_snapshot='TRIAL',public_observations=[row]),supplied_observations=rows)
+E       TypeError: feedback_prompt_view() got an unexpected keyword argument 'supplied_observations'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py:130: TypeError
+_ test_ambiguous_or_different_observation_keeps_full_feedback_reference[digest] _
+
+change = 'digest'
+
+    @pytest.mark.parametrize('change',['snapshot','digest','locator','duplicate','missing_excerpt'])
+    def test_ambiguous_or_different_observation_keeps_full_feedback_reference(change):
+        from copy import deepcopy
+        row=predicate_record();supplied=deepcopy(row)
+        if change=='snapshot':supplied['snapshot_id']='CURRENT'
+        elif change=='digest':supplied['content_digest']='b'*64
+        elif change=='locator':supplied['locator']['path']='another.json'
+        elif change=='missing_excerpt':supplied.pop('excerpt')
+        rows=[supplied,supplied] if change=='duplicate' else [supplied]
+>       view=feedback_prompt_view(dict(to_snapshot='TRIAL',public_observations=[row]),supplied_observations=rows)
+E       TypeError: feedback_prompt_view() got an unexpected keyword argument 'supplied_observations'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py:130: TypeError
+_ test_ambiguous_or_different_observation_keeps_full_feedback_reference[locator] _
+
+change = 'locator'
+
+    @pytest.mark.parametrize('change',['snapshot','digest','locator','duplicate','missing_excerpt'])
+    def test_ambiguous_or_different_observation_keeps_full_feedback_reference(change):
+        from copy import deepcopy
+        row=predicate_record();supplied=deepcopy(row)
+        if change=='snapshot':supplied['snapshot_id']='CURRENT'
+        elif change=='digest':supplied['content_digest']='b'*64
+        elif change=='locator':supplied['locator']['path']='another.json'
+        elif change=='missing_excerpt':supplied.pop('excerpt')
+        rows=[supplied,supplied] if change=='duplicate' else [supplied]
+>       view=feedback_prompt_view(dict(to_snapshot='TRIAL',public_observations=[row]),supplied_observations=rows)
+E       TypeError: feedback_prompt_view() got an unexpected keyword argument 'supplied_observations'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py:130: TypeError
+_ test_ambiguous_or_different_observation_keeps_full_feedback_reference[duplicate] _
+
+change = 'duplicate'
+
+    @pytest.mark.parametrize('change',['snapshot','digest','locator','duplicate','missing_excerpt'])
+    def test_ambiguous_or_different_observation_keeps_full_feedback_reference(change):
+        from copy import deepcopy
+        row=predicate_record();supplied=deepcopy(row)
+        if change=='snapshot':supplied['snapshot_id']='CURRENT'
+        elif change=='digest':supplied['content_digest']='b'*64
+        elif change=='locator':supplied['locator']['path']='another.json'
+        elif change=='missing_excerpt':supplied.pop('excerpt')
+        rows=[supplied,supplied] if change=='duplicate' else [supplied]
+>       view=feedback_prompt_view(dict(to_snapshot='TRIAL',public_observations=[row]),supplied_observations=rows)
+E       TypeError: feedback_prompt_view() got an unexpected keyword argument 'supplied_observations'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py:130: TypeError
+_ test_ambiguous_or_different_observation_keeps_full_feedback_reference[missing_excerpt] _
+
+change = 'missing_excerpt'
+
+    @pytest.mark.parametrize('change',['snapshot','digest','locator','duplicate','missing_excerpt'])
+    def test_ambiguous_or_different_observation_keeps_full_feedback_reference(change):
+        from copy import deepcopy
+        row=predicate_record();supplied=deepcopy(row)
+        if change=='snapshot':supplied['snapshot_id']='CURRENT'
+        elif change=='digest':supplied['content_digest']='b'*64
+        elif change=='locator':supplied['locator']['path']='another.json'
+        elif change=='missing_excerpt':supplied.pop('excerpt')
+        rows=[supplied,supplied] if change=='duplicate' else [supplied]
+>       view=feedback_prompt_view(dict(to_snapshot='TRIAL',public_observations=[row]),supplied_observations=rows)
+E       TypeError: feedback_prompt_view() got an unexpected keyword argument 'supplied_observations'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py:130: TypeError
+________ test_actual_execution_request_uses_bound_observation_reference ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-217/test_actual_execution_request_0')
+
+    def test_actual_execution_request_uses_bound_observation_reference(tmp_path):
+        from tests.test_execution_reasoning_policy import fixture,request
+        import json
+        plan,config=fixture(tmp_path);row=predicate_record(snapshot=plan['snapshot_id'])
+        feedback=dict(to_snapshot=plan['snapshot_id'],public_observations=[row])
+        req=request(tmp_path,plan,config,feedback=feedback,observations=[row])
+        body=json.loads(req.messages[1]['content'])
+        ref=body['execution_feedback']['public_observation_refs'][0]
+>       assert ref['public_observation_record_ref']=='/public_observations/0'
+E       KeyError: 'public_observation_record_ref'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py:144: KeyError
+_ test_candidate_decision_explanation_agrees_with_actual_observation[FAIL-REJECT_REGRESSION-regressed] _
+
+after = 'FAIL', decision = 'REJECT_REGRESSION', phrase = 'regressed'
+
+    @pytest.mark.parametrize('after,decision,phrase',[('FAIL','REJECT_REGRESSION','regressed'),(None,'UNCOMPARABLE','could not be compared'),('PASS','PROMOTE','not semantic correctness')])
+    def test_candidate_decision_explanation_agrees_with_actual_observation(after,decision,phrase):
+        before=run({'retain':'PASS'},'S0');trial=run({} if after is None else {'retain':after},'S1')
+        result=api().compare_candidate_checks(before,trial,['retain'])
+        assert result['decision']==decision
+>       assert phrase in result['interpretation']
+E       AssertionError: assert 'regressed' in 'No known comparable preservation regression; PROMOTE is not semantic correctness'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_candidate_regression_guard.py:180: AssertionError
+_ test_candidate_decision_explanation_agrees_with_actual_observation[None-UNCOMPARABLE-could not be compared] _
+
+after = None, decision = 'UNCOMPARABLE', phrase = 'could not be compared'
+
+    @pytest.mark.parametrize('after,decision,phrase',[('FAIL','REJECT_REGRESSION','regressed'),(None,'UNCOMPARABLE','could not be compared'),('PASS','PROMOTE','not semantic correctness')])
+    def test_candidate_decision_explanation_agrees_with_actual_observation(after,decision,phrase):
+        before=run({'retain':'PASS'},'S0');trial=run({} if after is None else {'retain':after},'S1')
+        result=api().compare_candidate_checks(before,trial,['retain'])
+        assert result['decision']==decision
+>       assert phrase in result['interpretation']
+E       AssertionError: assert 'could not be compared' in 'No known comparable preservation regression; PROMOTE is not semantic correctness'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_candidate_regression_guard.py:180: AssertionError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py::test_supplied_observation_identity_is_referenced_once_without_losing_facts
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py::test_ambiguous_or_different_observation_keeps_full_feedback_reference[snapshot]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py::test_ambiguous_or_different_observation_keeps_full_feedback_reference[digest]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py::test_ambiguous_or_different_observation_keeps_full_feedback_reference[locator]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py::test_ambiguous_or_different_observation_keeps_full_feedback_reference[duplicate]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py::test_ambiguous_or_different_observation_keeps_full_feedback_reference[missing_excerpt]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py::test_actual_execution_request_uses_bound_observation_reference
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_candidate_regression_guard.py::test_candidate_decision_explanation_agrees_with_actual_observation[FAIL-REJECT_REGRESSION-regressed]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_candidate_regression_guard.py::test_candidate_decision_explanation_agrees_with_actual_observation[None-UNCOMPARABLE-could not be compared]
+9 failed, 31 passed in 2.59s

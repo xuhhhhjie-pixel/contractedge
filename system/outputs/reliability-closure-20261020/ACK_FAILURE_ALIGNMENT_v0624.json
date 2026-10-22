@@ -1,0 +1,81 @@
+{
+  "version": "0.6.24",
+  "independent_status": "NO_CANDIDATE",
+  "method_status": "EVIDENCE_GAP",
+  "calls": 4,
+  "patch_bytes": 0,
+  "generation_recovery_completed": true,
+  "prior_supported_static_claim": {
+    "id": "V1",
+    "relation_id": "R2",
+    "broken_behavior": "The update path places declared tags only on PutMetricAlarmInput.Tags, and PutMetricAlarm ignores tags for an existing alarm, so declared additions, value changes, and removals do not reach the externally stored tag set.",
+    "causal_explanation": "Expected: the update path reconciles external tag keys/values to the declaration (R2, atom A2). Actual: newUpdateRequestPayload sets res.Tags unconditionally from Spec.Tags and the only MetricAlarm mutation operations configured are PutMetricAlarm/DeleteAlarms/DescribeAlarms; the AWS API documents that tags on PutMetricAlarm are ignored for an existing alarm and that TagResource/UntagResource must be used. Deviation: no tag-sync call is made, so declared tag changes never take effect.",
+    "evidence_refs": [
+      "SRC-CU-be754c069fb990ae",
+      "SRC-CU-99686d29bed27b32",
+      "SRC-CU-65eb0f7b355e252d",
+      "SRC-CU-4a352efd5e1a6337"
+    ],
+    "support_basis": "STATIC_INFERENCE",
+    "causal_status": "SUPPORTED"
+  },
+  "extension_purpose": [
+    {
+      "id": "EG1",
+      "summary": "No evidenced production consumer of a tag-operation configuration: generator.yaml lists only PutMetricAlarm/DeleteAlarms/DescribeAlarms for MetricAlarm and no TagResource/UntagResource operation or update-time tag hook, so a config-only addition would be an unused declaration.",
+      "locator_hint": {
+        "path": "generator.yaml",
+        "search_term": "TagResource"
+      }
+    },
+    {
+      "id": "EG2",
+      "summary": "The generated SDK call sites and input/output shapes for tag reconciliation on an existing alarm are not evidenced; TagResource/UntagResource inputs and any update-flow invocation are absent from the supplied source.",
+      "locator_hint": {
+        "path": "pkg/resource/metric_alarm/sdk.go",
+        "symbol": "TagResource"
+      }
+    },
+    {
+      "id": "EG3",
+      "summary": "The hook template contract available to the update path (hook name and injectable variables for computing a tag delta) is not evidenced; only sdk_read_many_post_build_request and sdk_delete_post_build_request hooks are shown.",
+      "locator_hint": {
+        "path": "templates",
+        "search_term": "sdk_update_post_build_request"
+      }
+    }
+  ],
+  "actual_extension_lacks_prior_claim_context": true,
+  "current_api_contract": {
+    "id": "SRC-CU-99686d29bed27b32",
+    "snapshot_id": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+    "locator": {
+      "column_start": 1,
+      "end_line": 385,
+      "path": "apis/v1alpha1/metric_alarm.go",
+      "start_line": 26
+    },
+    "content_digest": "8668d6f27417a7c5be3e98a24b5206f303bf02bd742c02b2648e687bf4730589",
+    "explicit_update_tags_ignored_contract_present": true
+  },
+  "final_gaps": [
+    {
+      "id": "G1",
+      "summary": "No supplied evidence shows the externally stored tag set after an update, so tag additions, value changes, and removals taking effect cannot be established.",
+      "locator_hint": {
+        "path": "pkg/resource/metric_alarm/sdk.go",
+        "symbol": "sdkUpdate"
+      }
+    },
+    {
+      "id": "G2",
+      "summary": "No supplied evidence shows whether unchanged desired tags preserve the existing external tag set on the update path.",
+      "locator_hint": {
+        "path": "pkg/resource/metric_alarm/sdk.go",
+        "search_term": "Tags"
+      }
+    }
+  ],
+  "interpretation": "Output truncation was recovered; static source/API evidence remains but prior supported diagnosis and planning-gap purpose are absent from rebuilt request. New evidence use still requires real validation; no automatic repair judgment.",
+  "next_replay": "ack-continuity-v0625-final/summary.json"
+}

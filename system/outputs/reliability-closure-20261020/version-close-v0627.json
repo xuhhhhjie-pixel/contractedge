@@ -1,0 +1,11 @@
+{
+  "version": "0.6.27",
+  "closed_at": "2026-10-22T14:59:25.989122+00:00",
+  "finalized_and_independently_scored": 1,
+  "not_run": 45,
+  "ACK": "NO_CANDIDATE",
+  "method_status": "INVALID_PLAN",
+  "model_calls": 6,
+  "formal_ready": false,
+  "B_opened": false
+}

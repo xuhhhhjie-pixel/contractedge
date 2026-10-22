@@ -1,0 +1,14 @@
+{
+  "verified_at": "2026-10-22T06:24:28.812044+00:00",
+  "method_digest": "9ac7c0baab790eca5461ae75eea24f36235a9f8bbd3ec09b36da791a0529e75c",
+  "all_source_config_harness_verified": true,
+  "registration_and_all_46_slots_written": true,
+  "no_worker_started_by_setup_script": true,
+  "no_results_observed_for_new_version": true,
+  "source_delta": [
+    "contractedge/__init__.py",
+    "contractedge/execution/topomen.py",
+    "contractedge/orchestration/candidate_guard.py",
+    "contractedge/orchestration/feedback.py"
+  ]
+}

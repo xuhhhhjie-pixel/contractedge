@@ -1,0 +1,17 @@
+{
+  "api_calls": 0,
+  "saved_responses_replayed": 5,
+  "captured_request": 6,
+  "prompt_version": "changeset.v1.1.9",
+  "input_bound": 118716,
+  "output_reserved": 16384,
+  "source_unchanged": true,
+  "selected_current_source_count": 12,
+  "planning_support_count": 12,
+  "all_selected_source_delivered": true,
+  "owner_type_delivered": true,
+  "owner_was_previously_dropped": true,
+  "original_target_permissions_unchanged": true,
+  "no_preexisting_repair_requirement": true,
+  "scope": "Saved responses isolate input continuity only; no new model outcome, helper implementation or behavioral success is inferred."
+}

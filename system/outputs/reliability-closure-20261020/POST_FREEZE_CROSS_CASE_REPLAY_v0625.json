@@ -1,0 +1,8 @@
+{
+  "api_calls": 0,
+  "source_unchanged": true,
+  "method_digest": "7be5bfb0b13b9e894aa10f2bbf251b08bd97e2a81d1e1bddc603bae2d19f2fba",
+  "freeze_unchanged_sha256": "cf6705b2c4b10a1d4542e67f20f67c4bbfd8dd10739d151a5da901e76a56252b",
+  "replay": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/unchanged-cross-case-replay-v0625/summary.json",
+  "replay_sha256": "037b47ac48186dddd9b7fd896e6da4dbf3964800bf555af17e9f388a9f085859"
+}

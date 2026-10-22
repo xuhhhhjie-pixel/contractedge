@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/replay_current_seed_retry_v0623.py", line 35, in <module>
+    try:executor.execute(plan,source,projection['editable_policy'],requirement=method.requirement_text,feedback=initial,declared_artifacts=method.declared_artifacts,previous_attempt=previous,observations=select_observations(read(origin/'seed-public/observation.json')['observations'],method.requirement_text,counter,cfg['max_public_evidence_tokens']))
+  File "/home/xhj/contractedge-system/.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/execution/topomen_agent.py", line 154, in execute
+    request = build_execution_request(plan, source, policy, self.token_counter, self.config,
+  File "/home/xhj/contractedge-system/.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/execution/topomen.py", line 449, in build_execution_request
+    raise PlanRejected('Execution request exceeds the full context budget')
+contractedge.execution.topomen.PlanRejected: Execution request exceeds the full context budget

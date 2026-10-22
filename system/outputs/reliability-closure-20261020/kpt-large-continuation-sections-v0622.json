@@ -1,0 +1,25 @@
+{
+  "input_tokens": 211644,
+  "section_tokens": {
+    "requirement": 489,
+    "accepted_plan": 27499,
+    "acceptance": 765,
+    "require_behavior_change": 4,
+    "current_target_files": 41952,
+    "declared_artifacts": 2,
+    "read_only_source_support": 1805,
+    "public_observations": 51341,
+    "execution_feedback": 57639,
+    "execution_feedback_digest": 66,
+    "previous_execution_attempt": 24752,
+    "edit_contract": 871,
+    "helper_preconditions": 1030,
+    "helper_precondition_policy": 496,
+    "state_handoff_policy": 481,
+    "collection_writeback_context": 1469,
+    "output_schema": 554
+  },
+  "remaining_support_ids": [
+    "HELPER-b1458129855125de"
+  ]
+}

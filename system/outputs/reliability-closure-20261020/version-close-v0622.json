@@ -1,0 +1,11 @@
+{
+  "closed_at": "2026-10-22T06:20:47.379119+00:00",
+  "source_workers_finalized": true,
+  "independent_records_finalized": 2,
+  "watchers_stopped": [
+    211074
+  ],
+  "reason": "Actual KPT recovery rollback followed by full-context rejection; no remaining slots dispatched",
+  "remaining_not_run": 44,
+  "formal_ready": false
+}

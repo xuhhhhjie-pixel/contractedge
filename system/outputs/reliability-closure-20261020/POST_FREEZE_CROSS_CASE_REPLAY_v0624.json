@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-22T08:47:50.026938+00:00",
+  "api_calls": 0,
+  "source_unchanged": true,
+  "freeze_unchanged_sha256": "0ec0cd59105cd3821a19630f861e03208cd4d758ba9b546f76f97dfe5c60ccd5",
+  "method_digest": "ff806a7c11f05ebc7242c6faadc8d0e779b3d10f5a1a6da8ddfb9109bdefb2eb",
+  "replay": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/unchanged-cross-case-replay-v0624/summary.json",
+  "replay_sha256": "de58f00bd7900717f925869680433d8242ae584c27856c1ed547e09a0e0299a0",
+  "scope": "Additional validation after freeze, no artifact/source/config mutation and no new score"
+}

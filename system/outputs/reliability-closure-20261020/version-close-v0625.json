@@ -1,0 +1,9 @@
+{
+  "version": "0.6.25",
+  "closed_at": "2026-10-22T09:23:25.548345+00:00",
+  "finalized_and_independently_scored": 1,
+  "not_run": 45,
+  "ACK": "SEMANTIC_FAIL",
+  "formal_ready": false,
+  "B_opened": false
+}

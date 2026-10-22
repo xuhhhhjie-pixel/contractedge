@@ -1,0 +1,123 @@
+[
+  {
+    "group": "A",
+    "case_id": "RW-CAND-130",
+    "repeat": 0,
+    "variant": "baseline",
+    "status": "PASS",
+    "method_status": "PUBLIC_REVIEW_COMPLETE",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-RW-CAND-130-0-baseline",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.23/delivery-0.6.23-A-RW-CAND-130-0-baseline/cohort.json",
+    "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49"
+  },
+  {
+    "group": "A",
+    "case_id": "RW-CAND-130",
+    "repeat": 0,
+    "variant": "candidate",
+    "status": "PASS",
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-RW-CAND-130-0-candidate",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.23/delivery-0.6.23-A-RW-CAND-130-0-candidate/cohort.json",
+    "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49"
+  },
+  {
+    "group": "A",
+    "case_id": "R3-KPT-4673",
+    "repeat": 0,
+    "variant": "candidate",
+    "status": "PASS",
+    "method_status": "PUBLIC_REVIEW_COMPLETE",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R3-KPT-4673-0-candidate",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.23/delivery-0.6.23-A-R3-KPT-4673-0-candidate/cohort.json",
+    "patch_sha256": "35e578e97d526eeb90fdbb561c9bca5f23a496e3634fa4ae990b11c990393d35"
+  },
+  {
+    "group": "A",
+    "case_id": "R3-KPT-4673",
+    "repeat": 0,
+    "variant": "baseline",
+    "status": "SEMANTIC_FAIL",
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R3-KPT-4673-0-baseline",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.23/delivery-0.6.23-A-R3-KPT-4673-0-baseline/cohort.json",
+    "patch_sha256": "974ea8afd021e8cc23d66675363f1d1c4084e706e21ef98bc6327a5510a284c4"
+  },
+  {
+    "group": "A",
+    "case_id": "R3-KOPF-726",
+    "repeat": 0,
+    "variant": "baseline",
+    "status": "SEMANTIC_FAIL",
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R3-KOPF-726-0-baseline",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.23/delivery-0.6.23-A-R3-KOPF-726-0-baseline/cohort.json",
+    "patch_sha256": "550faf7c74480273e7704adf43661f20fac4a0931bb167997debe9bb4dec0ca7"
+  },
+  {
+    "group": "A",
+    "case_id": "R3-KOPF-726",
+    "repeat": 0,
+    "variant": "candidate",
+    "status": "PASS",
+    "method_status": "PUBLIC_REVIEW_COMPLETE",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R3-KOPF-726-0-candidate",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.23/delivery-0.6.23-A-R3-KOPF-726-0-candidate/cohort.json",
+    "patch_sha256": "73a31392d3e57189e8ffe6da5aeb4ea90ec0f3142bc1250d11c7e64468f195ac"
+  },
+  {
+    "group": "A",
+    "case_id": "R4-PROVIDER-HELM-408",
+    "repeat": 0,
+    "variant": "baseline",
+    "status": "PASS",
+    "method_status": "PUBLIC_REVIEW_COMPLETE",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R4-PROVIDER-HELM-408-0-baseline",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.23/delivery-0.6.23-A-R4-PROVIDER-HELM-408-0-baseline/cohort.json",
+    "patch_sha256": "673652df63ba3b56ade8984b3a84fc7c22e3ef2a6c2fd46ecc4ce53a79708837"
+  },
+  {
+    "group": "A",
+    "case_id": "R4-PROVIDER-HELM-408",
+    "repeat": 0,
+    "variant": "candidate",
+    "status": "PASS",
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R4-PROVIDER-HELM-408-0-candidate",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.23/delivery-0.6.23-A-R4-PROVIDER-HELM-408-0-candidate/cohort.json",
+    "patch_sha256": "673652df63ba3b56ade8984b3a84fc7c22e3ef2a6c2fd46ecc4ce53a79708837"
+  },
+  {
+    "group": "A",
+    "case_id": "R4-ACK-CLOUDWATCH-2985",
+    "repeat": 0,
+    "variant": "baseline",
+    "status": "PASS",
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R4-ACK-CLOUDWATCH-2985-0-baseline",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.23/delivery-0.6.23-A-R4-ACK-CLOUDWATCH-2985-0-baseline/cohort.json",
+    "patch_sha256": "19971501b4a4363054fa67e2c9c6d6122ad7d535e4b2f14cccae2c2d18a2d8e1"
+  },
+  {
+    "group": "A",
+    "case_id": "R4-ACK-CLOUDWATCH-2985",
+    "repeat": 0,
+    "variant": "candidate",
+    "status": "NO_CANDIDATE",
+    "method_status": "BUDGET_EXHAUSTED",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R4-ACK-CLOUDWATCH-2985-0-candidate",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.23/delivery-0.6.23-A-R4-ACK-CLOUDWATCH-2985-0-candidate/cohort.json",
+    "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "group": "recovery",
+    "case_id": "R3-KPT-4673",
+    "repeat": 0,
+    "variant": "candidate",
+    "status": "PASS",
+    "method_status": "PUBLIC_REVIEW_COMPLETE",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-recovery-R3-KPT-4673-0-candidate",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.23/delivery-0.6.23-recovery-R3-KPT-4673-0-candidate/cohort.json",
+    "patch_sha256": "1dfcc1cb9e089d49f6023eb5699c0e66e12e27475ed181b38194ad360a90f81e"
+  }
+]

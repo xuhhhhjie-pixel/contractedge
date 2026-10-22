@@ -1,0 +1,19 @@
+{
+  "version": "0.6.27",
+  "synced_at": "2026-10-22T10:58:44.116181+00:00",
+  "source_delta": [
+    "contractedge/__init__.py",
+    "contractedge/changeset/prompt.py",
+    "contractedge/orchestration/runner.py",
+    "contractedge/retrieval/gap_delivery.py"
+  ],
+  "prior_frozen_root_verified": true,
+  "candidate_suite": "662 passed,22 subtests passed",
+  "config_delta": {
+    "max_execution_support_bytes": [
+      24000,
+      48000
+    ]
+  },
+  "reason": "Read-only replay measured 29506 non-target source bytes after continuity repair; local48KB cap fits selected context while global220000, Top12,12calls and150CNY limits remain unchanged."
+}

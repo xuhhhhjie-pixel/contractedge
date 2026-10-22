@@ -1,0 +1,74 @@
+...F.........F.....F..FF.                                                [100%]
+=================================== FAILURES ===================================
+_ test_behavior_failure_without_exception_survives_live_and_rejected_feedback __
+
+    def test_behavior_failure_without_exception_survives_live_and_rejected_feedback():
+        from contractedge.orchestration.feedback import historical_trial_prompt_view
+        from copy import deepcopy
+        row=predicate_record();value=dict(to_snapshot='TRIAL',public_observations=[row]);before=deepcopy(value)
+        view=feedback_prompt_view(value)
+>       assert 'failure_tasks' in view
+E       AssertionError: assert 'failure_tasks' in {'to_snapshot': 'TRIAL', 'public_observation_refs': [{'id': 'OBS-visible', 'snapshot_id': 'TRIAL', 'content_digest': '...'whole_file_read': True}}], 'full_feedback_digest': 'ae4204ba4b52a6642439178fbc12b4988666330e5e72e11c4d3e543c7f5aa0d3'}
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py:60: AssertionError
+___ test_predicate_projection_budget_is_explicit_and_keeps_objects_parseable ___
+
+    def test_predicate_projection_budget_is_explicit_and_keeps_objects_parseable():
+        import hashlib
+        rows=[]
+        for i in range(12):
+            row=predicate_record();row['id']='OBS-'+str(i);rows.append(row)
+>       view=feedback_prompt_view(dict(to_snapshot='TRIAL',public_observations=rows))['failure_tasks']
+E       KeyError: 'failure_tasks'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py:98: KeyError
+_ test_single_operation_observed_regression_enables_existing_repair_reasoning __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-209/test_single_operation_observed0')
+
+    def test_single_operation_observed_regression_enables_existing_repair_reasoning(tmp_path):
+        plan,config=fixture(tmp_path);previous=rejected_predicate_attempt(plan)
+        result=request(tmp_path,plan,config,previous_attempt=previous)
+>       assert result.thinking=='enabled' and result.max_output_tokens==16384
+E       AssertionError: assert ('disabled' == 'enabled'
+E         
+E         - enabled
+E         + disabled)
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py:71: AssertionError
+__ test_unbound_or_disabled_trial_cannot_change_stage_reasoning[unbound_fact] __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-209/test_unbound_or_disabled_trial2')
+change = 'unbound_fact'
+
+    @pytest.mark.parametrize('change',['old_current','wrong_trial','unbound_fact','no_failure','policy_off'])
+    def test_unbound_or_disabled_trial_cannot_change_stage_reasoning(tmp_path,change):
+        plan,config=fixture(tmp_path);previous=rejected_predicate_attempt(plan)
+        if change=='old_current':previous['source_snapshot']='OLD'
+        elif change=='wrong_trial':previous['rejected_trial']['decision']['trial_snapshot']='OTHER'
+>       elif change=='unbound_fact':previous['rejected_trial']['feedback']['failure_tasks']['failed_predicates'][0]['snapshot_id']='OLD'
+E       KeyError: 'failure_tasks'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py:83: KeyError
+___ test_unbound_or_disabled_trial_cannot_change_stage_reasoning[no_failure] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-209/test_unbound_or_disabled_trial3')
+change = 'no_failure'
+
+    @pytest.mark.parametrize('change',['old_current','wrong_trial','unbound_fact','no_failure','policy_off'])
+    def test_unbound_or_disabled_trial_cannot_change_stage_reasoning(tmp_path,change):
+        plan,config=fixture(tmp_path);previous=rejected_predicate_attempt(plan)
+        if change=='old_current':previous['source_snapshot']='OLD'
+        elif change=='wrong_trial':previous['rejected_trial']['decision']['trial_snapshot']='OTHER'
+        elif change=='unbound_fact':previous['rejected_trial']['feedback']['failure_tasks']['failed_predicates'][0]['snapshot_id']='OLD'
+>       elif change=='no_failure':previous['rejected_trial']['feedback']['failure_tasks']['failed_predicates']=[]
+E       KeyError: 'failure_tasks'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py:84: KeyError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py::test_behavior_failure_without_exception_survives_live_and_rejected_feedback
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py::test_predicate_projection_budget_is_explicit_and_keeps_objects_parseable
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py::test_single_operation_observed_regression_enables_existing_repair_reasoning
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py::test_unbound_or_disabled_trial_cannot_change_stage_reasoning[unbound_fact]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py::test_unbound_or_disabled_trial_cannot_change_stage_reasoning[no_failure]
+5 failed, 20 passed in 0.50s

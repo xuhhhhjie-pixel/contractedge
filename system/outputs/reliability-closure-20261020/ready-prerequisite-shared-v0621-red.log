@@ -1,0 +1,265 @@
+....FFFFF                                                                [100%]
+=================================== FAILURES ===================================
+______ test_actual_exception_plan_passes_the_same_ready_consumer_contract ______
+
+    def test_actual_exception_plan_passes_the_same_ready_consumer_contract():
+        trace,method,source=kopf_ready_fixture()
+>       packet,context=validate_ready_trace(trace,method,source)
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/orchestration/repair.py:98: in validate_ready_trace
+    snapshot = compute_snapshot(source)
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/source/snapshot.py:16: in compute_snapshot
+    root = Path(source_root).resolve(strict=True)
+/usr/lib/python3.10/pathlib.py:1077: in resolve
+    s = self._accessor.realpath(self, strict=strict)
+/usr/lib/python3.10/posixpath.py:393: in realpath
+    path, ok = _joinrealpath(filename[:0], filename, strict, {})
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726'
+rest = 'source/kopf-e90ceaa9faeb000ea1ede52067b4389dd5609c92', strict = True
+seen = {}
+
+    def _joinrealpath(path, rest, strict, seen):
+        if isinstance(path, bytes):
+            sep = b'/'
+            curdir = b'.'
+            pardir = b'..'
+        else:
+            sep = '/'
+            curdir = '.'
+            pardir = '..'
+    
+        if isabs(rest):
+            rest = rest[1:]
+            path = sep
+    
+        while rest:
+            name, _, rest = rest.partition(sep)
+            if not name or name == curdir:
+                # current dir
+                continue
+            if name == pardir:
+                # parent dir
+                if path:
+                    path, name = split(path)
+                    if name == pardir:
+                        path = join(path, pardir, pardir)
+                else:
+                    path = pardir
+                continue
+            newpath = join(path, name)
+            try:
+>               st = os.lstat(newpath)
+E               FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/workspace'
+
+/usr/lib/python3.10/posixpath.py:428: FileNotFoundError
+_ test_exception_prerequisite_projection_cannot_be_removed_or_forged[missing] __
+
+change = 'missing'
+
+    @pytest.mark.parametrize('change',['missing','changed_reason','wrong_source'])
+    def test_exception_prerequisite_projection_cannot_be_removed_or_forged(change):
+        trace,method,source=kopf_ready_fixture();trace=deepcopy(trace)
+        entries=trace['run_context']['retrieval_config']['source_prerequisites']
+        if change=='missing':entries.clear()
+        elif change=='changed_reason':entries[0]['reason']='Claim unconditional success'
+        else:entries[0]['source_evidence_ref']='SRC-forged'
+        with pytest.raises(ValueError,match='context differs'):
+>           validate_ready_trace(trace,method,source)
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/orchestration/repair.py:98: in validate_ready_trace
+    snapshot = compute_snapshot(source)
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/source/snapshot.py:16: in compute_snapshot
+    root = Path(source_root).resolve(strict=True)
+/usr/lib/python3.10/pathlib.py:1077: in resolve
+    s = self._accessor.realpath(self, strict=strict)
+/usr/lib/python3.10/posixpath.py:393: in realpath
+    path, ok = _joinrealpath(filename[:0], filename, strict, {})
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726'
+rest = 'source/kopf-e90ceaa9faeb000ea1ede52067b4389dd5609c92', strict = True
+seen = {}
+
+    def _joinrealpath(path, rest, strict, seen):
+        if isinstance(path, bytes):
+            sep = b'/'
+            curdir = b'.'
+            pardir = b'..'
+        else:
+            sep = '/'
+            curdir = '.'
+            pardir = '..'
+    
+        if isabs(rest):
+            rest = rest[1:]
+            path = sep
+    
+        while rest:
+            name, _, rest = rest.partition(sep)
+            if not name or name == curdir:
+                # current dir
+                continue
+            if name == pardir:
+                # parent dir
+                if path:
+                    path, name = split(path)
+                    if name == pardir:
+                        path = join(path, pardir, pardir)
+                else:
+                    path = pardir
+                continue
+            newpath = join(path, name)
+            try:
+>               st = os.lstat(newpath)
+E               FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/workspace'
+
+/usr/lib/python3.10/posixpath.py:428: FileNotFoundError
+_ test_exception_prerequisite_projection_cannot_be_removed_or_forged[changed_reason] _
+
+change = 'changed_reason'
+
+    @pytest.mark.parametrize('change',['missing','changed_reason','wrong_source'])
+    def test_exception_prerequisite_projection_cannot_be_removed_or_forged(change):
+        trace,method,source=kopf_ready_fixture();trace=deepcopy(trace)
+        entries=trace['run_context']['retrieval_config']['source_prerequisites']
+        if change=='missing':entries.clear()
+        elif change=='changed_reason':entries[0]['reason']='Claim unconditional success'
+        else:entries[0]['source_evidence_ref']='SRC-forged'
+        with pytest.raises(ValueError,match='context differs'):
+>           validate_ready_trace(trace,method,source)
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/orchestration/repair.py:98: in validate_ready_trace
+    snapshot = compute_snapshot(source)
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/source/snapshot.py:16: in compute_snapshot
+    root = Path(source_root).resolve(strict=True)
+/usr/lib/python3.10/pathlib.py:1077: in resolve
+    s = self._accessor.realpath(self, strict=strict)
+/usr/lib/python3.10/posixpath.py:393: in realpath
+    path, ok = _joinrealpath(filename[:0], filename, strict, {})
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726'
+rest = 'source/kopf-e90ceaa9faeb000ea1ede52067b4389dd5609c92', strict = True
+seen = {}
+
+    def _joinrealpath(path, rest, strict, seen):
+        if isinstance(path, bytes):
+            sep = b'/'
+            curdir = b'.'
+            pardir = b'..'
+        else:
+            sep = '/'
+            curdir = '.'
+            pardir = '..'
+    
+        if isabs(rest):
+            rest = rest[1:]
+            path = sep
+    
+        while rest:
+            name, _, rest = rest.partition(sep)
+            if not name or name == curdir:
+                # current dir
+                continue
+            if name == pardir:
+                # parent dir
+                if path:
+                    path, name = split(path)
+                    if name == pardir:
+                        path = join(path, pardir, pardir)
+                else:
+                    path = pardir
+                continue
+            newpath = join(path, name)
+            try:
+>               st = os.lstat(newpath)
+E               FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/workspace'
+
+/usr/lib/python3.10/posixpath.py:428: FileNotFoundError
+_ test_exception_prerequisite_projection_cannot_be_removed_or_forged[wrong_source] _
+
+change = 'wrong_source'
+
+    @pytest.mark.parametrize('change',['missing','changed_reason','wrong_source'])
+    def test_exception_prerequisite_projection_cannot_be_removed_or_forged(change):
+        trace,method,source=kopf_ready_fixture();trace=deepcopy(trace)
+        entries=trace['run_context']['retrieval_config']['source_prerequisites']
+        if change=='missing':entries.clear()
+        elif change=='changed_reason':entries[0]['reason']='Claim unconditional success'
+        else:entries[0]['source_evidence_ref']='SRC-forged'
+        with pytest.raises(ValueError,match='context differs'):
+>           validate_ready_trace(trace,method,source)
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/orchestration/repair.py:98: in validate_ready_trace
+    snapshot = compute_snapshot(source)
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/source/snapshot.py:16: in compute_snapshot
+    root = Path(source_root).resolve(strict=True)
+/usr/lib/python3.10/pathlib.py:1077: in resolve
+    s = self._accessor.realpath(self, strict=strict)
+/usr/lib/python3.10/posixpath.py:393: in realpath
+    path, ok = _joinrealpath(filename[:0], filename, strict, {})
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726'
+rest = 'source/kopf-e90ceaa9faeb000ea1ede52067b4389dd5609c92', strict = True
+seen = {}
+
+    def _joinrealpath(path, rest, strict, seen):
+        if isinstance(path, bytes):
+            sep = b'/'
+            curdir = b'.'
+            pardir = b'..'
+        else:
+            sep = '/'
+            curdir = '.'
+            pardir = '..'
+    
+        if isabs(rest):
+            rest = rest[1:]
+            path = sep
+    
+        while rest:
+            name, _, rest = rest.partition(sep)
+            if not name or name == curdir:
+                # current dir
+                continue
+            if name == pardir:
+                # parent dir
+                if path:
+                    path, name = split(path)
+                    if name == pardir:
+                        path = join(path, pardir, pardir)
+                else:
+                    path = pardir
+                continue
+            newpath = join(path, name)
+            try:
+>               st = os.lstat(newpath)
+E               FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/workspace'
+
+/usr/lib/python3.10/posixpath.py:428: FileNotFoundError
+_ test_shared_prerequisite_projection_distinguishes_roles_without_adding_requirements _
+
+    def test_shared_prerequisite_projection_distinguishes_roles_without_adding_requirements():
+        from types import SimpleNamespace
+>       from contractedge.orchestration.runner import required_source_prerequisites
+E       ImportError: cannot import name 'required_source_prerequisites' from 'contractedge.orchestration.runner' (/home/xhj/contractedge-system/.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/orchestration/runner.py)
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py:66: ImportError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py::test_actual_exception_plan_passes_the_same_ready_consumer_contract
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py::test_exception_prerequisite_projection_cannot_be_removed_or_forged[missing]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py::test_exception_prerequisite_projection_cannot_be_removed_or_forged[changed_reason]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py::test_exception_prerequisite_projection_cannot_be_removed_or_forged[wrong_source]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_ready_support_consistency.py::test_shared_prerequisite_projection_distinguishes_roles_without_adding_requirements
+5 failed, 4 passed in 0.55s

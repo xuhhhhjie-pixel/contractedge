@@ -1,0 +1,12 @@
+{
+  "version": "0.6.26",
+  "closed_at": "2026-10-22T10:54:36.963086+00:00",
+  "finalized_and_independently_scored": 1,
+  "not_run": 45,
+  "ACK": "NO_CANDIDATE",
+  "method_status": "NEEDS_EVIDENCE",
+  "model_calls": 6,
+  "formal_ready": false,
+  "B_opened": false,
+  "watcher_stopped": true
+}

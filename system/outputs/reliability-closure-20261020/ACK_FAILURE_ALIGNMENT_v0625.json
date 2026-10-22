@@ -1,0 +1,57 @@
+{
+  "version": "0.6.25",
+  "independent_status": "SEMANTIC_FAIL",
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "public_semantic_outcome": "UNKNOWN",
+  "calls": 6,
+  "earliest_unsupported_inference": [
+    {
+      "id": "V1",
+      "relation_id": "R2",
+      "broken_behavior": "When Spec.Tags is nil (tags removed), the update request does not clear external tags because res.Tags is left unset.",
+      "causal_explanation": "newUpdateRequestPayload only assigns res.Tags inside `if r.ko.Spec.Tags != nil`, so a nil desired tag set produces no Tags in the PutMetricAlarm request, failing to request removal.",
+      "evidence_refs": [
+        "SRC-CU-be754c069fb990ae"
+      ],
+      "support_basis": "STATIC_INFERENCE",
+      "causal_status": "SUPPORTED"
+    }
+  ],
+  "actual_proposal": [
+    "In newUpdateRequestPayload in pkg/resource/metric_alarm/sdk.go, replace the `if r.ko.Spec.Tags != nil { ... res.Tags = f20 }` guard with an unconditional assignment: build f20 as a []svcsdktypes.Tag from r.ko.Spec.Tags (an empty slice when r.ko.Spec.Tags is nil) and always set res.Tags = f20, so the PutMetricAlarmInput produced for updates always carries the desired tag set, including an empty slice when tags are removed."
+  ],
+  "request_chain": [
+    {
+      "call": 1,
+      "prompt": "diagnosis.v1.1.26",
+      "api_update_contract_present": true
+    },
+    {
+      "call": 2,
+      "prompt": "diagnosis.v1.1.26",
+      "api_update_contract_present": true
+    },
+    {
+      "call": 3,
+      "prompt": "diagnosis.v1.1.26",
+      "api_update_contract_present": true
+    },
+    {
+      "call": 4,
+      "prompt": "changeset.v1.1.9",
+      "api_update_contract_present": true
+    },
+    {
+      "call": 5,
+      "prompt": "changeset.v1.1.9",
+      "api_update_contract_present": true
+    },
+    {
+      "call": 6,
+      "prompt": "topomen-source-execution.v1",
+      "api_update_contract_present": false
+    }
+  ],
+  "core_failure": "Diagnosis asserted external tag clearing from a producer-only mapping condition without accounting for the API contract. Plan preserved that false mechanism; execution faithfully changed only producer nil/empty mapping. Contract was absent from native execution input.",
+  "scope": "No independent hidden assertions inspected. Based on public source contract, actual diagnosis/plan/patch and aggregate independent outcome."
+}

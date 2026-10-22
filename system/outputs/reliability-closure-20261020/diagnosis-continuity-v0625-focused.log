@@ -1,0 +1,28 @@
+....F.............                                                       [100%]
+=================================== FAILURES ===================================
+__ test_current_reassessment_may_withdraw_old_claim_without_forcing_a_repair ___
+
+    def test_current_reassessment_may_withdraw_old_claim_without_forcing_a_repair():
+        class Provider(PlanningGapProvider):
+            def complete_json(self,request):
+                response=super().complete_json(request)
+                if request.prompt_version.startswith('diagnosis.') and self.diagnosis_calls==2:
+                    body=json.loads(response.content);body.update(status='EVIDENCE_GAP',violations=[],unverified_outcomes=['O1'],
+                        evidence_gaps=[dict(id='G2',summary='Current evidence is insufficient to support the previous inference; leave verification open.',locator_hint={'path':'templates/serviceaccount.yaml'})],
+                        outcome_coverage=[dict(outcome_id='O1',repair_supported=[],preserve_required=[],preserve_current_satisfaction=[],unresolved=['O1'])])
+                    return ModelResponse(json.dumps(body),{})
+                return response
+        p=Provider()
+        with tempfile.TemporaryDirectory() as td:
+            trace=run_fixture(Path(td),p,lambda s:len(s.split()))
+        assert trace.status=='EVIDENCE_GAP',trace.errors
+>       assert len(trace.model_calls)==3 and trace.changeset is not None
+E       assert (3 == 3 and None is not None)
+E        +  where 3 = len(({'stage': 'DIAGNOSIS', 'prompt_version': 'diagnosis.v1.1.24', 'request_metadata': {'run_id': 'c33ab8b6-480f-4334-b987..."locator_hint": {"path": "templates/serviceaccount.yaml"}}], "status": "EVIDENCE_GAP"}', 'response_metadata': {}, ...}))
+E        +    where ({'stage': 'DIAGNOSIS', 'prompt_version': 'diagnosis.v1.1.24', 'request_metadata': {'run_id': 'c33ab8b6-480f-4334-b987..."locator_hint": {"path": "templates/serviceaccount.yaml"}}], "status": "EVIDENCE_GAP"}', 'response_metadata': {}, ...}) = RunTrace(run_id='c33ab8b6-480f-4334-b987-54539ec8ad9b', case_id='RW-DEMO-001', input_digest='154792c07110ae78914bf9518...budget': {'max_output_tokens': 1024, 'max_model_calls': 24, 'max_total_tokens': 80000, 'max_elapsed_seconds': 1200.0}}).model_calls
+E        +  and   None = RunTrace(run_id='c33ab8b6-480f-4334-b987-54539ec8ad9b', case_id='RW-DEMO-001', input_digest='154792c07110ae78914bf9518...budget': {'max_output_tokens': 1024, 'max_model_calls': 24, 'max_total_tokens': 80000, 'max_elapsed_seconds': 1200.0}}).changeset
+
+tests/test_diagnosis_continuity.py:87: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_diagnosis_continuity.py::test_current_reassessment_may_withdraw_old_claim_without_forcing_a_repair
+1 failed, 17 passed in 0.62s

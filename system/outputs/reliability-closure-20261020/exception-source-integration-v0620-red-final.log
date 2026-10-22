@@ -1,0 +1,49 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_actual_initial_request_pins_exception_chain_under_unchanged_top12 ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-192/test_actual_initial_request_pi0')
+
+    def test_actual_initial_request_pins_exception_chain_under_unchanged_top12(tmp_path):
+        import pytest
+        from contractedge.contracts.validation import canonical_digest
+        from contractedge.orchestration.runner import run_front_half
+        from tests.test_contracts import valid_method_input
+    
+        _, _, observation = fixture(tmp_path)
+        path = tmp_path/'consumer.py'
+        with path.open('a') as stream:
+            for index in range(24):
+                stream.write(f'\ndef decoy_{index}():\n    return "enabled render selected ServiceAccount"\n')
+        snapshot = compute_snapshot(tmp_path)
+        observation['snapshot_id'] = snapshot.snapshot_id
+        method = valid_method_input()
+        method.update(initial_snapshot_id=snapshot.snapshot_id,
+                      scope_hints=[dict(kind='path',value='consumer.py',raw_text='consumer.py',origin_ref='public')])
+        method['input_digest'] = canonical_digest({k:v for k,v in method.items() if k != 'input_digest'})
+    
+        class Captured(BaseException):
+            pass
+    
+        class Provider:
+            request = None
+            def complete_json(self, request):
+                self.request = request
+                raise Captured()
+    
+        provider = Provider()
+        with pytest.raises(Captured):
+            run_front_half(method, tmp_path, provider,
+                dict(model={'model':'fixture'},top_n=12,max_context_tokens=120000,
+                     max_total_tokens=2000000,max_output_tokens=16384,gap_role_delivery_enabled=True),
+                len, public_observations=(observation,))
+        public = json.loads(provider.request.messages[1]['content'])
+        sources = [r for r in public['evidence_catalog'] if r['kind'] == 'SOURCE_SPAN']
+>       assert any('raise LookupError("Parent context unavailable")' in r['excerpt'] for r in sources)
+E       assert False
+E        +  where False = any(<generator object test_actual_initial_request_pins_exception_chain_under_unchanged_top12.<locals>.<genexpr> at 0x7f0af3b3aa40>)
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py:130: AssertionError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py::test_actual_initial_request_pins_exception_chain_under_unchanged_top12
+1 failed, 5 deselected in 0.15s

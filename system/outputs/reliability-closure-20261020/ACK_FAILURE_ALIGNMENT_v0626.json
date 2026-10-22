@@ -1,0 +1,43 @@
+{
+  "version": "0.6.26",
+  "audited_at": "2026-10-22T10:54:36.963086+00:00",
+  "api_calls": 6,
+  "status": "NEEDS_EVIDENCE",
+  "independent_status": "NO_CANDIDATE",
+  "patch_bytes": 0,
+  "final_gaps": [
+    {
+      "id": "EG-1-SDKAPI",
+      "summary": "The metric_alarm manager's sdkapi interface definition is not in the supplied evidence; it is required to know which CloudWatch operations the update path may call for tag reconciliation.",
+      "locator_hint": {
+        "path": "pkg/resource/metric_alarm/sdk.go",
+        "symbol": "sdkapi"
+      }
+    },
+    {
+      "id": "EG-2-TAGOPS",
+      "summary": "Availability of TagResource/UntagResource operations on the manager's SDK client/interface (or a generated tag-sync helper) is not evidenced, so the required additions, value changes, and removals cannot be bound to a real consumer.",
+      "locator_hint": {
+        "path": "pkg/resource/metric_alarm/sdk.go",
+        "search_term": "TagResource"
+      }
+    },
+    {
+      "id": "EG-3-CURRENTTAGS",
+      "summary": "No evidenced mechanism reads the current externally stored tags (for example ListTagsForResource) or an existing tag-diff helper needed to distinguish additions, value changes, removals, and the unchanged case.",
+      "locator_hint": {
+        "path": "pkg/resource/metric_alarm/sdk.go",
+        "search_term": "ListTagsForResource"
+      }
+    }
+  ],
+  "source_and_common_harness_unchanged": true,
+  "earliest_verified_boundary_loss": {
+    "source": "pkg/resource/metric_alarm/manager.go:resourceManager",
+    "diagnosis_extension_delivered": true,
+    "plan_delivered": false,
+    "reason": "Selected current source declaration not cited in Diagnosis and not in required_endpoint_ids; necessary_source_support filters it out."
+  },
+  "secondary_issue": "Exact TagResource query returns lexical fallback records with status FOUND; these are locations, not matching implementations or proof of SDK absence.",
+  "methodological_boundary": "Only public source/requests inspected. No hidden scorer source or expected patch used. No final repair or cross-case benefit inferred."
+}

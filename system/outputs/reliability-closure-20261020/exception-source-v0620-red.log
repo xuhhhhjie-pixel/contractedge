@@ -1,0 +1,74 @@
+FFFFF                                                                    [100%]
+=================================== FAILURES ===================================
+_____ test_exact_public_exception_delivers_producer_and_two_local_callers ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-189/test_exact_public_exception_de0')
+
+    def test_exact_public_exception_delivers_producer_and_two_local_callers(tmp_path):
+        snapshot, seed, observation = fixture(tmp_path)
+>       units, audit = helper_context.source_exception_units(snapshot, [seed], [observation])
+E       AttributeError: module 'contractedge.execution.helper_context' has no attribute 'source_exception_units'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py:39: AttributeError
+______ test_old_operation_or_unregistered_output_cannot_drive_source_pins ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-189/test_old_operation_or_unregist0')
+
+    def test_old_operation_or_unregistered_output_cannot_drive_source_pins(tmp_path):
+        snapshot, seed, observation = fixture(tmp_path)
+        stale = {**observation, 'snapshot_id':'old'}
+        unknown = {**observation, 'structured_complete':False}
+>       assert helper_context.source_exception_units(snapshot, [seed], [stale])[0] == []
+E       AttributeError: module 'contractedge.execution.helper_context' has no attribute 'source_exception_units'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py:52: AttributeError
+_____ test_fresh_snapshot_reloads_changed_producer_and_rejects_stale_seed ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-189/test_fresh_snapshot_reloads_ch0')
+
+    def test_fresh_snapshot_reloads_changed_producer_and_rejects_stale_seed(tmp_path):
+        old, seed, observation = fixture(tmp_path)
+        p = tmp_path/'consumer.py'
+        p.write_text(p.read_text().replace('if parent is None:', 'if parent is None or parent == {}:'))
+        current = compute_snapshot(tmp_path)
+        fresh_seed = next(u for u in parse_source_units('consumer.py', p.read_text(), current.snapshot_id)
+                          if u['symbol'] == 'attach')
+>       units, _ = helper_context.source_exception_units(current, [fresh_seed],
+                                                        [{**observation,'snapshot_id':current.snapshot_id}])
+E       AttributeError: module 'contractedge.execution.helper_context' has no attribute 'source_exception_units'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py:63: AttributeError
+____________ test_comment_or_wrong_exception_type_is_not_a_producer ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-189/test_comment_or_wrong_exceptio0')
+
+    def test_comment_or_wrong_exception_type_is_not_a_producer(tmp_path):
+        snapshot, seed, observation = fixture(tmp_path)
+        p = tmp_path/'consumer.py'
+        p.write_text(p.read_text().replace('raise LookupError("Parent context unavailable")',
+                                         '# raise LookupError("Parent context unavailable")\n        raise TypeError("Other issue")'))
+        current = compute_snapshot(tmp_path)
+        fresh_seed = next(u for u in parse_source_units('consumer.py', p.read_text(), current.snapshot_id)
+                          if u['symbol'] == 'attach')
+>       assert helper_context.source_exception_units(current, [fresh_seed],
+                                                    [{**observation,'snapshot_id':current.snapshot_id}])[0] == []
+E       AttributeError: module 'contractedge.execution.helper_context' has no attribute 'source_exception_units'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py:82: AttributeError
+_____________ test_record_limit_is_audited_without_unbounded_chain _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-189/test_record_limit_is_audited_w0')
+
+    def test_record_limit_is_audited_without_unbounded_chain(tmp_path):
+        snapshot, seed, observation = fixture(tmp_path)
+>       units, audit = helper_context.source_exception_units(snapshot, [seed], [observation], max_records=1)
+E       AttributeError: module 'contractedge.execution.helper_context' has no attribute 'source_exception_units'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py:88: AttributeError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py::test_exact_public_exception_delivers_producer_and_two_local_callers
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py::test_old_operation_or_unregistered_output_cannot_drive_source_pins
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py::test_fresh_snapshot_reloads_changed_producer_and_rejects_stale_seed
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py::test_comment_or_wrong_exception_type_is_not_a_producer
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py::test_record_limit_is_audited_without_unbounded_chain
+5 failed in 0.35s

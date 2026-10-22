@@ -1,0 +1,45 @@
+{
+  "version": "0.6.20",
+  "case_id": "R3-KOPF-726",
+  "repeat": 1,
+  "method_status": "INFRASTRUCTURE_ERROR",
+  "model_calls": 2,
+  "patch_bytes": 0,
+  "first_failing_boundary": "validate_ready_trace prerequisite projection",
+  "error": [
+    "ValueError: Ready trace prerequisite context differs from actually supplied current source"
+  ],
+  "diagnosis_causal_explanation": "adopt calls adjust_namespace with the owner namespace None; adjust_namespace then calls _guess_owner(None), which raises LookupError outside a handler context, so adoption fails before a valid manifest completes.",
+  "planned_changes": [
+    {
+      "id": "C1",
+      "semantic_action": "In adjust_namespace add a keyword-only parameter owner (default None). When namespace is None and owner is provided, derive the namespace from owner['metadata']['namespace'] instead of calling _guess_owner(None); if the derived namespace is still None (cluster-scoped owner), return without raising and assign no namespace to any child. Keep the existing _guess_owner(None) + LookupError path unchanged for callers that pass no owner."
+    },
+    {
+      "id": "C2",
+      "semantic_action": "In adopt, pass the already-resolved real_owner into the new keyword-only owner parameter of adjust_namespace (adjust_namespace(objs, forced=forced, namespace=real_owner_namespace, owner=real_owner)) so the wrapper does not perform a second owner guess for an explicitly supplied cluster-scoped owner."
+    }
+  ],
+  "source_prerequisites": [
+    {
+      "source_evidence_ref": "SRC-CU-9ab2354c53ef95ad",
+      "reason": "Review the source-supported exception-producing guard and caller prerequisites; literal match and local calls are locators, not causal proof"
+    }
+  ],
+  "actual_precondition_review": [
+    {
+      "source_evidence_ref": "SRC-CU-9ab2354c53ef95ad",
+      "condition": "Outside a handler, resolving an owner when none is passed raises LookupError; namespace resolution must not depend on that raise for an explicitly supplied cluster-scoped owner.",
+      "disposition": "REQUIRED",
+      "verification_refs": [
+        "P1"
+      ],
+      "open_obligation_refs": [],
+      "rationale": "This guard is the exact source-supported raise that V1 travels through. P1's public-plan check confirms adopt completes for the namespace-less owner via the new owner parameter, which is the requirement-relevant condition at this boundary."
+    }
+  ],
+  "source_unchanged": true,
+  "harness_unchanged": true,
+  "independent_status": "NO_CANDIDATE",
+  "interpretation": "Diagnosis and source-backed plan improved relative to exposed .19 trajectory; execution never started. No patch correctness or single-factor causal improvement claim."
+}

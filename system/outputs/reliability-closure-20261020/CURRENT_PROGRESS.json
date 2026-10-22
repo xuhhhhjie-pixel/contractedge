@@ -1,0 +1,72 @@
+{
+  "as_of": "2026-10-22T14:59:25.989122+00:00",
+  "version": "0.6.27",
+  "status": "V0627_INVALID_PLAN_NO_CANDIDATE_EFFECT_NOT_ACCEPTED",
+  "formal_ready": false,
+  "engineering_tests": 662,
+  "subtests": 22,
+  "G4": "ACK_PLAN_AND_REPAIR_EFFECT_PENDING",
+  "G5": "FIXED_SAME_VERSION_PANEL_PENDING",
+  "B_opened": false,
+  "budget_limit_cny": 150,
+  "latest_live_result": {
+    "version": "0.6.27",
+    "case_id": "R4-ACK-CLOUDWATCH-2985",
+    "status": "CLOSED_INVALID_PLAN",
+    "independent_status": "NO_CANDIDATE",
+    "scored": 1,
+    "not_run": 45,
+    "model_calls": 6
+  },
+  "implementation_version": "0.6.27",
+  "formal150_started": false,
+  "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.27.json",
+  "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.27.json",
+  "protocol_tests": {
+    "passed": 662,
+    "subtests_passed": 22,
+    "scope": "Root and isolated candidate; protocol and replay evidence, not repair effectiveness"
+  },
+  "current_experiment": {
+    "version": "0.6.27",
+    "case_id": "R4-ACK-CLOUDWATCH-2985",
+    "status": "CLOSED_INVALID_PLAN",
+    "independent_status": "NO_CANDIDATE",
+    "scored": 1,
+    "not_run": 45,
+    "model_calls": 6
+  },
+  "budget_snapshot": {
+    "limit_cny": 150,
+    "committed_including_reservations_cny": 90.317592,
+    "remaining_upper_bound_cny": 59.682407999999995
+  },
+  "staged_revision": null,
+  "frozen_method": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.27.json",
+  "staged_optimization": {
+    "status": "FROZEN",
+    "source_delta": [
+      "contractedge/__init__.py",
+      "contractedge/changeset/prompt.py",
+      "contractedge/orchestration/runner.py",
+      "contractedge/retrieval/gap_delivery.py"
+    ],
+    "alignment": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/ACK_FAILURE_ALIGNMENT_v0626.json",
+    "configuration_delta": {
+      "max_execution_support_bytes": [
+        24000,
+        48000
+      ]
+    }
+  },
+  "same_version_candidate_independent_pass_so_far": {
+    "A": 0,
+    "recovery": 0
+  },
+  "repair_reliability_accepted": false,
+  "current_engineering_evidence": {
+    "root": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/v0.6.27-root-verification.log",
+    "candidate": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/v0.6.27-candidate-verification.log"
+  },
+  "implementation_completed_claim": false
+}

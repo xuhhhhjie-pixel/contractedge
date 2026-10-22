@@ -1,0 +1,11 @@
+{
+  "schema_version": "ce.experiment_dataset_binding.v1",
+  "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
+  "release_id": "ContractEdge-benchmark150-v1-20261019",
+  "release_entry_sha256": "6f0d200363dbe14595f2cb3c4cbbaab324b0cc62eb760acc4393d3fbe02a66ef",
+  "public_manifest_sha256": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+  "evaluation_manifest_sha256": "c3c93eb008adbbaadc32ddc2a7f701c0e803307ae1209bf589dbdc94819ab31e",
+  "selected_cases": 150,
+  "by_class": {"R1": 30, "R2": 30, "R3": 30, "R4": 30, "R5": 30},
+  "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
+}

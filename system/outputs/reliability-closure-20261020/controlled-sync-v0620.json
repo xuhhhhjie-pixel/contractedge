@@ -1,0 +1,16 @@
+{
+  "as_of": "2026-10-22T03:18:28.927192+00:00",
+  "parent_version": "0.6.19",
+  "version": "0.6.20",
+  "source_delta": [
+    "contractedge/__init__.py",
+    "contractedge/execution/helper_context.py",
+    "contractedge/contracts/validation.py",
+    "contractedge/diagnosis/prompt.py",
+    "contractedge/orchestration/runner.py"
+  ],
+  "source_before_verified": true,
+  "source_after_matches_isolated": true,
+  "old_registered_results_retained": 8,
+  "formal_ready": false
+}

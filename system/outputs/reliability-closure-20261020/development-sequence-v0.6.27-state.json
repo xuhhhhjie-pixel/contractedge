@@ -1,0 +1,11 @@
+{
+  "status": "HELD_FIRST_REGISTERED_GATE_NOT_PASS",
+  "version": "0.6.27",
+  "freeze_sha256": "9afe512e6356ed2cbbfafab43d85a4faa1ed77a34b42f3e790dc108e171ebead",
+  "controller_sha256": "953c029a5d4a9eb33cce052d6abf1ac67679ec27f32cef1c28be6fb021125757",
+  "sequence_sha256": "8894516ac974f9b59ddf4e5fc4096b12ca4648ba451d9068d9ca001b8090367d",
+  "updated_at_unix": 1792667493.1306052,
+  "B_opened": false,
+  "formal_ready": false,
+  "first_gate_status": "NO_CANDIDATE"
+}

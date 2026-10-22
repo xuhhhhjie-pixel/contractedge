@@ -1,0 +1,109 @@
+.....F                                                                   [100%]
+=================================== FAILURES ===================================
+___ test_multiple_source_roles_can_be_reviewed_without_an_impossible_schema ____
+
+    def test_multiple_source_roles_can_be_reviewed_without_an_impossible_schema():
+        import json
+        from pathlib import Path
+        from jsonschema import Draft202012Validator
+        from contractedge import __file__ as package
+        schema=json.loads((Path(package).parent/'contracts/schema/semantic_changeset.v1_1.json').read_text())
+        review=schema['properties']['precondition_review']
+        rows=[dict(source_evidence_ref=f'SRC-{i}',condition='Review actual source prerequisite',disposition='NOT_APPLICABLE',
+            verification_refs=[],open_obligation_refs=[],rationale='Explicit independent source-role applicability review') for i in range(7)]
+>       Draft202012Validator(review).validate(rows)
+
+tests/test_source_field_contracts.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'items': {'additionalProperties': False, 'properties': {'condition': {'maxLength': 1600, ...n_refs', 'open_obligation_refs', 'rationale'], 'type': 'object'}, 'maxItems': 6, 'type': 'array'}, format_checker=None)
+args = ([{'source_evidence_ref': 'SRC-0', 'condition': 'Review actual source prerequisite', 'disposition': 'NOT_APPLICABLE', ...condition': 'Review actual source prerequisite', 'disposition': 'NOT_APPLICABLE', 'verification_refs': [], ...}, ...],)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: [{'source_evidence_ref': 'SRC-0', 'condition': 'Review actual source prerequisite', 'disposition': 'NOT_APPLICABLE', 'verification_refs': [], 'open_obligation_refs': [], 'rationale': 'Explicit independent source-role applicability review'}, {'source_evidence_ref': 'SRC-1', 'condition': 'Review actual source prerequisite', 'disposition': 'NOT_APPLICABLE', 'verification_refs': [], 'open_obligation_refs': [], 'rationale': 'Explicit independent source-role applicability review'}, {'source_evidence_ref': 'SRC-2', 'condition': 'Review actual source prerequisite', 'disposition': 'NOT_APPLICABLE', 'verification_refs': [], 'open_obligation_refs': [], 'rationale': 'Explicit independent source-role applicability review'}, {'source_evidence_ref': 'SRC-3', 'condition': 'Review actual source prerequisite', 'disposition': 'NOT_APPLICABLE', 'verification_refs': [], 'open_obligation_refs': [], 'rationale': 'Explicit independent source-role applicability review'}, {'source_evidence_ref': 'SRC-4', 'condition': 'Review actual source prerequisite', 'disposition': 'NOT_APPLICABLE', 'verification_refs': [], 'open_obligation_refs': [], 'rationale': 'Explicit independent source-role applicability review'}, {'source_evidence_ref': 'SRC-5', 'condition': 'Review actual source prerequisite', 'disposition': 'NOT_APPLICABLE', 'verification_refs': [], 'open_obligation_refs': [], 'rationale': 'Explicit independent source-role applicability review'}, {'source_evidence_ref': 'SRC-6', 'condition': 'Review actual source prerequisite', 'disposition': 'NOT_APPLICABLE', 'verification_refs': [], 'open_obligation_refs': [], 'rationale': 'Explicit independent source-role applicability review'}] is too long
+E           
+E           Failed validating 'maxItems' in schema:
+E               {'type': 'array',
+E                'maxItems': 6,
+E                'items': {'type': 'object',
+E                          'additionalProperties': False,
+E                          'required': ['source_evidence_ref',
+E                                       'condition',
+E                                       'disposition',
+E                                       'verification_refs',
+E                                       'open_obligation_refs',
+E                                       'rationale'],
+E                          'properties': {'source_evidence_ref': {'type': 'string',
+E                                                                 'minLength': 1},
+E                                         'condition': {'type': 'string',
+E                                                       'minLength': 1,
+E                                                       'maxLength': 1600},
+E                                         'disposition': {'type': 'string',
+E                                                         'enum': ['REQUIRED',
+E                                                                  'UNRESOLVED',
+E                                                                  'NOT_APPLICABLE']},
+E                                         'verification_refs': {'type': 'array',
+E                                                               'uniqueItems': True,
+E                                                               'maxItems': 32,
+E                                                               'items': {'type': 'string',
+E                                                                         'minLength': 1}},
+E                                         'open_obligation_refs': {'type': 'array',
+E                                                                  'uniqueItems': True,
+E                                                                  'maxItems': 32,
+E                                                                  'items': {'type': 'string',
+E                                                                            'minLength': 1}},
+E                                         'rationale': {'type': 'string',
+E                                                       'minLength': 1,
+E                                                       'maxLength': 1600}}}}
+E           
+E           On instance:
+E               [{'source_evidence_ref': 'SRC-0',
+E                 'condition': 'Review actual source prerequisite',
+E                 'disposition': 'NOT_APPLICABLE',
+E                 'verification_refs': [],
+E                 'open_obligation_refs': [],
+E                 'rationale': 'Explicit independent source-role applicability review'},
+E                {'source_evidence_ref': 'SRC-1',
+E                 'condition': 'Review actual source prerequisite',
+E                 'disposition': 'NOT_APPLICABLE',
+E                 'verification_refs': [],
+E                 'open_obligation_refs': [],
+E                 'rationale': 'Explicit independent source-role applicability review'},
+E                {'source_evidence_ref': 'SRC-2',
+E                 'condition': 'Review actual source prerequisite',
+E                 'disposition': 'NOT_APPLICABLE',
+E                 'verification_refs': [],
+E                 'open_obligation_refs': [],
+E                 'rationale': 'Explicit independent source-role applicability review'},
+E                {'source_evidence_ref': 'SRC-3',
+E                 'condition': 'Review actual source prerequisite',
+E                 'disposition': 'NOT_APPLICABLE',
+E                 'verification_refs': [],
+E                 'open_obligation_refs': [],
+E                 'rationale': 'Explicit independent source-role applicability review'},
+E                {'source_evidence_ref': 'SRC-4',
+E                 'condition': 'Review actual source prerequisite',
+E                 'disposition': 'NOT_APPLICABLE',
+E                 'verification_refs': [],
+E                 'open_obligation_refs': [],
+E                 'rationale': 'Explicit independent source-role applicability review'},
+E                {'source_evidence_ref': 'SRC-5',
+E                 'condition': 'Review actual source prerequisite',
+E                 'disposition': 'NOT_APPLICABLE',
+E                 'verification_refs': [],
+E                 'open_obligation_refs': [],
+E                 'rationale': 'Explicit independent source-role applicability review'},
+E                {'source_evidence_ref': 'SRC-6',
+E                 'condition': 'Review actual source prerequisite',
+E                 'disposition': 'NOT_APPLICABLE',
+E                 'verification_refs': [],
+E                 'open_obligation_refs': [],
+E                 'rationale': 'Explicit independent source-role applicability review'}]
+
+../.local/lib/python3.10/site-packages/jsonschema/validators.py:450: ValidationError
+=========================== short test summary info ============================
+FAILED tests/test_source_field_contracts.py::test_multiple_source_roles_can_be_reviewed_without_an_impossible_schema
+1 failed, 5 passed in 0.26s

@@ -1,0 +1,19 @@
+...................F.....                                                [100%]
+=================================== FAILURES ===================================
+_ test_single_operation_observed_regression_enables_existing_repair_reasoning __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-210/test_single_operation_observed0')
+
+    def test_single_operation_observed_regression_enables_existing_repair_reasoning(tmp_path):
+        plan,config=fixture(tmp_path);previous=rejected_predicate_attempt(plan)
+        result=request(tmp_path,plan,config,previous_attempt=previous)
+>       assert result.thinking=='enabled' and result.max_output_tokens==16384
+E       AssertionError: assert ('disabled' == 'enabled'
+E         
+E         - enabled
+E         + disabled)
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py:71: AssertionError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_execution_reasoning_policy.py::test_single_operation_observed_regression_enables_existing_repair_reasoning
+1 failed, 24 passed in 0.41s

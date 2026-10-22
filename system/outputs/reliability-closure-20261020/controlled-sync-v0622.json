@@ -1,0 +1,13 @@
+{
+  "previous_exact_freeze": true,
+  "changed_source_files": [
+    "contractedge/__init__.py",
+    "contractedge/execution/topomen.py",
+    "contractedge/orchestration/feedback.py"
+  ],
+  "test_files": [
+    "tests/test_failure_tasks.py",
+    "tests/test_execution_reasoning_policy.py"
+  ],
+  "root_exact_candidate": true
+}

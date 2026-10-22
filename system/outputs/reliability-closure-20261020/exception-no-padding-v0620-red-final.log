@@ -1,0 +1,32 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_selected_operation_chain_precedes_many_unrelated_callers _________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-199/test_selected_operation_chain_0')
+
+    def test_selected_operation_chain_precedes_many_unrelated_callers(tmp_path):
+        _, _, observation = fixture(tmp_path)
+        path = tmp_path/'consumer.py'
+        prefix = ''.join(f'def other_{i}(parent):\n    return current_parent(parent)\n\n' for i in range(8))
+        path.write_text(prefix + path.read_text())
+        snapshot = compute_snapshot(tmp_path)
+        seed = next(u for u in parse_source_units('consumer.py', path.read_text(), snapshot.snapshot_id)
+                    if u['symbol'] == 'attach')
+        units, _ = helper_context.source_exception_units(snapshot, [seed],
+            [{**observation,'snapshot_id':snapshot.snapshot_id}], max_records=3)
+        assert {u['symbol'] for u in units} == {'current_parent', 'assign_scope', 'attach'}
+        units, _ = helper_context.source_exception_units(snapshot, [seed],
+            [{**observation,'snapshot_id':snapshot.snapshot_id}], max_records=6)
+>       assert {u['symbol'] for u in units} == {'current_parent', 'assign_scope', 'attach'}
+E       AssertionError: assert {'assign_scop...1', 'other_2'} == {'assign_scop...rrent_parent'}
+E         
+E         Extra items in the left set:
+E         'other_0'
+E         'other_2'
+E         'other_1'
+E         Use -v to get more diff
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py:109: AssertionError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py::test_selected_operation_chain_precedes_many_unrelated_callers
+1 failed, 6 deselected in 0.13s

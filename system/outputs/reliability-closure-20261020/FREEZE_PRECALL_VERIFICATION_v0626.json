@@ -1,0 +1,15 @@
+{
+  "verified_at": "2026-10-22T09:42:54.976300+00:00",
+  "method_digest": "c3514afe0974a7eba5486d1f25c18793102e5d5592115492804d74a5e8f8f051",
+  "all_source_config_harness_verified": true,
+  "registration_and_all_46_slots_written": true,
+  "no_worker_started_by_setup_script": true,
+  "no_results_observed_for_new_version": true,
+  "source_delta": [
+    "contractedge/__init__.py",
+    "contractedge/contracts/schema/semantic_changeset.v1_1.json",
+    "contractedge/diagnosis/evidence.py",
+    "contractedge/diagnosis/prompt.py",
+    "contractedge/orchestration/runner.py"
+  ]
+}

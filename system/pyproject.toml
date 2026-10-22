@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "contractedge-system"
+version = "0.6.27"
+description = "Snapshot-bound requirement, diagnosis, semantic planning, repair and public feedback for ContractEdge"
+requires-python = ">=3.10"
+dependencies = [
+  "PyYAML==5.4.1",
+  "jsonschema==4.26.0",
+]
+
+[project.optional-dependencies]
+pilot = ["transformers>=4.45"]
+topomen = ["pydantic>=2,<3", "rich", "python-dotenv", "jinja2", "platformdirs"]
+
+[project.scripts]
+contractedge = "contractedge.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"contractedge.contracts" = ["schema/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

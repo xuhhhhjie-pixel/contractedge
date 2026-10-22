@@ -1,0 +1,8 @@
+{
+  "old_root_exact_freeze": true,
+  "new_root_exact_candidate": true,
+  "changed": [
+    "contractedge/__init__.py",
+    "contractedge/orchestration/runner.py"
+  ]
+}

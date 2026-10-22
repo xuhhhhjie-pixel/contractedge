@@ -1,0 +1,6 @@
+agent:
+  agent_class: repair_memory
+  experiment_group: zero-shot
+  repair_memory_path: experiments/memory/repair_memory.jsonl
+  experiment_runs_path: experiments/results/runs/experiment_runs.jsonl
+

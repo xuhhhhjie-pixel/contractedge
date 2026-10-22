@@ -1,0 +1,13 @@
+[
+  {
+    "group": "A",
+    "case_id": "R4-ACK-CLOUDWATCH-2985",
+    "repeat": 0,
+    "variant": "candidate",
+    "status": "SEMANTIC_FAIL",
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.25-A-R4-ACK-CLOUDWATCH-2985-0-candidate",
+    "score": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-v0.6.25/delivery-0.6.25-A-R4-ACK-CLOUDWATCH-2985-0-candidate/cohort.json",
+    "patch_sha256": "0594e69454ea795ec1cc4f1a185515bcb8a460b8e0e4b16a9dd13410f2a22bc6"
+  }
+]

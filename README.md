@@ -42,3 +42,7 @@ GitHub Release单个附件必须小于2GiB，本项目较大的包会分卷。�
 来源：`ContractEdge-benchmark150-v1-20261019`。每类以各自manifest为唯一成员入口；旧case状态用于历史追溯，不覆盖当前发布入口。继承仓库/修复家族分区及开发暴露记录；公开历史训练暴露UNKNOWN，不把全部150条称为未见盲测。
 
 第三方源码和镜像的原始许可证随对应归档保留，见[来源与许可说明](THIRD_PARTY_NOTICES.md)。
+
+## ContractEdge 修复系统（开发交接版）
+
+当前系统源码、测试、TopoMen运行源码、配置和设计文档见 [system/](system/README.md)。请先读 [正式实验准入与最终优化实施计划](system/docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md)。系统0.6.27尚未通过正式实验准入；历史开发成绩不代表150条正式结果。Benchmark冻结资源与系统开发状态分别管理。

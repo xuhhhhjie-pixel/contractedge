@@ -1,0 +1,40 @@
+.....................FF..                                                [100%]
+=================================== FAILURES ===================================
+_ test_execution_feedback_reuses_only_exact_accepted_context[obligation_lineage] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-220/test_execution_feedback_reuses0')
+field = 'obligation_lineage'
+
+    @pytest.mark.parametrize('field',['obligation_lineage','public_execution_capabilities'])
+    def test_execution_feedback_reuses_only_exact_accepted_context(tmp_path,field):
+        from tests.test_execution_reasoning_policy import fixture,request
+        from contractedge.contracts.validation import canonical_digest
+        from copy import deepcopy
+        plan,config=fixture(tmp_path);shared={'public_definition':{'enabled':True},'source':'registered'}
+        plan[field]=deepcopy(shared);feedback=dict(to_snapshot=plan['snapshot_id'],**{field:deepcopy(shared)})
+        req=request(tmp_path,plan,config,feedback=feedback);body=json.loads(req.messages[1]['content'])
+>       assert body['execution_feedback'][field+'_record_ref']=='/accepted_plan/'+field
+E       KeyError: 'obligation_lineage_record_ref'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py:157: KeyError
+_ test_execution_feedback_reuses_only_exact_accepted_context[public_execution_capabilities] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-220/test_execution_feedback_reuses1')
+field = 'public_execution_capabilities'
+
+    @pytest.mark.parametrize('field',['obligation_lineage','public_execution_capabilities'])
+    def test_execution_feedback_reuses_only_exact_accepted_context(tmp_path,field):
+        from tests.test_execution_reasoning_policy import fixture,request
+        from contractedge.contracts.validation import canonical_digest
+        from copy import deepcopy
+        plan,config=fixture(tmp_path);shared={'public_definition':{'enabled':True},'source':'registered'}
+        plan[field]=deepcopy(shared);feedback=dict(to_snapshot=plan['snapshot_id'],**{field:deepcopy(shared)})
+        req=request(tmp_path,plan,config,feedback=feedback);body=json.loads(req.messages[1]['content'])
+>       assert body['execution_feedback'][field+'_record_ref']=='/accepted_plan/'+field
+E       KeyError: 'public_execution_capabilities_record_ref'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py:157: KeyError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py::test_execution_feedback_reuses_only_exact_accepted_context[obligation_lineage]
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_failure_tasks.py::test_execution_feedback_reuses_only_exact_accepted_context[public_execution_capabilities]
+2 failed, 23 passed in 0.21s

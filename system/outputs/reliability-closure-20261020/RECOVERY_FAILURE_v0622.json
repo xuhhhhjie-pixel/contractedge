@@ -1,0 +1,17 @@
+{
+  "version": "0.6.22",
+  "group": "recovery",
+  "case_id": "R3-KPT-4673",
+  "repeat": 0,
+  "variant": "candidate",
+  "method_status": "RECOVERY_FAILED",
+  "independent_status": "SEMANTIC_FAIL",
+  "model_calls": 6,
+  "errors": [
+    "PlanRejected: Execution request exceeds the full context budget"
+  ],
+  "trial_reverted": true,
+  "exported_selected_snapshot": "d51cb7e7f27f3842dd448c2814080d19e4a048870d57730c1998f05ebd55777a",
+  "seed_snapshot": "d51cb7e7f27f3842dd448c2814080d19e4a048870d57730c1998f05ebd55777a",
+  "scope": "Registered saved failed seed; first new trial regressed and was restored, second edit prevented by full context budget. Not a successful recovery."
+}

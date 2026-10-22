@@ -1,0 +1,10 @@
+agent:
+  agent_class: topology_repair_memory
+  experiment_group: topology-rag
+  repair_memory_path: experiments/memory/repair_memory.jsonl
+  experiment_runs_path: experiments/results/runs/experiment_runs.jsonl
+  rag_top_k: 3
+  rag_min_score: 0.15
+  topology_enabled: true
+  topology_artifacts_dir: experiments/results/topologies
+  topology_max_workers: 4

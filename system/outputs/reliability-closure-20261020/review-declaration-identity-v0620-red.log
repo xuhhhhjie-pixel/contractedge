@@ -1,0 +1,25 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_same_named_method_cannot_replace_exact_decorated_top_level_producer ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-203/test_same_named_method_cannot_0')
+
+    def test_same_named_method_cannot_replace_exact_decorated_top_level_producer(tmp_path):
+        _, _, observation = fixture(tmp_path)
+        path = tmp_path/'consumer.py'
+        text = path.read_text().replace('def current_parent(parent):',
+            'def decorate(fn):\n    return fn\n\n@decorate\ndef current_parent(parent):')
+        path.write_text(text+'\nclass Other:\n    def current_parent(self):\n        return "unrelated method"\n')
+        snapshot = compute_snapshot(tmp_path)
+        seed = next(u for u in parse_source_units('consumer.py', path.read_text(), snapshot.snapshot_id)
+                    if u['symbol'] == 'attach')
+        units, _ = helper_context.source_exception_units(snapshot, [seed],
+            [{**observation,'snapshot_id':snapshot.snapshot_id}])
+        producer = next(u for u in units if u['symbol'] == 'current_parent')
+>       assert 'raise LookupError("Parent context unavailable")' in producer['text']
+E       assert 'raise LookupError("Parent context unavailable")' in '    def current_parent(self):\n        return "unrelated method"\n'
+
+.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py:101: AssertionError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/tests/test_public_exception_source.py::test_same_named_method_cannot_replace_exact_decorated_top_level_producer
+1 failed, 7 deselected in 0.12s

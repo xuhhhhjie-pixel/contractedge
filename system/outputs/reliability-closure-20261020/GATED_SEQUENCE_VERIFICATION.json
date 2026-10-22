@@ -1,0 +1,46 @@
+{
+  "api_calls": 0,
+  "actual_workers_started": 0,
+  "checks": [
+    {
+      "first_gate": "SEMANTIC_FAIL",
+      "groups_dispatched": [],
+      "final": {
+        "status": "HELD_FIRST_RECOVERY_NOT_PASS",
+        "formal_ready": false,
+        "first_recovery_status": "SEMANTIC_FAIL"
+      }
+    },
+    {
+      "first_gate": "INCOMPLETE",
+      "groups_dispatched": [],
+      "final": {
+        "status": "HELD_FIRST_RECOVERY_NOT_PASS",
+        "formal_ready": false,
+        "first_recovery_status": "INCOMPLETE"
+      }
+    },
+    {
+      "first_gate": "PUBLIC_FAILURE_WITH_INDEPENDENT_PASS",
+      "groups_dispatched": [],
+      "final": {
+        "status": "HELD_FIRST_RECOVERY_NOT_PASS",
+        "formal_ready": false,
+        "first_recovery_status": "PUBLIC_FAILURE_WITH_INDEPENDENT_PASS"
+      }
+    },
+    {
+      "first_gate": "PASS",
+      "groups_dispatched": [
+        "A",
+        "repeat",
+        "recovery"
+      ],
+      "final": {
+        "status": "A_REPEAT_RECOVERY_COMPLETE_B_CLOSED",
+        "formal_ready": false
+      }
+    }
+  ],
+  "final_record_shape_red_green": true
+}

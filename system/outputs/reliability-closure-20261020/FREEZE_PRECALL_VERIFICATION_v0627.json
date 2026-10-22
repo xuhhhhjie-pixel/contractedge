@@ -1,0 +1,20 @@
+{
+  "verified_at": "2026-10-22T11:00:00.311787+00:00",
+  "method_digest": "362780da39f585408b4b725a6cd72f08c6d66caaf8ef52b27d0086d466e80d22",
+  "all_source_config_harness_verified": true,
+  "registration_and_all_46_slots_written": true,
+  "no_worker_started_by_setup_script": true,
+  "no_results_observed_for_new_version": true,
+  "source_delta": [
+    "contractedge/__init__.py",
+    "contractedge/changeset/prompt.py",
+    "contractedge/orchestration/runner.py",
+    "contractedge/retrieval/gap_delivery.py"
+  ],
+  "config_delta": {
+    "max_execution_support_bytes": [
+      24000,
+      48000
+    ]
+  }
+}

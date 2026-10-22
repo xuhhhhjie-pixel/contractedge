@@ -1,0 +1,15 @@
+{
+  "started_at": "2026-10-22T06:31:39.617445+00:00",
+  "pid": 370434,
+  "log": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/development-sequence-v0623.log",
+  "state": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/development-sequence-v0.6.23-state.json",
+  "first_gate": "recovery/R3-KPT-4673/0/candidate independentPASS",
+  "allowed_groups": [
+    "A",
+    "repeat",
+    "recovery"
+  ],
+  "B_closed": true,
+  "formal150_closed": true,
+  "new_attempts_outside_registration": 0
+}

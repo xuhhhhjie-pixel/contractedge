@@ -1,0 +1,2721 @@
+{
+  "scope": "PUBLIC_METADATA_AND_CONTRACT_AUDIT_ZERO_MODEL_CALLS",
+  "api_calls": 0,
+  "manifest_sha256": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+  "members": 150,
+  "by_class": {
+    "R1": 30,
+    "R2": 30,
+    "R3": 30,
+    "R5": 30,
+    "R4": 30
+  },
+  "valid_method_inputs": 150,
+  "registered_operations": 2,
+  "records": [
+    {
+      "case_id": "RW-CAND-067",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "67715bb2cae658b418724583898e62a05b73e657db7e3bb94ce8f3fba2ecae5d",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-068",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "f1ce65ae0d7c2b27f68a8034f3fcf319e1fddc045ff6abd6470dfc11d4f0485b",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-070",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "8f4b74277e98942ab422c32906fd75ecec4476dbbfd82cbab22c502aa44376e2",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-071",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "27bf4452e7dc50be689c74e011edb39df4cfce05d857affd6cb0bb786fd9cf84",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-072",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "563b1485073453ea750c7bc1cfeb80051e182f77c91212a6e7c19f86b8f8d203",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-073",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "b4a810ea2fbd62660d1a9e7f44b0a85da0c8c637cd1023f0944d7c691f47ec01",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-076-AGGREGATE-VERIFIER-001",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "aef90515e13e7de66845dbf655b50a205a400089bb4b7dd217a3135cb02c6e1f",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-077",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "9a2e1e5bd6d8967d698e7d84e75342be814856e228f265b25911226436e03f7a",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-081",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "0cf51498bf0da0325aae5326be816cd3d2f84e6ff200008db9647a1f81df7b6c",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-086",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "9c4cd89da9a93bf01fba10feaa74c124ab3cb1d0c68a6a1dc00f9d824ea1da5f",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-091",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "0c8eafaa10114eb10f1aedf697c61d17900a884c38f010aef7a9b92043e8e3b4",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-094",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "c479b4487bf5b3a9fb4b698c9b20d7cc1ff5afb1e01bcdd42a5acf3303fa312e",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-095-AGGREGATE-VERIFIER-001",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "d921373f1c909c0d9f98e6a6f9867069a22cbfe506c60b3bba16a125b96424d1",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-102",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "79837647d8fec81541645f274c3d33a16acb706736b45af5ee2043a7af9d7e95",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-103",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "4babc09c2e4672f724ee7a492191f072f68a07aab6a516509c906519f27422c9",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-104",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "09b1058ab218651fe308ca6a86cb0e76d58f7d1d1a13b386afdf27e06d05bcdc",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-106",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "22469372c1f4370a295f95d5481efc76477f61ae60dedb4d61627f88851fdeb5",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-109",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "a60a832b30a99ded5c2c81d6951f1489c8107918c0f43d167e1f46ff1320b859",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "94c07a75d1e0e5f1eb03c8637c6a8431673111e51242bb8e50158aefb821f802",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-118",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "f9b5bf32b1e1bbf7a4351b52751f84eed759bf213ed211dc753929d9aa913bae",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-120",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "003d241f92f3dcd528a41a36766ff0ce102b43a8f1a06b09d6108f6c06298f88",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-127",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "56860e43d48044b7208964e2deb98e3457ba87ae45a507ed6ba6f34ab5eb2fcc",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-128",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "083ec8bd25d70899bddcbd379a3edd76bac212710f0a440a621d66ce2c49ecca",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "f44e75768af304334eff5fb7c49cc596b12218dbf83efdf95639691b167063f5",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "12a17b43260a954acb7d4dfd5e36aeeb66527d852b88b0dc6a10cdfb9a1e407c",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-137",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "f0a6bcd259f1f1ca54edee004526e82f64c59008d0f24e05556bbc2640c42743",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CAND-171",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "50fa7b0525153ab85cf4d8357e056c524577387ea2376c6c1c277665426041e8",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-HTTP-LOGGING-001",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "6278d36d235df9dc6c5fb86fa5fc7bc0ffba14a010939ade3aaf56af3ba4166f",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-RBAC-DISABLED-001",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "e40effa51329fa9a23ea9e811288801b5e97193df7d3a95ad91e46941d98fe05",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-HELM-PROM-KSM-EMPTY-HEADERS-001",
+      "primary_class": "R1",
+      "method_input_valid": true,
+      "source_snapshot": "f462a632627ca1ab04f57d2678aad709f4fa0876a2be5e092499b4dcad9851b6",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 2,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [
+        "public-object-adoption-v1"
+      ],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "REGISTERED_PRODUCER",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-KEDA-8033",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "eaec47d6108cd82e01944ebaeafdd293d17cdbb2786dd113107ffc8b1ff81b53",
+      "requirement_status": "READY",
+      "clause_count": 11,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-KEDA-8227",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "cc1d30c4f5ad51381be3c495d75ca59fa8a77e246f37c1022aeb1976c2b43de0",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "a1b8e691476832976ef5ce4ee21e819b45f7bdffc8efc4ce2d5bc3b60698f5a8",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [
+        "public-oci-transport-v1"
+      ],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "REGISTERED_PRODUCER",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-ARGO-CD-23823",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "066ad8ddb429c959b24480f25e52471dd93168caf1dedf40c5e5cff1dc54a99d",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "83e84c0a0595a3aaae7509d3125e640c39ea0498220c687b9595c67d90ca34b9",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-ARGO-CD-29827",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "2555e99e2209d75a50efbc8f690fb5f28b71a32ae59df65cb8ac25edd4bf3fdc",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9118",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "eac933df0452f07b5a957a78a80d347be477e7b4da487c22318ee1a930049d6e",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9128",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "e22d64489e1ee2bb14ebfd4f3c7fc272bdbc293559c31175c64f7f04834292d2",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CLUSTER-API-12341",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "9fd44fd287434f462709e600ed32200cfa79fb4a0d223e3374f8b20a37ef27bf",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CLUSTER-API-13937",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "d933d4c75661037da7fdeccbb51bc883786618d99da5b0e8d4f793b276d6f645",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7733",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "f38ad405f5294ea56d5b7e1f195e96c3ef90dfc92299171b1da2ffa980ec6d71",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7789",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "e960b472ca637f89697af17bacd64674940be23eb34dbb4948b5c6de9a114935",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7860",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "a1a6559ae4711de69dbc8bc246bf9fd732fdad580fe45aee43b7abfcf5f7c8fb",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-RUNTIME-1088",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "357d82672ad04e8580d0a3363ded73a79b1511975c2341af1df8208845b8bbe8",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-DAPR-10132",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "f67b0c38cba93a9fc2c1215556b88916c6e41c96d22a7b5d9328e4c4ecfd2450",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1411",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "dd49723e72047985f1029a778b9d4c962139016aec7d2f679c7939a606915a1a",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1412",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "26bab0b89a690114b16b85f74e275acea59ca5fd645781866f499527202dfdd9",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "99320b653f4f3c40bc4a2d5eb397efbb2905cbb5240826a8ed000da4a3ae4cfa",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-IMAGE-REFLECTOR-824",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "c60f9421a3131165315c04efcb7668fcc5801f57952d3a49bedc14d6766f68a4",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-KEDA-7777",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "271370101e97258b3e9b52dce8aa25e1340b6760fb600f7eff430a160400c41d",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-KEDA-8125",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "18ed1c192741322b77f69d1074eff6f50691bd4ab1f2f667acf317c1e000561e",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-KUSTOMIZE-CONTROLLER-1614",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "c3a5e7fcefd449dfccd5ee3d3fdd3367fe2f0091ce5e51537518403ab80199e9",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-KYVERNO-17395",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "6a28914353e4e9a40e7622ada6ae5e876411b5ae3f9fd516beb813ab9a851bd8",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8727",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "36aacc855366ea48dde450ab7773a21cbdc71dacb82776f31f065560ed2eda40",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8739",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "36aacc855366ea48dde450ab7773a21cbdc71dacb82776f31f065560ed2eda40",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-SOURCE-CONTROLLER-1904",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "53d59df1fb5f72bb272c4982b1a4129c165e2947fd671c38e706492cd33bb8bc",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7523",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "a097759c041329a62c8f135d1db56a540ea30c92ac943a19c790c5585acee188",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KUSTOMIZE-5940",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "d1fc99e8fae18872bb4de192c59a0e06a3aa8172092a5abc73620bb667d74aea",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KUSTOMIZE-6237",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "d8669a7eb0a391fc6eed70f2cd08793381d2a5042dcf6fbae61a145dabecfc3a",
+      "requirement_status": "READY",
+      "clause_count": 12,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KOMPOSE-1887",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "196d042119e98b775bcd4c0d69fcc254775e8ce867c54abbcfe5903ef1f38043",
+      "requirement_status": "READY",
+      "clause_count": 13,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-HELM-9175",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "a4698d5a1bd5276337ac701cf7f6c1f7183ef7029ad4896fbde578ebeed47d96",
+      "requirement_status": "READY",
+      "clause_count": 13,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KUBESPAWNER-654",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "fd310413b101e224f0bc4b3a55980f182760b0f5bd0e7fd2e3f35abbc6d6e12c",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-PREFECT-7244",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "9a0f84fafe6218caff529687f2d65e005a4049a3885f9240dad15ac78cd48a73",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-YTT-550",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "5e698036f37f13820f2b564b59074a0f636dd5a69077e9925961d262bf668f5a",
+      "requirement_status": "READY",
+      "clause_count": 7,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-CONTROLLER-TOOLS-1270",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "92e805f76e8c1a84dc5bb67dda01cab0d26c703c8fb61f8804d852a678348fa2",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5708",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "039ef3682114ff2e8403916b344a09d044ee3772c03696c43d98804bbac03da4",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "9f530aa302e98f4a0499c79631382a924a0ee1871eb9dbd00515e946cb29a697",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-FLUX-KUSTOMIZE-1693",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "6616c711602d4c14125aa39efeab477649535b8fc4111aa3ca8e90d7704e58ce",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-HELM-31979",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "6f907ee584512c9988d023e24636a125e85bd86f3c7a46f7819cc7ad7d05ea67",
+      "requirement_status": "READY",
+      "clause_count": 6,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9892",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "4debb8f8eca7bf82c8353a7a3df2bec23583ee96daab58c06d0dcc2b81fc9278",
+      "requirement_status": "READY",
+      "clause_count": 9,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-UPJET-593",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "133b883c6d9371e5fac4169aeb78924415f78888e3108ff5dda0f36a0cd6eb49",
+      "requirement_status": "READY",
+      "clause_count": 6,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-YTT-1000",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "4d9b67aa0ddeaf8d9339457381cd41b3fade809032ad95af01832f1aca1eb6a3",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-CDK8S-327",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "53d3513ae6947464c0a9f744edf08af388cca0d4e4ec6cc29e88e9ece23588cc",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-PULUMI-KUBERNETES-4426",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "434f8e83d068d31e5a99a0be9241bed9168ebb81f8dfd2eddeef469cdbff0fdf",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KPT-4746",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "09dd9c81f39b12001e6b1cd07ce0be9e40f43939a164f8b4aa3e7abb24901605",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-GARDEN-6713",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "c1f06cab14085047f994838b7ea6605e4584bd3eea5283e281cc5116d8a8623a",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KUBEVELA-7041",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "fbf82c1c3a223d594f365345a7c43fd550b045f75b28e5385280704b1846f443",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KOMPOSE-2124",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "bcde59951fb3710d59a18bf71e388176709ab8e1db3b9a92648c5fb95d268e03",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-PULUMI-KUBERNETES-4293",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "10770e11848df4e59a32789d845b7fa92de542e65f6dc237b109c6995136c845",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KUBESPAWNER-451",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "f331c723e6911354681e606ea92f57cc143f71248269f85839b27624da25cf81",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-FLINK-OPERATOR-1152",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "f6d1ce7caaf19e2badee2f78a199801879e8a7168e05bcd175a2d1f1d719bef1",
+      "requirement_status": "READY",
+      "clause_count": 13,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "28706ba06514b8a9f7d25f6e20ba685ecf672673e9f0d3f9cdfdaaba325a217a",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-HELMFILE-2531",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "a7fcea3e4ce382af2fd7c63a357a7c5b23fdec572d4a863aab6d80b81bf813ac",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R3-KUBEVELA-7383",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "6fc70a115bbb552c71f0a1234259a13357a281a2dbde812f4f25e4829e913daf",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-CLUSTER-API-OPENSTACK-3393",
+      "primary_class": "R3",
+      "method_input_valid": true,
+      "source_snapshot": "4d63b5f112da53e45e156461ffb88c263d84bde7ec9f6aef5bd9a985331a77f2",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-OTEL-5594",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "33e55ae20b9c1a1a8e9b40df481aff5dd487f91027552ad05706fa4478c2b420",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-5040",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "8f522483b62e03959f168bd8d01e139eee233ef13d48cc830690be9c7f11a241",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-ALLOY-6818",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "d7904a61a04903909db530cf7a56ed1fa22fccc9498c621c1d9b6785b2eaa6dd",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "CRI-O-7954",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "f4f7d79ea0fbd6bba1502817cf4d6569a0bdb1ecacc4c3aabb32103307d82ea7",
+      "requirement_status": "READY",
+      "clause_count": 12,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-COREDNS-7562",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "78584d471e927d2ea1c4b8c967a0b5bb7511f1dc12f83f3ea2ad0b47df85e72e",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-DAPR-10220",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "1350c00e6aa1aa45499fd9720a99ee8db4249437cba0f93d0e60a27c16720135",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-DAPR-9173",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "fe0279f2ea9ad02331d657437a3bd4c2cd4cf21bbc47fa4cb3967d3720e6ac38",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-DAPR-9612",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "9b77c05e4edf39a9c5aab1ffdc2e3d63ef1af672c049c9312a6a2db456d56161",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-10720",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "eafe5299bb9f35dd726f26e3be324ec593ab6a715047d6b1cc872a9fd8600704",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-12495",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "6e0aba022779e4c79fa57ff13085f496d7b6098dd13ce4c16af8af42f1d9e7e3",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-ISTIO-2944",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "cc5d33a8acecc9e2c2a5753a6d0740fe19bbe97488151498df89eff384c9b4b7",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2918",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "8521adf8c834bbf5dfa2c9a073a65933a0122e4246b99e171aaeb7674f32f881",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2955",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "0684adbc7e290ec78ad9cd7919bdb3189329871387a51f640c518d728c236e10",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-KYVERNO-17310",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "eadd8faafeb7cf5db8508f0cd3f326c0e5d72a77aec30c25c41250c3665c967c",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "feba7c9a9dc1d79560603257c06c334b8b08fd06a30d8bd3d76bc3c6afdde769",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-OPENCLAW-111511",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "966b06dc6c1cf17ba0113bf2f6ff97a4ded682bad65864e698526272ef1d75e8",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-10795",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "2933087b5d70a6e82f17133fad1adfa2a6392af604aac5a7ed5d68ea1e40693f",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15572",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "e2b0a51a7a3fec1f3759ab757f46dee6a022bc35a6d6b00419e94e8399437ce1",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15868",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "4aff9f36ed2cc677ad8870ceb974d60a9ab2c3644065f080abe4e6ac74e2f5f9",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-OTEL-OPERATOR-2171",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "1660256ee91bd6e2a1a122122adcd3ae7d1c91f02bbee2b1597db3bdbad4e0ce",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-16340",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "c5e17a5a65b38dda947392b63e1ccec706196244c48bfc4cd2155ac4e8715fcb",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-17807",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "262d7a5993404c82c5e68e3885a1af5bf9032239c152aacdf11c5b99bacf02c2",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "f6d770793d534c02701a6e0543a6d0735e19ebde4e598f6e957c978a5a2204e4",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-TEMPO-6435",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "3e5e6600bc1421636228ced17aed76fe4040f49c8e6b7b6f6670903974922de5",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-TEMPO-6481",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "23fad9fd02ab444d214dc6ce72c1481fd52805c7f9ab2ca55c696499cbf8315a",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-TEMPO-6509",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "39b4b26c7ad729946d9bde9d9ad931df075fc2a35ace0aa105b11f31f20d3696",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-THANOS-6503",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "5d6db69c6516d78e8f42519be1caae4e991a82ab4ecfe073e9ff7c78f2a03828",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-ACK-S3-2965",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "694fe833223a5dac560ce69b5c17985c67f1f406f684c74b714b586053e5c145",
+      "requirement_status": "READY",
+      "clause_count": 6,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-AWS-LBC-4847",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "dfb2f7c4730ab5fa1c44ba9121dbcaa17f17ca6ab61a81512d8861d1b1926409",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-AWS-LBC-4876",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "5428fd7aea31334022573726ba181c79f088837f42694ce23b9c4b0a0c5ed6a8",
+      "requirement_status": "READY",
+      "clause_count": 6,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-CAPA-5111",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "d57990f2eba46bd67e1b78573ed176650cd3119795740a467df3649285a06861",
+      "requirement_status": "READY",
+      "clause_count": 6,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-CERTMANAGER-9204",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "64dec6098477231ba69131b34071c37846ceab380489bf4f778905bec69c3b2b",
+      "requirement_status": "READY",
+      "clause_count": 7,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-CLUSTER-API-OPENSTACK-3319",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "9f45f17a9ce8e933cd684a156b90ad64c4a58f14d75209d48a958ade8f263205",
+      "requirement_status": "READY",
+      "clause_count": 7,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-EXTERNAL-DNS-6082",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "abe06f4a5f5d593264c5f87f182130fcdc4adfe454f41f4136a31ac8d91e0cc3",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-EXTERNAL-DNS-6661",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "488686a10a822924cbe55cabe5ed15d61d8f2ace492ac7e50e8472237c20a072",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-EXTERNAL-SECRETS-6821",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "4bee05db86a3895f077add31ff0212aeefc78e406658652c80a4a6d74981f179",
+      "requirement_status": "READY",
+      "clause_count": 14,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-EXTERNAL-SECRETS-6933",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "1ba082db84866c3746f6ffe7dccf4daf3cf821572d2a54a5902dd8f41f00c620",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-FLINK-OPERATOR-1168",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "b08403dfa12a2e97707dade20d0e42d4a17ea91c266e400bbbab5188ba7b475c",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2214",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "5a08b6f017b072e3f7e648860b04ac52f46487418dbbecb04e3077b3d4180de3",
+      "requirement_status": "READY",
+      "clause_count": 7,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2339",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "17d18b3b3fad868e5c6c8f3eac2ba09ff48e6e288ecf9268a4c1ca5876f38d30",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-138",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "a36b549e38646c5b739bab9edda3347702ebbac010ee32295e0c77950caf597a",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-HTTP-153",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "e3aac1306f13872f2bdd73c3a84ac86e77ecfd7b1dd9d5e88a24ab5285b5c87d",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-SQL-240-421",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "627ee099b71e1987f24ac85787b55bc451e7ba0c477869017a2474303af1cee4",
+      "requirement_status": "READY",
+      "clause_count": 11,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-SQL-459",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "922fa993297e06b385ad37d0eda09f93b305fd33c89ac9bfb019c9327246253a",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AWS-2117",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "da89b3d23dcfbe5c1a8b6a5e9b05d4adc87300f5931668294cc00fe2f323257f",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AWS-2182",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "ffab92130d5a2b8468320d32ccab3e53461818a027b6674853ad689ba8472805",
+      "requirement_status": "READY",
+      "clause_count": 5,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AZURE-1247",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "5308460746a31708a759f40c068812da7b96e5349f80669aac1c8c2319dbfe9f",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AZURE-1260",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "f7f6775909b328d23680416498cf6823bb38cc10bbea0ebb216793d169fa9503",
+      "requirement_status": "READY",
+      "clause_count": 2,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-GCP-1015",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "f6aa713ce7bd01e12a5d285c3fc80971cd09b866b10237561da443a4ff7ef9d8",
+      "requirement_status": "READY",
+      "clause_count": 8,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-GCP-875",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "d0cce5b67c9e1e8ab52dc8ea57d1f3d6cce682b718011393837c28f8af316293",
+      "requirement_status": "READY",
+      "clause_count": 9,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-UPJET-564",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "9ce4098741b55603b9f85fd955b20523f59f7feef870d74ad13b45941c68dd5f",
+      "requirement_status": "READY",
+      "clause_count": 6,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-UPJET-640",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "68452ddb1a1c62b6ba9e683a5f499023290edbed882ecd03cff025fe1d7f0d08",
+      "requirement_status": "READY",
+      "clause_count": 6,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-PROVIDER-AWS-2256",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "b216b43dcccfe0c630203ade5872ba73586d576b5b577157a003abf4b01066f7",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-PROVIDER-AWS-2343",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "aed59f492e01f1fccb60ee3e41483f4f792e961fe3875588079ea144cf12e258",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-UPJET-AWS-2137",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "f28456564547a54182ebe4790a7d10272355ec1570d46f7ba5445f27ff4e27ee",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "R4-UPJET-GCP-1027",
+      "primary_class": "R4",
+      "method_input_valid": true,
+      "source_snapshot": "c2ece9b338329383841a679e2dc33c88b3116b85133d4eac3a05b5b08507f5bd",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 1,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-HAPROXY-0D540394",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "7ae864e89fd57f798080797409420ef46d142f221449c4e698d0d73f7cd4df57",
+      "requirement_status": "READY",
+      "clause_count": 3,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-ARGO-ROLLOUTS-4604",
+      "primary_class": "R2",
+      "method_input_valid": true,
+      "source_snapshot": "2d860debc52ef20e6de2777e3961abad2e9e2dd82d167bfd10caebc8345f01a4",
+      "requirement_status": "READY",
+      "clause_count": 1,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-HAPROXY-REDIRECT-QS-001",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "b20015453a7e0284bcc5d90edb4047ef804a4b7946363030f1d7f7831e2853d1",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    },
+    {
+      "case_id": "RW-HAPROXY-HASH-NUMERIC-001",
+      "primary_class": "R5",
+      "method_input_valid": true,
+      "source_snapshot": "beb04451b950b03c403a97975ba2c85c7451f1ccbdebe886228dc8d8d08f834b",
+      "requirement_status": "READY",
+      "clause_count": 4,
+      "registered_operation_adapters": [],
+      "public_scenarios": 0,
+      "mechanisms": {
+        "lineage": "APPLICABLE",
+        "candidate_guard": "APPLICABLE_WHEN_COMPARABLE_PUBLIC_PRESERVATION_EXISTS",
+        "operation_consistency": "NO_REGISTERED_OPERATION_FACTS; DOES_NOT_BLOCK_OTHER_SOURCE_DIAGNOSIS",
+        "gap_delivery": "LANGUAGE_AND_LOCATABLE_QUERY_DEPENDENT; NO_UNIVERSAL_CALL_GRAPH",
+        "helper_preconditions": "FINITE_ANNOTATION_IDENTITY_MERGE_SYNTAX_ONLY; OTHERWISE_UNKNOWN"
+      },
+      "repair_performance": "NOT_MEASURED_BY_THIS_AUDIT"
+    }
+  ]
+}

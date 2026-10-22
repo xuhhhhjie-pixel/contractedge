@@ -1,0 +1,50 @@
+{
+  "started_at": "2026-10-22T11:00:47.472852+00:00",
+  "version": "0.6.27",
+  "processes": [
+    {
+      "role": "worker",
+      "pid": 1140980,
+      "command": [
+        "/usr/bin/python3",
+        "/home/xhj/contractedge-system/scripts/run_reliability_worker_v8.py",
+        "--method-root",
+        "/home/xhj/contractedge-system/.superpowers/sdd/2026-10-21-cross-stage-repair-closure/frozen-v0.6.27",
+        "--config",
+        "/home/xhj/contractedge-system/configs/deepseek-reliability-closure-v7-budget150.json",
+        "--output",
+        "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.27-A-R4-ACK-CLOUDWATCH-2985-0-candidate",
+        "--case",
+        "R4-ACK-CLOUDWATCH-2985"
+      ],
+      "log": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/delivery-0.6.27-A-R4-ACK-CLOUDWATCH-2985-0-candidate.log"
+    },
+    {
+      "role": "scorer",
+      "pid": 1140981,
+      "command": [
+        "/usr/bin/python3",
+        "/home/xhj/contractedge-system/scripts/score_reliability_delivery.py",
+        "--version",
+        "0.6.27",
+        "--watch"
+      ],
+      "log": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/independent-watch-v0627.log"
+    },
+    {
+      "role": "sequence",
+      "pid": 1140982,
+      "command": [
+        "/usr/bin/python3",
+        "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/run_gated_development_sequence_v0627.py",
+        "--freeze",
+        "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.27.json"
+      ],
+      "log": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/development-sequence-v0627.log"
+    }
+  ],
+  "first_gate": "A/R4-ACK-CLOUDWATCH-2985/0/candidate",
+  "freeze_sha256": "9afe512e6356ed2cbbfafab43d85a4faa1ed77a34b42f3e790dc108e171ebead",
+  "B_closed": true,
+  "formal150_closed": true
+}

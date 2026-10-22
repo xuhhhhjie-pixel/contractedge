@@ -1,0 +1,12 @@
+{
+  "previous_exact_freeze": true,
+  "changed_source_files": [
+    "contractedge/__init__.py",
+    "contractedge/orchestration/runner.py",
+    "contractedge/orchestration/repair.py"
+  ],
+  "test_files": [
+    "tests/test_ready_support_consistency.py"
+  ],
+  "root_exact_candidate": true
+}

@@ -1,0 +1,46 @@
+{
+  "api_calls": 0,
+  "scope": "Existing exposed development members; request generation and budgets only, no repair result or holdout evaluation",
+  "records": [
+    {
+      "case_id": "RW-CAND-130",
+      "status": "REQUEST_CAPTURED",
+      "input_bound": 98284,
+      "input_limit": 120000,
+      "lifecycle_units": [],
+      "gap_delivery": "DELIVERED"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "status": "REQUEST_CAPTURED",
+      "input_bound": 117305,
+      "input_limit": 120000,
+      "lifecycle_units": [],
+      "gap_delivery": "DELIVERED"
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "status": "REQUEST_CAPTURED",
+      "input_bound": 86493,
+      "input_limit": 120000,
+      "lifecycle_units": [],
+      "gap_delivery": "DELIVERED"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "status": "REQUEST_CAPTURED",
+      "input_bound": 97947,
+      "input_limit": 120000,
+      "lifecycle_units": [],
+      "gap_delivery": "DELIVERED"
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "status": "REQUEST_CAPTURED",
+      "input_bound": 119548,
+      "input_limit": 120000,
+      "lifecycle_units": [],
+      "gap_delivery": "DELIVERED"
+    }
+  ]
+}

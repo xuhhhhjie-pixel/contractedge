@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-22T08:39:03.523684+00:00",
+  "old_root_exact_freeze": true,
+  "new_root_exact_candidate": true,
+  "changed": [
+    "contractedge/__init__.py",
+    "contractedge/orchestration/runner.py"
+  ],
+  "source_sync_after_zero_call_replay_and_full_candidate_regression": true
+}

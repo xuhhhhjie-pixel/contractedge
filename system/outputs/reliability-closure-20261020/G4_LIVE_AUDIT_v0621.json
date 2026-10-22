@@ -1,0 +1,297 @@
+{
+  "as_of": "2026-10-22T03:52:42.985067+00:00",
+  "version": "0.6.21",
+  "case_id": "R3-KOPF-726",
+  "group": "A",
+  "repeat": 0,
+  "method_digest": "057ba0f8b51d832e70d820647936226a8bd5f0a9c9ab8e16fddde5629b28dcb2",
+  "frozen_source_and_harness_match": true,
+  "calls": [
+    {
+      "index": 0,
+      "prompt_version": "diagnosis.v1.1.26",
+      "response_received": true,
+      "finish_reason": "length",
+      "error": null,
+      "prompt_tokens_reserved": 86493,
+      "json_parseable": false,
+      "source_snapshot": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+      "gap_delivery": {
+        "status": "DELIVERED",
+        "records": [
+          {
+            "unit_id": "CU-856add59cc973a48",
+            "roles": [
+              "PUBLIC_EXCEPTION:CU-856add59cc973a48"
+            ],
+            "selected": true,
+            "delivered": true
+          },
+          {
+            "unit_id": "CU-b9c851e226597227",
+            "roles": [
+              "PUBLIC_EXCEPTION:CU-b9c851e226597227"
+            ],
+            "selected": true,
+            "delivered": true
+          },
+          {
+            "unit_id": "CU-9ab2354c53ef95ad",
+            "roles": [
+              "PUBLIC_EXCEPTION:CU-9ab2354c53ef95ad"
+            ],
+            "selected": true,
+            "delivered": true
+          }
+        ],
+        "missing_required_ids": [],
+        "interpretation": "Exact endpoint excerpts delivered; does not prove causal relevance or resolve gaps"
+      }
+    },
+    {
+      "index": 1,
+      "prompt_version": "diagnosis.v1.1.26",
+      "response_received": true,
+      "finish_reason": "stop",
+      "error": null,
+      "prompt_tokens_reserved": 89912,
+      "json_parseable": true,
+      "source_snapshot": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+      "gap_delivery": {
+        "status": "DELIVERED",
+        "records": [
+          {
+            "unit_id": "CU-856add59cc973a48",
+            "roles": [
+              "PUBLIC_EXCEPTION:CU-856add59cc973a48"
+            ],
+            "selected": true,
+            "delivered": true
+          },
+          {
+            "unit_id": "CU-b9c851e226597227",
+            "roles": [
+              "PUBLIC_EXCEPTION:CU-b9c851e226597227"
+            ],
+            "selected": true,
+            "delivered": true
+          },
+          {
+            "unit_id": "CU-9ab2354c53ef95ad",
+            "roles": [
+              "PUBLIC_EXCEPTION:CU-9ab2354c53ef95ad"
+            ],
+            "selected": true,
+            "delivered": true
+          }
+        ],
+        "missing_required_ids": [],
+        "interpretation": "Exact endpoint excerpts delivered; does not prove causal relevance or resolve gaps"
+      }
+    },
+    {
+      "index": 2,
+      "prompt_version": "diagnosis.v1.1.26",
+      "response_received": true,
+      "finish_reason": "stop",
+      "error": null,
+      "prompt_tokens_reserved": 94794,
+      "json_parseable": true,
+      "source_snapshot": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+      "gap_delivery": {
+        "status": "DELIVERED",
+        "records": [
+          {
+            "unit_id": "CU-856add59cc973a48",
+            "roles": [
+              "PUBLIC_EXCEPTION:CU-856add59cc973a48"
+            ],
+            "selected": true,
+            "delivered": true
+          },
+          {
+            "unit_id": "CU-b9c851e226597227",
+            "roles": [
+              "PUBLIC_EXCEPTION:CU-b9c851e226597227"
+            ],
+            "selected": true,
+            "delivered": true
+          },
+          {
+            "unit_id": "CU-9ab2354c53ef95ad",
+            "roles": [
+              "PUBLIC_EXCEPTION:CU-9ab2354c53ef95ad"
+            ],
+            "selected": true,
+            "delivered": true
+          }
+        ],
+        "missing_required_ids": [],
+        "interpretation": "Exact endpoint excerpts delivered; does not prove causal relevance or resolve gaps"
+      }
+    },
+    {
+      "index": 3,
+      "prompt_version": "changeset.v1.1.9",
+      "response_received": true,
+      "finish_reason": "stop",
+      "error": null,
+      "prompt_tokens_reserved": 50765,
+      "json_parseable": true,
+      "source_snapshot": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+      "gap_delivery": null
+    },
+    {
+      "index": 4,
+      "prompt_version": "topomen-source-execution.v1",
+      "response_received": true,
+      "finish_reason": "stop",
+      "error": null,
+      "prompt_tokens_reserved": 42056,
+      "json_parseable": true,
+      "source_snapshot": null,
+      "gap_delivery": null
+    },
+    {
+      "index": 5,
+      "prompt_version": "public-postcondition-review.v1",
+      "response_received": true,
+      "finish_reason": "stop",
+      "error": null,
+      "prompt_tokens_reserved": 21688,
+      "json_parseable": true,
+      "source_snapshot": null,
+      "gap_delivery": null
+    }
+  ],
+  "method_status": "PUBLIC_REVIEW_COMPLETE",
+  "patch": {
+    "patch_path": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.21-A-R3-KOPF-726-0-candidate/cases/R3-KOPF-726/candidate.patch",
+    "patch_sha256": "1bd0b7dc9134f2c43d2a3c7ec6762750e909c09967db1189a5d40c02d0afc524",
+    "patch_bytes": 1240,
+    "tool": {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019/tools/collect_patch.py",
+        "--workspace",
+        "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.21-A-R3-KOPF-726-0-candidate/cases/R3-KOPF-726/workspace",
+        "--output",
+        "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.21-A-R3-KOPF-726-0-candidate/cases/R3-KOPF-726/candidate.patch"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "stdout_sha256": "edb29006c493618513301422b5dd600d1431950c2a9c193d369c5dbabb89aac9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "errors": [],
+  "independent_status": "PASS",
+  "rounds": [
+    {
+      "round_id": "0",
+      "front.trace.json": {
+        "status": "READY",
+        "violations": [
+          {
+            "id": "V1",
+            "causal_status": "SUPPORTED",
+            "causal_explanation": "adopt() passes the cluster-scoped owner's None namespace to adjust_namespace, which calls _guess_owner(None); outside a handler _guess_owner raises LookupError, so no manifest or owner reference is produced."
+          }
+        ],
+        "prerequisites": [
+          {
+            "source_evidence_ref": "SRC-CU-9ab2354c53ef95ad",
+            "reason": "Review the source-supported exception-producing guard and caller prerequisites; literal match and local calls are locators, not causal proof"
+          }
+        ],
+        "precondition_review": [
+          {
+            "source_evidence_ref": "SRC-CU-9ab2354c53ef95ad",
+            "condition": "_guess_owner raises LookupError when owner is None and handling.cause_var has no ResourceCause.",
+            "disposition": "NOT_APPLICABLE",
+            "verification_refs": [],
+            "open_obligation_refs": [],
+            "rationale": "The planned repair routes cluster-scoped adoption away from _guess_owner(None) by passing allow_missing_namespace=True from adopt; the existing guard remains for callers that do not use the flag, so it is not a prerequisite for this repaired path."
+          }
+        ]
+      },
+      "feedback.json": {
+        "semantic_outcome": "PUBLIC_REVIEW_PASS",
+        "build_state": "PASSED",
+        "route": "STOP",
+        "failure_kind": "NONE",
+        "public_check_results": [
+          {
+            "id": "P1",
+            "status": "PASS",
+            "rationale": "The registered public adapter observed both cluster-scoped-owner cases with exception null. OBS3 and OBS4 both contain ownerReferences to Parent global-parent/parent-uid-1. This satisfies the observed no-LookupError and owner-reference requirements for those finite public cases.",
+            "evidence": [
+              {
+                "observation_id": "OBS3",
+                "quote": "\"exception\": null"
+              },
+              {
+                "observation_id": "OBS3",
+                "quote": "\"uid\": \"parent-uid-1\""
+              },
+              {
+                "observation_id": "OBS4",
+                "quote": "\"exception\": null"
+              },
+              {
+                "observation_id": "OBS4",
+                "quote": "\"uid\": \"parent-uid-1\""
+              }
+            ]
+          },
+          {
+            "id": "P2",
+            "status": "PASS",
+            "rationale": "OBS3 shows the cluster-child Namespace case with exception null and metadata containing labels/name/ownerReferences but no metadata.namespace key. This supports that the cluster-scoped child remained namespace-less in the public local-adopt observation.",
+            "evidence": [
+              {
+                "observation_id": "OBS3",
+                "quote": "\"exception\": null"
+              },
+              {
+                "observation_id": "OBS3",
+                "quote": "\"kind\": \"Namespace\""
+              },
+              {
+                "observation_id": "OBS3",
+                "quote": "\"metadata\": {\n      \"labels\": {\n        \"team\": \"research\"\n      },\n      \"name\": \"child\",\n      \"ownerReferences\": ["
+              }
+            ]
+          },
+          {
+            "id": "P3",
+            "status": "PASS",
+            "rationale": "OBS4 shows the explicit-child-namespace ConfigMap case with exception null and metadata.namespace still set to work-ns, while also carrying the owner reference. This supports namespace preservation for that public case.",
+            "evidence": [
+              {
+                "observation_id": "OBS4",
+                "quote": "\"exception\": null"
+              },
+              {
+                "observation_id": "OBS4",
+                "quote": "\"kind\": \"ConfigMap\""
+              },
+              {
+                "observation_id": "OBS4",
+                "quote": "\"namespace\": \"work-ns\""
+              }
+            ]
+          }
+        ]
+      },
+      "candidate-decision.json": {},
+      "execution.json": {
+        "status": "APPLIED"
+      }
+    }
+  ],
+  "scope": "One fresh development G4, not complete same-version panel/repetition/recovery acceptance",
+  "formal_ready": false,
+  "worker_before_after_identity_verified": true,
+  "committed_cny_including_reservations": 76.699814
+}

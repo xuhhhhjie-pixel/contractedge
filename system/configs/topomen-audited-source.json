@@ -1,0 +1,11 @@
+{
+  "source_root": "/home/xhj/contractedge-integrations/topomen",
+  "source_sha256": "3dfc43754d4bae6dbc99051ed607d4cc756b26049b79b7f5cc2f9865ee17b2dd",
+  "python_modules": 44,
+  "package_version": "1.1.2",
+  "native_agent": "topomen.collaboration.base_agent.DefaultAgent",
+  "scope": "ContractEdge custom plan bridge; not native Docker scheduler",
+  "compatibility_fix": "datetime.UTC replaced by datetime.timezone.utc in four modules",
+  "upstream_native_pytest": "168 passed",
+  "upstream_ruff": "PASS"
+}

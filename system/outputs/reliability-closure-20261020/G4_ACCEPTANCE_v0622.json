@@ -1,0 +1,21 @@
+{
+  "version": "0.6.22",
+  "case_id": "R3-KPT-4673",
+  "group": "A",
+  "repeat": 0,
+  "variant": "candidate",
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "independent_status": "PASS",
+  "public_semantics": "UNKNOWN",
+  "public_behavior_pass": 38,
+  "public_behavior_fail": 0,
+  "patch_bytes": 3574,
+  "patch_sha256": "a6562622049b5ea035ab3e4696a79a48c24ecec56320dbd811a81653c8386431",
+  "model_calls": 8,
+  "edit_rounds": 1,
+  "source_harness_patch_identity_verified": true,
+  "fresh_single_accepted": true,
+  "failed_trial_recovery_verified": false,
+  "formal_ready": false,
+  "scope": "One fresh initial-Broken repair; no component attribution, failure recovery or full-panel reliability claim"
+}

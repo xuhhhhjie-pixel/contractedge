@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/inspect_large_continuation_v0622.py", line 27, in <module>
+    request=build_execution_request(current,root,policy,counter,cfg,requirement=value['requirement_text'],feedback=seed,previous_attempt=previous,observations=select_observations(obs['observations'],value['requirement_text'],counter,cfg['max_public_evidence_tokens']))
+  File "/home/xhj/contractedge-system/src/contractedge/execution/topomen.py", line 448, in build_execution_request
+    raise PlanRejected('Execution request exceeds the full context budget')
+contractedge.execution.topomen.PlanRejected: Execution request exceeds the full context budget

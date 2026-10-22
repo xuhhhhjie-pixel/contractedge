@@ -1,0 +1,11 @@
+{
+  "old_root_exact_freeze": true,
+  "new_root_exact_candidate": true,
+  "changed": [
+    "contractedge/__init__.py",
+    "contractedge/contracts/schema/semantic_changeset.v1_1.json",
+    "contractedge/diagnosis/evidence.py",
+    "contractedge/diagnosis/prompt.py",
+    "contractedge/orchestration/runner.py"
+  ]
+}

@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+.runtime-deps/
+.topomen-deps/
+.env
+.env.*
+!.env.example
+*.key
+runs/
+workspaces/
+.local/
+*.egg-info/
+.pytest_cache/

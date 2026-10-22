@@ -1,0 +1,248 @@
+{
+  "as_of": "2026-10-22T08:26:53.037025+00:00",
+  "version": "0.6.23",
+  "group": "A",
+  "planned_attempts": 14,
+  "planned_cases": 7,
+  "formal_ready": false,
+  "finalized_attempts": 9,
+  "scored_attempts": 9,
+  "controller_status": "RUNNING",
+  "active": {
+    "case_id": "R4-ACK-CLOUDWATCH-2985",
+    "repeat": 0,
+    "variant": "candidate",
+    "name": "delivery-0.6.23-A-R4-ACK-CLOUDWATCH-2985-0-candidate",
+    "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R4-ACK-CLOUDWATCH-2985-0-candidate"
+  },
+  "rows": [
+    {
+      "case_id": "RW-CAND-130",
+      "variant": "baseline",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-RW-CAND-130-0-baseline",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "independent_status": "PASS",
+      "patch_bytes": 1474,
+      "model_calls_started": 4,
+      "semantic_outcome": "PUBLIC_REVIEW_PASS",
+      "budget": {
+        "max_tokens": 2000000,
+        "reserved_tokens": 334393,
+        "max_seconds": 9000.0,
+        "elapsed_seconds": 212.7494687847793,
+        "max_calls": 12,
+        "model_calls": 4,
+        "resumed_model_calls": 0
+      }
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "variant": "candidate",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-RW-CAND-130-0-candidate",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "patch_bytes": 1474,
+      "model_calls_started": 6,
+      "semantic_outcome": "UNKNOWN",
+      "budget": {
+        "max_tokens": 2000000,
+        "reserved_tokens": 515012,
+        "max_seconds": 9000.0,
+        "elapsed_seconds": 319.04959378391504,
+        "max_calls": 12,
+        "model_calls": 6,
+        "resumed_model_calls": 0
+      }
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "variant": "candidate",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R3-KPT-4673-0-candidate",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "independent_status": "PASS",
+      "patch_bytes": 3102,
+      "model_calls_started": 3,
+      "semantic_outcome": "PUBLIC_REVIEW_PASS",
+      "budget": {
+        "max_tokens": 2000000,
+        "reserved_tokens": 377592,
+        "max_seconds": 9000.0,
+        "elapsed_seconds": 556.9845452904701,
+        "max_calls": 12,
+        "model_calls": 3,
+        "resumed_model_calls": 0
+      }
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "variant": "baseline",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R3-KPT-4673-0-baseline",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "SEMANTIC_FAIL",
+      "patch_bytes": 1306,
+      "model_calls_started": 9,
+      "semantic_outcome": "PUBLIC_REVIEW_FAIL",
+      "budget": {
+        "max_tokens": 2000000,
+        "reserved_tokens": 842503,
+        "max_seconds": 9000.0,
+        "elapsed_seconds": 949.5519826039672,
+        "max_calls": 12,
+        "model_calls": 9,
+        "resumed_model_calls": 0
+      }
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "variant": "baseline",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R3-KOPF-726-0-baseline",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "SEMANTIC_FAIL",
+      "patch_bytes": 1012,
+      "model_calls_started": 5,
+      "semantic_outcome": "UNKNOWN",
+      "budget": {
+        "max_tokens": 2000000,
+        "reserved_tokens": 267985,
+        "max_seconds": 9000.0,
+        "elapsed_seconds": 367.6887204386294,
+        "max_calls": 12,
+        "model_calls": 5,
+        "resumed_model_calls": 0
+      }
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "variant": "candidate",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R3-KOPF-726-0-candidate",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "independent_status": "PASS",
+      "patch_bytes": 2077,
+      "model_calls_started": 4,
+      "semantic_outcome": "PUBLIC_REVIEW_PASS",
+      "budget": {
+        "max_tokens": 2000000,
+        "reserved_tokens": 268949,
+        "max_seconds": 9000.0,
+        "elapsed_seconds": 321.2825302258134,
+        "max_calls": 12,
+        "model_calls": 4,
+        "resumed_model_calls": 0
+      }
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "variant": "baseline",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R4-PROVIDER-HELM-408-0-baseline",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "independent_status": "PASS",
+      "patch_bytes": 611,
+      "model_calls_started": 4,
+      "semantic_outcome": "PUBLIC_REVIEW_PASS",
+      "budget": {
+        "max_tokens": 2000000,
+        "reserved_tokens": 326802,
+        "max_seconds": 9000.0,
+        "elapsed_seconds": 562.5203795358539,
+        "max_calls": 12,
+        "model_calls": 4,
+        "resumed_model_calls": 0
+      }
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "variant": "candidate",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R4-PROVIDER-HELM-408-0-candidate",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "patch_bytes": 611,
+      "model_calls_started": 4,
+      "semantic_outcome": "UNKNOWN",
+      "budget": {
+        "max_tokens": 2000000,
+        "reserved_tokens": 336289,
+        "max_seconds": 9000.0,
+        "elapsed_seconds": 616.9291429258883,
+        "max_calls": 12,
+        "model_calls": 4,
+        "resumed_model_calls": 0
+      }
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "variant": "baseline",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R4-ACK-CLOUDWATCH-2985-0-baseline",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "patch_bytes": 3778,
+      "model_calls_started": 5,
+      "semantic_outcome": "UNKNOWN",
+      "budget": {
+        "max_tokens": 2000000,
+        "reserved_tokens": 469812,
+        "max_seconds": 9000.0,
+        "elapsed_seconds": 993.232254743576,
+        "max_calls": 12,
+        "model_calls": 5,
+        "resumed_model_calls": 0
+      }
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "variant": "candidate",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-R4-ACK-CLOUDWATCH-2985-0-candidate",
+      "method_status": "RUNNING",
+      "independent_status": "NOT_RUN",
+      "patch_bytes": 0,
+      "model_calls_started": 5
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "variant": "candidate",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-RW-ALERTMANAGER-4705-0-candidate",
+      "method_status": "NOT_RUN",
+      "independent_status": "NOT_RUN"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "variant": "baseline",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-RW-ALERTMANAGER-4705-0-baseline",
+      "method_status": "NOT_RUN",
+      "independent_status": "NOT_RUN"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "variant": "candidate",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-RW-CERTMANAGER-9116-0-candidate",
+      "method_status": "NOT_RUN",
+      "independent_status": "NOT_RUN"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "variant": "baseline",
+      "repeat": 0,
+      "output": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/runs/delivery-0.6.23-A-RW-CERTMANAGER-9116-0-baseline",
+      "method_status": "NOT_RUN",
+      "independent_status": "NOT_RUN"
+    }
+  ],
+  "cost_snapshot": {
+    "committed_including_reservations_cny": 88.337392,
+    "limit_cny": 150,
+    "remaining_upper_cny": 61.662608000000006
+  },
+  "scope": "Incomplete fixed panel; registered existing slots counted once; no B execution or final acceptance"
+}

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/replay_kopf_closure_v0620.py", line 149, in <module>
+    main()
+  File "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/replay_kopf_closure_v0620.py", line 76, in main
+    raise AssertionError((trace.status,trace.errors))
+AssertionError: ('INFRASTRUCTURE_ERROR', ('ValueError: dictionary update sequence element #0 has length 1; 2 is required',))

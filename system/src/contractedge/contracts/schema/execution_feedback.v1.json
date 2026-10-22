@@ -1,0 +1,299 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "run_id",
+    "input_digest",
+    "round_id",
+    "from_snapshot",
+    "to_snapshot",
+    "patch_digest",
+    "build_state",
+    "semantic_outcome",
+    "public_observations",
+    "public_check_results",
+    "retained_constraints",
+    "pending_obligations",
+    "failure_kind",
+    "route",
+    "route_confidence",
+    "rationale",
+    "hidden_evaluation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ce.execution_feedback.v1"
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "round_id": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "from_snapshot": {
+      "type": "string",
+      "minLength": 1
+    },
+    "to_snapshot": {
+      "type": "string",
+      "minLength": 1
+    },
+    "patch_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "build_state": {
+      "enum": [
+        "PASSED",
+        "FAILED",
+        "NOT_RUN",
+        "INFRA_ERROR",
+        "BUDGET_EXCEEDED"
+      ]
+    },
+    "semantic_outcome": {
+      "enum": [
+        "PUBLIC_REVIEW_PASS",
+        "PUBLIC_REVIEW_FAIL",
+        "UNKNOWN"
+      ]
+    },
+    "public_observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "snapshot_id",
+          "kind",
+          "locator",
+          "content_digest",
+          "excerpt",
+          "origin"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "snapshot_id": {
+            "type": "string"
+          },
+          "kind": {
+            "const": "PUBLIC_OBSERVATION"
+          },
+          "locator": {
+            "type": "object"
+          },
+          "content_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "excerpt": {
+            "type": "string"
+          },
+          "origin": {
+            "type": "string"
+          },
+          "evidence_kind": {
+            "enum": [
+              "EXECUTION_ONLY",
+              "PUBLIC_STRUCTURE",
+              "PUBLIC_BEHAVIOR"
+            ]
+          },
+          "scenario": {
+            "type": "string"
+          },
+          "resource_identity": {
+            "type": "object"
+          },
+          "behavior_check": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "status",
+              "probe_sha256"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "PASS",
+                  "FAIL"
+                ]
+              },
+              "probe_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          },
+          "source_pointer": {
+            "type": "string"
+          },
+          "source_file": {
+            "type": "string"
+          },
+          "source_file_sha256": {
+            "type": "string"
+          },
+          "adapter_id": {
+            "type": "string"
+          },
+          "producer_manifest_sha256": {
+            "type": "string"
+          },
+          "structured_complete": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "pending_obligations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "public_check_results": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "retained_constraints": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "failure_kind": {
+      "enum": [
+        "NONE",
+        "ENVIRONMENT",
+        "EXECUTION",
+        "PLAN",
+        "DIAGNOSIS",
+        "UNKNOWN"
+      ]
+    },
+    "route": {
+      "enum": [
+        "STOP",
+        "EXECUTE",
+        "CHANGESET",
+        "DIAGNOSIS"
+      ]
+    },
+    "route_confidence": {
+      "enum": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ]
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hidden_evaluation": {
+      "const": "NOT_AVAILABLE_TO_METHOD"
+    },
+    "coordination_links": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "public_execution_capabilities": {
+      "type": "object"
+    },
+    "observation_diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "next_action": {
+      "type": "string"
+    },
+    "routing_policy": {
+      "enum": [
+        "BOUNDED_ACCEPTED_INTENT_RETRY",
+        "UNCHANGED_OPERATION_REASSESSMENT",
+        "NO_TARGET_PROGRESS_REASSESSMENT"
+      ]
+    },
+    "operation_failure_comparison": {
+      "type": "object"
+    },
+    "predicate_progress_comparison": {
+      "type": "object"
+    },
+    "obligation_lineage": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "input_digest",
+        "requirement_digest",
+        "nodes",
+        "events",
+        "bindings",
+        "snapshot_id"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "ce.obligation_lineage.v1"
+        },
+        "input_digest": {
+          "type": "string"
+        },
+        "requirement_digest": {
+          "type": "string"
+        },
+        "nodes": {
+          "type": "object"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "bindings": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "snapshot_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "obligation_coverage": {
+      "type": "object"
+    },
+    "helper_preconditions": {
+      "type": "object"
+    }
+  }
+}

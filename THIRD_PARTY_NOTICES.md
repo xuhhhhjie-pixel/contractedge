@@ -1,3 +1,7 @@
 # 第三方来源与许可
 
 案例来自真实上游项目的历史修复，完整包保留来源、源码身份和原始许可文件。各项目源码、依赖与OCI镜像继续受各自原始许可证及第三方声明约束；本仓库没有用一个新许可证替代所有上游许可。使用者应查看下载包和各上游项目中的LICENSE/NOTICE。
+
+## System runtime dependency
+
+`system/vendor/topomen` retains the supplied TopoMen runtime source, original README and MIT LICENSE.md. Its source identity is checked by the system adapter; datasets, caches and upstream experimental workspaces are not vendored.

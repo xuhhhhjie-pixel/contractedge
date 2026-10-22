@@ -1,0 +1,26 @@
+  File "<stdin>", line 10, in <module>
+  File "/usr/lib/python3.10/runpy.py", line 289, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "/usr/lib/python3.10/runpy.py", line 96, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "outputs/reliability-closure-20261020/replay_kopf_closure_v0620.py", line 149, in <module>
+    main()
+  File "outputs/reliability-closure-20261020/replay_kopf_closure_v0620.py", line 71, in main
+    trace = runner.run_front_half(method, source.parent, Provider(), cfg, counter,
+  File "/home/xhj/contractedge-system/.superpowers/sdd/2026-10-21-cross-stage-repair-closure/candidate/src/contractedge/orchestration/runner.py", line 745, in run_front_half
+    model_config=dict(config.get("model", {})),
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+  File "/usr/lib/python3.10/runpy.py", line 289, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "/usr/lib/python3.10/runpy.py", line 96, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "outputs/reliability-closure-20261020/replay_kopf_closure_v0620.py", line 149, in <module>
+    main()
+  File "outputs/reliability-closure-20261020/replay_kopf_closure_v0620.py", line 76, in main
+    raise AssertionError((trace.status,trace.errors))
+AssertionError: ('INFRASTRUCTURE_ERROR', ('ValueError: dictionary update sequence element #0 has length 1; 2 is required',))

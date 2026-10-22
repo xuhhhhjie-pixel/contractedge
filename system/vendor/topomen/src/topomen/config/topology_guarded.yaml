@@ -1,0 +1,20 @@
+agent:
+  agent_class: topology_repair_memory
+  experiment_group: topology-prefill-guarded
+  experiment_runs_path: experiments/results/runs/topology_guarded_single_complex_runs.jsonl
+  record_successful_repairs: false
+  topology_enabled: true
+  topology_artifacts_dir: experiments/results/topologies
+  topology_max_workers: 4
+  topology_prefill_dockerfile: true
+  topology_repair_scope: node_block
+  topology_guard_enabled: true
+  topology_prefill_validate_first: true
+  topology_guard_restore_invalid: true
+  track_command_timing: true
+  agent_wall_clock_timeout_seconds: 3600
+  command_timeout_seconds: 180
+  docker_build_timeout_seconds: 1800
+  docker_run_timeout_seconds: 900
+  topology_guard_max_violations_per_node: 2
+  topology_guard_max_skipped_nodes: 3
