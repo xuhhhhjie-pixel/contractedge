@@ -60,6 +60,12 @@ def _case_output_schema(requirement: Mapping[str, Any], evidence_catalog: list[M
         properties.pop('operation_assessments',None)
     if not requirement.get('lineage_required'):
         properties.pop('lineage_events',None)
+    else:
+        parents = sorted(requirement.get('prior_obligation_lineage', {}).get('nodes', {}))
+        if parents:
+            properties['lineage_events']['items']['properties']['parent_ids']['items']['enum'] = parents
+        else:
+            properties['lineage_events']['maxItems'] = 0
     if outcome_ids:
         statements = sorted({str(item["statement"]) for item in outcomes
                              if isinstance(item, Mapping) and isinstance(item.get("statement"), str)})

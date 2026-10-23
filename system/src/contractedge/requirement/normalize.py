@@ -78,6 +78,7 @@ def bind_obligation_sources(payload, requirement):
         if required and (not refs or any(r not in clauses for r in refs)):
             raise ValueError('OBLIGATION_CLAUSE_REQUIRED: select exact clause refs, not the entire requirement')
         excerpts = []
+        intervals = []
         for ref in refs:
             try:
                 prefix,a,b=ref.split(':');a,b=int(a),int(b)
@@ -86,7 +87,29 @@ def bind_obligation_sources(payload, requirement):
             if prefix!='requirement_text' or not 0<=a<b<=len(raw):
                 raise ValueError('OBLIGATION_SOURCE_INVALID')
             excerpts.append(raw[a:b])
-        if not any(quote in excerpt for excerpt in excerpts):
+            intervals.append((a, b))
+        # A verbatim predicate can cross consecutive explicitly cited clauses.
+        # Keep the original text (no concatenation/rephrasing); only whitespace
+        # between cited intervals may remain uncovered. Never bridge an uncited
+        # requirement, even when the long quote itself occurs in the raw input.
+        covered = False
+        start = raw.find(quote)
+        while start >= 0:
+            end = start + len(quote)
+            cursor = start
+            for a, b in sorted(intervals):
+                if b <= cursor or a >= end:
+                    continue
+                if a > cursor and raw[cursor:min(a, end)].strip():
+                    break
+                cursor = max(cursor, min(b, end))
+                if cursor >= end:
+                    covered = True
+                    break
+            if covered:
+                break
+            start = raw.find(quote, start + 1)
+        if not covered:
             raise ValueError('OBLIGATION_QUOTE_MISMATCH: source_quote must occur in its cited source interval')
         scope_quote=atom.get('scope_quote','')
         if scope_quote and (not isinstance(scope_quote,str) or not any(scope_quote in excerpt for excerpt in excerpts)):

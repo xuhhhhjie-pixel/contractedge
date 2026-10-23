@@ -452,6 +452,18 @@ def required_planning_source_support(method_input, candidate_set, snapshot_id):
             if r['id'] in support_ids and r.get('kind')=='SOURCE_SPAN']
 
 
+def requirement_for_rediagnosis(requirement, prior, snapshot_id, input_digest):
+    """Carry validated obligation identities with same-snapshot reassessment."""
+    from copy import deepcopy
+    result = deepcopy(requirement)
+    if (result.get('lineage_required') and prior
+            and prior.get('snapshot_id') == snapshot_id
+            and prior.get('input_digest') == input_digest
+            and prior.get('obligation_lineage')):
+        result['prior_obligation_lineage'] = deepcopy(prior['obligation_lineage'])
+    return result
+
+
 def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *, input_digest):
     """Carry reviewable claims, never prior verdicts as current evidence."""
     if not prior or prior.get('snapshot_id') != snapshot_id or prior.get('input_digest') != input_digest:
@@ -1030,6 +1042,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                 "selected_ids": list(candidate_set.selected_ids), "dropped_ids": list(candidate_set.dropped_ids),
                 "gap_search": gap_search_audit})
             if candidate_set.selected_ids:
+                requirement = requirement_for_rediagnosis(requirement, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
                 candidate_set, diagnosis_request, prompt_tokens = fit_diagnosis(
                     candidate_set, run_input, requirement, context, prior=diagnosis.raw, extension_gaps=diagnosis.evidence_gaps)
                 failure=evidence_delivery_failure(candidate_set,diagnosis.raw)
@@ -1248,6 +1261,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                 retrieval_rounds.append({'round_id': 2, 'extension_used': True,
                     'trigger': 'CHANGESET_NEEDS_EVIDENCE', 'selected_ids': list(candidate_set.selected_ids),
                     'gap_search': audit})
+                requirement = requirement_for_rediagnosis(requirement, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
                 candidate_set, request, count = fit_diagnosis(candidate_set, run_input, requirement, context, prior=diagnosis.raw, extension_gaps=planning_gaps)
                 failure=evidence_delivery_failure(candidate_set,diagnosis.raw,changeset_payload)
                 if failure is not None:return failure
