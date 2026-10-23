@@ -51,7 +51,8 @@ jobs:
           tests/test_contracts.py tests/test_source_field_contracts.py tests/test_final_front_contract.py
           tests/test_model_provider.py tests/test_provider_output_identity.py
           tests/test_run_budget.py tests/test_money_budget.py
-          tests/test_public_failure.py tests/test_development_snapshot.py
+          tests/test_public_failure.py tests/test_public_failure_contracts.py
+          tests/test_transport_request_audit.py tests/test_development_snapshot.py tests/test_public_demo.py
 
   runtime-portable:
     name: Actual Docker limits and portable development suite

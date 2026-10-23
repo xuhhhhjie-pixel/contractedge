@@ -1,6 +1,6 @@
 # ContractEdge developer entry
 
-当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准，入口为 [本轮开发冻结](docs/development/next-iteration-20261023.snapshot.json)。包版本仍保留 `0.6.27`；修改后的源码不能沿用原 0.6.27 方法摘要或历史效果。`formal_ready=false`，本轮仅验收开发工程，不执行真实模型 HTTP、正式数据实验或独立评分。
+当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准，入口为 [本轮开发冻结](docs/development/next-iteration-20261023.snapshot.json)。包版本仍保留 `0.6.27`；修改后的源码不能沿用原 0.6.27 方法摘要或历史效果。`formal_ready=false`，默认入口验收离线开发工程；真实 API 前半验证单独登记，不运行正式数据实验或独立评分。
 
 ## 安装与当前冻结校验
 
@@ -34,21 +34,21 @@ python scripts/run_public_demo.py --case reload-state --output /tmp/contractedge
 python scripts/run_public_demo.py --case two-consumers --output /tmp/contractedge-demo-consumers
 ```
 
-默认 fixture provider，沿用真实前半流程、READY 校验、执行消费者与公开反馈；它们只证明公开示例中的工程行为，不证明 benchmark 修复率。保存 READY 后可在新的进程继续：
+默认 fixture provider，沿用真实前半流程、READY 校验、执行消费者与公开反馈；它们只证明公开示例中的工程行为，不证明 benchmark 修复率。保存 READY 后可在新的进程继续一次。该保存点通过原子领取标记防止重复派发；失败也保留该标记及首次续跑账本，不清除标记以重置额度：
 
 ```bash
 python scripts/run_public_demo.py --case config-binding --save-ready --output /tmp/contractedge-ready
 python scripts/run_public_demo.py --resume-ready /tmp/contractedge-ready --output /tmp/contractedge-resumed
 ```
 
-保存目录包含公开冻结、READY trace、配置和前段调用账本；继续运行必须核对身份与预算。`--provider-config` 是显式选择其他 provider 的入口，使用前先检查配置与费用，本页和 CI 的默认命令均不启用模型 HTTP。旧 `configs/development.example.json`、`development-local-model.json` 及历史脚本包含外部环境假定，不能直接当作默认公开示例配置。
+保存目录包含公开冻结、READY trace、配置和前段调用账本；继续运行必须核对身份与预算。`--provider-config` 可显式选择配置；非 synthetic provider 仅允许配合 `--save-ready` 完成前半诊断和计划，禁止在此 host 示例运行其候选或续跑其 READY。此示例的 Python 子进程不提供网络/文件系统隔离；真实模型生成代码需后续隔离 runner。旧 `configs/development.example.json`、`development-local-model.json` 及历史脚本包含外部环境假定，不能直接当作默认公开示例配置。
 
 ## 回归与实际运行能力
 
 快速离线回归：
 
 ```bash
-python -m pytest -q tests/test_contracts.py tests/test_model_provider.py tests/test_provider_output_identity.py tests/test_run_budget.py tests/test_money_budget.py tests/test_public_failure.py tests/test_development_snapshot.py
+python -m pytest -q tests/test_contracts.py tests/test_model_provider.py tests/test_provider_output_identity.py tests/test_run_budget.py tests/test_money_budget.py tests/test_public_failure.py tests/test_public_failure_contracts.py tests/test_transport_request_audit.py tests/test_development_snapshot.py tests/test_public_demo.py
 ```
 
 完整可移植开发子集包含原有 Docker 时序探测，必须有实际可用的 CPU 配额和内存限制；不能去掉限额或跳过失败。先缓存固定可信镜像，再将 `runtime-check` 实际协商的 Docker 环境仅用于本次测试：
@@ -84,4 +84,19 @@ python -m pytest -q tests/test_topomen_agent.py
 
 `CURRENT_STATUS.json.historical_status.original_record` 保存旧状态和结果，包含原 0.6.27 ACK 的 `INVALID_PLAN/NO_CANDIDATE`、旧预算、冻结和曾经运行中的状态，均为历史佐证，不是当前开发下一步阻塞项。2026-10-22 的 [正式实验计划](docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md) 记录当时准入设计；当前开发入口和下一步以 `current_development`、`next_actions` 及新冻结为准。
 
-根目录 `benchmark/` 和 `tools/` 保留原数据工具，本轮不下载或读取数据、GT/Fixed、隐藏评分、凭据及运行目录。正式实验、真实模型验证与效果验收仍需独立授权和同版登记；旧结果不得混入新版本分母。
+根目录 `benchmark/` 和 `tools/` 保留原数据工具，本轮不下载或读取数据、GT/Fixed、隐藏评分、凭据及运行目录。正式实验与效果验收仍需独立授权和同版登记；小规模真实前半验证已有本轮30元费用授权，仍需新凭据安全配置及同版登记；旧结果不得混入新版本分母。
+
+
+## 组合 profile 与官方 API 前半验证
+
+`configs/development-local-fixture.example.json` 可直接复制并用于三个离线例子，执行后端仍按案例选择现有消费者。`configs/deepseek-official-front.example.json` 仅保存公开前半计划，需先把新 key 配置到环境变量；配置中只有环境变量名，不包含凭据。命令示例：
+
+```bash
+python scripts/run_public_demo.py --case config-binding --save-ready --provider-config configs/deepseek-official-front.example.json --output /tmp/contractedge-deepseek-front-new-attempt
+```
+
+官方当前文档的 `deepseek-flash` 使用 `https://api.deepseek.com`，JSON output 使用 `json_object`，没有据此声明严格 `json_schema`。关闭 thinking，模型身份要求匹配；返回未知别名时保留响应/用量并停止，不能猜别名以绕过检查。计数器按 UTF-8 字节保守上界控制提示预算，不冒充官方 tokenizer。
+
+该 profile 的 30 元是本轮多次尝试共享的硬上限。所有尝试必须使用同一个持久 `money_budget.path`，不得删账本、改路径或建新 allowance。失败及未知响应保留全额预留；先定位再决定是否有限复测，不自动重发。`3/12` 元每百万输入/输出是内部保守记账费率，按官方文档峰值 `$0.3/$1.2` 再乘 10 预留，并非实时汇率或官方人民币结算收据。价格来源：https://api-docs.deepseek.com/quick_start/pricing ，核对日期2026-10-23；付费前应再次核对账户当前计费。实际费用应与官方账户账单区分，未收到响应的调用不能记零。
+
+默认公开示例和 GitHub CI 无真实模型 HTTP。付费前半结果无论 READY、INVALID_PLAN 或身份拒绝均留痕，不能据此声明真实修复成功或论文效果。原 ACK 历史根因仍未验证。

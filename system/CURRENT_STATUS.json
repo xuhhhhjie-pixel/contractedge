@@ -1,7 +1,7 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-23T10:01:27.172499+00:00",
-  "status": "DEVELOPMENT_INTEGRATION_PENDING_FINAL_FREEZE",
+  "as_of": "2026-10-23T10:20:54.923079+00:00",
+  "status": "DEVELOPMENT_VALIDATED_OFFLINE",
   "implementation_version": "0.6.27",
   "version_scope": "Package version retained; method identity is the current development snapshot source/configuration/panel digests.",
   "formal_ready": false,
@@ -11,19 +11,25 @@
   "current_development": {
     "snapshot": "docs/development/next-iteration-20261023.snapshot.json",
     "snapshot_id": "next-iteration-20261023",
-    "status": "PENDING_COMBINED_SNAPSHOT_AND_VERIFICATION",
-    "scope": "Offline developer engineering; no real model HTTP, benchmark download or independent scoring.",
+    "status": "VALIDATED_OFFLINE",
+    "scope": "Offline development engineering; live API front planning separately authorized up to CNY30 but not run without a safely configured replacement credential.",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "test_command": "python scripts/test_portable.py",
     "native_test_command": "python -m pytest -q tests/test_topomen_agent.py",
     "ci_workflow": "../.github/workflows/development.yml",
-    "github_actions_execution": "NOT_RUN",
-    "formal_effectiveness": "NOT_EVALUATED"
+    "github_actions_execution": "NOT_RUN_AT_FREEZE",
+    "formal_effectiveness": "NOT_EVALUATED",
+    "verification": {
+      "portable": "864 passed, 27 subtests passed in 78.58s (0:01:18)",
+      "native": "9 passed in 2.51s",
+      "demo": "9 passed, 10 subtests passed in 9.78s"
+    },
+    "runtime_limits": "Actual 2CPU/2GiB verified"
   },
   "next_actions": [
-    "Integrate the public demo, provider retry isolation and replay boundary changes; generate and verify the new combined development snapshot.",
-    "Run the declared offline developer regression and report native fixture results separately; preserve resource failures as failures.",
-    "Inspect GitHub Actions after publication. Formal experiments and repair-effectiveness acceptance remain outside this developer iteration."
+    "Review this integrated candidate and inspect actual GitHub Actions checks; merge one integration route only.",
+    "After safe replacement credential configuration, pre-register one bounded official DeepSeek front attempt under the same persistent CNY30 ledger; retain failures and unknown costs.",
+    "Implement an isolated observer before executing model-generated code in these public demos; formal effectiveness remains unevaluated."
   ],
   "historical_status": {
     "scope": "REFERENCE_ONLY: the following original status/results are historical records, not current development gates or current method scores.",
@@ -1388,5 +1394,14 @@
     "original_ACK_package": "NOT_RESTORED_OR_LIVE_VERIFIED; historical reproduction limitation, not a blocker for current synthetic public development demos.",
     "original_delivery_manifest": "DELIVERY_MANIFEST.json and scripts/verify_delivery.py remain immutable evidence of the original upload; current source changes use the development snapshot verifier.",
     "six_excluded_modules": "Preserved by scripts/test_portable.py; test_topomen_agent.py is a separately reported vendored native fixture scope."
+  },
+  "real_api_validation": {
+    "status": "NOT_RUN_PENDING_SAFE_CREDENTIAL_CONFIG",
+    "provider": "DeepSeek official",
+    "budget_limit_cny": 30,
+    "http_calls": 0,
+    "cost_cny": 0,
+    "scope": "front diagnosis/planning only; live host source execution prohibited",
+    "unknown_response_policy": "retain full reservation; no automatic resend"
   }
 }
