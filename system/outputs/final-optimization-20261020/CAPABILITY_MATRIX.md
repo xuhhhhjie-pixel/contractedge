@@ -1,3 +1,5 @@
+> 最新：服务器冻结0.6.38，原0.6.37单条真实失败后修复独立PASS。完整交付与正式准入仍未通过；本文件保留历史记录，当前状态见CURRENT_STATUS.json及docs/reports/2026-10-24-pending-preservation-guard.md。
+
 > 此表是0.5.5历史能力记录；当前实现和验收状态见[当前能力矩阵](../reliability-closure-20261020/CAPABILITY_MATRIX.md)，不要将旧版成绩作为新版结果。
 
 # 0.5.5能力覆盖与观察边界

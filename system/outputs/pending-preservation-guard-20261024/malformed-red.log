@@ -1,0 +1,54 @@
+.........FF                                                              [100%]
+=================================== FAILURES ===================================
+_ test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior[coverage2] _
+
+coverage = []
+
+    @pytest.mark.parametrize('coverage',['SUPPORTING',None,[],{}])
+    def test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior(coverage):
+        before=run({'error-control':'PASS'},'S1');trial=run({'error-control':'FAIL'},'S2')
+        previous=prior();previous['pending_obligations'][0]['check_coverage']=coverage
+>       assert compare_candidate_checks(before,trial,preservation_check_ids({},previous))['decision']=='PROMOTE'
+
+../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../contractedge-github-delivery-20261022/system/src/contractedge/orchestration/candidate_guard.py:104: in preservation_check_ids
+    pending_preservation=[p for p in (previous_feedback or {}).get('pending_obligations',[])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7f2aa870d6f0>
+
+    pending_preservation=[p for p in (previous_feedback or {}).get('pending_obligations',[])
+                          if p.get('kind')=='PRESERVE'
+>                         and p.get('check_coverage') in {'ALL_OF','NECESSARY_ONLY'}]
+E   TypeError: unhashable type: 'list'
+
+../contractedge-github-delivery-20261022/system/src/contractedge/orchestration/candidate_guard.py:106: TypeError
+_ test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior[coverage3] _
+
+coverage = {}
+
+    @pytest.mark.parametrize('coverage',['SUPPORTING',None,[],{}])
+    def test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior(coverage):
+        before=run({'error-control':'PASS'},'S1');trial=run({'error-control':'FAIL'},'S2')
+        previous=prior();previous['pending_obligations'][0]['check_coverage']=coverage
+>       assert compare_candidate_checks(before,trial,preservation_check_ids({},previous))['decision']=='PROMOTE'
+
+../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../contractedge-github-delivery-20261022/system/src/contractedge/orchestration/candidate_guard.py:104: in preservation_check_ids
+    pending_preservation=[p for p in (previous_feedback or {}).get('pending_obligations',[])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7f2aa870df30>
+
+    pending_preservation=[p for p in (previous_feedback or {}).get('pending_obligations',[])
+                          if p.get('kind')=='PRESERVE'
+>                         and p.get('check_coverage') in {'ALL_OF','NECESSARY_ONLY'}]
+E   TypeError: unhashable type: 'dict'
+
+../contractedge-github-delivery-20261022/system/src/contractedge/orchestration/candidate_guard.py:106: TypeError
+=========================== short test summary info ============================
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py::test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior[coverage2]
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py::test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior[coverage3]
+2 failed, 9 passed in 0.14s

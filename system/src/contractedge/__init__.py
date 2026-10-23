@@ -1,3 +1,3 @@
 """ContractEdge snapshot-bound planning, concrete repair and feedback."""
 
-__version__ = "0.6.37"
+__version__ = "0.6.38"

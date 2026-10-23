@@ -1,3 +1,5 @@
+> 最新：服务器冻结0.6.38，原0.6.37单条真实失败后修复独立PASS。完整交付与正式准入仍未通过；本文件保留历史记录，当前状态见CURRENT_STATUS.json及docs/reports/2026-10-24-pending-preservation-guard.md。
+
 > 2026-10-22最新审查：0.6.27真实ACK最终INVALID_PLAN / NO_CANDIDATE（6次调用），当前不具备正式实验准入。完整后续方案见 docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md。下文为历史记录。
 
 > 最新进度：已冻结 0.6.27，修复诊断到计划的已选源码丢失及计划提示中的前置实现要求；662项测试+22项子测试通过。真实开发效果待验收，上一版ACK为NO_CANDIDATE。详见 [本轮记录](/home/xhj/contractedge-system/outputs/reliability-closure-20261020/DELIVERY_CHECKPOINT_v0627.md)。正式150与B面板仍关闭。

@@ -1,0 +1,40 @@
+FF...                                                                    [100%]
+=================================== FAILURES ===================================
+_ test_previous_unresolved_preservation_keeps_passed_necessary_check_protected[FAIL-REJECT_REGRESSION] _
+
+trial_state = 'FAIL', want = 'REJECT_REGRESSION'
+
+    @pytest.mark.parametrize('trial_state,want',[('FAIL','REJECT_REGRESSION'),('MISSING','UNCOMPARABLE')])
+    def test_previous_unresolved_preservation_keeps_passed_necessary_check_protected(trial_state,want):
+        plan=dict(preserve_constraints=[],obligation_lineage={})
+        before=run({'error-control':'PASS'},'S1')
+        trial=run({} if trial_state=='MISSING' else {'error-control':trial_state},'S2')
+        result=compare_candidate_checks(before,trial,preservation_check_ids(plan,prior()))
+>       assert result['decision']==want
+E       AssertionError: assert 'PROMOTE' == 'REJECT_REGRESSION'
+E         
+E         - REJECT_REGRESSION
+E         + PROMOTE
+
+../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py:19: AssertionError
+_ test_previous_unresolved_preservation_keeps_passed_necessary_check_protected[MISSING-UNCOMPARABLE] _
+
+trial_state = 'MISSING', want = 'UNCOMPARABLE'
+
+    @pytest.mark.parametrize('trial_state,want',[('FAIL','REJECT_REGRESSION'),('MISSING','UNCOMPARABLE')])
+    def test_previous_unresolved_preservation_keeps_passed_necessary_check_protected(trial_state,want):
+        plan=dict(preserve_constraints=[],obligation_lineage={})
+        before=run({'error-control':'PASS'},'S1')
+        trial=run({} if trial_state=='MISSING' else {'error-control':trial_state},'S2')
+        result=compare_candidate_checks(before,trial,preservation_check_ids(plan,prior()))
+>       assert result['decision']==want
+E       AssertionError: assert 'PROMOTE' == 'UNCOMPARABLE'
+E         
+E         - UNCOMPARABLE
+E         + PROMOTE
+
+../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py:19: AssertionError
+=========================== short test summary info ============================
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py::test_previous_unresolved_preservation_keeps_passed_necessary_check_protected[FAIL-REJECT_REGRESSION]
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py::test_previous_unresolved_preservation_keeps_passed_necessary_check_protected[MISSING-UNCOMPARABLE]
+2 failed, 3 passed in 0.18s

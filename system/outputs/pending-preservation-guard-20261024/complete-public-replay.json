@@ -1,0 +1,30 @@
+{
+  "scope": "Exact9savedresponses plus saved public observations through new candidate guard; not9newcalls or independent .38 effectiveness",
+  "saved_responses": 9,
+  "new_model_calls": 0,
+  "all_messages_and_schemas_exact": true,
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "final_snapshot": "88a30690562fa5f592fecc16895b916aea0ece9f61d64f67190bf35fad88b48d",
+  "candidate_patch_sha256": "c52869dbf9a2e0c3521c3e6212c736ee9241392f878b4341414d8adf93006f92",
+  "same_as_saved_candidate": true,
+  "candidate_decisions": [
+    {
+      "schema_version": "ce.candidate_decision.v1",
+      "decision": "PROMOTE",
+      "from_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+      "trial_snapshot": "5005dd7693e66fbb79403d8031c44a81c2b8fcac67918358d02f72ba5bf09b00",
+      "regressions": [],
+      "uncomparable": [],
+      "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness"
+    },
+    {
+      "schema_version": "ce.candidate_decision.v1",
+      "decision": "PROMOTE",
+      "from_snapshot": "5005dd7693e66fbb79403d8031c44a81c2b8fcac67918358d02f72ba5bf09b00",
+      "trial_snapshot": "88a30690562fa5f592fecc16895b916aea0ece9f61d64f67190bf35fad88b48d",
+      "regressions": [],
+      "uncomparable": [],
+      "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness"
+    }
+  ]
+}

@@ -98,6 +98,13 @@ def preservation_check_ids(plan, previous_feedback=None):
     from contractedge.requirement.lineage import disputed_obligation
     ledger=plan.get('obligation_lineage',{})
     retained=[p for p in (previous_feedback or {}).get('retained_constraints',[]) if not disputed_obligation(p,ledger)]
-    obligations=[p for p in [*plan.get('preserve_constraints',[]),*retained] if not disputed_obligation(p,ledger)]
+    # An unresolved broad preservation claim may still have passed necessary
+    # checks. Keep those local checks protected across re-planning without
+    # treating the whole claim as PASS or locking requested behavior changes.
+    pending_preservation=[p for p in (previous_feedback or {}).get('pending_obligations',[])
+                          if p.get('kind')=='PRESERVE'
+                          and p.get('check_coverage') in ('ALL_OF','NECESSARY_ONLY')]
+    obligations=[p for p in [*plan.get('preserve_constraints',[]),*retained,*pending_preservation]
+                 if not disputed_obligation(p,ledger)]
     return sorted({ref for item in obligations for ref in item.get('behavior_check_refs',[])} |
         {'obligation:'+item['retention_id'] for item in retained})

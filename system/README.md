@@ -1,4 +1,4 @@
-> CURRENT frozen0.6.37 / d0d8c56b057c18ee29511d85190c3cb1300ac5b4069878bae732b8169a653d93. Full859+22, portable826+17. Same-context rejected/current plan continuity verified offline; originalBroken ACK single gate RUNNING once,45held. Formal150/B closed. No GitHub push. Read CURRENT_STATUS.json and docs/reports/2026-10-24-changeset-draft-continuity.md.
+> CURRENT frozen0.6.38 / 5f9e90c459b95e703b0c9f32b9f9d70fff1eb859f90e95489f0083c632f422fe. Full870+22, portable837+17. Prior.37 originalBrokenPASS after real failed-first-trial recovery,9calls/2edits/public8PASS; never transfer that score to.38. Necessary pending-preservation checks protected; fresh.38 slots0/46. Formal150/B closed. No GitHub push. Read CURRENT_STATUS.json and docs/reports/2026-10-24-pending-preservation-guard.md.
 
 **当前为开发交接快照，formal_ready=false。** 完整847+22、可移植814+17。0.6.35单列编译失败续修独立PASS，原始Broken独立失败；0.6.36修复带反馈重诊错误套用初诊容量，回放已恢复当前生产源码送达。0.6.36原始Broken已INVALID_PLAN/NO_CANDIDATE；已定位计划纠错未携带原草稿。0.6.37正在隔离副本补齐，历史和补充结果不拼入固定面板成绩。
 

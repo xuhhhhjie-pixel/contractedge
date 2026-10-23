@@ -1,0 +1,23 @@
+{
+  "scope": "Audit-only locked public dependency excerpt; not inserted into frozen method or model input, no causal improvement claim",
+  "contracts": [
+    {
+      "module": "github.com/aws/aws-sdk-go-v2/service/cloudwatch",
+      "version": "v1.65.0",
+      "path": "api_op_TagResource.go",
+      "file_sha256": "93aabf0d77fb364ba3ccdcc9be430554b522bca717919616a8004ce4a6f8d35e",
+      "start_line": 45,
+      "end_line": 75,
+      "excerpt": "type TagResourceInput struct {\n\n\t// The ARN of the CloudWatch resource that you're adding tags to.\n\t//\n\t// The ARN format of an alarm is\n\t// arn:aws:cloudwatch:Region:account-id:alarm:alarm-name\n\t//\n\t// The ARN format of a Contributor Insights rule is\n\t// arn:aws:cloudwatch:Region:account-id:insight-rule/insight-rule-name\n\t//\n\t// The ARN format of a dashboard is\n\t// arn:aws:cloudwatch::account-id:dashboard/dashboard-name\n\t//\n\t// The ARN format of a metric stream is\n\t// arn:aws:cloudwatch:Region:account-id:metric-stream/metric-stream-name\n\t//\n\t// For more information about ARN format, see [Resource Types Defined by Amazon CloudWatch] in the Amazon Web Services General\n\t// Reference.\n\t//\n\t// [Resource Types Defined by Amazon CloudWatch]: https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazoncloudwatch.html#amazoncloudwatch-resources-for-iam-policies\n\t//\n\t// This member is required.\n\tResourceARN *string\n\n\t// The list of key-value pairs to associate with the alarm.\n\t//\n\t// This member is required.\n\tTags []types.Tag\n\n\tnoSmithyDocumentSerde\n}"
+    },
+    {
+      "module": "github.com/aws/aws-sdk-go-v2/service/cloudwatch",
+      "version": "v1.65.0",
+      "path": "api_op_UntagResource.go",
+      "file_sha256": "0ed733ae492be75a13fa241dfbe7e63593cd372873e98a954a9e71b3b61faa31",
+      "start_line": 28,
+      "end_line": 58,
+      "excerpt": "type UntagResourceInput struct {\n\n\t// The ARN of the CloudWatch resource that you're removing tags from.\n\t//\n\t// The ARN format of an alarm is\n\t// arn:aws:cloudwatch:Region:account-id:alarm:alarm-name\n\t//\n\t// The ARN format of a Contributor Insights rule is\n\t// arn:aws:cloudwatch:Region:account-id:insight-rule/insight-rule-name\n\t//\n\t// The ARN format of a dashboard is\n\t// arn:aws:cloudwatch::account-id:dashboard/dashboard-name\n\t//\n\t// The ARN format of a metric stream is\n\t// arn:aws:cloudwatch:Region:account-id:metric-stream/metric-stream-name\n\t//\n\t// For more information about ARN format, see [Resource Types Defined by Amazon CloudWatch] in the Amazon Web Services General\n\t// Reference.\n\t//\n\t// [Resource Types Defined by Amazon CloudWatch]: https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazoncloudwatch.html#amazoncloudwatch-resources-for-iam-policies\n\t//\n\t// This member is required.\n\tResourceARN *string\n\n\t// The list of tag keys to remove from the resource.\n\t//\n\t// This member is required.\n\tTagKeys []string\n\n\tnoSmithyDocumentSerde\n}"
+    }
+  ]
+}
