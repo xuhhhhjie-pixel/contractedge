@@ -17,8 +17,9 @@ import threading
 from typing import Mapping
 
 from contractedge.contracts.validation import canonical_digest
+from contractedge.model.admission import complete_quoted, context_fits, quote_request
 from contractedge.execution.topomen import (
-    PlanRejected, apply_edits, build_execution_request, validate_execution_response,
+    PlanRejected, apply_edits, _build_execution_request, validate_execution_response,
 )
 
 
@@ -96,12 +97,19 @@ def _native_agent(config: Mapping):
 
 
 class _ModelPort:
-    def __init__(self, provider, request):
+    def __init__(self, provider, request, token_counter, config, *, quote=None):
         self.provider, self.request, self.response = provider, request, None
+        self.token_counter, self.config, self.quote = token_counter, config, quote
 
     def query(self, messages, **kwargs):
         request = replace(self.request, messages=tuple({'role': m['role'], 'content': m['content']} for m in messages))
-        self.response = self.provider.complete_json(request)
+        # The Agent may wrap or extend the messages after source-context fitting.
+        # Reuse identical prepared bytes; otherwise admit the actual final request.
+        quote = self.quote if self.quote is not None and request == self.request else quote_request(
+            self.provider, request, self.token_counter)
+        if not context_fits(quote, int(self.config['max_context_tokens']), self.config.get('model_context_tokens')):
+            raise PlanRejected('Native TopoMen request exceeds the full context budget')
+        self.response = complete_quoted(self.provider, request, quote)
         body = validate_execution_response(self.response, request)
         return {'role': 'assistant', 'content': self.response.content,
                 'extra': {'cost': 0.0, 'actions': [{'kind': 'apply_source_edits', 'body': body}]}}
@@ -151,11 +159,11 @@ class TopoMenAgentExecutor:
     def execute(self, plan: Mapping, source: Path, policy: Mapping, *, requirement: str,
                 declared_artifacts=(), observations=(), feedback=None, previous_attempt=None) -> dict:
         self.last_trace = None
-        request = build_execution_request(plan, source, policy, self.token_counter, self.config,
+        request, quote = _build_execution_request(plan, source, policy, self.token_counter, self.config,
             requirement=requirement, declared_artifacts=declared_artifacts, observations=observations,
-            feedback=feedback, previous_attempt=previous_attempt)
+            feedback=feedback, previous_attempt=previous_attempt, provider=self.provider)
         agent_class, submitted, provenance = _native_agent(self.config)
-        model = _ModelPort(self.provider, request)
+        model = _ModelPort(self.provider, request, self.token_counter, self.config, quote=quote)
         environment = _FileEnvironment(plan, source, policy, submitted,
             require_behavior_change=json.loads(request.messages[1]['content'])['require_behavior_change'])
         agent = agent_class(model=model, env=environment,

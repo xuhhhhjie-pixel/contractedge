@@ -18,33 +18,18 @@ from typing import Mapping
 from jsonschema import Draft202012Validator
 
 from contractedge.contracts.validation import canonical_digest
+from contractedge.contracts.execution_capabilities import SOURCE_CONSUMER_ID, resolve_execution_capabilities
 from contractedge.model.provider import ModelRequest
+from contractedge.model.admission import complete_quoted, context_fits, quote_request
 from contractedge.orchestration.feedback import feedback_prompt_view
 from contractedge.source.snapshot import compute_snapshot
 from contractedge.contracts.permissions import target_permission_error
 
 
-CONSUMER_ID = 'contractedge.topomen_source_consumer.v1'
+CONSUMER_ID = SOURCE_CONSUMER_ID
 
 
-class PlanRejected(ValueError):
-    pass
-
-
-def safe_target(root: Path, relative: str) -> Path:
-    if not isinstance(relative, str) or '\\' in relative or '\x00' in relative:
-        raise PlanRejected('Invalid target path')
-    rel = PurePosixPath(relative)
-    if (not relative or rel.is_absolute() or rel.as_posix() != relative
-            or any(p in {'.', '..', '.git', '.contractedge-deps'} for p in rel.parts)):
-        raise PlanRejected('Unsafe target path')
-    cursor = root
-    for part in rel.parts:
-        cursor /= part
-        if cursor.is_symlink():
-            raise PlanRejected('Target traverses a symlink')
-    cursor.resolve().relative_to(root.resolve())
-    return cursor
+from contractedge.execution.literal import PlanRejected, safe_target, LiteralTarget, apply_literal_edits
 
 
 def operation_path(operation: Mapping) -> str:
@@ -59,6 +44,10 @@ def accept_plan(plan: Mapping, source: str | Path, policy: Mapping) -> dict:
     snapshot = compute_snapshot(root)
     if snapshot.snapshot_id != plan['snapshot_id']:
         raise PlanRejected('Plan snapshot is stale')
+    try:
+        capabilities = resolve_execution_capabilities(plan.get('public_execution_capabilities'))
+    except ValueError as exc:
+        raise PlanRejected(str(exc)) from exc
     operations = plan.get('operations', [])
     ids = [op['change_id'] for op in operations]
     if not operations or len(ids) != len(set(ids)):
@@ -82,6 +71,8 @@ def accept_plan(plan: Mapping, source: str | Path, policy: Mapping) -> dict:
             raise PlanRejected('Target is forbidden: ' + relative)
         if op['operation'] == 'REMOVE':
             raise PlanRejected('Current benchmark patch protocol rejects whole-file deletion; revise the plan explicitly')
+        if op['operation'] not in capabilities['supported_operations']:
+            raise PlanRejected('Execution consumer rejects unsupported operation: ' + op['operation'])
         target = op['target']
         if target['kind'] == 'EXISTING':
             if (op['operation'] != 'MODIFY' or not path.is_file()
@@ -95,111 +86,24 @@ def accept_plan(plan: Mapping, source: str | Path, policy: Mapping) -> dict:
             'decision': 'ACCEPT', 'plan_digest': canonical_digest(plan),
             'snapshot_id': snapshot.snapshot_id, 'input_digest': plan['input_digest'],
             'operation_order': ordered, 'scope_policy': dict(policy),
-            'supported_operations': ['MODIFY', 'CREATE']}
+            'supported_operations': capabilities['supported_operations']}
 
 
-def apply_edits(plan: Mapping, source: str | Path, policy: Mapping, response: Mapping, *, require_behavior_change=False) -> dict:
+def apply_edits(plan: Mapping, source: str | Path, policy: Mapping, response: Mapping, *, require_behavior_change=False, trial_session=None) -> dict:
     """Validate the complete edit batch before writing, rollback on write failure."""
     root = Path(source).resolve(strict=True)
     acceptance = accept_plan(plan, root, policy)
     by_id = {op['change_id']: op for op in plan['operations']}
-    if not isinstance(response, Mapping):
-        raise PlanRejected('Concrete response must be an object')
-    edits = response.get('edits')
-    if not isinstance(edits, list) or not edits or set(response) != {'edits'}:
-        raise PlanRejected('Concrete response must contain a nonempty edits array only')
-    if any(not isinstance(edit, Mapping) or set(edit) != {'change_id', 'path', 'operation', 'old_text', 'new_text'} for edit in edits):
-        raise PlanRejected('Unsupported concrete edit fields')
-    if any(not isinstance(edit['change_id'], str) for edit in edits):
-        raise PlanRejected('Concrete change_id must be a string')
-    submitted={edit['change_id'] for edit in edits}
-    eligible=(plan.get('execution_continuation') or {}).get('prior_applied_operations',{})
-    eligible=eligible if isinstance(eligible,Mapping) else {}
-    missing=set(by_id)-submitted
-    retained={cid for cid in missing if cid in eligible and
-              eligible[cid].get('path')==operation_path(by_id[cid]) and
-              eligible[cid].get('snapshot_id')==acceptance['snapshot_id'] and
-              eligible[cid].get('content_digest')==by_id[cid]['target'].get('content_digest') and
-              eligible[cid].get('content_digest')==hashlib.sha256(safe_target(root,operation_path(by_id[cid])).read_bytes()).hexdigest()}
-    if submitted-set(by_id) or missing-retained:
-        raise PlanRejected('Concrete edits must cover exactly the accepted change IDs; '
-            f'missing={sorted(set(by_id)-submitted)}, unexpected={sorted(submitted-set(by_id))}. '
-            'No source was changed. Cover every accepted operation with its own change_id; '
-            'do not silently omit an operation or relabel another operation as completed.')
-    original, changed, per_change = {}, {}, Counter()
-    for edit_index, edit in enumerate(sorted(edits, key=lambda e: acceptance['operation_order'].index(e['change_id']))):
-        if set(edit) != {'change_id', 'path', 'operation', 'old_text', 'new_text'}:
-            raise PlanRejected('Unsupported edit fields')
-        op = by_id[edit['change_id']]
-        relative = operation_path(op)
-        if edit['path'] != relative or edit['operation'] != op['operation']:
-            raise PlanRejected('Edit path/operation differs from accepted semantic target')
-        path = safe_target(root, relative)
-        if not isinstance(edit['old_text'], str) or not isinstance(edit['new_text'], str):
-            raise PlanRejected('Edits must contain literal UTF-8 text')
-        if '\x00' in edit['new_text'] or len(edit['new_text'].encode()) > 4 * 1024 * 1024:
-            raise PlanRejected('Concrete output is binary or exceeds patch budget')
-        if relative not in original:
-            original[relative] = path.read_bytes() if path.exists() else None
-            changed[relative] = original[relative].decode('utf-8') if original[relative] is not None else ''
-        if op['operation'] == 'CREATE':
-            if per_change[op['change_id']] or edit['old_text'] or not edit['new_text'] or original[relative] is not None:
-                raise PlanRejected('CREATE must specify one complete new regular file')
-            changed[relative] = edit['new_text']
-        else:
-            matches = changed[relative].count(edit['old_text']) if edit['old_text'] else 0
-            if not edit['old_text'] or matches != 1:
-                raise PlanRejected('MODIFY old_text must occur exactly once in the current file; '
-                    f'change_id={edit["change_id"]}, path={relative}, edit_index={edit_index}, matches={matches}. '
-                    'Copy a unique literal anchor from current_target_files; no source was changed.')
-            changed[relative] = changed[relative].replace(edit['old_text'], edit['new_text'], 1)
-        per_change[op['change_id']] += 1
-    if sum(len(value.encode()) for value in changed.values()) > 8 * 1024 * 1024:
-        raise PlanRejected('Edited file batch exceeds the consumer byte limit')
-    if all(original[path] == text.encode() for path, text in changed.items()):
-        raise PlanRejected('Concrete edits are a no-op')
-    if require_behavior_change:
-        from contractedge.execution.code_change import semantics_unchanged
-        if semantics_unchanged(original,changed):
-            raise PlanRejected('The current supported behavior failure requires a semantic change; '
-                'this retry changes only a matching Python AST or blank Go source lines. No source was changed. '
-                'Address the actual failing operation/path from fresh feedback, preserving already passing conditions. '
-                'Do not repeat a cosmetic edit or claim the accepted intent was completed.')
-    # Recheck all source bytes after model generation and before transaction.
-    accept_plan(plan, root, policy)
-    written, staged, backups = [], {}, {}
-    try:
-        # Stage all bytes before replacing any source file. Existing inode links
-        # allow rollback even if writing another file exhausts disk space.
-        for relative, text in changed.items():
-            path = safe_target(root, relative)
-            descriptor, name = tempfile.mkstemp(prefix='.ce-edit-', dir=path.parent)
-            staged[relative] = Path(name)
-            with os.fdopen(descriptor, 'wb') as stream:
-                stream.write(text.encode('utf-8'))
-            staged[relative].chmod(path.stat().st_mode & 0o777 if path.exists() else 0o644)
-            if path.exists():
-                descriptor, name = tempfile.mkstemp(prefix='.ce-before-', dir=path.parent)
-                os.close(descriptor)
-                Path(name).unlink()
-                os.link(path, name)
-                backups[relative] = Path(name)
-        for relative in changed:
-            path = safe_target(root, relative)
-            os.replace(staged[relative], path)
-            written.append(relative)
-    except Exception:
-        for relative in written:
-            path = safe_target(root, relative)
-            if original[relative] is None:
-                path.unlink()
-            else:
-                os.replace(backups[relative], path)
-        raise
-    finally:
-        for path in [*staged.values(), *backups.values()]:
-            path.unlink(missing_ok=True)
-    current = compute_snapshot(root)
+    facts = apply_literal_edits(root, policy, response, snapshot_id=plan['snapshot_id'],
+        targets=tuple(LiteralTarget(op['change_id'], operation_path(op), op['operation'],
+                                   op['target'].get('content_digest')) for op in plan['operations']),
+        operation_order=acceptance['operation_order'],
+        prior_applied_operations=(plan.get('execution_continuation') or {}).get('prior_applied_operations'),
+        supported_operations=acceptance['supported_operations'],
+        require_behavior_change=require_behavior_change, preflight=lambda: accept_plan(plan,root,policy),
+        trial_session=trial_session)
+    current, changed, per_change, retained = (facts[k] for k in ('snapshot','changed','per_change','retained'))
+    edits = response['edits']
     return {'schema_version': 'ce.concrete_execution.v1', 'consumer_id': CONSUMER_ID,
             'acceptance': acceptance, 'from_snapshot': plan['snapshot_id'], 'to_snapshot': current.snapshot_id,
             'changed_paths': sorted(changed), 'change_ids': sorted(per_change),
@@ -223,29 +127,23 @@ def apply_edits(plan: Mapping, source: str | Path, policy: Mapping, response: Ma
             'hidden_evaluation': 'NOT_AVAILABLE_TO_METHOD'}
 
 
-def execution_review_mapping(result, *, max_characters=24000):
-    """Bounded actual edit context, never public runtime/behavior evidence."""
-    remaining = max(0, max_characters)
-    mapping = []
-    for row in result.get('semantic_edit_trace', []):
-        item = {k: v for k, v in row.items() if k != 'literal_edits'}
-        spans = []
-        for edit in row.get('literal_edits', []):
-            span = {}
-            for key in ('old_text', 'new_text'):
-                raw = edit[key]
-                span[key] = raw[:remaining]
-                remaining -= len(span[key])
-            span['truncated'] = any(len(span[k]) < len(edit[k]) for k in ('old_text', 'new_text'))
-            spans.append(span)
-        item['literal_edits'] = spans
-        mapping.append(item)
-    return mapping
+from contractedge.execution.consumer import execution_review_mapping
 
 
 def build_execution_request(plan: Mapping, source: Path, policy: Mapping, token_counter, config: Mapping, *,
                             requirement: str, declared_artifacts=(), observations=(), feedback=None,
-                            previous_attempt=None) -> ModelRequest:
+                            previous_attempt=None, provider=None) -> ModelRequest:
+    """Build the admitted request; an optional provider contributes wire overhead."""
+    request, _ = _build_execution_request(plan, source, policy, token_counter, config,
+        requirement=requirement, declared_artifacts=declared_artifacts, observations=observations,
+        feedback=feedback, previous_attempt=previous_attempt, provider=provider)
+    return request
+
+
+def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token_counter, config: Mapping, *,
+                             requirement: str, declared_artifacts=(), observations=(), feedback=None,
+                             previous_attempt=None, provider=None):
+    """Keep the final quote beside the request for the actual execution consumer."""
     acceptance = accept_plan(plan, source, policy)
     # A prior edit response is a format-correction aid only on the exact
     # snapshot it read. Successful S0 edits must not compete with S1 source
@@ -450,17 +348,21 @@ def build_execution_request(plan: Mapping, source: Path, policy: Mapping, token_
     if prerequisite_refs - supplied_ids - target_ids:
         raise PlanRejected('Prerequisite source was not delivered to execution: '+', '.join(
             sorted(prerequisite_refs - supplied_ids - target_ids)))
-    while support and sum(token_counter(m['content']) for m in request.messages) + request.max_output_tokens > int(config['max_context_tokens']):
+    request = replace(request, metadata={**request.metadata, 'read_only_support_audit': support_audit})
+    quote = quote_request(provider, request, token_counter)
+    def fits(current_quote):
+        return context_fits(current_quote, int(config['max_context_tokens']), config.get('model_context_tokens'))
+    while support and not fits(quote):
         removable=[i for i,r in enumerate(support) if r.get('id') not in critical_helpers]
         if not removable:break
         removed = support.pop(removable[-1])
         support_audit.append({'id': removed['id'], 'result': 'FULL_REQUEST_CONTEXT_BUDGET'})
         request = replace(request, messages=(request.messages[0],
             {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}))
-    request = replace(request, metadata={**request.metadata, 'read_only_support_audit': support_audit})
-    if sum(token_counter(m['content']) for m in request.messages) + request.max_output_tokens > int(config['max_context_tokens']):
+        quote = quote_request(provider, request, token_counter)
+    if not fits(quote):
         raise PlanRejected('Execution request exceeds the full context budget')
-    return request
+    return request, quote
 
 
 def validate_execution_response(response, request: ModelRequest) -> dict:
@@ -490,14 +392,27 @@ class ModelPlanExecutor:
 
     def execute(self, plan: Mapping, source: Path, policy: Mapping, *, requirement: str,
                 declared_artifacts=(), observations=(), feedback: Mapping | None = None, previous_attempt=None) -> dict:
-        request = build_execution_request(plan, source, policy, self.token_counter, self.config,
+        request, quote = _build_execution_request(plan, source, policy, self.token_counter, self.config,
             requirement=requirement, declared_artifacts=declared_artifacts, observations=observations,
-            feedback=feedback, previous_attempt=previous_attempt)
-        response = self.provider.complete_json(request)
+            feedback=feedback, previous_attempt=previous_attempt, provider=self.provider)
+        response = complete_quoted(self.provider, request, quote)
+        trial = getattr(self, 'trial_session', None)
+        response_id = trial.record_response(request, response) if trial is not None else None
+        return self.consume_received_response(request, response, plan, source, policy,
+            trial_session=trial, response_id=response_id)
+
+    def consume_received_response(self, request, response, plan, source, policy, *, trial_session=None, response_id=None):
+        """Deterministic continuation; this method never calls the provider."""
         body = validate_execution_response(response, request)
+        if trial_session is not None:
+            trial_session.consume_response(response_id)
         result = apply_edits(plan, source, policy, body,
-            require_behavior_change=json.loads(request.messages[1]['content'])['require_behavior_change'])
+            require_behavior_change=json.loads(request.messages[1]['content'])['require_behavior_change'],
+            trial_session=trial_session)
         report=check_edited_helper_preconditions(request,source,self.config)
         if report is not None:result['helper_preconditions']=report
         result['model_response'] = {'content': response.content, 'metadata': dict(response.metadata)}
+        if trial_session is not None:
+            trial_session.record('RESPONSE_CONSUME_COMPLETED',response_id=response_id,
+                snapshot_id=result['to_snapshot'])
         return result

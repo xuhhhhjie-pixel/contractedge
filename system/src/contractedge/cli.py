@@ -132,19 +132,31 @@ def _build_provider(config: Mapping[str, Any]):
     for key in required:
         if not isinstance(config.get(key), str) or not config[key].strip():
             raise ValueError(f"model configuration requires non-empty {key!r}")
+    counter = _token_counter(config["tokenizer"])
+    identity = {'model_identity_policy': config.get('model_identity_policy', 'record'),
+                'model_aliases': config.get('model_aliases')}
     if provider_name == "ollama_native":
+        if config.get('output_mode', 'native_schema') != 'native_schema':
+            raise ValueError('Ollama output_mode is native_schema; OpenAI format options do not apply')
         provider = OllamaNativeProvider(str(config["base_url"]), int(config.get("timeout_seconds", 600)),
-                                        config.get('model_context_tokens'))
+                                        config.get('model_context_tokens'), **identity)
     else:
-        if config.get('schema_in_prompt') is False:
-            raise ValueError('schema_in_prompt=false requires a native schema-constrained provider')
+        strict = (config.get('output_mode', 'json_object') == 'json_schema'
+                  and config.get('supports_json_schema') is True
+                  and config.get('schema_fallback', 'error') == 'error')
+        if config.get('schema_in_prompt') is False and not strict:
+            raise ValueError('schema_in_prompt=false requires a native schema-constrained provider or strict JSON Schema without fallback')
         provider = OpenAICompatibleProvider(str(config["base_url"]), str(config["api_key_env"]),
                                             int(config.get("timeout_seconds", 120)), thinking=config.get('thinking'),
-                                            reasoning_effort=config.get('reasoning_effort'))
+                                            reasoning_effort=config.get('reasoning_effort'),
+                                            output_mode=config.get('output_mode', 'json_object'),
+                                            supports_json_schema=config.get('supports_json_schema', False),
+                                            schema_fallback=config.get('schema_fallback', 'error'),
+                                            context_tokens=config.get('model_context_tokens'), token_counter=counter, **identity)
         if config.get('money_budget') is not None:
             from contractedge.model.money import MoneyBudget
             provider.money_budget = MoneyBudget(**config['money_budget'])
-    return provider, _token_counter(config["tokenizer"])
+    return provider, counter
 
 
 def _load_public_member(public_root: Path, case_id: str) -> tuple[dict[str, Any], Path]:
@@ -161,7 +173,17 @@ def _load_public_member(public_root: Path, case_id: str) -> tuple[dict[str, Any]
     return row, _safe_public_file(public_root, relative)
 
 
-def run_public_case(public_root: str | Path, case_id: str, config: Mapping[str, Any]):
+def run_public_case(public_root: str | Path, case_id: str, config: Mapping[str, Any], *,
+                    recording_dir: str | Path | None = None, output_path: str | Path | None = None,
+                    config_path: str | Path | None = None):
+    """Persistent CLI entry when recording_dir is supplied; otherwise legacy front-only API."""
+    if recording_dir is not None:
+        from contractedge.orchestration.cli_front_recording import run_recorded_public_case
+        return run_recorded_public_case(public_root, case_id, config, recording_dir=recording_dir,
+            output_path=output_path, config_path=config_path, load_public_member=_load_public_member,
+            provider_factory=_build_provider, verify_model=_verify_ollama_model)
+    if output_path is not None or config_path is not None:
+        raise ValueError('output/config source recording requires an explicit recording_dir')
     from contractedge.orchestration.runner import run_front_half
     from contractedge.dataset.admission import check_case_admission
 
@@ -242,6 +264,12 @@ def _prepare(args: argparse.Namespace) -> dict[str, Any]:
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="contractedge", description="ContractEdge frozen-benchmark planning, source repair and public feedback")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    runtime = subparsers.add_parser('runtime-check', help='diagnose Docker and verify actual CPU/memory limits')
+    runtime.add_argument('--cpus', type=float, default=2)
+    runtime.add_argument('--memory-mib', type=int, default=2048)
+    runtime.add_argument('--context')
+    runtime.add_argument('--image', help='trusted cached digest-pinned image for actual cgroup verification')
+    runtime.add_argument('--timeout-seconds', type=float, default=20)
     validate = subparsers.add_parser("validate-input", help="validate one MethodInput and its public Broken archive")
     validate.add_argument("--method-input", required=True)
     validate.add_argument("--public-root", required=True)
@@ -272,6 +300,8 @@ def _parser() -> argparse.ArgumentParser:
     repair.add_argument("--config", required=True)
     repair.add_argument("--output", required=True)
     repair.add_argument("--initial-trace", help="resume one matching ready development trace; its prior budget is retained")
+    repair.add_argument('--resume-output', action='store_true', help='recover this existing output to a terminal selected candidate without model dispatch')
+    repair.add_argument('--consume-received-response', action='store_true', help='with --resume-output, consume one verified durable response at most once before conservative rollback')
     batch = subparsers.add_parser('repair-batch', help='resumable public repair cohort; independent hidden scoring is separate')
     batch.add_argument('--public-root', required=True)
     batch.add_argument('--tools-root', required=True)
@@ -316,6 +346,12 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     try:
+        if args.command == 'runtime-check':
+            from contractedge.execution.runtime_preflight import check_runtime
+            report = check_runtime(cpus=args.cpus, memory_mib=args.memory_mib, context=args.context,
+                                   verify_image=args.image, timeout_seconds=args.timeout_seconds)
+            print(json.dumps(report, ensure_ascii=False, sort_keys=True))
+            return 0 if report['status'] == 'PASS' else 1
         if args.command == "validate-input":
             report = validate_public_input(args.method_input, args.public_root)
             print(json.dumps(report, ensure_ascii=False, sort_keys=True))
@@ -336,9 +372,10 @@ def main(argv: list[str] | None = None) -> int:
             config = _json_file(args.config)
             if not isinstance(config, Mapping):
                 raise ValueError("run config must be a JSON object")
-            trace = run_public_case(args.public_root, args.case_id, config)
-            payload = validate_run_trace(trace.to_wire())
-            _write_json(args.output, payload)
+            trace = run_public_case(args.public_root, args.case_id, config,
+                recording_dir=str(Path(args.output)) + '.artifacts', output_path=args.output,
+                config_path=args.config)
+            validate_run_trace(trace.to_wire())
             print(json.dumps({"case_id": trace.case_id, "status": trace.status,
                               "run_id": trace.run_id, "trace_path": str(Path(args.output).resolve())},
                              ensure_ascii=False, sort_keys=True))
@@ -363,13 +400,20 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "repair":
             from contractedge.orchestration.repair import repair_case
             config = _json_file(args.config)
-            provider, tokenizer = _build_provider(config)
-            if config.get("ollama_model_digest"):
+            if args.consume_received_response and not args.resume_output:
+                raise ValueError('--consume-received-response requires --resume-output')
+            if args.resume_output and args.initial_trace:
+                raise ValueError('--resume-output and --initial-trace are different recovery protocols')
+            provider, tokenizer = (None, None) if args.resume_output else _build_provider(config)
+            if config.get("ollama_model_digest") and not args.resume_output:
                 _verify_ollama_model(config)
             initial = _json_file(args.initial_trace) if args.initial_trace else None
             report = repair_case(args.public_root, args.tools_root, args.case_id, args.output,
-                                 provider, tokenizer, config, initial_trace=initial)
+                                 provider, tokenizer, config, initial_trace=initial,
+                                 resume=args.resume_output, consume_received_response=args.consume_received_response)
             print(json.dumps({key: report[key] for key in ["case_id", "status", "run_id", "candidate", "errors"]}, ensure_ascii=False))
+            if args.resume_output:
+                return 0 if report['exportable'] and not report['errors'] and report['status'].startswith('RECOVERED_') else 1
             return 0 if report["status"] in {"PUBLIC_REVIEW_COMPLETE", "PUBLIC_EXECUTION_COMPLETE"} else 1
         if args.command == "evaluate-benchmark":
             from contractedge.evaluation.benchmark import evaluate_benchmark

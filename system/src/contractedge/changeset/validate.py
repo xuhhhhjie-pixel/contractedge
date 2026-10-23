@@ -5,16 +5,26 @@ from typing import Any, Mapping
 from contractedge.contracts.models import DiagnosisPacket, Snapshot, ValidationResult, ValidationIssue
 from contractedge.contracts.validation import validate_changeset
 from contractedge.contracts.permissions import target_permission_error
+from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
 
 
 def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: DiagnosisPacket,
                                 snapshot: Snapshot | None, *, policy: Mapping | None = None,
                                 frontier: list | None = None,
-                                prerequisites: list | None = None) -> ValidationResult:
+                                prerequisites: list | None = None, capabilities: Mapping | None = None) -> ValidationResult:
     result = validate_changeset(payload, diagnosis, snapshot)
     if result.value is None:
         return result
     issues = list(result.errors)
+    try:
+        consumer = resolve_execution_capabilities(capabilities)
+    except ValueError as exc:
+        issues.append(ValidationIssue('INVALID_EXECUTION_CAPABILITIES', 'public_execution_capabilities', str(exc)))
+        return ValidationResult(False, tuple(issues), result.value)
+    for index, change in enumerate(payload['changes']):
+        if change['operation'] not in consumer['supported_operations']:
+            issues.append(ValidationIssue('UNSUPPORTED_EXECUTION_OPERATION', f'changes[{index}].operation',
+                'Execution consumer supports only ' + ', '.join(consumer['supported_operations'])))
     if prerequisites is not None:
         expected = {r['source_evidence_ref'] for r in prerequisites}
         rows = payload.get('precondition_review', [])

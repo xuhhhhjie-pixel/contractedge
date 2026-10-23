@@ -7,6 +7,7 @@ from typing import Mapping
 from jsonschema import Draft202012Validator
 
 from contractedge.model.provider import ModelRequest
+from contractedge.model.admission import complete_quoted, context_fits, quote_request
 from contractedge.execution.comparison import compare_declared_input
 from contractedge.execution.support import support_error, deterministic_check_result
 
@@ -114,9 +115,10 @@ class ModelPublicReviewer:
                           'public_observations': observation['observations']}, ensure_ascii=False)}),
             max_output_tokens=int(self.config.get('review_max_output_tokens', 3072)), output_schema=schema)
         for attempt in range(max(0, int(self.config.get('max_format_retries', 0))) + 1):
-            if sum(self.token_counter(m['content']) for m in request.messages) + request.max_output_tokens > int(self.config['max_context_tokens']):
+            quote = quote_request(self.provider, request, self.token_counter)
+            if not context_fits(quote, int(self.config['max_context_tokens']), self.config.get('model_context_tokens')):
                 return {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN', 'method': 'CONTEXT_LIMIT'}
-            response = self.provider.complete_json(request)
+            response = complete_quoted(self.provider, request, quote)
             try:
                 body = json.loads(response.content)
                 errors = list(Draft202012Validator(schema).iter_errors(body))

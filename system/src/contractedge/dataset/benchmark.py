@@ -140,7 +140,7 @@ def public_execution_capabilities(directory: Path, task: Mapping, manifest: Mapp
     environment = execution_contract(directory, task, manifest)
     names = [task.get('execution_config'), task.get('execution_contract'), 'environment.json']
     contract_name = next((n for n in names if isinstance(n, str) and n in manifest['files']), 'task.yaml')
-    return {'schema_version': 'ce.public_execution_capabilities.v1',
+    result = {'schema_version': 'ce.public_execution_capabilities.v1',
         'source': {'path': contract_name, 'sha256': manifest.get('file_sha256', {}).get(contract_name),
                    'task_observation_limit_source': 'task.yaml:observation_limit'},
         'task_observation_limit': task.get('observation_limit'),
@@ -156,6 +156,10 @@ def public_execution_capabilities(directory: Path, task: Mapping, manifest: Mapp
                       for s in environment.get('scenarios', []) if isinstance(s, Mapping)],
         'editable_policy': editable_policy(task, environment), 'network': environment.get('network'),
         'interpretation': 'Declared public execution/observation only. Build success is not behavioral success; unavailable behavior stays UNKNOWN. No additional execution or edit permission.'}
+
+    if 'registered_public_checks' in environment:
+        result['registered_public_checks'] = environment['registered_public_checks']
+    return result
 
 
 def method_input_from_task(public_root: str | Path, case_id: str, *,

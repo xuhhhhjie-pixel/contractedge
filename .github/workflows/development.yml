@@ -1,0 +1,201 @@
+name: Development
+
+on:
+  pull_request:
+    paths: ['system/**', '.github/workflows/development.yml']
+  push:
+    paths: ['system/**', '.github/workflows/development.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: development-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONPATH: ${{ github.workspace }}/system/src:${{ github.workspace }}/system
+  CONTRACTEDGE_TOPOMEN_SOURCE: ${{ github.workspace }}/system/vendor/topomen
+  CONTRACTEDGE_RUNTIME_IMAGE: golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d
+
+jobs:
+  focused:
+    name: Contracts, providers, budgets and replay (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10', '3.12']
+    defaults:
+      run:
+        working-directory: system
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: system/requirements-dev.lock
+      - name: Install portable development environment
+        run: |
+          env -u PYTHONPATH python -m pip install -r requirements-dev.lock
+          env -u PYTHONPATH python -m pip install --no-deps -e .
+      - name: Verify current development freeze and CLI
+        run: |
+          python scripts/verify_development_snapshot.py
+          python scripts/contractedge_local.py --help
+      - name: Focused offline regression
+        run: >-
+          python -m pytest -q
+          tests/test_contracts.py tests/test_source_field_contracts.py tests/test_final_front_contract.py
+          tests/test_model_provider.py tests/test_provider_output_identity.py
+          tests/test_run_budget.py tests/test_money_budget.py
+          tests/test_public_failure.py tests/test_public_failure_contracts.py
+          tests/test_transport_request_audit.py tests/test_development_snapshot.py tests/test_public_demo.py
+          tests/test_evidence_delivery.py tests/test_front_delivery.py tests/test_request_admission.py tests/test_production_request_admission.py tests/test_stage_delivery_admission.py
+      - name: Stage references, final semantic delivery and READY inheritance
+        run: >-
+          python -m pytest -q
+          tests/test_artifact_recorder.py tests/test_stage_recorder_hooks.py
+          tests/test_stage_observer_integration.py tests/test_ready_recorder_hooks.py
+          tests/test_semantic_delivery_closure.py
+      - name: State transitions and persistent CLI front recording
+        run: >-
+          python -m pytest -q
+          tests/test_stage_transitions.py tests/test_state_primary_error.py
+          tests/test_cli_front_journal.py
+      - name: Persistent candidate transactions and independent consumers
+        run: >-
+          python -m pytest -q
+          tests/test_trial_transactions.py tests/test_consumer_trial_recovery.py
+          tests/test_repair_consumers.py tests/test_recovery_edit_windows.py
+          tests/test_persist_calls_primary_error.py
+      - name: Four modes, six-case observer and cross-mode recovery controls
+        run: >-
+          python -m pytest -q
+          tests/test_method_modes_panel.py tests/test_isolated_method_panel.py
+          tests/test_method_mode_trial_recovery.py
+      - name: Runtime and observer control tests without Docker
+        run: |
+          python -m pytest -q tests/test_runtime_session.py tests/test_public_observer.py
+          python -m pytest -q tests/test_public_isolated_demo.py -k 'not real_'
+
+  runtime-portable:
+    name: Actual Docker limits, isolated public runtime and portable suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DOCKER_HOST: unix:///var/run/docker.sock
+      CONTRACTEDGE_RUN_ISOLATED_DEMOS: '1'
+    defaults:
+      run:
+        working-directory: system
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # ancestry-bound panels require the recorded C1 base
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: system/requirements-dev.lock
+      - name: Install portable development environment
+        run: |
+          env -u PYTHONPATH python -m pip install -r requirements-dev.lock
+          env -u PYTHONPATH python -m pip install --no-deps -e .
+      - name: Cache trusted public probe image
+        run: docker pull "$CONTRACTEDGE_RUNTIME_IMAGE"
+      - name: Verify CPU and memory enforcement; negotiate task Docker API
+        run: |
+          python scripts/contractedge_local.py runtime-check --image "$CONTRACTEDGE_RUNTIME_IMAGE" --timeout-seconds 60 > "$RUNNER_TEMP/runtime-preflight.json"
+          cat "$RUNNER_TEMP/runtime-preflight.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          report = json.loads((Path(os.environ['RUNNER_TEMP']) / 'runtime-preflight.json').read_text())
+          assert report['status'] == 'PASS' and report['runtime_verified'] is True, report
+          overrides = report['environment_overrides']
+          assert set(overrides) <= {'DOCKER_API_VERSION', 'DOCKER_CONTEXT'}, overrides
+          with open(os.environ['GITHUB_ENV'], 'a') as target:
+              for key, value in overrides.items():
+                  assert isinstance(value, str) and '\n' not in value and '\r' not in value
+                  target.write(f'{key}={value}\n')
+          PY
+      - name: Actual RuntimeSession isolation and cleanup regression
+        run: python -m pytest -q tests/test_runtime_session_integration.py --basetemp "$RUNNER_TEMP/runtime-session-tests"
+      - name: Three isolated public cases and fresh-process READY inheritance
+        run: python -m pytest -q tests/test_public_isolated_demo.py -k real_ --basetemp "$RUNNER_TEMP/isolated-demo-tests"
+      - name: Persistent trial recovery with two real isolated consumers
+        run: >-
+          env -u DEEPSEEK_API_KEY -u OPENAI_API_KEY PYTHONDONTWRITEBYTECODE=1
+          python -B scripts/run_trial_isolation_panel.py --system "$PWD"
+          --binding configs/trial-isolation-acceptance-d2-r2.example.json
+          --output "$RUNNER_TEMP/trial-recovery-tests"
+          --image "$CONTRACTEDGE_RUNTIME_IMAGE" --docker-host "$DOCKER_HOST"
+          --docker-api-version "${DOCKER_API_VERSION:-}"
+      - name: Four modes by six public cases in actual isolated sessions
+        run: |
+          args=(--image "$CONTRACTEDGE_RUNTIME_IMAGE" --docker-host "$DOCKER_HOST")
+          if [ -n "${DOCKER_API_VERSION:-}" ]; then args+=(--docker-api-version "$DOCKER_API_VERSION"); fi
+          env -u DEEPSEEK_API_KEY -u OPENAI_API_KEY PYTHONDONTWRITEBYTECODE=1 \
+            python -B scripts/run_isolated_method_panel.py "${args[@]}" --output "$RUNNER_TEMP/method-panel24"
+      - name: Unchanged temporal resource-bound probe
+        run: python -m pytest -q tests/test_temporal_response_bounds.py
+      - name: Full portable development subset (six explicit exclusions)
+        run: python scripts/test_portable.py
+      - name: Retain actual runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-preflight
+          path: |
+            ${{ runner.temp }}/runtime-preflight.json
+            ${{ runner.temp }}/runtime-session-tests
+            ${{ runner.temp }}/isolated-demo-tests
+            ${{ runner.temp }}/trial-recovery-tests
+            ${{ runner.temp }}/method-panel24
+          if-no-files-found: warn
+
+  native:
+    name: Vendored native TopoMen fixture integration (separate scope)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: system
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install portable development environment
+        run: |
+          env -u PYTHONPATH python -m pip install -r requirements-dev.lock
+          env -u PYTHONPATH python -m pip install --no-deps -e .
+      - name: Native fixture provider; no model HTTP
+        run: python -m pytest -q tests/test_topomen_agent.py
+
+  public-demo:
+    name: Offline public cases and persistent READY continuation
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: system
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install portable development environment
+        run: |
+          env -u PYTHONPATH python -m pip install -r requirements-dev.lock
+          env -u PYTHONPATH python -m pip install --no-deps -e .
+      - name: Three synthetic public cases
+        run: |
+          for case in config-binding reload-state two-consumers; do
+            python scripts/run_public_demo.py --case "$case" --output "$RUNNER_TEMP/public-demo/$case"
+          done
+      - name: Persist READY and resume in a fresh process
+        run: |
+          python scripts/run_public_demo.py --case config-binding --save-ready --output "$RUNNER_TEMP/public-demo/saved"
+          python scripts/run_public_demo.py --resume-ready "$RUNNER_TEMP/public-demo/saved" --output "$RUNNER_TEMP/public-demo/resumed"

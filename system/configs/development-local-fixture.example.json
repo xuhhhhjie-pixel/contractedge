@@ -1,0 +1,14 @@
+{
+  "provider": "synthetic",
+  "model": "synthetic-public-example",
+  "schema_in_prompt": true,
+  "max_context_tokens": 240000,
+  "max_output_tokens": 4096,
+  "execution_max_output_tokens": 4096,
+  "review_max_output_tokens": 4096,
+  "max_total_tokens": 1500000,
+  "max_elapsed_seconds": 180,
+  "max_model_calls": 16,
+  "max_rounds": 2,
+  "max_format_retries": 0
+}

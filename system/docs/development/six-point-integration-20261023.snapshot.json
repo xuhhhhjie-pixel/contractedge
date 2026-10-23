@@ -1,0 +1,218 @@
+{
+  "schema_version": "ce.development_snapshot.v1",
+  "development_snapshot_id": "six-point-integration-20261023",
+  "base_commit": "7ae3cf2c3d58f91129cfdfe97b2ec5a7b730214c",
+  "integrated_head_before_documentation": "3afe3ac75c7586340e09950eec0801703224adbd",
+  "source_commits": [
+    "c475c5ecd002dec4f2de64f950c65763e62f4a2e",
+    "6a50de22a4518bac48028c49a5b623b355c28e4c",
+    "94fb4ca0484f5f50639ae425e122fac7faca0222",
+    "3a2d6720f4dc1b32826e75969375e32f6f778f55",
+    "dc384a45a78cec4f6adfc979071832ba07036cec"
+  ],
+  "original_runtime_package_version": "0.6.27",
+  "formal_ready": false,
+  "files": {
+    "contractedge/__init__.py": "a7a3014b7a835096a4c05430707082631f5cb8dd40906737c774dcbcd192c3ac",
+    "contractedge/changeset/__init__.py": "fe549dcea53cff6060e5cd0613c85a9c87fb98f2f23b2bc9caa4eb48490d3a3c",
+    "contractedge/changeset/adapter.py": "4c49bf991685235dde3ab4b29abc942544b4769a371342047d648cccb9af7fd0",
+    "contractedge/changeset/prompt.py": "f6c949ca703c3bb2f6410a21d2e615f761bd9ddf1117cb69551714ad69c2b5c8",
+    "contractedge/changeset/topomen.py": "da3408768719dadcc201f8eb97272990cf8e3ee4bbc7b4cf9a3d3d2e218d1ab5",
+    "contractedge/changeset/validate.py": "49a29af59960ba9db51c600858b99d511e21ca3c69905ac6c3dcf7781dfedd4e",
+    "contractedge/cli.py": "8f4b33b9438214258f7365425bf1ffbf84c560b41dd465b117dfd3a8608e3a03",
+    "contractedge/contracts/__init__.py": "93ce844fc567a6444515bd4c99b5fce4d7e5426622177489b4da252b23ae8dac",
+    "contractedge/contracts/evidence.py": "4ec6533175029ac7604c085dac8a03a9b6d90175efac8ad710082c638f46fe4d",
+    "contractedge/contracts/execution_capabilities.py": "d3d5404f529e16b3a66870939742ad8191c1549c9995b30671d6a7c55897326e",
+    "contractedge/contracts/models.py": "df2fe87ddbe758d85dc29de376d8a0ed200cd91f981c525da8950cd27c643519",
+    "contractedge/contracts/permissions.py": "b490d2ab1c2f5da06ee79dca2b9f9dcca9e042aec65fb914f45db3fffd265294",
+    "contractedge/contracts/schema/diagnosis_packet.v1_1.json": "2919205518376bb95ed5036f5adce5564a6ad661e7facb8f33849df9aae5df19",
+    "contractedge/contracts/schema/execution_feedback.v1.json": "5a9854525d21e146e11842194f330d1fc0e97e81a75890eb874e4ae32e53a5aa",
+    "contractedge/contracts/schema/method_input.v1_1.json": "72fae319c9a13b672813727130be3e3bb83ef9b738d4f718d5a31b1483a7f2e6",
+    "contractedge/contracts/schema/requirement_spec.v1_1.json": "1805fb91870b674cd457bc7cd23600b6a9263de653c7652fdcda474357d0c139",
+    "contractedge/contracts/schema/run_trace.v1_1.json": "21ff10c0ca5f52db4e52ba5b48b112064556cbe441a7401580ecb58905fe2c48",
+    "contractedge/contracts/schema/semantic_changeset.v1_1.json": "77f185649817fb93ffdb0d0575f7f180c659a072d535f5d50f5c3c65e187155e",
+    "contractedge/contracts/validation.py": "009504308c85ed42a831d5609dbb853a52e937b6abac3b0935c5368764619a57",
+    "contractedge/dataset/__init__.py": "94647c82cfb80fbadb0d0bcc285dbeee12d271da0683a9b498305640ef89d331",
+    "contractedge/dataset/admission.py": "1ab6739ad1ff4f59f4b5006513dc89c517a954ac9262ef8de5c301817e8cbf93",
+    "contractedge/dataset/archive.py": "cc15c7ecf500de6414b456eedbbf82aa3cdad47d11cb68d5feb6e0f11d1b8091",
+    "contractedge/dataset/audit.py": "27cbeee424a70693d621518b6613eed808ce9edd631e98ba585b250ef8438867",
+    "contractedge/dataset/benchmark.py": "e3c2a4ff5589000ed2733d2f03ce70a6a8cf52bb50f47fff33f12661ecd4e92c",
+    "contractedge/dataset/export.py": "67a501d3c5ae88fdffcfa2c43f20386e21b14eaeb5a5855fabbccdcf7b384a48",
+    "contractedge/dataset/releases.py": "dcd446840662f881c278a7bd0637077c3c5b23f1a19395fcaaa779300e8c3043",
+    "contractedge/diagnosis/__init__.py": "a1eac102f83f856612ac44386b40522afa8a861527b6c6d436378e055dd10757",
+    "contractedge/diagnosis/evidence.py": "aa69f22ccb962a855074a64c22d40c25c9e1f0903c51a0073b311b638d0add0d",
+    "contractedge/diagnosis/operation_consistency.py": "d6ff5675dfceeb654c43fbd4d1af2e244f5ce01fb3ef0b6cf9db6ea801f6a613",
+    "contractedge/diagnosis/parse.py": "3a2cca348d49f4d3afc72d1cf6561f48d81beed1bc21657be94bc298b6ca0de6",
+    "contractedge/diagnosis/prompt.py": "7fe61488d21caba1b22ece8c2d9a49e09e22c519d0e5df69c188e06e963c085a",
+    "contractedge/diagnosis/validate.py": "5b04437981b5ad46c8a74f046cbed56dd2e05f54012919b33238addf3b8493c1",
+    "contractedge/evaluation/__init__.py": "c5f517b055fa38c046faeb36dc4cccb37a07b1fa9e7f037f50708c5a03762d3a",
+    "contractedge/evaluation/batch.py": "a571c71dcf88e9afc0933e3dac37ff19904cdb57dbae0c3e7132bfe93e711d0f",
+    "contractedge/evaluation/benchmark.py": "7dfcc84bb9096844a01b933bc85e760931d324b269af8d85636a6380311923aa",
+    "contractedge/evaluation/gt_adapter.py": "1afab9bd7c8f5a5d5623af37459634a98f96453f773e033066bafaac2755a14f",
+    "contractedge/evaluation/repair_batch.py": "91768bacd1ceaf9f551356a81e51e04c4ecad8f938f30d57ef7ed44afda73975",
+    "contractedge/execution/__init__.py": "4ede206b9e2c1d0e0b619abd84930d2b5851abc35892fc7857624d5e15a413f9",
+    "contractedge/execution/code_change.py": "45f0ff876dcd6232ad9bf3f818c555483b77bb7a0b6dbbb778281bf26b50215b",
+    "contractedge/execution/comparison.py": "f425db463cfb717e971c20b5c89d3252c11b70a1f4acba09d34a2859765c2fa3",
+    "contractedge/execution/helper_context.py": "acbe302437d4911747fd0e76c03dff27f4cf520a5c54caaf26a3327c6cd3e1a3",
+    "contractedge/execution/observations.py": "292aa57be8fb3c920b2802ddeed9283114f62d341f3728f0fad440a631b878e5",
+    "contractedge/execution/preconditions.py": "468ea76ed15358c95abcd1f41712b7ca3323f9015ff4c2f1cdbe012ae9d51d51",
+    "contractedge/execution/probe_specs.py": "7b24eba4dd66da4f44bcbcc525f0eaaf27f2b8721a4df7fc42fcdf2f3e72c9ea",
+    "contractedge/execution/probes.py": "f7dd109d627a9463a9f5261a0679370e202b6ff1324b1748739015a36b141e3d",
+    "contractedge/execution/public.py": "4c9f03a55b4e1d503af37bf81a720b482df5f3f7846368d5a68437c212d2911f",
+    "contractedge/execution/review.py": "3515cfac52ef8900d00aee546247f9073d8ccb7fb0da5c35844c774972ff9ec4",
+    "contractedge/execution/runtime_preflight.py": "6e5f7f676de07745d35cfc271fa67efb4ee12aa3bbb725aa0b583355a55984fc",
+    "contractedge/execution/runtime_probe.py": "820e3d65aa4decfd63c3420076b3c72f3e565f7299d0aad445743a54fafd09b4",
+    "contractedge/execution/support.py": "9d8405ca323a3f4df1267eea75b634ce7bc68de8c9a2c85346c70356597311fd",
+    "contractedge/execution/topomen.py": "51359578d55562756888ea225cd27429e336e856707b65096a47cb66bba8b7f1",
+    "contractedge/execution/topomen_agent.py": "034314e34bed3467a34d065488ee34dc3cc616adb95dc7882094609539c7c558",
+    "contractedge/execution/writeback_context.py": "8b69b7361061350189956aaf9bf6d98c0529dd7f32133b67fdf3b5ae1c07b0e7",
+    "contractedge/model/__init__.py": "ecb72f11a5522bdd4691f012299cc934a7f51de5e3ac176f3f7e5321cf95e527",
+    "contractedge/model/budget.py": "6b51182541ce781cffd228c2e633fa75bf7bc59d53e29b4ce952c1937c075c18",
+    "contractedge/model/money.py": "ac09292c059914af6c737789491e9aea24c2e036cb384e02c7ba6dad65aff813",
+    "contractedge/model/output_contract.py": "6353849e111978eeb4fa66e4a8d01391dceda956bf16155428e0055b345ee0ad",
+    "contractedge/model/provider.py": "ba1216e213c1290db1f5cba7c66faf0f61d32f0058828ef5bf6b65a08a9f9df5",
+    "contractedge/model/schema.py": "8405a7c7c0c66d0931268ad84094a0cf9e6fc1b7e3ba4c67bfa0d6d403b04ce5",
+    "contractedge/orchestration/__init__.py": "11961ea8c82e428c79b84c7ae1447f42e24c08a55eb6966cf785514d4726c4cb",
+    "contractedge/orchestration/batch.py": "32ed1a4a247338a33cfb0da1909fcfc5ee8646d9e22522b45996c6bda1104f37",
+    "contractedge/orchestration/candidate_guard.py": "e1fc2c67461aabf0af515ec42dcb499322e0961d6be25039f2b31112c8dc2ff2",
+    "contractedge/orchestration/feedback.py": "8c555bdac5a2913288c54292d7a548f20d9c1ed5d85f9ee32eedafac3d9cda7e",
+    "contractedge/orchestration/repair.py": "f99c1f1b54f8d03bfbb2da7f29ddf21a2bdfb10a49b08cc4c98376ee7067cb67",
+    "contractedge/orchestration/runner.py": "0382fe647c3f1d29b2fea79dc63e72c78eb34dcc511f01ac4352ae6944eec8d8",
+    "contractedge/requirement/__init__.py": "a85ad83a62cea215e43cdc500ad54d74fc5d264eba80c8cdafe70ac7061b570e",
+    "contractedge/requirement/lineage.py": "d18430c95072eb974c02f245daca68c0c779aa72066a5553cd548b1579060fc6",
+    "contractedge/requirement/normalize.py": "b0804b4e0bc43712996f640ed644e6a348ddbb2c5a665997f89437615a0d0875",
+    "contractedge/retrieval/__init__.py": "e3c4976f8502c1544b74ac541a46edcaf35f0c2d1f3fcfbf6697336b49bab407",
+    "contractedge/retrieval/candidates.py": "086ad05281843eed33f7aab820b9fd645295be22bca3b19636a268d52f116d4f",
+    "contractedge/retrieval/edges.py": "c60241528f295f533491fe34115bf23d669ee3979ddfee3a64f165de10b98274",
+    "contractedge/retrieval/frontier.py": "7693229754c9b59bf6c9011cf554b64021f74ab5ffae7fe3fc2b478d9979ffce",
+    "contractedge/retrieval/gap_delivery.py": "98e1d6a443ff188efc14d6b4e30bc295dab0111443ec63854b8f5dab92599333",
+    "contractedge/source/__init__.py": "25c98d6e2368d69bc8a686d94c51ff2602ae7c20fb48debdcffd375679962e23",
+    "contractedge/source/absence.py": "bf6f0f59f16f9789d0db087fca947d937dc002e19080b9a5f23410bf9e4b2ad1",
+    "contractedge/source/entrypoints.py": "1afbe6bfe03fd38853becb5b110a6bc39ee8f92ec56c5de223e15c0c7638ebec",
+    "contractedge/source/parsers.py": "6b84a711f0d8531ba59e291f4709b16a06d04384553c893545828fa17c298f0a",
+    "contractedge/source/scopes.py": "7191e96945b52d59c60495ef12ba3ea57dee64c716ff32084c86db9ac9052120",
+    "contractedge/source/snapshot.py": "63c5006d006930231b5b56753e81865e891a76256d623a5ad6798c6f16fc99fd",
+    "contractedge/source/units.py": "c8fd2bb3b0872e9cb7b571a3ef5c82653229fe650b57676d12df56b0ddb65dc3",
+    "contractedge/tokenizers.py": "e7e2a7060e903ac8192fedb97133aa2113fc00231b1fe964c0e9d0284246b2ef"
+  },
+  "source_sha256": "35c54c49ec875d3f7f5d80310fc1d5126b6add23c647fb538fff88df1acfa858",
+  "configuration": {
+    "stage_configuration_files": {
+      "configs/provider-contracts.example.json": "477e44e29bec85debda56d9830677997807db548407207ed52bec4ae8fce3e34",
+      "configs/runtime-preflight.example.json": "f7d0f028ac3310eda4de0f9539f589793817ef559f91aa01da9559fec96e67a2",
+      "configs/public-failure-recipe.example.json": "b8bc730c996125208841dd3b38a7e9b2fbede37071f2e8a0c6c582cf4a3252ec"
+    },
+    "validation_scope": "portable development subset plus separately reported native fixture module",
+    "real_model_http_calls": 0,
+    "formal_ready": false,
+    "real_ACK": "BLOCKED_MISSING_ORIGINAL_PUBLIC_PACKAGE"
+  },
+  "configuration_sha256": "9fa9bbed24d635e80ef8e255c9bc127ebbd8ad16584b3e690e2306f3535bf0d8",
+  "fixture_panel": [
+    "tests/test_public_failure.py",
+    "tests/test_execution_operation_capabilities.py",
+    "tests/test_provider_output_identity.py",
+    "tests/test_runtime_preflight.py",
+    "tests/test_run_budget.py",
+    "tests/test_repair_execution.py",
+    "tests/test_temporal_response_bounds.py",
+    "tests/test_topomen_agent.py"
+  ],
+  "fixture_panel_sha256": "d700fe5009f866b0bd91bc17eb691e30b6a8886916db69321c7dac75a54c769d",
+  "fixture_files": {
+    "tests/test_public_failure.py": "78fcb8d31775821ff756537382401d01e3327b55643d32e3dd1dde9571b1f755",
+    "tests/test_execution_operation_capabilities.py": "ea39fdd4e575254e1c1456dd59ae3518f26b67e7fcfb2886a4e5ce50c63bdb06",
+    "tests/test_provider_output_identity.py": "37079b0c183bf0b060f94777c8fd43ff3e1716febd48ebdbbf772a2359bbb170",
+    "tests/test_runtime_preflight.py": "83b04816a580a260ac8348c7ff246b3f758c5786c1f6c75826e5138c56470706",
+    "tests/test_run_budget.py": "2c92b3e2124ede94970c845a42875a44f844dd5cb10b4800322a4d7e1c3f0a21",
+    "tests/test_repair_execution.py": "62aa320de912adeab94aecf8eae402bc3d73227054694eee397292a4c22592bf",
+    "tests/test_temporal_response_bounds.py": "1c0212d4e46fb74eed406eb30b478131b902fe956b032f618f3ab0786ded6faa",
+    "tests/test_topomen_agent.py": "c3b8016158d909d1da6591414c4a274ec2777767d60bc19ea9ac52c9ff0bcad5"
+  },
+  "verification": {
+    "related": "119 passed in 9.61s",
+    "portable": "730 passed, 17 subtests passed in 69.23s (0:01:09)",
+    "native": "9 passed in 2.88s"
+  },
+  "runtime_probe": {
+    "attempts": [
+      {
+        "exit_code": 1,
+        "operation": "version"
+      },
+      {
+        "exit_code": 0,
+        "operation": "version"
+      },
+      {
+        "exit_code": 0,
+        "operation": "info"
+      },
+      {
+        "exit_code": 0,
+        "operation": "run"
+      }
+    ],
+    "capabilities": {
+      "CgroupVersion": "2",
+      "CpuCfsPeriod": true,
+      "CpuCfsQuota": true,
+      "MemoryLimit": true
+    },
+    "client_api": "1.43",
+    "context": null,
+    "elapsed_seconds": 0.741628423333168,
+    "endpoint_source": "INHERITED_DOCKER_HOST",
+    "environment_overrides": {
+      "DOCKER_API_VERSION": "1.43"
+    },
+    "errors": [],
+    "global_configuration_changed": false,
+    "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+    "observed_limits": {
+      "cpu": "200000 100000",
+      "memory": "2147483648"
+    },
+    "required_cpus": "2",
+    "required_memory_bytes": 2147483648,
+    "runtime_verified": true,
+    "schema_version": "ce.runtime_preflight.v1",
+    "server_api": "1.43",
+    "status": "PASS"
+  },
+  "synthetic_front_replay": {
+    "configuration_sha256": "71b71b3a869baed5bab3c4d5a29af0b9cdbebc60d520902f1921ab63d4239e42",
+    "errors": [],
+    "first_request_divergence": null,
+    "identity": {
+      "broken_snapshot_id": "0c484ef116e802ee848698dda88da96cdf9065ca111b32a7c0a997330397ff05",
+      "input_digest": "154792c07110ae78914bf95188603cf89794c7dfad3e59d4da4b1f3db00b9fe9",
+      "method_source_sha256": "35c54c49ec875d3f7f5d80310fc1d5126b6add23c647fb538fff88df1acfa858",
+      "model_call_range": null,
+      "run_id": "public-failure-fixture",
+      "scope": "front_semantic_failure",
+      "semantic_reviewer": "disabled",
+      "tokenizer": "whitespace_fixture"
+    },
+    "manifest_sha256": "abb698c9e813d764407047d1f3b98b3fbbe09e863b9b889a910db6ccdb14644b",
+    "matched_calls": 5,
+    "missing": [],
+    "model_call_range": [
+      0,
+      5
+    ],
+    "real_model_http_calls": 0,
+    "recorded_calls": 5,
+    "replayed_errors": [
+      "PRESERVATION_IMPACT_INVALID:preservation_impact:CHANGES needs real influencing changes; GLOBAL has no speculative change ids"
+    ],
+    "replayed_status": "INVALID_PLAN",
+    "schema_version": "ce.public_failure.v1",
+    "scope": "front semantic request/validation replay; no HTTP, latency, execution or repair-effectiveness replay",
+    "status": "REPLAY_MATCH",
+    "terminal_differences": [],
+    "total_ledger_calls": 5
+  },
+  "original_dirty_changes_preserved": true,
+  "original_freeze_preserved": true
+}

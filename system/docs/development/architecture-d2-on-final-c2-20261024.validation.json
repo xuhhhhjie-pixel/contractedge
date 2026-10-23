@@ -1,0 +1,91 @@
+{
+  "schema_version": "ce.development_validation.v1",
+  "development_snapshot_id": "architecture-d2-on-final-c2-20261024",
+  "snapshot_sha256": "3965fa6fd6d9902f381c5fe6d4a29c74d82ff2488ff227efd48a56e97bed2f7e",
+  "source_sha256": "f5b0353760d13fc49387b9dbc1ff281edb7f8905b13ad524fde71c5454287e14",
+  "base_commit": "e8647f157bd1f0599fdd7ffd9a0f852ed66011ea",
+  "status": "VALIDATED_OFFLINE",
+  "regression_result_sha256": "cae17fef9e8124525fedaa559c51a38c54c44d36a213b70559c97aac36b2f3a9",
+  "regression_evidence": "/home/zyw/contractedge-collab-20261023/evidence/architecture-d2-final-regression-v1",
+  "regression_logs": {
+    "freeze": {
+      "sha256": "fe585f921548957947073922c011d8568f135fc9365e2d5ee62683c50f6b1194",
+      "elapsed_seconds": 0.264406718313694
+    },
+    "preflight": {
+      "sha256": "3c28b6025d29a11574685eb940b685500404d02e1ff63d3debb5a50511c469d4",
+      "elapsed_seconds": 1.567575205117464
+    },
+    "actual8": {
+      "sha256": "8fc86fd450aed3d850af9005f6cb5594d0e44a29e813050f756c47993bd1abd7",
+      "elapsed_seconds": 65.10198452696204
+    },
+    "combined": {
+      "sha256": "9947f41a9b673c0ec7621182322cf9eb48696e06d8c725b934ec413feba76449",
+      "elapsed_seconds": 264.3695013523102
+    },
+    "portable": {
+      "sha256": "73f690ece1be1b7a4409082a3610f80616cbd836167820e57ca6703e933ff9c2",
+      "elapsed_seconds": 350.4394988939166
+    },
+    "native": {
+      "sha256": "48fd48096104a0c1c6616aab557d7ae68ba8fa7acac09ec966be399e16a5c17f",
+      "elapsed_seconds": 8.63125453516841
+    },
+    "freeze-after": {
+      "sha256": "fe585f921548957947073922c011d8568f135fc9365e2d5ee62683c50f6b1194",
+      "elapsed_seconds": 0.16520290821790695
+    }
+  },
+  "test_results": {
+    "combined": "414 passed, 45 subtests passed in 264.02s (0:04:24)",
+    "portable": "1305 passed, 4 skipped, 86 subtests passed in 350.01s (0:05:50)",
+    "native": "9 passed in 8.33s"
+  },
+  "six_historical_native_exclusions_retained": true,
+  "real_opt_in": "Four isolated cases explicitly run in combined, not duplicated in portable",
+  "actual_trial_matrix": {
+    "status": "PASS",
+    "cells": 8,
+    "actual_runtime_sessions": 14,
+    "candidate_observer_containers": 28,
+    "binding_sha256": "c981d3966e815fe5f0d4acad28c4f9f7e5c4e0a29d7b5573a53cd219755649be",
+    "evidence": "/home/zyw/contractedge-collab-20261023/evidence/architecture-d2-final-regression-v1/actual8"
+  },
+  "actual_method_matrix": {
+    "status": "PASS",
+    "cells": 24,
+    "sessions": 48,
+    "containers": 96,
+    "manifest_sha256": "3aacb45b2a94d29d073a1d1570ed06db28b6df746922c79f2c46813e06221475",
+    "summary_sha256": "0d37c5fc364c8f1f8ce112a486d862b63f491fbe50cfe8cce38b1ac07a4aa934",
+    "fixed_response_target_and_preservation": "ALL_PASS",
+    "new_http_calls": 0
+  },
+  "independent_exports": {
+    "evidence-audit.json": "64a387a912a934fb9d221aa77dec12e36818f0a6ddd4fda399911dedd12999f1",
+    "mode-isolation.json": "1255ef9d7d3f0e62e6171c44a66c4e3fcbd74752295809a1650088fcea565707",
+    "panel-results.csv": "0e90015703029f2b446b5bc9ed35274ace19ff4d122644c37983b8a73f2a6258",
+    "panel-results.json": "848498f5c85a7e8fd655081515d86084b6628b245fcef03c3f47f64bac916216"
+  },
+  "limitations": [
+    "Exposed synthetic engineering panel; not model effectiveness or benchmark repair rate.",
+    "No real provider/HTTP calls were made by the panel or this audit; token fields are conservative reservations, not usage.",
+    "This file-only audit verifies persisted runtime/cleanup evidence; it did not query live Docker or rerun any process.",
+    "No format corrections or second-round feedback paths were executed in actual24; their dynamic absence-of-leak behavior is not proven by this panel.",
+    "Successful session open/close wall durations are within the case cap; actual24 does not independently prove timeout termination, and does not preserve a per-run absolute deadline field. Version-bound runtime timeout counterexamples remain separate evidence.",
+    "Model adoption, semantic causal attribution, hidden behavior and generalization are not proved.",
+    "Fresh/resume negative gates, adversarial observations, UNKNOWN/partial repair and alternative-consumer interrupt coverage remain separately evidenced by their own version-bound tests; actual24 does not replace them.",
+    "The source inventory digest covers exact current bound files; this is not a full new source audit.",
+    "Selected source snapshots use the bound protocol exclusions .git and .contractedge-deps; no other dot-files are ignored."
+  ],
+  "Full_equivalence": "Final C2 r2 versus D2 full request bytes exact for MODIFY-only and native; native DefaultAgent trace captured; not model-effectiveness evidence",
+  "original_recovery_fixes_retained": {
+    "src/contractedge/execution/literal.py": "24abbed6150a46434f6fb89bfbafef6d49f2d72e083277859e5c1432f8aa3d29",
+    "src/contractedge/orchestration/resume.py": "30383f81e3b80078f7e476d5745d06ca1c8786737102c4f9c02a0a6702373bb5"
+  },
+  "real_model_single_case": "NOT_RUN",
+  "github_actions": "NOT_RUN_AT_LOCAL_VALIDATION",
+  "new_model_http_calls": 0,
+  "formal_ready": false
+}
