@@ -9,6 +9,7 @@ from contextlib import nullcontext
 from dataclasses import asdict, is_dataclass, replace
 import json
 import os
+import sys
 import time
 from pathlib import Path
 import uuid
@@ -16,7 +17,6 @@ from typing import Mapping
 
 from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset_envelope
 from contractedge.changeset.prompt import build_changeset_request
-from contractedge.changeset.topomen import translate_for_topomen
 from contractedge.changeset.validate import validate_semantic_changeset
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
 from contractedge.execution.runtime_preflight import check_runtime, scoped_runtime_environment
@@ -26,7 +26,9 @@ from contractedge.dataset.benchmark import execution_contract, editable_policy, 
 from contractedge.diagnosis.validate import validate_diagnosis
 from contractedge.execution.public import BenchmarkPublicRunner
 from contractedge.execution.review import ModelPublicReviewer
-from contractedge.execution.topomen import ModelPlanExecutor, PlanRejected, accept_plan
+from contractedge.contracts.repair_intent import SemanticChangeSetIntent
+from contractedge.execution.consumer import (ConsumerContext, BudgetPort, build_consumer,
+    validate_consumer, execution_review_mapping, PlanRejected)
 from contractedge.model.budget import BudgetedProvider, BudgetExceeded
 from contractedge.model.admission import quote_request, context_fits, complete_quoted
 from contractedge.orchestration.evidence_delivery import select_observations_delivery
@@ -35,7 +37,8 @@ from contractedge.orchestration.recorder import RunRecorder, ProviderJournal, pr
 from contractedge.orchestration.semantic_delivery import SemanticDeliveryError, delivery_context, install_monitor
 from contractedge.contracts.stages import StageResult, front_status, feedback_status, stop_status
 from contractedge.orchestration.state import RepairEngine
-from contractedge.execution.topomen import execution_review_mapping
+from contractedge.orchestration.trial import TrialSession, initialize_recovery
+
 from contractedge.orchestration.feedback import make_feedback, validate_feedback, review_plan_with_retained, feedback_prompt_view
 from contractedge.orchestration.runner import run_front_half, required_planning_source_support, required_source_prerequisites
 from contractedge.retrieval.candidates import CandidateSet
@@ -193,51 +196,31 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
             'model_calls': list(trace['model_calls']) + [call]}
 
 
-def rebind_execution_plan(plan: Mapping, source: Path, feedback: Mapping, *, prior_execution=None) -> dict:
-    """Keep semantic intent for EXECUTE retries, bind only fresh concrete targets."""
-    snapshot = compute_snapshot(source)
-    rebound = json.loads(json.dumps(plan))
-    old_digest = canonical_digest(plan)
-    rebound['snapshot_id'] = snapshot.snapshot_id
-    for op in rebound['operations']:
-        target = op['target']
-        if target['kind'] == 'EXISTING':
-            if target['path'] not in snapshot.file_digests:
-                raise PlanRejected('Execution retry lost an existing target; rediagnosis required')
-            target['snapshot_id'] = snapshot.snapshot_id
-            target['content_digest'] = snapshot.file_digests[target['path']]
-        elif (source / target['proposed_path']).exists():
-            # CREATE already materialized; revise its concrete implementation.
-            op['operation'] = 'MODIFY'
-            op['target'] = {'kind': 'EXISTING', 'path': target['proposed_path'],
-                            'snapshot_id': snapshot.snapshot_id,
-                            'content_digest': snapshot.file_digests[target['proposed_path']],
-                            'unit_refs': [], 'locator': {}}
-    rebound['execution_continuation'] = {'prior_plan_digest': old_digest,
-        'feedback_digest': canonical_digest(feedback), 'route': 'EXECUTE',
-        'interpretation': 'Semantic intent retained; old diagnosis evidence is historical, not rebound as fresh facts.'}
-    proof=prior_execution or {}
-    if (proof.get('status')=='APPLIED' and proof.get('to_snapshot')==snapshot.snapshot_id
-            and proof.get('from_snapshot')==plan['snapshot_id']
-            and proof.get('acceptance',{}).get('plan_digest')==old_digest):
-        edited={r['change_id'] for r in proof.get('semantic_edit_trace',[])
-                if any(e.get('old_text')!=e.get('new_text') for e in r.get('literal_edits',[]))}
-        eligible={}
-        for op in rebound['operations']:
-            target=op['target'];cid=op['change_id'];path=target.get('path')
-            if (cid in edited and cid in proof.get('change_ids',[]) and target['kind']=='EXISTING'
-                    and proof.get('file_digests',{}).get(path)==snapshot.file_digests.get(path)):
-                eligible[cid]=dict(path=path,snapshot_id=snapshot.snapshot_id,content_digest=snapshot.file_digests[path])
-        rebound['execution_continuation'].update(prior_applied_operations=eligible,
-            prior_execution_digest=canonical_digest(proof),
-            coverage_boundary='Previously applied source transaction, not semantic completion. All postconditions and preservation remain required.')
-    return rebound
+def rebind_execution_plan(*args, **kwargs):
+    """Compatibility export; new engine retries go through consumer.prepare."""
+    from contractedge.execution.consumers.topomen import rebind_execution_plan as rebind
+    return rebind(*args, **kwargs)
 
 
 def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
                 output: str | Path, provider, token_counter, config: Mapping, *,
                 initial_trace: Mapping | None = None, public_runner=None,
-                executor=None, reviewer=None) -> dict:
+                executor=None, reviewer=None, consumer=None, resume=False, consume_received_response=False) -> dict:
+    from contractedge.orchestration.trial import run_lease
+    with run_lease(output):
+        if resume:
+            from contractedge.orchestration.resume import resume_repair_case
+            return resume_repair_case(public_root, tools_root, case_id, output, config,
+                public_runner=public_runner, executor=executor, consumer=consumer,
+                consume_received_response=consume_received_response)
+        return _repair_case_locked(public_root, tools_root, case_id, output, provider, token_counter, config,
+            initial_trace=initial_trace, public_runner=public_runner, executor=executor, consumer=consumer, reviewer=reviewer)
+
+
+def _repair_case_locked(public_root: str | Path, tools_root: str | Path, case_id: str,
+                output: str | Path, provider, token_counter, config: Mapping, *,
+                initial_trace: Mapping | None = None, public_runner=None,
+                executor=None, reviewer=None, consumer=None) -> dict:
     isolated = (config.get('public_runtime') == 'isolated'
         or getattr(public_runner, 'requires_public_profile', False) is True)
     if isolated:
@@ -263,14 +246,14 @@ def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
             result = check_runtime(**options)
         with scoped_runtime_environment((result or {}).get('environment_overrides')):
             return _repair_case_impl(public_root, tools_root, case_id, output, provider, token_counter, config,
-                initial_trace=initial_trace, public_runner=public_runner, executor=executor, reviewer=reviewer,
+                initial_trace=initial_trace, public_runner=public_runner, executor=executor, reviewer=reviewer, consumer=consumer,
                 _runtime_preflight=result, _runtime_started=started)
 
 
 def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: str,
                 output: str | Path, provider, token_counter, config: Mapping, *,
                 initial_trace: Mapping | None = None, public_runner=None,
-                executor=None, reviewer=None, _runtime_preflight=None, _runtime_started=None) -> dict:
+                executor=None, reviewer=None, consumer=None, _runtime_preflight=None, _runtime_started=None) -> dict:
     root = Path(public_root).resolve(strict=True)
     from contractedge.dataset.admission import check_case_admission
     check_case_admission(root, case_id, config)
@@ -280,7 +263,18 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
     out.mkdir(parents=True, exist_ok=False)
     method_value, projection = method_input_from_task(root, case_id)
     backend = config.get('execution_backend', 'direct')
+    if consumer is not None and executor is not None:
+        raise ValueError('Specify consumer or legacy executor, not both')
+    consumer = consumer or build_consumer(backend, executor=executor,
+        on_trace=lambda trace: write_json(out / 'topomen-native-last-trace.json', trace))
+    consumer_capabilities = validate_consumer(consumer)
+    if 'SEMANTIC_CHANGESET' not in consumer_capabilities.supported_intents:
+        raise PlanRejected('Full mode requires SEMANTIC_CHANGESET consumer support before model dispatch')
     configured = resolve_execution_capabilities(config.get('public_execution_capabilities'), backend=backend)
+    configured['supported_operations'] = [op for op in configured['supported_operations']
+        if op in consumer_capabilities.supported_operations]
+    if not configured['supported_operations']:
+        raise PlanRejected('Consumer has no permitted operation before model dispatch')
     projected = resolve_execution_capabilities(projection.get('public_execution_capabilities'), backend=backend)
     projected['supported_operations'] = [op for op in projected['supported_operations'] if op in configured['supported_operations']]
     config = {**dict(config), 'public_execution_capabilities': resolve_execution_capabilities(projected, backend=backend)}
@@ -290,9 +284,15 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
     run_id = initial_trace['run_id'] if initial_trace else str(config.get('run_id') or uuid.uuid4())
     journal = ProviderJournal(RunRecorder(out, run_id=run_id, input_digest=method_input.input_digest),
                               prior_calls=initial_trace['model_calls'] if initial_trace else ())
+    def persist_calls(calls):
+        journal.callback(calls, lambda actual: write_json(out / 'model_calls.json', actual))
+        # Seal the original reservation before dispatch, and its later response
+        # settlement. These are revisions of the existing ledger, not new calls.
+        primary = sys.exc_info()[1] if calls and calls[-1].get('error') else None
+        preserve_error(primary, lambda: journal.recorder.seal_ledger(segment_index=journal.segment_index))
     budget = BudgetedProvider(provider, token_counter, max_tokens=int(config.get('max_total_tokens', 160000)),
         max_seconds=float(config.get('max_elapsed_seconds', 2400)), max_calls=int(config.get('max_model_calls', 24)),
-        on_update=lambda calls: journal.callback(calls, lambda actual: write_json(out / 'model_calls.json', actual)))
+        on_update=persist_calls)
     journal.attach(budget)
     semantic_monitor = install_monitor(budget, journal)
     if _runtime_started is not None:
@@ -303,24 +303,17 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         method_probe_profiles=config.get('method_probe_profiles', []))
     requires_public_profile = (config.get('public_runtime') == 'isolated'
         or getattr(runner, 'requires_public_profile', False) is True)
-    if executor is None:
-        backend = config.get('execution_backend', 'direct')
-        if backend == 'topomen_agent':
-            from contractedge.execution.topomen_agent import TopoMenAgentExecutor
-            executor = TopoMenAgentExecutor(budget, token_counter, config,
-                on_trace=lambda trace: write_json(out / 'topomen-native-last-trace.json', trace))
-        elif backend == 'direct':
-            executor = ModelPlanExecutor(budget, token_counter, config)
-        else:
-            raise ValueError('Unknown execution backend: ' + str(backend))
     reviewer = reviewer or ModelPublicReviewer(budget, token_counter, config)
     workspace = out / 'workspace'
     trace, plan, feedback, current_observation = None, None, None, None
+    execution_input = None
     last_execution_attempt = None
     last_applied_execution = None
     execution_format_corrections = 0
     rejected_trials = []
+    selected_comparison = None
     active_checkpoint = None
+    active_trial = None
     active_incumbent = None
     retry_restored_candidate = False
     source_integrity_verified = True
@@ -330,6 +323,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
     source = None
     initial_snapshot = method_input.initial_snapshot_id
     engine = journal.engine = RepairEngine(journal.recorder, initial_snapshot, config)
+    engine.policy.on_update = lambda usage: journal.recorder._write_pending('journal/policy-usage.json', list(usage))
     max_rounds = int(config.get('max_rounds', 2))
     if not 1 <= max_rounds <= 16:
         raise ValueError('max_rounds must be between1and16')
@@ -412,9 +406,13 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         from contractedge.orchestration.candidate_guard import restore_candidate
         trial = compute_snapshot(source).snapshot_id
         destination = Path(destination)
+        if active_trial is not None:
+            active_trial.rollback_intent()
         try:
             restore_candidate(source, checkpoint)
         except BaseException as exc:
+            if active_trial is not None:
+                preserve_error(exc, lambda: active_trial.record_rollback(error=exc))
             def record_failure():
                 actual = compute_snapshot(source).snapshot_id
                 write_json(destination, {'status': 'RESTORE_FAILED', 'from_snapshot': trial,
@@ -425,6 +423,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             preserve_error(exc, record_failure)
             raise
         actual = compute_snapshot(source).snapshot_id
+        if active_trial is not None:
+            active_trial.record_rollback()
         write_json(destination, {'status': 'RESTORED', 'from_snapshot': trial, 'to_snapshot': actual,
                                  'expected_snapshot': checkpoint['snapshot_id']})
         record_stage('rollback', attempt_id=attempt_id, snapshot_id=actual, status='RESTORED',
@@ -453,6 +453,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         reserve_public_time()
         record = runner.prepare(case_id, workspace, out / 'prepare')
         source = Path(record['source_root']).resolve(strict=True)
+        run_recovery_identity = initialize_recovery(journal.recorder, source, method_value, config,
+            consumer_id=consumer_capabilities.consumer_id)
         if compute_snapshot(source).snapshot_id != initial_snapshot:
             raise ValueError('Public prepare source tree differs from frozen MethodInput S0')
         if config.get('method_probe_profiles'):
@@ -569,26 +571,34 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 status = trace['status']
                 errors.extend(trace.get('errors', []))
                 break
-            if ((feedback and feedback['route'] == 'EXECUTE') or retry_restored_candidate) and plan:
-                plan = rebind_execution_plan(plan, source, feedback or {}, prior_execution=last_applied_execution)
-            else:
+            rebind_input = bool(((feedback and feedback['route'] == 'EXECUTE') or retry_restored_candidate)
+                                and execution_input is not None)
+            if not rebind_input:
                 validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
-                plan = translate_for_topomen(trace['changeset'], 'contractedge.topomen_plan.v1',
-                    diagnosis=trace.get('diagnosis'), public_capabilities=config.get('public_execution_capabilities'),
-                    source_support=trace['run_context']['retrieval_config'].get('necessary_source_support'))
+            intent = SemanticChangeSetIntent(trace['changeset'], trace.get('diagnosis'),
+                tuple(trace['run_context']['retrieval_config'].get('necessary_source_support') or ()))
+            context = ConsumerContext(source, policy, config, method_input.requirement_text,
+                tuple(method_input.declared_artifacts), tuple(observations), feedback, last_execution_attempt,
+                execution_input, last_applied_execution, rebind_input)
+            execution_input = consumer.prepare(intent, context)
+            plan = dict(execution_input.payload)
             before = compute_snapshot(source).snapshot_id
             retry_restored_candidate = False
             incumbent_observation, incumbent_feedback = current_observation, feedback
             incumbent_execution = last_applied_execution
-            checkpoint = None
-            if requires_public_profile or config.get('candidate_guard_enabled'):
-                from contractedge.orchestration.candidate_guard import checkpoint_candidate
-                from contractedge.execution.topomen import operation_path
-                checkpoint = checkpoint_candidate(source,[operation_path(op) for op in plan['operations']],
-                    directory/'incumbent-checkpoint.json')
-                active_checkpoint = checkpoint
-                active_incumbent = (current_observation,feedback)
+            guard_enabled = requires_public_profile or config.get('candidate_guard_enabled')
+            from contractedge.orchestration.candidate_guard import checkpoint_candidate
+            checkpoint = checkpoint_candidate(source,list(execution_input.target_paths),
+                directory/'incumbent-checkpoint.json')
+            active_checkpoint = checkpoint
+            active_incumbent = (current_observation,feedback)
             write_json(directory / 'plan.json', plan)
+            write_json(directory / 'consumer-input.json', {
+                'schema_version':'ce.repair_consumer_input.v1', 'consumer_id':execution_input.consumer_id,
+                'intent_kind':execution_input.intent_kind, 'execution_digest':execution_input.digest(),
+                'snapshot_id':execution_input.snapshot_id, 'input_digest':execution_input.input_digest,
+                'target_paths':list(execution_input.target_paths),
+                'operation_coverage':execution_input.operation_coverage})
             review_plan = review_plan_with_retained({**trace['changeset'],
                 'declared_artifacts': list(method_input.declared_artifacts),
                 'public_execution_capabilities': config.get('public_execution_capabilities')}, feedback)
@@ -596,18 +606,24 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             relative = directory.relative_to(out).as_posix()
             record_stage('consumer_projection', snapshot_id=before,
                 inputs=(relative + '/front.trace.json',),
-                outputs=(relative + '/plan.json', relative + '/public-review-plan.json'),
+                outputs=(relative + '/plan.json', relative + '/consumer-input.json', relative + '/public-review-plan.json'),
                 projections=(relative + '/public-evidence.delivery.json',),
                 predecessor=('planning', 'front_delivery', 'begin'))
-            engine.step(StageResult('plan', 'READY',
+            plan_decision = engine.step(StageResult('plan', 'READY',
                 journal.capture(relative + '/plan.json', 'CONSUMER_PLAN', snapshot_id=before), snapshot_id=before))
+            active_trial = TrialSession.begin(journal.recorder, 'round-' + str(round_id), source, plan,
+                run_recovery_identity, plan_path=relative + '/plan.json',
+                incumbent_observation=incumbent_observation, incumbent_feedback=incumbent_feedback,
+                intent_effect_id=plan_decision.effect_id, target_paths=execution_input.target_paths)
+            consumer.trial_session = active_trial
             engine.project(status='EXECUTING', case_id=case_id, round_id=round_id)
             execution_call_start = journal.position()
             execution_status, review = 'INVALID_OBSERVATION', None
             rejection_kind = None
             try:
-                acceptance = accept_plan(plan, source, policy)
-                write_json(directory / 'consumer-acceptance.json', acceptance)
+                accepted_input = consumer.accept(execution_input, compute_snapshot(source), policy)
+                write_json(directory / 'consumer-acceptance.json', dict(accepted_input.acceptance))
+                active_trial.record_authority(accepted_input)
             except PlanRejected as exc:
                 rejection_kind = 'PLAN'
                 execution_result = {'status': 'PLAN_REJECTED', 'error': str(exc)}
@@ -617,22 +633,25 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     calls_before_execution = len(budget.calls)
                     rejection_kind = None
                     try:
+                        # Refresh only correction context; retain accepted source and policy authority.
+                        execution_input = replace(execution_input, context=replace(execution_input.context,
+                            previous_attempt=last_execution_attempt))
+                        accepted_input = replace(accepted_input, execution_input=execution_input)
                         with semantic_monitor.scope(semantic_context_for('EXECUTION_ROUND_' + str(round_id),
                                 evidence=observations)):
-                            execution_result = executor.execute(plan, source, policy,
-                                requirement=method_input.requirement_text, declared_artifacts=method_input.declared_artifacts,
-                                observations=observations, feedback=feedback, previous_attempt=last_execution_attempt)
+                            execution_result = consumer.execute(accepted_input,
+                                BudgetPort(budget, token_counter, config, active_trial))
                     except SemanticDeliveryError:
                         raise
                     except (PlanRejected, ValueError) as exc:
                         rejection_kind = 'EXECUTION'
                         execution_result = {'status': 'CONCRETE_EDIT_REJECTED', 'error': str(exc)}
-                        if getattr(executor, 'last_trace', None) is not None:
-                            execution_result['topomen_trace'] = executor.last_trace
+                        if getattr(consumer, 'last_trace', None) is not None:
+                            execution_result['topomen_trace'] = consumer.last_trace
                     completed_response = False
                     if len(budget.calls) > calls_before_execution:
                         call = budget.calls[-1]
-                        if (call.get('prompt_version') == 'topomen-source-execution.v1'
+                        if (call.get('prompt_version') in consumer_capabilities.execution_prompt_versions
                                 and isinstance(call.get('response_content'), str) and not call.get('error')):
                             completed_response = True
                             last_execution_attempt = {'model_response': call['response_content'],
@@ -662,6 +681,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 execution_result = {**execution_result, 'generation_attempts': len(attempts),
                                     'format_corrections_used': execution_format_corrections}
             write_json(directory / 'execution.json', execution_result)
+            active_trial.record_applied(execution_result)
             if execution_result.get('status')=='APPLIED':
                 last_applied_execution=execution_result
             patch_info = runner.export(workspace, directory / 'candidate.patch', directory / 'export')
@@ -679,6 +699,16 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 reserve_public_time()
                 current_observation = observe_recorded(directory / 'public', directory / 'public-observation.json',
                     stage='observe', attempt_id='round-' + str(round_id), predecessor=('execute',))
+                observed_source = compute_snapshot(source).snapshot_id
+                if current_observation.get('snapshot_id') == observed_source:
+                    active_trial.record_observed(current_observation)
+                else:
+                    # The observer already retained the rejected identity and
+                    # raw payload. Do not record a successful OBSERVED effect;
+                    # retain the existing no-dispatch UNKNOWN review and guard.
+                    active_trial.record('OBSERVATION_REJECTED', snapshot_id=observed_source,
+                        reported_snapshot_id=current_observation.get('snapshot_id'),
+                        observation_digest=canonical_digest(current_observation))
                 execution_status = current_observation['status']
                 review_delivery = select_observations_delivery(
                     current_observation['observations'], method_input.requirement_text + '\n' + '\n'.join(
@@ -770,7 +800,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 'EDIT_REJECTED' if rejection_kind == 'EXECUTION' else 'PLAN_INVALID' if rejection_kind == 'PLAN' else
                 feedback_status(feedback), journal.latest['feedback'], snapshot_id=after, route=feedback['route'],
                 terminal_status=stop_status(feedback)))
-            if checkpoint and rejection_kind is None and incumbent_observation:
+            selection_decision = {'decision':'PROMOTE','interpretation':'Existing candidate selection protocol'}
+            if guard_enabled and checkpoint and rejection_kind is None and incumbent_observation:
                 from contractedge.orchestration.candidate_guard import compare_candidate_checks, preservation_check_ids, restore_candidate
                 protected_checks = preservation_check_ids(review_plan, incumbent_feedback)
                 if requires_public_profile:
@@ -788,6 +819,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                             'reason': 'Independent observation or runtime cleanup is incomplete; trial cannot be promoted.'}],
                         'interpretation': 'Incomplete isolated observation; retain the incumbent without further review dispatch.'}
                 write_json(directory/'candidate-decision.json',decision)
+                selection_decision = decision
                 record_stage('candidate_decision', snapshot_id=after, status=decision['decision'],
                     outputs=(relative + '/candidate-decision.json',), predecessor=('feedback', 'observe', 'semantic_outcome'))
                 engine.step(StageResult('candidate_selection',
@@ -815,6 +847,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     current_observation=incumbent_observation
                     feedback=incumbent_feedback
                     active_checkpoint=None
+                    active_trial=None
                     after=before
                     retry_restored_candidate=(round_id+1<max_rounds and (
                         decision['decision']=='REJECT_REGRESSION'
@@ -834,6 +867,9 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     write_json(out/'selected-candidate.json',dict(snapshot_id=before,selection='INCUMBENT',rejected_trials=rejected_trials))
                     if retry_restored_candidate:continue
                     break
+            active_trial.select(selection_decision, feedback, patch_info)
+            selected_comparison = selection_decision
+            active_trial=None
             active_checkpoint=None
             rounds.append({'round_id': round_id, 'from_snapshot': before, 'to_snapshot': after,
                            'feedback': str((directory / 'feedback.json').relative_to(out)),
@@ -907,6 +943,9 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
               'status': status, 'candidate': final_patch, 'rounds': rounds,
               'candidate_selection': {'rejected_trials':len(rejected_trials),'decisions':rejected_trials},
               'last_feedback': feedback, 'budget': budget.summary(), 'errors': errors,
+              'exportable': final_patch is not None,
+              'public_semantic_status': (feedback or {}).get('semantic_outcome', 'UNKNOWN'),
+              'preservation_comparison': selected_comparison,
               'execution_format_corrections_used': execution_format_corrections,
               'hidden_evaluation': 'NOT_RUN; final patch must be scored in an independent evaluator process',
               'scope': 'Public repair execution. A public review is an uncertain method signal, not a benchmark PASS.'}

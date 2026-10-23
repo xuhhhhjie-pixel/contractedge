@@ -39,6 +39,9 @@ class PolicyLedger:
             raise ValueError("Existing policy allowance exhausted: " + name + "/" + scope)
         used = self.used(name, scope) + 1
         self._used[name, scope] = used
+        callback = getattr(self, 'on_update', None)
+        if callback is not None:
+            callback(self.snapshot())
         return used
 
     def snapshot(self):
@@ -112,6 +115,39 @@ class RepairEngine:
     def __init__(self, recorder, snapshot_id, config):
         self.recorder, self.policy = recorder, PolicyLedger(config)
         self.state = RepairState(snapshot_id)
+
+    @classmethod
+    def restore_committed(cls, recorder, snapshot_id, config, *, policy_usage=()):
+        """Rehydrate the original state/counters before any recovery transition."""
+        if recorder._path('journal/transitions/writer.lock').exists():
+            raise ValueError('Unresolved transition writer lock; recovery cannot claim commit authority')
+        engine=cls(recorder,snapshot_id,config)
+        paths=sorted(recorder._path('journal/transitions').glob('revision-*.json'))
+        previous=None
+        for revision,path in enumerate(paths,1):
+            commit=recorder._read(path.relative_to(recorder.root).as_posix())
+            if (path.name!='revision-'+str(revision).zfill(6)+'.json'
+                    or commit['run_id']!=recorder.run_id or commit['input_digest']!=recorder.input_digest
+                    or commit['expected_revision']!=revision-1 or commit['committed_revision']!=revision):
+                raise ValueError('Recovered transition chain differs')
+            previous=commit['next_state']
+        if previous:
+            data=dict(previous);data.pop('schema_version',None)
+            for key in ('incumbent','trial','selected','diagnosis_ref'):
+                if data.get(key) is not None:data[key]=recorder.verify_artifact(data[key])
+            for key in ('obligation_refs','artifact_refs'):
+                data[key]=tuple(recorder.verify_artifact(ref) for ref in data[key])
+            data['policy_usage']=tuple(data['policy_usage'])
+            engine.state=RepairState(**data)
+        usage={}
+        for row in [*engine.state.policy_usage,*policy_usage]:
+            if (row['policy'] not in engine.policy.limits or row['limit']!=engine.policy.limit(row['policy'])
+                    or type(row['used']) is not int or not 0<=row['used']<=row['limit']):
+                raise ValueError('Recovered policy allowance differs')
+            key=(row['policy'],row['scope']);usage[key]=max(usage.get(key,0),row['used'])
+        engine.policy._used=usage
+        engine.state=replace(engine.state,policy_usage=engine.policy.snapshot())
+        return engine
 
     def step(self, result, *, current_snapshot=None):
         from contractedge.orchestration.transitions import transition
