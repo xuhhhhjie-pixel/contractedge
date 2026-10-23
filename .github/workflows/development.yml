@@ -94,7 +94,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 3
+          fetch-depth: 0  # ancestry-bound panels require the recorded C1 base
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'

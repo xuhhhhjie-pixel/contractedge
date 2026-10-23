@@ -42,3 +42,5 @@
 安装、镜像、隔离运行、READY 及测试命令见 [开发入口](../../README.md)。Linux / Python 3.10 或 3.12 为当前已验证范围；先执行 `python scripts/verify_development_snapshot.py`，再运行公开例子。默认 host 路径只允许 synthetic，真实 provider 只走已验证 isolated 路径。
 
 恢复优化时从本收尾版本接续，先处理上述 P0 协议问题，保护旧冻结与原始失败证据；同版回归通过后再发布新方法身份。此次仅完成架构阶段收尾，不宣布整个优化目标或论文实验完成。
+
+CI 汇总检出历史另有必要修订：见 [CI 历史修复](2026-10-24-ci-history-wrapup.md)。当前发布配置冻结以 CURRENT_STATUS 的 architecture-wrapup-ci-history-20261024 指针为准，运行源码仍与上述 r2 相同。
