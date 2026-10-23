@@ -300,6 +300,8 @@ def _parser() -> argparse.ArgumentParser:
     repair.add_argument("--config", required=True)
     repair.add_argument("--output", required=True)
     repair.add_argument("--initial-trace", help="resume one matching ready development trace; its prior budget is retained")
+    repair.add_argument('--resume-output', action='store_true', help='recover this existing output to a terminal selected candidate without model dispatch')
+    repair.add_argument('--consume-received-response', action='store_true', help='with --resume-output, consume one verified durable response at most once before conservative rollback')
     batch = subparsers.add_parser('repair-batch', help='resumable public repair cohort; independent hidden scoring is separate')
     batch.add_argument('--public-root', required=True)
     batch.add_argument('--tools-root', required=True)
@@ -398,13 +400,20 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "repair":
             from contractedge.orchestration.repair import repair_case
             config = _json_file(args.config)
-            provider, tokenizer = _build_provider(config)
-            if config.get("ollama_model_digest"):
+            if args.consume_received_response and not args.resume_output:
+                raise ValueError('--consume-received-response requires --resume-output')
+            if args.resume_output and args.initial_trace:
+                raise ValueError('--resume-output and --initial-trace are different recovery protocols')
+            provider, tokenizer = (None, None) if args.resume_output else _build_provider(config)
+            if config.get("ollama_model_digest") and not args.resume_output:
                 _verify_ollama_model(config)
             initial = _json_file(args.initial_trace) if args.initial_trace else None
             report = repair_case(args.public_root, args.tools_root, args.case_id, args.output,
-                                 provider, tokenizer, config, initial_trace=initial)
+                                 provider, tokenizer, config, initial_trace=initial,
+                                 resume=args.resume_output, consume_received_response=args.consume_received_response)
             print(json.dumps({key: report[key] for key in ["case_id", "status", "run_id", "candidate", "errors"]}, ensure_ascii=False))
+            if args.resume_output:
+                return 0 if report['exportable'] and not report['errors'] and report['status'].startswith('RECOVERED_') else 1
             return 0 if report["status"] in {"PUBLIC_REVIEW_COMPLETE", "PUBLIC_EXECUTION_COMPLETE"} else 1
         if args.command == "evaluate-benchmark":
             from contractedge.evaluation.benchmark import evaluate_benchmark

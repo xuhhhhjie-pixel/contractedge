@@ -9,11 +9,11 @@
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "current_development": {
-    "snapshot": "docs/development/architecture-c1-state-cli-20261024.snapshot.json",
-    "snapshot_id": "architecture-c1-state-cli-20261024",
+    "snapshot": "docs/development/architecture-c2-transactions-consumers-20261024-r2.snapshot.json",
+    "snapshot_id": "architecture-c2-transactions-consumers-20261024-r2",
     "snapshot_role": "CURRENT_FROZEN_DEVELOPMENT",
     "status": "VALIDATED_OFFLINE",
-    "scope": "C1 state transitions, original error preservation and persistent standard CLI front; C2/D1/D2 and final real single-case validation remain separate.",
+    "scope": "Persistent candidate effects, conservative recovery and replaceable consumers; D2 final modes/panel and paid final single-case validation remain separate.",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "planned_verification_command": "python scripts/verify_development_snapshot.py --snapshot docs/development/architecture-b-runtime-observer-20261023.snapshot.json --require-current-bindings",
     "test_command": "python scripts/test_portable.py",
@@ -23,11 +23,12 @@
     "github_actions_execution": "NOT_RUN_FOR_THIS_SNAPSHOT_AT_FREEZE",
     "formal_effectiveness": "NOT_EVALUATED",
     "verification": {
-      "portable": "1155 passed, 4 skipped, 86 subtests passed in 210.82s (0:03:30)",
-      "native": "9 passed in 5.99s",
-      "combined": "264 passed, 45 subtests passed in 123.02s (0:02:03)",
       "freeze": "PASS before/after, explicit/default",
-      "Full_equivalence": "EXACT_EQUIVALENT five repair fixtures; CLI four variants separately equal"
+      "portable": "1228 passed, 4 skipped, 86 subtests passed in 313.15s (0:05:13)",
+      "native": "9 passed in 7.85s",
+      "combined": "337 passed, 45 subtests passed in 243.91s (0:04:03)",
+      "actual_trial_matrix": "8 cells PASS; 14 real RuntimeSession sessions, 28 candidate/observer containers; cleanup and absence confirmed",
+      "Full_equivalence": "EXACT_EQUIVALENT five Full fixtures on final P2-fixed source"
     },
     "last_validated_baseline": {
       "snapshot": "docs/development/architecture-a-delivery-admission-20261023.snapshot.json",
@@ -47,12 +48,12 @@
       "runtime_limits": "Actual 2CPU/2GiB verified"
     },
     "runtime_limits": "Actual cgroup CPU 200000/100000 and memory 2147483648 verified; RuntimeSession integration is included in portable.",
-    "validation": "docs/development/architecture-c1-state-cli-20261024.validation.json"
+    "validation": "docs/development/architecture-c2-transactions-consumers-20261024-r2.validation.json"
   },
   "next_actions": [
-    "Inspect the exact C1/CLI commit CI and draft PR stacked on PR #10; do not merge main automatically.",
-    "Integrate frozen C2/D1 combined delta while retaining the new CLI run branch; actual Docker, new same-version freeze and stage delivery remain required.",
-    "Integrate four independent modes and six-case actual isolated panel; keep formal_ready=false and original cumulative paid allowance."
+    "Review and publish C2/D1 stage draft PR stacked on PR #11; do not merge main automatically.",
+    "Apply approved D2-only modes/profile delta to this final C2 baseline without overwriting literal/resume fixes; rebuild inventory/bindings and actually run all 24 isolated cells.",
+    "Keep formal_ready=false; final paid single-case validation requires complete offline gates, original cumulative money ledger and safe credentials."
   ],
   "historical_status": {
     "scope": "REFERENCE_ONLY: the following original status/results are historical records, not current development gates or current method scores.",

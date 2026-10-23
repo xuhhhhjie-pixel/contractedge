@@ -1,0 +1,110 @@
+{
+  "schema_version": "ce.development_validation.v1",
+  "development_snapshot_id": "architecture-c2-transactions-consumers-20261024",
+  "snapshot_sha256": "6fce97d8bb2186bff48b65a0330429f3c9d05b87e2ec2b24c7e8cfe2a94d0b11",
+  "source_sha256": "8e3228f639570ad867e29d75a1b71b5528c18c2ea1e9e1f5b9c9ff2d85c50fb2",
+  "status": "VALIDATED_OFFLINE",
+  "portable": "Historical fixture / native integration modules NOT RUN: test_ready_support_consistency.py, test_probe_profiles_v2.py, test_compact_render_inventory.py, test_diagnosis_error_aggregation.py, test_structured_observation_adapters.py, test_topomen_agent.py\n....................................................... [  4%]\n........................................................................ [ 10%]\n........................................................................ [ 16%]\n........................................................................ [ 22%]\n................................................ [ 25%]\n..................................................................... [ 31%]\n........................................................................ [ 37%]\n...................................................................... [ 43%]\n........................................................................ [ 48%]\n........................................................................ [ 54%]\n.............................................................. [ 59%]\n........................................................................ [ 65%]\n.................................................ssss............................................................... [ 75%]\n...................................................................... [ 80%]\n........................................................................ [ 86%]\n........................................................................ [ 92%]\n........................................................................ [ 98%]\n...................                                                      [100%]\n1225 passed, 4 skipped, 86 subtests passed in 319.95s (0:05:19)\n",
+  "native": ".........                                                                [100%]\n9 passed in 8.10s\n",
+  "combined": "........................................................................ [ 21%]\n............................................................... [ 40%]\n..................................................................... [ 61%]\n............................................................... [ 79%]\n................................................... [ 95%]\n................                                                      [100%]\n334 passed, 45 subtests passed in 221.98s (0:03:41)\n",
+  "runtime_preflight": {
+    "attempts": [
+      {
+        "exit_code": 1,
+        "operation": "version"
+      },
+      {
+        "exit_code": 0,
+        "operation": "version"
+      },
+      {
+        "exit_code": 0,
+        "operation": "info"
+      },
+      {
+        "exit_code": 0,
+        "operation": "run"
+      }
+    ],
+    "capabilities": {
+      "CgroupVersion": "2",
+      "CpuCfsPeriod": true,
+      "CpuCfsQuota": true,
+      "MemoryLimit": true
+    },
+    "client_api": "1.43",
+    "context": null,
+    "elapsed_seconds": 0.8887861706316471,
+    "endpoint_source": "INHERITED_DOCKER_HOST",
+    "environment_overrides": {
+      "DOCKER_API_VERSION": "1.43"
+    },
+    "errors": [],
+    "global_configuration_changed": false,
+    "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+    "observed_limits": {
+      "cpu": "200000 100000",
+      "memory": "2147483648"
+    },
+    "required_cpus": "2",
+    "required_memory_bytes": 2147483648,
+    "runtime_verified": true,
+    "schema_version": "ce.runtime_preflight.v1",
+    "server_api": "1.43",
+    "status": "PASS"
+  },
+  "six_historical_native_exclusions_retained": true,
+  "regression_evidence": "/home/zyw/contractedge-collab-20261023/evidence/architecture-c2d1-final-regression-v1",
+  "regression_logs": {
+    "freeze": {
+      "sha256": "5312d47459ee0ff574f1542ed900bb33bf30bf1ac7b59c370e6886a4769ca4cc",
+      "elapsed_seconds": 0.1642446219921112
+    },
+    "preflight": {
+      "sha256": "909848438a02400fa79d9113e712c0f2b84e77a31a2a571cd1191fc055604d09",
+      "elapsed_seconds": 0.9661729373037815
+    },
+    "combined": {
+      "sha256": "476082a9ec48671d78a8439c44388bee542e60fdb6ec50567e4bcfab1a5aef4c",
+      "elapsed_seconds": 222.32430127635598
+    },
+    "portable": {
+      "sha256": "2bc329ecba183346dbea19fd43c151501f710b38f9306795591f401b65b050cf",
+      "elapsed_seconds": 320.4097195677459
+    },
+    "native": {
+      "sha256": "79a74903405b3e94a7a7147ad523514a7532a81c7c4f9dcdb6d7bc40511588d9",
+      "elapsed_seconds": 8.382683098316193
+    },
+    "freeze-after": {
+      "sha256": "5312d47459ee0ff574f1542ed900bb33bf30bf1ac7b59c370e6886a4769ca4cc",
+      "elapsed_seconds": 0.16466893628239632
+    }
+  },
+  "Full_equivalence": {
+    "status": "EXACT_EQUIVALENT",
+    "result_sha256": "f1ff5994abce3db1e06e25baf69553c8f71d4384c44b990bf4f5617c58cea805",
+    "scope": "Five Full fixtures; requests, calls, reservations, routes, feedback, selected source and patch signatures; final P2-fixed source"
+  },
+  "actual_trial_matrix": {
+    "status": "PASS",
+    "matrix_sha256": "0e5616c16e5ccca986f5d2a3f9ac4cf345ad1386b0d01c35beaeb1dd337a323c",
+    "binding_sha256": "7d9b608dd58c547a8acd2fbb7c6e2f6cca62e43b118251d5187648a7e8180b9e",
+    "cells": 8,
+    "actual_runtime_sessions": 14,
+    "candidate_observer_containers": 28,
+    "cleanup": "CONFIRMED",
+    "interpretation": "Normal cells passed bounded public behavior checks; crash cells correctly retained Broken incumbent and are engineering recovery, not target repair PASS"
+  },
+  "candidate_recovery": "Conservative terminal incumbent/verified-selection recovery; no automatic model-loop continuation; original budgets and unknown reservations retained",
+  "response_replay": "At most once direct/MODIFY after same-consumer reacceptance; native DefaultAgent rejects replay",
+  "recovery_p2_fixes": {
+    "scratch_outside_source": "24abbed6150a46434f6fb89bfbafef6d49f2d72e083277859e5c1432f8aa3d29",
+    "rollback_failure_closes_all_branches": "30383f81e3b80078f7e476d5745d06ca1c8786737102c4f9c02a0a6702373bb5",
+    "old_red_and_new_green": "evidence/ in previews/architecture-c2-recovery-review-fixes-20261024; retained without overwriting"
+  },
+  "new_model_http_calls": 0,
+  "formal_ready": false,
+  "github_actions": "NOT_RUN_AT_LOCAL_FREEZE",
+  "scope": "Persistent candidate effects, conservative recovery and replaceable consumers; D2 final modes/panel and paid final single-case validation remain separate."
+}

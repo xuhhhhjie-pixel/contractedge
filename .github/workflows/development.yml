@@ -65,6 +65,12 @@ jobs:
           python -m pytest -q
           tests/test_stage_transitions.py tests/test_state_primary_error.py
           tests/test_cli_front_journal.py
+      - name: Persistent candidate transactions and independent consumers
+        run: >-
+          python -m pytest -q
+          tests/test_trial_transactions.py tests/test_consumer_trial_recovery.py
+          tests/test_repair_consumers.py tests/test_recovery_edit_windows.py
+          tests/test_persist_calls_primary_error.py
       - name: Runtime and observer control tests without Docker
         run: |
           python -m pytest -q tests/test_runtime_session.py tests/test_public_observer.py
@@ -82,6 +88,8 @@ jobs:
         working-directory: system
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -113,6 +121,14 @@ jobs:
         run: python -m pytest -q tests/test_runtime_session_integration.py --basetemp "$RUNNER_TEMP/runtime-session-tests"
       - name: Three isolated public cases and fresh-process READY inheritance
         run: python -m pytest -q tests/test_public_isolated_demo.py -k real_ --basetemp "$RUNNER_TEMP/isolated-demo-tests"
+      - name: Persistent trial recovery with two real isolated consumers
+        run: >-
+          env -u DEEPSEEK_API_KEY -u OPENAI_API_KEY PYTHONDONTWRITEBYTECODE=1
+          python -B scripts/run_trial_isolation_panel.py --system "$PWD"
+          --binding configs/trial-isolation-acceptance-r2.example.json
+          --output "$RUNNER_TEMP/trial-recovery-tests"
+          --image "$CONTRACTEDGE_RUNTIME_IMAGE" --docker-host "$DOCKER_HOST"
+          --docker-api-version "${DOCKER_API_VERSION:-}"
       - name: Unchanged temporal resource-bound probe
         run: python -m pytest -q tests/test_temporal_response_bounds.py
       - name: Full portable development subset (six explicit exclusions)
@@ -126,6 +142,7 @@ jobs:
             ${{ runner.temp }}/runtime-preflight.json
             ${{ runner.temp }}/runtime-session-tests
             ${{ runner.temp }}/isolated-demo-tests
+            ${{ runner.temp }}/trial-recovery-tests
           if-no-files-found: warn
 
   native:
