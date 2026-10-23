@@ -1,0 +1,622 @@
+{
+  "schema_version": "ce.reliability_registration.v1",
+  "status": "FROZEN_G4_REQUIRED",
+  "selection_rule": "Per frozen primary_class, exclude A; prefer no recorded batch attempt, then ascending sha256(ce-reliability-closure-v1:case_id); inspect public project metadata only; no score selection",
+  "A": [
+    {
+      "case_id": "RW-CAND-130",
+      "primary_class": "R1",
+      "group": "A",
+      "exposure": "DEVELOPMENT_EXPOSED"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "primary_class": "R3",
+      "group": "A",
+      "exposure": "DEVELOPMENT_EXPOSED"
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "primary_class": "R2",
+      "group": "A",
+      "exposure": "DEVELOPMENT_EXPOSED"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "primary_class": "R2",
+      "group": "A",
+      "exposure": "DEVELOPMENT_EXPOSED"
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "primary_class": "R4",
+      "group": "A",
+      "exposure": "DEVELOPMENT_EXPOSED"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "primary_class": "R5",
+      "group": "A",
+      "exposure": "DEVELOPMENT_EXPOSED"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "primary_class": "R2",
+      "group": "A",
+      "exposure": "DEVELOPMENT_EXPOSED"
+    }
+  ],
+  "B": [
+    {
+      "case_id": "RW-CAND-114",
+      "primary_class": "R1",
+      "group": "B",
+      "split": "development",
+      "source_sha256": "3568f7d916d2dae1d5b2c3fb68a76fd2958f67dfa65a2e053566c6baa218d051",
+      "task_manifest_sha256": "adc1f50be2738aa0f590faca61ae74ed261533a888ab5af6bc31136fe1bbb002",
+      "repository_public_metadata": {
+        "path": "chart/Chart.yaml",
+        "sha256": "0ff374b2a103ab5eb611339647c61d3800248f5cad045bb215684848ebab5128",
+        "name": "wiremock",
+        "home": "https://wiremock.org",
+        "sources": [
+          "https://github.com/wiremock/helm-charts",
+          "https://github.com/wiremock/wiremock-docker",
+          "https://github.com/wiremock/wiremock"
+        ]
+      },
+      "prior_batch_attempts": [],
+      "exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "runtime_image": "alpine/helm@sha256:76c375eed56144c68d6197c55bc5a4552fb42002190b796729901cbab3ae6e51",
+      "resources": {
+        "cpus": 1,
+        "memory_bytes": 536870912,
+        "pids": 64
+      }
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "primary_class": "R1",
+      "group": "B",
+      "split": "development",
+      "source_sha256": "d271dd8d7fd5abe60d585fd98b2a9a91409c9aa19100f66813164d94aa160239",
+      "task_manifest_sha256": "7e9453097c61d61ffd0342110aa9f99956240c463c87c006b81ca0c20e066bff",
+      "repository_public_metadata": {
+        "path": "contractedge-source/charts/dfm-bq-load-alerter/Chart.yaml",
+        "sha256": "70e9604d766611a5b78d7951780c544011dbfbfd888ad04de2ca8816c387fe10",
+        "name": "dfm-bq-load-alerter",
+        "home": null,
+        "sources": null
+      },
+      "prior_batch_attempts": [],
+      "exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "runtime_image": "alpine/helm@sha256:76c375eed56144c68d6197c55bc5a4552fb42002190b796729901cbab3ae6e51",
+      "resources": {
+        "cpus": 1,
+        "memory_bytes": 536870912,
+        "pids": 64
+      }
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "primary_class": "R2",
+      "group": "B",
+      "split": "development",
+      "source_sha256": "40d9431438baa508ff92afde33e99ab575592d6ca88dd25c2a41cb8fe1316910",
+      "task_manifest_sha256": "bd9afa66b53653af466b5448acf2fc562961a52a587f733231b306bcf98c8240",
+      "repository_public_metadata": {
+        "path": "helm-controller-f37ac2aecf07f83e70bb9179e7c6c5053f7ddfeb/go.mod",
+        "sha256": "d7d378155967cce96d29893a7e6bba7f7edbafceae8e779fe72c62cb08fc5c27",
+        "module": "module github.com/fluxcd/helm-controller"
+      },
+      "prior_batch_attempts": [],
+      "exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "runtime_image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "resources": {
+        "cpus": 2,
+        "memory_bytes": 6442450944,
+        "pids": 512
+      }
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "primary_class": "R2",
+      "group": "B",
+      "split": "development",
+      "source_sha256": "804895d7bd54db581614bd48cea73b5430ddb2d542d42f565aca319faefd4356",
+      "task_manifest_sha256": "b2c6f1c638d7b7282492af397bbd589cb1820d5eb54f8ab771766aa909589d0e",
+      "repository_public_metadata": {
+        "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/go.mod",
+        "sha256": "827a62ba3623e6952b057b0697a3806ae23d0c23527aa608bf9c026449da9481",
+        "module": "module github.com/argoproj/argo-cd/v3"
+      },
+      "prior_batch_attempts": [],
+      "exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "runtime_image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "resources": {
+        "cpus": 2,
+        "memory_bytes": 6442450944,
+        "pids": 512
+      }
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "primary_class": "R3",
+      "group": "B",
+      "split": "development",
+      "source_sha256": "af9392e0682d280a6d169074fb9b7b58d6615a310b3c0b134019947cf27ad87d",
+      "task_manifest_sha256": "655e9f1d2564bee5c98b876443832d042672d8090a88b1c5133ba413452da27c",
+      "repository_public_metadata": {
+        "path": "go.mod",
+        "sha256": "c0ac35a71fca3f1bf46d228cc89c442b73f3e49bc15cbd9f9560fe6d0b4411f6",
+        "module": "module sigs.k8s.io/kubebuilder/v4"
+      },
+      "prior_batch_attempts": [],
+      "exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "runtime_image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "resources": {
+        "cpus": 2,
+        "memory_bytes": 6442450944,
+        "pids": 512
+      }
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "primary_class": "R3",
+      "group": "B",
+      "split": "development",
+      "source_sha256": "ef69a8f3a7256074085c02ecfb4a2d8b5b86eb73992d3fb91d649baf72b47906",
+      "task_manifest_sha256": "89cfec48901a5466ef1df68fd59ec4427ae43fee3622b08005ac81ac8d9e46ca",
+      "repository_public_metadata": {
+        "path": "skaffold-ca44de4e95e71bfb99ab2bbe846c4d3601fcbb1c/go.mod",
+        "sha256": "ff2a69ed8776530507c7bf2e70fad037bc6544a1149dab64dbb707e97d1bbd9d",
+        "module": "module github.com/GoogleContainerTools/skaffold/v2"
+      },
+      "prior_batch_attempts": [],
+      "exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "runtime_image": "golang:1.23.4-bookworm@sha256:9820aca42262f58451f006de3213055974b36f24b31508c1baa73c967fcecb99",
+      "resources": {
+        "cpus": 2,
+        "memory_bytes": 6442450944,
+        "pids": 512
+      }
+    },
+    {
+      "case_id": "R4-CAPA-5111",
+      "primary_class": "R4",
+      "group": "B",
+      "split": "development",
+      "source_sha256": "659b2f40dbb87d22a936ddfaa31abefeb4413e9dc7aac2bdf59615a2d42be290",
+      "task_manifest_sha256": "9fe02219160e5c0823e0dd2e4dce7efa138d44d76835bb6691f16ce9af8c6527",
+      "repository_public_metadata": {
+        "path": "cluster-api-provider-aws-4143c989c5fac44d87db476541273d28703a0077/go.mod",
+        "sha256": "c287873e521dd70b81efdcaaa61dbfd26f9d1aa27a1a37c2137bfa981c0d1be1",
+        "module": "module sigs.k8s.io/cluster-api-provider-aws/v2"
+      },
+      "prior_batch_attempts": [],
+      "exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "runtime_image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "resources": {
+        "cpus": 2,
+        "memory_bytes": 6442450944,
+        "pids": 512
+      }
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2339",
+      "primary_class": "R4",
+      "group": "B",
+      "split": "development",
+      "source_sha256": "78118551cd2567d86b908a206069ad67b74d8f8b9ac5c07e5367fc50fe75e19c",
+      "task_manifest_sha256": "0667038baa42b11bd4453e425e28339d7a099db775fde8918e87b17a966bd6f7",
+      "repository_public_metadata": {
+        "path": "source/go.mod",
+        "sha256": "d5e61aa35fe13f6fcb5ab7e4dce983de955b1d0dd21e9ff05438151f65468632",
+        "module": "module github.com/crossplane-contrib/provider-aws"
+      },
+      "prior_batch_attempts": [],
+      "exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "runtime_image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "resources": {
+        "cpus": 2,
+        "memory_bytes": 6442450944,
+        "pids": 512
+      }
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "primary_class": "R5",
+      "group": "B",
+      "split": "development",
+      "source_sha256": "80bafc81ab3d65d3e77165410e584cae7f11677dc2b9bd25f5a666d352ada2fc",
+      "task_manifest_sha256": "1c0abd65e872318af30bc7e9c1ac490604304fcc60d93f75bb32dd7216997bec",
+      "repository_public_metadata": {
+        "path": "prometheus-e66610b3295460aea47cf5a3db58665fc86c073f/go.mod",
+        "sha256": "98410e0dea78f6eacc863488842601d3d639e62ba8740586536196edcf0cbf77",
+        "module": "module github.com/prometheus/prometheus"
+      },
+      "prior_batch_attempts": [],
+      "exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "runtime_image": "golang@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "resources": {
+        "cpus": 2,
+        "memory_bytes": 6442450944,
+        "pids": 512
+      }
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "primary_class": "R5",
+      "group": "B",
+      "split": "development",
+      "source_sha256": "0a2f4775a91e1860f170d9384b28cd35fb4f936c02b440cd45a0fe72407c89df",
+      "task_manifest_sha256": "0c7d5e863fd9b8e64ed306c5d01d206e45b8dd57a3b2bc58422cd9b4053d2414",
+      "repository_public_metadata": {
+        "path": "go.mod",
+        "sha256": "562c11bc39ff2caae857b9e7cdc6afdd24657d9480677115f16a3507e00947c2",
+        "module": "module github.com/nats-io/nats-server/v2"
+      },
+      "prior_batch_attempts": [],
+      "exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "runtime_image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "resources": {
+        "cpus": 2,
+        "memory_bytes": 6442450944,
+        "pids": 512
+      }
+    }
+  ],
+  "planned_method_runs": 46,
+  "primary_pairs": 17,
+  "key_repeat_cases": [
+    "R3-KOPF-726",
+    "RW-ALERTMANAGER-4705"
+  ],
+  "recovery_seed_paths": {
+    "R3-KPT-4673": "outputs/deepseek-production-path-probe-v4-20261020/cases/R3-KPT-4673/rounds/0/candidate.patch",
+    "RW-ALERTMANAGER-4705": "outputs/deepseek-empty-reasoning-live-regression-v1-20261020/candidate.patch"
+  },
+  "B_opened_for_method_execution": false,
+  "all_outcomes_retained": true,
+  "model_call_cap_per_run": 12,
+  "semantic_round_cap": 2,
+  "shared_cap_cny": 150,
+  "recovery_seed_calibration": {
+    "RW-ALERTMANAGER-4705": {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "seed_sha256": "64cfd188fff8f9e6ae1a840f0eef6e68f0533f49b398ce78aeac66aaf9793951",
+      "status": "EXECUTION_PASS",
+      "checks": [
+        {
+          "id": "alertmanager-reload-v1:groups.visible_during_reload",
+          "status": "FAIL",
+          "probe_sha256": "0e329f171872fe23f1ac925e07ac534e6c7d1f7ada2ac9f2bade852fc7e43dc7"
+        },
+        {
+          "id": "alertmanager-reload-v1:groups.visible_after_reload",
+          "status": "PASS",
+          "probe_sha256": "0e329f171872fe23f1ac925e07ac534e6c7d1f7ada2ac9f2bade852fc7e43dc7"
+        }
+      ],
+      "scope": "PUBLIC_ONLY_SEED_QUALIFICATION",
+      "hidden_materials_loaded": false,
+      "api_calls": 0
+    },
+    "R3-KPT-4673": {
+      "case_id": "R3-KPT-4673",
+      "seed_sha256": "241498dbabda451898199ca22fcc0c9459dcacddc70b08f2cfa8ec64ce010b2e",
+      "status": "EXECUTION_PASS",
+      "checks": [
+        {
+          "id": "kpt-configpath-v4:mutator.owner_binding",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:validator.owner_binding",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_selector.owner_binding",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_exclusion.owner_binding",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator.owner_excludes_config",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator.later_sees_config",
+          "status": "FAIL",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator.workload_transformed",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:validator.owner_excludes_config",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_selector.owner_excludes_config",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_selector.later_sees_config",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_selector.workload_transformed",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_exclusion.owner_excludes_config",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_exclusion.later_sees_config",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_exclusion.workload_transformed",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator.resource_inventory",
+          "status": "FAIL",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator.identity_annotations_cleaned",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator.config_retained",
+          "status": "FAIL",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator.workload_retained",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator.config_transformed",
+          "status": "FAIL",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:validator.resource_inventory",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:validator.identity_annotations_cleaned",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:validator.config_retained",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:validator.workload_retained",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:validator.config_transformed",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_selector.resource_inventory",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_selector.identity_annotations_cleaned",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_selector.config_retained",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_selector.workload_retained",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_selector.config_transformed",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_exclusion.resource_inventory",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_exclusion.identity_annotations_cleaned",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_exclusion.config_retained",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_exclusion.workload_retained",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:mutator_exclusion.config_transformed",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:control.resource_inventory",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:control.identity_annotations_cleaned",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:control.ordinary_inputs",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        },
+        {
+          "id": "kpt-configpath-v4:control.final_resources",
+          "status": "PASS",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+        }
+      ],
+      "scope": "PUBLIC_ONLY_SEED_QUALIFICATION",
+      "hidden_materials_loaded": false,
+      "api_calls": 0
+    }
+  },
+  "method_version": "0.6.33",
+  "method_revision_reason": "Retain uncited exact current public observations in the canonical diagnosis registry so planning cannot lose them; reject stale snapshots, preserve claims, scope and all existing limits.",
+  "continuation_protocol": {
+    "id": "ce.seeded_continuation.v5",
+    "applies_to": [
+      "baseline",
+      "candidate"
+    ],
+    "saved_seed_is_bootstrap": true,
+    "max_fresh_edit_rounds": 2,
+    "max_model_calls": 12,
+    "max_format_corrections_per_case": 1,
+    "rejected_trial_context": "Exact historical feedback, shared execution error, helper preconditions and bounded actual edits retain trial snapshot identity",
+    "old_protocol_results": "v1/v2/v3/v4 results remain separate; never pooled",
+    "worker_implementation": "scripts/run_reliability_worker_v8.py",
+    "startup_failure_recovery": "Only producer-confirmed current startup failure can use remaining round after uncomparable preservation rollback; unknown checks remainUNKNOWN; same policy both versions, unsupported historicalAPI unchanged.",
+    "trusted_input_flow": "Seed/continuation/preservation envelopes use runtime-owned declared_artifacts and capabilities, for either frozen method; absent inputs remainUNKNOWN; same v5allocation/limits."
+  },
+  "development_probe_order": [
+    "A/R4-ACK-CLOUDWATCH-2985/0/candidate"
+  ],
+  "resource_alignment": {
+    "baseline_source_unchanged": true,
+    "cumulative_conservative_token_bound": 2000000,
+    "previous_bound": 1200000,
+    "input_estimator": "UTF8 byte upper bound; completion tokens reserved at configured max",
+    "applies_to_both_versions": true,
+    "model_calls": 12,
+    "semantic_edit_rounds": 2,
+    "shared_money_limit_cny": 150,
+    "reason": "Actual v0.6.6 KPT used1118691 reserved units at8calls; next190k request could not enter second permitted round"
+  },
+  "development_changes": [
+    {
+      "inherited_description": "592tests+22subtests candidate/root. Independent review closes twoImportant+minor and separately approves bounded counter; 12 accountingcases cover0/1correction, first/afterextension, parse/validation, repeatedNEEDS, empty/failedextension, and global4call cap. v8 common harness seededdeclared comparisons verified4tests on baseline0.5.5. All prior source/probe/scorer freezes unchanged."
+    },
+    {
+      "version": "0.6.20",
+      "change": "Bounded current Python exception producer and local consumer path; exact AST declaration, safe operation-field preflight and canonical scope refs",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.21",
+      "change": "Share existing source prerequisite projection; no source search, prompt, model allowance, or semantic gate changes",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.22",
+      "change": "Keep source-bound failed predicate actuals and expected statements through rollback; reason about verified failed trial; unchanged model/call/round/output/Top12/observation/score limits",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.23",
+      "change": "Share only exact identity/digest/canonical-equal context; keep raw validated plan/feedback and all failed facts; truthfully explain REJECT/UNCOMPARABLE/PROMOTE; same budgets and registered attempts",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.24",
+      "change": "Run-local prompt-version scoped generation-mode continuity after completed truncation recovery. No case-id dispatch or helper/patch recipe. Unchanged 46 slots, limits and independent scorer.",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.25",
+      "change": "Bounded prior-claim reassessment context at both existing evidence-extension boundaries. Exact snapshot/input identity, current evidence equality and missing-reference disclosure; protect already-selected claim source references within unchanged Top-N. No new schema, module, call allowance or automatic semantic verdict.",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.26",
+      "change": "Bounded 4-record/8000-byte field-document windows, precise locators and excerpt digests; retained within original Top12/full request budget. Shared required-source projection makes source contract review and native read-only delivery non-optional even if diagnosis omits citation. Existing review array capacity 6->12, covering bounded Top12 without changing its semantic checks or fields. No new module, API call allowance or verdict relaxation.",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.27",
+      "change": "Preserve finally selected current source through planning and native execution. Exact fallback audit is lexical context, not FOUND. Clarify new-helper planning without weakening evidence/target/behavior gates. Local read-only cap 24000->48000 follows measured29506-byte delivery need; Top12,220000 full-context,12 calls,2 rounds,150CNY cap unchanged.",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.28",
+      "change": "Receiver declaration + final input preservation + accurate plan state feedback; reviewed integration transport/runtime/replay recording. 11 new generic tests; no acceptance relaxation.",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.29",
+      "change": "Quote coverage and lineage delivery corrections; nine new generic tests. All prior source/behavior/snapshot gates retained; no new API allowance.",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.31",
+      "change": "Public production-path observation + seven metadata contracts + single-outcome schema consistency; no private test material or handwritten successful candidate introduced.",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.32",
+      "change": "Public existing-alarm probe v2 fairness/target rejection and execution budget policy; calibration-only positive control excluded from all repair inputs.",
+      "api_calls_for_replays": 0
+    },
+    {
+      "version": "0.6.33",
+      "change": "Public evidence retention at diagnosis-to-plan boundary, actual7to8 saved-response replay plus five exposed transport projections, no semantic verdict changes or new probes.",
+      "api_calls_for_replays": 0
+    }
+  ],
+  "final_effect_acceptance": {
+    "script": "scripts/assess_reliability_delivery_v2.py",
+    "sha256": "79cf30f9d3567fdbf16e2c4dffd748cad6299f6b0999b886432251fa293e6d56",
+    "policy": "All behavior gates + strictly greater primary independent PASS + B not below baseline; equal score/recovery-only gains insufficient"
+  },
+  "planning_correction_accounting": {
+    "evidence_extensions": 1,
+    "max_format_corrections": 1,
+    "parsing_and_contract_validation_share_counter": true,
+    "evidence_does_not_replenish_counter": true,
+    "global_model_calls": 12,
+    "semantic_edit_rounds": 2,
+    "max_changeset_requests_excluding_separate_truncation": 3
+  }
+}

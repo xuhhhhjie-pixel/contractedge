@@ -307,6 +307,20 @@ def _bind_diagnosis_envelope(payload: Mapping[str, Any], method_input: MethodInp
     body = _translate_model_outcome_coverage(body)
     catalog = build_evidence_catalog(method_input, candidate_set, context.snapshot_id)
     body["evidence_refs"] = bind_evidence_ids(_collect_diagnosis_evidence_ids(body), catalog)
+    # This is the canonical record registry, not just the model's chosen
+    # citations. Keep already-budgeted current observations available to plans
+    # even when the diagnosis did not use them to justify a causal claim.
+    retained_public_ids = []
+    bound_ids = {record['id'] for record in body['evidence_refs']}
+    for record in catalog:
+        if record.get('kind') != 'PUBLIC_OBSERVATION':
+            continue
+        if record.get('snapshot_id') != context.snapshot_id:
+            raise ValueError('Planning observations must belong to the current snapshot')
+        if record['id'] not in bound_ids:
+            body['evidence_refs'].append(dict(record))
+            bound_ids.add(record['id'])
+            retained_public_ids.append(record['id'])
     body.update(expected)
     from contractedge.requirement.normalize import bind_obligation_sources
     try:
@@ -334,6 +348,7 @@ def _bind_diagnosis_envelope(payload: Mapping[str, Any], method_input: MethodInp
         coverage_encoding = "v1_1_direct"
     return body, {"owner": "runner", "model_supplied_fields": sorted(supplied),
                   "evidence_records_bound": len(body["evidence_refs"]),
+                  "retained_uncited_public_evidence_ids": retained_public_ids,
                   "outcome_coverage_encoding": coverage_encoding,
                   "mismatched_model_fields": sorted(key for key, value in supplied.items()
                                                        if value != expected[key])}

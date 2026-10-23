@@ -1,12 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-23T16:43:08.623813+00:00",
-  "version": "0.6.32",
-  "implementation_version": "0.6.32",
-  "status": "FROZEN_SINGLE_DEVELOPMENT_GATE_RUNNING",
-  "formal_ready": false,
-  "repair_reliability_accepted": false,
-  "runtime_source_digest": "afd0732da530687bbd49e44c545ba6448402fd38354b446fa87a28c56d7c2075",
+  "as_of": "2026-10-23T17:13:00.467511+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -24,51 +18,1355 @@
     },
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
-  "engineering_tests": 799,
-  "subtests": 22,
-  "portable_verification": {
-    "passed": 766,
-    "subtests_passed": 17,
-    "excluded_modules": 6,
-    "fresh_venv": false
+  "historical_results": "REFERENCE_ONLY",
+  "implementation_version": "0.6.33",
+  "public_projection": {
+    "prepared": 150,
+    "status": "PASS",
+    "report": "outputs/benchmark150-adapter-v2-20261019/preparation.json"
   },
-  "latest_completed_experiment": {
-    "version": "0.6.31",
-    "case_id": "R4-ACK-CLOUDWATCH-2985",
+  "protocol_tests": {
+    "passed": 802,
+    "subtests_passed": 22,
+    "scope": "Complete candidate regression on this server with historical fixtures; not repair effectiveness"
+  },
+  "stage_implementations": {
+    "0_1": "dataset/benchmark.py",
+    "2": "requirement/normalize.py",
+    "3": "source/ and retrieval/",
+    "4": "diagnosis/",
+    "5_6": "changeset/ and orchestration/runner.py",
+    "7": "execution/topomen_agent.py → actual topomen.collaboration.base_agent.DefaultAgent → scoped source transaction",
+    "8": "execution/public.py",
+    "9": "orchestration/feedback.py and repair.py",
+    "10": "evaluation/benchmark.py and frozen score_case.py"
+  },
+  "development_run": {
+    "run": "deepseek-optimized-single-v4-20261020",
+    "case_id": "RW-CAND-130",
+    "method_status": "PUBLIC_REVIEW_COMPLETE",
+    "independent_status": "PASS",
+    "patch_bytes": 1448,
     "model_calls": 4,
-    "method_status": "INVALID_OUTPUT",
-    "independent": "NO_CANDIDATE",
-    "patch_bytes": 0,
-    "registered_scored": 1,
-    "registered_not_run": 45
+    "partition": "development",
+    "model": "deepseek-v4.1-flash",
+    "execution_backend": "topomen_agent",
+    "directory": "outputs/deepseek-optimized-single-v4-20261020",
+    "score": "outputs/deepseek-independent-optimized-single-v4-score-20261020/score.json",
+    "scope": "One current-method acceptance, not full-dataset effectiveness"
   },
-  "current_experiment": {
+  "full150_model_experiment": "CURRENT_METHOD_DEFERRED_BY_USER; historical stopped run remains reference only",
+  "authoritative_framework_spec": "docs/specs/ContractEdge_Current_Framework_v1.3.md",
+  "public_routes": {
+    "status": "PASS",
+    "verified": 150,
+    "candidate_executions": 0,
+    "report": "outputs/benchmark150-public-routes-20261019.json"
+  },
+  "development_history": [
+    {
+      "directory": "outputs/benchmark150-development-closure-v1-20261019",
+      "status": "ABORTED_FRONT_ONLY_PROBE",
+      "model_performance_result": false
+    },
+    {
+      "directory": "outputs/benchmark150-development-closure-v2-20261019",
+      "status": "BUDGET_EXHAUSTED",
+      "candidate_bytes": 0,
+      "hidden_score": "NOT_RUN",
+      "finding": "Duplicate in-prompt schema/public evidence left insufficient correction headroom."
+    },
+    {
+      "directory": "outputs/benchmark150-development-closure-v3-20261019",
+      "status": "INTERRUPTED_BEFORE_MODEL_RESPONSE",
+      "model_performance_result": false
+    },
+    {
+      "directory": "outputs/benchmark150-development-closure-v4-20261019",
+      "status": "INFRASTRUCTURE_ERROR",
+      "reason": "First diagnosis HTTP call timed out at900seconds; empty patch; no hidden scoring."
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "partition": "development",
+      "status": "INVALID_OUTPUT",
+      "directory": "outputs/benchmark150-development-closure-v5-20261019",
+      "frozen_implementation_version": "0.2.2",
+      "method_performance_accepted": false,
+      "completion": "outputs/benchmark150-development-closure-v5-20261019/completion.json",
+      "timeout_seconds": 2400,
+      "max_elapsed_seconds": 7200,
+      "execution_backend_at_freeze": "direct",
+      "independent_score": "NOT_RUN_EMPTY_OR_MISSING_PATCH"
+    }
+  ],
+  "developer_backhalf_acceptance": {
+    "case_id": "RW-CAND-130",
+    "origin": "DEVELOPER_SPECIFIED_PUBLIC_SOURCE_PATCH",
+    "directory": "outputs/benchmark150-development-backhalf-acceptance-20261019",
+    "patch_bytes": 1474,
+    "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+    "public_checks": {
+      "scheduling_fields": 6,
+      "passed": 6,
+      "control_targets": 0
+    },
+    "independent_hidden_score": "PASS",
+    "score": "outputs/benchmark150-independent-backhalf-score-20261019/score.json",
+    "model_success_claim": false
+  },
+  "independent_code_review": "outputs/reliability-closure-20261020/INDEPENDENT_REVIEW.md",
+  "acceptance_report": "outputs/reliability-closure-20261020/COMPLETION_AUDIT.md",
+  "relation_gt_adaptation": "outputs/benchmark150-gt-adapter-final-20261019.json",
+  "native_topomen_integration": {
+    "status": "REAL_AGENT_INTEGRATION_ACCEPTED",
+    "default_profile_backend": "topomen_agent",
+    "source_root": "/home/xhj/contractedge-integrations/topomen",
+    "source_sha256": "3dfc43754d4bae6dbc99051ed607d4cc756b26049b79b7f5cc2f9865ee17b2dd",
+    "package_version": "1.1.2",
+    "original_topomen_tests_passed": 168,
+    "native_agent_tests_passed": 9,
+    "independent_review": "NO_CRITICAL_OR_IMPORTANT_REMAINDER_FOUND",
+    "case_id": "RW-CAND-130",
+    "acceptance_directory": "outputs/benchmark150-native-topomen-acceptance-20261019",
+    "independent_score": "PASS",
+    "score": "outputs/benchmark150-independent-native-topomen-score-20261019/score.json",
+    "autonomous_model_success_claim": false,
+    "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/源码审查与接入验收.md",
+    "plan_format_owner": "ContractEdge, not native TopoMen",
+    "docker_deployment_scheduler_used": false
+  },
+  "real_api_experiment": {
+    "scope": "Fixed exposed7-case development panel; separate seeded continuation; formal150/ablations deferred",
+    "method_version": "0.5.5",
+    "method_code_digest": "3e523afe3a4888e7797e93d20e106893fe29c4d4af9b4356deec062c2d9aa4eb",
+    "rows": [
+      {
+        "case_id": "RW-CAND-130",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "batch": "outputs/deepseek-final-regression-v6-20261020",
+        "batch_record_error": null,
+        "independent_status": "PASS",
+        "patch_bytes": 1474,
+        "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+        "semantic_outcome": "PUBLIC_REVIEW_PASS",
+        "route": "STOP",
+        "pending_obligations": 0,
+        "rounds": 1,
+        "errors": [],
+        "elapsed_seconds": 218.52748702466488,
+        "model_calls": 4,
+        "model_usage_tokens": 110896,
+        "public_runs": [
+          {
+            "path": "outputs/deepseek-final-regression-v6-20261020/cases/RW-CAND-130/rounds/0/public/observation.json",
+            "status": "EXECUTION_PASS",
+            "method_probe_status": "NOT_RUN",
+            "typed_observation_counts": {
+              "PUBLIC_STRUCTURE": 50,
+              "EXECUTION_ONLY": 68
+            },
+            "registered_adapter_objects": 0
+          }
+        ],
+        "front_statuses": [
+          "READY"
+        ],
+        "feedback_routes": [
+          "STOP"
+        ]
+      },
+      {
+        "case_id": "R3-KPT-4673",
+        "method_status": "PUBLIC_EXECUTION_COMPLETE",
+        "batch": "outputs/deepseek-final-regression-v6-20261020",
+        "batch_record_error": null,
+        "independent_status": "PASS",
+        "patch_bytes": 4075,
+        "patch_sha256": "b69f9fcc5d2a8b7925e12986ea0147143bdd192063de026e4f517784ea9920e6",
+        "semantic_outcome": "UNKNOWN",
+        "route": "STOP",
+        "pending_obligations": 3,
+        "rounds": 1,
+        "errors": [],
+        "elapsed_seconds": 890.5285071730614,
+        "model_calls": 5,
+        "model_usage_tokens": 193359,
+        "public_runs": [
+          {
+            "path": "outputs/deepseek-final-regression-v6-20261020/cases/R3-KPT-4673/rounds/0/public/observation.json",
+            "status": "EXECUTION_PASS",
+            "method_probe_status": "COMPLETE",
+            "typed_observation_counts": {
+              "PUBLIC_BEHAVIOR": 14,
+              "EXECUTION_ONLY": 2
+            },
+            "registered_adapter_objects": 0
+          }
+        ],
+        "front_statuses": [
+          "READY"
+        ],
+        "feedback_routes": [
+          "STOP"
+        ]
+      },
+      {
+        "case_id": "R3-KOPF-726",
+        "method_status": "NO_SUPPORTED_VIOLATION",
+        "batch": "outputs/deepseek-final-transfer-v2-20261020",
+        "batch_record_error": null,
+        "independent_status": "NO_CANDIDATE",
+        "patch_bytes": 0,
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "semantic_outcome": null,
+        "route": null,
+        "pending_obligations": 0,
+        "rounds": 0,
+        "errors": [],
+        "elapsed_seconds": 123.95933769643307,
+        "model_calls": 2,
+        "model_usage_tokens": 74650,
+        "public_runs": [],
+        "front_statuses": [
+          "NO_SUPPORTED_VIOLATION"
+        ],
+        "feedback_routes": []
+      },
+      {
+        "case_id": "R4-PROVIDER-HELM-408",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "batch": "outputs/deepseek-final-transfer-v2-20261020",
+        "batch_record_error": null,
+        "independent_status": "PASS",
+        "patch_bytes": 884,
+        "patch_sha256": "bf73a0fd0e64de1584d095b195f3ca91fa674011a433de75aee0df79c9139018",
+        "semantic_outcome": "PUBLIC_REVIEW_PASS",
+        "route": "STOP",
+        "pending_obligations": 0,
+        "rounds": 1,
+        "errors": [],
+        "elapsed_seconds": 680.17351654917,
+        "model_calls": 4,
+        "model_usage_tokens": 118101,
+        "public_runs": [
+          {
+            "path": "outputs/deepseek-final-transfer-v2-20261020/cases/R4-PROVIDER-HELM-408/rounds/0/public/observation.json",
+            "status": "EXECUTION_PASS",
+            "method_probe_status": "NOT_RUN",
+            "typed_observation_counts": {
+              "EXECUTION_ONLY": 5,
+              "PUBLIC_BEHAVIOR": 4
+            },
+            "registered_adapter_objects": 4
+          }
+        ],
+        "front_statuses": [
+          "READY"
+        ],
+        "feedback_routes": [
+          "STOP"
+        ]
+      },
+      {
+        "case_id": "R4-ACK-CLOUDWATCH-2985",
+        "method_status": "PUBLIC_EXECUTION_COMPLETE",
+        "batch": "outputs/deepseek-final-transfer-v2-20261020",
+        "batch_record_error": null,
+        "independent_status": "PASS",
+        "patch_bytes": 3577,
+        "patch_sha256": "f5ca0de3ca55d08695c071b5a19e7049da5ae2eac97f90915ae3f71427ed9bc5",
+        "semantic_outcome": "UNKNOWN",
+        "route": "STOP",
+        "pending_obligations": 2,
+        "rounds": 1,
+        "errors": [],
+        "elapsed_seconds": 636.4279446005821,
+        "model_calls": 3,
+        "model_usage_tokens": 75190,
+        "public_runs": [
+          {
+            "path": "outputs/deepseek-final-transfer-v2-20261020/cases/R4-ACK-CLOUDWATCH-2985/rounds/0/public/observation.json",
+            "status": "EXECUTION_PASS",
+            "method_probe_status": "NOT_RUN",
+            "typed_observation_counts": {
+              "EXECUTION_ONLY": 3
+            },
+            "registered_adapter_objects": 0
+          }
+        ],
+        "front_statuses": [
+          "READY"
+        ],
+        "feedback_routes": [
+          "STOP"
+        ]
+      },
+      {
+        "case_id": "RW-ALERTMANAGER-4705",
+        "method_status": "EVIDENCE_GAP",
+        "batch": "outputs/deepseek-final-transfer-v2-20261020",
+        "batch_record_error": null,
+        "independent_status": "NO_CANDIDATE",
+        "patch_bytes": 0,
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "semantic_outcome": null,
+        "route": null,
+        "pending_obligations": 0,
+        "rounds": 0,
+        "errors": [],
+        "elapsed_seconds": 542.7135800719261,
+        "model_calls": 4,
+        "model_usage_tokens": 128116,
+        "public_runs": [],
+        "front_statuses": [
+          "EVIDENCE_GAP"
+        ],
+        "feedback_routes": []
+      },
+      {
+        "case_id": "RW-CERTMANAGER-9116",
+        "method_status": "PUBLIC_EXECUTION_COMPLETE",
+        "batch": "outputs/deepseek-final-transfer-v2-20261020",
+        "batch_record_error": null,
+        "independent_status": "PASS",
+        "patch_bytes": 2043,
+        "patch_sha256": "fe40d1eb1c2c3d0f7a7ba8c5812c9159cf33168ded8ee224661f32767498392c",
+        "semantic_outcome": "UNKNOWN",
+        "route": "STOP",
+        "pending_obligations": 1,
+        "rounds": 1,
+        "errors": [],
+        "elapsed_seconds": 869.1931199282408,
+        "model_calls": 5,
+        "model_usage_tokens": 142648,
+        "public_runs": [
+          {
+            "path": "outputs/deepseek-final-transfer-v2-20261020/cases/RW-CERTMANAGER-9116/rounds/0/public/observation.json",
+            "status": "EXECUTION_PASS",
+            "method_probe_status": "NOT_RUN",
+            "typed_observation_counts": {
+              "EXECUTION_ONLY": 2
+            },
+            "registered_adapter_objects": 0
+          }
+        ],
+        "front_statuses": [
+          "READY"
+        ],
+        "feedback_routes": [
+          "STOP"
+        ]
+      }
+    ],
+    "metrics": {
+      "panel_size": 7,
+      "independent_passes": 5,
+      "independent_status_counts": {
+        "PASS": 5,
+        "NO_CANDIDATE": 2
+      },
+      "candidate_count": 5,
+      "public_pass_independent_nonpass": [],
+      "independent_pass_public_unknown": [
+        "R3-KPT-4673",
+        "R4-ACK-CLOUDWATCH-2985",
+        "RW-CERTMANAGER-9116"
+      ],
+      "model_calls": 27,
+      "single_semantic_round_independent_passes": 5,
+      "no_candidate_count": 2,
+      "public_review_passes": 2,
+      "public_unknown_with_candidate": 3
+    },
+    "recovery": [
+      {
+        "case_id": "R3-KPT-4673",
+        "method_status": "PUBLIC_EXECUTION_COMPLETE",
+        "batch": "outputs/deepseek-final-seeded-recovery-v2-20261020",
+        "batch_record_error": null,
+        "independent_status": "SEMANTIC_FAIL",
+        "patch_bytes": 3935,
+        "patch_sha256": "45aa877a9445c6cd91aa45207dd1337b96b6eafe2ba5d5d6ba5defdf2323cdc9",
+        "semantic_outcome": "PUBLIC_REVIEW_FAIL",
+        "route": "STOP",
+        "pending_obligations": 6,
+        "rounds": 0,
+        "errors": [],
+        "elapsed_seconds": 487.265155389905,
+        "model_calls": 2,
+        "model_usage_tokens": 62344,
+        "public_runs": [],
+        "front_statuses": [],
+        "feedback_routes": [],
+        "scope": "SEEDED_CONTINUATION_NOT_FIRST_PASS",
+        "initial_route": "EXECUTE",
+        "used_public_feedback": true,
+        "seed_patch_sha256": "241498dbabda451898199ca22fcc0c9459dcacddc70b08f2cfa8ec64ce010b2e",
+        "probe_states": {
+          "seed-public": {
+            "kpt-configpath-v2:mutator.later_sees_config": "FAIL",
+            "kpt-configpath-v2:control.ordinary_inputs": "PASS",
+            "kpt-configpath-v2:control.final_resources": "PASS",
+            "kpt-configpath-v2:mutator.owner_excludes_config": "PASS",
+            "kpt-configpath-v2:validator.owner_excludes_config": "PASS",
+            "kpt-configpath-v2:mutator.config_transformed": "FAIL",
+            "kpt-configpath-v2:mutator.workload_transformed": "PASS",
+            "kpt-configpath-v2:validator.config_transformed": "PASS",
+            "kpt-configpath-v2:mutator.owner_binding": "PASS",
+            "kpt-configpath-v2:mutator.workload_retained": "PASS",
+            "kpt-configpath-v2:validator.owner_binding": "PASS",
+            "kpt-configpath-v2:validator.config_retained": "PASS",
+            "kpt-configpath-v2:validator.workload_retained": "PASS",
+            "kpt-configpath-v2:mutator.config_retained": "FAIL"
+          },
+          "final-public": {
+            "kpt-configpath-v2:mutator.later_sees_config": "FAIL",
+            "kpt-configpath-v2:mutator.owner_excludes_config": "FAIL",
+            "kpt-configpath-v2:mutator.config_transformed": "FAIL",
+            "kpt-configpath-v2:mutator.workload_transformed": "FAIL",
+            "kpt-configpath-v2:control.ordinary_inputs": "PASS",
+            "kpt-configpath-v2:control.final_resources": "PASS",
+            "kpt-configpath-v2:mutator.owner_binding": "FAIL",
+            "kpt-configpath-v2:mutator.workload_retained": "FAIL",
+            "kpt-configpath-v2:validator.owner_excludes_config": "PASS",
+            "kpt-configpath-v2:mutator.config_retained": "FAIL",
+            "kpt-configpath-v2:validator.config_transformed": "PASS",
+            "kpt-configpath-v2:validator.owner_binding": "PASS",
+            "kpt-configpath-v2:validator.config_retained": "PASS",
+            "kpt-configpath-v2:validator.workload_retained": "PASS"
+          }
+        },
+        "failed_checks_reached_execution_prompt": {
+          "preserve:PR-A4": true,
+          "preserve:PR-A5": true
+        },
+        "effect_acceptance_passed": false
+      }
+    ],
+    "report": "outputs/final-optimization-20261020/final-validation.json"
+  },
+  "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/单条真实实验验收与系统优化-20261020.md",
+  "release_integrity": {
+    "report": "outputs/deepseek-method-preflight-v6-20261020/release150-verified.json",
+    "cases": 150,
+    "frozen_checksum_files_verified": 9134,
+    "status": "PASS"
+  },
+  "system_optimization": {
+    "status": "IMPLEMENTED_AND_BOUNDED_VALIDATION_RECORDED",
+    "version": "0.4.3",
+    "method_code_digest": "5c2dc5800aec314cae60571dfc90e379ea78a72f6f1a8b26f8eed99d01f32a5c",
+    "report": "outputs/system-optimization-20261020/IMPLEMENTATION_REPORT.md",
+    "audit": "outputs/system-optimization-20261020/COMPLETION_AUDIT.md",
+    "effectiveness": "Significant repair-rate improvement NOT PROVEN; failures and interruption retained",
+    "interrupted_extra_regressions": 1,
+    "formal150": "DEFERRED_BY_USER",
+    "ablation": "DEFERRED_BY_USER",
+    "formal_ready": false
+  },
+  "historical_real_api_experiment_pre_optimization": {
+    "status": "SYSTEM_OPTIMIZATION_IN_PROGRESS; FORMAL150_NOT_STARTED",
+    "total_limit_cny": 80,
+    "ledger": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/money-ledger.json",
+    "batch_cli": "repair-batch",
+    "independent_score_cli": "evaluate-repair-batch",
+    "limitations": [
+      "Three of five primary development cases did not produce a candidate; no claim all150 can be repaired.",
+      "Separate Go retry regression compiled publicly but failed independent behavioral scoring; excluded from primary results.",
+      "Remaining80CNY total budget may stop a formal run before150 cases; the cap is not increased by this receipt.",
+      "Route and file verification are not fresh all150 runtime executions; host resources may change before launch.",
+      "Relation precision/recall requires explicit GT eligibility; missing eligibility remains unknown.",
+      "Historical prematurely stopped run exposed one validation case; retained exposure audit is required for research reporting."
+    ],
+    "host_free_work_disk_bytes": 27445895168,
+    "single_case_acceptance": "/home/xhj/contractedge-system/outputs/deepseek-single-case-acceptance-v9-20261020/stage-acceptance.json",
+    "all_experiment_money_upper_bound_cny": 12.403536,
+    "development_pilot": {
+      "directory": "outputs/deepseek-development-pilot-v7-20261020",
+      "selected_cases": [
+        "RW-CAND-067",
+        "R3-KOPF-726",
+        "R3-KPT-4673",
+        "R4-ACK-CLOUDWATCH-2985",
+        "RW-ALERTMANAGER-4705"
+      ],
+      "selection": "First development member of each R1-R5 class in frozen manifest order",
+      "formal150_started": false,
+      "previous_run": "outputs/deepseek-development-pilot-v5-20261020",
+      "previous_public_counts": {
+        "PUBLIC_REVIEW_COMPLETE": 1,
+        "PUBLIC_EXECUTION_COMPLETE": 1,
+        "EVIDENCE_GAP": 1,
+        "NEEDS_EVIDENCE": 1,
+        "ROUND_LIMIT": 1
+      },
+      "system_fixes": [
+        "Bounded public review correction retry; exact rejected response retained; shared budget unchanged",
+        "Precise query recovery in seed files including bounded windows after long function prefixes",
+        "New query-recovered source prioritized over old generic documentation matches",
+        "Open obligations explicitly reviewed against fresh public output and retained after acceptance",
+        "Empty wholly-reasoning truncated execution may retry with thinking disabled for that request only; global budget unchanged",
+        "Core development admission uses pinned current partition metadata, rejecting validation/blind_test before paid calls"
+      ],
+      "independent_hidden_scoring": "COMPLETED_AFTER_FIXED_SELECTION; no hidden outcomes used for tuning",
+      "current_public_completed": {
+        "PUBLIC_REVIEW_COMPLETE": 2,
+        "EVIDENCE_GAP": 2,
+        "INVALID_OUTPUT": 1
+      },
+      "v6_preflight_failure": "outputs/deepseek-development-pilot-v6-20261020/admission-preflight-failure.json; no paid calls",
+      "current150_admission_audit": "outputs/deepseek-method-preflight-v6-20261020/admission-current150.json",
+      "status": "COMPLETED_AND_INDEPENDENTLY_SCORED",
+      "independent_cohort": "outputs/deepseek-independent-pilot-v7-score-20261020/cohort.json",
+      "independent_counts": {
+        "PASS": 2,
+        "NO_CANDIDATE": 3,
+        "NOT_RUN": 145
+      },
+      "unchanged_implementation": true
+    },
+    "all_experiment_money_upper_bound_at_v4_end_cny": 8.99058,
+    "current_profile": "configs/deepseek-development-optimized-v1-budget80.json",
+    "historical_batch_profiles": [
+      "configs/deepseek-formal150-batch.json",
+      "configs/deepseek-formal150-production.json"
+    ],
+    "remaining_readiness_work": [],
+    "pending_reservations": 1,
+    "all_experiment_money_upper_bound_at_v5_end_cny": 10.94968,
+    "historical_stopped_batch": "outputs/deepseek-formal150-batch-v1-20261020",
+    "historical_method_freeze": "outputs/deepseek-formal150-method-freeze-20261020",
+    "method_code_digest": "5531a69e4e2f330bcc509348ca6177fcd4156cadc83bd6fc0048feba8774ed9b",
+    "production_profile": "configs/deepseek-formal150-production-v2-budget80.json",
+    "production_profile_sha256": "a2c0b5c182d5470aee6efd82492c23d605c0ef54cfafabf3597399bd0db1d01f",
+    "formal_launcher": "scripts/run_formal150.py",
+    "formal_preflight": "outputs/deepseek-formal150-launch-preflight-budget80-20261020",
+    "frozen_method": "outputs/deepseek-formal150-launch-preflight-budget80-20261020/method-freeze",
+    "readiness_receipt": "outputs/deepseek-formal150-readiness-budget80-20261020/readiness.json",
+    "readiness_audit_command": "python3 scripts/audit_formal150_readiness.py",
+    "readiness_checks_passed": 18,
+    "formal_cases_dispatched": 0,
+    "formal_case_count": 150,
+    "remaining_money_upper_bound_cny": 67.596464,
+    "all_experiment_model_calls": 167,
+    "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/预算上限调整至80元.md",
+    "engineering_retry_regression": {
+      "directory": "outputs/deepseek-empty-reasoning-live-regression-v1-20261020",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "status": "RECOVERY_EXECUTED",
+      "public_execution": "EXECUTION_PASS",
+      "public_semantics": "UNKNOWN",
+      "independent_score": "SEMANTIC_FAIL",
+      "score": "outputs/deepseek-independent-empty-reasoning-regression-score-20261020/score.json",
+      "included_in_primary_cohort": false
+    },
+    "budget_amendment": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/budget-amendment-20-to-80.json",
+    "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/正式150运行前验收-20261020.md"
+  },
+  "historical_protocol_tests_pre_acceptance_optimization": {
+    "status": "PASS",
+    "passed": 262,
+    "subtests_passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "implementation_version": "0.4.3",
+    "method_code_digest": "5c2dc5800aec314cae60571dfc90e379ea78a72f6f1a8b26f8eed99d01f32a5c",
+    "command": "PYTHONPATH=src:.topomen-deps python3 -m pytest -q",
+    "log": "tests-final-audit.log",
+    "completion_audit": "PASS",
+    "report": "outputs/system-optimization-20261020/tests.json"
+  },
+  "acceptance_optimization": {
+    "version": "0.4.7",
+    "status": "IMPLEMENTED_AND_BOUNDED_DEVELOPMENT_VALIDATED",
+    "method_code_digest": "9e9290382bc7f47f3931f600bdfa180794e8e5b25bf19adccd64cbb7a47b1293",
+    "formal_ready": false,
+    "live_single": "outputs/deepseek-acceptance-single-v3-20261020",
+    "plan": "docs/superpowers/plans/2026-10-20-acceptance-optimization.md",
+    "report_directory": "outputs/acceptance-optimization-20261020",
+    "report": "outputs/acceptance-optimization-20261020/IMPLEMENTATION_REPORT.md",
+    "actual_results": [
+      {
+        "case_id": "RW-CAND-130",
+        "run": "deepseek-acceptance-recovery-v1-20261020",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "independent_status": "PASS",
+        "patch_bytes": 1474,
+        "model_calls": 5,
+        "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+        "errors": [],
+        "front_statuses": [
+          "READY"
+        ],
+        "truncation_recovery_calls": 0
+      },
+      {
+        "case_id": "R3-KPT-4673",
+        "run": "deepseek-acceptance-recovery-v1-20261020",
+        "method_status": "PUBLIC_EXECUTION_COMPLETE",
+        "independent_status": "SEMANTIC_FAIL",
+        "patch_bytes": 1411,
+        "model_calls": 6,
+        "patch_sha256": "04a1f7a8697fa3168606390b3ee9de0fb34bffb39d932e0e0a077667c0bec19a",
+        "errors": [],
+        "front_statuses": [
+          "READY_PARTIAL"
+        ],
+        "truncation_recovery_calls": 0
+      }
+    ],
+    "money": {
+      "limit_cny": 80.0,
+      "committed_upper_cny": 22.624222,
+      "remaining_cny": 57.375778,
+      "pending_calls": 2,
+      "total_calls": 274,
+      "ledger_sha256": "6dbc3e9e51608a7ae3b5aa91420fe49c8b09978aac3b9b31b8caaff2bbaa78d1"
+    }
+  },
+  "historical_real_api_experiment_pre_acceptance_optimization": {
+    "status": "BOUNDED_DEVELOPMENT_VALIDATION_ONLY",
+    "total_limit_cny": 80,
+    "money": {
+      "limit_micro_cny": 80000000,
+      "committed_micro_cny": 18880226,
+      "calls": 235,
+      "reservation_rejected": false,
+      "pending_calls": 2,
+      "committed_upper_cny": 18.880226,
+      "remaining_upper_cny": 61.119774,
+      "optimization_added_upper_cny": 6.47669,
+      "unresolved_reservation_cny": 0.672542,
+      "ledger_sha256": "0cb032a1c4ee8ffb711169aecc5104f47d19da8ed0b1584ded9bc6e12161fb0c"
+    },
+    "method_code_digest": "5c2dc5800aec314cae60571dfc90e379ea78a72f6f1a8b26f8eed99d01f32a5c",
+    "report": "outputs/system-optimization-20261020/final-validation.json",
+    "new_formal_cases_dispatched": 0,
+    "new_ablation_cases_dispatched": 0,
+    "historical_runs": "REFERENCE_ONLY; retained separately"
+  },
+  "production_path_behavior_optimization": {
+    "status": "COMPLETED_FOR_BOUNDED_DEVELOPMENT_SCOPE",
+    "version": "0.4.12",
+    "method_code_digest": "6bfdf199b74f59af01d4cad893f63477b53584840493887b4e70950845740e84",
+    "plan": "docs/superpowers/plans/2026-10-20-production-path-behavior.md",
+    "output_directory": "outputs/production-path-behavior-20261020",
+    "formal_ready": false,
+    "live_batch": "outputs/deepseek-production-path-probe-v5-20261020",
+    "actual_results": [
+      {
+        "execution_calls": [
+          {
+            "finish_reason": "stop",
+            "usage": {
+              "prompt_tokens": 12741,
+              "completion_tokens": 520,
+              "total_tokens": 13261,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              }
+            },
+            "read_only_support_audit": [
+              {
+                "id": "SRC-CU-b86cb057519aca46",
+                "path": "templates/cluster-gateway/job-patch.yaml",
+                "result": "TARGET_ALREADY_SUPPLIED"
+              }
+            ]
+          }
+        ],
+        "case_id": "RW-CAND-130",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "independent_status": "PASS",
+        "patch_bytes": 1474,
+        "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+        "model_calls": 4,
+        "errors": [],
+        "front_statuses": [
+          "READY"
+        ],
+        "branch_reviews": [
+          []
+        ],
+        "probe_runs": [],
+        "public_feedback": [
+          {
+            "build_state": "PASSED",
+            "semantic_outcome": "PUBLIC_REVIEW_PASS",
+            "route": "STOP"
+          }
+        ]
+      },
+      {
+        "execution_calls": [
+          {
+            "finish_reason": "stop",
+            "usage": {
+              "prompt_tokens": 27695,
+              "completion_tokens": 1959,
+              "total_tokens": 29654,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              }
+            },
+            "read_only_support_audit": [
+              {
+                "id": "SRC-CU-60d3496476d58093",
+                "path": "pkg/lib/kptops/render_executor.go",
+                "result": "TARGET_ALREADY_SUPPLIED"
+              },
+              {
+                "id": "SRC-CU-883e2cb2727d395a",
+                "path": "pkg/lib/kptops/render_executor.go",
+                "result": "TARGET_ALREADY_SUPPLIED"
+              },
+              {
+                "id": "HELPER-b1458129855125de",
+                "path": "pkg/fn/runtime/utils.go",
+                "symbol": "MergeWithInput",
+                "result": "INCLUDED_READ_ONLY_HELPER"
+              },
+              {
+                "id": "HELPER-bf52db689d494726",
+                "path": "pkg/fn/runtime/utils.go",
+                "symbol": "SetResourceIDs",
+                "result": "INCLUDED_READ_ONLY_HELPER"
+              },
+              {
+                "id": "HELPER-222efe5087442853",
+                "path": "pkg/fn/runtime/utils.go",
+                "symbol": "DeleteResourceIDs",
+                "result": "INCLUDED_READ_ONLY_HELPER"
+              },
+              {
+                "id": "HELPER-a6f6c10ee69b1968",
+                "path": "pkg/fn/runtime/utils.go",
+                "symbol": "SelectInput",
+                "result": "INCLUDED_READ_ONLY_HELPER"
+              },
+              {
+                "id": "HELPER-db4df3998fec9e0b",
+                "path": "pkg/lib/pkg/pkg.go",
+                "symbol": "Pipeline",
+                "result": "INCLUDED_READ_ONLY_HELPER"
+              }
+            ]
+          }
+        ],
+        "case_id": "R3-KPT-4673",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "independent_status": "PASS",
+        "patch_bytes": 3882,
+        "patch_sha256": "be5c01f86b68aeded69aaef6d817f3baf95dc09c04dde5a7fb1e2dd9d9fcb7da",
+        "model_calls": 6,
+        "errors": [],
+        "front_statuses": [
+          "READY"
+        ],
+        "branch_reviews": [
+          [
+            {
+              "source_evidence_id": "SRC-CU-883e2cb2727d395a",
+              "disposition": "MODIFY",
+              "rationale": "runMutators sets functionConfig via pn.refreshFnConfig(mutator, input, pl.Mutators[i].ConfigPath) and then calls fnruntime.SelectInput(input, selectors, exclusions, ...) on the same unchanged input, so the configPath-designated resource is selected as ordinary input. This is the mutator branch of V1/A2. Excluding the resolved config resource from the SelectInput slice (while retaining it in the package input / final output) is the intended change.",
+              "change_refs": [
+                "ch-mutator-exclude-config-from-input"
+              ],
+              "open_obligation_refs": []
+            },
+            {
+              "source_evidence_id": "SRC-CU-60d3496476d58093",
+              "disposition": "MODIFY",
+              "rationale": "runValidators sets functionConfig via pn.refreshFnConfig(validator, input, function.ConfigPath) and selects ordinary input from the unchanged input list with fnruntime.SelectInput, so the configPath resource is also selected as an ordinary input item. This is the validator branch of V2/A2 and is the intended second change.",
+              "change_refs": [
+                "ch-validator-exclude-config-from-input"
+              ],
+              "open_obligation_refs": []
+            },
+            {
+              "source_evidence_id": "SRC-CU-b185a6639d1920f7",
+              "disposition": "PRESERVE",
+              "rationale": "runPipeline only sequences pn.runMutators(ctx, hctx, input) and then pn.runValidators(ctx, hctx, mutatedResources); it holds no configPath ordinary-input selection logic and merely forwards the mutated resource list. The repair is confined to the two owning functions, so this orchestration must stay as-is, including the error wrapping and empty-pipeline KRM check.",
+              "change_refs": [],
+              "open_obligation_refs": []
+            },
+            {
+              "source_evidence_id": "SRC-CU-f234e7e032fde349",
+              "disposition": "OUT_OF_SCOPE",
+              "rationale": "Renderer.Execute handles hydration ordering, save-on-render-failure, rel-path adjustment and output writing. It does not resolve ConfigPath, bind functionConfig, or perform ordinary-input selection, so it is not part of the A2/R3/R4 relation chain and needs no change for these violations.",
+              "change_refs": [],
+              "open_obligation_refs": []
+            }
+          ]
+        ],
+        "probe_runs": [
+          {
+            "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+            "status": "COMPLETE",
+            "checks": [
+              {
+                "id": "mutator.owner_binding",
+                "status": "PASS"
+              },
+              {
+                "id": "mutator.owner_excludes_config",
+                "status": "FAIL"
+              },
+              {
+                "id": "mutator.later_sees_config",
+                "status": "PASS"
+              },
+              {
+                "id": "mutator.final_resources",
+                "status": "PASS"
+              },
+              {
+                "id": "validator.owner_binding",
+                "status": "PASS"
+              },
+              {
+                "id": "validator.owner_excludes_config",
+                "status": "FAIL"
+              },
+              {
+                "id": "validator.final_resources",
+                "status": "PASS"
+              },
+              {
+                "id": "control.ordinary_inputs",
+                "status": "PASS"
+              },
+              {
+                "id": "control.final_resources",
+                "status": "PASS"
+              }
+            ]
+          },
+          {
+            "snapshot_id": "b70493b40d8cab820814c9167e96130346d69d6d95c09621ab23c2b71625c411",
+            "status": "COMPLETE",
+            "checks": [
+              {
+                "id": "mutator.owner_binding",
+                "status": "PASS"
+              },
+              {
+                "id": "mutator.owner_excludes_config",
+                "status": "PASS"
+              },
+              {
+                "id": "mutator.later_sees_config",
+                "status": "PASS"
+              },
+              {
+                "id": "mutator.final_resources",
+                "status": "PASS"
+              },
+              {
+                "id": "validator.owner_binding",
+                "status": "PASS"
+              },
+              {
+                "id": "validator.owner_excludes_config",
+                "status": "PASS"
+              },
+              {
+                "id": "validator.final_resources",
+                "status": "PASS"
+              },
+              {
+                "id": "control.ordinary_inputs",
+                "status": "PASS"
+              },
+              {
+                "id": "control.final_resources",
+                "status": "PASS"
+              }
+            ]
+          }
+        ],
+        "public_feedback": [
+          {
+            "build_state": "PASSED",
+            "semantic_outcome": "PUBLIC_REVIEW_PASS",
+            "route": "STOP"
+          }
+        ]
+      }
+    ],
+    "money": {
+      "limit_cny": 80.0,
+      "committed_upper_cny": 26.712284,
+      "remaining_cny": 53.287716,
+      "pending_calls": 2
+    },
+    "report": "outputs/production-path-behavior-20261020/IMPLEMENTATION_REPORT.md",
+    "scope_complete": true
+  },
+  "final_optimization": {
+    "status": "DELIVERED_WITH_EFFECT_LIMITATIONS",
+    "as_of": "2026-10-20T21:53:53.116646+08:00",
+    "version": "0.5.5",
+    "method_code_digest": "3e523afe3a4888e7797e93d20e106893fe29c4d4af9b4356deec062c2d9aa4eb",
+    "scope_complete": true,
+    "engineering_delivery_complete": true,
+    "full_effect_acceptance_passed": false,
+    "formal_ready": false,
+    "formal150_started_this_scope": false,
+    "ablation_started_this_scope": false,
+    "engineering_tests": {
+      "passed": 362,
+      "subtests": 22,
+      "skipped": 0,
+      "log": "delivery-tests-v0.5.5.log"
+    },
+    "fixed_development_panel": {
+      "panel_size": 7,
+      "independent_passes": 5,
+      "independent_status_counts": {
+        "PASS": 5,
+        "NO_CANDIDATE": 2
+      },
+      "candidate_count": 5,
+      "public_pass_independent_nonpass": [],
+      "independent_pass_public_unknown": [
+        "R3-KPT-4673",
+        "R4-ACK-CLOUDWATCH-2985",
+        "RW-CERTMANAGER-9116"
+      ],
+      "model_calls": 27,
+      "single_semantic_round_independent_passes": 5,
+      "no_candidate_count": 2,
+      "public_review_passes": 2,
+      "public_unknown_with_candidate": 3
+    },
+    "regression_run": "outputs/deepseek-final-regression-v6-20261020",
+    "transfer_run": "outputs/deepseek-final-transfer-v2-20261020",
+    "independent_regression": "outputs/deepseek-independent-final-regression-v6-score-20261020",
+    "independent_transfer": "outputs/deepseek-independent-final-transfer-v2-score-20261020",
+    "recovery": {
+      "scope": "SEEDED_CONTINUATION_NOT_FIRST_PASS",
+      "run": "outputs/deepseek-final-seeded-recovery-v2-20261020",
+      "independent_status": "SEMANTIC_FAIL",
+      "effect_acceptance_passed": false,
+      "feedback_used": true,
+      "native_edit_applied": true,
+      "initial_probe_counts": {
+        "PASS": 11,
+        "FAIL": 3
+      },
+      "final_probe_counts": {
+        "PASS": 7,
+        "FAIL": 7
+      }
+    },
+    "repair_rate_improvement_established": false,
+    "complete_artifacts": [
+      "COMPLETION_AUDIT.md",
+      "IMPLEMENTATION_REPORT.md",
+      "CAPABILITY_MATRIX.md",
+      "RECOVERY_REPORT.md",
+      "final-validation.json",
+      "candidate-method-v0.5.5.json",
+      "cost-final-v0.5.5.json",
+      "INDEPENDENT_REVIEW.md",
+      "RULINGS.md"
+    ],
+    "remaining_capability_limitations": [
+      "KOPF model misread public operation exceptions and produced no candidate",
+      "Alertmanager production-state read path evidence gap; no candidate",
+      "KPT,ACK,Certmanager independent PASS but public verification UNKNOWN",
+      "Seeded real recovery edit regressed behavior; independent SEMANTIC_FAIL"
+    ],
+    "outstanding_delivery_work": []
+  },
+  "final_delivery_readiness": {
+    "version": "0.6.4",
+    "status": "ACCEPTANCE_IN_PROGRESS",
+    "formal_ready": false,
+    "audit": "outputs/reliability-closure-20261020/COMPLETION_AUDIT.md"
+  },
+  "historical_real_api_experiment_pre_final_optimization": {
+    "scope": "Bounded development; formal150/ablations deferred",
+    "method_version": "0.4.12",
+    "rows": [
+      {
+        "execution_calls": [
+          {
+            "finish_reason": "stop",
+            "usage": {
+              "prompt_tokens": 12741,
+              "completion_tokens": 520,
+              "total_tokens": 13261,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              }
+            },
+            "read_only_support_audit": [
+              {
+                "id": "SRC-CU-b86cb057519aca46",
+                "path": "templates/cluster-gateway/job-patch.yaml",
+                "result": "TARGET_ALREADY_SUPPLIED"
+              }
+            ]
+          }
+        ],
+        "case_id": "RW-CAND-130",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "independent_status": "PASS",
+        "patch_bytes": 1474,
+        "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+        "model_calls": 4,
+        "errors": [],
+        "front_statuses": [
+          "READY"
+        ],
+        "branch_reviews": [
+          []
+        ],
+        "probe_runs": [],
+        "public_feedback": [
+          {
+            "build_state": "PASSED",
+            "semantic_outcome": "PUBLIC_REVIEW_PASS",
+            "route": "STOP"
+          }
+        ]
+      },
+      {
+        "execution_calls": [
+          {
+            "finish_reason": "stop",
+            "usage": {
+              "prompt_tokens": 27695,
+              "completion_tokens": 1959,
+              "total_tokens": 29654,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              }
+            },
+            "read_only_support_audit": [
+              {
+                "id": "SRC-CU-60d3496476d58093",
+                "path": "pkg/lib/kptops/render_executor.go",
+                "result": "TARGET_ALREADY_SUPPLIED"
+              },
+              {
+                "id": "SRC-CU-883e2cb2727d395a",
+                "path": "pkg/lib/kptops/render_executor.go",
+                "result": "TARGET_ALREADY_SUPPLIED"
+              },
+              {
+                "id": "HELPER-b1458129855125de",
+                "path": "pkg/fn/runtime/utils.go",
+                "symbol": "MergeWithInput",
+                "result": "INCLUDED_READ_ONLY_HELPER"
+              },
+              {
+                "id": "HELPER-bf52db689d494726",
+                "path": "pkg/fn/runtime/utils.go",
+                "symbol": "SetResourceIDs",
+                "result": "INCLUDED_READ_ONLY_HELPER"
+              },
+              {
+                "id": "HELPER-222efe5087442853",
+                "path": "pkg/fn/runtime/utils.go",
+                "symbol": "DeleteResourceIDs",
+                "result": "INCLUDED_READ_ONLY_HELPER"
+              },
+              {
+                "id": "HELPER-a6f6c10ee69b1968",
+                "path": "pkg/fn/runtime/utils.go",
+                "symbol": "SelectInput",
+                "result": "INCLUDED_READ_ONLY_HELPER"
+              },
+              {
+                "id": "HELPER-db4df3998fec9e0b",
+                "path": "pkg/lib/pkg/pkg.go",
+                "symbol": "Pipeline",
+                "result": "INCLUDED_READ_ONLY_HELPER"
+              }
+            ]
+          }
+        ],
+        "case_id": "R3-KPT-4673",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "independent_status": "PASS",
+        "patch_bytes": 3882,
+        "patch_sha256": "be5c01f86b68aeded69aaef6d817f3baf95dc09c04dde5a7fb1e2dd9d9fcb7da",
+        "model_calls": 6,
+        "errors": [],
+        "front_statuses": [
+          "READY"
+        ],
+        "branch_reviews": [
+          [
+            {
+              "source_evidence_id": "SRC-CU-883e2cb2727d395a",
+              "disposition": "MODIFY",
+              "rationale": "runMutators sets functionConfig via pn.refreshFnConfig(mutator, input, pl.Mutators[i].ConfigPath) and then calls fnruntime.SelectInput(input, selectors, exclusions, ...) on the same unchanged input, so the configPath-designated resource is selected as ordinary input. This is the mutator branch of V1/A2. Excluding the resolved config resource from the SelectInput slice (while retaining it in the package input / final output) is the intended change.",
+              "change_refs": [
+                "ch-mutator-exclude-config-from-input"
+              ],
+              "open_obligation_refs": []
+            },
+            {
+              "source_evidence_id": "SRC-CU-60d3496476d58093",
+              "disposition": "MODIFY",
+              "rationale": "runValidators sets functionConfig via pn.refreshFnConfig(validator, input, function.ConfigPath) and selects ordinary input from the unchanged input list with fnruntime.SelectInput, so the configPath resource is also selected as an ordinary input item. This is the validator branch of V2/A2 and is the intended second change.",
+              "change_refs": [
+                "ch-validator-exclude-config-from-input"
+              ],
+              "open_obligation_refs": []
+            },
+            {
+              "source_evidence_id": "SRC-CU-b185a6639d1920f7",
+              "disposition": "PRESERVE",
+              "rationale": "runPipeline only sequences pn.runMutators(ctx, hctx, input) and then pn.runValidators(ctx, hctx, mutatedResources); it holds no configPath ordinary-input selection logic and merely forwards the mutated resource list. The repair is confined to the two owning functions, so this orchestration must stay as-is, including the error wrapping and empty-pipeline KRM check.",
+              "change_refs": [],
+              "open_obligation_refs": []
+            },
+            {
+              "source_evidence_id": "SRC-CU-f234e7e032fde349",
+              "disposition": "OUT_OF_SCOPE",
+              "rationale": "Renderer.Execute handles hydration ordering, save-on-render-failure, rel-path adjustment and output writing. It does not resolve ConfigPath, bind functionConfig, or perform ordinary-input selection, so it is not part of the A2/R3/R4 relation chain and needs no change for these violations.",
+              "change_refs": [],
+              "open_obligation_refs": []
+            }
+          ]
+        ],
+        "probe_runs": [
+          {
+            "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+            "status": "COMPLETE",
+            "checks": [
+              {
+                "id": "mutator.owner_binding",
+                "status": "PASS"
+              },
+              {
+                "id": "mutator.owner_excludes_config",
+                "status": "FAIL"
+              },
+              {
+                "id": "mutator.later_sees_config",
+                "status": "PASS"
+              },
+              {
+                "id": "mutator.final_resources",
+                "status": "PASS"
+              },
+              {
+                "id": "validator.owner_binding",
+                "status": "PASS"
+              },
+              {
+                "id": "validator.owner_excludes_config",
+                "status": "FAIL"
+              },
+              {
+                "id": "validator.final_resources",
+                "status": "PASS"
+              },
+              {
+                "id": "control.ordinary_inputs",
+                "status": "PASS"
+              },
+              {
+                "id": "control.final_resources",
+                "status": "PASS"
+              }
+            ]
+          },
+          {
+            "snapshot_id": "b70493b40d8cab820814c9167e96130346d69d6d95c09621ab23c2b71625c411",
+            "status": "COMPLETE",
+            "checks": [
+              {
+                "id": "mutator.owner_binding",
+                "status": "PASS"
+              },
+              {
+                "id": "mutator.owner_excludes_config",
+                "status": "PASS"
+              },
+              {
+                "id": "mutator.later_sees_config",
+                "status": "PASS"
+              },
+              {
+                "id": "mutator.final_resources",
+                "status": "PASS"
+              },
+              {
+                "id": "validator.owner_binding",
+                "status": "PASS"
+              },
+              {
+                "id": "validator.owner_excludes_config",
+                "status": "PASS"
+              },
+              {
+                "id": "validator.final_resources",
+                "status": "PASS"
+              },
+              {
+                "id": "control.ordinary_inputs",
+                "status": "PASS"
+              },
+              {
+                "id": "control.final_resources",
+                "status": "PASS"
+              }
+            ]
+          }
+        ],
+        "public_feedback": [
+          {
+            "build_state": "PASSED",
+            "semantic_outcome": "PUBLIC_REVIEW_PASS",
+            "route": "STOP"
+          }
+        ]
+      }
+    ],
+    "money": {
+      "limit_cny": 80.0,
+      "committed_upper_cny": 26.712284,
+      "remaining_cny": 53.287716,
+      "pending_calls": 2
+    }
+  },
+  "historical_independent_code_review_pre_final_optimization": "outputs/benchmark150-independent-code-review-20261019.json",
+  "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/系统审查与验收.md",
+  "reliability_closure": {
+    "version": "0.6.33",
+    "status": "G4_V0633_SINGLE_GATE_RUNNING",
+    "implementation_completed_claim": false,
+    "repair_reliability_accepted": false,
+    "formal150_started": false,
+    "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.33.json",
+    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.33.json",
+    "audit": "outputs/reliability-closure-20261020/COMPLETION_AUDIT.md"
+  },
+  "historical_final_delivery_readiness_v0_5_5": {
+    "engineering_delivery_complete": true,
+    "formal_ready": false,
+    "effect_acceptance_complete": true,
+    "report": "outputs/final-optimization-20261020/readiness.json",
+    "effect_acceptance_passed": false
+  },
+  "version": "0.6.33",
+  "status": "V0633_FROZEN_SINGLE_ACK_RUNNING",
+  "repair_reliability_accepted": false,
+  "implementation_completed_claim": false,
+  "formal_ready": false,
+  "formal150_started": false,
+  "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.33.json",
+  "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.33.json",
+  "current_engineering_evidence": {
+    "full": "outputs/public-evidence-continuity-20261024/full-v0633-tests.log",
+    "portable_subset": "outputs/public-evidence-continuity-20261024/portable-tests.log",
+    "replay": "outputs/public-evidence-continuity-20261024/after.json",
+    "cross_case": "outputs/public-evidence-continuity-20261024/cross-case-v0633.json",
+    "report": "docs/reports/2026-10-24-public-evidence-continuity.md"
+  },
+  "active_frozen_panels": {
+    "0.6.8": "Historical dispatch held, results retained",
+    "0.6.9": "Historical SEMANTIC_FAIL",
+    "0.6.10": "Historical INVALID_OUTPUT / SEMANTIC_FAIL",
+    "0.6.11": "Historical BUILD_FAIL, retained",
+    "0.6.12": "NO_CANDIDATE, known required-delivery defect reproduced offline",
+    "0.6.13": "NO_CANDIDATE, source-support marker rejected by stale Ready consumer; zero-HTTP native replay passes after shared binding fix",
+    "0.6.14": "NEEDS_EVIDENCE, no candidate; exact-source lookup defect reproduced and corrected offline",
+    "0.6.15": "SEMANTIC_FAIL despite public3/3PASS; no G5/B dispatch",
+    "0.6.16": "G4 only with calibrated v3 public observations; G5/B closed",
+    "0.6.29": "CLOSED SEMANTIC_FAIL;1/46 scored,45NOT_RUN",
+    "0.6.31": "CLOSED INVALID_OUTPUT/NO_CANDIDATE;4calls,1/46scored,45NOT_RUN",
+    "0.6.32": "CLOSED single ACK PASS, public8/8PASS/overallUNKNOWN;1/46scored,45held; superseded for uncited fact continuity",
+    "0.6.33": "Single ACK candidate/0 running;45held"
+  },
+  "optimization_reset": {
+    "as_of": "2026-10-21T14:38:03.778057+00:00",
+    "gate": "G4_V0633_SINGLE_GATE_RUNNING",
+    "formal_ready": false,
+    "money_limit_cny": 150,
+    "report": "docs/reports/2026-10-24-public-evidence-continuity.md",
+    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.33.json",
+    "public_calibration": "temporal-v2-calibration-corrected/summary.json",
+    "live_result": "Latest completed .32 ACK independentPASS; .33 running",
+    "next_revision": null
+  },
+  "latest_live_result": {
     "version": "0.6.32",
     "case_id": "R4-ACK-CLOUDWATCH-2985",
-    "status": "RUNNING",
-    "source": "ORIGINAL_BROKEN",
-    "slot": "A/0/candidate",
-    "scoring": "NOT_RUN"
+    "status": "PUBLIC_EXECUTION_COMPLETE",
+    "independent_status": "PASS",
+    "public_checks_passed": 8,
+    "public_checks_total": 8,
+    "semantic_outcome": "UNKNOWN",
+    "model_calls": 6,
+    "scored": 1,
+    "not_run": 45
   },
-  "public_probe_qualification": {
-    "id": "cloudwatch-tags-v2",
-    "program_sha256": "b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f",
-    "status": "QUALIFIED_PUBLIC_LOCAL_PROBE",
-    "initial_checks_delivered": 8,
-    "input_bound": 91480,
-    "input_limit": 120000,
-    "scope": "Local SDK IO production path; direct Update, valid existing alarm, sticky target rejection; artificial calibration control excluded from repair effectiveness"
+  "current_experiment": {
+    "version": "0.6.33",
+    "case_id": "R4-ACK-CLOUDWATCH-2985",
+    "status": "RUNNING"
   },
-  "current_report": "docs/reports/2026-10-24-execution-contract-closure.md",
-  "implementation_plan": "docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md",
-  "remaining_required": [
-    "same-version registered effect and recovery gates",
-    "full source/process provenance and isolation evidence",
-    "final readiness aggregation",
-    "clean operational reproduction and recovery drills"
-  ],
-  "historical_results": "REFERENCE_ONLY; no mixed-version best scores",
-  "full150_model_experiment": "NOT_STARTED",
-  "B_panel": "CLOSED",
-  "packaging": "Raw runtime workspaces, credentials, ledger and large replay fixtures excluded"
+  "G4": "V0633_SINGLE_GATE_PENDING_SAME_VERSION_RECOVERY_NOT_RUN",
+  "G5": "FIXED_SAME_VERSION_PANEL_PENDING",
+  "B_opened": false,
+  "engineering_tests": 802,
+  "budget_snapshot": {
+    "limit_cny": 150,
+    "committed_including_reservations_cny": 94.24902,
+    "remaining_upper_bound_cny": 55.75098,
+    "as_of": "End of .32; .33 running"
+  },
+  "staged_revision": null,
+  "subtests": 22,
+  "frozen_method": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.33.json",
+  "same_version_candidate_independent_pass_so_far": {
+    "A": 0,
+    "recovery": 0
+  },
+  "staged_optimization": {
+    "status": "FROZEN",
+    "source_delta": [
+      "contractedge/__init__.py",
+      "contractedge/orchestration/runner.py"
+    ],
+    "configuration_delta": {}
+  },
+  "current_development_revision": {
+    "version": "0.6.33",
+    "source_sha256": "c557658498cae454dc47664f567bf6d7f32d708dba9c2f7daa80f21a0d7cbe28",
+    "upstream_commit": "c892215",
+    "local_delta": [
+      "contractedge/__init__.py",
+      "contractedge/orchestration/runner.py"
+    ],
+    "is_original_v0627_freeze": false
+  },
+  "budget_current": {
+    "limit_cny": 150,
+    "committed_including_uncertain_cny": 94.24902,
+    "remaining_upper_cny": 55.75098,
+    "uncertain_reservations": 3,
+    "as_of": "End of .32; .33 running"
+  }
 }
