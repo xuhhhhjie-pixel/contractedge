@@ -216,13 +216,13 @@ def trim_context_bundle(candidate_set: CandidateSet, *, request_tokens: int, lim
     if not groups:
         return candidate_set
     positions = {str(c['id']): i for i, c in enumerate(selected)}
-    protected={str(c['id']) for c in selected if c.get('gap_role_keys')}
+    protected={str(c['id']) for c in selected if c.get('gap_role_keys')} | set(candidate_set.required_endpoint_ids)
     unprotected=[g for g in groups if not g&protected]
     removed = max(unprotected or groups, key=lambda g: (min(positions[k] for k in g), sorted(g)))
-    if len(removed)==len(selected) and len(selected)>1:
-        # All source may form a single lexical component. It is a retrieval
-        # hint, not an indivisible semantic proof. Drop redundant scaffolding
-        # before discarding every evidenced production branch at once.
+    if (removed & protected or len(removed)==len(selected)) and len(selected)>1:
+        # A lexical component is not an indivisible semantic proof. Even when
+        # there are several components, remove optional scaffolding before
+        # sacrificing a required source endpoint in any of them.
         removable=[c for c in selected if str(c['id']) not in protected]
         ordinary=[c for c in removable if not candidate_set.ranking_features.get(str(c['id']),{}).get('lexical_sibling_candidate')]
         if ordinary or removable:
