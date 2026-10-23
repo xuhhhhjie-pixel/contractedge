@@ -1,5 +1,6 @@
 """Public developer examples exercise actual processes and the production loop."""
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -100,8 +101,12 @@ class PublicDemoTests(unittest.TestCase):
             workspace = output / 'repair/workspace'
             record = read(workspace / 'workspace.json')
             source = Path(record['source_root']) / 'app.py'
-            source.write_text(source.read_text().replace('"stable"', '"regressed"'))
+            source.write_text('import os\nassert not os.environ.get("CONTRACTEDGE_DEMO_TEST_SENTINEL")\n' + source.read_text())
             runner = public_demo.PublicExampleRunner(output / 'frozen-public/public', 'config-binding')
+            with patch.dict(os.environ, {'CONTRACTEDGE_DEMO_TEST_SENTINEL': 'fictional-environment-test'}):
+                clean = runner.observe(workspace, output / 'repair/environment-public')
+            self.assertEqual(clean['status'], 'EXECUTION_PASS')
+            source.write_text(source.read_text().replace('"stable"', '"regressed"'))
             observation = runner.observe(workspace, output / 'repair/regression-public')
             stable = next(json.loads(r['excerpt']) for r in observation['observations'] if r['id']=='OBS-stable')
             self.assertEqual(stable['status'], 'FAIL')
@@ -139,10 +144,74 @@ class PublicDemoTests(unittest.TestCase):
             with patch.object(public_demo, '_provider', offline_provider):
                 public_demo.run_demo('reload-state', root / 'saved', save_ready=True,
                                      provider_config=root / 'provider.json')
+            with patch.object(public_demo, '_provider') as factory:
+                for output, options in [(root / 'direct', {'case': 'reload-state', 'provider_config': root / 'provider.json'}),
+                                        (root / 'live-continuation', {'case': None, 'resume_ready': root / 'saved'})]:
+                    with self.assertRaisesRegex(ValueError, 'requires a sandbox observer'):
+                        public_demo.run_demo(output=output, **options)
+                factory.assert_not_called()
+            self.assertFalse((root / 'saved/continuation.claim.json').exists())
             (root / 'money.json').unlink()
             with patch.object(public_demo, '_provider') as factory:
                 with self.assertRaisesRegex(ValueError, 'money ledger is missing or changed'):
                     public_demo.run_demo(None, root / 'continued', resume_ready=root / 'saved')
+                factory.assert_not_called()
+
+    def test_timeout_consumes_ready_once_and_retains_unknown_dispatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.run_cli('--case', 'reload-state', '--save-ready', '--output', root / 'saved')
+            class TimeoutProvider:
+                def complete_json(self, request):
+                    raise TimeoutError('fictional dispatched request timeout')
+            with patch.object(public_demo, '_provider', return_value=(TimeoutProvider(), public_demo.count_tokens)):
+                summary = public_demo.run_demo(None, root / 'first', resume_ready=root / 'saved')
+            self.assertEqual(summary['status'], 'INFRASTRUCTURE_ERROR')
+            calls = read(root / 'first/combined.model_calls.json')
+            self.assertEqual(len(calls), 3)
+            self.assertIn('TimeoutError', calls[-1]['error'])
+            self.assertNotIn('response_content', calls[-1])
+            with patch.object(public_demo, '_provider') as factory:
+                with self.assertRaisesRegex(ValueError, 'already claimed'):
+                    public_demo.run_demo(None, root / 'second', resume_ready=root / 'saved')
+                factory.assert_not_called()
+            claim = read(root / 'saved/continuation.claim.json')
+            self.assertEqual(claim['output'], str(root / 'first'))
+            self.assertEqual(read(root / 'first/combined.model_calls.json'), calls)
+
+    def test_concurrent_ready_claim_admits_exactly_one_continuation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.run_cli('--case', 'reload-state', '--save-ready', '--output', root / 'saved')
+            processes = [subprocess.Popen([sys.executable, str(ENTRY), '--resume-ready', str(root / 'saved'),
+                '--output', str(root / name)], cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                for name in ['one', 'two']]
+            outputs = [p.communicate(timeout=90) for p in processes]
+            self.assertEqual(sorted(p.returncode for p in processes), [0, 2], outputs)
+            claim = read(root / 'saved/continuation.claim.json')
+            self.assertEqual(read(Path(claim['output']) / 'summary.json')['status'], 'PUBLIC_REVIEW_COMPLETE')
+            self.assertEqual(sum((root / name / 'repair').exists() for name in ['one', 'two']), 1)
+
+    def test_api_config_rejects_null_money_and_credential_urls_before_persistence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            config = {'provider': 'openai_compatible', 'model': 'fixture', 'base_url': 'https://api.example.invalid',
+                'api_key_env': 'PUBLIC_DEMO_TEST_KEY', 'max_total_tokens': 1500000, 'max_elapsed_seconds': 180,
+                'max_model_calls': 16, 'max_rounds': 2, 'money_budget': {'path': str(root / 'money.json'),
+                    'limit_cny': 1, 'model': 'fixture', 'input_cny_per_million': 1, 'output_cny_per_million': 1}}
+            invalid = [[1], {**config, 'money_budget': None}, {**config, 'money_budget': {}},
+                {**config, 'base_url': 'https://fictional-user:fictional-password@api.example.invalid'},
+                {**config, 'base_url': 'https://api.example.invalid?api_key=fictional-value'},
+                {**config, 'base_url': 'https://api.example.invalid#fictional-value'},
+                {**config, 'api_key_env': 'sk-fictional-value'}]
+            with patch.object(public_demo, '_provider') as factory:
+                for index, value in enumerate(invalid):
+                    with self.subTest(index=index):
+                        public_demo.write_json(root / 'provider.json', value)
+                        output = root / str(index)
+                        with self.assertRaises(ValueError):
+                            public_demo.run_demo('reload-state', output, save_ready=True, provider_config=root / 'provider.json')
+                        self.assertFalse((output / 'run.config.json').exists())
                 factory.assert_not_called()
 
 

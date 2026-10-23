@@ -9,7 +9,9 @@ import argparse
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -57,16 +59,18 @@ def freeze_example(case, output):
         import gzip
         with gzip.GzipFile(fileobj=raw, mode='wb', mtime=0, filename='') as zipped:
             with tarfile.open(fileobj=zipped, mode='w') as archive:
-                for path in sorted((example / 'source').rglob('*')):
-                    if path.is_file():
-                        data = path.read_bytes()
-                        member = tarfile.TarInfo('repo/' + path.relative_to(example / 'source').as_posix())
-                        member.size, member.mode = len(data), 0o644
-                        archive.addfile(member, io.BytesIO(data))
+                for name in ['app.py', 'config.yaml']:
+                    path = example / 'source' / name
+                    if path.is_symlink() or not path.resolve().is_relative_to(example.resolve()):
+                        raise ValueError('Public example source must be an owned regular file')
+                    data = path.read_bytes()
+                    member = tarfile.TarInfo('repo/' + name)
+                    member.size, member.mode = len(data), 0o644
+                    archive.addfile(member, io.BytesIO(data))
     (task / 'task.yaml').write_text('schema_version: contractedge.method_task.v1\nrequirement_file: requirement.md\nsource_archive: source.tar.gz\nexecution_config: environment.json\n', encoding='utf-8')
     write_json(task / 'environment.json', {
-        'editable_paths': ['app.py'], 'network': 'none',
-        'observation_boundary': 'Python child process runs published selected and preservation behavior controls.',
+        'editable_paths': ['app.py'], 'network': 'host-process-not-enforced',
+        'observation_boundary': 'Host Python child process runs published controls; no OS network/filesystem sandbox. Only synthetic-provider execution is admitted.',
         'scenarios': [{'name': 'selected-and-preservation', 'argv': ['python', 'published-observer']}],
     })
     names = sorted(p.name for p in task.iterdir())
@@ -131,11 +135,17 @@ class PublicExampleRunner:
         output.mkdir(parents=True)
         record = _read(workspace / 'workspace.json')
         source = Path(record['source_root'])
-        argv = [sys.executable, '-B', '-c', OBSERVER, str(source), str(workspace / 'inputs/runtime-inputs.json')]
-        result = subprocess.run(argv, capture_output=True, text=True, timeout=self.timeout_seconds)
+        argv = [sys.executable, '-I', '-B', '-c', OBSERVER, str(source), str(workspace / 'inputs/runtime-inputs.json')]
+        environment = {key: os.environ[key] for key in ['PATH', 'SYSTEMROOT', 'WINDIR', 'TEMP', 'TMP', 'TMPDIR'] if key in os.environ}
+        environment['LANG'] = 'C.UTF-8'
+        # This removes inherited API credentials and Python/user startup paths.
+        # It is not an operating-system filesystem or network sandbox.
+        result = subprocess.run(argv, capture_output=True, text=True, timeout=self.timeout_seconds,
+                                cwd=source, env=environment)
         (output / 'stdout.txt').write_text(result.stdout, encoding='utf-8')
         (output / 'stderr.txt').write_text(result.stderr, encoding='utf-8')
         write_json(output / 'process.json', {'argv': argv, 'returncode': result.returncode,
+            'environment_keys': sorted(environment), 'python_isolated': True,
             'boundary': 'returncode=0 means observations collected; checks carry behavioral PASS/FAIL'})
         snapshot = compute_snapshot(source).snapshot_id
         observations = []
@@ -272,6 +282,8 @@ def _provider(config, case, runner):
 
 def _safe_config(config):
     # Credentials are environment references only; never serialize literal keys.
+    if not isinstance(config, dict):
+        raise ValueError('Provider config must be a JSON object')
     forbidden = {'api_key', 'token', 'password', 'authorization', 'headers', 'extra_headers'}
     def inspect(value):
         if isinstance(value, dict):
@@ -283,7 +295,47 @@ def _safe_config(config):
             for child in value:
                 inspect(child)
     inspect(config)
+    if config.get('base_url') is not None:
+        from urllib.parse import urlsplit
+        if not isinstance(config['base_url'], str):
+            raise ValueError('Provider base_url must be a URL string')
+        url = urlsplit(config['base_url'])
+        if url.scheme not in {'http', 'https'} or not url.netloc or url.username is not None or url.password is not None or url.query or url.fragment:
+            raise ValueError('Provider base_url must be HTTP(S) without userinfo, query or fragment')
+    if config.get('api_key_env') is not None and not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', str(config['api_key_env'])):
+        raise ValueError('api_key_env must be an environment variable name')
+    if config.get('provider') == 'openai_compatible':
+        money = config.get('money_budget')
+        fields = {'path', 'limit_cny', 'model', 'input_cny_per_million', 'output_cny_per_million'}
+        if not isinstance(money, dict) or not fields.issubset(money) or not isinstance(money['path'], str) or not money['path']:
+            raise ValueError('API provider requires a nonempty money_budget object with path/limit/model/input and output rates')
+        if money['model'] != config.get('model'):
+            raise ValueError('Money budget model must match the configured provider model')
     return config
+
+
+def _claim_ready(saved, output):
+    """A deliberate checkpoint is consumed at most once, even after a crash."""
+    path = saved / 'continuation.claim.json'
+    claim = {'schema_version': 'ce.public_demo_continuation_claim.v1', 'output': str(output),
+             'checkpoint_sha256': file_sha(saved / 'ready.checkpoint.json'),
+             'prior_ledger_sha256': file_sha(saved / 'model_calls.json'),
+             'claimed_unix_seconds': time.time(), 'automatic_resend': False}
+    try:
+        descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    except FileExistsError as exc:
+        raise ValueError('READY checkpoint is already claimed; inspect the first continuation ledger and never automatically resend unknown calls: ' + str(path)) from exc
+    # An interrupted/empty claim also blocks reuse: no unknown attempt is erased.
+    with os.fdopen(descriptor, 'w') as stream:
+        stream.write(json.dumps(claim, indent=2) + '\n')
+        stream.flush()
+        os.fsync(stream.fileno())
+    directory = os.open(saved, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(directory)
+    finally:
+        os.close(directory)
+    return claim
 
 
 def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_config=None):
@@ -340,6 +392,8 @@ def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_conf
         if config.get('money_budget') is not None:
             config['money_budget']['path'] = str(Path(config['money_budget']['path']).resolve())
     _safe_config(config)
+    if config.get('provider') != 'synthetic' and not save_ready:
+        raise ValueError('Non-synthetic provider execution requires a sandbox observer; only --save-ready is supported')
     write_json(output / 'run.config.json', config)
     method, projection = method_input_from_task(public, case)
     write_json(output / 'run.freeze.json', {'schema_version': 'ce.public_demo_freeze.v1',
@@ -348,6 +402,9 @@ def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_conf
         'initial_snapshot_id': method['initial_snapshot_id'], 'source_archive_sha256': method['archive_sha256'],
         'frozen_public_files': _freeze_inventory(output / 'frozen-public')})
     runner = PublicExampleRunner(public, case)
+    if resume_ready is not None:
+        claim = _claim_ready(saved, output)
+        write_json(output / 'continuation.claim.json', claim)
     provider, counter = _provider(config, case, runner)
     if save_ready:
         workspace = output / 'ready-workspace'
@@ -407,7 +464,7 @@ def main(argv=None):
     parser.add_argument('--output', type=Path, help='New directory; existing output is never overwritten.')
     parser.add_argument('--save-ready', action='store_true', help='Stop after a validated READY plan and persist its exact ledger.')
     parser.add_argument('--resume-ready', type=Path, help='Continue a deliberate READY checkpoint in a new process/output; budgets are inherited.')
-    parser.add_argument('--provider-config', type=Path, help='Optional explicit provider JSON using the existing CLI factory; may incur API cost.')
+    parser.add_argument('--provider-config', type=Path, help='Optional provider JSON for --save-ready planning only; may incur API cost. Live code execution requires a future sandbox runner.')
     args = parser.parse_args(argv)
     if args.list:
         print(json.dumps(CASES, indent=2))
