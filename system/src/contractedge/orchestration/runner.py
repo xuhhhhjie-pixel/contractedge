@@ -711,7 +711,15 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                         ensure_ascii=False)},))
             request = planning_generation_mode(request)
             count = request_tokens(request)
-            first_limit = min(fitted.max_context_tokens, int(config.get('initial_diagnosis_context_tokens', fitted.max_context_tokens)))
+            # The smaller initial allowance is not a second global context cap.
+            # Validated feedback adds obligation/history state on rediagnosis;
+            # fit that stage in the existing total context, reserving output.
+            total_limit = min(int(config['max_context_tokens']),
+                int(config.get('model_context_tokens') or config['max_context_tokens']))
+            first_limit = (min(fitted.max_context_tokens,
+                int(config.get('initial_diagnosis_context_tokens', fitted.max_context_tokens)))
+                if execution_feedback is None else
+                min(fitted.max_context_tokens, total_limit - request.max_output_tokens))
             if count <= first_limit:
                 if config.get('gap_role_delivery_enabled'):
                     from contractedge.retrieval.gap_delivery import audit_gap_delivery
@@ -723,6 +731,8 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                         return fitted,None,count
                 audit = {'request_tokens': count, 'input_limit': first_limit,
                          'reserved_output_tokens': request.max_output_tokens,
+                         'context_stage': 'INITIAL_DIAGNOSIS' if execution_feedback is None else 'FEEDBACK_REDIAGNOSIS',
+                         'total_context_limit': total_limit,
                          'selected_ids': list(fitted.selected_ids),
                          'surviving_reference_edges': len(fitted.edges),
                          'drop_reasons': dict(fitted.drop_reasons or {})}

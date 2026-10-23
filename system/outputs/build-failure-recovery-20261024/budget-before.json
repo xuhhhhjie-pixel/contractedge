@@ -3,7 +3,6 @@
   "real_model_http_calls": 0,
   "saved_model_responses_consumed": 6,
   "request_count": 6,
-  "captured_restored_retry": false,
   "selected_source_snapshot": "6936f15814e107a25ad7588b9689851dbe6f8527fe391fe784749554259b3a32",
   "initial_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
   "source_restored": false,
@@ -298,5 +297,6 @@
       ]
     }
   ],
-  "scope": "Saved eight responses and public Broken/build-failure reports only; capture next request after coherent rollback. Not a new model correction or repair outcome."
+  "scope": "Six actual .35 public responses through normal repair loop. Capture next feedback-driven extension request; no new model output or repair result. Changed inputs after feedback are reported explicitly.",
+  "captured_followup_extension_request": false
 }

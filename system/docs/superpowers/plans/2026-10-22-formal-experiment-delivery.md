@@ -1,6 +1,6 @@
 # ContractEdge 正式实验准入与最终优化实施计划
 
-> 2026-10-24执行入口：当前冻结0.6.35（841+22完整测试、808+17可移植子集）。下文0.6.27是制定计划时的基线，不是当前源码。当前进展、失败与剩余项以`CURRENT_STATUS.json`及`docs/reports/2026-10-24-build-failure-recovery.md`为准；任务与G0—G6退出条件不变，不因工程局部通过而降低。
+> 2026-10-24执行入口：当前冻结0.6.36（847+22完整测试、814+17可移植子集）。下文0.6.27是制定计划时的基线，不是当前源码。当前进展、失败与剩余项以`CURRENT_STATUS.json`及`docs/reports/2026-10-24-feedback-context-admission.md`为准；任务与G0—G6退出条件不变，不因工程局部通过而降低。
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. 用户已授权执行普通修复；不得重复要求批准，不得擅自改变验收口径。
 

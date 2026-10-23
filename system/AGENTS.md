@@ -1,9 +1,9 @@
-> CURRENT frozen0.6.35 / 68e5275224d95958f054acda90108c5f0a84272fa1569b6a90ae3e1aaa74b9dd. Full841+22, portable808+17 including masked freshvenv local clone13ee9ac. .35 CLOSED originalBroken BUDGET_EXHAUSTED/SEMANTIC_FAIL6calls;1/46scored45NOT_RUN. Supplemental .34-saved-response→.35 continuationPASS (8checksPASS,3newcalls) is NOT fresh/panel. No active paid job. Formal150/B closed. Latest report docs/reports/2026-10-24-build-failure-recovery.md. New followup-context failure reproduced; fix/test offline before more API.
+> CURRENT frozen0.6.36 / b47a0a6d60b4bdc99ef6a70ec45d6d456131d1bbeb52049ca3198aabce56f2ca. Full847+22, portable814+17 in existingvenv. .36 originalBroken ACK candidate/0 running once session72898;45held. Never duplicate/mutate freeze. .35 original SEMANTIC_FAIL and separately labeled saved-response continuationPASS are historical, not .36scores. Formal150/B closed. Read CURRENT_STATUS.json and docs/reports/2026-10-24-feedback-context-admission.md. Unused group dispatcher draft is not qualified.
 
 # ContractEdge system handoff
 
 Read README.md and docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md first.
-Runtime source is 0.6.35; formal_ready=false. Historical reports contain superseded status; CURRENT_STATUS.json and the handoff plan identify the current failed gate.
+Runtime source is 0.6.36; formal_ready=false. Historical reports contain superseded status; CURRENT_STATUS.json and the handoff plan identify the current failed gate.
 Preserve benchmark/ and tools/ in the repository root. Do not put credentials, hidden graders, GT/Fixed, runtime workspaces or caches into model context or Git.
 Use saved public failure replay before behavior changes; verify actual final serialized requests across diagnosis, plan, execution and re-diagnosis. Re-read the current snapshot after edits.
 Run python scripts/test_portable.py for the self-contained development subset; report explicitly that six historical/native modules are excluded. Full tests require the documented external fixtures. Never call subset results a full 662-test reproduction.

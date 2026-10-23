@@ -1,0 +1,15 @@
+F.....                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_valid_feedback_can_deliver_fresh_source_beyond_initial_cap_within_total _
+
+context = <tests.test_feedback_context.FeedbackContextTests testMethod=runTest>
+
+    def test_valid_feedback_can_deliver_fresh_source_beyond_initial_cap_within_total(context):
+        provider=Capture();before=compute_snapshot(context.source).snapshot_id
+>       with pytest.raises(Captured):invoke(context,provider)
+E       Failed: DID NOT RAISE Captured
+
+tests/test_feedback_diagnosis_budget.py:37: Failed
+=========================== short test summary info ============================
+FAILED tests/test_feedback_diagnosis_budget.py::test_valid_feedback_can_deliver_fresh_source_beyond_initial_cap_within_total
+1 failed, 5 passed in 0.87s
