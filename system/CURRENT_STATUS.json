@@ -9,11 +9,11 @@
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "current_development": {
-    "snapshot": "docs/development/architecture-b-runtime-observer-20261023-r2.snapshot.json",
-    "snapshot_id": "architecture-b-runtime-observer-20261023-r2",
+    "snapshot": "docs/development/architecture-a2-stage-references-20261023.snapshot.json",
+    "snapshot_id": "architecture-a2-stage-references-20261023",
     "snapshot_role": "CURRENT_FROZEN_DEVELOPMENT",
     "status": "VALIDATED_OFFLINE",
-    "scope": "Three exposed synthetic public developer cases; independent runtime controls. Not a benchmark result or full architecture completion.",
+    "scope": "Exposed synthetic developer cases and engineering counterexamples; C1/C2/D1/D2 and final paid single-case validation remain separate.",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "planned_verification_command": "python scripts/verify_development_snapshot.py --snapshot docs/development/architecture-b-runtime-observer-20261023.snapshot.json --require-current-bindings",
     "test_command": "python scripts/test_portable.py",
@@ -23,10 +23,10 @@
     "github_actions_execution": "NOT_RUN_FOR_THIS_SNAPSHOT_AT_FREEZE",
     "formal_effectiveness": "NOT_EVALUATED",
     "verification": {
-      "portable": "1021 passed, 4 skipped, 74 subtests passed in 122.16s (0:02:02)",
-      "native": ".........                                                                [100%]\n9 passed in 2.76s",
-      "actual_isolated_public_tests": "....                                                                     [100%]\n4 passed, 52 deselected in 30.71s",
-      "freeze": "PASS; explicit and default"
+      "portable": "1103 passed, 4 skipped, 86 subtests passed in 178.14s (0:02:58)",
+      "native": ".........                                                                [100%]\n9 passed in 5.86s",
+      "combined": "212 passed, 45 subtests passed in 104.71s (0:01:44)",
+      "freeze": "PASS before/after; explicit and default"
     },
     "last_validated_baseline": {
       "snapshot": "docs/development/architecture-a-delivery-admission-20261023.snapshot.json",
@@ -46,12 +46,12 @@
       "runtime_limits": "Actual 2CPU/2GiB verified"
     },
     "runtime_limits": "Actual cgroup CPU 200000/100000 and memory 2147483648 verified; RuntimeSession integration is included in portable.",
-    "validation": "docs/development/architecture-b-runtime-observer-20261023-r2.validation.json"
+    "validation": "docs/development/architecture-a2-stage-references-20261023.validation.json"
   },
   "next_actions": [
-    "Review the Stage B runtime/observer draft PR stacked on PR #8; CI results must be inspected on the published commit.",
-    "Integrate the independently validated A2 stage-reference hooks on the Stage B commit, then run same-version combination verification and create its own freeze/PR.",
-    "Continue explicit transitions, durable candidate transactions, replaceable consumers and four-mode six-case development panel. Keep formal_ready=false and original cumulative API allowance."
+    "Review the A2 stage-reference draft PR stacked on PR #9; inspect CI for this exact published commit.",
+    "Three-way integrate frozen C1 state transitions and connect standard CLI run to the unique budget/journal boundary; preserve newer A2 delivery hooks and classify historical worker/tape compatibility explicitly.",
+    "Continue persistent C2 transactions/recovery, D1 consumer protocol and D2 independent four-mode fixed six-case panel; keep formal_ready=false and original cumulative API allowance."
   ],
   "historical_status": {
     "scope": "REFERENCE_ONLY: the following original status/results are historical records, not current development gates or current method scores.",

@@ -5,10 +5,10 @@ separate command/process after final candidate selection.
 """
 from __future__ import annotations
 
+from contextlib import nullcontext
 from dataclasses import asdict, is_dataclass, replace
 import json
 import os
-import sys
 import time
 from pathlib import Path
 import uuid
@@ -31,6 +31,8 @@ from contractedge.model.budget import BudgetedProvider, BudgetExceeded
 from contractedge.model.admission import quote_request, context_fits, complete_quoted
 from contractedge.orchestration.evidence_delivery import select_observations_delivery
 from contractedge.orchestration.front_delivery import build_front_delivery
+from contractedge.orchestration.recorder import RunRecorder, ProviderJournal, preserve_error
+from contractedge.orchestration.semantic_delivery import SemanticDeliveryError, delivery_context, install_monitor
 from contractedge.execution.topomen import execution_review_mapping
 from contractedge.orchestration.feedback import make_feedback, validate_feedback, review_plan_with_retained, feedback_prompt_view
 from contractedge.orchestration.runner import run_front_half, required_planning_source_support, required_source_prerequisites
@@ -54,7 +56,8 @@ def write_json(path: Path, value):
 
 
 def run_front_recorded(method_input, workspace, provider, config, token_counter, *,
-                       directory, execution_feedback=None, public_observations=(), evidence_delivery=None):
+                       directory, execution_feedback=None, public_observations=(), evidence_delivery=None,
+                       journal=None, attempt_id="front"):
     """Persist exact effective front inputs, without synthesizing legacy traces."""
     directory = Path(directory)
     write_json(directory / 'front.method_input.json', asdict(method_input) if is_dataclass(method_input) else dict(method_input))
@@ -62,17 +65,30 @@ def run_front_recorded(method_input, workspace, provider, config, token_counter,
     write_json(directory / 'front.public_observations.json', list(public_observations))
     write_json(directory / 'front.execution_feedback.json', execution_feedback)
     start = len(provider.calls)
+    active_error = None
     try:
         return run_front_half(method_input, workspace, provider, config, token_counter,
-                              execution_feedback=execution_feedback, public_observations=public_observations)
+                              execution_feedback=execution_feedback, public_observations=public_observations,
+                              **({'journal': journal, 'attempt_id': attempt_id} if journal is not None else {}))
+    except BaseException as exc:
+        active_error = exc
+        raise
     finally:
-        active_error = sys.exc_info()[1]
+        active_error = active_error or (journal.primary_error if journal is not None else None)
         try:
             write_json(directory / 'front.replay.json', {'schema_version': 'ce.front_replay_inputs.v1',
                 'model_call_range': [start, len(provider.calls)],
                 'scope': 'front_semantic_failure', 'semantic_reviewer': 'disabled'})
             write_json(directory / 'front.delivery.json', build_front_delivery(
                 directory, method_input, provider, start, evidence_delivery))
+            if journal is not None:
+                relative = lambda path: Path(path).relative_to(journal.recorder.root).as_posix()
+                projections = (journal.capture(relative(directory / 'front.delivery.json'), "FRONT_DELIVERY"),)
+                journal.record("front_delivery", attempt_id=attempt_id, snapshot_id=None,
+                    status="RECORDED", call_start=len(provider.calls),
+                    input_refs=tuple(journal.latest[key] for key in ('front',) if key in journal.latest),
+                    output_refs=(journal.capture(relative(directory / 'front.replay.json'), "FRONT_REPLAY"),),
+                    projection_refs=projections)
         except Exception as recording_error:
             if active_error is None:
                 raise
@@ -149,7 +165,13 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
     quote = quote_request(provider, request, token_counter)
     if not context_fits(quote, int(config['max_context_tokens']), config.get('model_context_tokens')):
         raise BudgetExceeded('Plan revision exceeds the full context budget')
-    response = complete_quoted(provider, request, quote)
+    monitor = getattr(provider, '_semantic_delivery_monitor', None)
+    semantic = delivery_context(method_input, consumer='FEEDBACK_CHANGESET_REVISION',
+        snapshot_id=context.snapshot_id, diagnosis=trace.get('diagnosis'), changeset=trace.get('changeset'),
+        feedback=feedback, necessary_support=context.retrieval_config.get('necessary_source_support', ()),
+        prerequisites=context.retrieval_config.get('source_prerequisites', ()))
+    with monitor.scope(semantic) if monitor is not None else nullcontext():
+        response = complete_quoted(provider, request, quote)
     payload = json.loads(response.content)
     payload, binding = bind_changeset_envelope(payload, packet, context.run_id, context.snapshot_id, context.input_digest)
     payload = adapt_model_changeset(payload, packet, compute_snapshot(source))
@@ -264,9 +286,13 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
     _, task_root, task, manifest = public_task(root, case_id)
     policy = editable_policy(task, execution_contract(task_root, task, manifest))
     run_id = initial_trace['run_id'] if initial_trace else str(config.get('run_id') or uuid.uuid4())
+    journal = ProviderJournal(RunRecorder(out, run_id=run_id, input_digest=method_input.input_digest),
+                              prior_calls=initial_trace['model_calls'] if initial_trace else ())
     budget = BudgetedProvider(provider, token_counter, max_tokens=int(config.get('max_total_tokens', 160000)),
         max_seconds=float(config.get('max_elapsed_seconds', 2400)), max_calls=int(config.get('max_model_calls', 24)),
-        on_update=lambda calls: write_json(out / 'model_calls.json', calls))
+        on_update=lambda calls: journal.callback(calls, lambda actual: write_json(out / 'model_calls.json', actual)))
+    journal.attach(budget)
+    semantic_monitor = install_monitor(budget, journal)
     if _runtime_started is not None:
         budget.started = _runtime_started
     runner = public_runner or BenchmarkPublicRunner(root, tools_root,
@@ -297,6 +323,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
     retry_restored_candidate = False
     source_integrity_verified = True
     rounds, errors = [], []
+    primary_error = None
     status = 'STARTING'
     source = None
     initial_snapshot = method_input.initial_snapshot_id
@@ -305,11 +332,96 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         raise ValueError('max_rounds must be between1and16')
     write_json(out / 'method_input.json', method_value)
     write_json(out / 'projection.json', projection)
+    journal.record('begin', attempt_id='run', snapshot_id=initial_snapshot, status='STARTING',
+        input_refs=(journal.capture('method_input.json', 'METHOD_INPUT', snapshot_id=initial_snapshot),),
+        projection_refs=(journal.capture('projection.json', 'PUBLIC_PROJECTION', snapshot_id=initial_snapshot),))
+    def record_stage(stage, *, snapshot_id=None, status='RECORDED', call_start=None,
+                     inputs=(), outputs=(), projections=(), predecessor=(), attempt_id=None):
+        def capture_file(path, kind, *, fallback_snapshot=None):
+            # An earlier plan/trace remains historical when consumed after an
+            # edit. Never relabel its embedded snapshot as the current stage.
+            bound_snapshot = None
+            if Path(path).suffix == '.json':
+                value = json.loads((out / path).read_bytes())
+                if isinstance(value, Mapping):
+                    bound_snapshot = (value.get('snapshot_id') or value.get('to_snapshot')
+                                      or value.get('final_snapshot_id'))
+            return journal.capture(path, kind, snapshot_id=bound_snapshot or fallback_snapshot)
+        return journal.record(stage, attempt_id=attempt_id or ('round-' + str(round_id)),
+            snapshot_id=snapshot_id, status=status,
+            call_start=journal.position() if call_start is None else call_start,
+            input_refs=tuple(capture_file(path, 'STAGE_INPUT') for path in inputs)
+                + tuple(journal.latest[key] for key in predecessor if key in journal.latest),
+            output_refs=tuple(capture_file(path, 'STAGE_OUTPUT', fallback_snapshot=snapshot_id) for path in outputs),
+            projection_refs=tuple(capture_file(path, 'DELIVERY_PROJECTION') for path in projections))
+    def semantic_context_for(consumer, *, evidence=(), mandatory_refs=(), source_requirements=True):
+        retrieval = ((trace or {}).get('run_context') or {}).get('retrieval_config') or {}
+        return delivery_context(method_input, consumer=consumer,
+            snapshot_id=compute_snapshot(source).snapshot_id if source is not None else initial_snapshot,
+            diagnosis=(trace or {}).get('diagnosis'), changeset=(trace or {}).get('changeset'),
+            plan=plan, feedback=feedback, necessary_support=retrieval.get('necessary_source_support', ()),
+            prerequisites=(plan or {}).get('precondition_review', ()), evidence=evidence,
+            mandatory_refs=mandatory_refs, source_requirements=source_requirements, source_root=source)
     def reserve_public_time():
         if budget.remaining_seconds <= 0:
             raise BudgetExceeded('Global wall-clock budget exhausted before public execution')
         if hasattr(runner, 'timeout_seconds'):
             runner.timeout_seconds = min(float(config.get('public_timeout_seconds', 600)), budget.remaining_seconds)
+    def observe_recorded(destination, record_path, *, stage, attempt_id, predecessor):
+        destination, record_path = Path(destination), Path(record_path)
+        relative_record = record_path.relative_to(out).as_posix()
+        try:
+            observed = runner.observe(workspace, destination)
+        except BaseException as exc:
+            failed = record_path.with_name(record_path.stem + '.error.json')
+            def record_failure():
+                actual = compute_snapshot(source).snapshot_id
+                write_json(failed, {'status': 'OBSERVATION_ERROR', 'snapshot_id': actual,
+                    'observation_produced': False, 'error': type(exc).__name__ + ': ' + str(exc)})
+                record_stage(stage, attempt_id=attempt_id, snapshot_id=actual, status='ERROR',
+                    outputs=(failed.relative_to(out).as_posix(),), predecessor=predecessor)
+                if stage == 'observe':
+                    record_stage('review', attempt_id=attempt_id, snapshot_id=actual, status='NOT_RUN',
+                        outputs=(failed.relative_to(out).as_posix(),), predecessor=('observe',))
+            preserve_error(exc, record_failure)
+            raise
+        actual = compute_snapshot(source).snapshot_id
+        identity_path = record_path.with_name(record_path.stem + '.identity.json')
+        matched = observed.get('snapshot_id') == actual
+        write_json(identity_path, {'snapshot_id': actual,
+            'observed_snapshot_id': observed.get('snapshot_id'), 'matches_current_source': matched})
+        outputs = [relative_record, identity_path.relative_to(out).as_posix()]
+        if not matched:
+            raw_path = record_path.with_name(record_path.stem + '.raw.json')
+            write_json(raw_path, observed)
+            outputs.append(raw_path.relative_to(out).as_posix())
+            observed = {**observed, 'status': 'INVALID_OBSERVATION',
+                'errors': [*observed.get('errors', []), 'Observation belongs to another current source snapshot']}
+        write_json(record_path, observed)
+        record_stage(stage, attempt_id=attempt_id, snapshot_id=actual, status=observed['status'],
+            outputs=tuple(outputs), predecessor=predecessor)
+        return observed
+    def restore_recorded(checkpoint, destination, *, attempt_id, predecessor):
+        from contractedge.orchestration.candidate_guard import restore_candidate
+        trial = compute_snapshot(source).snapshot_id
+        destination = Path(destination)
+        try:
+            restore_candidate(source, checkpoint)
+        except BaseException as exc:
+            def record_failure():
+                actual = compute_snapshot(source).snapshot_id
+                write_json(destination, {'status': 'RESTORE_FAILED', 'from_snapshot': trial,
+                    'to_snapshot': actual, 'expected_snapshot': checkpoint['snapshot_id'],
+                    'error': type(exc).__name__ + ': ' + str(exc)})
+                record_stage('rollback', attempt_id=attempt_id, snapshot_id=actual, status='RESTORE_FAILED',
+                    outputs=(destination.relative_to(out).as_posix(),), predecessor=predecessor)
+            preserve_error(exc, record_failure)
+            raise
+        actual = compute_snapshot(source).snapshot_id
+        write_json(destination, {'status': 'RESTORED', 'from_snapshot': trial, 'to_snapshot': actual,
+                                 'expected_snapshot': checkpoint['snapshot_id']})
+        record_stage('rollback', attempt_id=attempt_id, snapshot_id=actual, status='RESTORED',
+            outputs=(destination.relative_to(out).as_posix(),), predecessor=predecessor)
     try:
         if initial_trace:
             calls = initial_trace['model_calls']
@@ -353,10 +465,19 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             trace = dict(initial_trace)
             # Resuming a real development trace does not replenish model budgets.
             write_json(out / 'initial-front.trace.json', trace)
+            seal = journal.recorder.seal_ledger(segment_index=0)
+            journal.recorder.record_stage('front_import', attempt_id='ready', snapshot_id=initial_snapshot,
+                status='LEGACY_RECORDED', input_refs=(journal.latest['begin'],),
+                output_refs=(journal.capture('initial-front.trace.json', 'IMPORTED_FRONT_TRACE', snapshot_id=initial_snapshot),),
+                call_refs=seal.call_refs,
+                issues=({'code': 'LEGACY_PARAMETERS_NOT_SYNTHESIZED',
+                         'missing_request_indices': [i for i,c in enumerate(initial_trace['model_calls'])
+                                                     if not isinstance(c.get('request'), Mapping)]},))
         if config.get('observe_broken', True):
             write_json(out / 'state.json', {'status': 'OBSERVING_BROKEN', 'case_id': case_id})
             reserve_public_time()
-            current_observation = runner.observe(workspace, out / 'broken-public')
+            current_observation = observe_recorded(out / 'broken-public', out / 'initial-public-observation.json',
+                stage='observe_initial', attempt_id='broken', predecessor=('begin',))
             if current_observation['status'] in {'INFRA_ERROR', 'INVALID_OBSERVATION', 'BUDGET_EXCEEDED'}:
                 status = current_observation['status']
                 raise ValueError('Initial public observation could not be produced')
@@ -385,7 +506,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                               'schema_in_prompt': config.get('schema_in_prompt', True)}}
                 trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
                     budget, round_config, token_counter, execution_feedback=feedback,
-                    public_observations=observations, directory=directory, evidence_delivery=delivery.receipt).to_wire()
+                    public_observations=observations, directory=directory, evidence_delivery=delivery.receipt,
+                    journal=journal, attempt_id='round-' + str(round_id)).to_wire()
                 plan = None
             if trace['status'] not in {'READY', 'READY_PARTIAL'}:
                 write_json(directory / 'front.trace.json', trace)
@@ -394,7 +516,14 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 break
             if feedback and feedback['route'] == 'CHANGESET' and not retry_restored_candidate:
                 if trace['snapshot_id'] == compute_snapshot(source).snapshot_id:
+                    revision_call_start = journal.position()
                     trace = revise_plan(trace, method_input, source, feedback, budget, token_counter, config)
+                    revision_value = journal.recorder.capture_value(trace['changeset'], 'FINAL_SEMANTIC_PLAN',
+                                                                  snapshot_id=trace['snapshot_id'])
+                    journal.record('planning', attempt_id='round-' + str(round_id) + '.revision',
+                        snapshot_id=trace['snapshot_id'], status=trace['status'], call_start=revision_call_start,
+                        input_refs=tuple(journal.latest[k] for k in ('planning','feedback') if k in journal.latest),
+                        output_refs=(revision_value,))
                     plan = None
                 else:
                     # Old source evidence cannot be relabelled as current solely to reuse a diagnosis.
@@ -404,7 +533,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                         budget, {**dict(config), 'run_id': run_id, 'model': {'model': config['model'],
                             'schema_in_prompt': config.get('schema_in_prompt', True)}},
                         token_counter, execution_feedback=feedback, public_observations=observations,
-                        directory=directory, evidence_delivery=delivery.receipt).to_wire()
+                        directory=directory, evidence_delivery=delivery.receipt,
+                        journal=journal, attempt_id='round-' + str(round_id) + '.rediagnosis').to_wire()
                     plan = None
             write_json(directory / 'front.trace.json', trace)
             if trace['status'] not in {'READY', 'READY_PARTIAL'}:
@@ -435,7 +565,14 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 'declared_artifacts': list(method_input.declared_artifacts),
                 'public_execution_capabilities': config.get('public_execution_capabilities')}, feedback)
             write_json(directory / 'public-review-plan.json', review_plan)
+            relative = directory.relative_to(out).as_posix()
+            record_stage('consumer_projection', snapshot_id=before,
+                inputs=(relative + '/front.trace.json',),
+                outputs=(relative + '/plan.json', relative + '/public-review-plan.json'),
+                projections=(relative + '/public-evidence.delivery.json',),
+                predecessor=('planning', 'front_delivery', 'begin'))
             write_json(out / 'state.json', {'status': 'EXECUTING', 'case_id': case_id, 'round_id': round_id})
+            execution_call_start = journal.position()
             execution_status, review = 'INVALID_OBSERVATION', None
             rejection_kind = None
             try:
@@ -450,9 +587,13 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     calls_before_execution = len(budget.calls)
                     rejection_kind = None
                     try:
-                        execution_result = executor.execute(plan, source, policy,
-                            requirement=method_input.requirement_text, declared_artifacts=method_input.declared_artifacts,
-                            observations=observations, feedback=feedback, previous_attempt=last_execution_attempt)
+                        with semantic_monitor.scope(semantic_context_for('EXECUTION_ROUND_' + str(round_id),
+                                evidence=observations)):
+                            execution_result = executor.execute(plan, source, policy,
+                                requirement=method_input.requirement_text, declared_artifacts=method_input.declared_artifacts,
+                                observations=observations, feedback=feedback, previous_attempt=last_execution_attempt)
+                    except SemanticDeliveryError:
+                        raise
                     except (PlanRejected, ValueError) as exc:
                         rejection_kind = 'EXECUTION'
                         execution_result = {'status': 'CONCRETE_EDIT_REJECTED', 'error': str(exc)}
@@ -471,6 +612,12 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                             execution_result['execution_attempt'] = last_execution_attempt
                     attempts.append(execution_result)
                     write_json(directory / 'execution-attempts' / (str(len(attempts) - 1) + '.json'), execution_result)
+                    record_stage('execute_attempt', snapshot_id=compute_snapshot(source).snapshot_id,
+                        status=execution_result['status'], call_start=calls_before_execution,
+                        inputs=(relative + '/plan.json',),
+                        outputs=(relative + '/execution-attempts/' + str(len(attempts)-1) + '.json',),
+                        predecessor=('consumer_projection',),
+                        attempt_id='round-' + str(round_id) + '.attempt-' + str(len(attempts)-1))
                     can_correct = (config.get('execution_format_retry_in_round', False)
                         and rejection_kind == 'EXECUTION' and completed_response
                         and compute_snapshot(source).snapshot_id == before
@@ -489,10 +636,16 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 last_applied_execution=execution_result
             patch_info = runner.export(workspace, directory / 'candidate.patch', directory / 'export')
             write_json(directory / 'patch.json', patch_info)
+            record_stage('execute', snapshot_id=compute_snapshot(source).snapshot_id,
+                status=execution_result['status'], call_start=execution_call_start,
+                inputs=(relative + '/plan.json',),
+                outputs=(relative + '/execution.json', relative + '/patch.json', relative + '/candidate.patch'),
+                predecessor=('consumer_projection', 'execute_attempt'))
             if rejection_kind is None:
                 write_json(out / 'state.json', {'status': 'PUBLIC_CHECK', 'case_id': case_id, 'round_id': round_id})
                 reserve_public_time()
-                current_observation = runner.observe(workspace, directory / 'public')
+                current_observation = observe_recorded(directory / 'public', directory / 'public-observation.json',
+                    stage='observe', attempt_id='round-' + str(round_id), predecessor=('execute',))
                 execution_status = current_observation['status']
                 review_delivery = select_observations_delivery(
                     current_observation['observations'], method_input.requirement_text + '\n' + '\n'.join(
@@ -506,7 +659,9 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     'execution_mapping': execution_review_mapping(execution_result),
                     'observations': list(review_delivery.records)}
                 from contractedge.execution.public_observer import isolated_observation_complete
-                if requires_public_profile and not isolated_observation_complete(current_observation):
+                review_call_start = journal.position()
+                if (current_observation['status'] in {'INFRA_ERROR','INVALID_OBSERVATION','BUDGET_EXCEEDED'}
+                        or requires_public_profile and not isolated_observation_complete(current_observation)):
                     review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
                         'method': 'ISOLATED_OBSERVATION_INCOMPLETE',
                         'rationale': 'No review dispatch is admitted without complete isolated runs, public checks and confirmed cleanup.'}
@@ -517,7 +672,13 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                         'delivery_receipt_digest': review_delivery.receipt['receipt_digest']}
                 else:
                     try:
-                        review = reviewer.review(method_input.requirement_text, review_plan, review_observation)
+                        with semantic_monitor.scope(semantic_context_for('PUBLIC_REVIEW_ROUND_' + str(round_id),
+                                evidence=review_delivery.records,
+                                mandatory_refs=review_delivery.receipt.get('mandatory_refs', ()),
+                                source_requirements=False)):
+                            review = reviewer.review(method_input.requirement_text, review_plan, review_observation)
+                    except SemanticDeliveryError:
+                        raise
                     except (ValueError, KeyError) as exc:
                         review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
                                   'method': 'PUBLIC_REVIEW_INVALID', 'rationale': str(exc)}
@@ -525,6 +686,19 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 review = enforce_public_profile(review, current_observation,
                     required=requires_public_profile)
                 write_json(directory / 'public-review.json', review)
+                record_stage('review', snapshot_id=compute_snapshot(source).snapshot_id,
+                    status=review['decision'], call_start=review_call_start,
+                    inputs=(relative + '/public-review-plan.json', relative + '/public-observation.json'),
+                    outputs=(relative + '/public-review.json',),
+                    projections=(relative + '/review-evidence.delivery.json',), predecessor=('observe',))
+            else:
+                write_json(directory / 'observation-review-skipped.json', {'status': 'NOT_RUN',
+                    'snapshot_id': compute_snapshot(source).snapshot_id, 'reason': rejection_kind,
+                    'observation_invoked': False, 'review_invoked': False})
+                record_stage('observe', snapshot_id=compute_snapshot(source).snapshot_id, status='NOT_RUN',
+                    outputs=(relative + '/observation-review-skipped.json',), predecessor=('execute',))
+                record_stage('review', snapshot_id=compute_snapshot(source).snapshot_id, status='NOT_RUN',
+                    outputs=(relative + '/observation-review-skipped.json',), predecessor=('observe',))
             after = compute_snapshot(source).snapshot_id
             raw_observations = (current_observation or {}).get('observations', [])
             fresh = [o for o in raw_observations if o['snapshot_id'] == after]
@@ -548,6 +722,17 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 feedback=reassess_failed_target_predicates(feedback,incumbent_observation,current_observation,review_plan)
                 validate_feedback(feedback,case_id=case_id,input_digest=method_input.input_digest,to_snapshot=after)
             write_json(directory / 'feedback.json', feedback)
+            record_stage('feedback', snapshot_id=after, status=feedback['route'],
+                inputs=(relative + '/public-review-plan.json', relative + '/execution.json'),
+                outputs=(relative + '/feedback.json',),
+                predecessor=('execute', 'review') if rejection_kind is None else ('execute',))
+            semantic_monitor.outcome(semantic_context_for('RESULT_ROUND_' + str(round_id),
+                    source_requirements=False),
+                artifacts=tuple(journal.latest[key] for key in ('consumer_projection', 'execute', 'observe', 'review', 'feedback')
+                                if key in journal.latest),
+                execution={'result': execution_result, 'patch': patch_info,
+                           'mapping': execution_review_mapping(execution_result) if rejection_kind is None else None},
+                review=review, observations=current_observation)
             if checkpoint and rejection_kind is None and incumbent_observation:
                 from contractedge.orchestration.candidate_guard import compare_candidate_checks, preservation_check_ids, restore_candidate
                 protected_checks = preservation_check_ids(review_plan, incumbent_feedback)
@@ -566,6 +751,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                             'reason': 'Independent observation or runtime cleanup is incomplete; trial cannot be promoted.'}],
                         'interpretation': 'Incomplete isolated observation; retain the incumbent without further review dispatch.'}
                 write_json(directory/'candidate-decision.json',decision)
+                record_stage('candidate_decision', snapshot_id=after, status=decision['decision'],
+                    outputs=(relative + '/candidate-decision.json',), predecessor=('feedback', 'observe', 'semantic_outcome'))
                 if decision['decision']!='PROMOTE':
                     # A registered production startup panic is actionable even
                     # when it prevented completing preservation checks. Keep
@@ -581,7 +768,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                         'feedback':feedback_prompt_view(feedback),'decision':decision,
                         'patch_sha256':patch_info['patch_sha256'],
                         'interpretation':'Rejected historical trial. These observations describe the trial, not the restored current source.'}
-                    restore_candidate(source,checkpoint)
+                    restore_recorded(checkpoint, directory / 'rollback.json',
+                        attempt_id='round-' + str(round_id), predecessor=('candidate_decision','feedback'))
                     last_applied_execution=incumbent_execution
                     rejected_trials.append({'round_id':round_id,**decision})
                     current_observation=incumbent_observation
@@ -620,10 +808,16 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                           'INFRASTRUCTURE_ERROR' if feedback['failure_kind'] == 'ENVIRONMENT' else 'STOPPED_UNCERTAIN')
                 break
             status = 'ROUND_LIMIT'
+    except SemanticDeliveryError as exc:
+        primary_error = exc
+        status = 'EVIDENCE_DELIVERY_INCOMPLETE'
+        errors.append(str(exc))
     except BudgetExceeded as exc:
+        primary_error = exc
         status = 'BUDGET_EXHAUSTED'
         errors.append(str(exc))
     except Exception as exc:
+        primary_error = exc
         if budget.remaining_seconds <= 0:
             status = 'BUDGET_EXHAUSTED'
         elif status not in {'INFRA_ERROR', 'INVALID_OBSERVATION', 'BUDGET_EXCEEDED'}:
@@ -635,7 +829,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         try:
             from contractedge.orchestration.candidate_guard import restore_candidate
             trial_snapshot=compute_snapshot(source).snapshot_id
-            restore_candidate(source,active_checkpoint)
+            restore_recorded(active_checkpoint, out / 'emergency-rollback.json',
+                attempt_id='incomplete-trial', predecessor=('candidate_decision','feedback','execute'))
             current_observation,feedback=active_incumbent
             rejected_trials.append(dict(decision='INCOMPLETE_TRIAL_REJECTED',
                 from_snapshot=active_checkpoint['snapshot_id'],trial_snapshot=trial_snapshot,
@@ -669,4 +864,19 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
     write_json(out / 'model_calls.json', budget.calls)
     write_json(out / 'repair.trace.json', report)
     write_json(out / 'state.json', {'status': status, 'case_id': case_id, 'rounds_completed': len(rounds)})
+    selection_outputs = ['repair.trace.json']
+    write_json(out / 'selected-feedback.json', report['last_feedback'])
+    selection_outputs.append('selected-feedback.json')
+    if final_patch is not None:
+        selection_outputs.append('candidate.patch')
+    if (out / 'selected-candidate.json').is_file():
+        selection_outputs.append('selected-candidate.json')
+    primary_error = primary_error or journal.primary_error
+    preserve_error(primary_error, lambda: record_stage('selection', attempt_id='final',
+        snapshot_id=report['final_snapshot_id'], status=status,
+        outputs=tuple(selection_outputs), predecessor=('feedback','candidate_decision','execute','begin',
+            'semantic_outcome','semantic_delivery','front')))
+    if primary_error is not None and getattr(primary_error, 'recording_errors', ()):
+        report['recording_errors'] = list(primary_error.recording_errors)
+        write_json(out / 'repair.trace.json', report)
     return report

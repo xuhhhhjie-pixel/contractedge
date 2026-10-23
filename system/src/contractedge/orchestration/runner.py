@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import nullcontext
 import time
 import uuid
 import re
@@ -26,6 +27,7 @@ from contractedge.model.provider import ModelProvider, ModelResponse
 from contractedge.model.budget import BudgetExceeded
 from contractedge.model.admission import quote_request, context_fits, complete_quoted
 from contractedge.orchestration.feedback import feedback_prompt_view
+from contractedge.orchestration.semantic_delivery import SemanticDeliveryError, delivery_context, install_monitor
 from contractedge.requirement.normalize import normalize_requirement
 from contractedge.retrieval.candidates import CandidateSet, build_candidate_set, extend_once, trim_context_bundle
 from contractedge.retrieval.edges import build_direct_reference_edges
@@ -496,7 +498,34 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                    token_counter: Callable[[str], int] | None, *,
                    semantic_reviewer: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None = None,
                    execution_feedback: Mapping[str, Any] | None = None,
-                   public_observations: tuple[Mapping[str, Any], ...] = ()) -> RunTrace:
+                   public_observations: tuple[Mapping[str, Any], ...] = (),
+                   journal=None, attempt_id="front") -> RunTrace:
+    dispatch_start = len(journal.dispatches) if journal is not None else 0
+    if journal is not None:
+        install_monitor(provider, journal)
+        journal.primary_error = None
+    trace = _run_front_half_impl(method_input, workspace, provider, config, token_counter,
+        semantic_reviewer=semantic_reviewer, execution_feedback=execution_feedback,
+        public_observations=public_observations, journal=journal, attempt_id=attempt_id)
+    if journal is not None:
+        from contractedge.orchestration.recorder import preserve_error
+        def record_final_front():
+            inputs = tuple(journal.recorder.capture_value(value, kind, snapshot_id=trace.snapshot_id)
+                for value, kind in (
+                    (asdict(method_input) if isinstance(method_input, MethodInput) else dict(method_input), "METHOD_INPUT"),
+                    (dict(config), "FRONT_CONFIG"), (execution_feedback, "EXECUTION_FEEDBACK"),
+                    (list(public_observations), "PUBLIC_OBSERVATIONS")))
+            return journal.final_front(trace, attempt_id=attempt_id,
+                                       dispatch_start=dispatch_start, input_refs=inputs)
+        preserve_error(journal.primary_error, record_final_front)
+    return trace
+
+
+def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspace: str | Path,
+                   provider: ModelProvider, config: Mapping[str, Any],
+                   token_counter: Callable[[str], int] | None, *,
+                   semantic_reviewer=None, execution_feedback=None,
+                   public_observations=(), journal=None, attempt_id="front") -> RunTrace:
     started = time.monotonic()
     parsed = method_input if isinstance(method_input, MethodInput) else parse_method_input(method_input)
     run_id = str(config.get("run_id") or uuid.uuid4())
@@ -541,20 +570,37 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                 'origin_stage': origin, 'scope': 'CURRENT_FRONT_HALF_PROMPT_VERSION'}})
 
     def complete_recorded(request, stage: str):
+        ledger_start = journal.position() if journal is not None else 0
         prompt_reservation = request_tokens(request)
         previous_timeout = getattr(provider, 'timeout_seconds', None)
         response = None
+        dispatch_error = None
         try:
             remaining = max_elapsed_seconds - (time.monotonic() - started)
             if remaining <= 0:
                 raise BudgetExceeded('Model call cannot start after the run deadline')
             if previous_timeout is not None:
                 provider.timeout_seconds = min(previous_timeout, remaining)
-            response = complete_quoted(provider, request, request_quote(request))
+            monitor = getattr(provider, '_semantic_delivery_monitor', None)
+            planning = stage.startswith(('SEMANTIC_CHANGESET', 'CHANGESET'))
+            semantic = delivery_context(parsed, consumer=stage, snapshot_id=snapshot_id,
+                diagnosis=diagnosis_wire, changeset=changeset_payload, feedback=execution_feedback,
+                necessary_support=(required_planning_source_support(parsed, candidate_set, snapshot_id)
+                                   if planning and candidate_set is not None else ()),
+                prerequisites=(required_source_prerequisites(candidate_set)
+                               if planning and candidate_set is not None else ()),
+                evidence=public_observations, source_requirements=planning)
+            with monitor.scope(semantic) if monitor is not None else nullcontext():
+                response = complete_quoted(provider, request, request_quote(request))
             if time.monotonic() - started >= max_elapsed_seconds:
                 raise BudgetExceeded('Model response exceeded the run deadline')
             return response
         except Exception as exc:
+            dispatch_error = exc
+            if isinstance(exc, SemanticDeliveryError):
+                # Admission attempts are in semantic_delivery receipts, never in
+                # this compatibility model-call view without a real dispatch.
+                raise
             received = getattr(exc, 'response', None)
             if response is None and isinstance(received, ModelResponse):
                 response = received
@@ -573,6 +619,14 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
         finally:
             if previous_timeout is not None:
                 provider.timeout_seconds = previous_timeout
+            if journal is not None:
+                from contractedge.orchestration.recorder import preserve_error
+                primary = dispatch_error
+                preserve_error(primary, lambda: journal.record_dispatch(stage,
+                    attempt_id=attempt_id + ".call-" + str(ledger_start),
+                    snapshot_id=snapshot_id, call_start=ledger_start,
+                    status="ADMISSION_REJECTED" if isinstance(primary, SemanticDeliveryError)
+                           else "ERROR" if primary is not None else "RESPONSE_RECEIVED"))
 
     def request_quote(request):
         # Keep each immutable request and its prepared bytes together. A changed
@@ -1317,7 +1371,10 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                         diagnosis.raw, changeset_payload, tuple(calls), (), structural_validation, semantic_review,
                         tuple(retrieval_rounds), run_context_wire)
     except Exception as exc:
+        if journal is not None:
+            journal.primary_error = exc
         return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot_id,
+                        "EVIDENCE_DELIVERY_INCOMPLETE" if isinstance(exc, SemanticDeliveryError) else
                         "BUDGET_EXHAUSTED" if isinstance(exc, BudgetExceeded) else "INFRASTRUCTURE_ERROR",
                         requirement, scope, candidate_set, diagnosis_wire, changeset_payload,
                         tuple(calls), (f"{type(exc).__name__}: {exc}",),
