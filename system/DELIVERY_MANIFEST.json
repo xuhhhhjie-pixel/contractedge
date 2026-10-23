@@ -1,6 +1,6 @@
 {
   "version": "0.6.33",
-  "created_at": "2026-10-23T17:13:40.499967+00:00",
+  "created_at": "2026-10-23T17:23:14.977537+00:00",
   "formal_ready": false,
   "runtime_source_digest": "c557658498cae454dc47664f567bf6d7f32d708dba9c2f7daa80f21a0d7cbe28",
   "runtime_source_exact": true,
@@ -12,11 +12,11 @@
     "scope": "Existing server development venv; fresh exported-source environment not yet checked"
   },
   "server_full_verification": {
-    "passed": 802,
+    "passed": 803,
     "subtests_passed": 22
   },
   "latest_effect": ".32 ACK originalBroken independentPASS/public8checksPASS/overallUNKNOWN (6calls); .33 single gate running,45held; formal/B closed",
-  "packaging_delta": "Generic exact current public evidence retention at diagnosis-to-plan boundary; strict citations, scope, verdicts and all limits unchanged. Existing probe and execution policy unchanged.",
+  "packaging_delta": "Generic current public evidence retention; packaging dependency contract accepts the unchanged pinned development environment. Runtime source still equals frozen .33.",
   "excluded": [
     ".git history and dirty workspace metadata",
     ".superpowers isolated duplicate source snapshots",
@@ -29,7 +29,7 @@
     ".gitignore": "732d8b0b1edc7f462e29aaf3b0f4f9a9f7489157100ded1df882db78d343c5d6",
     "AGENTS.md": "d887f78d521ee7cbe210cac4eca55201fcdd76c412a7af74dc10eeec3d814d8b",
     "CURRENT_STATUS.json": "f754f88b1638532f7a2cc23be283e9270868c4f8bcc4a239e9ac4fb08c2db9c1",
-    "README.md": "6daf3f597dbe6f5942d993a9dd1f7a3b99177c1b3bebcd62b60ccca5805a1585",
+    "README.md": "cbc1a3af527e1c1eb4326d09d76265c80a2c8abda798355643f85e05348bf6b8",
     "configs/benchmark150-local.json": "83b7b187305c330e7da5919cbc3ac42bc3b9d6230aeb3cda8c9175e0c4c7a589",
     "configs/deepseek-development-final-v1-budget80.json": "af9e24dd681811df94f9f1bdf1e76edf96a3c1048d9e6825e50d972f82366c9a",
     "configs/deepseek-development-optimized-v1-budget80.json": "e7a563ffd6e30e37d37136167a14cbad4fd2c820984697f9ef2ec0e8aadbfbac",
@@ -91,7 +91,7 @@
     "docs/reports/2026-10-23-v0629-quote-lineage-continuity.md": "b8b9e85a4165c0f8f1e624c480371a3da9b47f7da509fdc442d23c741649d273",
     "docs/reports/2026-10-23-v0631-production-tag-probe.md": "afe632c9081c6e3d465140ea16a752d88ab620321a469e913fb06ced20f2f1f3",
     "docs/reports/2026-10-24-execution-contract-closure.md": "f8043cd494b5b2dce3fc67040dea1836cc95d619c3123c9c345762a16dc2769b",
-    "docs/reports/2026-10-24-public-evidence-continuity.md": "8b7b37febf32635379b124d4814f5bfbbb3be3676e08ff3a92cadfa3061606f1",
+    "docs/reports/2026-10-24-public-evidence-continuity.md": "91df6477b283250bc69cabf40547a346b2fc0858c1a558cac3b967e9bdeb351e",
     "docs/reports/benchmark-quality-gate-2026-10-04.md": "0e829e5e349badca7fd8ede37a0910c4f7a0122efed6bc5bea3a224329693000",
     "docs/reports/cohort-accounting-v1_1-2026-10-04.json": "cdc52afe33a43051a35b6fd072ace84b21692aca6602bf0a2c0418fcd1e59b19",
     "docs/reports/dataset-adaptation-audit-2026-10-04.md": "717e5371f16063f5a4cadd01404284ed727b7cd1af4513e03b9a9ea9dca274c4",
@@ -474,7 +474,7 @@
     "outputs/system-optimization-20261020/IMPLEMENTATION_REPORT.md": "cc27010f247a502aef61605683353fb3a16642436c7558376c07b874171a5cf4",
     "outputs/system-optimization-20261020/WORK_LOG.md": "f09a2d5fb1191251560519232e2167ee9d13b5ceab3de2cb85d70e870a2850f0",
     "outputs/system-optimization-20261020/finalize_report.py": "5089c97cdb1bacec4dd9e0b3ae7511d5ce774176846ccf01f1db59fdb324786f",
-    "pyproject.toml": "6f5dd393b3672bfa231a5ca4037da6a226a03166ea7d82b671d2ff430b8a3cbe",
+    "pyproject.toml": "871a19316589d4c8ac205a035a200c17d30ecc0d68b484d8eea1a2ce40fb15dd",
     "requirements-dev.lock": "3404e692c17e766cf8ac35fef7b3b49f50fb27d30cdfbb76ec3354fb52e96b0d",
     "scripts/assess_reliability_delivery.py": "0c73ea46af3c879f5a37554c97528d457affa870cd79ecef6b9e6ec0a5c3d133",
     "scripts/assess_reliability_delivery_v2.py": "79cf30f9d3567fdbf16e2c4dffd748cad6299f6b0999b886432251fa293e6d56",
@@ -658,6 +658,7 @@
     "tests/test_optimization_evidence.py": "b6fcad951bad0aa5a135fd3cd35935246f36a9a76ae4e3d240233d38ef7e296c",
     "tests/test_optimization_integrity.py": "2f5be302fdcbbf04ff65cdaf6b037fa102a1cbbb956af65e509a14d3f82a3c4d",
     "tests/test_orchestration.py": "4485ae00e6c4bee6874dc4b851fa417aee7ba5e622a567864e8764d6748bc5d8",
+    "tests/test_packaging_dependency_consistency.py": "a4506f0b75424a6a6918253e82566b1fe7b076e513b05107e0fb8471b8d0194c",
     "tests/test_parser_current_languages.py": "b5edfef0d7d70ebf26be9d3220c5381541025a7fdab4f58b94545fbcefb11d1c",
     "tests/test_parsers.py": "e90ba4f4ad02d1facaa3e7ff84e94d70f392f39d0cde5a7c7d7bfd39f51db658",
     "tests/test_path_probe_review_regressions.py": "48b951c07b4d5124d579c84d03f65a5f32cb3fefd1aa4266cd4b942f617d424d",

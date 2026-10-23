@@ -22,14 +22,13 @@ Linux，Python3.10+，推荐3.12。以下仅运行自包含测试，不读取API
 cd system
 python3 -m venv .venv
 . .venv/bin/activate
-# 历史工程固定PyYAML5.4.1可能需要旧构建工具；新环境先安装现代wheel。
 python -m pip install --index-url https://pypi.org/simple -r requirements-dev.lock
-python -m pip install --no-deps -e .
+python -m pip install --index-url https://pypi.org/simple -e ".[topomen]"
 python scripts/contractedge_local.py --help
 python scripts/test_portable.py
 ```
 
-上述PyYAML6安装是交接开发环境方案，与原实验PyYAML5.4.1环境不同。正式实验前必须冻结并重新验收所选依赖环境。pyproject保留历史依赖记录；--no-deps是显式采用上面的开发依赖集合，不表示依赖解析已复现原服务器。
+开发锁文件固定PyYAML6.0.3，包元数据兼容PyYAML5.4.1至7之前的版本；实际实验必须固定具体依赖清单，不能把兼容范围当作已冻结环境。此开发环境不等同于历史PyYAML5.4.1环境。安装后应运行`python -m pip check`，版本冲突必须先解决。
 
 测试入口默认将所需的原生TopoMen源码定位到随库的`vendor/topomen`，避免部分测试回退到学长服务器的`/home/xhj`路径；显式设置`CONTRACTEDGE_TOPOMEN_SOURCE`时保留该选择。Docker相关测试仍要求当前daemon实际支持其声明的资源限制；依赖缺失或容器启动失败必须报告，不能通过移除限额计为通过。
 
