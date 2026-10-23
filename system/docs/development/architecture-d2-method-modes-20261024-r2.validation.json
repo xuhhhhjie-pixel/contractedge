@@ -1,0 +1,106 @@
+{
+  "schema_version": "ce.development_validation.v1",
+  "development_snapshot_id": "architecture-d2-method-modes-20261024-r2",
+  "snapshot_sha256": "d9bd920dbcc963aa1e13af8e312e46ce31a2c0a30ede09f4720b515cda56ea34",
+  "source_sha256": "b9f9a83ebf9ced04a5b1672dd9870de5c57b54d5b6c257246d487759e323735a",
+  "base_commit": "e8647f157bd1f0599fdd7ffd9a0f852ed66011ea",
+  "status": "VALIDATED_OFFLINE",
+  "regression_result_sha256": "9fdd51a2e43a2576d1b35fc9d9f3d854e56f058cb2babfff48add436d535f93d",
+  "regression_evidence": "/home/zyw/contractedge-collab-20261023/evidence/architecture-d2-final-regression-r2",
+  "regression_logs": {
+    "freeze": {
+      "sha256": "145c5e0d5decb43237cedb59d4fabb39d5bbccb6f65898bd24cdec3784ad484b",
+      "elapsed_seconds": 0.16440536826848984
+    },
+    "preflight": {
+      "sha256": "5f2bd63f977f1377cd35533eec5169ef2b7935b7eaf4e4bd1cd0a64b9e3de1ad",
+      "elapsed_seconds": 0.715700525790453
+    },
+    "actual8": {
+      "sha256": "fb87e67f90f94c3cb0b659216c3b07c91ee8a0f2a797d456a665a3881198b59c",
+      "elapsed_seconds": 61.09456652775407
+    },
+    "combined": {
+      "sha256": "055a473f33d94fdf41b99721719cc94906067ec0a0134dce9467e19e74d4762c",
+      "elapsed_seconds": 274.7690500058234
+    },
+    "portable": {
+      "sha256": "191f3c967cd4b70b18cfcd5a034edba003404bddbf386e3837b92d099af0146f",
+      "elapsed_seconds": 355.78288189694285
+    },
+    "native": {
+      "sha256": "4e7ebda8afa09b1dba537962c9a94cb9783e8074443fdd3774102b286eda83fa",
+      "elapsed_seconds": 9.4332324154675
+    },
+    "freeze-after": {
+      "sha256": "145c5e0d5decb43237cedb59d4fabb39d5bbccb6f65898bd24cdec3784ad484b",
+      "elapsed_seconds": 0.2145725004374981
+    }
+  },
+  "test_results": {
+    "combined": "417 passed, 45 subtests passed in 274.43s (0:04:34)",
+    "portable": "1308 passed, 4 skipped, 86 subtests passed in 355.33s (0:05:55)",
+    "native": "9 passed in 9.08s"
+  },
+  "six_historical_native_exclusions_retained": true,
+  "four_real_tests": "Explicitly run in combined; portable opt-in skips not failures",
+  "actual_trial_matrix": {
+    "status": "PASS",
+    "cells": 8,
+    "sessions": 14,
+    "containers": 28,
+    "summary_sha256": "fb87e67f90f94c3cb0b659216c3b07c91ee8a0f2a797d456a665a3881198b59c",
+    "binding_sha256": "784bbe454e98e60d75e22e83e2cc6f7e3885aa8c49013b9f6abf2d9e0d3d689f"
+  },
+  "actual_method_matrix": {
+    "status": "PASS",
+    "cells": 24,
+    "sessions": 48,
+    "containers": 96,
+    "manifest_sha256": "4e3aa2a3dc40904998dd69347bede4c00a4a4eb612941361d5544559d27609dd",
+    "source_identity": {
+      "system": "/home/zyw/contractedge-collab-20261023/worktrees/architecture-d2-method-modes/system",
+      "source_sha256": "b9f9a83ebf9ced04a5b1672dd9870de5c57b54d5b6c257246d487759e323735a",
+      "snapshot_path": "system/docs/development/architecture-d2-method-modes-20261024-r2.snapshot.json",
+      "snapshot_sha256": "d9bd920dbcc963aa1e13af8e312e46ce31a2c0a30ede09f4720b515cda56ea34",
+      "binding_path": "system/configs/trial-isolation-acceptance-d2-r2.example.json",
+      "binding_sha256": "784bbe454e98e60d75e22e83e2cc6f7e3885aa8c49013b9f6abf2d9e0d3d689f",
+      "binding_files": 225,
+      "binding_mapping_sha256": "e82c65be0bfcd9db41c837d40662e5faa565686e8bcfbba5624438efc108c5f5",
+      "source_files": 113,
+      "bound_files": 393,
+      "mapping_sha256": "98b74b6e9a658f723ec1696945eaf0809b86fc8b1ca809e32e276c79f1c4249a"
+    },
+    "product_entry": "scripts/run_isolated_method_panel.py",
+    "all_fixed_targets_and_preservation": "PASS"
+  },
+  "independent_exports": {
+    "mode-isolation.json": "9e3d0347cda39c224d44828d81e6cf79f85206043906fb5f717ed68e9192a3b3",
+    "panel-results.json": "e42b80961fcfdd90bf2db0e0dee95ae5fe8290ffbece4a9778c1bc64adc27ead",
+    "panel-results.csv": "210d31b0f127ec6d0ca1984fce3e4ffb8028435fe6074c66248b2eccc627819e",
+    "evidence-audit.json": "3aea668ac0118cfe7e5db92c5161aa351edc7bc81f49c785639c037712098c45"
+  },
+  "controlled_interventions": {
+    "path": "/home/zyw/contractedge-collab-20261023/evidence/architecture-d2-controlled-interventions-20261024/run-final-r2-v3/interventions.json",
+    "sha256": "f306fabc00d472d0f6d42710d870a0fed60b906f036c93088ac2027d77698389",
+    "scope": "Separate manual intermediate-object consumer control; bypasses semantic validation and holds provider response fixed. Request/edit/behavior changes reported without a required Full advantage; not automatic method score."
+  },
+  "source_review_sha256": "af9c7ed074696a424887378139e02a687c7f96c4ce5ca3e971771420e5b2cf2c",
+  "primary_error_fix": "Local current dispatch_error passed to existing preserve_error; current timeout/budget primary retained, independent I/O still blocks",
+  "Full_compatibility": "Prior exact two-consumer Full request comparison retained. r2 sole source delta is local without_relation error handling; Full path unchanged; r2 actual8 includes native Full execution. Do not relabel prior comparison as newly executed.",
+  "limitations": [
+    "Exposed synthetic engineering panel; not model effectiveness or benchmark repair rate.",
+    "No real provider/HTTP calls were made by the panel or this audit; token fields are conservative reservations, not usage.",
+    "This file-only audit verifies persisted runtime/cleanup evidence; it did not query live Docker or rerun any process.",
+    "No format corrections or second-round feedback paths were executed in actual24; their dynamic absence-of-leak behavior is not proven by this panel.",
+    "Successful session open/close wall durations are within the case cap; actual24 does not independently prove timeout termination, and does not preserve a per-run absolute deadline field. Version-bound runtime timeout counterexamples remain separate evidence.",
+    "Model adoption, semantic causal attribution, hidden behavior and generalization are not proved.",
+    "Fresh/resume negative gates, adversarial observations, UNKNOWN/partial repair and alternative-consumer interrupt coverage remain separately evidenced by their own version-bound tests; actual24 does not replace them.",
+    "The source inventory digest covers exact current bound files; this is not a full new source audit.",
+    "Selected source snapshots use the bound protocol exclusions .git and .contractedge-deps; no other dot-files are ignored."
+  ],
+  "real_model_single_case": "NOT_RUN",
+  "github_actions": "NOT_RUN_AT_LOCAL_VALIDATION",
+  "new_model_http_calls": 0,
+  "formal_ready": false
+}

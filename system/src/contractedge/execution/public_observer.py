@@ -243,6 +243,9 @@ class IsolatedPublicObserver:
 def enforce_public_profile(review, observation, *, required=False):
     """A model's own postconditions cannot delete the registered public checks."""
     profile = observation.get('required_public_profile')
+    if isinstance(profile, Mapping) and profile.get('schema_version') == 'ce.d2_isolated_requirement_profile.v1':
+        from contractedge.execution.panel_observer import enforce_isolated_panel_profile
+        return enforce_isolated_panel_profile(review, observation)
     if profile is None and not required:
         return review
     valid = (isinstance(profile, Mapping)
@@ -315,6 +318,9 @@ def isolated_observation_complete(observation):
     """A valid profile cannot substitute for completed runs and confirmed cleanup."""
     if not isinstance(observation, Mapping):
         return False
+    if isinstance(observation.get('required_public_profile'), Mapping) and observation['required_public_profile'].get('schema_version') == 'ce.d2_isolated_requirement_profile.v1':
+        from contractedge.execution.panel_observer import isolated_panel_observation_complete
+        return isolated_panel_observation_complete(observation)
     validation = enforce_public_profile({'decision': 'UNKNOWN'}, observation, required=True)
     if validation.get('required_public_profile', {}).get('binding_valid') is not True:
         return False

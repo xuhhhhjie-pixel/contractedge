@@ -113,6 +113,18 @@ python scripts/run_public_demo.py --case config-binding --runtime isolated --run
 
 `--provider-config` 必须显式约束 token、时间、调用、轮次和费用；凭据只用环境变量引用，不放入配置、日志或产物。`configs/deepseek-official-front.example.json` 是前半示例，不能不经核对当作新的全流程预算。已授权尝试共享同一 30 元账本，不能改路径、删除账本或逐模式重置。未知响应保留预留，不自动重发；当前模型、价格及输出能力在实际付费前核对。同版真实单例是否运行及其 PASS/FAIL/UNKNOWN/无候选，均按新 validation 记录，不继承旧 READY 或历史费用结果。
 
+## 四模式与六例开发面板
+
+`full`、`without_relation`、`without_changeset`、`direct` 分别运行完整路径、独立 DirectPlan、RelationOnly 和 RequirementOnly 路径。方法模式与 execution_backend 独立；四模式主对照共用 MODIFY-only 消费者。原生 TopoMen 的 Full 兼容性单列验证。
+
+六例覆盖配置绑定、异常守卫、两消费者与保持义务、重载状态和非法重载拒绝。以下命令只用公开 synthetic provider，但候选与可信 checker 使用实际独立 RuntimeSession；镜像、资源、输出和清理门槛与公开运行器相同，没有 host 降级：
+
+```bash
+python scripts/run_isolated_method_panel.py --image "$CONTRACTEDGE_RUNTIME_IMAGE" --docker-host "$DOCKER_HOST" --output /tmp/contractedge-method-panel24-new
+```
+
+模式/observer/跨模式恢复的无 Docker 检查为 `tests/test_method_modes_panel.py`、`tests/test_isolated_method_panel.py`、`tests/test_method_mode_trial_recovery.py`；其中 runtime doubles 不作为实际隔离证据。面板只验证有限公开开发行为，不代表模型效果或正式数据修复率。当前同版状态和准入边界见[阶段 D2 说明](docs/development/2026-10-24-architecture-d2-method-modes.md)。 独立规划派发错误保护的r2修订见[修订说明](docs/development/2026-10-24-architecture-d2-dispatch-error.md)，最终结果以当前validation为准。
+
 ## 历史与后续
 
 阶段 A 的[交付与准入说明](docs/development/2026-10-23-architecture-a-delivery-admission.md)保留：必要失败证据缺失停止派发；front.delivery 绑定实际输入和最终请求；max_context_tokens 含 provider/schema 输入开销，model_context_tokens 限输入加输出。交付不等于模型采用或修复正确。

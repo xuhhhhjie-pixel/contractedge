@@ -43,6 +43,8 @@ from contractedge.orchestration.feedback import make_feedback, validate_feedback
 from contractedge.orchestration.runner import run_front_half, required_planning_source_support, required_source_prerequisites
 from contractedge.retrieval.candidates import CandidateSet
 from contractedge.source.snapshot import compute_snapshot
+from contractedge.experiments.modes import (method_mode, INTENTS, generate_nonrelation,
+    repair_intent, public_feedback, audit_mode_calls)
 
 
 def write_json(path: Path, value):
@@ -262,14 +264,24 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         raise ValueError('Repair output must be independent of frozen public tasks')
     out.mkdir(parents=True, exist_ok=False)
     method_value, projection = method_input_from_task(root, case_id)
+    mode = method_mode(config)
+    if mode != 'full' and initial_trace is not None:
+        raise PlanRejected('Legacy READY trace cannot be relabelled as a new method mode')
     backend = config.get('execution_backend', 'direct')
     if consumer is not None and executor is not None:
         raise ValueError('Specify consumer or legacy executor, not both')
+    if consumer is None and config.get('repair_consumer') == 'modify_only':
+        if executor is not None:
+            raise ValueError('MODIFY-only consumer cannot use a legacy TopoMen executor')
+        from contractedge.execution.consumers.direct import ModifyOnlyConsumer
+        consumer = ModifyOnlyConsumer()
+    elif config.get('repair_consumer') not in {None, 'topomen', 'modify_only'}:
+        raise ValueError('Unknown repair_consumer')
     consumer = consumer or build_consumer(backend, executor=executor,
         on_trace=lambda trace: write_json(out / 'topomen-native-last-trace.json', trace))
     consumer_capabilities = validate_consumer(consumer)
-    if 'SEMANTIC_CHANGESET' not in consumer_capabilities.supported_intents:
-        raise PlanRejected('Full mode requires SEMANTIC_CHANGESET consumer support before model dispatch')
+    if INTENTS[mode] not in consumer_capabilities.supported_intents:
+        raise PlanRejected(('Full mode' if mode == 'full' else mode) + ' requires ' + INTENTS[mode] + ' consumer support before model dispatch')
     configured = resolve_execution_capabilities(config.get('public_execution_capabilities'), backend=backend)
     configured['supported_operations'] = [op for op in configured['supported_operations']
         if op in consumer_capabilities.supported_operations]
@@ -303,6 +315,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         method_probe_profiles=config.get('method_probe_profiles', []))
     requires_public_profile = (config.get('public_runtime') == 'isolated'
         or getattr(runner, 'requires_public_profile', False) is True)
+    if getattr(runner, 'synthetic_only', False) and config.get('provider') != 'synthetic':
+        raise PlanRejected('Host development panel admits only the trusted synthetic provider; isolated runtime is required for real providers')
     reviewer = reviewer or ModelPublicReviewer(budget, token_counter, config)
     workspace = out / 'workspace'
     trace, plan, feedback, current_observation = None, None, None, None
@@ -356,9 +370,11 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         return delivery_context(method_input, consumer=consumer,
             snapshot_id=compute_snapshot(source).snapshot_id if source is not None else initial_snapshot,
             diagnosis=(trace or {}).get('diagnosis'), changeset=(trace or {}).get('changeset'),
-            plan=plan, feedback=feedback, necessary_support=retrieval.get('necessary_source_support', ()),
+            plan=plan, feedback=feedback if mode == 'full' else public_feedback(feedback), necessary_support=retrieval.get('necessary_source_support', ()),
             prerequisites=(plan or {}).get('precondition_review', ()), evidence=evidence,
-            mandatory_refs=mandatory_refs, source_requirements=source_requirements, source_root=source)
+            mandatory_refs=mandatory_refs, source_requirements=source_requirements, source_root=source,
+            **({'layer_absence': {'diagnosis': 'NOT_APPLICABLE' if mode in {'direct', 'without_relation'} else 'UNKNOWN',
+                                  'changeset': 'NOT_APPLICABLE'}} if mode != 'full' else {}))
     def reserve_public_time():
         if budget.remaining_seconds <= 0:
             raise BudgetExceeded('Global wall-clock budget exhausted before public execution')
@@ -522,14 +538,23 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             round_decision = engine.start_round(StageResult('round_start', 'READY',
                 journal.latest.get('feedback') or journal.latest.get('front_import'),
                 snapshot_id=compute_snapshot(source).snapshot_id, route=next_route), repeated=round_id > 0)
-            if round_decision.action == 'DIAGNOSE':
+            if mode in {'without_relation', 'direct'} and (
+                    trace is None or round_decision.action != 'EXECUTE'):
+                with semantic_monitor.scope(semantic_context_for('DIRECT_PLAN_ROUND_' + str(round_id),
+                        evidence=observations, mandatory_refs=delivery.receipt.get('mandatory_refs', ()))):
+                    trace = generate_nonrelation(mode, method_input, source, policy, budget, token_counter,
+                        {**dict(config), 'run_id': run_id}, observations=observations, feedback=feedback,
+                        journal=journal, attempt_id='round-' + str(round_id))
+                plan = None
+            elif (round_decision.action == 'DIAGNOSE' or mode == 'without_changeset'
+                    and round_decision.action in {'REVISE_PLAN', 'REDIAGNOSE'}):
                 round_config = {**dict(config), 'run_id': run_id,
                     'max_total_tokens': max(1, budget.max_tokens - budget.reserved_tokens),
                     'max_elapsed_seconds': budget.remaining_seconds,
                     'model': {'model': config['model'], 'provider': config.get('provider', 'configured'),
                               'schema_in_prompt': config.get('schema_in_prompt', True)}}
                 trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
-                    budget, round_config, token_counter, execution_feedback=feedback,
+                    budget, round_config, token_counter, execution_feedback=feedback if mode == 'full' else public_feedback(feedback),
                     public_observations=observations, directory=directory, evidence_delivery=delivery.receipt,
                     journal=journal, attempt_id='round-' + str(round_id)).to_wire()
                 plan = None
@@ -544,7 +569,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 status = trace['status']
                 errors.extend(trace.get('errors', []))
                 break
-            if round_decision.action in {'REVISE_PLAN', 'REDIAGNOSE'}:
+            if mode == 'full' and round_decision.action in {'REVISE_PLAN', 'REDIAGNOSE'}:
                 if round_decision.action == 'REVISE_PLAN':
                     revision_call_start = journal.position()
                     trace = revise_plan(trace, method_input, source, feedback, budget, token_counter, config)
@@ -573,12 +598,12 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 break
             rebind_input = bool(((feedback and feedback['route'] == 'EXECUTE') or retry_restored_candidate)
                                 and execution_input is not None)
-            if not rebind_input:
+            if not rebind_input and mode == 'full':
                 validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
-            intent = SemanticChangeSetIntent(trace['changeset'], trace.get('diagnosis'),
-                tuple(trace['run_context']['retrieval_config'].get('necessary_source_support') or ()))
+            intent = repair_intent(mode, trace, method_input, source) if not rebind_input else intent
             context = ConsumerContext(source, policy, config, method_input.requirement_text,
-                tuple(method_input.declared_artifacts), tuple(observations), feedback, last_execution_attempt,
+                tuple(method_input.declared_artifacts), tuple(observations),
+                feedback if mode == 'full' else public_feedback(feedback), last_execution_attempt,
                 execution_input, last_applied_execution, rebind_input)
             execution_input = consumer.prepare(intent, context)
             plan = dict(execution_input.payload)
@@ -599,9 +624,9 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 'snapshot_id':execution_input.snapshot_id, 'input_digest':execution_input.input_digest,
                 'target_paths':list(execution_input.target_paths),
                 'operation_coverage':execution_input.operation_coverage})
-            review_plan = review_plan_with_retained({**trace['changeset'],
+            review_plan = review_plan_with_retained({**(trace.get('changeset') or {}),
                 'declared_artifacts': list(method_input.declared_artifacts),
-                'public_execution_capabilities': config.get('public_execution_capabilities')}, feedback)
+                'public_execution_capabilities': config.get('public_execution_capabilities')}, feedback if mode == 'full' else None)
             write_json(directory / 'public-review-plan.json', review_plan)
             relative = directory.relative_to(out).as_posix()
             record_stage('consumer_projection', snapshot_id=before,
@@ -655,6 +680,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                                 and isinstance(call.get('response_content'), str) and not call.get('error')):
                             completed_response = True
                             last_execution_attempt = {'model_response': call['response_content'],
+                                **({'consumer_id':execution_input.consumer_id, 'intent_kind':execution_input.intent_kind}
+                                   if mode != 'full' else {}),
                                 'response_metadata': call.get('response_metadata', {}),
                                 'validation_error': execution_result.get('error'),
                                 'plan_digest': canonical_digest(plan), 'source_snapshot': before}
@@ -748,6 +775,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 from contractedge.execution.public_observer import enforce_public_profile
                 review = enforce_public_profile(review, current_observation,
                     required=requires_public_profile)
+                if hasattr(runner, 'enforce_requirement_profile'):
+                    review = runner.enforce_requirement_profile(review, current_observation)
                 write_json(directory / 'public-review.json', review)
                 record_stage('review', snapshot_id=compute_snapshot(source).snapshot_id,
                     status=review['decision'], call_start=review_call_start,
@@ -771,6 +800,20 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 patch_digest=patch_info['patch_sha256'], execution_status=execution_status,
                 observations=fresh, plan=review_plan, review=review, diagnosis=trace.get('diagnosis'),
                 observation_diagnostics=public_failure_diagnostics(current_observation or {}))
+            if rejection_kind is None and hasattr(runner, 'enforce_requirement_profile'):
+                if review.get('requirement_profile_valid') is True:
+                    fixed = review['public_requirement_checks']
+                    verdict = review['requirement_profile_decision']
+                    feedback.update(public_check_results=fixed,
+                        semantic_outcome='PUBLIC_REVIEW_PASS' if verdict == 'PASS' and not feedback['pending_obligations'] else
+                            'PUBLIC_REVIEW_FAIL' if verdict == 'FAIL' else 'UNKNOWN',
+                        failure_kind='NONE' if verdict == 'PASS' else 'UNKNOWN', route='STOP',
+                        rationale='Fixed requirement-level public profile: ' + verdict,
+                        next_action='COMPLETE' if verdict == 'PASS' else 'STOP_UNCERTAIN')
+                    if verdict == 'FAIL' and round_id == 0 and before != after and max_rounds > 1:
+                        feedback.update(route='EXECUTE', routing_policy='BOUNDED_ACCEPTED_INTENT_RETRY',
+                            next_action='EXECUTE', rationale='Bounded retry of this mode\'s accepted intent using only fresh fixed public failures; semantic attribution remains UNKNOWN.')
+                    validate_feedback(feedback,case_id=case_id,input_digest=method_input.input_digest,to_snapshot=after)
             if rejection_kind:
                 feedback.update(build_state='NOT_RUN', failure_kind=rejection_kind,
                     route='CHANGESET' if rejection_kind == 'PLAN' else 'EXECUTE',
@@ -804,7 +847,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             if guard_enabled and checkpoint and rejection_kind is None and incumbent_observation:
                 from contractedge.orchestration.candidate_guard import compare_candidate_checks, preservation_check_ids, restore_candidate
                 protected_checks = preservation_check_ids(review_plan, incumbent_feedback)
-                if requires_public_profile:
+                if requires_public_profile or getattr(runner, 'requires_requirement_profile', False):
                     # Registered checks do not depend on which conditions a
                     # model chooses to include. Every observed PASS is retained.
                     protected_checks = sorted(set(protected_checks) | {
@@ -951,6 +994,10 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
               'scope': 'Public repair execution. A public review is an uncertain method signal, not a benchmark PASS.'}
     if initial_trace:
         report['resumed_front_trace_digest'] = canonical_digest(initial_trace)
+    if 'method_mode' in config:
+        report['method_mode'] = mode
+        report['execution_backend'] = backend
+        write_json(out / 'method-mode.audit.json', audit_mode_calls(mode, budget.calls))
     write_json(out / 'model_calls.json', budget.calls)
     write_json(out / 'repair.trace.json', report)
     preserve_error(primary_error or journal.primary_error, lambda: engine.project(status=status, case_id=case_id, rounds_completed=len(rounds)))

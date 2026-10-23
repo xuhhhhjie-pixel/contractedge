@@ -1214,6 +1214,12 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                             () if diagnosis_decision.action == "STOP" else ("DIAGNOSIS_SNAPSHOT_STALE",),
                             structural_validation, semantic_review, tuple(retrieval_rounds), run_context_wire)
 
+        if config.get('method_mode') == 'without_changeset':
+            return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
+                            'READY', requirement, scope, candidate_set, diagnosis.raw, None,
+                            tuple(calls), (), structural_validation, semantic_review,
+                            tuple(retrieval_rounds), run_context_wire)
+
         feedback: list[Mapping[str, Any]] = []
         changeset_payload = None
         validation = None
