@@ -1,14 +1,14 @@
-# ContractEdge system — 0.6.33 development snapshot
+# ContractEdge system — 0.6.34 development snapshot
 
-**当前为开发交接快照，formal_ready=false。** 完整服务器回归802项+22项子测试，可移植子集769+17（明确排除六个历史/原生模块）。最近完成的0.6.32原始Broken ACK独立PASS、公开8项检查PASS、整体语义UNKNOWN；0.6.33修复未引用公开事实向计划运输时丢失的问题，已冻结并单次派发ACK门槛验证，尚未获得本版效果结论。
+**当前为开发交接快照，formal_ready=false。** 完整服务器回归814+22，可移植子集781+17（排除六个历史/原生模块）。0.6.32 ACK独立PASS；0.6.33补证因错误必需片段标记停止、独立NO_CANDIDATE。0.6.34修复可选词面上下文分级及合并降级问题，保存失败轨迹已在原预算内恢复送达，单条真实验证进行中。历史结果不拼入本版成绩。
 
-本版细节见[公开证据连续性修复](docs/reports/2026-10-24-public-evidence-continuity.md)；上一版真实结果见[执行与探测记录](docs/reports/2026-10-24-execution-contract-closure.md)。
+见[本版机制修复与验收](docs/reports/2026-10-24-optional-gap-context-closure.md)、[公开证据连续性](docs/reports/2026-10-24-public-evidence-continuity.md)和[0.6.32真实修复结果](docs/reports/2026-10-24-execution-contract-closure.md)。
 
 首先阅读 [正式实验准入与最终优化实施计划](docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md)。它逐项审查0—10步骤、三个核心模块、现有证据和未完成事项，并给出后续任务、验收与停止条件。
 
 ## 内容
 
-- src/：完整当前ContractEdge运行源码及JSON契约，与本地0.6.33冻结摘要一致。
+- src/：完整当前ContractEdge运行源码及JSON契约，与本地0.6.34冻结摘要一致。
 - tests/、scripts/、configs/、docs/：当前全部测试、工程脚本、历史配置和设计文档。
 - vendor/topomen/：所接入TopoMen运行源码与原MIT许可；调用其DefaultAgent作为源码修复消费者，非完整部署调度系统接入。
 - outputs/：精简历史审计文档、冻结元数据和结果摘要；不是全部多GB工作目录或完整历史回放输入。

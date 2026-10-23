@@ -1,9 +1,9 @@
-> CURRENT: frozen0.6.33 / c557658498cae454dc47664f567bf6d7f32d708dba9c2f7daa80f21a0d7cbe28. Full802+22, portable769+17; generic current-public-evidence retention. Latest completed .32 original-Broken ACK independentPASS, public8/8PASS/overallUNKNOWN,6calls. .33 candidate/0 dispatched once (session24574; inspect state/ps before resuming),45held. Do not duplicate slots or mutate freezes; formal150/B closed. Read CURRENT_STATUS.json, docs/reports/2026-10-24-public-evidence-continuity.md and current plan ledger.
+> CURRENT: frozen0.6.34 / cfc3e75abc53206b14ad1df497f48bb561a81aeffa8e63450474532703bc73a2. Full814+22, portable781+17. .33 CLOSED EVIDENCE_GAP/NO_CANDIDATE2calls; .32 independentPASS remains historical only. .34 original-Broken ACK candidate/0 dispatched once session8464;45held. Confirm state/ps, never duplicate or mutate freeze. Formal150/B closed. Read CURRENT_STATUS.json and docs/reports/2026-10-24-optional-gap-context-closure.md. The draft continuation dispatcher in outputs is NOT qualified for paid group dispatch.
 
 # ContractEdge system handoff
 
 Read README.md and docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md first.
-Runtime source is 0.6.33; formal_ready=false. Historical reports contain superseded status; CURRENT_STATUS.json and the handoff plan identify the current failed gate.
+Runtime source is 0.6.34; formal_ready=false. Historical reports contain superseded status; CURRENT_STATUS.json and the handoff plan identify the current failed gate.
 Preserve benchmark/ and tools/ in the repository root. Do not put credentials, hidden graders, GT/Fixed, runtime workspaces or caches into model context or Git.
 Use saved public failure replay before behavior changes; verify actual final serialized requests across diagnosis, plan, execution and re-diagnosis. Re-read the current snapshot after edits.
 Run python scripts/test_portable.py for the self-contained development subset; report explicitly that six historical/native modules are excluded. Full tests require the documented external fixtures. Never call subset results a full 662-test reproduction.

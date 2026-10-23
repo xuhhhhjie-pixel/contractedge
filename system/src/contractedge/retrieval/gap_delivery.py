@@ -6,7 +6,7 @@ import hashlib
 import json
 import re
 from pathlib import Path, PurePosixPath
-from contractedge.retrieval.candidates import _terms
+from contractedge.retrieval.candidates import _terms, merge_gap_context_optional
 from contractedge.source.parsers import parse_source_units, _unit
 
 
@@ -74,13 +74,16 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
                     and unit['locator']['start_line']<=first['locator']['end_line']
                     and first['locator']['start_line']<=unit['locator']['end_line']):continue
             if index and scored[index][0]<.7*scored[0][0]:continue
-            item={**unit,'gap_role_keys':[gap['id']+(':anchor' if index==0 else ':context')],
+            tier = match_tier(unit)
+            item={**unit,'gap_role_keys':[gap['id']+(':anchor' if index==0 and tier else ':context')],
+                  'optional_gap_context': not bool(tier),
                   'evidence_gap_refs':[gap['id']],'anchor_priority':4,
                   'scope_extension':'EVIDENCE_GAP_EXACT_PATH','hop_distance':0,
-                  'association_status':'EXACT_PUBLIC_GAP_QUERY; lexical location only, not causality or edit grant'}
+                  'association_status':('EXACT_PUBLIC_GAP_QUERY' if tier else 'BOUNDED_NONMATCHING_LEXICAL_CONTEXT')+'; lexical location only, not causality or edit grant'}
             prior=next((u for u in output if u['id']==item['id']),None)
             if prior is None:output.append(item)
             else:
+                prior['optional_gap_context'] = merge_gap_context_optional(prior, item)
                 prior['gap_role_keys']=sorted(set(prior['gap_role_keys'])|set(item['gap_role_keys']))
                 prior['evidence_gap_refs']=sorted(set(prior.get('evidence_gap_refs',[]))|set(item['evidence_gap_refs']))
             audit.append(dict(gap_id=gap['id'],unit_id=item['id'],path=path,

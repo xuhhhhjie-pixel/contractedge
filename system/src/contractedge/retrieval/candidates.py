@@ -58,6 +58,22 @@ def _identity(candidate: Mapping[str, Any]) -> tuple[str, str, str]:
             repr(sorted(locator.items())) if isinstance(locator, Mapping) else repr(locator))
 
 
+def requires_gap_delivery(unit: Mapping[str, Any]) -> bool:
+    """Keep real/legacy required roles; nonmatching lexical context is optional.
+
+    An exact anchor or explicit requirement always wins when identities merge.
+    """
+    roles = unit.get("gap_role_keys", [])
+    return bool(unit.get("required_for_gap_delivery") or (roles and (
+        unit.get("optional_gap_context") is not True or any(role.endswith(":anchor") for role in roles))))
+
+
+def merge_gap_context_optional(*units: Mapping[str, Any]) -> bool:
+    """A merged role is optional only if every role contribution is optional."""
+    contributors = [unit for unit in units if unit.get("gap_role_keys")]
+    return bool(contributors) and all(not requires_gap_delivery(unit) for unit in contributors)
+
+
 def _rank(candidates: Sequence[Mapping[str, Any]], requirement: str, observable: str | None):
     requirement_terms = _terms(requirement)
     observable_terms = _terms(observable or "")
@@ -73,6 +89,8 @@ def _rank(candidates: Sequence[Mapping[str, Any]], requirement: str, observable:
                 'anchor_priority': max(previous.get('anchor_priority', 0), candidate.get('anchor_priority', 0)),
                 'gap_role_keys': sorted(set(previous.get('gap_role_keys',[]))|set(candidate.get('gap_role_keys',[]))),
                 'evidence_gap_refs': sorted(set(previous.get('evidence_gap_refs', [])) | set(candidate.get('evidence_gap_refs', [])))}
+            if 'optional_gap_context' in previous or 'optional_gap_context' in candidate:
+                unique[identity]['optional_gap_context'] = merge_gap_context_optional(previous, candidate)
             if previous.get('required_for_gap_delivery') or candidate.get('required_for_gap_delivery'):
                 unique[identity]={**unique[identity],'required_for_gap_delivery':True}
     from contractedge.retrieval.frontier import production_frontier
@@ -191,6 +209,7 @@ def _select(ordered, features, edges, *, top_n: int, max_context_tokens: int,
                         total, max_context_tokens, top_n, extension_used, reasons)
 
 
+
 def trim_context_bundle(candidate_set: CandidateSet, *, request_tokens: int, limit: int) -> CandidateSet:
     """Remove the lowest-priority connected evidence bundle, recording lost edges.
 
@@ -216,7 +235,7 @@ def trim_context_bundle(candidate_set: CandidateSet, *, request_tokens: int, lim
     if not groups:
         return candidate_set
     positions = {str(c['id']): i for i, c in enumerate(selected)}
-    protected={str(c['id']) for c in selected if c.get('gap_role_keys')} | set(candidate_set.required_endpoint_ids)
+    protected={str(c['id']) for c in selected if requires_gap_delivery(c)} | set(candidate_set.required_endpoint_ids)
     unprotected=[g for g in groups if not g&protected]
     removed = max(unprotected or groups, key=lambda g: (min(positions[k] for k in g), sorted(g)))
     if (removed & protected or len(removed)==len(selected)) and len(selected)>1:

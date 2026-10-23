@@ -1,0 +1,10 @@
+{
+  "status": "IMPORTANT_FIXED_TDD_FULL_SUITE_PASSED",
+  "finding": "Order-dependent optionality in locator and ranking merges could demote exact secondary or legacy roles",
+  "red": "4failed7passed",
+  "related_green": "37passed",
+  "full": "814passed22subtests",
+  "fix": "All contributing role-bearing inputs must be explicitly optional; any exact/legacy/explicit required contribution wins",
+  "reviewer_private_access": false,
+  "reviewer_edits": false
+}

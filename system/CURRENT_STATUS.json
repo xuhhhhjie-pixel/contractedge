@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-23T17:13:00.467511+00:00",
+  "as_of": "2026-10-23T17:45:00.154781+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -19,14 +19,14 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.33",
+  "implementation_version": "0.6.34",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
     "report": "outputs/benchmark150-adapter-v2-20261019/preparation.json"
   },
   "protocol_tests": {
-    "passed": 802,
+    "passed": 814,
     "subtests_passed": 22,
     "scope": "Complete candidate regression on this server with historical fixtures; not repair effectiveness"
   },
@@ -1253,13 +1253,13 @@
   "historical_independent_code_review_pre_final_optimization": "outputs/benchmark150-independent-code-review-20261019.json",
   "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/系统审查与验收.md",
   "reliability_closure": {
-    "version": "0.6.33",
-    "status": "G4_V0633_SINGLE_GATE_RUNNING",
+    "version": "0.6.34",
+    "status": "G4_V0634_SINGLE_GATE_RUNNING",
     "implementation_completed_claim": false,
     "repair_reliability_accepted": false,
     "formal150_started": false,
-    "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.33.json",
-    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.33.json",
+    "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.34.json",
+    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.34.json",
     "audit": "outputs/reliability-closure-20261020/COMPLETION_AUDIT.md"
   },
   "historical_final_delivery_readiness_v0_5_5": {
@@ -1269,20 +1269,21 @@
     "report": "outputs/final-optimization-20261020/readiness.json",
     "effect_acceptance_passed": false
   },
-  "version": "0.6.33",
-  "status": "V0633_FROZEN_SINGLE_ACK_RUNNING",
+  "version": "0.6.34",
+  "status": "V0634_FROZEN_SINGLE_ACK_RUNNING",
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "formal_ready": false,
   "formal150_started": false,
-  "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.33.json",
-  "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.33.json",
+  "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.34.json",
+  "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.34.json",
   "current_engineering_evidence": {
-    "full": "outputs/public-evidence-continuity-20261024/full-v0633-tests.log",
-    "portable_subset": "outputs/public-evidence-continuity-20261024/portable-tests.log",
-    "replay": "outputs/public-evidence-continuity-20261024/after.json",
-    "cross_case": "outputs/public-evidence-continuity-20261024/cross-case-v0633.json",
-    "report": "docs/reports/2026-10-24-public-evidence-continuity.md"
+    "full": "outputs/optional-gap-context-20261024/full-final-tests.log",
+    "portable_subset": "outputs/optional-gap-context-20261024/portable-final-tests.log",
+    "replay": "outputs/optional-gap-context-20261024/after-final.json",
+    "saved_success_front": "outputs/optional-gap-context-20261024/success-front.json",
+    "cross_case": "outputs/optional-gap-context-20261024/cross-case-v0634-final.json",
+    "report": "docs/reports/2026-10-24-optional-gap-context-closure.md"
   },
   "active_frozen_panels": {
     "0.6.8": "Historical dispatch held, results retained",
@@ -1297,49 +1298,47 @@
     "0.6.29": "CLOSED SEMANTIC_FAIL;1/46 scored,45NOT_RUN",
     "0.6.31": "CLOSED INVALID_OUTPUT/NO_CANDIDATE;4calls,1/46scored,45NOT_RUN",
     "0.6.32": "CLOSED single ACK PASS, public8/8PASS/overallUNKNOWN;1/46scored,45held; superseded for uncited fact continuity",
-    "0.6.33": "Single ACK candidate/0 running;45held"
+    "0.6.33": "CLOSED EVIDENCE_GAP/NO_CANDIDATE,2calls,1/46scored45NOT_RUN",
+    "0.6.34": "Single ACK candidate/0 running;45held"
   },
   "optimization_reset": {
     "as_of": "2026-10-21T14:38:03.778057+00:00",
-    "gate": "G4_V0633_SINGLE_GATE_RUNNING",
+    "gate": "G4_V0634_SINGLE_GATE_RUNNING",
     "formal_ready": false,
     "money_limit_cny": 150,
-    "report": "docs/reports/2026-10-24-public-evidence-continuity.md",
-    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.33.json",
+    "report": "docs/reports/2026-10-24-optional-gap-context-closure.md",
+    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.34.json",
     "public_calibration": "temporal-v2-calibration-corrected/summary.json",
-    "live_result": "Latest completed .32 ACK independentPASS; .33 running",
+    "live_result": ".32ACKPASS; latest.33EVIDENCE_GAP/NO_CANDIDATE; .34running",
     "next_revision": null
   },
   "latest_live_result": {
-    "version": "0.6.32",
+    "version": "0.6.33",
     "case_id": "R4-ACK-CLOUDWATCH-2985",
-    "status": "PUBLIC_EXECUTION_COMPLETE",
-    "independent_status": "PASS",
-    "public_checks_passed": 8,
-    "public_checks_total": 8,
-    "semantic_outcome": "UNKNOWN",
-    "model_calls": 6,
+    "status": "EVIDENCE_GAP",
+    "independent_status": "NO_CANDIDATE",
+    "model_calls": 2,
     "scored": 1,
     "not_run": 45
   },
   "current_experiment": {
-    "version": "0.6.33",
+    "version": "0.6.34",
     "case_id": "R4-ACK-CLOUDWATCH-2985",
     "status": "RUNNING"
   },
-  "G4": "V0633_SINGLE_GATE_PENDING_SAME_VERSION_RECOVERY_NOT_RUN",
+  "G4": "V0634_SINGLE_GATE_PENDING_RECOVERY_NOT_RUN",
   "G5": "FIXED_SAME_VERSION_PANEL_PENDING",
   "B_opened": false,
-  "engineering_tests": 802,
+  "engineering_tests": 814,
   "budget_snapshot": {
     "limit_cny": 150,
-    "committed_including_reservations_cny": 94.24902,
-    "remaining_upper_bound_cny": 55.75098,
-    "as_of": "End of .32; .33 running"
+    "committed_including_reservations_cny": 94.591748,
+    "remaining_upper_bound_cny": 55.408252,
+    "as_of": "End of .33; .34 running"
   },
   "staged_revision": null,
   "subtests": 22,
-  "frozen_method": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.33.json",
+  "frozen_method": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.34.json",
   "same_version_candidate_independent_pass_so_far": {
     "A": 0,
     "recovery": 0
@@ -1348,25 +1347,36 @@
     "status": "FROZEN",
     "source_delta": [
       "contractedge/__init__.py",
-      "contractedge/orchestration/runner.py"
+      "contractedge/orchestration/runner.py",
+      "contractedge/retrieval/candidates.py",
+      "contractedge/retrieval/gap_delivery.py"
     ],
     "configuration_delta": {}
   },
   "current_development_revision": {
-    "version": "0.6.33",
-    "source_sha256": "c557658498cae454dc47664f567bf6d7f32d708dba9c2f7daa80f21a0d7cbe28",
+    "version": "0.6.34",
+    "source_sha256": "cfc3e75abc53206b14ad1df497f48bb561a81aeffa8e63450474532703bc73a2",
     "upstream_commit": "c892215",
     "local_delta": [
       "contractedge/__init__.py",
-      "contractedge/orchestration/runner.py"
+      "contractedge/orchestration/runner.py",
+      "contractedge/retrieval/candidates.py",
+      "contractedge/retrieval/gap_delivery.py"
     ],
     "is_original_v0627_freeze": false
   },
   "budget_current": {
     "limit_cny": 150,
-    "committed_including_uncertain_cny": 94.24902,
-    "remaining_upper_cny": 55.75098,
+    "committed_including_uncertain_cny": 94.591748,
+    "remaining_upper_cny": 55.408252,
     "uncertain_reservations": 3,
-    "as_of": "End of .32; .33 running"
+    "as_of": "End of .33; .34 running"
+  },
+  "previous_live_success": {
+    "version": "0.6.32",
+    "independent_status": "PASS",
+    "public_checks": "8/8PASS",
+    "semantic_outcome": "UNKNOWN",
+    "model_calls": 6
   }
 }

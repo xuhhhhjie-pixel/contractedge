@@ -26,7 +26,7 @@ from contractedge.model.provider import ModelProvider, ModelResponse
 from contractedge.model.budget import BudgetExceeded
 from contractedge.orchestration.feedback import feedback_prompt_view
 from contractedge.requirement.normalize import normalize_requirement
-from contractedge.retrieval.candidates import CandidateSet, build_candidate_set, extend_once, trim_context_bundle
+from contractedge.retrieval.candidates import CandidateSet, build_candidate_set, extend_once, trim_context_bundle, requires_gap_delivery
 from contractedge.retrieval.edges import build_direct_reference_edges
 from contractedge.source.scopes import (
     DEFAULT_SCOPE_MATCHES_PER_HINT, DEFAULT_SCOPE_SEARCH_BYTES, DEFAULT_SCOPE_SEARCH_FILE_BYTES,
@@ -686,7 +686,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                 if u['id'] in pinned else u for u in fitted.candidates),
                 required_endpoint_ids=tuple(dict.fromkeys([*fitted.required_endpoint_ids, *pinned])))
         required_endpoint_ids=list(dict.fromkeys([*fitted.required_endpoint_ids,
-            *[c['id'] for c in fitted.candidates if c.get('gap_role_keys')]]))
+            *[c['id'] for c in fitted.candidates if requires_gap_delivery(c)]]))
         while True:
             if not fitted.candidates:
                 return fitted,None,0
