@@ -1,0 +1,408 @@
+{
+  "label": "budget-parts",
+  "real_model_http_calls": 0,
+  "saved_model_responses_consumed": 6,
+  "request_count": 6,
+  "captured_restored_retry": false,
+  "selected_source_snapshot": "6936f15814e107a25ad7588b9689851dbe6f8527fe391fe784749554259b3a32",
+  "initial_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+  "source_restored": false,
+  "method_status": "BUDGET_EXHAUSTED",
+  "rounds": 1,
+  "errors": [
+    "BudgetExceeded: Planning evidence extension exceeds the existing round budget"
+  ],
+  "first_six_messages_match_saved": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "debug_budget_boundaries": [
+    {
+      "function": "final_request_parts",
+      "messages_bytes": [
+        10101,
+        85561
+      ],
+      "compact_messages_bytes": [
+        10101,
+        83377
+      ],
+      "sections": [
+        {
+          "allowed_evidence_ids": 198,
+          "candidate_set": 3376,
+          "evidence_catalog": 55502,
+          "failed_public_predicates": 656,
+          "method_input": 1061,
+          "operation_facts": 2,
+          "output_contract": 69,
+          "output_schema": 9583,
+          "production_path_frontier": 2,
+          "public_execution_capabilities": 2888,
+          "requirement_spec": 2181,
+          "run_context": 254,
+          "schema_version": 26,
+          "scope_resolution": 7347,
+          "source_contract_review_instruction": 272,
+          "source_field_contract_contexts": 1746
+        }
+      ]
+    },
+    {
+      "function": "fit_diagnosis",
+      "request_present": true,
+      "input_bound": 95662,
+      "candidates": 4,
+      "required_endpoint_ids": [
+        "CU-99686d29bed27b32"
+      ],
+      "last_context_audit": [
+        {
+          "request_tokens_before": 129149,
+          "limit": 120000,
+          "removed_ids": [
+            "CU-94db3638d8bd0829"
+          ],
+          "removed_reference_edges": 0,
+          "interpretation": "Bounded reference bundle removed; no causal correctness claim"
+        },
+        {
+          "request_tokens_before": 127785,
+          "limit": 120000,
+          "removed_ids": [
+            "CU-df0ba524743b197d"
+          ],
+          "removed_reference_edges": 0,
+          "interpretation": "Bounded reference bundle removed; no causal correctness claim"
+        },
+        {
+          "request_tokens": 95662,
+          "input_limit": 120000,
+          "reserved_output_tokens": 16384,
+          "selected_ids": [
+            "CU-99686d29bed27b32",
+            "CU-be754c069fb990ae",
+            "CU-7c7a7b8079b38ca1",
+            "CU-65eb0f7b355e252d"
+          ],
+          "surviving_reference_edges": 0,
+          "drop_reasons": {
+            "CU-2270885228292a93": "TOP_N_LIMIT",
+            "CU-be5400fe46944c30": "TOP_N_LIMIT",
+            "CU-1d8315c144da970f": "TOP_N_LIMIT",
+            "CU-b7d1ef7b0ce415db": "TOP_N_LIMIT",
+            "CU-ba54b71c55eb35e2": "TOP_N_LIMIT",
+            "CU-b90d1892631007d6": "TOP_N_LIMIT",
+            "CU-b2f152c960337456": "TOP_N_LIMIT",
+            "CU-4de58174d9bf3de5": "TOP_N_LIMIT",
+            "CU-78d4600fbf35accd": "TOP_N_LIMIT",
+            "CU-345f8b49f83800c0": "TOP_N_LIMIT",
+            "CU-1b3583a83d17988c": "TOP_N_LIMIT",
+            "CU-2ee9b752b3f2ee96": "TOP_N_LIMIT",
+            "CU-34cbf6e037d3d864": "TOP_N_LIMIT",
+            "CU-55f0185a8b431775": "TOP_N_LIMIT",
+            "CU-527fe5429a26f69f": "TOP_N_LIMIT",
+            "CU-a7541d022781ad4b": "TOP_N_LIMIT",
+            "CU-f9ee7a999445b0df": "TOP_N_LIMIT",
+            "CU-01cd2e9f85259019": "TOP_N_LIMIT",
+            "CU-c72484ba7e449273": "TOP_N_LIMIT",
+            "CU-9c38bc2724053630": "TOP_N_LIMIT",
+            "CU-4dc8f7b2c2efff35": "TOP_N_LIMIT",
+            "CU-0ccf2fc44b29cc42": "TOP_N_LIMIT",
+            "CU-b27a44dd8e9fdbd7": "TOP_N_LIMIT",
+            "CU-b4185ffa68f68682": "TOP_N_LIMIT",
+            "CU-22154ccbbd203ac5": "TOP_N_LIMIT",
+            "CU-2d9b59007fd90d24": "TOP_N_LIMIT",
+            "CU-5eac0c72ae3bde86": "TOP_N_LIMIT",
+            "CU-2ab62715bf7916dd": "TOP_N_LIMIT",
+            "CU-559f2c81c5796303": "TOP_N_LIMIT",
+            "CU-a4371674baeb6a37": "TOP_N_LIMIT",
+            "CU-7fdc3be9014a21fa": "TOP_N_LIMIT",
+            "CU-dd01703df12f01b2": "TOP_N_LIMIT",
+            "CU-e7822c531d9e109c": "TOP_N_LIMIT",
+            "CU-118e0e65dc6a2bf1": "TOP_N_LIMIT",
+            "CU-a694eee16eff8b4e": "TOP_N_LIMIT",
+            "CU-865f0c8c3926989d": "TOP_N_LIMIT",
+            "CU-158c6fb45de05228": "TOP_N_LIMIT",
+            "CU-910dd8b93742de6d": "TOP_N_LIMIT",
+            "CU-8a7d3fa2f065c6d8": "TOP_N_LIMIT",
+            "CU-40abb3190d675c8d": "TOP_N_LIMIT",
+            "CU-e246145b156c696c": "TOP_N_LIMIT",
+            "CU-643d4d9c9f22dbe4": "TOP_N_LIMIT",
+            "CU-04fbbb6af61826d9": "TOP_N_LIMIT",
+            "CU-2fd4346ebe6b1fe5": "TOP_N_LIMIT",
+            "CU-266dbed6cce6c113": "TOP_N_LIMIT",
+            "CU-ac25e46825eec25a": "TOP_N_LIMIT",
+            "CU-9cf4ea366701b5dd": "TOP_N_LIMIT",
+            "CU-33b3ff400de01c14": "TOP_N_LIMIT",
+            "CU-a9757224d62e04f3": "TOP_N_LIMIT",
+            "CU-7df7934ede900916": "TOP_N_LIMIT",
+            "CU-324e9dd980631ed6": "TOP_N_LIMIT",
+            "CU-1ef9f04729ebbe1d": "TOP_N_LIMIT",
+            "CU-cef9be0e4652d132": "TOP_N_LIMIT",
+            "CU-7942c4ef6cc54806": "TOP_N_LIMIT",
+            "CU-61b4e470e2e40ec1": "TOP_N_LIMIT",
+            "CU-b910e3b90a9c8d54": "TOP_N_LIMIT",
+            "CU-63467f44017dc614": "TOP_N_LIMIT",
+            "CU-2837c6d8eb9ce25c": "TOP_N_LIMIT",
+            "CU-2be6005fce9e03aa": "TOP_N_LIMIT",
+            "CU-89c22f6460670a50": "TOP_N_LIMIT",
+            "CU-c9a2f5098be786d4": "TOP_N_LIMIT",
+            "CU-ba0b37625663ccda": "TOP_N_LIMIT",
+            "CU-ec869f9cae370125": "TOP_N_LIMIT",
+            "CU-a78365c6a020bacf": "TOP_N_LIMIT",
+            "CU-ea84caa213f28f28": "TOP_N_LIMIT",
+            "CU-7b3e7755da297ca9": "TOP_N_LIMIT",
+            "CU-0616938211473513": "TOP_N_LIMIT",
+            "CU-b5bd5d943a6b9169": "TOP_N_LIMIT",
+            "CU-589565bb35b747f1": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-b5d1b05a951a5b9a": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-fb1cea16e61ccaff": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-4a352efd5e1a6337": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-c95ace3682ffc9db": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-ae72a7fd21483c04": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-94db3638d8bd0829": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-df0ba524743b197d": "FULL_REQUEST_CONTEXT_BUNDLE"
+          }
+        }
+      ]
+    },
+    {
+      "function": "final_request_parts",
+      "messages_bytes": [
+        10101,
+        70573,
+        35481
+      ],
+      "compact_messages_bytes": [
+        10101,
+        68362,
+        34377
+      ],
+      "sections": [
+        {
+          "allowed_evidence_ids": 117,
+          "candidate_set": 2397,
+          "evidence_catalog": 38100,
+          "failed_public_predicates": 656,
+          "method_input": 1061,
+          "operation_facts": 2,
+          "output_contract": 69,
+          "output_schema": 9282,
+          "production_path_frontier": 2,
+          "public_execution_capabilities": 2888,
+          "requirement_spec": 5956,
+          "run_context": 254,
+          "schema_version": 26,
+          "scope_resolution": 7347,
+          "source_contract_review_instruction": 272,
+          "source_field_contract_contexts": 1746
+        },
+        {
+          "execution_feedback": 35229,
+          "instruction": 211
+        }
+      ]
+    },
+    {
+      "function": "fit_diagnosis",
+      "request_present": true,
+      "input_bound": 116155,
+      "candidates": 1,
+      "required_endpoint_ids": [
+        "CU-736735f726695056"
+      ],
+      "last_context_audit": [
+        {
+          "request_tokens_before": 132370,
+          "limit": 120000,
+          "removed_ids": [
+            "CU-79f88378b3a8d7a9"
+          ],
+          "removed_reference_edges": 0,
+          "interpretation": "Bounded reference bundle removed; no causal correctness claim"
+        },
+        {
+          "request_tokens_before": 127005,
+          "limit": 120000,
+          "removed_ids": [
+            "CU-76de403c311c172a"
+          ],
+          "removed_reference_edges": 0,
+          "interpretation": "Bounded reference bundle removed; no causal correctness claim"
+        },
+        {
+          "request_tokens": 116155,
+          "input_limit": 120000,
+          "reserved_output_tokens": 16384,
+          "selected_ids": [
+            "CU-736735f726695056"
+          ],
+          "surviving_reference_edges": 0,
+          "drop_reasons": {
+            "CU-c0961c62726d5e32": "TOP_N_LIMIT",
+            "CU-ce439c9620e1b6ee": "TOP_N_LIMIT",
+            "CU-2ad803605f890f91": "TOP_N_LIMIT",
+            "CU-c992d7ea9a67ce91": "TOP_N_LIMIT",
+            "CU-3527362ba0977d04": "TOP_N_LIMIT",
+            "CU-da90fcae9547d8c7": "TOP_N_LIMIT",
+            "CU-e410858ea3cd0429": "TOP_N_LIMIT",
+            "CU-7b305b4f5168a953": "TOP_N_LIMIT",
+            "CU-6e7647a22395ec1b": "TOP_N_LIMIT",
+            "CU-360996a2532047f9": "TOP_N_LIMIT",
+            "CU-be99b2cb8d085ea6": "TOP_N_LIMIT",
+            "CU-e283aaa05aefd496": "TOP_N_LIMIT",
+            "CU-7834207e28c75be2": "TOP_N_LIMIT",
+            "CU-211fcc4f3696bcd9": "TOP_N_LIMIT",
+            "CU-8b2d066d5ac65fc2": "TOP_N_LIMIT",
+            "CU-98f1466028f426d2": "TOP_N_LIMIT",
+            "CU-e808cd904fbbae22": "TOP_N_LIMIT",
+            "CU-7c8a5e3c6cc5c8f5": "TOP_N_LIMIT",
+            "CU-b817335353f9d76a": "TOP_N_LIMIT",
+            "CU-0f47059f7ed466c2": "TOP_N_LIMIT",
+            "CU-6863b5cada6109ee": "TOP_N_LIMIT",
+            "CU-9b0a000ea9b0b484": "TOP_N_LIMIT",
+            "CU-90cc653d22084e02": "TOP_N_LIMIT",
+            "CU-c70da48bccd039ab": "TOP_N_LIMIT",
+            "CU-bda3c7900976c331": "TOP_N_LIMIT",
+            "CU-91fca951c5cc50c4": "TOP_N_LIMIT",
+            "CU-731c4445c68873f8": "TOP_N_LIMIT",
+            "CU-e26a05fd5fb35449": "TOP_N_LIMIT",
+            "CU-97c61ea7bf30fb33": "TOP_N_LIMIT",
+            "CU-c8e12e0d353ce26d": "TOP_N_LIMIT",
+            "CU-f0229c07cdd59f24": "TOP_N_LIMIT",
+            "CU-3fc8604a64da4360": "TOP_N_LIMIT",
+            "CU-2a6fa1c65b761c87": "TOP_N_LIMIT",
+            "CU-2abaaee98a3ea8f0": "TOP_N_LIMIT",
+            "CU-8ee4670bb660bc6f": "TOP_N_LIMIT",
+            "CU-e5eaaad708eaf02d": "TOP_N_LIMIT",
+            "CU-a81236d535f9102d": "TOP_N_LIMIT",
+            "CU-d4b3e6666db160c3": "TOP_N_LIMIT",
+            "CU-d796ca35ee6cd506": "TOP_N_LIMIT",
+            "CU-6e28c0f8edeef2d5": "TOP_N_LIMIT",
+            "CU-eece1b45cfcb3bb4": "TOP_N_LIMIT",
+            "CU-6435f5ffbd8060fa": "TOP_N_LIMIT",
+            "CU-240cd7eb35baa5f9": "TOP_N_LIMIT",
+            "CU-974f3a73dc695d42": "TOP_N_LIMIT",
+            "CU-92bccfefb3347143": "TOP_N_LIMIT",
+            "CU-4ddf01f02653ace4": "TOP_N_LIMIT",
+            "CU-6ec87eda0200bc8d": "TOP_N_LIMIT",
+            "CU-3229e2ef81b0afdb": "TOP_N_LIMIT",
+            "CU-84afbbfd7a91eec3": "TOP_N_LIMIT",
+            "CU-80ecc703fdcfc0f9": "TOP_N_LIMIT",
+            "CU-5b4d546c16da9f5a": "TOP_N_LIMIT",
+            "CU-7c04d34d8d080ac3": "TOP_N_LIMIT",
+            "CU-b72cd21e7fbd2b46": "TOP_N_LIMIT",
+            "CU-7dc7bb7ab82d11e7": "TOP_N_LIMIT",
+            "CU-4a3df81b46f9eb95": "TOP_N_LIMIT",
+            "CU-3f2c6d37d74555c2": "TOP_N_LIMIT",
+            "CU-a0924c2d556cce58": "TOP_N_LIMIT",
+            "CU-e6ad71f766c3cfaf": "TOP_N_LIMIT",
+            "CU-ca035e648ed10e19": "TOP_N_LIMIT",
+            "CU-89cc0612cc7b6b5c": "TOP_N_LIMIT",
+            "CU-fede81a64048f84a": "TOP_N_LIMIT",
+            "CU-77d8b6fe3b8398c5": "TOP_N_LIMIT",
+            "CU-fdfdc91b7731e169": "TOP_N_LIMIT",
+            "CU-2631aeb377d5f41b": "TOP_N_LIMIT",
+            "CU-a75a77e2a177dd6c": "TOP_N_LIMIT",
+            "CU-c780a69ed8011d61": "TOP_N_LIMIT",
+            "CU-03c64aad0d69a79c": "TOP_N_LIMIT",
+            "CU-d54679e970034278": "TOP_N_LIMIT",
+            "CU-b93532cf770f05c0": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-6b05bbdc86cdbd86": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-426444833d5e1f8e": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-1df8e29ccc383a0b": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-22210e3716f1633f": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-bcfddcba473b531b": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-0bcc43d9e36bc6be": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-ebb5c6f42e1cc583": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-4bd74fe42bb8b8b4": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-79f88378b3a8d7a9": "FULL_REQUEST_CONTEXT_BUNDLE",
+            "CU-76de403c311c172a": "FULL_REQUEST_CONTEXT_BUNDLE"
+          }
+        }
+      ]
+    },
+    {
+      "function": "final_request_parts",
+      "messages_bytes": [
+        10101,
+        77843,
+        35481
+      ],
+      "compact_messages_bytes": [
+        10101,
+        77843,
+        34377
+      ],
+      "sections": [
+        {
+          "allowed_evidence_ids": 198,
+          "candidate_set": 2880,
+          "diagnosis_continuity": 4106,
+          "evidence_catalog": 41221,
+          "failed_public_predicates": 656,
+          "method_input": 1061,
+          "operation_facts": 2,
+          "output_contract": 69,
+          "output_schema": 9707,
+          "production_path_frontier": 2,
+          "public_execution_capabilities": 2888,
+          "requirement_spec": 7557,
+          "run_context": 254,
+          "schema_version": 26,
+          "scope_resolution": 7347,
+          "source_contract_review_instruction": 272,
+          "source_field_contract_contexts": 1746
+        },
+        {
+          "execution_feedback": 35229,
+          "instruction": 211
+        }
+      ]
+    },
+    {
+      "function": "fit_diagnosis",
+      "request_present": false,
+      "input_bound": 0,
+      "candidates": 0,
+      "required_endpoint_ids": [
+        "CU-736735f726695056"
+      ],
+      "last_context_audit": [
+        {
+          "request_tokens_before": 131924,
+          "limit": 120000,
+          "removed_ids": [
+            "CU-365f54a7e98d9238"
+          ],
+          "removed_reference_edges": 0,
+          "interpretation": "Bounded reference bundle removed; no causal correctness claim"
+        },
+        {
+          "request_tokens_before": 127781,
+          "limit": 120000,
+          "removed_ids": [
+            "CU-0035cdaf7d46b6b9"
+          ],
+          "removed_reference_edges": 0,
+          "interpretation": "Bounded reference bundle removed; no causal correctness claim"
+        },
+        {
+          "request_tokens_before": 123425,
+          "limit": 120000,
+          "removed_ids": [
+            "CU-736735f726695056"
+          ],
+          "removed_reference_edges": 0,
+          "interpretation": "Bounded reference bundle removed; no causal correctness claim"
+        }
+      ]
+    }
+  ],
+  "scope": "Saved eight responses and public Broken/build-failure reports only; capture next request after coherent rollback. Not a new model correction or repair outcome."
+}

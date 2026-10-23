@@ -1,6 +1,6 @@
 # ContractEdge system — 0.6.35 development snapshot
 
-**当前为开发交接快照，formal_ready=false。** 完整服务器回归841+22，可移植子集808+17（排除六个历史/原生模块）。0.6.34已送达证据但实际补丁编译失败、回滚停止，独立NO_CANDIDATE。0.6.35补足可核验的公开Go编译错误恢复，保存失败轨迹已正确生成下一轮执行请求，单条真实验证进行中。历史PASS不拼入本版成绩。
+**当前为开发交接快照，formal_ready=false。** 完整服务器回归841+22，可移植子集808+17（排除六个历史/原生模块）。0.6.34已送达证据但实际补丁编译失败、回滚停止，独立NO_CANDIDATE。0.6.35补足可核验的公开Go编译错误恢复，保存失败轨迹已正确生成下一轮执行请求，原始Broken独立失败；单列保存响应续修独立PASS、8项公开检查PASS。新发现重诊补证套用初诊预算的问题，仍待修复。历史和补充结果不拼入本版固定面板成绩。
 
 见[本版机制修复与验收](docs/reports/2026-10-24-optional-gap-context-closure.md)、[公开证据连续性](docs/reports/2026-10-24-public-evidence-continuity.md)和[0.6.32真实修复结果](docs/reports/2026-10-24-execution-contract-closure.md)。
 

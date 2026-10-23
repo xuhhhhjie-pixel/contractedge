@@ -1,0 +1,12 @@
+{
+  "limit_cny": 150,
+  "total_committed_including_uncertain_cny": 96.631876,
+  "remaining_upper_cny": 53.368124,
+  "uncertain_reservations": 3,
+  "new_paid_calls": 9,
+  "charges_cny": {
+    "original": 0.847144,
+    "supplemental": 0.211582
+  },
+  "matching": "Unique exact prompt_version+provider_usage against nine new shared ledger entries; overlapping accounting snapshots not summed"
+}

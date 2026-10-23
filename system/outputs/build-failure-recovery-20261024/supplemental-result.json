@@ -1,0 +1,33 @@
+{
+  "role": "SUPPLEMENTAL_CROSS_VERSION_SAVED_RESPONSE_CONTINUATION",
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "new_paid_model_calls": 3,
+  "saved_responses": 8,
+  "total_requests": 11,
+  "initial_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+  "final_snapshot": "f28d28fd53c1a872dc95a894e841c1357763eee1b4f64c77aabff7440cc0a913",
+  "candidate": {
+    "patch_path": "/home/xhj/contractedge-system/outputs/build-failure-recovery-20261024/supplemental-live/candidate.patch",
+    "patch_sha256": "bd9c6ee68767f4eebe9f9c531e5086fc4395f4133fcf55b34e33a4a33e11a0a1",
+    "patch_bytes": 2868,
+    "tool": {
+      "argv": [
+        "/home/xhj/contractedge-system/.venv-dev/bin/python",
+        "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019/tools/collect_patch.py",
+        "--workspace",
+        "/home/xhj/contractedge-system/outputs/build-failure-recovery-20261024/supplemental-live/workspace",
+        "--output",
+        "/home/xhj/contractedge-system/outputs/build-failure-recovery-20261024/supplemental-live/candidate.patch"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "stdout_sha256": "acf7046e4519c0a8500c7bbd144821677a5c611b37bd0a022b6bd7257a76a9f8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "errors": [],
+  "rounds": 2,
+  "counts_as_fresh_broken_attempt": false,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

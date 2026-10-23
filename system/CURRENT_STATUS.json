@@ -1254,7 +1254,7 @@
   "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/系统审查与验收.md",
   "reliability_closure": {
     "version": "0.6.35",
-    "status": "G4_V0635_SINGLE_GATE_RUNNING",
+    "status": "G4_V0635_ORIGINAL_FAILED_SUPPLEMENTAL_RECOVERY_PASS",
     "implementation_completed_claim": false,
     "repair_reliability_accepted": false,
     "formal150_started": false,
@@ -1270,7 +1270,7 @@
     "effect_acceptance_passed": false
   },
   "version": "0.6.35",
-  "status": "V0635_FROZEN_SINGLE_ACK_RUNNING",
+  "status": "V0635_CLOSED_ORIGINAL_FAIL_SUPPLEMENTAL_PASS",
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "formal_ready": false,
@@ -1299,43 +1299,45 @@
     "0.6.32": "CLOSED single ACK PASS, public8/8PASS/overallUNKNOWN;1/46scored,45held; superseded for uncited fact continuity",
     "0.6.33": "CLOSED EVIDENCE_GAP/NO_CANDIDATE,2calls,1/46scored45NOT_RUN",
     "0.6.34": "CLOSED build failure/rollback/NO_CANDIDATE;8calls,1/46scored45NOT_RUN",
-    "0.6.35": "Single original-Broken ACK candidate/0 running;45held"
+    "0.6.35": "CLOSED originalBroken SEMANTIC_FAIL/BUDGET_EXHAUSTED6calls;1/46scored45NOT_RUN. Supplemental saved-response continuationPASS separate, not panel."
   },
   "optimization_reset": {
     "as_of": "2026-10-21T14:38:03.778057+00:00",
-    "gate": "G4_V0635_SINGLE_GATE_RUNNING",
+    "gate": "ORIGINAL_GATE_FAILED_SUPPLEMENTAL_COMPILER_RECOVERY_PASS",
     "formal_ready": false,
     "money_limit_cny": 150,
     "report": "docs/reports/2026-10-24-build-failure-recovery.md",
     "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.35.json",
     "public_calibration": "temporal-v2-calibration-corrected/summary.json",
-    "live_result": ".34 compile failure, rollback, NO_CANDIDATE; .32 PASS historical only",
-    "next_revision": null
+    "live_result": ".35 originalBroken SEMANTIC_FAIL; supplemental .34savedresponse→.35 continuationPASS/8publicchecksPASS,3newcalls, not panel",
+    "next_revision": "Phase-correct diagnosis budget admission, not implemented yet"
   },
   "latest_live_result": {
-    "version": "0.6.34",
+    "version": "0.6.35",
     "case_id": "R4-ACK-CLOUDWATCH-2985",
-    "status": "CLOSED",
-    "method_status": "CANDIDATE_COMPARISON_UNCERTAIN",
-    "independent_status": "NO_CANDIDATE",
-    "model_calls": 8,
+    "status": "BUDGET_EXHAUSTED",
+    "independent_status": "SEMANTIC_FAIL",
+    "model_calls": 6,
     "scored": 1,
     "not_run": 45
   },
   "current_experiment": {
     "version": "0.6.35",
     "case_id": "R4-ACK-CLOUDWATCH-2985",
-    "status": "RUNNING"
+    "status": "CLOSED",
+    "method_status": "BUDGET_EXHAUSTED",
+    "independent_status": "SEMANTIC_FAIL",
+    "model_calls": 6
   },
-  "G4": "V0635_SINGLE_GATE_PENDING_RECOVERY_NOT_RUN",
+  "G4": "ORIGINAL_GATE_FAILED_SUPPLEMENTAL_COMPILER_RECOVERY_PASS",
   "G5": "FIXED_SAME_VERSION_PANEL_PENDING",
   "B_opened": false,
   "engineering_tests": 841,
   "budget_snapshot": {
     "limit_cny": 150,
-    "committed_including_reservations_cny": 95.57315,
-    "remaining_upper_bound_cny": 54.42685,
-    "as_of": "End of .34"
+    "committed_including_reservations_cny": 96.631876,
+    "remaining_upper_bound_cny": 53.368124,
+    "as_of": "End of .35 original+supplemental"
   },
   "staged_revision": null,
   "subtests": 22,
@@ -1368,10 +1370,16 @@
   },
   "budget_current": {
     "limit_cny": 150,
-    "committed_including_uncertain_cny": 95.57315,
-    "remaining_upper_cny": 54.42685,
+    "total_committed_including_uncertain_cny": 96.631876,
+    "remaining_upper_cny": 53.368124,
     "uncertain_reservations": 3,
-    "as_of": "End of .34"
+    "new_paid_calls": 9,
+    "charges_cny": {
+      "original": 0.847144,
+      "supplemental": 0.211582
+    },
+    "matching": "Unique exact prompt_version+provider_usage against nine new shared ledger entries; overlapping accounting snapshots not summed",
+    "as_of": "End of both .35 method runs; no active paid model call"
   },
   "previous_live_success": {
     "version": "0.6.32",
@@ -1379,5 +1387,23 @@
     "public_checks": "8/8PASS",
     "semantic_outcome": "UNKNOWN",
     "model_calls": 6
+  },
+  "supplemental_saved_failure_continuation": {
+    "version": "0.6.35",
+    "status": "CLOSED",
+    "source_run_version": "0.6.34",
+    "role": "SUPPLEMENTAL_CROSS_VERSION_SAVED_RESPONSE_CONTINUATION",
+    "saved_responses": 8,
+    "max_new_paid_model_calls": 4,
+    "counts_in_46_slot_panel": false,
+    "counts_as_fresh_broken_attempt": false,
+    "output": "outputs/build-failure-recovery-20261024/supplemental-live",
+    "registration": "outputs/build-failure-recovery-20261024/supplemental-registration.json",
+    "retry_if_failed": false,
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "independent_status": "PASS",
+    "new_paid_model_calls": 3,
+    "public_checks": "8/8PASS",
+    "semantic_outcome": "UNKNOWN"
   }
 }

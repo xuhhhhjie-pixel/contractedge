@@ -1,4 +1,4 @@
-> CURRENT: frozen0.6.35 / 68e5275224d95958f054acda90108c5f0a84272fa1569b6a90ae3e1aaa74b9dd. Full841+22, portable808+17. .34 CLOSED build failure/rollback/NO_CANDIDATE8calls;1/46scored45NOT_RUN. .35 original-Broken ACK candidate/0 running once;45held. Check state/ps and never repeat or mutate freeze. .32PASS historical only. Formal150/B closed. Read CURRENT_STATUS.json and docs/reports/2026-10-24-build-failure-recovery.md. Unused draft group dispatcher is NOT qualified for paid dispatch.
+> CURRENT frozen0.6.35 / 68e5275224d95958f054acda90108c5f0a84272fa1569b6a90ae3e1aaa74b9dd. Full841+22, portable808+17 including masked freshvenv local clone13ee9ac. .35 CLOSED originalBroken BUDGET_EXHAUSTED/SEMANTIC_FAIL6calls;1/46scored45NOT_RUN. Supplemental .34-saved-response→.35 continuationPASS (8checksPASS,3newcalls) is NOT fresh/panel. No active paid job. Formal150/B closed. Latest report docs/reports/2026-10-24-build-failure-recovery.md. New followup-context failure reproduced; fix/test offline before more API.
 
 # ContractEdge system handoff
 
