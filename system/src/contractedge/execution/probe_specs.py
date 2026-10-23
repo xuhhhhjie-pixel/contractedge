@@ -163,9 +163,11 @@ KPT_CONFIGPATH_V4_GO = KPT_CONFIGPATH_V3_GO.replace('kpt-configpath-v3','kpt-con
 
 
 def registered_programs():
+    from contractedge.execution.cloudwatch_probe import CLOUDWATCH_TAG_GO,CLOUDWATCH_TAG_CHECKS
     from contractedge.execution.runtime_probe import (ALERTMANAGER_RELOAD_GO, ALERTMANAGER_CHECKS,
         ALERTMANAGER_RELOAD_V2_GO, ALERTMANAGER_V2_CHECKS, ALERTMANAGER_RELOAD_V3_GO, ALERTMANAGER_V3_CHECKS)
-    return {'kpt-configpath-v1':(KPT_CONFIGPATH_GO,KPT_CHECKS),
+    return {'cloudwatch-tags-v1':(CLOUDWATCH_TAG_GO,CLOUDWATCH_TAG_CHECKS),
+            'kpt-configpath-v1':(KPT_CONFIGPATH_GO,KPT_CHECKS),
             'kpt-configpath-v2':(KPT_CONFIGPATH_V2_GO,KPT_V2_CHECKS),
             'kpt-configpath-v3':(KPT_CONFIGPATH_V3_GO,KPT_V3_CHECKS),
             'kpt-configpath-v4':(KPT_CONFIGPATH_V4_GO,KPT_V3_CHECKS),
@@ -184,6 +186,13 @@ def select_probes(requirement, source, profiles):
                     and (source/'pkg/lib/kptops/render.go').is_file() and (source/'pkg/fn/eval.go').is_file()):continue
             apis=[{'package':'pkg/lib/kptops','symbol':'Renderer'},{'package':'pkg/fn','symbol':'FunctionRuntime'}]
             boundary='Local public Renderer API using function runtime stand-ins; candidate code and probe share a process, stdout is not tamper-proof; no external container/WASM or remote service guarantee'
+        elif profile=='cloudwatch-tags-v1':
+            if not (all(t in text for t in ('metricalarm','tag','unchanged'))
+                    and (source/'pkg/resource/metric_alarm/manager.go').is_file()
+                    and (source/'pkg/resource/metric_alarm/sdk.go').is_file()):continue
+            apis=[{'package':'pkg/resource/metric_alarm','symbol':'Update'},
+                  {'package':'pkg/resource/metric_alarm','symbol':'newResourceDelta'}]
+            boundary='Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof'
         else:
             if not (all(t in text for t in ('alertmanager','reload','groups')) and (source/'cmd/alertmanager/main.go').is_file()):continue
             apis=[{'package':'cmd/alertmanager','symbol':'main'}]

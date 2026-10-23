@@ -60,6 +60,13 @@ def candidate_runtime_failures(report, output, source):
 
 
 def probe_command(probe_id):
+    if probe_id=='cloudwatch-tags-v1':
+        return ['sh','-eu','-c',
+            'export GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off GOMAXPROCS=2 GOMODCACHE=/work/.contractedge-deps/gomod GOCACHE=/tmp/ce-gocache CGO_ENABLED=0; '
+            'cp /work/go.mod /tmp/method-probe.go.mod; cp /work/.contractedge-deps/setup/go.sum /tmp/method-probe.go.sum; '
+            'if go test -count=1 -p=1 -mod=readonly -modfile=/tmp/method-probe.go.mod -buildvcs=false '
+            '-overlay=/method-probe/overlay.json -run "^TestContractEdgePublicTagUpdate$" -v ./pkg/resource/metric_alarm >/tmp/ce-probe.stdout 2>/tmp/ce-probe.stderr; '
+            'then sed -n "/^{/p" /tmp/ce-probe.stdout; else cat /tmp/ce-probe.stdout /tmp/ce-probe.stderr >&2; exit 1; fi']
     if probe_id in {'alertmanager-reload-v1','alertmanager-reload-v2','alertmanager-reload-v3'}:
         return ['sh','-eu','-c','export GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off GOMAXPROCS=2 GOMODCACHE=/work/.contractedge-deps/gomod GOCACHE=/tmp/ce-gocache CGO_ENABLED=0 GOFLAGS="-mod=readonly -buildvcs=false"; exec go run -p=1 /method-probe/main.go']
     return ['sh','-eu','-c',
@@ -108,6 +115,11 @@ def run_method_probes(workspace, output, tools_root, specs, timeout_seconds=1200
                 if spec['id'] not in registry or spec['program']!=registry[spec['id']][0]:raise ValueError('Unregistered executable probe')
                 program=out/spec['id'];program.mkdir();(program/'main.go').write_text(spec['program'])
                 assert hashlib.sha256((program/'main.go').read_bytes()).hexdigest()==spec['sha256']
+                if spec['id']=='cloudwatch-tags-v1':
+                    virtual='pkg/resource/metric_alarm/zz_contractedge_public_probe_test.go'
+                    if (source/virtual).exists():raise ValueError('Method-owned probe overlay collides with source')
+                    (program/'overlay.json').write_text(json.dumps({'Replace':{
+                        '/work/'+virtual:'/method-probe/main.go'}}))
                 remaining=timeout_seconds-(time.monotonic()-start)
                 if remaining<=0:raise TimeoutError('Method probe deadline exceeded')
                 command=probe_command(spec['id'])
