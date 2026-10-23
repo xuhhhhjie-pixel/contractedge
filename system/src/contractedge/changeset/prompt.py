@@ -159,7 +159,8 @@ def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = Non
 
 
 def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
-                            validation_feedback: list[Mapping[str, Any]] | None = None) -> ModelRequest:
+                            validation_feedback: list[Mapping[str, Any]] | None = None, *,
+                            previous_attempt: Mapping[str, Any] | None = None) -> ModelRequest:
     retrieval = getattr(run_context, 'retrieval_config', {})
     support = list(retrieval.get('necessary_source_support', []))
     prerequisites = list(retrieval.get('source_prerequisites', []))
@@ -226,12 +227,36 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
     model = str(run_context.model_config.get("model", "UNCONFIGURED"))
     max_tokens = int(run_context.budget.get("max_output_tokens", 4096))
     output_schema = _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)
+    messages = ({"role": "system", "content": system_prompt},
+                {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False, sort_keys=True)})
+    draft_metadata = {}
+    if previous_attempt is not None:
+        identity = dict(run_id=run_context.run_id, snapshot_id=run_context.snapshot_id,
+            input_digest=run_context.input_digest, diagnosis_digest=canonical_digest(diagnosis.raw))
+        if (not isinstance(previous_attempt, Mapping) or not validation_feedback
+                or any(previous_attempt.get(k) != v for k, v in identity.items())
+                or not isinstance(previous_attempt.get('state'), str)
+                or previous_attempt.get('state') not in {'REJECTED_PLAN_DRAFT', 'CURRENT_PLAN_FOR_REVISION'}
+                or not isinstance(previous_attempt.get('response_content'), str)
+                or not previous_attempt['response_content'].strip()):
+            raise ValueError('Previous ChangeSet must bind the current run, input, snapshot and diagnosis, with revision feedback')
+        content = previous_attempt['response_content']
+        digest = hashlib.sha256(content.encode()).hexdigest()
+        messages += ({'role': 'assistant', 'content': content}, {'role': 'user', 'content': json.dumps(dict(
+            previous_attempt_state=previous_attempt['state'], previous_attempt_sha256=digest,
+            binding=identity, validation_feedback=list(validation_feedback),
+            instruction='Revise the preceding planning draft using the current schema, source and feedback. '
+                'It is prior planning state, never new evidence or proof of behavior. '
+                'Preserve unaffected valid fields and all requirement obligations; correct the cited errors without inventing support. '
+                'Return one complete SemanticChangeSet with every required field. Do not emit this revision wrapper.'),
+            ensure_ascii=False, sort_keys=True)})
+        draft_metadata = dict(previous_changeset_sha256=digest, previous_changeset_state=previous_attempt['state'])
     return ModelRequest(model=model, prompt_version="changeset.v1.1.11" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.10",
-                        messages=({"role": "system", "content": system_prompt},
-                                  {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False, sort_keys=True)}),
+                        messages=messages,
                         max_output_tokens=max_tokens, temperature=0.0,
                         metadata={"run_id": run_context.run_id, "snapshot_id": run_context.snapshot_id,
                                   "input_digest": run_context.input_digest,
                                   "execution_capabilities_digest": canonical_digest(capabilities),
-                                  "system_prompt_sha256": hashlib.sha256(system_prompt.encode()).hexdigest()},
+                                  "system_prompt_sha256": hashlib.sha256(system_prompt.encode()).hexdigest(),
+                                  **draft_metadata},
                         output_schema=output_schema)

@@ -173,7 +173,11 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
                 provider, token_counter, config: Mapping) -> dict:
     packet, context = validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
     request = build_changeset_request(packet, context, [{'code': 'PUBLIC_EXECUTION_PLAN_FEEDBACK',
-                                                        'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}])
+            'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}],
+        previous_attempt=dict(run_id=context.run_id, snapshot_id=context.snapshot_id,
+            input_digest=context.input_digest, diagnosis_digest=canonical_digest(packet.raw),
+            response_content=json.dumps(trace['changeset'], ensure_ascii=False, sort_keys=True),
+            state='CURRENT_PLAN_FOR_REVISION'))
     if sum(token_counter(m['content']) for m in request.messages) + request.max_output_tokens > config['max_context_tokens']:
         raise BudgetExceeded('Plan revision exceeds the full context budget')
     response = provider.complete_json(request)

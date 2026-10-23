@@ -1173,6 +1173,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
         change_attempt = -1
         planning_corrections_used = 0
         planning_extension_attempted = False
+        previous_changeset_attempt = None
         while True:
             # A valid source request is not a malformed plan. Keep the one
             # acquisition and the configured correction allowance separate;
@@ -1196,7 +1197,8 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                     'necessary_source_support': required_planning_source_support(run_input,candidate_set,snapshot.snapshot_id),
                     'source_prerequisites': required_source_prerequisites(candidate_set)})
             run_context_wire = asdict(context)
-            changeset_request = build_changeset_request(diagnosis, context, feedback)
+            changeset_request = build_changeset_request(diagnosis, context, feedback,
+                previous_attempt=previous_changeset_attempt if feedback else None)
             changeset_request = replace(changeset_request, metadata={**changeset_request.metadata,
                 'planning_format_retry_index': planning_corrections_used})
             changeset_request = planning_generation_mode(changeset_request)
@@ -1228,6 +1230,10 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
             identity_bound = False
             changeset_payload = None
             validation = None
+            previous_changeset_attempt = (dict(run_id=run_id, snapshot_id=snapshot.snapshot_id,
+                input_digest=parsed.input_digest, diagnosis_digest=canonical_digest(diagnosis.raw),
+                response_content=changeset_response.content, state='REJECTED_PLAN_DRAFT')
+                if isinstance(changeset_response.content, str) and changeset_response.content.strip() else None)
             try:
                 changeset_payload = parse_json_response(changeset_response.content)
                 changeset_payload, changeset_binding = bind_changeset_envelope(
@@ -1341,6 +1347,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                 # The next plan is based on a new diagnosis. Previous plan
                 # errors do not describe it, but any used correction stays used.
                 feedback = []
+                previous_changeset_attempt = None
                 continue
             if validation.valid:
                 break

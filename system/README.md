@@ -1,6 +1,6 @@
-# ContractEdge system — 0.6.36 development snapshot
+> CURRENT frozen0.6.37 / d0d8c56b057c18ee29511d85190c3cb1300ac5b4069878bae732b8169a653d93. Full859+22, portable826+17. Same-context rejected/current plan continuity verified offline; originalBroken ACK single gate RUNNING once,45held. Formal150/B closed. No GitHub push. Read CURRENT_STATUS.json and docs/reports/2026-10-24-changeset-draft-continuity.md.
 
-**当前为开发交接快照，formal_ready=false。** 完整847+22、可移植814+17。0.6.35单列编译失败续修独立PASS，原始Broken独立失败；0.6.36修复带反馈重诊错误套用初诊容量，回放已恢复当前生产源码送达。新版本单条真实验证进行中，历史和补充结果不拼入其固定面板成绩。
+**当前为开发交接快照，formal_ready=false。** 完整847+22、可移植814+17。0.6.35单列编译失败续修独立PASS，原始Broken独立失败；0.6.36修复带反馈重诊错误套用初诊容量，回放已恢复当前生产源码送达。0.6.36原始Broken已INVALID_PLAN/NO_CANDIDATE；已定位计划纠错未携带原草稿。0.6.37正在隔离副本补齐，历史和补充结果不拼入固定面板成绩。
 
 见[本版机制修复与验收](docs/reports/2026-10-24-optional-gap-context-closure.md)、[公开证据连续性](docs/reports/2026-10-24-public-evidence-continuity.md)和[0.6.32真实修复结果](docs/reports/2026-10-24-execution-contract-closure.md)。
 
