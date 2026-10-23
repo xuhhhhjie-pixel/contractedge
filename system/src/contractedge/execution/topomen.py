@@ -20,6 +20,7 @@ from jsonschema import Draft202012Validator
 from contractedge.contracts.validation import canonical_digest
 from contractedge.contracts.execution_capabilities import SOURCE_CONSUMER_ID, resolve_execution_capabilities
 from contractedge.model.provider import ModelRequest
+from contractedge.model.admission import complete_quoted, context_fits, quote_request
 from contractedge.orchestration.feedback import feedback_prompt_view
 from contractedge.source.snapshot import compute_snapshot
 from contractedge.contracts.permissions import target_permission_error
@@ -252,7 +253,18 @@ def execution_review_mapping(result, *, max_characters=24000):
 
 def build_execution_request(plan: Mapping, source: Path, policy: Mapping, token_counter, config: Mapping, *,
                             requirement: str, declared_artifacts=(), observations=(), feedback=None,
-                            previous_attempt=None) -> ModelRequest:
+                            previous_attempt=None, provider=None) -> ModelRequest:
+    """Build the admitted request; an optional provider contributes wire overhead."""
+    request, _ = _build_execution_request(plan, source, policy, token_counter, config,
+        requirement=requirement, declared_artifacts=declared_artifacts, observations=observations,
+        feedback=feedback, previous_attempt=previous_attempt, provider=provider)
+    return request
+
+
+def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token_counter, config: Mapping, *,
+                             requirement: str, declared_artifacts=(), observations=(), feedback=None,
+                             previous_attempt=None, provider=None):
+    """Keep the final quote beside the request for the actual execution consumer."""
     acceptance = accept_plan(plan, source, policy)
     # A prior edit response is a format-correction aid only on the exact
     # snapshot it read. Successful S0 edits must not compete with S1 source
@@ -457,17 +469,21 @@ def build_execution_request(plan: Mapping, source: Path, policy: Mapping, token_
     if prerequisite_refs - supplied_ids - target_ids:
         raise PlanRejected('Prerequisite source was not delivered to execution: '+', '.join(
             sorted(prerequisite_refs - supplied_ids - target_ids)))
-    while support and sum(token_counter(m['content']) for m in request.messages) + request.max_output_tokens > int(config['max_context_tokens']):
+    request = replace(request, metadata={**request.metadata, 'read_only_support_audit': support_audit})
+    quote = quote_request(provider, request, token_counter)
+    def fits(current_quote):
+        return context_fits(current_quote, int(config['max_context_tokens']), config.get('model_context_tokens'))
+    while support and not fits(quote):
         removable=[i for i,r in enumerate(support) if r.get('id') not in critical_helpers]
         if not removable:break
         removed = support.pop(removable[-1])
         support_audit.append({'id': removed['id'], 'result': 'FULL_REQUEST_CONTEXT_BUDGET'})
         request = replace(request, messages=(request.messages[0],
             {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}))
-    request = replace(request, metadata={**request.metadata, 'read_only_support_audit': support_audit})
-    if sum(token_counter(m['content']) for m in request.messages) + request.max_output_tokens > int(config['max_context_tokens']):
+        quote = quote_request(provider, request, token_counter)
+    if not fits(quote):
         raise PlanRejected('Execution request exceeds the full context budget')
-    return request
+    return request, quote
 
 
 def validate_execution_response(response, request: ModelRequest) -> dict:
@@ -497,10 +513,10 @@ class ModelPlanExecutor:
 
     def execute(self, plan: Mapping, source: Path, policy: Mapping, *, requirement: str,
                 declared_artifacts=(), observations=(), feedback: Mapping | None = None, previous_attempt=None) -> dict:
-        request = build_execution_request(plan, source, policy, self.token_counter, self.config,
+        request, quote = _build_execution_request(plan, source, policy, self.token_counter, self.config,
             requirement=requirement, declared_artifacts=declared_artifacts, observations=observations,
-            feedback=feedback, previous_attempt=previous_attempt)
-        response = self.provider.complete_json(request)
+            feedback=feedback, previous_attempt=previous_attempt, provider=self.provider)
+        response = complete_quoted(self.provider, request, quote)
         body = validate_execution_response(response, request)
         result = apply_edits(plan, source, policy, body,
             require_behavior_change=json.loads(request.messages[1]['content'])['require_behavior_change'])

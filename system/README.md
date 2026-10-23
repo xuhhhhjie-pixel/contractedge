@@ -1,6 +1,6 @@
 # ContractEdge developer entry
 
-当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准，入口为 [本轮开发冻结](docs/development/next-iteration-20261023-ci1.snapshot.json)。包版本仍保留 `0.6.27`；修改后的源码不能沿用原 0.6.27 方法摘要或历史效果。`formal_ready=false`，默认入口验收离线开发工程；真实 API 前半验证单独登记，不运行正式数据实验或独立评分。
+当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准，入口为 [本轮开发冻结](docs/development/architecture-a-delivery-admission-20261023.snapshot.json)。包版本仍保留 `0.6.27`；修改后的源码不能沿用原 0.6.27 方法摘要或历史效果。`formal_ready=false`，默认入口验收离线开发工程；真实 API 前半验证单独登记，不运行正式数据实验或独立评分。
 
 ## 安装与当前冻结校验
 
@@ -48,7 +48,7 @@ python scripts/run_public_demo.py --resume-ready /tmp/contractedge-ready --outpu
 快速离线回归：
 
 ```bash
-python -m pytest -q tests/test_contracts.py tests/test_model_provider.py tests/test_provider_output_identity.py tests/test_run_budget.py tests/test_money_budget.py tests/test_public_failure.py tests/test_public_failure_contracts.py tests/test_transport_request_audit.py tests/test_development_snapshot.py tests/test_public_demo.py
+python -m pytest -q tests/test_contracts.py tests/test_model_provider.py tests/test_provider_output_identity.py tests/test_run_budget.py tests/test_money_budget.py tests/test_public_failure.py tests/test_public_failure_contracts.py tests/test_transport_request_audit.py tests/test_development_snapshot.py tests/test_public_demo.py tests/test_evidence_delivery.py tests/test_front_delivery.py tests/test_request_admission.py tests/test_production_request_admission.py tests/test_stage_delivery_admission.py
 ```
 
 完整可移植开发子集包含原有 Docker 时序探测，必须有实际可用的 CPU 配额和内存限制；不能去掉限额或跳过失败。先缓存固定可信镜像，再将 `runtime-check` 实际协商的 Docker 环境仅用于本次测试：
@@ -103,3 +103,6 @@ python scripts/run_public_demo.py --case config-binding --save-ready --provider-
 
 
 Python3.10安装时显式清除PYTHONPATH，避免pip在安装待构建的editable metadata时提前解析原历史依赖。运行测试时仍使用上述PYTHONPATH。首次GitHub CI的该安装失败保留记录；同一独立3.10/pip26.2.1/PyYAML6环境已复现失败并验证清PYTHONPATH后安装通过，无需修改历史pyproject依赖或升级pip。
+
+
+本阶段新增[证据交付与请求准入说明](docs/development/2026-10-23-architecture-a-delivery-admission.md)。每轮保留 public-evidence.delivery.json；必要失败证据缺失时停止派发。front.delivery.json 绑定实际输入文件、最终请求及传输摘要，交付记录不代表模型已采用证据或修复正确。max_context_tokens统一约束包含provider/schema开销的输入，model_context_tokens如有配置则约束输入加输出；旧调用预算与费用账本保留。
