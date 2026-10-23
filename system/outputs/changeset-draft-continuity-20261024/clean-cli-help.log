@@ -1,0 +1,31 @@
+usage: contractedge [-h]
+                    {runtime-check,validate-input,prepare,prepare-benchmark,audit-release,run,repair,repair-batch,evaluate-repair-batch,evaluate-benchmark,evaluate,evaluate-cohort}
+                    ...
+
+ContractEdge frozen-benchmark planning, source repair and public feedback
+
+positional arguments:
+  {runtime-check,validate-input,prepare,prepare-benchmark,audit-release,run,repair,repair-batch,evaluate-repair-batch,evaluate-benchmark,evaluate,evaluate-cohort}
+    runtime-check       diagnose Docker and verify actual CPU/memory limits
+    validate-input      validate one MethodInput and its public Broken archive
+    prepare             preflight/materialize manifest-listed isolated release
+                        views
+    prepare-benchmark   project the current frozen benchmark into public
+                        MethodInputs
+    audit-release       verify public/private hash manifests and isolation
+    run                 run Requirement → Diagnosis → Semantic ChangeSet on a
+                        public case
+    repair              run the bounded public plan/patch/feedback loop on the
+                        frozen benchmark
+    repair-batch        resumable public repair cohort; independent hidden
+                        scoring is separate
+    evaluate-repair-batch
+                        independent hidden scoring of frozen final batch
+                        patches
+    evaluate-benchmark  evaluator-only full150 GT/trace cohort accounting
+    evaluate            score one trace in the evaluator-only process
+    evaluate-cohort     score trace manifest against frozen evaluator
+                        manifests, retaining all members
+
+options:
+  -h, --help            show this help message and exit

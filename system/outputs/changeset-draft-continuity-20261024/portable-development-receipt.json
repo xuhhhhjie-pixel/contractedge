@@ -1,0 +1,36 @@
+{
+  "schema_version": "ce.portable_development_verification.v1",
+  "status": "PASS_DEVELOPMENT_SUBSET_AND_NATIVE_FIXTURE_ONLY",
+  "formal_ready": false,
+  "method_version": "0.6.37",
+  "clone_commit": "1ec7b261cf4b96646f84137d4656cbafcb014a51",
+  "clone_origin": "Local Git clone without hardlinks, not remote GitHub or new host",
+  "source_digest": "d0d8c56b057c18ee29511d85190c3cb1300ac5b4069878bae732b8169a653d93",
+  "fresh_venv": true,
+  "passed": 826,
+  "subtests_passed": 17,
+  "excluded_modules": 6,
+  "native_topomen_fixture_tests": 9,
+  "dependency_check": "No broken requirements found.",
+  "masked_paths": [
+    "/home/xhj/contractedge",
+    "/home/xhj/contractedge-system",
+    "/home/xhj/contractedge-integrations",
+    "/home/xhj/contractedge-github-delivery-20261022"
+  ],
+  "environment_correction": "Initial private /tmp mount was invisible to Docker daemon, bind source did not exist. Kept failed log; reran same checkout/test/limits with TMPDIR inside shared fresh-clone directory. No test or source change.",
+  "limits": [
+    "Not real paid method/scorer portability",
+    "Not G3 method process isolation; Docker socket remains available",
+    "Not a new OS/remote host",
+    "No new model API calls"
+  ],
+  "logs": {
+    "clean-install.log": "58dcbbd4dabfd483a3a642a6885806c0699d8b7c8dfb4955d2fa8490e6212a08",
+    "clean-pip-check.log": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "clean-cli-help.log": "8f0c0a580e5b67aac937d248ff997c586b91be60f27446f03cfcc1dde27e0e96",
+    "masked-clean-portable-tests.log": "ec99e3eb8715ef71f763b4fb777369a7c4fea57ea5371bd3e1e352eecb38d002",
+    "masked-native-topomen-tests.log": "7f713cf6414cacde84296eff4fd35d05a94aabe49a3a551baa5d3ebc7fe3e2eb",
+    "masked-private-tmp-mount-failure.log": "6c6de4e9ce03e1bb5222a403b0f23dcbc951b157685e6b43108e6072831ed128"
+  }
+}
