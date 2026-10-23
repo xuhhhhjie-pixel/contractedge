@@ -38,6 +38,8 @@ def test_contract_version_and_required_fields(tmp_path, role, change):
     ('max_context_tokens', True), ('max_context_tokens', 0),
     ('max_total_tokens', -1), ('max_model_calls', '12'),
     ('max_format_retries', False), ('max_seconds', float('nan')),
+    ('max_elapsed_seconds', None), ('max_elapsed_seconds', -1),
+    ('max_elapsed_seconds', float('nan')), ('max_elapsed_seconds', True),
 ])
 def test_effective_config_requires_valid_limits(tmp_path, field, body):
     run, source, recipe, _, _ = fixture(tmp_path)
@@ -107,3 +109,22 @@ def test_valid_observation_extensions_are_supported(tmp_path):
         'excerpt': 'observed', 'origin': 'public-check', 'evidence_kind': 'EXECUTION_ONLY',
         'public_runner_extension': {'exit_code': 0}}])
     assert tool.export_package(run, source, recipe, tmp_path / 'package')['status'] == 'COMPLETE'
+
+
+@pytest.mark.parametrize('body', [[], None, '', 4])
+def test_present_wrong_type_request_is_invalid(tmp_path, body):
+    run, source, recipe, budget, _ = fixture(tmp_path)
+    budget.calls[0]['request'] = body
+    write(run / 'model_calls.json', budget.calls)
+    result = tool.export_package(run, source, recipe, tmp_path / 'package')
+    assert result['status'] == 'INVALID', result
+
+
+@pytest.mark.parametrize('body', [[], {}, None])
+def test_nonstring_manifest_tokenizer_is_invalid(tmp_path, body):
+    run, source, recipe, _, _ = fixture(tmp_path)
+    out = tmp_path / 'package'
+    tool.export_package(run, source, recipe, out)
+    manifest = tool.load(out / 'manifest.json'); manifest['identity']['tokenizer'] = body
+    write(out / 'manifest.json', manifest)
+    assert tool.check_package(out)['status'] == 'INVALID'

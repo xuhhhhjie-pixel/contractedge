@@ -273,8 +273,9 @@ def check_package(package):
                     'initial_diagnosis_context_tokens', 'max_format_retries', 'top_n']:
             if key in cfg and not positive_int(cfg[key], 0 if key == 'max_format_retries' else 1):
                 errors.append('INVALID_FRONT_CONFIG:front_config:' + key)
-        if 'max_seconds' in cfg and not finite_number(cfg['max_seconds'], 0.001):
-            errors.append('INVALID_FRONT_CONFIG:front_config:max_seconds')
+        for key in ['max_seconds', 'max_elapsed_seconds']:
+            if key in cfg and not finite_number(cfg[key], 0.001):
+                errors.append('INVALID_FRONT_CONFIG:front_config:' + key)
     if 'public_observations' in roles:
         observations = roles['public_observations']
         if not isinstance(observations, list):
@@ -297,7 +298,8 @@ def check_package(package):
             errors.append('FEEDBACK_CASE_MISMATCH')
         if feedback.get('to_snapshot') != identity.get('broken_snapshot_id'):
             errors.append('FEEDBACK_SNAPSHOT_MISMATCH')
-    if identity.get('scope') != 'front_semantic_failure' or identity.get('semantic_reviewer') != 'disabled' or identity.get('tokenizer') not in TOKENIZERS:
+    if (identity.get('scope') != 'front_semantic_failure' or identity.get('semantic_reviewer') != 'disabled'
+            or not isinstance(identity.get('tokenizer'), str) or identity['tokenizer'] not in TOKENIZERS):
         errors.append('UNSUPPORTED_REPLAY_SCOPE')
     calls = roles.get('model_calls', [])
     if not isinstance(calls, list):
@@ -327,7 +329,10 @@ def check_package(package):
             errors.append(f'INVALID_MODEL_CALL:call_{index}')
             continue
         request = call.get('request')
-        if not isinstance(request, dict) or REQUEST_FIELDS - set(request):
+        if 'request' in call and not isinstance(request, dict):
+            errors.append(f'INVALID_REQUEST_PARAMETERS:call_{index}')
+            continue
+        if request is None or REQUEST_FIELDS - set(request):
             missing.append(f'complete_request_parameters:call_{index}')
             continue
         if (set(request) != REQUEST_FIELDS
