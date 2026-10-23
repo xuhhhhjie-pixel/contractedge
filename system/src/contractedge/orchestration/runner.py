@@ -24,6 +24,9 @@ from contractedge.diagnosis.evidence import bind_evidence_ids, build_evidence_ca
 from contractedge.diagnosis.prompt import build_diagnosis_request
 from contractedge.diagnosis.validate import validate_diagnosis
 from contractedge.model.provider import ModelProvider, ModelResponse
+from contractedge.contracts.stages import StageResult, front_status
+from contractedge.orchestration.state import PolicyLedger, RepairState
+from contractedge.orchestration.transitions import transition
 from contractedge.model.budget import BudgetExceeded
 from contractedge.model.admission import quote_request, context_fits, complete_quoted
 from contractedge.orchestration.feedback import feedback_prompt_view
@@ -550,10 +553,26 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
     separate_truncation_allowance = config.get("planning_truncation_separate_allowance", False)
     if type(separate_truncation_allowance) is not bool:
         raise ValueError("planning_truncation_separate_allowance must be boolean")
-    max_format_retries = max(0, int(config.get("max_format_retries", 1)))
+    engine = getattr(journal, "engine", None)
+    policy = engine.policy if engine is not None else PolicyLedger(config)
+    max_format_retries = policy.limit("format_correction")
     per_evidence_context_correction = config.get('diagnosis_format_retry_per_context', False)
     if type(per_evidence_context_correction) is not bool:
         raise ValueError('diagnosis_format_retry_per_context must be boolean')
+
+    def diagnosis_gate(diagnosis):
+        payload_ref = None
+        call_refs = ()
+        if journal is not None:
+            payload_ref = journal.recorder.capture_value(diagnosis.raw, "FINAL_DIAGNOSIS",
+                                                          snapshot_id=snapshot_id)
+            produced = [receipt for stage, receipt in journal.dispatches if stage.startswith("DIAGNOSIS")]
+            call_refs = produced[-1].call_refs if produced else ()
+        result = StageResult("diagnosis", front_status(diagnosis.status), payload_ref,
+                             call_refs=call_refs, snapshot_id=snapshot_id)
+        live_snapshot = compute_snapshot(source_root).snapshot_id
+        return (engine.step(result, current_snapshot=live_snapshot) if engine is not None else
+                transition(RepairState(live_snapshot), result))
 
     def planning_generation_mode(request):
         """Keep a completed truncation recovery for this prompt in this run only.
@@ -676,9 +695,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
         count = request_tokens(retry)
         if not within_budget(retry, count):
             return response
-        truncation_recoveries_used += 1
+        truncation_recoveries_used = policy.consume("truncation_recovery", attempt_id)
         if not separate_truncation_allowance:
-            format_retries_used += 1
+            format_retries_used = policy.consume("format_correction", "diagnosis:" + attempt_id)
         result = complete_recorded(retry, 'PLANNING_TRUNCATION_FORMAT_RETRY')
         reserved_tokens += count + retry.max_output_tokens
         calls.append({'stage': 'PLANNING_TRUNCATION_FORMAT_RETRY', 'prompt_version': retry.prompt_version,
@@ -767,6 +786,10 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
         for record in reversed(fitted.context_audit):
             receipt=record.get('gap_delivery',{})
             if receipt.get('status')=='INCOMPLETE':
+                if engine is not None:
+                    engine.step(StageResult('delivery', 'DELIVERY_INCOMPLETE',
+                        journal.recorder.capture_value(receipt, 'SOURCE_DELIVERY', snapshot_id=snapshot_id),
+                        snapshot_id=snapshot_id))
                 return RunTrace(run_id,parsed.case_id,parsed.input_digest,snapshot.snapshot_id,
                     'EVIDENCE_GAP',requirement,scope,fitted,diagnosis,changeset,tuple(calls),
                     ('REQUIRED_SOURCE_NOT_DELIVERED: '+json.dumps(receipt,ensure_ascii=False),),
@@ -991,7 +1014,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                                     "INVALID_OUTPUT", requirement, scope, candidate_set, None, None,
                                     tuple(calls), (str(validation_error),), "FAIL",
                                     run_context=run_context_wire)
-                format_retries_used += 1
+                format_retries_used = policy.consume("format_correction", "diagnosis:" + attempt_id)
                 validation_feedback = _format_validation_feedback(validation_error, diagnosis_payload)
                 calls[-1]["validation_error"] = str(validation_error)
                 calls[-1]["validation_feedback"] = validation_feedback
@@ -1069,6 +1092,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                                     "gap_search": gap_search_audit, "reason": "no direct query-matched or dropped candidates"}]),
                                 run_context_wire)
             try:
+                policy.consume("evidence_extension", attempt_id)
                 candidate_set = extend_once(
                     candidate_set, diagnosis.evidence_gaps, extension_units,
                     max_context_tokens=int(config["max_context_tokens"]), token_counter=token_counter,
@@ -1128,7 +1152,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                                         tuple(calls), (str(exc),), "FAIL", semantic_review,
                                         tuple(retrieval_rounds), run_context_wire)
                     if not per_evidence_context_correction:
-                        format_retries_used += 1
+                        format_retries_used = policy.consume("format_correction", "diagnosis:" + attempt_id)
+                    if per_evidence_context_correction:
+                        policy.consume("format_correction", "diagnosis-extension:" + attempt_id)
                     extension_retry_index = 1 if per_evidence_context_correction else format_retries_used
                     validation_feedback = _format_validation_feedback(exc, diagnosis_payload
                         if isinstance(diagnosis_payload, Mapping) else {})
@@ -1180,9 +1206,12 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                                         "INVALID_OUTPUT", requirement, scope, candidate_set, None, None,
                                         tuple(calls), (str(retry_exc),), "FAIL", semantic_review,
                                         tuple(retrieval_rounds), run_context_wire)
-        if diagnosis.status not in {"READY", "PARTIAL_READY"}:
-            return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id, diagnosis.status,
-                            requirement, scope, candidate_set, diagnosis.raw, None, tuple(calls), (),
+        diagnosis_decision = diagnosis_gate(diagnosis)
+        if diagnosis_decision.action != "PLAN":
+            return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
+                            diagnosis.status if diagnosis_decision.action == "STOP" else "EVIDENCE_GAP",
+                            requirement, scope, candidate_set, diagnosis.raw, None, tuple(calls),
+                            () if diagnosis_decision.action == "STOP" else ("DIAGNOSIS_SNAPSHOT_STALE",),
                             structural_validation, semantic_review, tuple(retrieval_rounds), run_context_wire)
 
         feedback: list[Mapping[str, Any]] = []
@@ -1205,7 +1234,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                         requirement, scope, candidate_set, diagnosis.raw, changeset_payload,
                         tuple(calls), errors, structural_validation, semantic_review,
                         tuple(retrieval_rounds), run_context_wire)
-                planning_corrections_used += 1
+                planning_corrections_used = policy.consume("format_correction", "planning:" + attempt_id)
             if config.get('production_path_review_enabled', False):
                 context = replace(context, retrieval_config={**context.retrieval_config,
                     'production_path_frontier': production_frontier(candidate_set.candidates, parsed.requirement_text)})
@@ -1294,6 +1323,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                         break
                     continue
                 try:
+                    policy.consume("evidence_extension", attempt_id)
                     candidate_set = extend_once(candidate_set, planning_gaps, extra,
                         max_context_tokens=int(config['max_context_tokens']), token_counter=token_counter)
                 except ValueError:
@@ -1338,8 +1368,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                                 'INVALID_OUTPUT', requirement, scope, candidate_set, None, changeset_payload,
                                 tuple(calls), (str(exc),), 'FAIL', semantic_review,
                                 tuple(retrieval_rounds), run_context_wire)
-                        planning_context_corrections+=1
-                        if not per_evidence_context_correction:format_retries_used += 1
+                        planning_context_corrections = (policy.consume("format_correction", "planning-evidence:" + attempt_id)
+                            if per_evidence_context_correction else planning_context_corrections + 1)
+                        if not per_evidence_context_correction:format_retries_used = policy.consume("format_correction", "diagnosis:" + attempt_id)
                         history = _append_diagnosis_retry_turn(history, response.content,
                             _format_validation_feedback(exc, body if isinstance(body, Mapping) else {}))
                         retry = replace(request, messages=history,metadata={**request.metadata,
@@ -1351,10 +1382,13 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                             raise BudgetExceeded('Planning evidence correction exceeds the existing round budget')
                         response = complete_recorded(retry, 'DIAGNOSIS_FORMAT_RETRY')
                         reserved_tokens += count + retry.max_output_tokens
-                if diagnosis.status not in {'READY', 'PARTIAL_READY'}:
+                diagnosis_decision = diagnosis_gate(diagnosis)
+                if diagnosis_decision.action != "PLAN":
                     return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
-                        diagnosis.status, requirement, scope, candidate_set, diagnosis.raw, None, tuple(calls),
-                        (), structural_validation, semantic_review, tuple(retrieval_rounds), run_context_wire)
+                        diagnosis.status if diagnosis_decision.action == "STOP" else "EVIDENCE_GAP",
+                        requirement, scope, candidate_set, diagnosis.raw, None, tuple(calls),
+                        () if diagnosis_decision.action == "STOP" else ("DIAGNOSIS_SNAPSHOT_STALE",),
+                        structural_validation, semantic_review, tuple(retrieval_rounds), run_context_wire)
                 # The next plan is based on a new diagnosis. Previous plan
                 # errors do not describe it, but any used correction stays used.
                 feedback = []

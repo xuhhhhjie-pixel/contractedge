@@ -85,6 +85,10 @@ class RunRecorder:
             "schema_version": "ce.run_recorder.v1", "run_id": run_id, "input_digest": input_digest,
         })
 
+    def commit_transition(self, expected_revision, decision):
+        from contractedge.orchestration.state import commit_transition
+        return commit_transition(self, expected_revision, decision)
+
     def _path(self, name):
         relative_path(name)
         path = self.root / name

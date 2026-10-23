@@ -33,6 +33,8 @@ from contractedge.orchestration.evidence_delivery import select_observations_del
 from contractedge.orchestration.front_delivery import build_front_delivery
 from contractedge.orchestration.recorder import RunRecorder, ProviderJournal, preserve_error
 from contractedge.orchestration.semantic_delivery import SemanticDeliveryError, delivery_context, install_monitor
+from contractedge.contracts.stages import StageResult, front_status, feedback_status, stop_status
+from contractedge.orchestration.state import RepairEngine
 from contractedge.execution.topomen import execution_review_mapping
 from contractedge.orchestration.feedback import make_feedback, validate_feedback, review_plan_with_retained, feedback_prompt_view
 from contractedge.orchestration.runner import run_front_half, required_planning_source_support, required_source_prerequisites
@@ -327,6 +329,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
     status = 'STARTING'
     source = None
     initial_snapshot = method_input.initial_snapshot_id
+    engine = journal.engine = RepairEngine(journal.recorder, initial_snapshot, config)
     max_rounds = int(config.get('max_rounds', 2))
     if not 1 <= max_rounds <= 16:
         raise ValueError('max_rounds must be between1and16')
@@ -400,6 +403,10 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         write_json(record_path, observed)
         record_stage(stage, attempt_id=attempt_id, snapshot_id=actual, status=observed['status'],
             outputs=tuple(outputs), predecessor=predecessor)
+        observation_status = ('ENVIRONMENT_ERROR' if observed['status'] in {'INFRA_ERROR', 'INVALID_OBSERVATION'} else
+                              'BUDGET_EXHAUSTED' if observed['status'] == 'BUDGET_EXCEEDED' else 'COMPLETE')
+        engine.step(StageResult('incumbent' if stage == 'observe_initial' else 'observation',
+            observation_status, journal.latest[stage], snapshot_id=actual))
         return observed
     def restore_recorded(checkpoint, destination, *, attempt_id, predecessor):
         from contractedge.orchestration.candidate_guard import restore_candidate
@@ -422,6 +429,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                                  'expected_snapshot': checkpoint['snapshot_id']})
         record_stage('rollback', attempt_id=attempt_id, snapshot_id=actual, status='RESTORED',
             outputs=(destination.relative_to(out).as_posix(),), predecessor=predecessor)
+        engine.step(StageResult('rollback', 'COMPLETE', journal.latest['rollback'], snapshot_id=actual))
     try:
         if initial_trace:
             calls = initial_trace['model_calls']
@@ -441,7 +449,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             if _runtime_preflight.get('status') != 'PASS' or _runtime_preflight.get('runtime_verified') is not True:
                 raise RuntimeError('RUNTIME_PREFLIGHT_FAILED: ' + '; '.join(_runtime_preflight.get('errors', []))
                                    + '; inspect ' + str(out / 'runtime-preflight.json'))
-        write_json(out / 'state.json', {'status': 'PREPARING', 'case_id': case_id})
+        engine.project(status='PREPARING', case_id=case_id)
         reserve_public_time()
         record = runner.prepare(case_id, workspace, out / 'prepare')
         source = Path(record['source_root']).resolve(strict=True)
@@ -474,7 +482,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                          'missing_request_indices': [i for i,c in enumerate(initial_trace['model_calls'])
                                                      if not isinstance(c.get('request'), Mapping)]},))
         if config.get('observe_broken', True):
-            write_json(out / 'state.json', {'status': 'OBSERVING_BROKEN', 'case_id': case_id})
+            engine.project(status='OBSERVING_BROKEN', case_id=case_id)
             reserve_public_time()
             current_observation = observe_recorded(out / 'broken-public', out / 'initial-public-observation.json',
                 stage='observe_initial', attempt_id='broken', predecessor=('begin',))
@@ -486,19 +494,33 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 raise BudgetExceeded('Global wall-clock budget exhausted')
             directory = out / 'rounds' / str(round_id)
             directory.mkdir(parents=True)
-            write_json(out / 'state.json', {'status': 'PLANNING', 'case_id': case_id, 'round_id': round_id})
+            engine.project(status='PLANNING', case_id=case_id, round_id=round_id)
             delivery = select_observations_delivery((current_observation or {}).get('observations', []),
                 method_input.requirement_text, token_counter, int(config.get('max_public_evidence_tokens', 4000)),
                 snapshot_id=compute_snapshot(source).snapshot_id)
             write_json(directory / 'public-evidence.delivery.json', delivery.receipt)
             if delivery.receipt['status'] != 'COMPLETE':
                 status = 'EVIDENCE_DELIVERY_INCOMPLETE'
+                engine.step(StageResult('delivery', 'DELIVERY_INCOMPLETE',
+                    journal.capture(directory.relative_to(out).as_posix() + '/public-evidence.delivery.json',
+                                    'PUBLIC_EVIDENCE_DELIVERY', snapshot_id=compute_snapshot(source).snapshot_id),
+                    snapshot_id=compute_snapshot(source).snapshot_id))
                 errors.append('Public evidence delivery ' + delivery.receipt['status'] + ': '
                     + json.dumps({'coverage': delivery.receipt['mandatory_coverage'],
                                   'errors': delivery.receipt['errors']}, ensure_ascii=False))
                 break
             observations = delivery.records
-            if trace is None or (feedback and feedback['route'] == 'DIAGNOSIS' and not retry_restored_candidate):
+            if trace is not None and engine.state.diagnosis_snapshot is None and trace.get('diagnosis'):
+                imported = (journal.capture('initial-front.trace.json', 'IMPORTED_FRONT_TRACE',
+                                           snapshot_id=trace['snapshot_id']) if initial_trace else journal.latest.get('front'))
+                engine.step(StageResult('diagnosis', front_status(trace['diagnosis']['status']), imported,
+                    snapshot_id=trace['snapshot_id']))
+            next_route = ('EXECUTE' if retry_restored_candidate else feedback['route'] if feedback else
+                          'EXECUTE' if trace is not None else 'DIAGNOSIS')
+            round_decision = engine.start_round(StageResult('round_start', 'READY',
+                journal.latest.get('feedback') or journal.latest.get('front_import'),
+                snapshot_id=compute_snapshot(source).snapshot_id, route=next_route), repeated=round_id > 0)
+            if round_decision.action == 'DIAGNOSE':
                 round_config = {**dict(config), 'run_id': run_id,
                     'max_total_tokens': max(1, budget.max_tokens - budget.reserved_tokens),
                     'max_elapsed_seconds': budget.remaining_seconds,
@@ -510,12 +532,18 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     journal=journal, attempt_id='round-' + str(round_id)).to_wire()
                 plan = None
             if trace['status'] not in {'READY', 'READY_PARTIAL'}:
+                unknown = bool(budget.calls and budget.calls[-1].get('error')
+                    and 'response_content' not in budget.calls[-1] and trace['status'] != 'BUDGET_EXHAUSTED')
+                preserve_error(journal.primary_error, lambda: engine.step(StageResult('front',
+                    front_status(trace['status'], response_unknown=unknown), journal.latest.get('front'),
+                    snapshot_id=trace['snapshot_id'],
+                    call_refs=journal.refs(max(0, len(budget.calls)-1)) if unknown else ())))
                 write_json(directory / 'front.trace.json', trace)
                 status = trace['status']
                 errors.extend(trace.get('errors', []))
                 break
-            if feedback and feedback['route'] == 'CHANGESET' and not retry_restored_candidate:
-                if trace['snapshot_id'] == compute_snapshot(source).snapshot_id:
+            if round_decision.action in {'REVISE_PLAN', 'REDIAGNOSE'}:
+                if round_decision.action == 'REVISE_PLAN':
                     revision_call_start = journal.position()
                     trace = revise_plan(trace, method_input, source, feedback, budget, token_counter, config)
                     revision_value = journal.recorder.capture_value(trace['changeset'], 'FINAL_SEMANTIC_PLAN',
@@ -571,7 +599,9 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 outputs=(relative + '/plan.json', relative + '/public-review-plan.json'),
                 projections=(relative + '/public-evidence.delivery.json',),
                 predecessor=('planning', 'front_delivery', 'begin'))
-            write_json(out / 'state.json', {'status': 'EXECUTING', 'case_id': case_id, 'round_id': round_id})
+            engine.step(StageResult('plan', 'READY',
+                journal.capture(relative + '/plan.json', 'CONSUMER_PLAN', snapshot_id=before), snapshot_id=before))
+            engine.project(status='EXECUTING', case_id=case_id, round_id=round_id)
             execution_call_start = journal.position()
             execution_status, review = 'INVALID_OBSERVATION', None
             rejection_kind = None
@@ -628,7 +658,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     # the round: no S1 or fresh execution feedback exists yet.
                     # Never retry a missing/unknown HTTP response. Shared case
                     # tokens, calls, wall time and money still guard the request.
-                    execution_format_corrections += 1
+                    execution_format_corrections = engine.policy.consume('format_correction', 'execution:case')
                 execution_result = {**execution_result, 'generation_attempts': len(attempts),
                                     'format_corrections_used': execution_format_corrections}
             write_json(directory / 'execution.json', execution_result)
@@ -641,8 +671,11 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 inputs=(relative + '/plan.json',),
                 outputs=(relative + '/execution.json', relative + '/patch.json', relative + '/candidate.patch'),
                 predecessor=('consumer_projection', 'execute_attempt'))
+            engine.step(StageResult('execute', 'EDIT_REJECTED' if rejection_kind == 'EXECUTION' else
+                'PLAN_INVALID' if rejection_kind == 'PLAN' else 'APPLIED', journal.latest.get('execute'),
+                snapshot_id=compute_snapshot(source).snapshot_id))
             if rejection_kind is None:
-                write_json(out / 'state.json', {'status': 'PUBLIC_CHECK', 'case_id': case_id, 'round_id': round_id})
+                engine.project(status='PUBLIC_CHECK', case_id=case_id, round_id=round_id)
                 reserve_public_time()
                 current_observation = observe_recorded(directory / 'public', directory / 'public-observation.json',
                     stage='observe', attempt_id='round-' + str(round_id), predecessor=('execute',))
@@ -733,6 +766,10 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 execution={'result': execution_result, 'patch': patch_info,
                            'mapping': execution_review_mapping(execution_result) if rejection_kind is None else None},
                 review=review, observations=current_observation)
+            feedback_decision = engine.step(StageResult('feedback',
+                'EDIT_REJECTED' if rejection_kind == 'EXECUTION' else 'PLAN_INVALID' if rejection_kind == 'PLAN' else
+                feedback_status(feedback), journal.latest['feedback'], snapshot_id=after, route=feedback['route'],
+                terminal_status=stop_status(feedback)))
             if checkpoint and rejection_kind is None and incumbent_observation:
                 from contractedge.orchestration.candidate_guard import compare_candidate_checks, preservation_check_ids, restore_candidate
                 protected_checks = preservation_check_ids(review_plan, incumbent_feedback)
@@ -753,6 +790,9 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 write_json(directory/'candidate-decision.json',decision)
                 record_stage('candidate_decision', snapshot_id=after, status=decision['decision'],
                     outputs=(relative + '/candidate-decision.json',), predecessor=('feedback', 'observe', 'semantic_outcome'))
+                engine.step(StageResult('candidate_selection',
+                    'COMPLETE' if decision['decision'] == 'PROMOTE' else 'CANDIDATE_REJECTED',
+                    journal.latest['candidate_decision'], snapshot_id=after))
                 if decision['decision']!='PROMOTE':
                     # A registered production startup panic is actionable even
                     # when it prevented completing preservation checks. Keep
@@ -802,10 +842,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 status = 'INVALID_OUTPUT'
                 errors.append('Concrete generation could not produce an accepted edit within its existing correction allowance')
                 break
-            if feedback['route'] == 'STOP':
-                status = ('PUBLIC_REVIEW_COMPLETE' if feedback['semantic_outcome'] == 'PUBLIC_REVIEW_PASS' else
-                          'PUBLIC_EXECUTION_COMPLETE' if feedback['build_state'] == 'PASSED' else
-                          'INFRASTRUCTURE_ERROR' if feedback['failure_kind'] == 'ENVIRONMENT' else 'STOPPED_UNCERTAIN')
+            if feedback_decision.action == 'STOP':
+                status = stop_status(feedback)
                 break
             status = 'ROUND_LIMIT'
     except SemanticDeliveryError as exc:
@@ -816,6 +854,11 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         primary_error = exc
         status = 'BUDGET_EXHAUSTED'
         errors.append(str(exc))
+        preserve_error(exc, lambda: engine.step(StageResult('failure', 'BUDGET_EXHAUSTED',
+            journal.latest.get('execute') or journal.latest.get('front'),
+            snapshot_id=compute_snapshot(source).snapshot_id if source else initial_snapshot,
+            call_refs=journal.refs(max(0, len(budget.calls)-1))
+                if budget.calls and budget.calls[-1].get('error') else ())))
     except Exception as exc:
         primary_error = exc
         if budget.remaining_seconds <= 0:
@@ -823,6 +866,14 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         elif status not in {'INFRA_ERROR', 'INVALID_OBSERVATION', 'BUDGET_EXCEEDED'}:
             status = 'INFRASTRUCTURE_ERROR'
         errors.append(type(exc).__name__ + ': ' + str(exc))
+        failure_status = ('PLAN_INVALID' if isinstance(exc, PlanRejected) else
+            'RESPONSE_UNKNOWN' if budget.calls and budget.calls[-1].get('error')
+                and 'response_content' not in budget.calls[-1] else 'ENVIRONMENT_ERROR')
+        preserve_error(exc, lambda: engine.step(StageResult('failure', failure_status,
+            journal.latest.get('execute') or journal.latest.get('front'),
+            snapshot_id=compute_snapshot(source).snapshot_id if source else initial_snapshot,
+            call_refs=journal.refs(max(0, len(budget.calls)-1))
+                if budget.calls and budget.calls[-1].get('error') else ())))
     if active_checkpoint is not None and source is not None:
         # Transport errors, budget exits and failed observations must not bypass
         # promotion. The previous candidate is selected until a trial completes.
@@ -863,7 +914,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         report['resumed_front_trace_digest'] = canonical_digest(initial_trace)
     write_json(out / 'model_calls.json', budget.calls)
     write_json(out / 'repair.trace.json', report)
-    write_json(out / 'state.json', {'status': status, 'case_id': case_id, 'rounds_completed': len(rounds)})
+    preserve_error(primary_error or journal.primary_error, lambda: engine.project(status=status, case_id=case_id, rounds_completed=len(rounds)))
     selection_outputs = ['repair.trace.json']
     write_json(out / 'selected-feedback.json', report['last_feedback'])
     selection_outputs.append('selected-feedback.json')
@@ -876,6 +927,9 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         snapshot_id=report['final_snapshot_id'], status=status,
         outputs=tuple(selection_outputs), predecessor=('feedback','candidate_decision','execute','begin',
             'semantic_outcome','semantic_delivery','front')))
+    preserve_error(primary_error, lambda: engine.step(StageResult('selection', 'COMPLETE',
+        journal.latest.get('selection'), snapshot_id=report['final_snapshot_id'], terminal_status=status)))
+    preserve_error(primary_error or journal.primary_error, lambda: engine.project(status=status, case_id=case_id, rounds_completed=len(rounds)))
     if primary_error is not None and getattr(primary_error, 'recording_errors', ()):
         report['recording_errors'] = list(primary_error.recording_errors)
         write_json(out / 'repair.trace.json', report)
