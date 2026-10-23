@@ -173,7 +173,17 @@ def _load_public_member(public_root: Path, case_id: str) -> tuple[dict[str, Any]
     return row, _safe_public_file(public_root, relative)
 
 
-def run_public_case(public_root: str | Path, case_id: str, config: Mapping[str, Any]):
+def run_public_case(public_root: str | Path, case_id: str, config: Mapping[str, Any], *,
+                    recording_dir: str | Path | None = None, output_path: str | Path | None = None,
+                    config_path: str | Path | None = None):
+    """Persistent CLI entry when recording_dir is supplied; otherwise legacy front-only API."""
+    if recording_dir is not None:
+        from contractedge.orchestration.cli_front_recording import run_recorded_public_case
+        return run_recorded_public_case(public_root, case_id, config, recording_dir=recording_dir,
+            output_path=output_path, config_path=config_path, load_public_member=_load_public_member,
+            provider_factory=_build_provider, verify_model=_verify_ollama_model)
+    if output_path is not None or config_path is not None:
+        raise ValueError('output/config source recording requires an explicit recording_dir')
     from contractedge.orchestration.runner import run_front_half
     from contractedge.dataset.admission import check_case_admission
 
@@ -360,9 +370,10 @@ def main(argv: list[str] | None = None) -> int:
             config = _json_file(args.config)
             if not isinstance(config, Mapping):
                 raise ValueError("run config must be a JSON object")
-            trace = run_public_case(args.public_root, args.case_id, config)
-            payload = validate_run_trace(trace.to_wire())
-            _write_json(args.output, payload)
+            trace = run_public_case(args.public_root, args.case_id, config,
+                recording_dir=str(Path(args.output)) + '.artifacts', output_path=args.output,
+                config_path=args.config)
+            validate_run_trace(trace.to_wire())
             print(json.dumps({"case_id": trace.case_id, "status": trace.status,
                               "run_id": trace.run_id, "trace_path": str(Path(args.output).resolve())},
                              ensure_ascii=False, sort_keys=True))

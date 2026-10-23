@@ -60,6 +60,11 @@ jobs:
           tests/test_artifact_recorder.py tests/test_stage_recorder_hooks.py
           tests/test_stage_observer_integration.py tests/test_ready_recorder_hooks.py
           tests/test_semantic_delivery_closure.py
+      - name: State transitions and persistent CLI front recording
+        run: >-
+          python -m pytest -q
+          tests/test_stage_transitions.py tests/test_state_primary_error.py
+          tests/test_cli_front_journal.py
       - name: Runtime and observer control tests without Docker
         run: |
           python -m pytest -q tests/test_runtime_session.py tests/test_public_observer.py

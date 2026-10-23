@@ -1,6 +1,6 @@
 # ContractEdge developer entry
 
-当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准；待冻结变更见同一对象的 `status` 与 `planned_snapshot`。包版本仍为 `0.6.27`，方法身份由同版源码、配置和测试面板摘要确定，不能沿用历史版本效果。`formal_ready=false`，不运行正式数据实验或隐藏评分。阶段 B 的范围与验证登记见[隔离运行与可信公开观察说明](docs/development/2026-10-23-architecture-b-runtime-observer.md)。 跨阶段引用、调用账本封存及 READY 原阶段继承见[阶段 A2 说明](docs/development/2026-10-23-architecture-a2-stage-references.md)；该阶段的通过范围以同版验证报告为准。
+当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准；待冻结变更见同一对象的 `status` 与 `planned_snapshot`。包版本仍为 `0.6.27`，方法身份由同版源码、配置和测试面板摘要确定，不能沿用历史版本效果。`formal_ready=false`，不运行正式数据实验或隐藏评分。阶段 B 的范围与验证登记见[隔离运行与可信公开观察说明](docs/development/2026-10-23-architecture-b-runtime-observer.md)。 跨阶段引用、调用账本封存及 READY 原阶段继承见[阶段 A2 说明](docs/development/2026-10-23-architecture-a2-stage-references.md)；该阶段的通过范围以同版验证报告为准。 状态转换及标准CLI持久记录见[阶段C1说明](docs/development/2026-10-24-architecture-c1-state-cli.md)。
 
 ## 安装与冻结校验
 
