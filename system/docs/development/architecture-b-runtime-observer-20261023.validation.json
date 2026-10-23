@@ -1,0 +1,12 @@
+{
+  "schema_version": "ce.development_validation.v1",
+  "development_snapshot_id": "architecture-b-runtime-observer-20261023",
+  "snapshot_sha256": "a7cdf3e2f10f33d8b4f370842497b3dd26dd87c63b4fed47c6f9896973c1488b",
+  "status": "SUPERSEDED_BEFORE_DELIVERY",
+  "reason": "Independent review found missing cross-binding of run role/snapshot/invocation and candidate/check input digests in the public completion gate. Preserve these results for this earlier source only; use r2 for delivery.",
+  "portable": "Historical fixture / native integration modules NOT RUN: test_ready_support_consistency.py, test_probe_profiles_v2.py, test_compact_render_inventory.py, test_diagnosis_error_aggregation.py, test_structured_observation_adapters.py, test_topomen_agent.py\n................................................................... [  6%]\n........................................................................ [ 14%]\n..................................................................... [ 20%]\n................................................... [ 26%]\n..................................................................... [ 33%]\n........................................................................ [ 40%]\n...................................................................... [ 47%]\n........................................................................ [ 54%]\n........................................................................ [ 61%]\n.............................................................. [ 68%]\n........................................................................ [ 75%]\n......ssss.................................. [ 79%]\n...................................................................... [ 86%]\n........................................................................ [ 94%]\n..........................................................               [100%]\n988 passed, 4 skipped, 74 subtests passed in 111.08s (0:01:51)\n",
+  "native": ".........                                                                [100%]\n9 passed in 2.61s\n",
+  "real_isolated_tests": "4 passed in separate final-v2 evidence for this earlier source",
+  "new_model_http_calls": 0,
+  "formal_ready": false
+}

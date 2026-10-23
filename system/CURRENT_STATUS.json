@@ -1,7 +1,7 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-23T12:28:51.024878+00:00",
-  "status": "DEVELOPMENT_VALIDATED_OFFLINE",
+  "as_of": "2026-10-23T14:27:16.330491+00:00",
+  "status": "STAGED_RUNTIME_OBSERVER_VALIDATION_PENDING",
   "implementation_version": "0.6.27",
   "version_scope": "Package version retained; method identity is the current development snapshot source/configuration/panel digests.",
   "formal_ready": false,
@@ -9,26 +9,49 @@
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "current_development": {
-    "snapshot": "docs/development/architecture-a-delivery-admission-20261023.snapshot.json",
-    "snapshot_id": "architecture-a-delivery-admission-20261023",
+    "snapshot": "docs/development/architecture-b-runtime-observer-20261023-r2.snapshot.json",
+    "snapshot_id": "architecture-b-runtime-observer-20261023-r2",
+    "snapshot_role": "CURRENT_FROZEN_DEVELOPMENT",
     "status": "VALIDATED_OFFLINE",
-    "scope": "Stage A first increment: explicit public evidence receipts and consistent request context admission; offline synthetic engineering validation only.",
+    "scope": "Three exposed synthetic public developer cases; independent runtime controls. Not a benchmark result or full architecture completion.",
     "verification_command": "python scripts/verify_development_snapshot.py",
+    "planned_verification_command": "python scripts/verify_development_snapshot.py --snapshot docs/development/architecture-b-runtime-observer-20261023.snapshot.json --require-current-bindings",
     "test_command": "python scripts/test_portable.py",
     "native_test_command": "python -m pytest -q tests/test_topomen_agent.py",
+    "isolated_test_command": "CONTRACTEDGE_RUN_ISOLATED_DEMOS=1 python -m pytest -q tests/test_runtime_session_integration.py tests/test_public_isolated_demo.py",
     "ci_workflow": "../.github/workflows/development.yml",
     "github_actions_execution": "NOT_RUN_FOR_THIS_SNAPSHOT_AT_FREEZE",
     "formal_effectiveness": "NOT_EVALUATED",
     "verification": {
-      "portable": "918 passed, 46 subtests passed in 86.82s (0:01:26)",
-      "native": "9 passed in 2.47s"
+      "portable": "1021 passed, 4 skipped, 74 subtests passed in 122.16s (0:02:02)",
+      "native": ".........                                                                [100%]\n9 passed in 2.76s",
+      "actual_isolated_public_tests": "....                                                                     [100%]\n4 passed, 52 deselected in 30.71s",
+      "freeze": "PASS; explicit and default"
     },
-    "runtime_limits": "Actual 2CPU/2GiB verified"
+    "last_validated_baseline": {
+      "snapshot": "docs/development/architecture-a-delivery-admission-20261023.snapshot.json",
+      "snapshot_id": "architecture-a-delivery-admission-20261023",
+      "status": "VALIDATED_OFFLINE",
+      "scope": "Stage A first increment: explicit public evidence receipts and consistent request context admission; offline synthetic engineering validation only.",
+      "verification_command": "python scripts/verify_development_snapshot.py",
+      "test_command": "python scripts/test_portable.py",
+      "native_test_command": "python -m pytest -q tests/test_topomen_agent.py",
+      "ci_workflow": "../.github/workflows/development.yml",
+      "github_actions_execution": "NOT_RUN_FOR_THIS_SNAPSHOT_AT_FREEZE",
+      "formal_effectiveness": "NOT_EVALUATED",
+      "verification": {
+        "portable": "918 passed, 46 subtests passed in 86.82s (0:01:26)",
+        "native": "9 passed in 2.47s"
+      },
+      "runtime_limits": "Actual 2CPU/2GiB verified"
+    },
+    "runtime_limits": "Actual cgroup CPU 200000/100000 and memory 2147483648 verified; RuntimeSession integration is included in portable.",
+    "validation": "docs/development/architecture-b-runtime-observer-20261023-r2.validation.json"
   },
   "next_actions": [
-    "Review the stacked Stage A PR against codex/next-iteration-integration and inspect actual GitHub Actions checks; do not merge both routes independently.",
-    "Next architecture increment: explicit stage outcomes and transitions, retaining existing obligation and candidate transaction semantics.",
-    "Isolated model candidate execution and formal research evaluation require their separate implementation and validation."
+    "Review the Stage B runtime/observer draft PR stacked on PR #8; CI results must be inspected on the published commit.",
+    "Integrate the independently validated A2 stage-reference hooks on the Stage B commit, then run same-version combination verification and create its own freeze/PR.",
+    "Continue explicit transitions, durable candidate transactions, replaceable consumers and four-mode six-case development panel. Keep formal_ready=false and original cumulative API allowance."
   ],
   "historical_status": {
     "scope": "REFERENCE_ONLY: the following original status/results are historical records, not current development gates or current method scores.",
@@ -1400,7 +1423,7 @@
     "budget_limit_cny": 30,
     "http_calls": 0,
     "cost_cny": 0,
-    "scope": "No new API calls for architecture Stage A; prior a070513 front result remains version-specific and does not validate this source.",
+    "scope": "No new real-provider result is claimed for pending Stage B. Documentation and CI use synthetic fixtures; any later approved paid attempt requires its own same-version registration and the original persistent ledger.",
     "unknown_response_policy": "retain full reservation; no automatic resend"
   },
   "prior_api_reference": {

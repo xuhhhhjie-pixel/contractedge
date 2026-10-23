@@ -214,6 +214,13 @@ def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
                 output: str | Path, provider, token_counter, config: Mapping, *,
                 initial_trace: Mapping | None = None, public_runner=None,
                 executor=None, reviewer=None) -> dict:
+    isolated = (config.get('public_runtime') == 'isolated'
+        or getattr(public_runner, 'requires_public_profile', False) is True)
+    if isolated:
+        if config.get('observe_broken', True) is not True:
+            raise ValueError('Isolated public execution requires the actual Broken observation before model dispatch')
+        if getattr(public_runner, 'runtime_kind', None) != 'isolated-public-process':
+            raise ValueError('Isolated public execution requires its trusted isolated runner; host fallback is prohibited')
     # Frozen public runtime helpers inherit environment. Keep API/context changes
     # scoped to this serial task process, including method probes and cleanup.
     with scoped_runtime_environment():
@@ -266,6 +273,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         lock_root=config.get('lock_root', '/tmp/contractedge-system-native-locks'),
         timeout_seconds=float(config.get('public_timeout_seconds', 600)), query=method_input.requirement_text,
         method_probe_profiles=config.get('method_probe_profiles', []))
+    requires_public_profile = (config.get('public_runtime') == 'isolated'
+        or getattr(runner, 'requires_public_profile', False) is True)
     if executor is None:
         backend = config.get('execution_backend', 'direct')
         if backend == 'topomen_agent':
@@ -414,7 +423,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             incumbent_observation, incumbent_feedback = current_observation, feedback
             incumbent_execution = last_applied_execution
             checkpoint = None
-            if config.get('candidate_guard_enabled'):
+            if requires_public_profile or config.get('candidate_guard_enabled'):
                 from contractedge.orchestration.candidate_guard import checkpoint_candidate
                 from contractedge.execution.topomen import operation_path
                 checkpoint = checkpoint_candidate(source,[operation_path(op) for op in plan['operations']],
@@ -496,7 +505,12 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     'public_execution_capabilities': config.get('public_execution_capabilities'),
                     'execution_mapping': execution_review_mapping(execution_result),
                     'observations': list(review_delivery.records)}
-                if review_delivery.receipt['status'] != 'COMPLETE':
+                from contractedge.execution.public_observer import isolated_observation_complete
+                if requires_public_profile and not isolated_observation_complete(current_observation):
+                    review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
+                        'method': 'ISOLATED_OBSERVATION_INCOMPLETE',
+                        'rationale': 'No review dispatch is admitted without complete isolated runs, public checks and confirmed cleanup.'}
+                elif review_delivery.receipt['status'] != 'COMPLETE':
                     review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
                         'method': 'EVIDENCE_DELIVERY_INCOMPLETE',
                         'rationale': 'Required public review evidence was not completely delivered.',
@@ -507,6 +521,9 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     except (ValueError, KeyError) as exc:
                         review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
                                   'method': 'PUBLIC_REVIEW_INVALID', 'rationale': str(exc)}
+                from contractedge.execution.public_observer import enforce_public_profile
+                review = enforce_public_profile(review, current_observation,
+                    required=requires_public_profile)
                 write_json(directory / 'public-review.json', review)
             after = compute_snapshot(source).snapshot_id
             raw_observations = (current_observation or {}).get('observations', [])
@@ -533,8 +550,21 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             write_json(directory / 'feedback.json', feedback)
             if checkpoint and rejection_kind is None and incumbent_observation:
                 from contractedge.orchestration.candidate_guard import compare_candidate_checks, preservation_check_ids, restore_candidate
+                protected_checks = preservation_check_ids(review_plan, incumbent_feedback)
+                if requires_public_profile:
+                    # Registered checks do not depend on which conditions a
+                    # model chooses to include. Every observed PASS is retained.
+                    protected_checks = sorted(set(protected_checks) | {
+                        row['behavior_check']['id'] for row in incumbent_observation.get('observations', [])
+                        if isinstance(row.get('behavior_check'), Mapping) and row['behavior_check'].get('id')})
                 decision = compare_candidate_checks({**incumbent_observation,'feedback':incumbent_feedback},
-                    {**current_observation,'feedback':feedback},preservation_check_ids(review_plan,incumbent_feedback))
+                    {**current_observation,'feedback':feedback}, protected_checks)
+                if requires_public_profile and not isolated_observation_complete(current_observation):
+                    decision = {**decision, 'decision': 'UNCOMPARABLE',
+                        'uncomparable': [*decision.get('uncomparable', []), {
+                            'check_id': 'REQUIRED_ISOLATED_RUNTIME',
+                            'reason': 'Independent observation or runtime cleanup is incomplete; trial cannot be promoted.'}],
+                        'interpretation': 'Incomplete isolated observation; retain the incumbent without further review dispatch.'}
                 write_json(directory/'candidate-decision.json',decision)
                 if decision['decision']!='PROMOTE':
                     # A registered production startup panic is actionable even
