@@ -53,7 +53,7 @@
   "method_probe_profiles": [
     "kpt-configpath-v4",
     "alertmanager-reload-v3",
-    "cloudwatch-tags-v1"
+    "cloudwatch-tags-v2"
   ],
   "diagnosis_format_retry_per_context": true,
   "execution_helper_support_enabled": true,
@@ -66,7 +66,7 @@
   "gap_role_delivery_enabled": true,
   "helper_preconditions_enabled": true,
   "writeback_context_enabled": true,
-  "execution_reasoning_policy": "complex_plan",
+  "execution_reasoning_policy": "failed_trial_only",
   "model_identity_policy": "require_match",
   "output_mode": "json_object",
   "runtime_preflight": {

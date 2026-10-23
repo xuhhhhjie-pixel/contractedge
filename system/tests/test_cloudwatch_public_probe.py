@@ -73,3 +73,20 @@ def test_command_uses_readonly_go_overlay_and_offline_production_test():
     assert '-overlay=/method-probe/overlay.json' in command
     assert './pkg/resource/metric_alarm' in command and 'GOPROXY=off' in command
     assert 'TestContractEdgePublicTagUpdate' in command
+
+
+def test_v2_keeps_historical_program_and_supplies_existing_alarm_identity(tmp_path):
+    import hashlib
+    p=tmp_path/'pkg/resource/metric_alarm';p.mkdir(parents=True)
+    (p/'manager.go').write_text('package metric_alarm');(p/'sdk.go').write_text('package metric_alarm')
+    old=registered_programs()['cloudwatch-tags-v1'][0]
+    assert hashlib.sha256(old.encode()).hexdigest()=='fbcc7fd88580cdfddc8b01211207394393912425b24cdcf7fc5c837528a10564'
+    spec=select_probes('MetricAlarm tag updates; unchanged tags remain intact.',tmp_path,['cloudwatch-tags-v2'])[0]
+    assert spec['id']=='cloudwatch-tags-v2'
+    assert 'ACKResourceMetadata=&ackv1alpha1.ResourceMetadata{ARN:&arn}' in spec['program']
+    assert 'transport-target-identity' in spec['program']
+    assert set(spec['checks'])==set(registered_programs()['cloudwatch-tags-v1'][1])
+
+
+def test_v2_uses_the_same_offline_readonly_command_contract():
+    assert probe_command('cloudwatch-tags-v2')==probe_command('cloudwatch-tags-v1')

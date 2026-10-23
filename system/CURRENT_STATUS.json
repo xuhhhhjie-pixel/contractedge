@@ -1,12 +1,12 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-23T15:59:24.015494+00:00",
-  "version": "0.6.31",
-  "implementation_version": "0.6.31",
+  "as_of": "2026-10-23T16:43:08.623813+00:00",
+  "version": "0.6.32",
+  "implementation_version": "0.6.32",
   "status": "FROZEN_SINGLE_DEVELOPMENT_GATE_RUNNING",
   "formal_ready": false,
   "repair_reliability_accepted": false,
-  "runtime_source_digest": "396ef3744848f44257b9eaf40a97d456fb7b2e696cc4f6fce053fcefcc2b94d4",
+  "runtime_source_digest": "afd0732da530687bbd49e44c545ba6448402fd38354b446fa87a28c56d7c2075",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -24,26 +24,26 @@
     },
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
-  "engineering_tests": 792,
+  "engineering_tests": 799,
   "subtests": 22,
   "portable_verification": {
-    "passed": 759,
+    "passed": 766,
     "subtests_passed": 17,
     "excluded_modules": 6,
     "fresh_venv": false
   },
   "latest_completed_experiment": {
-    "version": "0.6.29",
+    "version": "0.6.31",
     "case_id": "R4-ACK-CLOUDWATCH-2985",
-    "model_calls": 9,
-    "public_build": "PASS",
-    "public_behavior": "UNKNOWN",
-    "independent": "SEMANTIC_FAIL",
+    "model_calls": 4,
+    "method_status": "INVALID_OUTPUT",
+    "independent": "NO_CANDIDATE",
+    "patch_bytes": 0,
     "registered_scored": 1,
     "registered_not_run": 45
   },
   "current_experiment": {
-    "version": "0.6.31",
+    "version": "0.6.32",
     "case_id": "R4-ACK-CLOUDWATCH-2985",
     "status": "RUNNING",
     "source": "ORIGINAL_BROKEN",
@@ -51,15 +51,15 @@
     "scoring": "NOT_RUN"
   },
   "public_probe_qualification": {
-    "id": "cloudwatch-tags-v1",
-    "program_sha256": "fbcc7fd88580cdfddc8b01211207394393912425b24cdcf7fc5c837528a10564",
+    "id": "cloudwatch-tags-v2",
+    "program_sha256": "b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f",
     "status": "QUALIFIED_PUBLIC_LOCAL_PROBE",
     "initial_checks_delivered": 8,
-    "input_bound": 90221,
+    "input_bound": 91480,
     "input_limit": 120000,
-    "scope": "Local SDK IO production path; not independent scoring or real AWS"
+    "scope": "Local SDK IO production path; direct Update, valid existing alarm, sticky target rejection; artificial calibration control excluded from repair effectiveness"
   },
-  "current_report": "docs/reports/2026-10-23-v0631-production-tag-probe.md",
+  "current_report": "docs/reports/2026-10-24-execution-contract-closure.md",
   "implementation_plan": "docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md",
   "remaining_required": [
     "same-version registered effect and recovery gates",

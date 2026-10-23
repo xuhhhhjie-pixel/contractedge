@@ -60,7 +60,7 @@ def candidate_runtime_failures(report, output, source):
 
 
 def probe_command(probe_id):
-    if probe_id=='cloudwatch-tags-v1':
+    if probe_id in {'cloudwatch-tags-v1','cloudwatch-tags-v2'}:
         return ['sh','-eu','-c',
             'export GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off GOMAXPROCS=2 GOMODCACHE=/work/.contractedge-deps/gomod GOCACHE=/tmp/ce-gocache CGO_ENABLED=0; '
             'cp /work/go.mod /tmp/method-probe.go.mod; cp /work/.contractedge-deps/setup/go.sum /tmp/method-probe.go.sum; '
@@ -115,7 +115,7 @@ def run_method_probes(workspace, output, tools_root, specs, timeout_seconds=1200
                 if spec['id'] not in registry or spec['program']!=registry[spec['id']][0]:raise ValueError('Unregistered executable probe')
                 program=out/spec['id'];program.mkdir();(program/'main.go').write_text(spec['program'])
                 assert hashlib.sha256((program/'main.go').read_bytes()).hexdigest()==spec['sha256']
-                if spec['id']=='cloudwatch-tags-v1':
+                if spec['id'] in {'cloudwatch-tags-v1','cloudwatch-tags-v2'}:
                     virtual='pkg/resource/metric_alarm/zz_contractedge_public_probe_test.go'
                     if (source/virtual).exists():raise ValueError('Method-owned probe overlay collides with source')
                     (program/'overlay.json').write_text(json.dumps({'Replace':{

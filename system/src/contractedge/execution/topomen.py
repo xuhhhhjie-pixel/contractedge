@@ -348,6 +348,11 @@ def build_execution_request(plan: Mapping, source: Path, policy: Mapping, token_
                'execution_feedback_digest': canonical_digest(feedback) if feedback is not None else None,
                'previous_execution_attempt': previous_attempt,
                'edit_contract': 'Return one JSON object containing only edits, with each edit containing only change_id, path, operation, old_text and new_text. Transport settings such as type=json_object are not output fields. Encode source strings exactly once as JSON: after JSON decoding, old_text must equal a unique current substring, with actual line breaks and tabs rather than literal backslash-n or backslash-t substitutes. CREATE uses empty old_text and complete file content. Prefer short, unique literal anchors copied exactly from current_target_files, preserving whitespace. Split separate regions into separate edits; avoid whole-file rewrites. Correct previous_execution_attempt using the supplied validation error and the current file. Cover every accepted operation, preserve all conditions and unrelated behavior. Do not add tests, fabricate observations or edit task/runner/oracle.'}
+    payload['edit_batch_rules'] = {
+        'multiple_edits_per_change_id': True,
+        'allowed_edit_fields': ['change_id','path','operation','old_text','new_text'],
+        'numbered_fields_allowed': False,
+        'application_order': 'Separate regions are separate edits array items, reusing the same accepted change_id and path. Items for one operation apply in array order; each old_text matches the current virtual file after prior items. Never append numbered fields such as old_text_2, even when empty. The complete batch validates before writing.'}
     if config.get('helper_preconditions_enabled'):
         from contractedge.execution.preconditions import validate_helper_preconditions
         payload['helper_preconditions']=validate_helper_preconditions(plan,{s['path']:s['content'] for s in sources},support)
@@ -394,7 +399,7 @@ def build_execution_request(plan: Mapping, source: Path, policy: Mapping, token_
             raise PlanRejected('Execution thinking override requires a valid compatible transport setting')
         metadata['execution_thinking_policy'] = 'EXPLICIT_STAGE_CONFIGURATION'
     reasoning_policy=config.get('execution_reasoning_policy')
-    if reasoning_policy not in {None,'complex_plan'}:
+    if reasoning_policy not in {None,'complex_plan','failed_trial_only'}:
         raise PlanRejected('Unknown execution reasoning policy')
     complex_plan=(len(plan['operations'])>1 or any(
         r.get('disposition')=='REQUIRED' for r in plan.get('precondition_review',[])))
@@ -412,7 +417,8 @@ def build_execution_request(plan: Mapping, source: Path, policy: Mapping, token_
         and decision.get('trial_snapshot')==trial['snapshot_id']==history.get('to_snapshot')
         and any(p.get('snapshot_id')==trial['snapshot_id'] and p.get('status')=='FAIL'
                 and p.get('probe_sha256') and p.get('content_digest') for p in failed_predicates))
-    if reasoning_policy=='complex_plan' and (complex_plan or failed_trial):
+    if (reasoning_policy in {'complex_plan','failed_trial_only'}
+            and (failed_trial or reasoning_policy=='complex_plan' and complex_plan)):
         if config.get('provider')!='openai_compatible':
             raise PlanRejected('Complex execution reasoning policy requires compatible transport')
         thinking='enabled'

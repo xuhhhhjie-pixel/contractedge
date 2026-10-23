@@ -100,3 +100,62 @@ func TestContractEdgePublicTagUpdate(t *testing.T){
  b,err:=json.Marshal(map[string]interface{}{"probe_id":"cloudwatch-tags-v1","checks":results});if err!=nil{t.Fatal(err)};fmt.Println(string(b))
 }
 '''
+
+
+def _existing_alarm_program():
+    """Keep v1 exact for replay; v2 supplies and checks the managed identity."""
+    program=CLOUDWATCH_TAG_GO.replace('cloudwatch-tags-v1','cloudwatch-tags-v2')
+    replacements=[
+        (' smithycbor "github.com/aws/smithy-go/encoding/cbor"',
+         ' ackv1alpha1 "github.com/aws-controllers-k8s/runtime/apis/core/v1alpha1"\n smithycbor "github.com/aws/smithy-go/encoding/cbor"'),
+        ('type ceTagTransport struct',
+         'const ceAlarmARN="arn:aws:cloudwatch:us-east-1:123456789012:alarm:public-alarm"\n'
+         'func ceTargetValid(tr *ceTagTransport,valid bool)bool{return valid && tr.wrongTarget==""}\n'
+         'func ceHTTPReply(r *http.Request,status int,body smithycbor.Map)*http.Response{\n'
+         ' header:=http.Header{};header.Set("Content-Type","application/cbor");header.Set("smithy-protocol","rpc-v2-cbor")\n'
+         ' return &http.Response{StatusCode:status,Status:fmt.Sprint(status),Header:header,Body:io.NopCloser(strings.NewReader(string(smithycbor.Encode(body)))),Request:r}\n}\n'
+         'type ceTagTransport struct'),
+        ('failPut,failTag bool; unsupported,injected string',
+         'failPut,failTag bool; unsupported,injected,wrongTarget string'),
+        (' status:=200;body:=smithycbor.Map{}',r''' // A valid SDK request for the wrong alarm is candidate behavior failure,
+ // not an unsupported probe protocol. Never mutate the fixture's other resource.
+ invalidTarget:=false
+ if action=="PutMetricAlarm"{name,_:=values["AlarmName"].(smithycbor.String);invalidTarget=string(name)!="public-alarm"}
+ if action=="ListTagsForResource" || action=="TagResource" || action=="UntagResource"{arn,_:=values["ResourceARN"].(smithycbor.String);invalidTarget=string(arn)!=ceAlarmARN}
+ if invalidTarget{tr.wrongTarget=action+" "+fmt.Sprint(values);return ceHTTPReply(r,400,smithycbor.Map{"__type":smithycbor.String("ValidationException"),"message":smithycbor.String("public probe rejected wrong alarm identity"),"Message":smithycbor.String("public probe rejected wrong alarm identity")}),nil}
+ status:=200;body:=smithycbor.Map{}'''),
+        (' header:=http.Header{};header.Set("Content-Type","application/cbor");header.Set("smithy-protocol","rpc-v2-cbor")\n return &http.Response{StatusCode:status,Status:fmt.Sprint(status),Header:header,Body:io.NopCloser(strings.NewReader(string(smithycbor.Encode(body)))),Request:r},nil',
+         ' return ceHTTPReply(r,status,body),nil'),
+        (' r.ko.Spec.Name=aws.String("public-alarm");',
+         ' arn:=ackv1alpha1.AWSResourceName(ceAlarmARN);r.ko.Status.ACKResourceMetadata=&ackv1alpha1.ResourceMetadata{ARN:&arn}\n'
+         ' r.ko.Spec.ComparisonOperator=aws.String("GreaterThanThreshold");r.ko.Spec.EvaluationPeriods=aws.Int64(1);r.ko.Spec.Period=aws.Int64(60)\n'
+         ' r.ko.Spec.Namespace=aws.String("ContractEdge/PublicProbe");r.ko.Spec.MetricName=aws.String("Latency");r.ko.Spec.Statistic=aws.String("Average");r.ko.Spec.Threshold=aws.Float64(1)\n'
+         ' r.ko.Spec.Name=aws.String("public-alarm");'),
+        ('  status:="FAIL";if ok{status="PASS"}',
+         '  ok=ceTargetValid(tr,ok)\n  status:="FAIL";if ok{status="PASS"}'),
+        ('"sdk_operations":tr.calls,"tag_writes":tr.writes',
+         '"sdk_operations":tr.calls,"wrong_target_request":tr.wrongTarget,"tag_writes":tr.writes'),
+        (' b,err:=json.Marshal(map[string]interface{}{"probe_id":',r''' t.Run("transport-target-identity",func(t *testing.T){
+  for _,operation:=range []string{"PutMetricAlarm","ListTagsForResource","TagResource","UntagResource"}{
+   tr:=&ceTagTransport{tags:ceCopy(base)}
+   payload:=smithycbor.Map{"ResourceARN":smithycbor.String("wrong-resource"),"AlarmName":smithycbor.String("wrong-alarm"),"Tags":smithycbor.List{smithycbor.Map{"Key":smithycbor.String("env"),"Value":smithycbor.String("changed")}},"TagKeys":smithycbor.List{smithycbor.String("env")}}
+   req,err:=http.NewRequest("POST","https://cloudwatch.public-probe.invalid/service/GraniteServiceVersion20100801/operation/"+operation,strings.NewReader(string(smithycbor.Encode(payload))));if err!=nil{t.Fatal(err)}
+   req.Header.Set("smithy-protocol","rpc-v2-cbor");response,err:=tr.RoundTrip(req)
+   if err!=nil || response.StatusCode!=400 || tr.unsupported!="" || tr.writes!=0 || !reflect.DeepEqual(tr.tags,base){t.Fatalf("wrong target was not rejected for %s",operation)};response.Body.Close()
+   if ceTargetValid(tr,true){t.Fatalf("swallowed wrong-target error accepted for %s",operation)}
+  }
+ })
+ t.Run("valid-managed-alarm-input",func(t *testing.T){
+  r:=ceResource(base)
+  if r.ko.Status.ACKResourceMetadata==nil || r.ko.Status.ACKResourceMetadata.ARN==nil{t.Fatal("existing alarm identity missing")}
+  s:=r.ko.Spec
+  if s.MetricName==nil || s.Namespace==nil || s.ComparisonOperator==nil || s.EvaluationPeriods==nil || s.Period==nil || s.Statistic==nil || s.Threshold==nil{t.Fatal("basic static alarm input missing")}
+ })
+ b,err:=json.Marshal(map[string]interface{}{"probe_id":''')]
+    for before,after in replacements:
+        if program.count(before)!=1:raise ValueError('CloudWatch v2 program anchor is ambiguous')
+        program=program.replace(before,after,1)
+    return program
+
+
+CLOUDWATCH_TAG_V2_GO = _existing_alarm_program()
