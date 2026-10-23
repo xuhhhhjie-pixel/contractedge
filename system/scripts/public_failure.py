@@ -8,11 +8,14 @@ import argparse
 import dataclasses
 import hashlib
 import json
+import math
 import os
 from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import sys
+
+from jsonschema import Draft202012Validator
 
 VERSION = 'ce.public_failure.v1'
 ROLES = {'method_input', 'model_calls', 'front_trace', 'front_config',
@@ -143,14 +146,58 @@ def export_package(run_root, source_root, recipe, output):
     return check_package(output)
 
 
+def contract_errors(value, filename, role, errors):
+    # Schemas belong to this trusted developer tool, never to the selected package.
+    schema = load(Path(__file__).resolve().parents[1] / 'src/contractedge/contracts/schema' / filename)
+    invalid = sorted(Draft202012Validator(schema).iter_errors(value),
+                     key=lambda e: tuple(map(str, e.absolute_path)))
+    for error in invalid[:12]:
+        errors.append('INVALID_CONTRACT:' + role + ':' + '.'.join(map(str, error.absolute_path)) + ':' + error.validator)
+
+
+def positive_int(value, minimum=1):
+    return type(value) is int and value >= minimum
+
+
+def finite_number(value, minimum=0):
+    return type(value) in {int, float} and math.isfinite(value) and value >= minimum
+
+
+def package_result(package, identity, errors, missing=(), cfg=None, calls=(), bounds=None):
+    bounds = bounds if bounds is not None else [0, 0]
+    return {'schema_version': VERSION, 'status': 'INVALID' if errors else ('INCOMPLETE' if missing else 'COMPLETE'),
+            'errors': errors, 'missing': sorted(set(missing)), 'identity': identity,
+            'configuration_sha256': sha(canonical(cfg)), 'manifest_sha256': sha((package/'manifest.json').read_bytes()),
+            'recorded_calls': bounds[1] - bounds[0], 'model_call_range': bounds,
+            'total_ledger_calls': len(calls), 'real_model_http_calls': 0}
+
+
 def check_package(package):
     package = Path(package).resolve(strict=True)
-    manifest = load(regular(package, 'manifest.json'))
+    try:
+        manifest = load(regular(package, 'manifest.json'))
+    except (ValueError, UnicodeDecodeError) as exc:
+        # Path/credential selection remains refused by regular/public_bytes.
+        if not isinstance(exc, (json.JSONDecodeError, UnicodeDecodeError)):
+            raise
+        return package_result(package, {}, ['INVALID_MANIFEST_JSON'])
+    if not isinstance(manifest, dict):
+        return package_result(package, {}, ['INVALID_MANIFEST:object_required'])
     if manifest.get('schema_version') != VERSION:
-        raise ValueError('Unsupported public package version')
+        return package_result(package, {}, ['INVALID_MANIFEST:schema_version'])
+    if (not isinstance(manifest.get('files'), dict) or not isinstance(manifest.get('identity'), dict)
+            or not isinstance(manifest.get('missing_roles', []), list)
+            or any(not isinstance(role, str) or role not in ROLES | {'broken_source'}
+                   for role in manifest.get('missing_roles', []))):
+        return package_result(package, {}, ['INVALID_MANIFEST:fields'])
     errors, missing = [], list(manifest.get('missing_roles', []))
     roles, sources, total = {}, {}, 0
     for name, item in manifest['files'].items():
+        if (not isinstance(item, dict) or not isinstance(item.get('role'), str)
+                or not isinstance(item.get('sha256'), str) or not re.fullmatch('[0-9a-f]{64}', item['sha256'])
+                or not positive_int(item.get('bytes'), 0)):
+            errors.append('INVALID_MANIFEST_ENTRY:' + name)
+            continue
         path = regular(package, name)
         data = path.read_bytes()
         public_bytes(data)
@@ -163,7 +210,11 @@ def check_package(package):
                 errors.append('INVALID_SOURCE_LOCATION:' + name)
             sources[name.removeprefix('broken/')] = sha(data)
         elif role in ROLES and name == 'artifacts/' + role + '.json' and role not in roles:
-            roles[role] = json.loads(data)
+            try:
+                roles[role] = json.loads(data)
+            except (ValueError, UnicodeDecodeError):
+                errors.append('INVALID_ARTIFACT_JSON:' + role)
+                roles[role] = None
         else:
             errors.append('INVALID_ARTIFACT_ROLE:' + name)
     if total > LIMIT:
@@ -182,30 +233,77 @@ def check_package(package):
     for key in ['method_source_sha256', 'broken_snapshot_id', 'input_digest']:
         if not isinstance(identity.get(key), str) or not re.fullmatch('[0-9a-f]{64}', identity[key]):
             errors.append('INVALID_IDENTITY:' + key)
+    if not isinstance(identity.get('run_id'), str) or not identity['run_id'].strip():
+        errors.append('INVALID_IDENTITY:run_id')
     if not sources:
         missing.append('broken_source')
     elif sha(canonical(sources)) != identity.get('broken_snapshot_id'):
         errors.append('BROKEN_SNAPSHOT_MISMATCH')
-    value, trace, cfg = roles.get('method_input', {}), roles.get('front_trace', {}), roles.get('front_config', {})
-    if value:
+    for role, filename in [('method_input', 'method_input.v1_1.json'), ('front_trace', 'run_trace.v1_1.json'),
+                           ('execution_feedback', 'execution_feedback.v1.json')]:
+        if role in roles and not (role == 'execution_feedback' and roles[role] is None):
+            contract_errors(roles[role], filename, role, errors)
+    value, trace, cfg = [roles.get(role) if isinstance(roles.get(role), dict) else {}
+                         for role in ['method_input', 'front_trace', 'front_config']]
+    if 'method_input' in roles:
         body = {k:v for k,v in value.items() if k != 'input_digest'}
         if sha(canonical(body)) != value.get('input_digest') or value.get('input_digest') != identity.get('input_digest'):
             errors.append('METHOD_INPUT_DIGEST_MISMATCH')
         if value.get('initial_snapshot_id') != identity.get('broken_snapshot_id'):
             errors.append('METHOD_INPUT_SNAPSHOT_MISMATCH')
-    if trace:
+    if 'front_trace' in roles:
         for key, actual_value in [('run_id', identity.get('run_id')), ('input_digest', identity.get('input_digest')),
                                   ('snapshot_id', identity.get('broken_snapshot_id'))]:
             if trace.get(key) != actual_value:
                 errors.append('TRACE_IDENTITY_MISMATCH:' + key)
         if value and trace.get('case_id') != value.get('case_id'):
             errors.append('TRACE_CASE_MISMATCH')
-    if cfg and (cfg.get('run_id') != identity.get('run_id') or not isinstance(cfg.get('model'), dict)):
-        errors.append('EFFECTIVE_FRONT_CONFIG_REQUIRED')
+        context = trace.get('run_context')
+        if isinstance(context, dict):
+            for key in ['run_id', 'case_id', 'input_digest', 'snapshot_id']:
+                if context.get(key) != trace.get(key):
+                    errors.append('TRACE_CONTEXT_MISMATCH:' + key)
+    if 'front_config' in roles:
+        model = cfg.get('model')
+        if (cfg.get('run_id') != identity.get('run_id') or not isinstance(model, dict)
+                or not isinstance(model.get('model'), str) or not model['model'].strip()
+                or not positive_int(cfg.get('max_context_tokens'))):
+            errors.append('EFFECTIVE_FRONT_CONFIG_REQUIRED:front_config')
+        for key in ['max_output_tokens', 'max_total_tokens', 'max_model_calls', 'model_context_tokens',
+                    'initial_diagnosis_context_tokens', 'max_format_retries', 'top_n']:
+            if key in cfg and not positive_int(cfg[key], 0 if key == 'max_format_retries' else 1):
+                errors.append('INVALID_FRONT_CONFIG:front_config:' + key)
+        if 'max_seconds' in cfg and not finite_number(cfg['max_seconds'], 0.001):
+            errors.append('INVALID_FRONT_CONFIG:front_config:max_seconds')
+    if 'public_observations' in roles:
+        observations = roles['public_observations']
+        if not isinstance(observations, list):
+            errors.append('INVALID_PUBLIC_OBSERVATIONS:list_required')
+        else:
+            schema = load(Path(__file__).resolve().parents[1] / 'src/contractedge/contracts/schema/method_input.v1_1.json')
+            evidence = {**schema['$defs']['evidence'], '$defs': schema['$defs'], 'additionalProperties': True}
+            validator = Draft202012Validator(evidence)
+            for index, row in enumerate(observations):
+                if not validator.is_valid(row):
+                    errors.append(f'INVALID_PUBLIC_OBSERVATION:{index}')
+                elif row['snapshot_id'] != identity.get('broken_snapshot_id'):
+                    errors.append(f'OBSERVATION_SNAPSHOT_MISMATCH:{index}')
+    feedback = roles.get('execution_feedback')
+    if isinstance(feedback, dict):
+        for key in ['run_id', 'input_digest']:
+            if feedback.get(key) != identity.get(key):
+                errors.append('FEEDBACK_IDENTITY_MISMATCH:' + key)
+        if value and feedback.get('case_id') != value.get('case_id'):
+            errors.append('FEEDBACK_CASE_MISMATCH')
+        if feedback.get('to_snapshot') != identity.get('broken_snapshot_id'):
+            errors.append('FEEDBACK_SNAPSHOT_MISMATCH')
     if identity.get('scope') != 'front_semantic_failure' or identity.get('semantic_reviewer') != 'disabled' or identity.get('tokenizer') not in TOKENIZERS:
         errors.append('UNSUPPORTED_REPLAY_SCOPE')
     calls = roles.get('model_calls', [])
-    if not isinstance(calls, list) or not calls:
+    if not isinstance(calls, list):
+        errors.append('INVALID_MODEL_CALLS:list_required')
+        calls = []
+    if not calls:
         missing.append('complete_model_calls')
         calls = []
     bounds = identity.get('model_call_range')
@@ -218,14 +316,30 @@ def check_package(package):
         errors.append('INVALID_MODEL_CALL_RANGE')
         bounds = [0, 0]
     selected_calls = calls[bounds[0]:bounds[1]]
-    if trace and calls and len(trace.get('model_calls', [])) != len(selected_calls):
+    if not selected_calls:
+        missing.append('complete_model_calls')
+    front_calls = trace.get('model_calls') if isinstance(trace.get('model_calls'), list) else []
+    if trace and calls and len(front_calls) != len(selected_calls):
         errors.append('FRONT_CALL_RANGE_MISMATCH')
     for offset, call in enumerate(selected_calls):
         index = offset + bounds[0]
+        if not isinstance(call, dict):
+            errors.append(f'INVALID_MODEL_CALL:call_{index}')
+            continue
         request = call.get('request')
-        if not isinstance(request, dict) or set(request) != REQUEST_FIELDS:
+        if not isinstance(request, dict) or REQUEST_FIELDS - set(request):
             missing.append(f'complete_request_parameters:call_{index}')
             continue
+        if (set(request) != REQUEST_FIELDS
+                or any(not isinstance(request[key], str) or not request[key].strip() for key in ['model', 'prompt_version'])
+                or not isinstance(request['messages'], list) or not request['messages']
+                or any(not isinstance(m, dict) or not isinstance(m.get('role'), str) or not m['role']
+                       or not isinstance(m.get('content'), str) for m in request['messages'])
+                or not isinstance(request['metadata'], dict) or not positive_int(request['max_output_tokens'])
+                or not finite_number(request['temperature'])
+                or not (request['output_schema'] is None or isinstance(request['output_schema'], dict))
+                or request['thinking'] not in (None, 'enabled', 'disabled')):
+            errors.append(f'INVALID_REQUEST_PARAMETERS:call_{index}')
         # Bind exact request to the durable ledger, including every saved public request field.
         for key in ['model', 'prompt_version', 'messages', 'output_schema']:
             if request[key] != call.get(key):
@@ -234,16 +348,15 @@ def check_package(package):
             errors.append(f'LEDGER_REQUEST_MISMATCH:call_{index}:parameters')
         if not isinstance(call.get('response_content'), str) or not isinstance(call.get('response_metadata'), dict) or call.get('error'):
             missing.append(f'completed_response:call_{index}')
-        if trace and offset < len(trace.get('model_calls', [])):
-            front_call = trace['model_calls'][offset]
+        if trace and offset < len(front_calls):
+            front_call = front_calls[offset]
+            if not isinstance(front_call, dict):
+                errors.append(f'INVALID_FRONT_CALL:call_{index}')
+                continue
             for key in ['prompt_version', 'response_content', 'response_metadata']:
                 if front_call.get(key) != call.get(key):
                     errors.append(f'FRONT_LEDGER_MISMATCH:call_{index}:{key}')
-    return {'schema_version': VERSION, 'status': 'INVALID' if errors else ('INCOMPLETE' if missing else 'COMPLETE'),
-            'errors': errors, 'missing': sorted(set(missing)), 'identity': identity,
-            'configuration_sha256': sha(canonical(cfg)), 'manifest_sha256': sha((package/'manifest.json').read_bytes()),
-            'recorded_calls': len(selected_calls), 'model_call_range': bounds,
-            'total_ledger_calls': len(calls), 'real_model_http_calls': 0}
+    return package_result(package, identity, errors, missing, cfg, calls, bounds)
 
 
 class ReplayMismatch(RuntimeError):
