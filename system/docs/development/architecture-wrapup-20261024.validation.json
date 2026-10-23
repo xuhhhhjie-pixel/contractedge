@@ -1,0 +1,92 @@
+{
+  "schema_version": "ce.architecture_wrapup_validation.v1",
+  "scope": "Engineering developer snapshot; no formal effectiveness claim",
+  "runtime_commit": "d487c4648b144c4eb2f04a84ab37010bfa8043f9",
+  "snapshot": "architecture-d2-method-modes-20261024-r2",
+  "snapshot_sha256": "d9bd920dbcc963aa1e13af8e312e46ce31a2c0a30ede09f4720b515cda56ea34",
+  "source_sha256": "b9f9a83ebf9ced04a5b1672dd9870de5c57b54d5b6c257246d487759e323735a",
+  "runtime_delta_since_validated_commit": "NONE",
+  "smoke_status": "PASS",
+  "smoke_script_sha256": "6b624ff69e6e98d5d1b924a0c347731af0c9c651501bb76db27615d4b86fcbc7",
+  "checks": [
+    {
+      "name": "freeze-before",
+      "exit_code": 0,
+      "elapsed_seconds": 0.1646045818924904,
+      "log_sha256": "145c5e0d5decb43237cedb59d4fabb39d5bbccb6f65898bd24cdec3784ad484b"
+    },
+    {
+      "name": "preflight",
+      "exit_code": 0,
+      "elapsed_seconds": 0.9662939608097076,
+      "log_sha256": "b7b6ccce22791aeb6da01354c2642ecf4fe3f318031be56ff64465f5d02afa62"
+    },
+    {
+      "name": "config-binding",
+      "exit_code": 0,
+      "elapsed_seconds": 7.378086116164923,
+      "log_sha256": "ac1df16ca790419ec3bcb9c7ec409d7e66de17ec643c02b36de6c24fd3265868"
+    },
+    {
+      "name": "reload-state",
+      "exit_code": 0,
+      "elapsed_seconds": 6.876625940203667,
+      "log_sha256": "abca15354837c8155607e796af1c7518390fecbbae3cfa41a07e6df7099372ee"
+    },
+    {
+      "name": "two-consumers",
+      "exit_code": 0,
+      "elapsed_seconds": 11.133851237595081,
+      "log_sha256": "33ce9b24447f4f0f18a12487a68f96ec60c9f362ce2f237136438771936099a8"
+    },
+    {
+      "name": "ready-prepare",
+      "exit_code": 0,
+      "elapsed_seconds": 3.621621087193489,
+      "log_sha256": "e1f20b4c4dd208fb0ea0caf0b846637e8df1d38fb829ea9bbbd48dc29ddf133f"
+    },
+    {
+      "name": "ready-resume",
+      "exit_code": 0,
+      "elapsed_seconds": 6.326276257634163,
+      "log_sha256": "28850152e1723edfe2ee6f6ba441609f9da48047349000f5cc81a2ba4f45c7aa"
+    },
+    {
+      "name": "freeze-after",
+      "exit_code": 0,
+      "elapsed_seconds": 0.16459698602557182,
+      "log_sha256": "145c5e0d5decb43237cedb59d4fabb39d5bbccb6f65898bd24cdec3784ad484b"
+    }
+  ],
+  "prior_same_source_verification": {
+    "combined": "417 passed;45 subtests",
+    "portable": "1308 passed;86 subtests;historical exclusions preserved",
+    "native": "9 passed",
+    "actual_trial_matrix": "8 cells PASS",
+    "actual_method_panel": "24 unique cells PASS;48 sessions;96 containers;synthetic",
+    "github_pr13": "10/10 completed success at exact runtime_commit; live rechecked before wrapup"
+  },
+  "first_real_attempt": {
+    "status": "PUBLIC_EXECUTION_COMPLETE",
+    "http_calls": 4,
+    "rounds": 1,
+    "patch_bytes": 307,
+    "independent_public_checks": [
+      "selected:PASS",
+      "disabled:PASS",
+      "stable:PASS"
+    ],
+    "public_semantic_status": "UNKNOWN",
+    "patch_sha256": "fa8820d9d35babd0e47afd7e02380bdf8f08e5d6fa4b6a47806ab9389c28ecbb"
+  },
+  "remaining": [
+    "Public check capability/schema binding mismatch",
+    "Observer scenario/scope protocol mismatch",
+    "Unvalidated protocol WIP; new freeze/regressions and bounded retest not completed",
+    "Formal research effectiveness, generalization and full clean-machine migration not evaluated"
+  ],
+  "unvalidated_protocol_wip_shipped": false,
+  "new_model_http_calls": 0,
+  "formal_ready": false,
+  "wrapup_ci": "NOT_RUN_AT_COMMIT; inspect exact GitHub HEAD checks"
+}
