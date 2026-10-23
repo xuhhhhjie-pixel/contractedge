@@ -38,7 +38,12 @@ class BudgetedProvider:
 
     def complete_json(self, request: ModelRequest):
         prompt_tokens = sum(int(self.token_counter(m['content'])) for m in request.messages)
-        overhead = self.request_overhead(request)
+        prepare = getattr(self.provider, 'prepare_request', None)
+        dispatch = getattr(self.provider, 'complete_prepared_json', None)
+        prepared = prepare(request) if callable(prepare) and callable(dispatch) else None
+        overhead = prepared.overhead if prepared is not None else self.request_overhead(request)
+        if not isinstance(overhead, str):
+            raise ValueError('Provider request overhead must be serialized text')
         overhead_tokens = int(self.token_counter(overhead)) if overhead else 0
         if overhead_tokens < 0:
             raise ValueError('Provider overhead token count cannot be negative')
@@ -57,7 +62,10 @@ class BudgetedProvider:
         record['request_metadata'] = dict(request.metadata)
         record['output_schema'] = dict(request.output_schema) if request.output_schema is not None else None
         hook = getattr(self.provider, 'request_metadata', None)
-        if callable(hook):
+        if prepared is not None:
+            record['provider_request_metadata'] = dict(prepared.metadata)
+            record['transport_request'] = prepared.audit_record()
+        elif callable(hook):
             record['provider_request_metadata'] = dict(hook(request))
         record['transport_schema_tokens_reserved'] = overhead_tokens
         self.reserved_tokens += reserve
@@ -71,7 +79,8 @@ class BudgetedProvider:
                 raise BudgetExceeded('Global deadline expired during provider request preparation')
             if previous_timeout is not None:
                 self.provider.timeout_seconds = min(previous_timeout, remaining)
-            response = self.provider.complete_json(request)
+            response = (dispatch(request, prepared) if prepared is not None
+                        else self.provider.complete_json(request))
             record.update(response_content=response.content, response_metadata=dict(response.metadata))
             record['elapsed_seconds'] = time.monotonic() - self.started
             if self.remaining_seconds <= 0:
@@ -84,7 +93,9 @@ class BudgetedProvider:
             if getattr(exc, 'provider_metadata', None) is not None:
                 record['provider_error_metadata'] = dict(exc.provider_metadata)
             record['elapsed_seconds'] = time.monotonic() - self.started
-            record['error'] = type(exc).__name__ + ': ' + str(exc)
+            safe_error = getattr(self.provider, 'safe_error_message', None)
+            message = safe_error(exc) if callable(safe_error) else str(exc)
+            record['error'] = type(exc).__name__ + ': ' + message
             raise
         finally:
             if previous_timeout is not None:
