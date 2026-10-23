@@ -125,6 +125,10 @@ class ModifyOnlyConsumer:
     def execute(self, accepted_input, budget_port):
         accepted_input.verify(self.ID)
         item=accepted_input.execution_input;context=item.context
+        if item.intent_kind != 'SEMANTIC_CHANGESET' and context.previous_attempt and (
+                context.previous_attempt.get('consumer_id') != self.ID
+                or context.previous_attempt.get('intent_kind') != item.intent_kind):
+            raise PlanRejected('Correction input belongs to another consumer or semantic mode')
         policy=accepted_input.acceptance['scope_policy']
         self.accept(item,compute_snapshot(context.source),policy)
         files=[];used=0
@@ -148,6 +152,10 @@ class ModifyOnlyConsumer:
         # D2 supplies a mode-specific projection rather than deleting fields here.
         if item.intent_kind=='SEMANTIC_CHANGESET':
             payload['feedback']=context.feedback
+        elif context.feedback is not None:
+            if context.feedback.get('schema_version') != 'ce.mode_public_feedback.v1':
+                raise PlanRejected('Ablation feedback must originate from the public-only mode projector')
+            payload['public_feedback']=context.feedback
         request=ModelRequest(model=str(budget_port.config['model']),prompt_version=self.PROMPT,
             messages=({'role':'system','content':'Implement the actual repair input with literal replacements in current_files. Respect its existing conditions and preservation obligations. No shell or other file operation is available. Return JSON replacements only. Source inventory grants edit permission, and is not an authored semantic plan.'},
                       {'role':'user','content':json.dumps(payload,ensure_ascii=False)}),
