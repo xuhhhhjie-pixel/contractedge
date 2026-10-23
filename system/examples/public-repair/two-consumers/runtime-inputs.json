@@ -1,0 +1,36 @@
+{
+  "scenarios": [
+    {
+      "id": "selected",
+      "config": {
+        "enabled": true,
+        "selected_name": "orion"
+      },
+      "expected": {
+        "primary": "orion",
+        "secondary": "orion"
+      }
+    },
+    {
+      "id": "disabled",
+      "config": {
+        "enabled": false,
+        "selected_name": "ignored"
+      },
+      "expected": {
+        "primary": "default",
+        "secondary": "default"
+      }
+    },
+    {
+      "id": "stable",
+      "config": {
+        "enabled": true,
+        "selected_name": "orion"
+      },
+      "expected": {
+        "mode": "stable"
+      }
+    }
+  ]
+}
