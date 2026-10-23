@@ -1,8 +1,8 @@
 # ContractEdge developer entry
 
-当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准，入口为 [本轮开发冻结](docs/development/architecture-a-delivery-admission-20261023.snapshot.json)。包版本仍保留 `0.6.27`；修改后的源码不能沿用原 0.6.27 方法摘要或历史效果。`formal_ready=false`，默认入口验收离线开发工程；真实 API 前半验证单独登记，不运行正式数据实验或独立评分。
+当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准；待冻结变更见同一对象的 `status` 与 `planned_snapshot`。包版本仍为 `0.6.27`，方法身份由同版源码、配置和测试面板摘要确定，不能沿用历史版本效果。`formal_ready=false`，不运行正式数据实验或隐藏评分。阶段 B 的范围与验证登记见[隔离运行与可信公开观察说明](docs/development/2026-10-23-architecture-b-runtime-observer.md)。
 
-## 安装与当前冻结校验
+## 安装与冻结校验
 
 Linux、Python 3.10 或 3.12，在仓库根目录执行：
 
@@ -18,44 +18,74 @@ python scripts/contractedge_local.py --help
 python scripts/verify_development_snapshot.py
 ```
 
-`requirements-dev.lock` 使用 PyYAML 6，与原实验的 PyYAML 5.4.1 环境不同；`--no-deps` 表示显式选择开发依赖，并不复现历史正式实验环境。原生 TopoMen 运行源码和原 MIT 许可保留在 `vendor/topomen/`，此处接入的是源码修复消费者 `DefaultAgent`。
+`requirements-dev.lock` 使用 PyYAML 6；此开发环境不复现历史 PyYAML 5.4.1 实验环境。安装时清除 PYTHONPATH，避免 pip 构建 editable metadata 时提前解析历史依赖；运行时使用上述新 tree 的显式路径。原生 TopoMen 源码与 MIT 许可保留在 `vendor/topomen/`，接入的是源码修复消费者 DefaultAgent。
 
-新校验器不修改冻结。它核对 `src/` 中全部 `.py/.json` 的精确文件集、逐文件摘要、配置与工具文件、固定测试面板及对应摘要；缺失、额外源码或字节变化均失败。`--snapshot docs/development/NAME.snapshot.json` 可检查指定历史开发冻结，但旧版本本就可能与当前源码不同。最早没有逐测试文件摘要的 v1 冻结仅能显式加 `--allow-legacy-unbound` 检查，结果标为 `LEGACY_UNBOUND`。修改源码后应生成新的同版开发冻结，不能改写旧冻结使检查变绿。
+校验器只读核对 `src/` 的全部 `.py/.json` 精确文件集、配置、工具及固定测试面板。`--snapshot docs/development/NAME.snapshot.json --require-current-bindings` 可指定新冻结；历史冻结可能与当前源码不同。最早的 list-only v1 仅能显式加 `--allow-legacy-unbound`，结果为 LEGACY_UNBOUND。源码变化后生成新冻结，不能修改旧冻结使其通过。`DELIVERY_MANIFEST.json` 和原上传校验器保留历史字节语义。
 
-原 `DELIVERY_MANIFEST.json` 与 `scripts/verify_delivery.py` 保留原上传语义，仅用于原上传字节；当前开发源码已有有意差异，不应刷新该历史清单。`docs/development/` 中旧冻结和报告也保留各自范围。
+## 默认 host 示例：仅 synthetic 工程回归
 
-## 零模型调用的公开示例
-
-这些小型合成公开案例不需要数据下载、模型服务或 API 密钥，每次使用新的输出目录：
+默认 provider 为 synthetic，不使用模型服务或 API 密钥。host 路径的 Python 子进程没有操作系统文件系统或网络隔离，仅用于三个公开合成开发例子：
 
 ```bash
-python scripts/run_public_demo.py --case config-binding --output /tmp/contractedge-demo-config
-python scripts/run_public_demo.py --case reload-state --output /tmp/contractedge-demo-reload
-python scripts/run_public_demo.py --case two-consumers --output /tmp/contractedge-demo-consumers
+python scripts/run_public_demo.py --case config-binding --output /tmp/contractedge-host-config-new
+python scripts/run_public_demo.py --case reload-state --output /tmp/contractedge-host-reload-new
+python scripts/run_public_demo.py --case two-consumers --output /tmp/contractedge-host-consumers-new
 ```
 
-默认 fixture provider，沿用真实前半流程、READY 校验、执行消费者与公开反馈；它们只证明公开示例中的工程行为，不证明 benchmark 修复率。保存 READY 后可在新的进程继续一次。该保存点通过原子领取标记防止重复派发；失败也保留该标记及首次续跑账本，不清除标记以重置额度：
+每次使用新输出目录。它们经过真实诊断、计划、消费者和反馈入口，但不是 benchmark 修复率证据。host 候选执行不接受非 synthetic provider；本轮真实 provider 验收使用下面已验证的 isolated 路径。旧 host API 前半记录仅保留自身版本与范围。
 
-```bash
-python scripts/run_public_demo.py --case config-binding --save-ready --output /tmp/contractedge-ready
-python scripts/run_public_demo.py --resume-ready /tmp/contractedge-ready --output /tmp/contractedge-resumed
-```
+## isolated：候选与公开检查分开运行
 
-保存目录包含公开冻结、READY trace、配置和前段调用账本；继续运行必须核对身份与预算。`--provider-config` 可显式选择配置；非 synthetic provider 仅允许配合 `--save-ready` 完成前半诊断和计划，禁止在此 host 示例运行其候选或续跑其 READY。此示例的 Python 子进程不提供网络/文件系统隔离；真实模型生成代码需后续隔离 runner。旧 `configs/development.example.json`、`development-local-model.json` 及历史脚本包含外部环境假定，不能直接当作默认公开示例配置。
-
-## 回归与实际运行能力
-
-快速离线回归：
-
-```bash
-python -m pytest -q tests/test_contracts.py tests/test_model_provider.py tests/test_provider_output_identity.py tests/test_run_budget.py tests/test_money_budget.py tests/test_public_failure.py tests/test_public_failure_contracts.py tests/test_transport_request_audit.py tests/test_development_snapshot.py tests/test_public_demo.py tests/test_evidence_delivery.py tests/test_front_delivery.py tests/test_request_admission.py tests/test_production_request_admission.py tests/test_stage_delivery_admission.py
-```
-
-完整可移植开发子集包含原有 Docker 时序探测，必须有实际可用的 CPU 配额和内存限制；不能去掉限额或跳过失败。先缓存固定可信镜像，再将 `runtime-check` 实际协商的 Docker 环境仅用于本次测试：
+先为当前 Docker daemon 缓存固定可信镜像；RuntimeSession 自身始终使用 `--pull=never`，没有 host 降级。镜像已包含本例需要的 `/usr/bin/python3`，候选不依赖在容器里安装第三方包。
 
 ```bash
 export CONTRACTEDGE_RUNTIME_IMAGE='golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d'
+export DOCKER_HOST='unix:///var/run/docker.sock'
 docker pull "$CONTRACTEDGE_RUNTIME_IMAGE"
+
+python scripts/run_public_demo.py --case config-binding --runtime isolated --runtime-image "$CONTRACTEDGE_RUNTIME_IMAGE" --output /tmp/contractedge-isolated-config-new
+python scripts/run_public_demo.py --case reload-state --runtime isolated --runtime-image "$CONTRACTEDGE_RUNTIME_IMAGE" --output /tmp/contractedge-isolated-reload-new
+python scripts/run_public_demo.py --case two-consumers --runtime isolated --runtime-image "$CONTRACTEDGE_RUNTIME_IMAGE" --output /tmp/contractedge-isolated-consumers-new
+```
+
+`DOCKER_HOST` 应指向自己有权限且资源限制有效的 daemon；上述是常见 Linux socket。API 版本由当前客户端和 daemon 协商，不把某台机器的 1.43 写成通用要求。资源/权限/镜像检查失败就保留失败，不取消 CPU、内存或 PID 限额。
+
+候选与观察器使用不同容器。候选只见只读快照 `/source`、去除 expected 的公开请求 `/inputs/public-inputs.json` 和有界 `/tmp`；观察器只见可信复制的 `/observations/stdout.bin`、`stderr.bin`、`run.json` 与冻结 `/checks/spec.json`，不挂候选源码或候选可写目录。控制层不导入候选模块。
+
+运行层核验实际镜像、非 root UID、只读挂载、network=none、capabilities/no-new-privileges 和内核 cgroup 限额。stdout/stderr 分别及合计限额，deadline 覆盖准备、运行和观察；清理只获得独立短宽限。清理未确认、非零退出、超时、截断、伪造 PASS 或缺检查不能变成可信完整行为 PASS。每次会话持久化 token、container ID、实际核验与清理回执。
+
+当前观察能力限于三个公开开发例子的有限进程输出，不能据此宣称候选内部函数事实、完整部署收敛或正式数据集已全面隔离。注册的 selected/disabled/stable 公开断言不能被模型漏掉的 P 或模型自报 PASS 抹除；原本 UNKNOWN 的义务也不会仅因 profile PASS 被提升。候选保护中的保持项来自固定公开 profile 的基线 PASS，不能由模型删除 P2/P3 改变；观察或清理不完整时不得晋级。真实模型必须自行提供受支持的行为检查绑定，synthetic fixture 的显式绑定不是模型能力成绩。
+
+## READY：继承同版配置与预算
+
+isolated READY 可在新进程继续一次；续跑继承 runtime、provider、方法摘要及前段调用账本，不能改 runtime 或另建额度：
+
+```bash
+python scripts/run_public_demo.py --case config-binding --runtime isolated --runtime-image "$CONTRACTEDGE_RUNTIME_IMAGE" --save-ready --output /tmp/contractedge-isolated-ready-new
+python scripts/run_public_demo.py --resume-ready /tmp/contractedge-isolated-ready-new --output /tmp/contractedge-isolated-resumed-new
+```
+
+原子 claim 防止重复派发；失败也保留 claim 和首次续跑账本。未知/不完整调用不重发，旧源码的 READY 不能替换 hash 后继续新方法。这是 deliberate READY 边界，尚不是任意崩溃恢复。
+
+## 回归与 CI 范围
+
+不需要 Docker 的控制层单测：
+
+```bash
+python -m pytest -q tests/test_runtime_session.py tests/test_public_observer.py
+python -m pytest -q tests/test_public_isolated_demo.py -k 'not real_'
+```
+
+实际 Docker 集成与三例/READY 继承（先设置上面的固定镜像和 Docker socket）：
+
+```bash
+python -m pytest -q tests/test_runtime_session_integration.py
+CONTRACTEDGE_RUN_ISOLATED_DEMOS=1 python -m pytest -q tests/test_public_isolated_demo.py -k real_
+```
+
+原完整 portable 子集保留六项历史/native 排除，不能去掉限额或删失败来变绿。先核验实际 CPU/内存，再将协商结果仅用于本次运行：
+
+```bash
 python - <<'PY'
 import json, os, subprocess, sys
 from contractedge.execution.runtime_preflight import check_runtime, scoped_runtime_environment
@@ -66,43 +96,27 @@ if report['status'] != 'PASS' or report['runtime_verified'] is not True:
 with scoped_runtime_environment(report['environment_overrides']):
     raise SystemExit(subprocess.call([sys.executable, 'scripts/test_portable.py']))
 PY
-```
-
-检查实际 CPU/内存值后才判定运行能力通过。API 版本由目标 daemon 协商，不能把某台历史机器的 `DOCKER_API_VERSION=1.43` 写成所有机器的要求；无 Docker、权限不足、资源限制无效都保留失败。
-
-`test_portable.py` 明确列出 6 个历史/native 排除模块，原入口与排除名单保留。单独运行 vendored native fixture 模块，并单独报告结果：
-
-```bash
 python -m pytest -q tests/test_topomen_agent.py
 ```
 
-这两种范围均不等于原服务器的全量 662+22 验收。原有历史 fixture 和真实 ACK 原始公开包未在干净克隆中恢复；该历史重放限制不阻塞上述合成公开示例。公开观察不充分时保持 UNKNOWN，工程测试通过也不代表方法效果已验收。
+portable 与单列 native 均不等于原服务器全量 662+22 验收。历史 ACK 原始公开包缺失不阻塞这些合成示例，也不能由它们补造历史结果。
 
-[GitHub Actions](../.github/workflows/development.yml) 分别运行 Python 3.10/3.12 的契约/provider/预算/回放测试、Linux 实际 Docker 资源核对与原有完整可移植子集、单独 native fixture，以及三个公开示例和跨进程 READY 继续。所有 job 都不配置模型密钥；工作流文件存在和本地 YAML 检查不代表 GitHub 已执行成功。
+[GitHub Actions](../.github/workflows/development.yml) 的 focused job 只跑无 Docker 控制层测试；独立 Docker job 核对实际资源、RuntimeSession 反例、三例 isolated 和跨进程 READY 继承；native 与 host synthetic 示例另列范围。CI 不配置模型密钥。工作流存在或本地 YAML 可解析，不代表 GitHub 已运行成功，状态以实际 checks 为准。
 
-## 历史与后续工作
+## 真实 provider 与费用边界
 
-`CURRENT_STATUS.json.historical_status.original_record` 保存旧状态和结果，包含原 0.6.27 ACK 的 `INVALID_PLAN/NO_CANDIDATE`、旧预算、冻结和曾经运行中的状态，均为历史佐证，不是当前开发下一步阻塞项。2026-10-22 的 [正式实验计划](docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md) 记录当时准入设计；当前开发入口和下一步以 `current_development`、`next_actions` 及新冻结为准。
-
-根目录 `benchmark/` 和 `tools/` 保留原数据工具，本轮不下载或读取数据、GT/Fixed、隐藏评分、凭据及运行目录。正式实验与效果验收仍需独立授权和同版登记；小规模真实前半验证已有本轮30元费用授权，仍需新凭据安全配置及同版登记；旧结果不得混入新版本分母。
-
-
-## 组合 profile 与官方 API 前半验证
-
-`configs/development-local-fixture.example.json` 可直接复制并用于三个离线例子，执行后端仍按案例选择现有消费者。`configs/deepseek-official-front.example.json` 仅保存公开前半计划，需先把新 key 配置到环境变量；配置中只有环境变量名，不包含凭据。命令示例：
+本轮真实 provider 后半只在 isolated 正反例和 synthetic 闭环通过后开放，且先验证 Broken 的目标 FAIL 与保持控制 PASS。以下命令需要事先批准的配置、可用的安全凭据通道和同一个持久费用账本，本 README 不触发调用：
 
 ```bash
-python scripts/run_public_demo.py --case config-binding --save-ready --provider-config configs/deepseek-official-front.example.json --output /tmp/contractedge-deepseek-front-new-attempt
+python scripts/run_public_demo.py --case config-binding --runtime isolated --runtime-image "$CONTRACTEDGE_RUNTIME_IMAGE" --provider-config /absolute/path/to/approved-provider.json --output /tmp/contractedge-provider-isolated-new-attempt
 ```
 
-官方当前文档的 `deepseek-flash` 使用 `https://api.deepseek.com`，JSON output 使用 `json_object`，没有据此声明严格 `json_schema`。关闭 thinking，模型身份要求匹配；返回未知别名时保留响应/用量并停止，不能猜别名以绕过检查。计数器按 UTF-8 字节保守上界控制提示预算，不冒充官方 tokenizer。
+`--provider-config` 必须显式约束 token、时间、调用、轮次和费用；凭据只用环境变量引用，不放入配置、日志或产物。`configs/deepseek-official-front.example.json` 是前半示例，不能不经核对当作新的全流程预算。已授权尝试共享同一 30 元账本，不能改路径、删除账本或逐模式重置。未知响应保留预留，不自动重发；当前模型、价格及输出能力在实际付费前核对。同版真实单例是否运行及其 PASS/FAIL/UNKNOWN/无候选，均按新 validation 记录，不继承旧 READY 或历史费用结果。
 
-该 profile 的 30 元是本轮多次尝试共享的硬上限。所有尝试必须使用同一个持久 `money_budget.path`，不得删账本、改路径或建新 allowance。失败及未知响应保留全额预留；先定位再决定是否有限复测，不自动重发。`3/12` 元每百万输入/输出是内部保守记账费率，按官方文档峰值 `$0.3/$1.2` 再乘 10 预留，并非实时汇率或官方人民币结算收据。价格来源：https://api-docs.deepseek.com/quick_start/pricing ，核对日期2026-10-23；付费前应再次核对账户当前计费。实际费用应与官方账户账单区分，未收到响应的调用不能记零。
+## 历史与后续
 
-默认公开示例和 GitHub CI 无真实模型 HTTP。付费前半结果无论 READY、INVALID_PLAN 或身份拒绝均留痕，不能据此声明真实修复成功或论文效果。原 ACK 历史根因仍未验证。
+阶段 A 的[交付与准入说明](docs/development/2026-10-23-architecture-a-delivery-admission.md)保留：必要失败证据缺失停止派发；front.delivery 绑定实际输入和最终请求；max_context_tokens 含 provider/schema 输入开销，model_context_tokens 限输入加输出。交付不等于模型采用或修复正确。
 
+`CURRENT_STATUS.json.historical_status.original_record`、原上传清单和历史 freeze 保留旧版本结果。当前下一步以 current_development、next_actions 和新同版证据为准。跨阶段统一引用、StageResult/transition、持久候选事务/任意中断恢复、消费者解耦和研究模式仍按完整架构方案逐项推进，不能把 B1/B2 当作整个架构目标完成。
 
-Python3.10安装时显式清除PYTHONPATH，避免pip在安装待构建的editable metadata时提前解析原历史依赖。运行测试时仍使用上述PYTHONPATH。首次GitHub CI的该安装失败保留记录；同一独立3.10/pip26.2.1/PyYAML6环境已复现失败并验证清PYTHONPATH后安装通过，无需修改历史pyproject依赖或升级pip。
-
-
-本阶段新增[证据交付与请求准入说明](docs/development/2026-10-23-architecture-a-delivery-admission.md)。每轮保留 public-evidence.delivery.json；必要失败证据缺失时停止派发。front.delivery.json 绑定实际输入文件、最终请求及传输摘要，交付记录不代表模型已采用证据或修复正确。max_context_tokens统一约束包含provider/schema开销的输入，model_context_tokens如有配置则约束输入加输出；旧调用预算与费用账本保留。
+根目录 `benchmark/` 与 `tools/` 保留；本阶段不读取数据、GT/Fixed、隐藏评分或其他实验目录，不运行 formal150。工程闭环和公开单例结果不能替代论文效果、消融或泛化评价。

@@ -1,0 +1,22 @@
+{
+  "schema_version": "ce.development_validation.v1",
+  "development_snapshot_id": "architecture-b-runtime-observer-20261023-r2",
+  "snapshot_sha256": "58231da28569c831aaf5ecfc7db04e0bbf3b43d1d7ff24d514a15690ccf2d563",
+  "source_sha256": "520b1e156789b617095f398b40ae07552513b9038a1df2228c367de9426e5692",
+  "status": "VALIDATED_OFFLINE",
+  "portable": "Historical fixture / native integration modules NOT RUN: test_ready_support_consistency.py, test_probe_profiles_v2.py, test_compact_render_inventory.py, test_diagnosis_error_aggregation.py, test_structured_observation_adapters.py, test_topomen_agent.py\n................................................................... [  6%]\n........................................................................ [ 13%]\n..................................................................... [ 20%]\n................................................... [ 25%]\n..................................................................... [ 32%]\n........................................................................ [ 39%]\n...................................................................... [ 45%]\n........................................................................ [ 52%]\n........................................................................ [ 59%]\n.............................................................. [ 65%]\n........................................................................ [ 72%]\n.......................................ssss....................................................................... [ 84%]\n........................................................................ [ 91%]\n........................................................................ [ 98%]\n...................                                                      [100%]\n1021 passed, 4 skipped, 74 subtests passed in 122.16s (0:02:02)\n",
+  "native": ".........                                                                [100%]\n9 passed in 2.76s\n",
+  "actual_isolated_public_tests": "....                                                                     [100%]\n4 passed, 52 deselected in 30.71s\n",
+  "runtime_limits": "Actual cgroup CPU 200000/100000 and memory 2147483648 verified; RuntimeSession integration is included in portable.",
+  "candidate_guard_counterexamples": "Two exact pre-guard repair overlay cases fail by retaining the trial; current cases restore S0 and prevent review after unconfirmed cleanup.",
+  "receipt_binding_counterexamples": "33 exact v1-helper counterexamples fail; current 52 offline checks pass.",
+  "evidence_manifests": {
+    "runtime_integration": "414fe5ad219388cd137c47302ee98eb9b362025ed0494883c81353c3b548bbaf",
+    "candidate_guard": "47238c4c95cfeef8f25924fc9383cc9fd65493c9e37d9e9cddf2f73d62f8f5ed",
+    "receipt_binding": "5f827eef78ecd02c2ddde4958b15edd8741634c5a8565d9110ef752d14995f2a"
+  },
+  "new_model_http_calls": 0,
+  "formal_ready": false,
+  "scope": "Three exposed synthetic public developer cases; independent runtime controls. Not a benchmark result or full architecture completion.",
+  "github_actions": "NOT_RUN_AT_LOCAL_FREEZE"
+}

@@ -46,7 +46,7 @@ def _read(path):
     return json.loads(Path(path).read_text(encoding='utf-8'))
 
 
-def freeze_example(case, output):
+def freeze_example(case, output, *, runtime='host'):
     """Build the existing MethodInput public-task protocol from tiny source files."""
     example = SYSTEM_ROOT / 'examples/public-repair' / case
     frozen = output / 'frozen-public'
@@ -68,11 +68,16 @@ def freeze_example(case, output):
                     member.size, member.mode = len(data), 0o644
                     archive.addfile(member, io.BytesIO(data))
     (task / 'task.yaml').write_text('schema_version: contractedge.method_task.v1\nrequirement_file: requirement.md\nsource_archive: source.tar.gz\nexecution_config: environment.json\n', encoding='utf-8')
-    write_json(task / 'environment.json', {
-        'editable_paths': ['app.py'], 'network': 'host-process-not-enforced',
-        'observation_boundary': 'Host Python child process runs published controls; no OS network/filesystem sandbox. Only synthetic-provider execution is admitted.',
+    environment = {
+        'editable_paths': ['app.py'], 'network': 'none' if runtime == 'isolated' else 'host-process-not-enforced',
+        'observation_boundary': ('Isolated candidate process output with independent frozen public assertions; effective isolation is verified per actual invocation.'
+            if runtime == 'isolated' else 'Host Python child process runs published controls; no OS network/filesystem sandbox. Only synthetic-provider execution is admitted.'),
         'scenarios': [{'name': 'selected-and-preservation', 'argv': ['python', 'published-observer']}],
-    })
+    }
+    if runtime == 'isolated':
+        from contractedge.execution.public_observer import public_check_capabilities
+        environment['registered_public_checks'] = public_check_capabilities()
+    write_json(task / 'environment.json', environment)
     names = sorted(p.name for p in task.iterdir())
     manifest = {'case_id': case, 'source_sha256': file_sha(task / 'source.tar.gz'),
                 'files': names, 'file_sha256': {n: file_sha(task / n) for n in names}}
@@ -174,6 +179,42 @@ class PublicExampleRunner:
         return result
 
 
+class IsolatedPublicExampleRunner(PublicExampleRunner):
+    """Production public-runner protocol backed by independent container checks."""
+    runtime_kind = 'isolated-public-process'
+    requires_public_profile = True
+
+    def __init__(self, public, case, runtime_config):
+        super().__init__(public, case)
+        from contractedge.execution.public_observer import IsolatedPublicObserver
+        if set(runtime_config) - {'image', 'docker_host', 'docker_api_version'}:
+            raise ValueError('Unsupported public runtime configuration')
+        self.observer = IsolatedPublicObserver(**runtime_config, timeout_seconds=self.timeout_seconds)
+        self.first_observation = True
+
+    def observe(self, workspace, output):
+        record = _read(workspace / 'workspace.json')
+        # repair.reserve_public_time narrows this timeout using the shared
+        # deadline; do not retain the constructor's original 30-second allowance.
+        self.observer.timeout_seconds = self.timeout_seconds
+        report = self.observer.observe(Path(record['source_root']), workspace / 'inputs/runtime-inputs.json', output)
+        if report.get('status') == 'EXECUTION_PASS':
+            from contractedge.execution.public_observer import isolated_observation_complete
+            if not isolated_observation_complete(report):
+                report = {**report, 'status': 'INVALID_OBSERVATION',
+                    'errors': list(report.get('errors', [])) + ['Required public profile or runtime receipt is missing, incomplete or stale']}
+        if self.first_observation:
+            self.first_observation = False
+            checks = {row['id']: row['status'] for row in report.get('required_public_profile', {}).get('checks', [])}
+            if (report.get('status') != 'EXECUTION_PASS'
+                    or report.get('required_public_profile', {}).get('status') != 'COMPLETE'
+                    or checks != {'selected': 'FAIL', 'disabled': 'PASS', 'stable': 'PASS'}):
+                report['status'] = 'INVALID_OBSERVATION'
+                report.setdefault('errors', []).append('The frozen Broken must fail the registered target while preserving the published controls before any model dispatch.')
+                write_json(Path(output) / 'observation.json', report)
+        return report
+
+
 class SyntheticExampleProvider:
     """Deterministic public-only responses, still validated by every real stage."""
     def __init__(self, case, runner):
@@ -240,6 +281,16 @@ class SyntheticExampleProvider:
                                            ('P2', 'Disabled output retains default_name.'), ('P3', 'Mode remains stable for every public scenario.')]],
                 'preserve_constraints': [], 'open_obligations': [],
                 'outcome_coverage': [{'outcome_id': oid, 'repair_supported': ['V1'], 'preserve_required': [], 'unresolved': []}], 'status': 'READY'}
+        if (not version.startswith('diagnosis.') and version not in {'topomen-source-execution.v1', 'public-postcondition-review.v1'}
+                and isinstance(self.runner, IsolatedPublicExampleRunner)):
+            # This synthetic provider explicitly declares its finite predicate
+            # bindings. Real model responses must supply their own bindings.
+            for condition in payload['postconditions']:
+                suffix = {'P1': 'selected', 'P2': 'disabled', 'P3': 'stable'}[condition['id']]
+                condition.update(verification_kind='PUBLIC_BEHAVIOR',
+                    behavior_check_refs=['contractedge-public-process-v1:' + suffix],
+                    check_coverage='ALL_OF',
+                    coverage_rationale='This postcondition is restricted to its published finite process-output predicate; it makes no hidden or internal-state claim.')
         return ModelResponse(json.dumps(payload), {'provider': 'deterministic-public-example', 'zero_cost': True})
 
 
@@ -338,7 +389,8 @@ def _claim_ready(saved, output):
     return claim
 
 
-def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_config=None):
+def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_config=None,
+             runtime=None, runtime_image=None):
     started = time.monotonic()
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
@@ -380,7 +432,6 @@ def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_conf
     else:
         if case not in CASES:
             raise ValueError('Select a public example with --case')
-        public = freeze_example(case, output)
         config = default_config(case)
         if provider_config is not None:
             supplied = _safe_config(_read(provider_config))
@@ -391,8 +442,29 @@ def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_conf
             config.update(supplied)
         if config.get('money_budget') is not None:
             config['money_budget']['path'] = str(Path(config['money_budget']['path']).resolve())
+    if resume_ready is not None:
+        if runtime is not None or runtime_image is not None:
+            raise ValueError('READY continuation inherits the frozen execution runtime; overrides are prohibited')
+    else:
+        kind = runtime or config.get('public_runtime', 'host')
+        if kind not in {'host', 'isolated'}:
+            raise ValueError('Unsupported public runtime')
+        config['public_runtime'] = kind
+        if kind == 'isolated':
+            settings = dict(config.get('public_runtime_config') or {})
+            settings['image'] = runtime_image or settings.get('image') or os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+            settings['docker_host'] = settings.get('docker_host') or os.environ.get('DOCKER_HOST', 'unix:///var/run/docker.sock')
+            # API negotiation belongs to the current daemon, not a baked-in API version.
+            config['public_runtime_config'] = settings
+            if not settings.get('image'):
+                raise ValueError('Isolated runtime requires an explicit cached digest-pinned image')
+        elif runtime_image is not None:
+            raise ValueError('--runtime-image requires --runtime isolated')
+        public = freeze_example(case, output, runtime=kind)
     _safe_config(config)
-    if config.get('provider') != 'synthetic' and not save_ready:
+    if config.get('public_runtime', 'host') == 'isolated' and config.get('observe_broken', True) is not True:
+        raise ValueError('Isolated public execution requires the actual Broken observation before model dispatch')
+    if config.get('provider') != 'synthetic' and not save_ready and config.get('public_runtime', 'host') != 'isolated':
         raise ValueError('Non-synthetic provider execution requires a sandbox observer; only --save-ready is supported')
     write_json(output / 'run.config.json', config)
     method, projection = method_input_from_task(public, case)
@@ -401,15 +473,26 @@ def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_conf
         'config_digest': canonical_digest(config), 'method_input_digest': method['input_digest'],
         'initial_snapshot_id': method['initial_snapshot_id'], 'source_archive_sha256': method['archive_sha256'],
         'frozen_public_files': _freeze_inventory(output / 'frozen-public')})
-    runner = PublicExampleRunner(public, case)
+    runner = (IsolatedPublicExampleRunner(public, case, config['public_runtime_config'])
+              if config.get('public_runtime', 'host') == 'isolated' else PublicExampleRunner(public, case))
     if resume_ready is not None:
         claim = _claim_ready(saved, output)
         write_json(output / 'continuation.claim.json', claim)
     provider, counter = _provider(config, case, runner)
     if save_ready:
         workspace = output / 'ready-workspace'
+        remaining = float(config['max_elapsed_seconds']) - (time.monotonic() - started)
+        if remaining <= 0:
+            raise ValueError('Global wall-clock budget exhausted before Broken preparation')
+        runner.timeout_seconds = min(float(config.get('public_timeout_seconds', 600)), remaining)
         runner.prepare(case, workspace, output / 'prepare')
+        remaining = float(config['max_elapsed_seconds']) - (time.monotonic() - started)
+        if remaining <= 0:
+            raise ValueError('Global wall-clock budget exhausted before Broken observation')
+        runner.timeout_seconds = min(float(config.get('public_timeout_seconds', 600)), remaining)
         observation = runner.observe(workspace, output / 'broken-public')
+        if observation.get('status') in {'INFRA_ERROR', 'INVALID_OBSERVATION', 'BUDGET_EXCEEDED'}:
+            raise ValueError('Broken observation could not be completed; model dispatch is prohibited')
         from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
         capabilities = resolve_execution_capabilities(projection['public_execution_capabilities'], backend=config['execution_backend'])
         front_config = {**config, 'public_execution_capabilities': capabilities,
@@ -464,7 +547,9 @@ def main(argv=None):
     parser.add_argument('--output', type=Path, help='New directory; existing output is never overwritten.')
     parser.add_argument('--save-ready', action='store_true', help='Stop after a validated READY plan and persist its exact ledger.')
     parser.add_argument('--resume-ready', type=Path, help='Continue a deliberate READY checkpoint in a new process/output; budgets are inherited.')
-    parser.add_argument('--provider-config', type=Path, help='Optional provider JSON for --save-ready planning only; may incur API cost. Live code execution requires a future sandbox runner.')
+    parser.add_argument('--provider-config', type=Path, help='Optional provider JSON; live execution requires --runtime isolated and a persistent money budget.')
+    parser.add_argument('--runtime', choices=['host', 'isolated'], help='Host remains synthetic-only; isolated verifies actual candidate and observer boundaries.')
+    parser.add_argument('--runtime-image', help='Cached digest-pinned image for isolated execution; no automatic pull.')
     args = parser.parse_args(argv)
     if args.list:
         print(json.dumps(CASES, indent=2))
@@ -475,7 +560,8 @@ def main(argv=None):
         parser.error('--save-ready and --resume-ready are mutually exclusive')
     try:
         summary = run_demo(args.case, args.output, save_ready=args.save_ready,
-                           resume_ready=args.resume_ready, provider_config=args.provider_config)
+                           resume_ready=args.resume_ready, provider_config=args.provider_config,
+                           runtime=args.runtime, runtime_image=args.runtime_image)
     except (ValueError, OSError) as exc:
         parser.exit(2, f'public demo: {exc}\n')
     print(json.dumps(summary, sort_keys=True))
