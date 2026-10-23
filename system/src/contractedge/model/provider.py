@@ -6,6 +6,7 @@ import json
 import os
 import re
 import urllib.request
+from urllib.parse import urlsplit, unquote, parse_qsl
 from contextvars import ContextVar
 from dataclasses import dataclass, field
 from typing import Any, Mapping, Protocol
@@ -95,7 +96,9 @@ class _IdentityProvider:
     def _prepared_for(self, request):
         self._check_available()
         active = _active_prepared_request.get()
-        if active is not None and active[0] is self and active[1] is request:
+        if active is not None and active[0] is self:
+            if active[1] is not request:
+                raise ValueError('Provider override changed an already prepared request; transform it before preparation')
             return active[2]
         return self.prepare_request(request)
 
@@ -105,7 +108,18 @@ class _IdentityProvider:
         message = re.sub(r'https?://[^\s<>\"\']+', '[provider endpoint]', message)
         key_env = getattr(self, 'api_key_env', None)
         key = os.environ.get(key_env) if key_env else None
-        return message.replace(key, '[credential]') if key else message
+        sensitive = {key} if key else set()
+        try:
+            parsed = urlsplit(self.base_url)
+            sensitive.update(v for v in (parsed.username, parsed.password) if v)
+            sensitive.update(v for _, v in parse_qsl(parsed.query) if v)
+        except ValueError:
+            # A malformed endpoint should not surface its raw parser diagnostic.
+            return type(exc).__name__ + ': provider request failed'
+        sensitive.update(unquote(v) for v in tuple(sensitive))
+        for value in sorted(sensitive, key=len, reverse=True):
+            message = message.replace(value, '[credential]')
+        return message
 
     def _configure_identity(self, policy, aliases):
         if policy not in {'record', 'require_match'}:

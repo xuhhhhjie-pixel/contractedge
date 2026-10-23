@@ -242,3 +242,36 @@ def test_credential_bearing_endpoint_and_errors_do_not_enter_transport_ledger(tm
     for sensitive in ('fixture-user', 'fixture-password', 'fixture-query', 'transport-fixture-token',
                       'redirect-user', 'redirect-password', 'redirect-query', 'Authorization'):
         assert sensitive not in serialized
+
+
+def test_subclass_cannot_silently_replace_an_already_audited_request(tmp_path):
+    from dataclasses import replace
+    class TransformingPort(OpenAICompatibleProvider):
+        def complete_json(self, req):
+            return super().complete_json(replace(req, temperature=0.9))
+    port = TransformingPort('https://fixture.invalid/v1', 'CE_TRANSPORT_FIXTURE_KEY')
+    budget, path = budget_with_disk_ledger(port, tmp_path)
+    with patch('urllib.request.urlopen') as send, pytest.raises(ValueError, match='already prepared'):
+        budget.complete_json(request())
+    send.assert_not_called()
+    record = json.loads(path.read_text())[0]
+    assert json.loads(record['transport_request']['body_utf8'])['temperature'] == 0.25
+    assert record['error'] and budget.reserved_tokens > 0
+
+
+@pytest.mark.parametrize('fragment', ['fixture-password@fixture.invalid', 'encoded@password', 'query-secret'])
+def test_partial_url_credentials_are_removed_from_errors(tmp_path, fragment):
+    import http.client
+    port = OpenAICompatibleProvider(
+        'https://fixture-user:encoded%40password@fixture.invalid/v1?api_key=query-secret',
+        'CE_TRANSPORT_FIXTURE_KEY')
+    # A second endpoint makes the ordinary stdlib nonnumeric-port diagnostic explicit.
+    if fragment.startswith('fixture-password'):
+        port.base_url = 'https://fixture-user:fixture-password@fixture.invalid/v1'
+    budget, path = budget_with_disk_ledger(port, tmp_path)
+    error = http.client.InvalidURL("nonnumeric port: '" + fragment + "'")
+    with patch('urllib.request.urlopen', side_effect=error), pytest.raises(http.client.InvalidURL):
+        budget.complete_json(request())
+    saved = path.read_text()
+    assert fragment not in saved
+    assert all(secret not in saved for secret in ['fixture-password', 'encoded@password', 'query-secret'])
