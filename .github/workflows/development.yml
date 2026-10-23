@@ -39,8 +39,8 @@ jobs:
           cache-dependency-path: system/requirements-dev.lock
       - name: Install portable development environment
         run: |
-          python -m pip install -r requirements-dev.lock
-          python -m pip install --no-deps -e .
+          env -u PYTHONPATH python -m pip install -r requirements-dev.lock
+          env -u PYTHONPATH python -m pip install --no-deps -e .
       - name: Verify current development freeze and CLI
         run: |
           python scripts/verify_development_snapshot.py
@@ -70,8 +70,8 @@ jobs:
           cache-dependency-path: system/requirements-dev.lock
       - name: Install portable development environment
         run: |
-          python -m pip install -r requirements-dev.lock
-          python -m pip install --no-deps -e .
+          env -u PYTHONPATH python -m pip install -r requirements-dev.lock
+          env -u PYTHONPATH python -m pip install --no-deps -e .
       - name: Cache trusted public probe image
         run: docker pull "$CONTRACTEDGE_RUNTIME_IMAGE"
       - name: Verify CPU and memory enforcement; negotiate task Docker API
@@ -115,8 +115,8 @@ jobs:
           python-version: '3.12'
       - name: Install portable development environment
         run: |
-          python -m pip install -r requirements-dev.lock
-          python -m pip install --no-deps -e .
+          env -u PYTHONPATH python -m pip install -r requirements-dev.lock
+          env -u PYTHONPATH python -m pip install --no-deps -e .
       - name: Native fixture provider; no model HTTP
         run: python -m pytest -q tests/test_topomen_agent.py
 
@@ -133,8 +133,8 @@ jobs:
           python-version: '3.12'
       - name: Install portable development environment
         run: |
-          python -m pip install -r requirements-dev.lock
-          python -m pip install --no-deps -e .
+          env -u PYTHONPATH python -m pip install -r requirements-dev.lock
+          env -u PYTHONPATH python -m pip install --no-deps -e .
       - name: Three synthetic public cases
         run: |
           for case in config-binding reload-state two-consumers; do

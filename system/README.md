@@ -1,6 +1,6 @@
 # ContractEdge developer entry
 
-当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准，入口为 [本轮开发冻结](docs/development/next-iteration-20261023.snapshot.json)。包版本仍保留 `0.6.27`；修改后的源码不能沿用原 0.6.27 方法摘要或历史效果。`formal_ready=false`，默认入口验收离线开发工程；真实 API 前半验证单独登记，不运行正式数据实验或独立评分。
+当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准，入口为 [本轮开发冻结](docs/development/next-iteration-20261023-ci1.snapshot.json)。包版本仍保留 `0.6.27`；修改后的源码不能沿用原 0.6.27 方法摘要或历史效果。`formal_ready=false`，默认入口验收离线开发工程；真实 API 前半验证单独登记，不运行正式数据实验或独立评分。
 
 ## 安装与当前冻结校验
 
@@ -10,8 +10,8 @@ Linux、Python 3.10 或 3.12，在仓库根目录执行：
 cd system
 python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install -r requirements-dev.lock
-python -m pip install --no-deps -e .
+env -u PYTHONPATH python -m pip install -r requirements-dev.lock
+env -u PYTHONPATH python -m pip install --no-deps -e .
 export PYTHONPATH="$PWD/src:$PWD"
 export CONTRACTEDGE_TOPOMEN_SOURCE="$PWD/vendor/topomen"
 python scripts/contractedge_local.py --help
@@ -100,3 +100,6 @@ python scripts/run_public_demo.py --case config-binding --save-ready --provider-
 该 profile 的 30 元是本轮多次尝试共享的硬上限。所有尝试必须使用同一个持久 `money_budget.path`，不得删账本、改路径或建新 allowance。失败及未知响应保留全额预留；先定位再决定是否有限复测，不自动重发。`3/12` 元每百万输入/输出是内部保守记账费率，按官方文档峰值 `$0.3/$1.2` 再乘 10 预留，并非实时汇率或官方人民币结算收据。价格来源：https://api-docs.deepseek.com/quick_start/pricing ，核对日期2026-10-23；付费前应再次核对账户当前计费。实际费用应与官方账户账单区分，未收到响应的调用不能记零。
 
 默认公开示例和 GitHub CI 无真实模型 HTTP。付费前半结果无论 READY、INVALID_PLAN 或身份拒绝均留痕，不能据此声明真实修复成功或论文效果。原 ACK 历史根因仍未验证。
+
+
+Python3.10安装时显式清除PYTHONPATH，避免pip在安装待构建的editable metadata时提前解析原历史依赖。运行测试时仍使用上述PYTHONPATH。首次GitHub CI的该安装失败保留记录；同一独立3.10/pip26.2.1/PyYAML6环境已复现失败并验证清PYTHONPATH后安装通过，无需修改历史pyproject依赖或升级pip。

@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-23T10:20:54.923079+00:00",
+  "as_of": "2026-10-23T10:29:23.075983+00:00",
   "status": "DEVELOPMENT_VALIDATED_OFFLINE",
   "implementation_version": "0.6.27",
   "version_scope": "Package version retained; method identity is the current development snapshot source/configuration/panel digests.",
@@ -9,15 +9,15 @@
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "current_development": {
-    "snapshot": "docs/development/next-iteration-20261023.snapshot.json",
-    "snapshot_id": "next-iteration-20261023",
+    "snapshot": "docs/development/next-iteration-20261023-ci1.snapshot.json",
+    "snapshot_id": "next-iteration-20261023-ci1",
     "status": "VALIDATED_OFFLINE",
     "scope": "Offline development engineering; live API front planning separately authorized up to CNY30 but not run without a safely configured replacement credential.",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "test_command": "python scripts/test_portable.py",
     "native_test_command": "python -m pytest -q tests/test_topomen_agent.py",
     "ci_workflow": "../.github/workflows/development.yml",
-    "github_actions_execution": "NOT_RUN_AT_FREEZE",
+    "github_actions_execution": "INITIAL_PY310_INSTALL_FAILURE_FIXED_PENDING_RERUN_AT_FREEZE",
     "formal_effectiveness": "NOT_EVALUATED",
     "verification": {
       "portable": "864 passed, 27 subtests passed in 78.58s (0:01:18)",
