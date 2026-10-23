@@ -6,7 +6,7 @@ import json
 import os
 import re
 import urllib.request
-from urllib.parse import urlsplit, unquote, parse_qsl
+from urllib.parse import urlsplit
 from contextvars import ContextVar
 from dataclasses import dataclass, field
 from typing import Any, Mapping, Protocol
@@ -108,18 +108,16 @@ class _IdentityProvider:
         message = re.sub(r'https?://[^\s<>\"\']+', '[provider endpoint]', message)
         key_env = getattr(self, 'api_key_env', None)
         key = os.environ.get(key_env) if key_env else None
-        sensitive = {key} if key else set()
         try:
             parsed = urlsplit(self.base_url)
-            sensitive.update(v for v in (parsed.username, parsed.password) if v)
-            sensitive.update(v for _, v in parse_qsl(parsed.query) if v)
+            if parsed.username or parsed.password or parsed.query:
+                # Parser/transport errors can contain arbitrarily encoded fragments.
+                # Keep only the error class for an endpoint carrying credentials.
+                return type(exc).__name__ + ': provider request failed'
         except ValueError:
             # A malformed endpoint should not surface its raw parser diagnostic.
             return type(exc).__name__ + ': provider request failed'
-        sensitive.update(unquote(v) for v in tuple(sensitive))
-        for value in sorted(sensitive, key=len, reverse=True):
-            message = message.replace(value, '[credential]')
-        return message
+        return message.replace(key, '[credential]') if key else message
 
     def _configure_identity(self, policy, aliases):
         if policy not in {'record', 'require_match'}:

@@ -259,7 +259,7 @@ def test_subclass_cannot_silently_replace_an_already_audited_request(tmp_path):
     assert record['error'] and budget.reserved_tokens > 0
 
 
-@pytest.mark.parametrize('fragment', ['fixture-password@fixture.invalid', 'encoded@password', 'query-secret'])
+@pytest.mark.parametrize('fragment', ['fixture-password@fixture.invalid', 'encoded@password', 'query-secret', 'fixture%2Dquery'])
 def test_partial_url_credentials_are_removed_from_errors(tmp_path, fragment):
     import http.client
     port = OpenAICompatibleProvider(
@@ -268,6 +268,8 @@ def test_partial_url_credentials_are_removed_from_errors(tmp_path, fragment):
     # A second endpoint makes the ordinary stdlib nonnumeric-port diagnostic explicit.
     if fragment.startswith('fixture-password'):
         port.base_url = 'https://fixture-user:fixture-password@fixture.invalid/v1'
+    if fragment == 'fixture%2Dquery':
+        port.base_url = 'https://fixture.invalid/v1?api_key=fixture%2Dquery'
     budget, path = budget_with_disk_ledger(port, tmp_path)
     error = http.client.InvalidURL("nonnumeric port: '" + fragment + "'")
     with patch('urllib.request.urlopen', side_effect=error), pytest.raises(http.client.InvalidURL):
