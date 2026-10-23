@@ -112,7 +112,7 @@ def checked_public_file(directory: Path, manifest: Mapping, relative: str) -> Pa
 
 
 def execution_contract(directory: Path, task: Mapping, manifest: Mapping) -> dict:
-    for name in [task.get('execution_config'), task.get('execution_contract'), 'environment.json']:
+    for name in [task.get('execution_config'), task.get('execution_contract'), 'environment.json', 'execution_contract.json']:
         if isinstance(name, str) and name in manifest['files']:
             value = json.loads(checked_public_file(directory, manifest, name).read_text())
             if isinstance(value, dict):
@@ -138,7 +138,7 @@ def public_execution_capabilities(directory: Path, task: Mapping, manifest: Mapp
     verifier. Keep its declared observation boundary and actual argv visible.
     """
     environment = execution_contract(directory, task, manifest)
-    names = [task.get('execution_config'), task.get('execution_contract'), 'environment.json']
+    names = [task.get('execution_config'), task.get('execution_contract'), 'environment.json', 'execution_contract.json']
     contract_name = next((n for n in names if isinstance(n, str) and n in manifest['files']), 'task.yaml')
     return {'schema_version': 'ce.public_execution_capabilities.v1',
         'source': {'path': contract_name, 'sha256': manifest.get('file_sha256', {}).get(contract_name),
