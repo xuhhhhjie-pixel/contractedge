@@ -1,0 +1,80 @@
+{
+  "scope": "Stage A first architecture increment; offline synthetic engineering validation only",
+  "base_commit": "a0705138f6130fa7e96551eeb95c5cb40377d907",
+  "verification": {
+    "portable": "918 passed, 46 subtests passed in 86.82s (0:01:26)",
+    "native": "9 passed in 2.47s"
+  },
+  "runtime_probe": {
+    "attempts": [
+      {
+        "exit_code": 1,
+        "operation": "version"
+      },
+      {
+        "exit_code": 0,
+        "operation": "version"
+      },
+      {
+        "exit_code": 0,
+        "operation": "info"
+      },
+      {
+        "exit_code": 0,
+        "operation": "run"
+      }
+    ],
+    "capabilities": {
+      "CgroupVersion": "2",
+      "CpuCfsPeriod": true,
+      "CpuCfsQuota": true,
+      "MemoryLimit": true
+    },
+    "client_api": "1.43",
+    "context": null,
+    "elapsed_seconds": 0.6775193773210049,
+    "endpoint_source": "INHERITED_DOCKER_HOST",
+    "environment_overrides": {
+      "DOCKER_API_VERSION": "1.43"
+    },
+    "errors": [],
+    "global_configuration_changed": false,
+    "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+    "observed_limits": {
+      "cpu": "200000 100000",
+      "memory": "2147483648"
+    },
+    "required_cpus": "2",
+    "required_memory_bytes": 2147483648,
+    "runtime_verified": true,
+    "schema_version": "ce.runtime_preflight.v1",
+    "server_api": "1.43",
+    "status": "PASS"
+  },
+  "public_demo_cases": [
+    "config-binding",
+    "reload-state",
+    "two-consumers"
+  ],
+  "persistent_ready_fresh_process": true,
+  "new_test_modules": [
+    "test_evidence_delivery.py",
+    "test_front_delivery.py",
+    "test_request_admission.py",
+    "test_production_request_admission.py",
+    "test_stage_delivery_admission.py"
+  ],
+  "real_model_http_calls": 0,
+  "formal_ready": false,
+  "original_delivery_manifest_and_exclusions_preserved": true,
+  "github_actions": "NOT_RUN_AT_FREEZE",
+  "post_test_cosmetic_changes": [
+    {
+      "path": "tests/test_stage_delivery_admission.py",
+      "before_sha256": "803b27fda20b4f3da5bcd201db30edc00f3493f7747d100a05637105749a7189",
+      "after_sha256": "d33ddf1d7c8187a2b3c1c56e1e0fc9258e07d53a18c60d26cfdaf3bd052b4056",
+      "change": "remove trailing empty line only",
+      "python_ast_unchanged": true
+    }
+  ]
+}

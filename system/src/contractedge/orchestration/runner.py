@@ -24,6 +24,7 @@ from contractedge.diagnosis.prompt import build_diagnosis_request
 from contractedge.diagnosis.validate import validate_diagnosis
 from contractedge.model.provider import ModelProvider, ModelResponse
 from contractedge.model.budget import BudgetExceeded
+from contractedge.model.admission import quote_request, context_fits, complete_quoted
 from contractedge.orchestration.feedback import feedback_prompt_view
 from contractedge.requirement.normalize import normalize_requirement
 from contractedge.retrieval.candidates import CandidateSet, build_candidate_set, extend_once, trim_context_bundle
@@ -504,6 +505,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
     max_elapsed_seconds = float(config.get("max_elapsed_seconds", 1_200))
     max_model_calls = int(config.get('max_model_calls', 24))
     reserved_tokens = 0
+    request_quotes = {}
     run_context_wire = None
     snapshot_id = None
     requirement = None
@@ -548,7 +550,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                 raise BudgetExceeded('Model call cannot start after the run deadline')
             if previous_timeout is not None:
                 provider.timeout_seconds = min(previous_timeout, remaining)
-            response = provider.complete_json(request)
+            response = complete_quoted(provider, request, request_quote(request))
             if time.monotonic() - started >= max_elapsed_seconds:
                 raise BudgetExceeded('Model response exceeded the run deadline')
             return response
@@ -572,25 +574,25 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
             if previous_timeout is not None:
                 provider.timeout_seconds = previous_timeout
 
+    def request_quote(request):
+        # Keep each immutable request and its prepared bytes together. A changed
+        # request is validated again by complete_quoted before reservation.
+        key = id(request)
+        if key not in request_quotes:
+            if token_counter is None:
+                raise ValueError("an explicit model tokenizer/token counter is required")
+            request_quotes[key] = (request, quote_request(provider, request, token_counter))
+        return request_quotes[key][1]
+
     def request_tokens(request) -> int:
-        if token_counter is None:
-            raise ValueError("an explicit model tokenizer/token counter is required")
-        count = sum(int(token_counter(str(message.get("content", "")))) for message in request.messages)
-        hook = getattr(provider, 'request_overhead', None)
-        overhead = hook(request) if callable(hook) else ''
-        extra = int(token_counter(overhead)) if overhead else 0
-        if count < 0 or extra < 0:
-            raise ValueError("token counter cannot return a negative count")
-        count += extra
-        return count
+        return request_quote(request).input_tokens
 
     def within_budget(request, prompt_tokens: int) -> bool:
+        quote = request_quote(request)
         return (time.monotonic() - started < max_elapsed_seconds
                 and len(calls) < max_model_calls
-                and prompt_tokens <= int(config['max_context_tokens'])
-                and (config.get('model_context_tokens') is None
-                     or prompt_tokens + request.max_output_tokens <= int(config['model_context_tokens']))
-                and reserved_tokens + prompt_tokens + request.max_output_tokens <= max_total_tokens)
+                and context_fits(quote, int(config['max_context_tokens']), config.get('model_context_tokens'))
+                and reserved_tokens + quote.total_tokens <= max_total_tokens)
 
     def recover_truncated_planning(response, request, stage):
         """Recover known reasoning-starved JSON once within all shared budgets.

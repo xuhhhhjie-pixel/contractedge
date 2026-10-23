@@ -5,9 +5,10 @@ separate command/process after final candidate selection.
 """
 from __future__ import annotations
 
-from dataclasses import asdict, replace
+from dataclasses import asdict, is_dataclass, replace
 import json
 import os
+import sys
 import time
 from pathlib import Path
 import uuid
@@ -27,6 +28,9 @@ from contractedge.execution.public import BenchmarkPublicRunner
 from contractedge.execution.review import ModelPublicReviewer
 from contractedge.execution.topomen import ModelPlanExecutor, PlanRejected, accept_plan
 from contractedge.model.budget import BudgetedProvider, BudgetExceeded
+from contractedge.model.admission import quote_request, context_fits, complete_quoted
+from contractedge.orchestration.evidence_delivery import select_observations_delivery
+from contractedge.orchestration.front_delivery import build_front_delivery
 from contractedge.execution.topomen import execution_review_mapping
 from contractedge.orchestration.feedback import make_feedback, validate_feedback, review_plan_with_retained, feedback_prompt_view
 from contractedge.orchestration.runner import run_front_half, required_planning_source_support, required_source_prerequisites
@@ -50,9 +54,10 @@ def write_json(path: Path, value):
 
 
 def run_front_recorded(method_input, workspace, provider, config, token_counter, *,
-                       directory, execution_feedback=None, public_observations=()):
+                       directory, execution_feedback=None, public_observations=(), evidence_delivery=None):
     """Persist exact effective front inputs, without synthesizing legacy traces."""
     directory = Path(directory)
+    write_json(directory / 'front.method_input.json', asdict(method_input) if is_dataclass(method_input) else dict(method_input))
     write_json(directory / 'front.config.json', dict(config))
     write_json(directory / 'front.public_observations.json', list(public_observations))
     write_json(directory / 'front.execution_feedback.json', execution_feedback)
@@ -61,56 +66,23 @@ def run_front_recorded(method_input, workspace, provider, config, token_counter,
         return run_front_half(method_input, workspace, provider, config, token_counter,
                               execution_feedback=execution_feedback, public_observations=public_observations)
     finally:
-        write_json(directory / 'front.replay.json', {'schema_version': 'ce.front_replay_inputs.v1',
-            'model_call_range': [start, len(provider.calls)],
-            'scope': 'front_semantic_failure', 'semantic_reviewer': 'disabled'})
+        active_error = sys.exc_info()[1]
+        try:
+            write_json(directory / 'front.replay.json', {'schema_version': 'ce.front_replay_inputs.v1',
+                'model_call_range': [start, len(provider.calls)],
+                'scope': 'front_semantic_failure', 'semantic_reviewer': 'disabled'})
+            write_json(directory / 'front.delivery.json', build_front_delivery(
+                directory, method_input, provider, start, evidence_delivery))
+        except Exception as recording_error:
+            if active_error is None:
+                raise
+            # A recording failure must not replace the original provider/error.
+            active_error.delivery_recording_error = str(recording_error)
 
 
 def select_observations(observations, query: str, token_counter, max_tokens: int = 4000):
-    """Fit public evidence independently of source retrieval, retaining exact quotes."""
-    import re
-    terms = set(re.findall(r'[a-z][a-z0-9_-]{3,}', query.casefold()))
-    ranked = sorted(observations, key=lambda o: (-sum(term in o['excerpt'].casefold() for term in terms), o['id']))
-    # Keep complete-parse/count headers from each scenario, including controls
-    # whose missing target names otherwise make lexical ranking discard them.
-    headers = [o for o in ranked if o['locator'].get('start_byte') == 0
-               and o['locator']['path'].endswith('.render-overview.json')]
-    pod_records = [o for o in ranked if '.pod-spec-' in o['locator']['path']]
-    identity_terms = set(re.findall(r'[a-z0-9]+', query.casefold()))
-    def pod_identity_priority(record):
-        try:
-            resource = json.loads(record['excerpt'])['resource']
-            kind = str(resource.get('kind', '')).casefold()
-            name_terms = set(re.findall(r'[a-z0-9]+', str(resource.get('name', '')).casefold()))
-        except (ValueError, KeyError, TypeError):
-            return (0, 0)
-        # Missing fields reduce a broken target's lexical score. Rank resource
-        # identity first so a working sibling cannot hide that missing evidence.
-        return (-int(kind in identity_terms or kind+'s' in identity_terms),
-                -len(name_terms & identity_terms))
-    pod_records.sort(key=pod_identity_priority)
-    inventories = [o for o in ranked if '.render-kind-' in o['locator']['path']]
-    def relevant_kind(record):
-        try:
-            kind = str(json.loads(record['excerpt'])['kind']).casefold()
-        except (ValueError, KeyError, TypeError):
-            return False
-        return kind in identity_terms or kind+'s' in identity_terms
-    relevant_inventories = [o for o in inventories if relevant_kind(o)]
-    result, used, selected = [], 0, set()
-    structured = [o for o in ranked if o.get('structured_complete') or o.get('behavior_check')]
-    from contractedge.diagnosis.operation_consistency import operation_facts
-    failed_operations={o['observation_id'] for o in operation_facts(observations) if o['status']=='FAILED'}
-    failures=[o for o in structured if o.get('behavior_check',{}).get('status')=='FAIL' or o['id'] in failed_operations]
-    for record in headers + relevant_inventories + failures + pod_records + structured + ranked:
-        if record['id'] in selected:
-            continue
-        cost = token_counter(record['excerpt'])
-        if used + cost <= max_tokens:
-            result.append(record)
-            selected.add(record['id'])
-            used += cost
-    return tuple(result)
+    """Compatibility tuple projection; stage callers persist the full receipt."""
+    return select_observations_delivery(observations, query, token_counter, max_tokens).records
 
 
 def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabilities: Mapping | None = None):
@@ -174,9 +146,10 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
     packet, context = validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
     request = build_changeset_request(packet, context, [{'code': 'PUBLIC_EXECUTION_PLAN_FEEDBACK',
                                                         'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}])
-    if sum(token_counter(m['content']) for m in request.messages) + request.max_output_tokens > config['max_context_tokens']:
+    quote = quote_request(provider, request, token_counter)
+    if not context_fits(quote, int(config['max_context_tokens']), config.get('model_context_tokens')):
         raise BudgetExceeded('Plan revision exceeds the full context budget')
-    response = provider.complete_json(request)
+    response = complete_quoted(provider, request, quote)
     payload = json.loads(response.content)
     payload, binding = bind_changeset_envelope(payload, packet, context.run_id, context.snapshot_id, context.input_digest)
     payload = adapt_model_changeset(payload, packet, compute_snapshot(source))
@@ -189,7 +162,7 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
         raise PlanRejected('Feedback plan revision failed: ' + str(validation.errors))
     call = {'stage': 'EXECUTION_PLAN_REVISION', 'prompt_version': request.prompt_version,
             'response_content': response.content, 'response_metadata': dict(response.metadata), 'runner_binding': binding,
-            'prompt_tokens_reserved': sum(token_counter(m['content']) for m in request.messages),
+            'prompt_tokens_reserved': quote.input_tokens,
             'output_tokens_reserved': request.max_output_tokens,
             'elapsed_seconds': provider.summary()['elapsed_seconds'] if isinstance(provider, BudgetedProvider) else 0}
     return {**trace, 'changeset': payload, 'status': payload['status'],
@@ -384,8 +357,17 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             directory = out / 'rounds' / str(round_id)
             directory.mkdir(parents=True)
             write_json(out / 'state.json', {'status': 'PLANNING', 'case_id': case_id, 'round_id': round_id})
-            observations = select_observations((current_observation or {}).get('observations', []),
-                method_input.requirement_text, token_counter, int(config.get('max_public_evidence_tokens', 4000)))
+            delivery = select_observations_delivery((current_observation or {}).get('observations', []),
+                method_input.requirement_text, token_counter, int(config.get('max_public_evidence_tokens', 4000)),
+                snapshot_id=compute_snapshot(source).snapshot_id)
+            write_json(directory / 'public-evidence.delivery.json', delivery.receipt)
+            if delivery.receipt['status'] != 'COMPLETE':
+                status = 'EVIDENCE_DELIVERY_INCOMPLETE'
+                errors.append('Public evidence delivery ' + delivery.receipt['status'] + ': '
+                    + json.dumps({'coverage': delivery.receipt['mandatory_coverage'],
+                                  'errors': delivery.receipt['errors']}, ensure_ascii=False))
+                break
+            observations = delivery.records
             if trace is None or (feedback and feedback['route'] == 'DIAGNOSIS' and not retry_restored_candidate):
                 round_config = {**dict(config), 'run_id': run_id,
                     'max_total_tokens': max(1, budget.max_tokens - budget.reserved_tokens),
@@ -394,7 +376,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                               'schema_in_prompt': config.get('schema_in_prompt', True)}}
                 trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
                     budget, round_config, token_counter, execution_feedback=feedback,
-                    public_observations=observations, directory=directory).to_wire()
+                    public_observations=observations, directory=directory, evidence_delivery=delivery.receipt).to_wire()
                 plan = None
             if trace['status'] not in {'READY', 'READY_PARTIAL'}:
                 write_json(directory / 'front.trace.json', trace)
@@ -412,7 +394,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
                         budget, {**dict(config), 'run_id': run_id, 'model': {'model': config['model'],
                             'schema_in_prompt': config.get('schema_in_prompt', True)}},
-                        token_counter, execution_feedback=feedback, public_observations=observations, directory=directory).to_wire()
+                        token_counter, execution_feedback=feedback, public_observations=observations,
+                        directory=directory, evidence_delivery=delivery.receipt).to_wire()
                     plan = None
             write_json(directory / 'front.trace.json', trace)
             if trace['status'] not in {'READY', 'READY_PARTIAL'}:
@@ -502,19 +485,28 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 reserve_public_time()
                 current_observation = runner.observe(workspace, directory / 'public')
                 execution_status = current_observation['status']
-                review_observation = {**current_observation, 'declared_artifacts': list(method_input.declared_artifacts),
-                    'public_execution_capabilities': config.get('public_execution_capabilities'),
-                    'execution_mapping': execution_review_mapping(execution_result),
-                    'observations': list(select_observations(
+                review_delivery = select_observations_delivery(
                     current_observation['observations'], method_input.requirement_text + '\n' + '\n'.join(
                         p['statement'] for kind in ['postconditions', 'preserve_constraints', 'open_obligations']
                         for p in review_plan.get(kind, [])),
-                    token_counter, int(config.get('max_review_evidence_tokens', 9000))))}
-                try:
-                    review = reviewer.review(method_input.requirement_text, review_plan, review_observation)
-                except (ValueError, KeyError) as exc:
+                    token_counter, int(config.get('max_review_evidence_tokens', 9000)),
+                    snapshot_id=compute_snapshot(source).snapshot_id)
+                write_json(directory / 'review-evidence.delivery.json', review_delivery.receipt)
+                review_observation = {**current_observation, 'declared_artifacts': list(method_input.declared_artifacts),
+                    'public_execution_capabilities': config.get('public_execution_capabilities'),
+                    'execution_mapping': execution_review_mapping(execution_result),
+                    'observations': list(review_delivery.records)}
+                if review_delivery.receipt['status'] != 'COMPLETE':
                     review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
-                              'method': 'PUBLIC_REVIEW_INVALID', 'rationale': str(exc)}
+                        'method': 'EVIDENCE_DELIVERY_INCOMPLETE',
+                        'rationale': 'Required public review evidence was not completely delivered.',
+                        'delivery_receipt_digest': review_delivery.receipt['receipt_digest']}
+                else:
+                    try:
+                        review = reviewer.review(method_input.requirement_text, review_plan, review_observation)
+                    except (ValueError, KeyError) as exc:
+                        review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
+                                  'method': 'PUBLIC_REVIEW_INVALID', 'rationale': str(exc)}
                 write_json(directory / 'public-review.json', review)
             after = compute_snapshot(source).snapshot_id
             raw_observations = (current_observation or {}).get('observations', [])

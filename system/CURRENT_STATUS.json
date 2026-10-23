@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-23T10:29:23.075983+00:00",
+  "as_of": "2026-10-23T12:28:51.024878+00:00",
   "status": "DEVELOPMENT_VALIDATED_OFFLINE",
   "implementation_version": "0.6.27",
   "version_scope": "Package version retained; method identity is the current development snapshot source/configuration/panel digests.",
@@ -9,27 +9,26 @@
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "current_development": {
-    "snapshot": "docs/development/next-iteration-20261023-ci1.snapshot.json",
-    "snapshot_id": "next-iteration-20261023-ci1",
+    "snapshot": "docs/development/architecture-a-delivery-admission-20261023.snapshot.json",
+    "snapshot_id": "architecture-a-delivery-admission-20261023",
     "status": "VALIDATED_OFFLINE",
-    "scope": "Offline development engineering; live API front planning separately authorized up to CNY30 but not run without a safely configured replacement credential.",
+    "scope": "Stage A first increment: explicit public evidence receipts and consistent request context admission; offline synthetic engineering validation only.",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "test_command": "python scripts/test_portable.py",
     "native_test_command": "python -m pytest -q tests/test_topomen_agent.py",
     "ci_workflow": "../.github/workflows/development.yml",
-    "github_actions_execution": "INITIAL_PY310_INSTALL_FAILURE_FIXED_PENDING_RERUN_AT_FREEZE",
+    "github_actions_execution": "NOT_RUN_FOR_THIS_SNAPSHOT_AT_FREEZE",
     "formal_effectiveness": "NOT_EVALUATED",
     "verification": {
-      "portable": "864 passed, 27 subtests passed in 78.58s (0:01:18)",
-      "native": "9 passed in 2.51s",
-      "demo": "9 passed, 10 subtests passed in 9.78s"
+      "portable": "918 passed, 46 subtests passed in 86.82s (0:01:26)",
+      "native": "9 passed in 2.47s"
     },
     "runtime_limits": "Actual 2CPU/2GiB verified"
   },
   "next_actions": [
-    "Review this integrated candidate and inspect actual GitHub Actions checks; merge one integration route only.",
-    "After safe replacement credential configuration, pre-register one bounded official DeepSeek front attempt under the same persistent CNY30 ledger; retain failures and unknown costs.",
-    "Implement an isolated observer before executing model-generated code in these public demos; formal effectiveness remains unevaluated."
+    "Review the stacked Stage A PR against codex/next-iteration-integration and inspect actual GitHub Actions checks; do not merge both routes independently.",
+    "Next architecture increment: explicit stage outcomes and transitions, retaining existing obligation and candidate transaction semantics.",
+    "Isolated model candidate execution and formal research evaluation require their separate implementation and validation."
   ],
   "historical_status": {
     "scope": "REFERENCE_ONLY: the following original status/results are historical records, not current development gates or current method scores.",
@@ -1396,12 +1395,22 @@
     "six_excluded_modules": "Preserved by scripts/test_portable.py; test_topomen_agent.py is a separately reported vendored native fixture scope."
   },
   "real_api_validation": {
-    "status": "NOT_RUN_PENDING_SAFE_CREDENTIAL_CONFIG",
+    "status": "NOT_RUN_FOR_THIS_SNAPSHOT",
     "provider": "DeepSeek official",
     "budget_limit_cny": 30,
     "http_calls": 0,
     "cost_cny": 0,
-    "scope": "front diagnosis/planning only; live host source execution prohibited",
+    "scope": "No new API calls for architecture Stage A; prior a070513 front result remains version-specific and does not validate this source.",
     "unknown_response_policy": "retain full reservation; no automatic resend"
+  },
+  "prior_api_reference": {
+    "code_commit": "a0705138f6130fa7e96551eeb95c5cb40377d907",
+    "status": "READY_FRONT_ONLY",
+    "http_calls": 2,
+    "input_tokens": 17565,
+    "output_tokens": 2409,
+    "conservative_cost_cny": 0.081603,
+    "official_bill": false,
+    "scope": "Prior public config-binding front planning only; no candidate execution or semantic effectiveness claim."
   }
 }
