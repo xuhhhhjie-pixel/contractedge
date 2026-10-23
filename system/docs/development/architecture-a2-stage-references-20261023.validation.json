@@ -1,0 +1,100 @@
+{
+  "schema_version": "ce.development_validation.v1",
+  "development_snapshot_id": "architecture-a2-stage-references-20261023",
+  "snapshot_sha256": "f6b0c61daa7d2f17b2acb7cd13b940c6b706b5593c8803d3cd72737acfa58d96",
+  "source_sha256": "1d7025d36a04e51966dbef4595c09732f30f4d7f2c8726c4da73e1186ecc923a",
+  "status": "VALIDATED_OFFLINE",
+  "portable": "Historical fixture / native integration modules NOT RUN: test_ready_support_consistency.py, test_probe_profiles_v2.py, test_compact_render_inventory.py, test_diagnosis_error_aggregation.py, test_structured_observation_adapters.py, test_topomen_agent.py\n....................................................... [  4%]\n........................................................................ [ 11%]\n........................................................................ [ 17%]\n......................................................... [ 23%]\n............................................................ [ 28%]\n........................................................................ [ 35%]\n...................................................................... [ 41%]\n........................................................................ [ 47%]\n........................................................................ [ 54%]\n.............................................................. [ 59%]\n........................................................................ [ 66%]\n........................................................................ [ 72%]\nssss........................................ [ 76%]\n...................................................................... [ 83%]\n........................................................................ [ 89%]\n........................................................................ [ 96%]\n.........................................                                [100%]\n1103 passed, 4 skipped, 86 subtests passed in 178.14s (0:02:58)\n",
+  "native": ".........                                                                [100%]\n9 passed in 5.86s\n",
+  "combined_actual_stage_and_isolated_public_tests": "............................................................ [ 28%]\n........................................................................ [ 62%]\n.......................................... [ 82%]\n......................................                                [100%]\n212 passed, 45 subtests passed in 104.71s (0:01:44)\n",
+  "runtime_preflight": {
+    "attempts": [
+      {
+        "exit_code": 1,
+        "operation": "version"
+      },
+      {
+        "exit_code": 0,
+        "operation": "version"
+      },
+      {
+        "exit_code": 0,
+        "operation": "info"
+      },
+      {
+        "exit_code": 0,
+        "operation": "run"
+      }
+    ],
+    "capabilities": {
+      "CgroupVersion": "2",
+      "CpuCfsPeriod": true,
+      "CpuCfsQuota": true,
+      "MemoryLimit": true
+    },
+    "client_api": "1.43",
+    "context": null,
+    "elapsed_seconds": 0.7421519085764885,
+    "endpoint_source": "INHERITED_DOCKER_HOST",
+    "environment_overrides": {
+      "DOCKER_API_VERSION": "1.43"
+    },
+    "errors": [],
+    "global_configuration_changed": false,
+    "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+    "observed_limits": {
+      "cpu": "200000 100000",
+      "memory": "2147483648"
+    },
+    "required_cpus": "2",
+    "required_memory_bytes": 2147483648,
+    "runtime_verified": true,
+    "schema_version": "ce.runtime_preflight.v1",
+    "server_api": "1.43",
+    "status": "PASS"
+  },
+  "six_historical_native_exclusions_retained": true,
+  "delivery_scope": "Exact final request delivery and actual artifact/call identities; not proof of causal model adoption.",
+  "ready_scope": "Original immutable stage inheritance and deliberate READY continuation; not arbitrary candidate crash recovery.",
+  "regression_evidence": "/home/zyw/contractedge-collab-20261023/evidence/architecture-a2-final-regression-v1",
+  "regression_logs": {
+    "freeze": {
+      "sha256": "93062ccb57c01f0ac4a1356bca3c2551175806554d4fe73f1ed297779d9660cc",
+      "elapsed_seconds": 0.1642201840877533
+    },
+    "preflight": {
+      "sha256": "7df6057186be8fc0761164b8f5a8b9bed4a9198c4d43ce2a0e81bdae6021f018",
+      "elapsed_seconds": 0.8157081305980682
+    },
+    "combined": {
+      "sha256": "4fa8a9395621e8acc946b724c96542a98bd11c2ce3d1fb81ee40cba258ebf51a",
+      "elapsed_seconds": 105.00554210692644
+    },
+    "portable": {
+      "sha256": "67f213df8678836e4cbd9b59fa8da947e7a3a1017b43d452c5ac7e5ed6dcfcba",
+      "elapsed_seconds": 178.53825123608112
+    },
+    "native": {
+      "sha256": "16ad94a1af3d4204b6a7a773cf0b3443fae3942e69566bebcd9b4e3144079ba8",
+      "elapsed_seconds": 6.12557777762413
+    },
+    "freeze-after": {
+      "sha256": "93062ccb57c01f0ac4a1356bca3c2551175806554d4fe73f1ed297779d9660cc",
+      "elapsed_seconds": 0.16464437544345856
+    }
+  },
+  "new_model_http_calls": 0,
+  "formal_ready": false,
+  "scope": "Exposed synthetic developer cases and engineering counterexamples; C1/C2/D1/D2 and final paid single-case validation remain separate.",
+  "github_actions": "NOT_RUN_AT_LOCAL_FREEZE",
+  "recorded_entrypoints": [
+    "repair_case / repair / repair-batch",
+    "public_demo fresh and deliberate READY save/continue"
+  ],
+  "legacy_entrypoints_not_yet_recorded": [
+    "cli.run_public_case / contractedge run",
+    "historical reliability worker front/save paths",
+    "offline public_failure tape replay (no new dispatch)"
+  ],
+  "legacy_scope": "Original context/quote and support validation remain; no claim of new immutable stage receipts or semantic-delivery enforcement at journal=None front call sites."
+}

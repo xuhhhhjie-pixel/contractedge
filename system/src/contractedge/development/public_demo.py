@@ -6,6 +6,7 @@ or evaluator is needed. Checkpoints support deliberate READY handoff only.
 from __future__ import annotations
 
 import argparse
+from dataclasses import asdict
 import hashlib
 import io
 import json
@@ -17,8 +18,10 @@ import subprocess
 import sys
 import tarfile
 import time
+import uuid
 
 from contractedge.contracts.validation import canonical_digest, parse_method_input
+from contractedge.contracts.artifacts import digest, relative_path
 from contractedge.dataset.archive import safe_extract
 from contractedge.dataset.benchmark import file_sha, method_input_from_task
 from contractedge.execution.topomen_agent import source_identity
@@ -26,6 +29,7 @@ from contractedge.model.budget import BudgetedProvider
 from contractedge.model.provider import ModelResponse
 from contractedge.orchestration.repair import repair_case, validate_ready_trace, write_json
 from contractedge.orchestration.runner import run_front_half
+from contractedge.orchestration.recorder import RunRecorder, ProviderJournal
 from contractedge.source.snapshot import compute_snapshot
 
 
@@ -389,6 +393,124 @@ def _claim_ready(saved, output):
     return claim
 
 
+def _journal_path(root, name):
+    """Checkpoint references can read only owned immutable journal namespaces."""
+    relative_path(name)
+    immutable = (name == 'journal/run.identity.json'
+        or re.fullmatch(r'journal/ledger/segment-[0-9]{6,}/revision-[0-9]{6,}(?:\.seal)?\.json', name)
+        or re.fullmatch(r'journal/stages/[A-Za-z0-9][A-Za-z0-9_.-]{0,127}/[A-Za-z0-9][A-Za-z0-9_.-]{0,127}/revision-[0-9]{6,}\.json', name)
+        or re.fullmatch(r'journal/values/[0-9a-f]{64}\.json', name)
+        or re.fullmatch(r'journal/artifacts/[0-9a-f]{64}/.+', name))
+    if not immutable:
+        raise ValueError('READY stage journal path is outside the immutable namespaces')
+    path = Path(root)
+    for part in Path(name).parts:
+        path = path / part
+        if path.is_symlink():
+            raise ValueError('READY stage journal paths cannot traverse symlinks')
+    if not path.is_file():
+        raise ValueError('READY stage journal artifact is missing: ' + name)
+    return path
+
+
+def _journal_inventory(root):
+    journal = Path(root) / 'journal'
+    if journal.is_symlink() or not journal.is_dir():
+        raise ValueError('READY stage journal must be an owned directory')
+    files = {}
+    for path in sorted(journal.rglob('*')):
+        if path.is_symlink():
+            raise ValueError('READY stage journal paths cannot be symlinks')
+        if path.is_file() and not path.name.endswith('.inflight.json'):
+            name = path.relative_to(root).as_posix()
+            files[name] = file_sha(_journal_path(root, name))
+    return files
+
+
+def _validate_ready_journal(saved, checkpoint, trace, calls):
+    binding = checkpoint.get('stage_journal')
+    if binding is None:
+        return None
+    if (not isinstance(binding, dict) or binding.get('schema_version') != 'ce.ready_stage_journal.v1'
+            or binding.get('run_id') != trace['run_id'] or checkpoint.get('run_id') != trace['run_id']
+            or binding.get('input_digest') != trace['input_digest']
+            or binding.get('snapshot_id') != trace['snapshot_id']):
+        raise ValueError('READY stage journal identity differs from the saved trace')
+    files = binding.get('files')
+    if not isinstance(files, dict) or 'journal/run.identity.json' not in files:
+        raise ValueError('READY stage journal inventory is missing')
+    for name, checksum in files.items():
+        digest(checksum)
+        if file_sha(_journal_path(saved, name)) != checksum:
+            raise ValueError('READY stage journal artifact changed: ' + name)
+    if _journal_inventory(saved) != files:
+        raise ValueError('READY stage journal exact immutable inventory differs')
+    recorder = RunRecorder(saved, run_id=trace['run_id'], input_digest=trace['input_digest'])
+    references = binding.get('stage_receipts')
+    if not isinstance(references, dict) or set(references) != {'diagnosis','planning','front','ready'}:
+        raise ValueError('READY original stage receipt references are incomplete')
+    def verify_artifact(reference):
+        if not isinstance(reference, dict) or reference.get('relative_path') not in files:
+            raise ValueError('READY stage receipt points outside its bound journal')
+        _journal_path(saved, reference['relative_path'])
+        return recorder.verify_artifact(reference)
+    for name in files:
+        if not name.startswith('journal/stages/'):
+            continue
+        wire = _read(_journal_path(saved, name))
+        receipt = recorder._load_stage(name, stage=wire['stage'], attempt_id=wire['attempt_id'], revision=wire['revision'])
+        for field in ('input_refs','output_refs','projection_refs'):
+            for reference in getattr(receipt, field):verify_artifact(asdict(reference))
+        for reference in receipt.call_refs:recorder.verify_call(reference)
+    for stage, reference in references.items():
+        ref = verify_artifact(reference)
+        if (ref.kind != 'STAGE_RECEIPT' or not ref.relative_path.startswith('journal/stages/' + stage + '/')
+                or ref.snapshot_id != trace['snapshot_id']):
+            raise ValueError('READY stage receipt kind/snapshot/stage differs')
+    ready_wire = _read(_journal_path(saved, references['ready']['relative_path']))
+    ready_outputs = {reference['kind']:reference for reference in ready_wire['output_refs']}
+    for kind, name in [('READY_TRACE_ACTUAL_LEDGER','ready.trace.json'),('ACTUAL_CALLS_VIEW','model_calls.json'),
+                       ('READY_CONFIG','run.config.json'),('READY_FREEZE','run.freeze.json')]:
+        if kind not in ready_outputs or ready_outputs[kind]['sha256'] != file_sha(saved / name):
+            raise ValueError('READY stage journal source/configuration/observe_broken binding differs: ' + name)
+    seal_wire = binding.get('ledger_seal')
+    if not isinstance(seal_wire, dict):
+        raise ValueError('READY stage journal ledger seal is missing')
+    try:
+        seal = recorder._load_seal(recorder._revision_name(seal_wire['segment_index'], seal_wire['revision'], metadata=True))
+    except (KeyError, TypeError) as error:
+        raise ValueError('READY stage journal ledger seal is invalid') from error
+    if canonical_digest(asdict(seal)) != canonical_digest(seal_wire) or _read(saved / seal.artifact_ref.relative_path) != calls:
+        raise ValueError('READY final settled journal differs from the actual saved calls')
+    return binding
+
+
+def _import_ready_journal(saved, output, binding, trace):
+    if (output / 'journal').exists() or (output / 'journal').is_symlink():
+        raise ValueError('READY journal import cannot overwrite an existing destination')
+    for name, checksum in binding['files'].items():
+        content = _journal_path(saved, name).read_bytes()
+        if hashlib.sha256(content).hexdigest() != checksum:
+            raise ValueError('READY stage journal changed during import')
+        # Every validated name starts in journal/. Copying cannot overwrite
+        # config, freeze, claims, model-call views or a money ledger.
+        target = output / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if any(path.is_symlink() for path in (target, *target.parents)):
+            raise ValueError('READY journal import destination cannot contain symlinks')
+        with target.open('xb') as stream:
+            stream.write(content)
+            stream.flush()
+            os.fsync(stream.fileno())
+    recorder = RunRecorder(output, run_id=trace['run_id'], input_digest=trace['input_digest'])
+    seal = recorder._load_seal(recorder._revision_name(binding['ledger_seal']['segment_index'],
+                                                     binding['ledger_seal']['revision'], metadata=True))
+    recorder.record_stage('ready_import', attempt_id='saved', snapshot_id=trace['snapshot_id'],
+        status='VERIFIED_STAGE_IMPORT', input_refs=tuple(binding['stage_receipts'].values()),
+        output_refs=(recorder.capture_artifact('continuation.json','READY_CONTINUATION'),),
+        call_refs=seal.call_refs, issues=({'scope':'Original stage facts imported byte-for-byte; no new dispatch or cost.'},))
+
+
 def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_config=None,
              runtime=None, runtime_image=None):
     started = time.monotonic()
@@ -423,12 +545,18 @@ def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_conf
         money = checkpoint.get('money_ledger')
         if money and (not Path(money['path']).is_file() or file_sha(Path(money['path'])) != money['sha256']):
             raise ValueError('READY money ledger is missing or changed; never create a fresh allowance on continuation')
+        original_journal = _validate_ready_journal(saved, checkpoint, trace, previous_calls)
         shutil.copytree(saved / 'frozen-public', output / 'frozen-public')
         public = output / 'frozen-public/public'
         write_json(output / 'initial.model_calls.json', previous_calls)
         write_json(output / 'continuation.json', {'checkpoint': str(saved), 'checkpoint_sha256': file_sha(saved / 'ready.checkpoint.json'),
             'inherited_budget': checkpoint['budget'], 'prior_ledger_sha256': file_sha(saved / 'model_calls.json'),
+            'initial_stage_provenance': {'status':'VERIFIED_STAGE_IMPORT' if original_journal is not None else 'LEGACY_IMPORT',
+                'scope':'Original immutable stage receipts retained.' if original_journal is not None else
+                        'No original stage receipts available; compatibility import only, no stages synthesized.'},
             'automatic_resend': False, 'arbitrary_crash_resume': 'UNSUPPORTED'})
+        if original_journal is not None:
+            _import_ready_journal(saved, output, original_journal, trace)
     else:
         if case not in CASES:
             raise ValueError('Select a public example with --case')
@@ -496,12 +624,16 @@ def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_conf
         from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
         capabilities = resolve_execution_capabilities(projection['public_execution_capabilities'], backend=config['execution_backend'])
         front_config = {**config, 'public_execution_capabilities': capabilities,
+            'run_id': str(config.get('run_id') or uuid.uuid4()),
             'model': {'model': config['model'], 'provider': config['provider'], 'schema_in_prompt': config.get('schema_in_prompt', True)}}
+        journal = ProviderJournal(RunRecorder(output, run_id=front_config['run_id'], input_digest=method['input_digest']))
         budget = BudgetedProvider(provider, counter, max_tokens=config['max_total_tokens'], max_seconds=config['max_elapsed_seconds'],
-            max_calls=config['max_model_calls'], on_update=lambda calls: write_json(output / 'model_calls.json', calls))
+            max_calls=config['max_model_calls'],
+            on_update=lambda calls: journal.callback(calls, lambda actual: write_json(output / 'model_calls.json', actual)))
+        journal.attach(budget)
         budget.started = started
         trace = run_front_half(method, runner.source.parent, budget, front_config, counter,
-                               public_observations=observation['observations']).to_wire()
+                               public_observations=observation['observations'], journal=journal, attempt_id='ready').to_wire()
         # Front semantic traces contain abbreviated records. Preserve the exact
         # budget dispatch records and inherit their reservations on continuation.
         trace['model_calls'] = budget.calls
@@ -517,11 +649,24 @@ def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_conf
             budget.calls[-1]['elapsed_seconds'] = budget.summary()['elapsed_seconds']
         write_json(output / 'ready.trace.json', trace)
         write_json(output / 'model_calls.json', budget.calls)
+        journal.update(budget.calls)
+        final_seal = journal.recorder.seal_ledger()
+        journal.record('ready', attempt_id='save', snapshot_id=trace['snapshot_id'], status='READY',
+            input_refs=tuple(journal.latest[stage] for stage in ('diagnosis','planning','front')),
+            output_refs=tuple(journal.capture(name, kind, snapshot_id=trace['snapshot_id'])
+                for name,kind in [('ready.trace.json','READY_TRACE_ACTUAL_LEDGER'),('model_calls.json','ACTUAL_CALLS_VIEW'),
+                                  ('run.config.json','READY_CONFIG'),('run.freeze.json','READY_FREEZE')]))
         checkpoint = {'schema_version': 'ce.public_demo_ready.v1', 'case': case, 'status': 'READY',
+            'run_id':trace['run_id'],
             'front_status': trace['status'],
             'resume_boundary': 'deliberate-READY-only', 'arbitrary_crash_resume': 'UNSUPPORTED; unknown dispatches are never resent',
             'budget': budget.summary(), 'frozen_public_files': _freeze_inventory(output / 'frozen-public'),
             'files': {name: file_sha(output / name) for name in ['ready.trace.json', 'model_calls.json', 'run.config.json', 'run.freeze.json']}}
+        checkpoint['stage_journal'] = {'schema_version':'ce.ready_stage_journal.v1',
+            'run_id':trace['run_id'],'input_digest':trace['input_digest'],'snapshot_id':trace['snapshot_id'],
+            'files':_journal_inventory(output),'ledger_seal':asdict(final_seal),
+            'stage_receipts':{stage:asdict(journal.latest[stage]) for stage in ('diagnosis','planning','front','ready')},
+            'runner_trace_scope':'RunTrace is a compatibility projection. Final ready.trace.json/model_calls.json bind the later actual ledger settlement.'}
         if config.get('money_budget') is not None:
             money_path = Path(config['money_budget']['path'])
             checkpoint['money_ledger'] = {'path': str(money_path), 'sha256': file_sha(money_path)}
