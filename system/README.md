@@ -1,6 +1,6 @@
-# ContractEdge system — 0.6.34 development snapshot
+# ContractEdge system — 0.6.35 development snapshot
 
-**当前为开发交接快照，formal_ready=false。** 完整服务器回归814+22，可移植子集781+17（排除六个历史/原生模块）。0.6.32 ACK独立PASS；0.6.33补证因错误必需片段标记停止、独立NO_CANDIDATE。0.6.34修复可选词面上下文分级及合并降级问题，保存失败轨迹已在原预算内恢复送达，单条真实验证进行中。历史结果不拼入本版成绩。
+**当前为开发交接快照，formal_ready=false。** 完整服务器回归841+22，可移植子集808+17（排除六个历史/原生模块）。0.6.34已送达证据但实际补丁编译失败、回滚停止，独立NO_CANDIDATE。0.6.35补足可核验的公开Go编译错误恢复，保存失败轨迹已正确生成下一轮执行请求，单条真实验证进行中。历史PASS不拼入本版成绩。
 
 见[本版机制修复与验收](docs/reports/2026-10-24-optional-gap-context-closure.md)、[公开证据连续性](docs/reports/2026-10-24-public-evidence-continuity.md)和[0.6.32真实修复结果](docs/reports/2026-10-24-execution-contract-closure.md)。
 
@@ -8,7 +8,7 @@
 
 ## 内容
 
-- src/：完整当前ContractEdge运行源码及JSON契约，与本地0.6.34冻结摘要一致。
+- src/：完整当前ContractEdge运行源码及JSON契约，与本地0.6.35冻结摘要一致。
 - tests/、scripts/、configs/、docs/：当前全部测试、工程脚本、历史配置和设计文档。
 - vendor/topomen/：所接入TopoMen运行源码与原MIT许可；调用其DefaultAgent作为源码修复消费者，非完整部署调度系统接入。
 - outputs/：精简历史审计文档、冻结元数据和结果摘要；不是全部多GB工作目录或完整历史回放输入。
@@ -55,3 +55,5 @@ python scripts/test_portable.py
 2026-10-23本地续接：0.6.31完整792+22、可移植子集766+17通过；本轮使用已有开发虚拟环境，不声称全新虚拟环境复现。新源码与公开生产探测已经冻结，真实效果仍在开发验收中，本次尚未推送远端。
 
 2026-10-24：0.6.32完整799+22、可移植子集766+17；新探测三方公开校准与错误目标反例通过，当前真实开发验证仍待结束。详见最新记录，不能将此Git快照当作正式准入。
+
+2026-10-24续接0.6.35：完整841+22，可移植808+17。新增公开Go编译错误恢复，见`docs/reports/2026-10-24-build-failure-recovery.md`。历史夹具测试应从具备这些相对输出路径的运行根目录执行，同时通过绝对PYTHONPATH和测试目录选择待验证源码；在缺夹具的干净交付目录仅运行已声明的可移植子集，不把夹具缺失解释成源码回归或测试通过。

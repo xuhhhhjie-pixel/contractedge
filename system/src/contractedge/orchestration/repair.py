@@ -545,14 +545,14 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     {**current_observation,'feedback':feedback},preservation_check_ids(review_plan,incumbent_feedback))
                 write_json(directory/'candidate-decision.json',decision)
                 if decision['decision']!='PROMOTE':
-                    # A registered production startup panic is actionable even
+                    # A source-bound compiler diagnostic or registered startup failure is actionable even
                     # when it prevented completing preservation checks. Keep
                     # their status UNKNOWN, restore the incumbent, and use only
                     # an already available edit round; generic probe/infra
                     # failures still stop without guessing a source repair.
-                    from contractedge.execution.public import has_candidate_runtime_failure
+                    from contractedge.execution.public import has_candidate_execution_failure
                     runtime_failed = (current_observation.get('snapshot_id')==decision['trial_snapshot']
-                        and has_candidate_runtime_failure(current_observation))
+                        and has_candidate_execution_failure(current_observation))
                     # Keep the trial artifacts above, but export only the coherent
                     # incumbent below. Failed trial evidence retains its own snapshot.
                     rejected_context={'snapshot_id':decision['trial_snapshot'],
@@ -573,7 +573,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                         last_execution_attempt={**(last_execution_attempt or {}),'source_snapshot':before,
                             'validation_error':('Candidate rejected: a protected current behavior regressed. '
                                 if decision['decision']=='REJECT_REGRESSION' else
-                                'Candidate rejected: production startup failed and protected behavior could not be verified. ')
+                                'Candidate rejected: source-bound production compilation or startup failed and protected behavior could not be verified. ')
                                 +'Revise the accepted intent on the restored source using historical trial evidence; preserve every current condition.',
                             'rejected_trial':rejected_context}
                     rounds.append(dict(round_id=round_id,from_snapshot=before,

@@ -19,7 +19,7 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.34",
+  "implementation_version": "0.6.35",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
@@ -1253,13 +1253,13 @@
   "historical_independent_code_review_pre_final_optimization": "outputs/benchmark150-independent-code-review-20261019.json",
   "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/系统审查与验收.md",
   "reliability_closure": {
-    "version": "0.6.34",
-    "status": "G4_V0634_SINGLE_GATE_RUNNING",
+    "version": "0.6.35",
+    "status": "G4_V0635_SINGLE_GATE_RUNNING",
     "implementation_completed_claim": false,
     "repair_reliability_accepted": false,
     "formal150_started": false,
-    "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.34.json",
-    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.34.json",
+    "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.35.json",
+    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.35.json",
     "audit": "outputs/reliability-closure-20261020/COMPLETION_AUDIT.md"
   },
   "historical_final_delivery_readiness_v0_5_5": {
@@ -1269,21 +1269,20 @@
     "report": "outputs/final-optimization-20261020/readiness.json",
     "effect_acceptance_passed": false
   },
-  "version": "0.6.34",
-  "status": "V0634_FROZEN_SINGLE_ACK_RUNNING",
+  "version": "0.6.35",
+  "status": "V0635_FROZEN_SINGLE_ACK_RUNNING",
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "formal_ready": false,
   "formal150_started": false,
-  "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.34.json",
-  "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.34.json",
+  "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.35.json",
+  "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.35.json",
   "current_engineering_evidence": {
-    "full": "outputs/optional-gap-context-20261024/full-final-tests.log",
-    "portable_subset": "outputs/optional-gap-context-20261024/portable-final-tests.log",
-    "replay": "outputs/optional-gap-context-20261024/after-final.json",
-    "saved_success_front": "outputs/optional-gap-context-20261024/success-front.json",
-    "cross_case": "outputs/optional-gap-context-20261024/cross-case-v0634-final.json",
-    "report": "docs/reports/2026-10-24-optional-gap-context-closure.md"
+    "full": "outputs/build-failure-recovery-20261024/full-final-tests.log",
+    "portable_subset": "outputs/build-failure-recovery-20261024/portable-final-tests.log",
+    "replay": "outputs/build-failure-recovery-20261024/after-final.json",
+    "cross_case": "outputs/build-failure-recovery-20261024/cross-case-v0635-final.json",
+    "report": "docs/reports/2026-10-24-build-failure-recovery.md"
   },
   "active_frozen_panels": {
     "0.6.8": "Historical dispatch held, results retained",
@@ -1299,46 +1298,48 @@
     "0.6.31": "CLOSED INVALID_OUTPUT/NO_CANDIDATE;4calls,1/46scored,45NOT_RUN",
     "0.6.32": "CLOSED single ACK PASS, public8/8PASS/overallUNKNOWN;1/46scored,45held; superseded for uncited fact continuity",
     "0.6.33": "CLOSED EVIDENCE_GAP/NO_CANDIDATE,2calls,1/46scored45NOT_RUN",
-    "0.6.34": "Single ACK candidate/0 running;45held"
+    "0.6.34": "CLOSED build failure/rollback/NO_CANDIDATE;8calls,1/46scored45NOT_RUN",
+    "0.6.35": "Single original-Broken ACK candidate/0 running;45held"
   },
   "optimization_reset": {
     "as_of": "2026-10-21T14:38:03.778057+00:00",
-    "gate": "G4_V0634_SINGLE_GATE_RUNNING",
+    "gate": "G4_V0635_SINGLE_GATE_RUNNING",
     "formal_ready": false,
     "money_limit_cny": 150,
-    "report": "docs/reports/2026-10-24-optional-gap-context-closure.md",
-    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.34.json",
+    "report": "docs/reports/2026-10-24-build-failure-recovery.md",
+    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.35.json",
     "public_calibration": "temporal-v2-calibration-corrected/summary.json",
-    "live_result": ".32ACKPASS; latest.33EVIDENCE_GAP/NO_CANDIDATE; .34running",
+    "live_result": ".34 compile failure, rollback, NO_CANDIDATE; .32 PASS historical only",
     "next_revision": null
   },
   "latest_live_result": {
-    "version": "0.6.33",
+    "version": "0.6.34",
     "case_id": "R4-ACK-CLOUDWATCH-2985",
-    "status": "EVIDENCE_GAP",
+    "status": "CLOSED",
+    "method_status": "CANDIDATE_COMPARISON_UNCERTAIN",
     "independent_status": "NO_CANDIDATE",
-    "model_calls": 2,
+    "model_calls": 8,
     "scored": 1,
     "not_run": 45
   },
   "current_experiment": {
-    "version": "0.6.34",
+    "version": "0.6.35",
     "case_id": "R4-ACK-CLOUDWATCH-2985",
     "status": "RUNNING"
   },
-  "G4": "V0634_SINGLE_GATE_PENDING_RECOVERY_NOT_RUN",
+  "G4": "V0635_SINGLE_GATE_PENDING_RECOVERY_NOT_RUN",
   "G5": "FIXED_SAME_VERSION_PANEL_PENDING",
   "B_opened": false,
-  "engineering_tests": 814,
+  "engineering_tests": 841,
   "budget_snapshot": {
     "limit_cny": 150,
-    "committed_including_reservations_cny": 94.591748,
-    "remaining_upper_bound_cny": 55.408252,
-    "as_of": "End of .33; .34 running"
+    "committed_including_reservations_cny": 95.57315,
+    "remaining_upper_bound_cny": 54.42685,
+    "as_of": "End of .34"
   },
   "staged_revision": null,
   "subtests": 22,
-  "frozen_method": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.34.json",
+  "frozen_method": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.35.json",
   "same_version_candidate_independent_pass_so_far": {
     "A": 0,
     "recovery": 0
@@ -1347,30 +1348,30 @@
     "status": "FROZEN",
     "source_delta": [
       "contractedge/__init__.py",
-      "contractedge/orchestration/runner.py",
-      "contractedge/retrieval/candidates.py",
-      "contractedge/retrieval/gap_delivery.py"
+      "contractedge/execution/public.py",
+      "contractedge/orchestration/feedback.py",
+      "contractedge/orchestration/repair.py"
     ],
     "configuration_delta": {}
   },
   "current_development_revision": {
-    "version": "0.6.34",
-    "source_sha256": "cfc3e75abc53206b14ad1df497f48bb561a81aeffa8e63450474532703bc73a2",
+    "version": "0.6.35",
+    "source_sha256": "68e5275224d95958f054acda90108c5f0a84272fa1569b6a90ae3e1aaa74b9dd",
     "upstream_commit": "c892215",
     "local_delta": [
       "contractedge/__init__.py",
-      "contractedge/orchestration/runner.py",
-      "contractedge/retrieval/candidates.py",
-      "contractedge/retrieval/gap_delivery.py"
+      "contractedge/execution/public.py",
+      "contractedge/orchestration/feedback.py",
+      "contractedge/orchestration/repair.py"
     ],
     "is_original_v0627_freeze": false
   },
   "budget_current": {
     "limit_cny": 150,
-    "committed_including_uncertain_cny": 94.591748,
-    "remaining_upper_cny": 55.408252,
+    "committed_including_uncertain_cny": 95.57315,
+    "remaining_upper_cny": 54.42685,
     "uncertain_reservations": 3,
-    "as_of": "End of .33; .34 running"
+    "as_of": "End of .34"
   },
   "previous_live_success": {
     "version": "0.6.32",

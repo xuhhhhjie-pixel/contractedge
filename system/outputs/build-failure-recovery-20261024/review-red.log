@@ -1,0 +1,258 @@
+..............FFFFFFFFF                                                  [100%]
+=================================== FAILURES ===================================
+__ test_incomplete_scenario_flags_cannot_authorize_repair[missing-timed_out] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-312/test_incomplete_scenario_flags0')
+field = 'timed_out', value = 'missing'
+
+    @pytest.mark.parametrize('field',['timed_out','output_limited'])
+    @pytest.mark.parametrize('value',['missing',None])
+    def test_incomplete_scenario_flags_cannot_authorize_repair(tmp_path,field,value):
+        raw,snapshot,record=fixture(tmp_path)
+        scenario=record['scenarios'][0]
+        if value=='missing':
+            del scenario[field]
+        else:
+            scenario[field]=value
+        (raw/'public_execution.json').write_text(json.dumps(record))
+>       assert classify(raw,snapshot)==[]
+E       AssertionError: assert [{'operation'...TIC_V1', ...}] == []
+E         
+E         Left contains one more item: {'operation': 'PRODUCTION_COMPILE', 'compiler': 'go', 'status': 'FAILED', 'producer': 'FROZEN_PUBLIC_GO_COMPILER_DIAGNOSTIC_V1', ...}
+E         Use -v to get more diff
+
+tests/test_candidate_build_failure.py:99: AssertionError
+_ test_incomplete_scenario_flags_cannot_authorize_repair[missing-output_limited] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-312/test_incomplete_scenario_flags1')
+field = 'output_limited', value = 'missing'
+
+    @pytest.mark.parametrize('field',['timed_out','output_limited'])
+    @pytest.mark.parametrize('value',['missing',None])
+    def test_incomplete_scenario_flags_cannot_authorize_repair(tmp_path,field,value):
+        raw,snapshot,record=fixture(tmp_path)
+        scenario=record['scenarios'][0]
+        if value=='missing':
+            del scenario[field]
+        else:
+            scenario[field]=value
+        (raw/'public_execution.json').write_text(json.dumps(record))
+>       assert classify(raw,snapshot)==[]
+E       AssertionError: assert [{'operation'...TIC_V1', ...}] == []
+E         
+E         Left contains one more item: {'operation': 'PRODUCTION_COMPILE', 'compiler': 'go', 'status': 'FAILED', 'producer': 'FROZEN_PUBLIC_GO_COMPILER_DIAGNOSTIC_V1', ...}
+E         Use -v to get more diff
+
+tests/test_candidate_build_failure.py:99: AssertionError
+____ test_incomplete_scenario_flags_cannot_authorize_repair[None-timed_out] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-312/test_incomplete_scenario_flags2')
+field = 'timed_out', value = None
+
+    @pytest.mark.parametrize('field',['timed_out','output_limited'])
+    @pytest.mark.parametrize('value',['missing',None])
+    def test_incomplete_scenario_flags_cannot_authorize_repair(tmp_path,field,value):
+        raw,snapshot,record=fixture(tmp_path)
+        scenario=record['scenarios'][0]
+        if value=='missing':
+            del scenario[field]
+        else:
+            scenario[field]=value
+        (raw/'public_execution.json').write_text(json.dumps(record))
+>       assert classify(raw,snapshot)==[]
+E       AssertionError: assert [{'operation'...TIC_V1', ...}] == []
+E         
+E         Left contains one more item: {'operation': 'PRODUCTION_COMPILE', 'compiler': 'go', 'status': 'FAILED', 'producer': 'FROZEN_PUBLIC_GO_COMPILER_DIAGNOSTIC_V1', ...}
+E         Use -v to get more diff
+
+tests/test_candidate_build_failure.py:99: AssertionError
+_ test_incomplete_scenario_flags_cannot_authorize_repair[None-output_limited] __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-312/test_incomplete_scenario_flags3')
+field = 'output_limited', value = None
+
+    @pytest.mark.parametrize('field',['timed_out','output_limited'])
+    @pytest.mark.parametrize('value',['missing',None])
+    def test_incomplete_scenario_flags_cannot_authorize_repair(tmp_path,field,value):
+        raw,snapshot,record=fixture(tmp_path)
+        scenario=record['scenarios'][0]
+        if value=='missing':
+            del scenario[field]
+        else:
+            scenario[field]=value
+        (raw/'public_execution.json').write_text(json.dumps(record))
+>       assert classify(raw,snapshot)==[]
+E       AssertionError: assert [{'operation'...TIC_V1', ...}] == []
+E         
+E         Left contains one more item: {'operation': 'PRODUCTION_COMPILE', 'compiler': 'go', 'status': 'FAILED', 'producer': 'FROZEN_PUBLIC_GO_COMPILER_DIAGNOSTIC_V1', ...}
+E         Use -v to get more diff
+
+tests/test_candidate_build_failure.py:99: AssertionError
+____ test_non_mapping_failure_is_dropped_without_hiding_valid_failure[True] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-312/test_non_mapping_failure_is_dr0')
+invalid_first = True
+
+    @pytest.mark.parametrize('invalid_first',[True,False])
+    def test_non_mapping_failure_is_dropped_without_hiding_valid_failure(tmp_path,invalid_first):
+        raw,snapshot,_=fixture(tmp_path);facts=classify(raw,snapshot)
+        values=[None,*facts] if invalid_first else [*facts,None]
+        report={'status':'EXECUTION_FAILED','snapshot_id':snapshot.snapshot_id,'candidate_build_failures':values}
+>       assert public.has_candidate_execution_failure(report)
+
+tests/test_candidate_build_failure.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/public.py:163: in has_candidate_execution_failure
+    return has_candidate_runtime_failure(report) or has_candidate_build_failure(report)
+src/contractedge/execution/public.py:159: in has_candidate_build_failure
+    and any(valid(failure) for failure in report.get('candidate_build_failures', [])))
+src/contractedge/execution/public.py:159: in <genexpr>
+    and any(valid(failure) for failure in report.get('candidate_build_failures', [])))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+failure = None
+
+    def valid(failure):
+>       locations = failure.get('source_locations')
+E       AttributeError: 'NoneType' object has no attribute 'get'
+
+src/contractedge/execution/public.py:144: AttributeError
+___ test_non_mapping_failure_is_dropped_without_hiding_valid_failure[False] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-312/test_non_mapping_failure_is_dr1')
+invalid_first = False
+
+    @pytest.mark.parametrize('invalid_first',[True,False])
+    def test_non_mapping_failure_is_dropped_without_hiding_valid_failure(tmp_path,invalid_first):
+        raw,snapshot,_=fixture(tmp_path);facts=classify(raw,snapshot)
+        values=[None,*facts] if invalid_first else [*facts,None]
+        report={'status':'EXECUTION_FAILED','snapshot_id':snapshot.snapshot_id,'candidate_build_failures':values}
+        assert public.has_candidate_execution_failure(report)
+>       diagnostics=public.public_failure_diagnostics(report)
+
+tests/test_candidate_build_failure.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/public.py:169: in public_failure_diagnostics
+    build=[f for f in report.get('candidate_build_failures',[]) if has_candidate_build_failure(
+src/contractedge/execution/public.py:169: in <listcomp>
+    build=[f for f in report.get('candidate_build_failures',[]) if has_candidate_build_failure(
+src/contractedge/execution/public.py:159: in has_candidate_build_failure
+    and any(valid(failure) for failure in report.get('candidate_build_failures', [])))
+src/contractedge/execution/public.py:159: in <genexpr>
+    and any(valid(failure) for failure in report.get('candidate_build_failures', [])))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+failure = None
+
+    def valid(failure):
+>       locations = failure.get('source_locations')
+E       AttributeError: 'NoneType' object has no attribute 'get'
+
+src/contractedge/execution/public.py:144: AttributeError
+________ test_non_list_failure_container_cannot_authorize_repair[None] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-312/test_non_list_failure_containe0')
+values = None
+
+    @pytest.mark.parametrize('values',[None,{'invalid':'container'},'invalid'])
+    def test_non_list_failure_container_cannot_authorize_repair(tmp_path,values):
+        _,snapshot,_=fixture(tmp_path)
+        report={'status':'EXECUTION_FAILED','snapshot_id':snapshot.snapshot_id,'candidate_build_failures':values}
+>       assert not public.has_candidate_execution_failure(report)
+
+tests/test_candidate_build_failure.py:116: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/public.py:163: in has_candidate_execution_failure
+    return has_candidate_runtime_failure(report) or has_candidate_build_failure(report)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+report = {'status': 'EXECUTION_FAILED', 'snapshot_id': '1dd010f6ae2667662c7f3cd6ed0d8c0955e41ff06d3d907f67862ef3e448e992', 'candidate_build_failures': None}
+
+    def has_candidate_build_failure(report):
+        def valid(failure):
+            locations = failure.get('source_locations')
+            excerpt = failure.get('stderr_excerpt')
+            return (failure.get('snapshot_id') == report.get('snapshot_id')
+                and failure.get('operation') == 'PRODUCTION_COMPILE' and failure.get('compiler') == 'go'
+                and failure.get('producer') == 'FROZEN_PUBLIC_GO_COMPILER_DIAGNOSTIC_V1'
+                and failure.get('status') == 'FAILED' and isinstance(excerpt, str) and bool(excerpt)
+                and hashlib.sha256(excerpt.encode()).hexdigest() == failure.get('diagnostic_sha256')
+                and bool(re.fullmatch(r'[0-9a-f]{64}', str(failure.get('stderr_sha256', ''))))
+                and isinstance(locations, list) and bool(locations) and all(
+                    isinstance(location, dict) and str(location.get('path', '')).endswith('.go')
+                    and not Path(location['path']).is_absolute() and '..' not in Path(location['path']).parts
+                    and all(type(location.get(key)) is int and location[key] > 0 for key in ['line', 'column'])
+                    and bool(re.fullmatch(r'[0-9a-f]{64}', str(location.get('file_sha256', ''))))
+                    for location in locations))
+        return bool(report.get('status') == 'EXECUTION_FAILED' and report.get('snapshot_id')
+>                   and any(valid(failure) for failure in report.get('candidate_build_failures', [])))
+E       TypeError: 'NoneType' object is not iterable
+
+src/contractedge/execution/public.py:159: TypeError
+_______ test_non_list_failure_container_cannot_authorize_repair[values1] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-312/test_non_list_failure_containe1')
+values = {'invalid': 'container'}
+
+    @pytest.mark.parametrize('values',[None,{'invalid':'container'},'invalid'])
+    def test_non_list_failure_container_cannot_authorize_repair(tmp_path,values):
+        _,snapshot,_=fixture(tmp_path)
+        report={'status':'EXECUTION_FAILED','snapshot_id':snapshot.snapshot_id,'candidate_build_failures':values}
+>       assert not public.has_candidate_execution_failure(report)
+
+tests/test_candidate_build_failure.py:116: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/public.py:163: in has_candidate_execution_failure
+    return has_candidate_runtime_failure(report) or has_candidate_build_failure(report)
+src/contractedge/execution/public.py:159: in has_candidate_build_failure
+    and any(valid(failure) for failure in report.get('candidate_build_failures', [])))
+src/contractedge/execution/public.py:159: in <genexpr>
+    and any(valid(failure) for failure in report.get('candidate_build_failures', [])))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+failure = 'invalid'
+
+    def valid(failure):
+>       locations = failure.get('source_locations')
+E       AttributeError: 'str' object has no attribute 'get'
+
+src/contractedge/execution/public.py:144: AttributeError
+_______ test_non_list_failure_container_cannot_authorize_repair[invalid] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-312/test_non_list_failure_containe2')
+values = 'invalid'
+
+    @pytest.mark.parametrize('values',[None,{'invalid':'container'},'invalid'])
+    def test_non_list_failure_container_cannot_authorize_repair(tmp_path,values):
+        _,snapshot,_=fixture(tmp_path)
+        report={'status':'EXECUTION_FAILED','snapshot_id':snapshot.snapshot_id,'candidate_build_failures':values}
+>       assert not public.has_candidate_execution_failure(report)
+
+tests/test_candidate_build_failure.py:116: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/public.py:163: in has_candidate_execution_failure
+    return has_candidate_runtime_failure(report) or has_candidate_build_failure(report)
+src/contractedge/execution/public.py:159: in has_candidate_build_failure
+    and any(valid(failure) for failure in report.get('candidate_build_failures', [])))
+src/contractedge/execution/public.py:159: in <genexpr>
+    and any(valid(failure) for failure in report.get('candidate_build_failures', [])))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+failure = 'i'
+
+    def valid(failure):
+>       locations = failure.get('source_locations')
+E       AttributeError: 'str' object has no attribute 'get'
+
+src/contractedge/execution/public.py:144: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_candidate_build_failure.py::test_incomplete_scenario_flags_cannot_authorize_repair[missing-timed_out]
+FAILED tests/test_candidate_build_failure.py::test_incomplete_scenario_flags_cannot_authorize_repair[missing-output_limited]
+FAILED tests/test_candidate_build_failure.py::test_incomplete_scenario_flags_cannot_authorize_repair[None-timed_out]
+FAILED tests/test_candidate_build_failure.py::test_incomplete_scenario_flags_cannot_authorize_repair[None-output_limited]
+FAILED tests/test_candidate_build_failure.py::test_non_mapping_failure_is_dropped_without_hiding_valid_failure[True]
+FAILED tests/test_candidate_build_failure.py::test_non_mapping_failure_is_dropped_without_hiding_valid_failure[False]
+FAILED tests/test_candidate_build_failure.py::test_non_list_failure_container_cannot_authorize_repair[None]
+FAILED tests/test_candidate_build_failure.py::test_non_list_failure_container_cannot_authorize_repair[values1]
+FAILED tests/test_candidate_build_failure.py::test_non_list_failure_container_cannot_authorize_repair[invalid]
+9 failed, 14 passed in 0.40s
