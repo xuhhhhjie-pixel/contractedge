@@ -34,6 +34,14 @@ def compare_candidate_checks(incumbent: dict, trial: dict, preservation_ids: lis
             values[key]=retained.get('latest_public_status','UNKNOWN')
         return values
     old,new=table(incumbent),table(trial); regressions=[];unknown=[]
+    # A failed production compile/start cannot be promoted merely because no
+    # semantic preservation check was registered. Keep it an execution blocker,
+    # not an inferred behavioral FAIL; the caller retains the last candidate
+    # and can use the source-bound diagnostic within its existing retry budget.
+    from contractedge.execution.public import has_candidate_execution_failure
+    if has_candidate_execution_failure(trial):
+        unknown.append(dict(check_id='production_execution',
+            reason='Source-bound production execution failed; trial is not eligible for promotion'))
     for key,state in old.items():
         if key[0] not in preservation_ids or state!='PASS':continue
         if not key[3] or not key[4]:

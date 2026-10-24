@@ -1,0 +1,96 @@
+{
+  "method_version": "0.6.42",
+  "saved_source_version": "0.6.41",
+  "new_model_calls": 0,
+  "saved_responses": 8,
+  "all_requests_exact": false,
+  "request_audits": [
+    {
+      "index": 0,
+      "prompt_version": "diagnosis.v1.1.26",
+      "changed_fields": [],
+      "counterexample_in_execution": false,
+      "counts_in_execution": false
+    },
+    {
+      "index": 1,
+      "prompt_version": "changeset.v1.1.13",
+      "changed_fields": [],
+      "counterexample_in_execution": false,
+      "counts_in_execution": false
+    },
+    {
+      "index": 2,
+      "prompt_version": "changeset.v1.1.13",
+      "changed_fields": [],
+      "counterexample_in_execution": false,
+      "counts_in_execution": false
+    },
+    {
+      "index": 3,
+      "prompt_version": "public-postcondition-review.v2",
+      "changed_fields": [],
+      "counterexample_in_execution": true,
+      "counts_in_execution": true
+    },
+    {
+      "index": 4,
+      "prompt_version": "topomen-source-execution.v1",
+      "changed_fields": [],
+      "counterexample_in_execution": true,
+      "counts_in_execution": true
+    },
+    {
+      "index": 5,
+      "prompt_version": "topomen-source-execution.v1",
+      "changed_fields": [],
+      "counterexample_in_execution": true,
+      "counts_in_execution": true
+    },
+    {
+      "index": 6,
+      "prompt_version": "public-postcondition-review.v2",
+      "changed_fields": [],
+      "counterexample_in_execution": true,
+      "counts_in_execution": true
+    },
+    {
+      "index": 7,
+      "prompt_version": "topomen-source-execution.v1",
+      "changed_fields": [
+        "messages"
+      ],
+      "counterexample_in_execution": true,
+      "counts_in_execution": true
+    }
+  ],
+  "worker_returncode": 0,
+  "method_status": "CONCRETE_EDIT_REJECTED",
+  "final_snapshot": "bc59bc7247e84394076bbeaca0a519370d1499e7964ad382e3efd6d53eb9a463",
+  "patch_sha256": "3df74f9495619b571ef279dd629d9d56ad5d99b97d584a4f1bea4681b5a01fae",
+  "method_namespace": true,
+  "producer_namespace": false,
+  "saved_public_outputs": true,
+  "counts_in_46_slot_panel": false,
+  "independent_score": "NOT_RUN",
+  "replay_only_ledger_unchanged": true,
+  "global_ledger_unchanged_claim": false,
+  "harness_files": {
+    "isolated_protocol.py": "bcd33c178da305f4fe69836f68d9f158c4b7a520bb089d1231a7d78c4815f9c7",
+    "isolated_paths.py": "f228cfaac3d959d0a3b43c73a5c8c23d953746f065e753515cdc467e190974a8",
+    "run_isolated_method.py": "31e06fcb6280a9c7d8079682e9f3fa171e778a7e41d2cdf5c490734033e82285",
+    "isolated_public_worker.py": "3e4652e564ffd37a5d7c7798a5ee19fdf43c6fd82744f2fbc50fbb0afc0275ac",
+    "run_reliability_worker_v10.py": "3ec2c661292c04dc695dbbf8db6d4bbc76c0b1a080e6eaa5a4ff4a3539938351",
+    "run_reliability_worker_v9.py": "261d59c4edeca3cafa631576a9197a02c4cd18308df55572f96f1dabf829ba58"
+  },
+  "terminal_validation": {
+    "classification": "METHOD_RESULT",
+    "method_status": "CONCRETE_EDIT_REJECTED",
+    "unknown_requests": 0,
+    "not_dispatched_requests": 0,
+    "candidate_verified": true,
+    "coordinator_policy_failures": [],
+    "recovery_failure": null,
+    "semantic_outcome_upgraded": false
+  }
+}

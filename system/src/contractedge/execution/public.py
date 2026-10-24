@@ -84,6 +84,8 @@ def classify_candidate_build_failures(raw_root, snapshot):
     pattern = re.compile(r'^(?:\./)?([^\s:]+\.go):([1-9]\d*):([1-9]\d*): (.+)$')
     messages = re.compile(r'^(?:cannot use\b|undefined:|syntax error:|unknown field\b|'
                           r'not enough arguments\b|too many arguments\b|'
+                          r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)+ undefined '
+                          r'\(type .+ has no field or method [A-Za-z_]\w*\)$|'
                           r'.+ declared and not used$|.+ imported and not used$)')
     failures = []
     for scenario in record.get('scenarios', []):

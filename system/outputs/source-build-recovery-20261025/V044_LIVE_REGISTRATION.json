@@ -1,0 +1,19 @@
+{
+  "case_id": "RW-ALERTMANAGER-4705",
+  "attempt_id": "native-recovery-alert-public-continuation-v044-20261025-1",
+  "config_sha256": "bf8049c5f8d1b62a56db7d04984d4afa63d58dab8d5af8c48b1e137aea186334",
+  "seed_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
+  "public_release_files": {
+    "public/manifest.jsonl": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+    "partition/member_groups.jsonl": "aa32b07dc8cd2f3c946cb54e42385bded2ccbdf3cdd31b2b358a999480146aea",
+    "RELEASE_ENTRY.json": "6f0d200363dbe14595f2cb3c4cbbaab324b0cc62eb760acc4393d3fbe02a66ef"
+  },
+  "registration_created_utc": "2026-10-24T16:40:15.254237+00:00",
+  "purpose": "Validate source-bound compiler repair tasks, guard rollback and merged seed operation proof after saved replay; new engineering .44, not a repeat-until-pass alias",
+  "comparison_scope": "Independent single development continuation, not original46 or originalBroken first pass",
+  "status": "REGISTERED_NOT_DISPATCHED",
+  "version": "0.6.44",
+  "source_sha256": "b8e46f43a53387f62b6b343de2edf8bf21424eb9423586c35f56ee5f06f8926b",
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

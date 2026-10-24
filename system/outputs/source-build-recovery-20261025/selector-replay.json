@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "scope": "Saved public failed candidate; deterministic diagnosis-to-execution repair task projection, not new model success",
+  "candidate_snapshot": "10f5bcfe9fbd3623f649638c23953c6f7644cbbf789fb52348e1100d711298e9",
+  "original_missing_diagnostic": true,
+  "source_bound_diagnostic": [
+    {
+      "operation": "PRODUCTION_COMPILE",
+      "compiler": "go",
+      "status": "FAILED",
+      "producer": "FROZEN_PUBLIC_GO_COMPILER_DIAGNOSTIC_V1",
+      "snapshot_id": "10f5bcfe9fbd3623f649638c23953c6f7644cbbf789fb52348e1100d711298e9",
+      "scenario": "public-production-build",
+      "source_locations": [
+        {
+          "path": "dispatch/dispatch.go",
+          "line": 188,
+          "column": 20,
+          "file_sha256": "c6923233f251d18a9eae24b2cc15cc79dc38c84de7a4074892af94ea4b37bd32"
+        }
+      ],
+      "stderr_excerpt": "dispatch/dispatch.go:188:20: d.route.findRouteByKey undefined (type *Route has no field or method findRouteByKey)",
+      "stderr_truncated": false,
+      "stderr_sha256": "26ca2752c54e2d470552f2e4a99e286de4cdf266408f450f3ccb741c49f71b91",
+      "diagnostic_sha256": "7300c7853127c4636ccb417e0df584ad5f3ae06eb8f90b538c5cca53ef4fbccb",
+      "locator": {
+        "path": "raw/public-production-build.stderr"
+      },
+      "interpretation": "Source-bound compiler diagnostic; no behavioral verdict or proven root cause"
+    }
+  ],
+  "task_delivered_in_final_request": true,
+  "candidate_guard": {
+    "schema_version": "ce.candidate_decision.v1",
+    "decision": "UNCOMPARABLE",
+    "from_snapshot": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
+    "trial_snapshot": "10f5bcfe9fbd3623f649638c23953c6f7644cbbf789fb52348e1100d711298e9",
+    "regressions": [],
+    "uncomparable": [
+      {
+        "check_id": "production_execution",
+        "reason": "Source-bound production execution failed; trial is not eligible for promotion"
+      }
+    ],
+    "interpretation": "Protected behavior could not be compared sufficiently; do not promote this trial."
+  },
+  "real_model_http_calls": 0,
+  "hidden_data_read": false,
+  "formal_ready": false
+}

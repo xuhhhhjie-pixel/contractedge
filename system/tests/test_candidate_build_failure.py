@@ -38,6 +38,51 @@ def test_current_source_go_type_error_is_bound_to_raw_log_and_snapshot(tmp_path)
     assert not public.has_candidate_execution_failure(report)
 
 
+@pytest.mark.parametrize('diagnostic', [
+    'main.go:2:13: tree.lookup undefined (type *Tree has no field or method lookup)\n',
+    'main.go:2:13: value.Name undefined (type Item has no field or method Name)\n',
+])
+def test_missing_selector_becomes_source_bound_repair_task(tmp_path, diagnostic):
+    from contractedge.orchestration.feedback import make_feedback, feedback_prompt_view
+    raw, snapshot, _ = fixture(tmp_path, diagnostic)
+    facts = classify(raw, snapshot)
+    assert len(facts) == 1
+    report = dict(status='EXECUTION_FAILED', snapshot_id=snapshot.snapshot_id,
+                  candidate_build_failures=facts)
+    feedback = make_feedback(case_id='CASE', run_id='run', input_digest='a'*64, round_id=0,
+        from_snapshot='before', to_snapshot=snapshot.snapshot_id, patch_digest='b'*64,
+        execution_status='EXECUTION_FAILED', observations=[], plan={},
+        observation_diagnostics=public.public_failure_diagnostics(report))
+    task = feedback_prompt_view(feedback)['failure_tasks']['shared_execution_errors'][0]
+    assert task['actual_error'] == diagnostic.strip()
+    assert task['error_field'] == 'production_compile'
+    assert task['source_locations'][0]['file_sha256'] == snapshot.file_digests['main.go']
+    assert feedback['semantic_outcome'] == 'UNKNOWN'
+
+
+@pytest.mark.parametrize('diagnostic', [
+    'main.go:2:13: tree.lookup undefined\n',
+    'main.go:2:13: tree.lookup undefined (dependency download failed)\n',
+    '../external.go:2:13: tree.lookup undefined (type *Tree has no field or method lookup)\n',
+])
+def test_selector_like_unrecognized_or_foreign_errors_remain_unclassified(tmp_path, diagnostic):
+    raw, snapshot, _ = fixture(tmp_path, diagnostic)
+    assert classify(raw, snapshot) == []
+
+
+def test_source_build_failure_cannot_replace_runnable_incumbent_without_preserve_ids(tmp_path):
+    from contractedge.orchestration.candidate_guard import compare_candidate_checks
+    raw, snapshot, _ = fixture(tmp_path)
+    incumbent = dict(status='EXECUTION_PASS', snapshot_id='before', observations=[],
+                     input_digest='input', environment_digest='environment')
+    trial = dict(incumbent, status='EXECUTION_FAILED', snapshot_id=snapshot.snapshot_id,
+                 candidate_build_failures=classify(raw, snapshot))
+    decision = compare_candidate_checks(incumbent, trial, [])
+    assert decision['decision'] == 'UNCOMPARABLE'
+    assert decision['uncomparable'][0]['check_id'] == 'production_execution'
+    assert not decision['regressions']  # A compiler failure is not a semantic FAIL.
+
+
 @pytest.mark.parametrize('kind',['timeout','limited','success','foreign_path','out_of_range','environment','symlink','changed_source'])
 def test_unbound_environment_incomplete_or_stale_output_cannot_authorize_repair(tmp_path,kind):
     raw,snapshot,record=fixture(tmp_path)

@@ -202,10 +202,10 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
             'model_calls': list(trace['model_calls']) + [call]}
 
 
-def rebind_execution_plan(*args, **kwargs):
+def rebind_execution_plan(plan: Mapping, source: Path, feedback: Mapping, *, prior_execution=None) -> dict:
     """Compatibility export; new engine retries go through consumer.prepare."""
     from contractedge.execution.consumers.topomen import rebind_execution_plan as rebind
-    return rebind(*args, **kwargs)
+    return rebind(plan, source, feedback, prior_execution=prior_execution)
 
 
 def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
