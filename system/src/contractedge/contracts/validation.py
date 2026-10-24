@@ -9,6 +9,7 @@ from typing import Any, Mapping
 from jsonschema import Draft202012Validator
 
 from .evidence import static_search_content_digest, supports_expected_missing_evidence
+from .pointers import JSON_POINTER_GUIDANCE
 from .models import (
     ContractError,
     DiagnosisPacket,
@@ -54,7 +55,10 @@ def _check_schema(payload: Any, version: str) -> None:
         path = ".".join(str(part) for part in error.absolute_path)
         additional = ["SCHEMA_INVALID at " + '.'.join(map(str, e.absolute_path)) + ': ' + e.message[:220]
                       for e in errors[1:12]]
-        raise ContractError("SCHEMA_INVALID", path, error.message +
+        pointer_hint = ('; ' + JSON_POINTER_GUIDANCE if any(
+            e.validator == 'pattern' and list(e.absolute_path)[-1:] in [['input_pointer'], ['output_pointer']]
+            for e in errors) else '')
+        raise ContractError("SCHEMA_INVALID", path, error.message + pointer_hint +
                             ('; additional independent errors: ' + '; '.join(additional) if additional else ''))
 
 
