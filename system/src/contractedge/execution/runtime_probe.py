@@ -122,3 +122,42 @@ ALERTMANAGER_RELOAD_V3_GO = (ALERTMANAGER_RELOAD_V2_GO
              'twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity'))
 ALERTMANAGER_V3_CHECKS = {**ALERTMANAGER_V2_CHECKS,
     'groups.visible_at_reload_return': 'Immediately after each of twenty successful reload responses, the production groups API contains all2048 injected active alert names'}
+
+# v4 preserves v3's inputs and bounds. An oversized response cannot establish
+# visibility/absence, but two complete prefix objects with the same identity
+# already contradict the declared uniqueness predicate. Retain only that FAIL.
+_PREFIX_FAILURE_GO = r'''
+var prefixFailureOnce sync.Once
+func emitPrefixFailure(groups,duplicates,unique,observedBytes int){
+ prefixFailureOnce.Do(func(){
+  observation:=map[string]interface{}{
+   "counterexample_kind":"DUPLICATE_GROUP_IDENTITIES_IN_BOUNDED_PREFIX",
+   "response_complete":false,"byte_limit":8*1024*1024,"observed_bytes":observedBytes,
+   "complete_prefix_groups":groups,"duplicate_identities":duplicates,"unique_identities":unique,
+   "scope":"Complete group objects in the bounded public response prefix; no visibility or absence claim"}
+  json.NewEncoder(os.Stdout).Encode(map[string]interface{}{
+   "probe_id":"alertmanager-reload-v4","partial_observation":true,
+   "checks":[]check{{"groups.unique_for_declared_route","FAIL",observation}}})
+  os.Exit(0)
+ })
+}
+'''
+_PREFIX_OVERFLOW_GO = r'''if len(b)>limit{
+ decoder:=json.NewDecoder(bytes.NewReader(b));token,tokenErr:=decoder.Token()
+ groups,duplicates:=0,0;identities:=map[string]bool{}
+ if tokenErr==nil&&token==json.Delim('['){for decoder.More(){
+  var group struct{Labels map[string]string `json:"labels"`;Receiver struct{Name string `json:"name"`} `json:"receiver"`}
+  if decoder.Decode(&group)!=nil{break}
+  if group.Receiver.Name!="null"||group.Labels["alertname"]==""{break};groups++
+  key,_:=json.Marshal([]interface{}{group.Labels,group.Receiver.Name})
+  if identities[string(key)]{duplicates++};identities[string(key)]=true
+ }}
+ if duplicates>0{emitPrefixFailure(groups,duplicates,len(identities),len(b))}
+ return false,false,len(b),fmt.Errorf("groups response exceeds %d bytes; incomplete observation",limit)
+}'''
+ALERTMANAGER_RELOAD_V4_GO = (ALERTMANAGER_RELOAD_V3_GO
+    .replace('alertmanager-reload-v3','alertmanager-reload-v4')
+    .replace('func main(){',_PREFIX_FAILURE_GO+'\nfunc main(){',1)
+    .replace('if len(b)>limit{return false,false,len(b),fmt.Errorf("groups response exceeds %d bytes; incomplete observation",limit)}',
+             _PREFIX_OVERFLOW_GO,1))
+ALERTMANAGER_V4_CHECKS = dict(ALERTMANAGER_V3_CHECKS)

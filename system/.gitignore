@@ -12,3 +12,4 @@ workspaces/
 .local/
 *.egg-info/
 .pytest_cache/
+build/

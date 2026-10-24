@@ -26,13 +26,35 @@ func TestMissingIsNotDuplicate(t *testing.T){visible,unique,_,e:=decodePublicGro
 func TestInvalid(t *testing.T){_,_,_,e:=decodePublicGroups(strings.NewReader("["));if e==nil{t.Fatal("invalid JSON accepted")}}
 func TestOverBound(t *testing.T){_,_,_,e:=decodePublicGroups(strings.NewReader(strings.Repeat(" ",8*1024*1024+1)));if e==nil||!strings.Contains(e.Error(),"exceeds"){t.Fatal(e)}}
 '''
-    for suffix,count,padding in [('v2',128,10000),('v3',2048,625)]:
+    for suffix,count,padding in [('v2',128,10000),('v3',2048,625),('v4',2048,625)]:
         directory=tmp_path/suffix;directory.mkdir();directory.chmod(0o755)
         program,checks=registry['alertmanager-reload-'+suffix]
         assert 'groups.unique_for_declared_route' in checks
         (directory/'main.go').write_text(program);(directory/'main.go').chmod(0o644)
         body=test_source.replace('response(128,false,10000)',f'response({count},false,{padding})')
         (directory/'main_test.go').write_text(body);(directory/'main_test.go').chmod(0o644)
+        if suffix=='v4':
+            partial=r'''package main
+import("os";"os/exec";"encoding/json";"strings";"testing")
+func TestBoundedDuplicatePrefix(t *testing.T){
+ if os.Getenv("CE_PREFIX_HELPER")=="1"{decodePublicGroups(strings.NewReader(response(2048,true,5000)));t.Fatal("duplicate prefix was lost");return}
+ cmd:=exec.Command(os.Args[0],"-test.run=^TestBoundedDuplicatePrefix$")
+ cmd.Env=append(os.Environ(),"CE_PREFIX_HELPER=1");raw,e:=cmd.CombinedOutput();if e!=nil{t.Fatal(e,string(raw))}
+ var result struct{ProbeID string `json:"probe_id"`;Partial bool `json:"partial_observation"`;Checks []struct{ID string `json:"id"`;Status string `json:"status"`;Observed struct{Complete bool `json:"response_complete"`;Groups int `json:"complete_prefix_groups"`;Duplicates int `json:"duplicate_identities"`;Unique int `json:"unique_identities"`;Bytes int `json:"observed_bytes"`} `json:"observed"`} `json:"checks"`}
+ if e=json.Unmarshal(raw,&result);e!=nil{t.Fatal(e,string(raw))}
+ if result.ProbeID!="alertmanager-reload-v4"||!result.Partial||len(result.Checks)!=1{t.Fatal(string(raw))}
+ c:=result.Checks[0];if c.ID!="groups.unique_for_declared_route"||c.Status!="FAIL"||c.Observed.Complete||c.Observed.Duplicates<1||c.Observed.Groups!=c.Observed.Duplicates+c.Observed.Unique||c.Observed.Bytes!=8*1024*1024+1{t.Fatal(string(raw))}
+}
+func TestLargeUniquePrefixRemainsUnavailable(t *testing.T){
+ _,_,_,e:=decodePublicGroups(strings.NewReader(response(2048,false,5000)))
+ if e==nil||!strings.Contains(e.Error(),"incomplete observation"){t.Fatal(e)}
+}
+func TestUnrecognisedPrefixCannotInventIdentity(t *testing.T){
+ _,_,_,e:=decodePublicGroups(strings.NewReader("[{}, {},"+strings.Repeat(" ",8*1024*1024)))
+ if e==nil||!strings.Contains(e.Error(),"incomplete observation"){t.Fatal(e)}
+}
+'''
+            (directory/'prefix_test.go').write_text(partial);(directory/'prefix_test.go').chmod(0o644)
     image='golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d'
     command=['docker','run','--rm','--pull=never','--network=none','--read-only',
         '--user',f'{os.getuid()}:{os.getgid()}','--cpus=2','--memory=2g','--tmpfs=/tmp:rw,exec,size=1g',

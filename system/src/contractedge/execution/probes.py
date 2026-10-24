@@ -5,6 +5,24 @@ from pathlib import Path
 from contractedge.execution.public import cleanup_owned_containers
 
 
+def _valid_partial_checks(probe_id, checks):
+    """A narrow registered counterexample, never partial positive coverage."""
+    if (probe_id!='alertmanager-reload-v4' or not isinstance(checks,list) or len(checks)!=1
+            or not isinstance(checks[0],dict) or checks[0].get('id')!='groups.unique_for_declared_route'
+            or checks[0].get('status')!='FAIL'):
+        return False
+    fact=checks[0].get('observed')
+    if (not isinstance(fact,dict)
+            or fact.get('counterexample_kind')!='DUPLICATE_GROUP_IDENTITIES_IN_BOUNDED_PREFIX'
+            or fact.get('response_complete') is not False):
+        return False
+    names=['byte_limit','observed_bytes','complete_prefix_groups','duplicate_identities','unique_identities']
+    if any(type(fact.get(k)) is not int for k in names):return False
+    return (fact['byte_limit']==8*1024*1024 and fact['observed_bytes']==fact['byte_limit']+1
+            and fact['duplicate_identities']>0 and fact['unique_identities']>0
+            and fact['complete_prefix_groups']==fact['duplicate_identities']+fact['unique_identities'])
+
+
 def candidate_runtime_failures(report, output, source):
     """Recognize the registered wrapper's production startup panic boundary.
 
@@ -29,7 +47,7 @@ def candidate_runtime_failures(report, output, source):
         pid=probe.get('probe_id')
         # These versions own the explicit server readiness + child-log wrapper.
         # Other registered probes have different execution boundaries.
-        if pid not in {'alertmanager-reload-v1','alertmanager-reload-v2','alertmanager-reload-v3'}:continue
+        if pid not in {'alertmanager-reload-v1','alertmanager-reload-v2','alertmanager-reload-v3','alertmanager-reload-v4'}:continue
         if (probe.get('probe_sha256')!=hashlib.sha256(registry[pid][0].encode()).hexdigest()
                 or probe.get('snapshot_id')!=report['snapshot_id']
                 or probe.get('scenario')!='method-'+pid
@@ -67,7 +85,7 @@ def probe_command(probe_id):
             'if go test -count=1 -p=1 -mod=readonly -modfile=/tmp/method-probe.go.mod -buildvcs=false '
             '-overlay=/method-probe/overlay.json -run "^TestContractEdgePublicTagUpdate$" -v ./pkg/resource/metric_alarm >/tmp/ce-probe.stdout 2>/tmp/ce-probe.stderr; '
             'then sed -n "/^{/p" /tmp/ce-probe.stdout; else cat /tmp/ce-probe.stdout /tmp/ce-probe.stderr >&2; exit 1; fi']
-    if probe_id in {'alertmanager-reload-v1','alertmanager-reload-v2','alertmanager-reload-v3'}:
+    if probe_id in {'alertmanager-reload-v1','alertmanager-reload-v2','alertmanager-reload-v3','alertmanager-reload-v4'}:
         return ['sh','-eu','-c','export GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off GOMAXPROCS=2 GOMODCACHE=/work/.contractedge-deps/gomod GOCACHE=/tmp/ce-gocache CGO_ENABLED=0 GOFLAGS="-mod=readonly -buildvcs=false"; exec go run -p=1 /method-probe/main.go']
     return ['sh','-eu','-c',
         'export GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off GOMAXPROCS=2 GOMODCACHE=/work/.contractedge-deps/gomod CGO_ENABLED=0; '
@@ -134,10 +152,14 @@ def run_method_probes(workspace, output, tools_root, specs, timeout_seconds=1200
                     try:
                         value=json.loads(run.stdout)
                         checks=value['checks'];ids=[c['id'] for c in checks]
-                        if (value['probe_id']!=spec['id'] or set(ids)!=set(spec['checks']) or len(ids)!=len(set(ids))
-                            or any(c.get('status') not in {'PASS','FAIL'} or 'observed' not in c for c in checks)):
+                        partial=value.get('partial_observation',False)
+                        if (value['probe_id']!=spec['id'] or type(partial) is not bool
+                            or (partial and not _valid_partial_checks(spec['id'],checks))
+                            or (not partial and (set(ids)!=set(spec['checks']) or len(ids)!=len(set(ids))
+                                or any(c.get('status') not in {'PASS','FAIL'} or 'observed' not in c for c in checks)))):
                             raise ValueError('Probe output check set invalid')
-                        report.update(status='COMPLETE',checks=[{**c,'statement':spec['checks'][c['id']]} for c in checks])
+                        report.update(status='PARTIAL' if partial else 'COMPLETE',
+                            checks=[{**c,'statement':spec['checks'][c['id']]} for c in checks])
                     except (ValueError,KeyError,TypeError) as exc:report['error']=str(exc)
                 reports.append(report)
             for mount,target in writable:
@@ -149,21 +171,30 @@ def run_method_probes(workspace, output, tools_root, specs, timeout_seconds=1200
     after=compute_snapshot(source).snapshot_id
     if after!=before:raise ValueError('Method probe changed candidate source')
     result={'schema_version':'ce.method_behavior_probes.v1','case_id':record['case_id'],'snapshot_id':before,
-        'status':'COMPLETE' if cleanup['status']=='OWNED_CONTAINERS_CLOSED' and all(r['status']=='COMPLETE' for r in reports) else 'PROBE_ERROR',
+        'status':('PARTIAL' if any(r['status']=='PARTIAL' for r in reports) else 'COMPLETE')
+            if cleanup['status']=='OWNED_CONTAINERS_CLOSED' and all(r['status'] in {'COMPLETE','PARTIAL'} for r in reports) else 'PROBE_ERROR',
         'probes':reports,'source_unchanged':before==after,'cleanup':cleanup,'private_materials_loaded':False,
         'hidden_semantic_evaluation':'NOT_RUN','elapsed_seconds':time.monotonic()-start}
     (out/'report.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');return result
 
 
 def behavior_records(report, output):
-    """Materialize only complete registered probe checks as typed evidence."""
+    """Materialize complete checks and narrowly registered partial negative facts."""
     records={};out=Path(output)
-    if report.get('status')!='COMPLETE':return records
+    if report.get('status') not in {'COMPLETE','PARTIAL'}:return records
+    if report['status']=='PARTIAL' and (report.get('source_unchanged') is not True
+            or report.get('cleanup',{}).get('status')!='OWNED_CONTAINERS_CLOSED'):return records
     from contractedge.execution.probe_specs import registered_programs
     registry=registered_programs()
     for probe in report['probes']:
-        if (probe.get('probe_id') not in registry or probe.get('status')!='COMPLETE'
-                or probe.get('probe_sha256')!=hashlib.sha256(registry[probe['probe_id']][0].encode()).hexdigest()
+        partial=probe.get('status')=='PARTIAL'
+        if (probe.get('probe_id') not in registry
+                or probe.get('probe_sha256')!=hashlib.sha256(registry[probe['probe_id']][0].encode()).hexdigest()):continue
+        if partial:
+            if (report['status']!='PARTIAL' or probe.get('snapshot_id')!=report['snapshot_id']
+                    or probe.get('scenario')!='method-'+probe['probe_id']
+                    or not _valid_partial_checks(probe['probe_id'],probe.get('checks'))):continue
+        elif (probe.get('status')!='COMPLETE'
                 or len(probe.get('checks',[]))!=len(registry[probe['probe_id']][1])
                 or {c.get('id') for c in probe.get('checks',[])}!=set(registry[probe['probe_id']][1])
                 or any(c.get('status') not in {'PASS','FAIL'} for c in probe.get('checks',[]))):
@@ -172,6 +203,7 @@ def behavior_records(report, output):
             path=out/probe['probe_id']/f'check-{index:03d}.json'
             value={'probe_id':probe['probe_id'],'probe_sha256':probe['probe_sha256'],
                    'snapshot_id':report['snapshot_id'],'boundary':probe['boundary'],**check}
+            if partial:value['observation_complete']=False
             if probe['probe_id'] in {'kpt-configpath-v2','kpt-configpath-v3','kpt-configpath-v4'}:
                 state=check.get('observed',{});name=check['id'];kind=name.split('.')[0];predicate=name.split('.')[1]
                 functions=state.get('functions',{});rendered=state.get('rendered',{})

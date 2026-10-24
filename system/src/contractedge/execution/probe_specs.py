@@ -165,7 +165,8 @@ KPT_CONFIGPATH_V4_GO = KPT_CONFIGPATH_V3_GO.replace('kpt-configpath-v3','kpt-con
 def registered_programs():
     from contractedge.execution.cloudwatch_probe import CLOUDWATCH_TAG_GO,CLOUDWATCH_TAG_V2_GO,CLOUDWATCH_TAG_CHECKS
     from contractedge.execution.runtime_probe import (ALERTMANAGER_RELOAD_GO, ALERTMANAGER_CHECKS,
-        ALERTMANAGER_RELOAD_V2_GO, ALERTMANAGER_V2_CHECKS, ALERTMANAGER_RELOAD_V3_GO, ALERTMANAGER_V3_CHECKS)
+        ALERTMANAGER_RELOAD_V2_GO, ALERTMANAGER_V2_CHECKS, ALERTMANAGER_RELOAD_V3_GO, ALERTMANAGER_V3_CHECKS,
+        ALERTMANAGER_RELOAD_V4_GO, ALERTMANAGER_V4_CHECKS)
     return {'cloudwatch-tags-v1':(CLOUDWATCH_TAG_GO,CLOUDWATCH_TAG_CHECKS),
             'cloudwatch-tags-v2':(CLOUDWATCH_TAG_V2_GO,CLOUDWATCH_TAG_CHECKS),
             'kpt-configpath-v1':(KPT_CONFIGPATH_GO,KPT_CHECKS),
@@ -174,7 +175,8 @@ def registered_programs():
             'kpt-configpath-v4':(KPT_CONFIGPATH_V4_GO,KPT_V3_CHECKS),
             'alertmanager-reload-v1':(ALERTMANAGER_RELOAD_GO,ALERTMANAGER_CHECKS),
             'alertmanager-reload-v2':(ALERTMANAGER_RELOAD_V2_GO,ALERTMANAGER_V2_CHECKS),
-            'alertmanager-reload-v3':(ALERTMANAGER_RELOAD_V3_GO,ALERTMANAGER_V3_CHECKS)}
+            'alertmanager-reload-v3':(ALERTMANAGER_RELOAD_V3_GO,ALERTMANAGER_V3_CHECKS),
+            'alertmanager-reload-v4':(ALERTMANAGER_RELOAD_V4_GO,ALERTMANAGER_V4_CHECKS)}
 
 
 def select_probes(requirement, source, profiles):

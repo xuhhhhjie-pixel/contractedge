@@ -1,0 +1,240 @@
+FFFFFFFFFFFFF                                                            [100%]
+=================================== FAILURES ===================================
+_ test_partial_negative_fact_reaches_necessary_failure_without_asserting_visibility _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_negative_fact_rea0')
+
+    def test_partial_negative_fact_reaches_necessary_failure_without_asserting_visibility(tmp_path):
+        (tmp_path/PID).mkdir()
+>       records=behavior_records(report(),tmp_path)
+
+tests/test_partial_probe_counterexamples.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+_______ test_partial_output_cannot_upgrade_unknown_or_forge_scope[pass] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_output_cannot_upg0')
+change = 'pass'
+
+    @pytest.mark.parametrize('change', ['pass','unrelated','old_profile','wrong_digest','old_snapshot',
+        'dirty_source','cleanup_failed','missing_counts','contradictory_counts','not_over_bound','complete_claim'])
+    def test_partial_output_cannot_upgrade_unknown_or_forge_scope(tmp_path, change):
+>       d=report();p=d['probes'][0];c=p['checks'][0];o=c['observed']
+
+tests/test_partial_probe_counterexamples.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+_____ test_partial_output_cannot_upgrade_unknown_or_forge_scope[unrelated] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_output_cannot_upg1')
+change = 'unrelated'
+
+    @pytest.mark.parametrize('change', ['pass','unrelated','old_profile','wrong_digest','old_snapshot',
+        'dirty_source','cleanup_failed','missing_counts','contradictory_counts','not_over_bound','complete_claim'])
+    def test_partial_output_cannot_upgrade_unknown_or_forge_scope(tmp_path, change):
+>       d=report();p=d['probes'][0];c=p['checks'][0];o=c['observed']
+
+tests/test_partial_probe_counterexamples.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+____ test_partial_output_cannot_upgrade_unknown_or_forge_scope[old_profile] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_output_cannot_upg2')
+change = 'old_profile'
+
+    @pytest.mark.parametrize('change', ['pass','unrelated','old_profile','wrong_digest','old_snapshot',
+        'dirty_source','cleanup_failed','missing_counts','contradictory_counts','not_over_bound','complete_claim'])
+    def test_partial_output_cannot_upgrade_unknown_or_forge_scope(tmp_path, change):
+>       d=report();p=d['probes'][0];c=p['checks'][0];o=c['observed']
+
+tests/test_partial_probe_counterexamples.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+___ test_partial_output_cannot_upgrade_unknown_or_forge_scope[wrong_digest] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_output_cannot_upg3')
+change = 'wrong_digest'
+
+    @pytest.mark.parametrize('change', ['pass','unrelated','old_profile','wrong_digest','old_snapshot',
+        'dirty_source','cleanup_failed','missing_counts','contradictory_counts','not_over_bound','complete_claim'])
+    def test_partial_output_cannot_upgrade_unknown_or_forge_scope(tmp_path, change):
+>       d=report();p=d['probes'][0];c=p['checks'][0];o=c['observed']
+
+tests/test_partial_probe_counterexamples.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+___ test_partial_output_cannot_upgrade_unknown_or_forge_scope[old_snapshot] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_output_cannot_upg4')
+change = 'old_snapshot'
+
+    @pytest.mark.parametrize('change', ['pass','unrelated','old_profile','wrong_digest','old_snapshot',
+        'dirty_source','cleanup_failed','missing_counts','contradictory_counts','not_over_bound','complete_claim'])
+    def test_partial_output_cannot_upgrade_unknown_or_forge_scope(tmp_path, change):
+>       d=report();p=d['probes'][0];c=p['checks'][0];o=c['observed']
+
+tests/test_partial_probe_counterexamples.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+___ test_partial_output_cannot_upgrade_unknown_or_forge_scope[dirty_source] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_output_cannot_upg5')
+change = 'dirty_source'
+
+    @pytest.mark.parametrize('change', ['pass','unrelated','old_profile','wrong_digest','old_snapshot',
+        'dirty_source','cleanup_failed','missing_counts','contradictory_counts','not_over_bound','complete_claim'])
+    def test_partial_output_cannot_upgrade_unknown_or_forge_scope(tmp_path, change):
+>       d=report();p=d['probes'][0];c=p['checks'][0];o=c['observed']
+
+tests/test_partial_probe_counterexamples.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+__ test_partial_output_cannot_upgrade_unknown_or_forge_scope[cleanup_failed] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_output_cannot_upg6')
+change = 'cleanup_failed'
+
+    @pytest.mark.parametrize('change', ['pass','unrelated','old_profile','wrong_digest','old_snapshot',
+        'dirty_source','cleanup_failed','missing_counts','contradictory_counts','not_over_bound','complete_claim'])
+    def test_partial_output_cannot_upgrade_unknown_or_forge_scope(tmp_path, change):
+>       d=report();p=d['probes'][0];c=p['checks'][0];o=c['observed']
+
+tests/test_partial_probe_counterexamples.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+__ test_partial_output_cannot_upgrade_unknown_or_forge_scope[missing_counts] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_output_cannot_upg7')
+change = 'missing_counts'
+
+    @pytest.mark.parametrize('change', ['pass','unrelated','old_profile','wrong_digest','old_snapshot',
+        'dirty_source','cleanup_failed','missing_counts','contradictory_counts','not_over_bound','complete_claim'])
+    def test_partial_output_cannot_upgrade_unknown_or_forge_scope(tmp_path, change):
+>       d=report();p=d['probes'][0];c=p['checks'][0];o=c['observed']
+
+tests/test_partial_probe_counterexamples.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+_ test_partial_output_cannot_upgrade_unknown_or_forge_scope[contradictory_counts] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_output_cannot_upg8')
+change = 'contradictory_counts'
+
+    @pytest.mark.parametrize('change', ['pass','unrelated','old_profile','wrong_digest','old_snapshot',
+        'dirty_source','cleanup_failed','missing_counts','contradictory_counts','not_over_bound','complete_claim'])
+    def test_partial_output_cannot_upgrade_unknown_or_forge_scope(tmp_path, change):
+>       d=report();p=d['probes'][0];c=p['checks'][0];o=c['observed']
+
+tests/test_partial_probe_counterexamples.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+__ test_partial_output_cannot_upgrade_unknown_or_forge_scope[not_over_bound] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_output_cannot_upg9')
+change = 'not_over_bound'
+
+    @pytest.mark.parametrize('change', ['pass','unrelated','old_profile','wrong_digest','old_snapshot',
+        'dirty_source','cleanup_failed','missing_counts','contradictory_counts','not_over_bound','complete_claim'])
+    def test_partial_output_cannot_upgrade_unknown_or_forge_scope(tmp_path, change):
+>       d=report();p=d['probes'][0];c=p['checks'][0];o=c['observed']
+
+tests/test_partial_probe_counterexamples.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+__ test_partial_output_cannot_upgrade_unknown_or_forge_scope[complete_claim] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-429/test_partial_output_cannot_upg10')
+change = 'complete_claim'
+
+    @pytest.mark.parametrize('change', ['pass','unrelated','old_profile','wrong_digest','old_snapshot',
+        'dirty_source','cleanup_failed','missing_counts','contradictory_counts','not_over_bound','complete_claim'])
+    def test_partial_output_cannot_upgrade_unknown_or_forge_scope(tmp_path, change):
+>       d=report();p=d['probes'][0];c=p['checks'][0];o=c['observed']
+
+tests/test_partial_probe_counterexamples.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def report():
+>       program, statements = registered_programs()[PID]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:17: KeyError
+__________ test_v4_keeps_old_programs_and_offline_dispatch_unchanged ___________
+
+    def test_v4_keeps_old_programs_and_offline_dispatch_unchanged():
+        registry=registered_programs()
+        assert hashlib.sha256(registry['alertmanager-reload-v3'][0].encode()).hexdigest()=='cc9f5496072b4f4e922d702c3c74a48e35831c7cba16efdbac5ef8efe7e4ae4d'
+>       assert registry[PID][1]==registry['alertmanager-reload-v3'][1]
+E       KeyError: 'alertmanager-reload-v4'
+
+tests/test_partial_probe_counterexamples.py:66: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_negative_fact_reaches_necessary_failure_without_asserting_visibility
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_output_cannot_upgrade_unknown_or_forge_scope[pass]
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_output_cannot_upgrade_unknown_or_forge_scope[unrelated]
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_output_cannot_upgrade_unknown_or_forge_scope[old_profile]
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_output_cannot_upgrade_unknown_or_forge_scope[wrong_digest]
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_output_cannot_upgrade_unknown_or_forge_scope[old_snapshot]
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_output_cannot_upgrade_unknown_or_forge_scope[dirty_source]
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_output_cannot_upgrade_unknown_or_forge_scope[cleanup_failed]
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_output_cannot_upgrade_unknown_or_forge_scope[missing_counts]
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_output_cannot_upgrade_unknown_or_forge_scope[contradictory_counts]
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_output_cannot_upgrade_unknown_or_forge_scope[not_over_bound]
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_output_cannot_upgrade_unknown_or_forge_scope[complete_claim]
+FAILED tests/test_partial_probe_counterexamples.py::test_v4_keeps_old_programs_and_offline_dispatch_unchanged
+13 failed in 0.96s

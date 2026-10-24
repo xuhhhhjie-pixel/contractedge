@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "contractedge-system"
-version = "0.6.40"
+version = "0.6.41"
 description = "Snapshot-bound requirement, diagnosis, semantic planning, repair and public feedback for ContractEdge"
 requires-python = ">=3.10"
 dependencies = [

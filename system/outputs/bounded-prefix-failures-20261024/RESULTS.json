@@ -1,0 +1,42 @@
+{
+  "schema_version": "ce.bounded_prefix_failure_qualification.v1",
+  "version": "0.6.41",
+  "method_digest": "18bcb324efdb8fd5b4548703f9e5b85ba6544941d7b1c682d1f152a27170f0ac",
+  "formal_ready": false,
+  "runtime_promoted": false,
+  "engineering": {
+    "full": 1082,
+    "full_subtests": 22,
+    "portable": 1049,
+    "portable_subtests": 17,
+    "portable_excluded_modules": 6,
+    "fresh_portable": 1049,
+    "fresh_portable_subtests": 17,
+    "fresh_native": 9
+  },
+  "saved_public_negative_replay": {
+    "schema_version": "ce.partial_negative_public_replay.v1",
+    "method_source_version": "0.6.41",
+    "candidate_source_version": "0.6.40",
+    "case_id": "RW-ALERTMANAGER-4705",
+    "candidate_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
+    "registered_probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62",
+    "probe_status": "PARTIAL",
+    "source_unchanged": true,
+    "observed_negative_checks": 1,
+    "public_decision": "FAIL",
+    "decision_method": "BOUND_CHECK_AGGREGATION",
+    "semantic_outcome": "PUBLIC_REVIEW_FAIL",
+    "feedback_route": "EXECUTE",
+    "causal_attribution": "UNKNOWN",
+    "unobserved_visibility_claim": "UNKNOWN",
+    "new_model_calls": 0,
+    "private_materials_loaded": false,
+    "fixture_plan_not_new_model_plan": true,
+    "independent_score_claim": false,
+    "formal_ready": false
+  },
+  "real_public_failure_continuation": "RUNNING",
+  "seed_independent_status_already": "PASS",
+  "counts_in_46_slot_panel": false
+}

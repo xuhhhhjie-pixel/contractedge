@@ -52,7 +52,7 @@
   "production_path_review_enabled": true,
   "method_probe_profiles": [
     "kpt-configpath-v4",
-    "alertmanager-reload-v3",
+    "alertmanager-reload-v4",
     "cloudwatch-tags-v2"
   ],
   "diagnosis_format_retry_per_context": true,
