@@ -106,6 +106,27 @@ def test_excessively_nested_payload_is_rejected_without_crashing_review():
     assert support_error(obligation(),claim(item),[item]) is not None
 
 
+@pytest.mark.parametrize('field,value',[('namespace',[]),('kind',{}),('namespace',''),('namespace','  ')])
+def test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness(field,value):
+    item=inventory();operation=failed();operation.update(id='OP',scenario='control',
+        resource_identity={'kind':'Job','name':'child','namespace':'team-a'})
+    operation['resource_identity'][field]=value
+    assert support_error(obligation(),claim(item),[item,operation])=='OPERATION_SUCCESS_CONFLICT'
+
+
+@pytest.mark.parametrize('namespace',['','  '])
+def test_empty_effective_namespace_does_not_prove_explicit_namespace_enumeration(namespace):
+    item=inventory();body=json.loads(item['excerpt']);body['resources'][0]['namespace']=namespace
+    item['excerpt']=json.dumps(body);item['content_digest']=hashlib.sha256(item['excerpt'].encode()).hexdigest()
+    assert support_error(obligation(),claim(item),[item]) is not None
+
+
+def test_collection_cannot_fallback_to_object_identity_when_truncated():
+    item=inventory();item['locator']['truncated']=True
+    item['resource_identity']=obligation()['verification_scope']['resource']
+    assert support_error(obligation(),claim(item),[item]) is not None
+
+
 def test_real_producer_registers_only_successful_complete_render(tmp_path,monkeypatch):
     tools=tmp_path/'tools';tools.mkdir()
     for name in ['prepare_case.py','collect_patch.py','launch_public_case.py']:(tools/name).touch()

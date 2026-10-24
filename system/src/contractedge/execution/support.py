@@ -35,7 +35,8 @@ def _inventory_covers(record, resource):
         return all(isinstance(row,dict) and row.get('kind')==resource['kind']
             and isinstance(row.get('name'),str) and bool(row['name'])
             and (row.get('namespace') is None or isinstance(row['namespace'],str))
-            and (not resource.get('namespace') or row.get('namespace') is not None)
+            and (not resource.get('namespace') or isinstance(row.get('namespace'),str)
+                 and bool(row['namespace'].strip()))
             for row in body['resources'])
     except (KeyError,TypeError,ValueError,AttributeError,RecursionError):return False
 
@@ -44,8 +45,9 @@ def _operation_in_resource_scope(record,resource):
     identity=record.get('resource_identity')
     # Null scope fields do not exclude named objects. Unknown operation identity
     # fields cannot waive a potentially relevant failure either.
-    return not isinstance(identity,Mapping) or all(v is None or identity.get(k) in (None,v)
-                                                 for k,v in resource.items())
+    return not isinstance(identity,Mapping) or all(v is None
+        or not isinstance(identity.get(k),str) or not identity[k].strip() or identity[k]==v
+        for k,v in resource.items())
 
 
 def support_error(obligation, claim, observations, artifacts=()):
@@ -68,7 +70,8 @@ def support_error(obligation, claim, observations, artifacts=()):
             scope_error = 'OBSERVATION_SCENARIO_MISMATCH'
             continue
         resource = scope.get('resource')
-        if resource and not (_inventory_covers(record,resource) or
+        if resource and not (_inventory_covers(record,resource)
+                if record.get('adapter_id')=='contractedge.render-inventory.v1' else
                 isinstance(record.get('resource_identity'),Mapping)
                 and all(record['resource_identity'].get(k)==v for k,v in resource.items())):
             scope_error = 'OBSERVATION_RESOURCE_MISMATCH'
