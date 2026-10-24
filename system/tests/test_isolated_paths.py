@@ -145,3 +145,63 @@ def test_file_modified_during_copy_cannot_become_complete_candidate(tmp_path, mo
         monkeypatch.setattr(safe.os, 'read', racing_read)
         with pytest.raises(safe.UnsafePath): boundary.clone_source('workspace/source', tmp_path/'copy')
     assert changed and not (tmp_path/'copy').exists()
+
+
+def test_registered_broken_relative_link_is_preserved_without_reading_target(tmp_path):
+    safe=module();root=source_tree(tmp_path)
+    source=root/'workspace/source';(source/'docs').mkdir();(source/'docs/link').symlink_to('../main.go')
+    with safe.SafeRoot(root) as boundary:
+        manifest=boundary.clone_source('workspace/source',tmp_path/'copy',allowed_symlinks={'docs/link':'../main.go'})
+    assert (tmp_path/'copy/docs/link').is_symlink()
+    assert os.readlink(tmp_path/'copy/docs/link')=='../main.go'
+    assert manifest['symlinks']=={'docs/link':'../main.go'}
+    assert set(manifest['files'])=={'main.go'}
+
+
+@pytest.mark.parametrize('target',['../../private','/etc/passwd','../different'])
+def test_registered_link_cannot_change_target_or_escape_source(tmp_path,target):
+    safe=module();root=source_tree(tmp_path)
+    source=root/'workspace/source';(source/'docs').mkdir();(source/'docs/link').symlink_to(target)
+    with safe.SafeRoot(root) as boundary:
+        with pytest.raises(safe.UnsafePath):
+            boundary.clone_source('workspace/source',tmp_path/'copy',allowed_symlinks={'docs/link':'../main.go'})
+    assert not (tmp_path/'copy').exists()
+
+
+def test_registered_links_must_exist_and_cannot_be_declared_outside_source(tmp_path):
+    safe=module();root=source_tree(tmp_path)
+    with safe.SafeRoot(root) as boundary:
+        for links in [{'missing':'main.go'},{'link':'../private'},{'../link':'main.go'}]:
+            with pytest.raises(safe.UnsafePath):
+                boundary.clone_source('workspace/source',tmp_path/'copy',allowed_symlinks=links)
+    assert not (tmp_path/'copy').exists()
+
+
+def test_receipt_read_uses_same_nofollow_and_size_boundary(tmp_path):
+    safe=module();root=source_tree(tmp_path)
+    (root/'report.json').write_text('public')
+    (root/'redirect').symlink_to(tmp_path/'private')
+    with safe.SafeRoot(root) as boundary:
+        assert boundary.read_bytes('report.json',max_bytes=10)==b'public'
+        for relative,limit in [('redirect',10),('report.json',3),('../private',10)]:
+            with pytest.raises(safe.UnsafePath):boundary.read_bytes(relative,max_bytes=limit)
+
+
+def test_source_mount_remains_traversable_to_nonowner_container_process(tmp_path):
+    safe=module();root=source_tree(tmp_path)
+    with safe.SafeRoot(root) as boundary:boundary.clone_source('workspace/source',tmp_path/'copy')
+    # Official extraction exposes source as 0755. Helm's nonowner container
+    # process must traverse /work; making the cloned root 0700 breaks execution.
+    assert (tmp_path/'copy').stat().st_mode & 0o005 == 0o005
+    assert (tmp_path/'copy/main.go').stat().st_mode & 0o004
+
+
+def test_trusted_publication_has_its_own_bounds_without_relaxing_source_snapshot(tmp_path):
+    safe=module();root=source_tree(tmp_path)
+    stage=tmp_path/'inputs';stage.mkdir();(stage/'dependency.tar.gz').write_bytes(b'123456')
+    with safe.SafeRoot(root) as boundary:
+        with pytest.raises(safe.UnsafePath):boundary.publish_dir(stage,'rejected',limits={'max_file_bytes':3})
+        boundary.publish_dir(stage,'accepted',limits={'max_file_bytes':6,'max_bytes':6})
+        with pytest.raises(safe.UnsafePath):boundary.clone_source('workspace/source',tmp_path/'copy',{'max_file_bytes':3})
+    assert (root/'accepted/dependency.tar.gz').read_bytes()==b'123456'
+    assert not (root/'rejected').exists() and not (tmp_path/'copy').exists()

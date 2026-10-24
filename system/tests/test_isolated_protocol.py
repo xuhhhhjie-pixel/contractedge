@@ -173,3 +173,26 @@ def test_sensitive_result_is_never_journaled_or_returned(tmp_path):
         with pytest.raises(rpc.ProtocolError, match='OUTCOME_UNKNOWN'):
             rpc.RpcClient(server.path, 'token').call('model.complete', {})
     assert secret not in ''.join(p.read_text() for p in (tmp_path/'journal').glob('*.json'))
+
+
+def test_transport_timeout_is_not_a_new_semantic_request(tmp_path):
+    rpc = module(); effects=[]
+    handlers={'model.complete':lambda p:effects.append(p['timeout_seconds']) or {'content':'saved'}}
+    with rpc.JsonRpcServer(tmp_path/'s','auth-test-8dce',rpc.Journal(tmp_path/'j'),handlers) as server:
+        client=rpc.RpcClient(server.path,'auth-test-8dce')
+        assert client.call('model.complete',{'request':{'prompt':'public'},'timeout_seconds':2},request_id='one')=={'content':'saved'}
+        assert client.call('model.complete',{'request':{'prompt':'public'},'timeout_seconds':1},request_id='one')=={'content':'saved'}
+    assert effects==[2]
+
+
+def test_live_and_recovered_results_keep_exact_later_prompt_serialization(tmp_path):
+    rpc=module();effects=[]
+    def public_result(payload):
+        effects.append(1)
+        return {'observation':{'id':'OBS1','snapshot_id':'S0','behavior_check':{'id':'probe','status':'FAIL'}}}
+    for _ in range(2):
+        with rpc.JsonRpcServer(tmp_path/'s','auth-8d7c',rpc.Journal(tmp_path/'j'),
+                               {'public.observe':public_result}) as server:
+            result=rpc.RpcClient(server.path,'auth-8d7c').call('public.observe',{},request_id='same')
+            assert json.dumps(result['observation'])=='{"id": "OBS1", "snapshot_id": "S0", "behavior_check": {"id": "probe", "status": "FAIL"}}'
+    assert effects==[1]

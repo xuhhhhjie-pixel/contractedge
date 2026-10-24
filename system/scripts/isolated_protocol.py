@@ -29,10 +29,14 @@ class ProtocolError(RuntimeError):
     """Only stable codes, never underlying provider or filesystem errors."""
 
 
-def _json_bytes(value):
+class DispatchCancelled(ProtocolError):
+    """The coordinator cancelled before entering a side-effect handler."""
+
+
+def _json_bytes(value, *, canonical=False):
     try:
         result = json.dumps(value, ensure_ascii=True, allow_nan=False,
-                            sort_keys=True, separators=(',', ':')).encode('utf-8')
+                            sort_keys=canonical, separators=(',', ':')).encode('utf-8')
     except (ValueError, TypeError, RecursionError):
         raise ProtocolError('INVALID_JSON') from None
     if len(result) > MAX_FRAME:
@@ -129,7 +133,7 @@ class Journal:
     def execute(self, request_id, identity, effect):
         if not isinstance(request_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,96}', request_id):
             raise ProtocolError('INVALID_REQUEST_ID')
-        digest = hashlib.sha256(_json_bytes(identity)).hexdigest()
+        digest = hashlib.sha256(_json_bytes(identity, canonical=True)).hexdigest()
         path = self.root / (request_id + '.json')
         with self._locked():
             if path.exists() or path.is_symlink():
@@ -138,6 +142,8 @@ class Journal:
                     raise ProtocolError('IDENTITY_MISMATCH')
                 if previous['status'] == 'DONE':
                     return previous['result']
+                if previous['status'] == 'NOT_DISPATCHED':
+                    raise ProtocolError('RUN_CLOSED')
                 raise ProtocolError('OUTCOME_UNKNOWN')
             # A crash may have left no explicit error marker. Read the durable
             # pending records, rather than relying on in-memory request state.
@@ -151,6 +157,9 @@ class Journal:
                     raise ProtocolError('INVALID_RESULT')
                 record = dict(record, status='DONE', result=result)
                 self._write(path, record)
+            except DispatchCancelled:
+                self._write(path, dict(record, status='NOT_DISPATCHED', error='RUN_CLOSED'))
+                raise ProtocolError('RUN_CLOSED') from None
             except Exception:
                 # Neither guess whether the service billed nor expose its error.
                 # Keep PENDING and forbid all new side effects in this session.
@@ -168,6 +177,11 @@ class JsonRpcServer:
         self.handlers = handlers
         self.sensitive = tuple(str(s) for s in (*sensitive_values, token) if s)
         self._server = None
+        self._closing = threading.Event()
+
+    def cancel_pending(self):
+        """Prevent queued handlers from starting; in-flight outcomes stay durable."""
+        self._closing.set()
 
     def _check_sensitive(self, value):
         # Compare decoded strings too: JSON escaping must not bypass the check.
@@ -194,11 +208,17 @@ class JsonRpcServer:
         if not isinstance(payload, dict):
             raise ProtocolError('INVALID_REQUEST')
         self._check_sensitive(payload)
+        self._check_sensitive(request['request_id'])
         def effect():
+            if self._closing.is_set():
+                raise DispatchCancelled('RUN_CLOSED')
             result = self.handlers[op](payload)
             self._check_sensitive(result)
             return result
-        return self.journal.execute(request['request_id'], {'op': op, 'payload': payload}, effect)
+        semantic_payload = dict(payload)
+        if op == 'model.complete':
+            semantic_payload.pop('timeout_seconds', None)
+        return self.journal.execute(request['request_id'], {'op': op, 'payload': semantic_payload}, effect)
 
     def __enter__(self):
         owner = self
@@ -223,6 +243,7 @@ class JsonRpcServer:
         return self
 
     def __exit__(self, *exc):
+        self.cancel_pending()
         self._server.shutdown()
         self._server.server_close()
         self._thread.join()
