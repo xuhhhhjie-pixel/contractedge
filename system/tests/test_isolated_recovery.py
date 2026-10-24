@@ -133,3 +133,27 @@ def test_cancelling_session_prevents_queued_request_from_dispatching_after_activ
     finally:release.set();first.join(3);second.join(3)
     assert effects==[1] and errors==['RUN_CLOSED']
     assert json.loads((tmp_path/'journal/2.json').read_text())['status']=='NOT_DISPATCHED'
+
+
+def test_run_claim_survives_process_death_and_requires_distinct_registered_attempt_and_output(tmp_path):
+    scripts,_,_=modules()
+    code='''import os
+from run_isolated_method import claim_attempt
+claim_attempt(ROOT,attempt_id='registered-1',output=OUTPUT,state=STATE,identity={'case_id':'CASE'})
+os._exit(23)
+'''.replace('ROOT',repr(str(tmp_path/'claims'))).replace('OUTPUT',repr(str(tmp_path/'out/CASE'))).replace('STATE',repr(str(tmp_path/'state')))
+    process=subprocess.run([sys.executable,'-c',code],env={**os.environ,'PYTHONPATH':str(scripts)},timeout=10)
+    assert process.returncode==23
+    spec=importlib.util.spec_from_file_location('claim_coordinator',scripts/'run_isolated_method.py')
+    entry=importlib.util.module_from_spec(spec);sys.path.insert(0,str(scripts))
+    try:spec.loader.exec_module(entry)
+    finally:sys.path.pop(0)
+    for attempt,output in [('registered-1','out/CASE'),('registered-2','out/CASE'),('registered-1','other/CASE')]:
+        with pytest.raises(ValueError,match='already claimed'):
+            entry.claim_attempt(tmp_path/'claims',attempt_id=attempt,output=tmp_path/output,
+                                state=tmp_path/'new-state',identity={'case_id':'CASE'})
+    accepted=entry.claim_attempt(tmp_path/'claims',attempt_id='registered-2',output=tmp_path/'new/CASE',
+                                 state=tmp_path/'new-state',identity={'case_id':'CASE'})
+    assert accepted['automatic_resume'] is False and accepted['budget_reset'] is False
+    records=[json.loads(p.read_text()) for p in (tmp_path/'claims').glob('*.json')]
+    assert any(r['attempt_id']=='registered-1' and r['state_root']==str(tmp_path/'state') for r in records)

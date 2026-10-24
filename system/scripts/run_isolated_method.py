@@ -143,6 +143,7 @@ class ModelBroker:
     def __init__(self, provider, token_counter, config, calls_path, *, started=None):
         from contractedge.model.budget import BudgetedProvider
         self.provider, self.counter, self.config = provider, token_counter, config
+        self.policy_failures = []
         self.budget = BudgetedProvider(provider, token_counter, max_tokens=config['max_total_tokens'],
             max_seconds=config['max_elapsed_seconds'], max_calls=config['max_model_calls'],
             on_update=lambda calls: write_json(calls_path, calls))
@@ -189,6 +190,15 @@ class ModelBroker:
         return {'metadata': dict(hook(request)) if callable(hook) else {}}
 
     def complete(self, payload):
+        from contractedge.model.budget import BudgetExceeded
+        try:
+            return self._complete(payload)
+        except Exception as error:
+            self.policy_failures.append({'category':'BUDGET' if isinstance(error,BudgetExceeded) else 'COORDINATOR_ERROR',
+                                         'error_type':type(error).__name__})
+            raise
+
+    def _complete(self, payload):
         from contractedge.model.provider import ProviderResponseError
         if set(payload) != {'request', 'timeout_seconds'}:
             raise ValueError('Unexpected model parameters')
@@ -208,6 +218,7 @@ class ModelBroker:
             response = self.budget.complete_json(request)
             return {'content': response.content, 'metadata': dict(response.metadata)}
         except ProviderResponseError as error:
+            self.policy_failures.append({'category':'MODEL_POLICY','error_type':type(error).__name__})
             # The service returned a known response. Preserve it and the
             # original strict policy failure, rather than label it network loss.
             return {'received_error': True, 'content': error.response.content,
@@ -348,7 +359,7 @@ class PublicBridge:
         return result
 
 
-def validate_method_result(child_root, case_id, bridge, journal_root):
+def validate_method_result(child_root, case_id, bridge, journal_root, *, broker=None):
     """Bind final candidate to trusted export and keep queue stop reasons explicit."""
     with SafeRoot(child_root) as child:
         trace = json.loads(child.read_bytes(case_id+'/repair.trace.json', max_bytes=8*1024**2))
@@ -376,12 +387,16 @@ def validate_method_result(child_root, case_id, bridge, journal_root):
         'INVALID_DIAGNOSIS', 'INVALID_CHANGESET', 'NEEDS_EVIDENCE', 'INSUFFICIENT_EVIDENCE', 'ROUND_LIMIT',
         'STOPPED_UNCERTAIN', 'CANDIDATE_REGRESSION_REJECTED', 'CANDIDATE_COMPARISON_UNCERTAIN',
         'RECOVERY_PLAN_UNSUPPORTED', 'RECOVERY_NOT_ROUTED', 'RECOVERY_REGRESSION_REJECTED',
-        'RECOVERY_COMPARISON_UNAVAILABLE', 'RECOVERY_FAILED'}
+        'RECOVERY_COMPARISON_UNAVAILABLE'}
+    policy_failures = list(broker.policy_failures) if broker is not None else []
     stopped = (pending > 0 or not_dispatched > 0 or bridge.public_infrastructure_failed
+               or bool(policy_failures) or trace.get('recovery_failure') is not None
                or trace.get('source_integrity_verified') is False or trace.get('status') not in method_statuses)
     return {'classification': 'INFRASTRUCTURE_STOP' if stopped else 'METHOD_RESULT',
             'method_status': trace.get('status'), 'unknown_requests': pending,
-            'not_dispatched_requests': not_dispatched, 'candidate_verified': bool(candidate), 'semantic_outcome_upgraded': False}
+            'not_dispatched_requests': not_dispatched, 'candidate_verified': bool(candidate),
+            'coordinator_policy_failures':policy_failures,'recovery_failure':trace.get('recovery_failure'),
+            'semantic_outcome_upgraded': False}
 
 
 def check_registration(path, identity):
@@ -390,6 +405,35 @@ def check_registration(path, identity):
             or registration.get('allow_paid') is not True or registration.get('counts_in_46_slot_panel') is not False
             or any(registration.get(key) != value for key, value in identity.items())):
         raise ValueError('Paid development registration does not match this exact run')
+
+
+def claim_attempt(root, *, attempt_id, output, state, identity):
+    """Irreversible admission marker: process death never renews a case budget.
+
+    Two exclusive, fsynced claims bind both attempt and canonical output. A crash
+    between claims is conservatively blocked; operators retain the records and
+    preregister a distinct attempt/output rather than deleting or resuming them.
+    """
+    if not isinstance(attempt_id,str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,96}',attempt_id):
+        raise ValueError('Paid execution requires an explicit registered attempt ID')
+    root=Path(root);root.mkdir(mode=0o700,parents=True,exist_ok=True)
+    if root.is_symlink():raise ValueError('Invalid attempt claim directory')
+    output=str(Path(output).resolve())
+    record={'schema_version':'ce.isolated_attempt.v1','attempt_id':attempt_id,'output_path':output,
+            'state_root':str(state),'identity_sha256':hashlib.sha256(
+                json.dumps(identity,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+            'automatic_resume':False,'budget_reset':False}
+    directory=os.open(root,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+    try:
+        for kind,value in [('output',output),('attempt',attempt_id)]:
+            name=kind+'-'+hashlib.sha256(value.encode()).hexdigest()+'.json'
+            try:fd=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600,dir_fd=directory)
+            except FileExistsError:raise ValueError('Attempt or output already claimed; retain prior journal, no automatic restart') from None
+            with os.fdopen(fd,'w') as stream:
+                json.dump(record,stream,ensure_ascii=False,indent=2);stream.write('\n');stream.flush();os.fsync(stream.fileno())
+            os.fsync(directory)
+    finally:os.close(directory)
+    return record
 
 
 def write_docker_wrapper(path, executable, session):
@@ -451,7 +495,18 @@ def execution_identity(args):
     venv = Path(args.python).absolute().parent.parent
     metadata = [*venv.glob('lib/python*/site-packages/*.dist-info/METADATA'),
                 *venv.glob('lib/python*/site-packages/*.pth')]
+    installed = {}
+    links = {}
+    if (venv/'pyvenv.cfg').is_file():
+        for path in sorted(venv.rglob('*')):
+            relative=path.relative_to(venv).as_posix()
+            if path.is_symlink():
+                links[relative]=os.readlink(path)
+                if path.is_dir() and not path.resolve().is_relative_to(venv.resolve()):
+                    raise ValueError('External virtualenv directory links are not registered')
+            if path.is_file():installed[relative]=sha(path)
     identity = {'case_id': args.case, 'config_sha256': sha(args.config),
+        'output_path':str(Path(args.output).resolve()),'attempt_id':getattr(args,'attempt_id',None),
         'method_files': source_files(args.method_root),
         'coordinator_code_files': source_files(scripts.parent),
         'harness_files': {**{name: sha(scripts/name) for name in HARNESS_NAMES},
@@ -465,6 +520,7 @@ def execution_identity(args):
                              for p in sorted(dependencies.rglob('*'))
                              if p.is_file() and p.suffix in {'.py', '.json', '.so'}},
         'python_environment': {'interpreter_sha256': sha(args.python), 'pyvenv_cfg_sha256': sha(venv/'pyvenv.cfg'),
+                               'installed_files':installed,'links':links,
                                'distribution_metadata': {p.relative_to(venv).as_posix(): sha(p) for p in sorted(metadata)}}}
     if args.seed:
         identity['seed_sha256'] = sha(args.seed)
@@ -528,6 +584,7 @@ def _docker_endpoint(preflight):
 
 def run_session(args, config, identity):
     """One development run; prior output is never overwritten or auto-retried."""
+    sys.dont_write_bytecode = True
     output, method, benchmark = Path(args.output).absolute(), Path(args.method_root).absolute(), Path(args.benchmark_root).absolute()
     if output.name != args.case or output.exists():
         raise ValueError('Fresh output named exactly after this case is required')
@@ -535,6 +592,14 @@ def run_session(args, config, identity):
         if not args.registration or not args.api_key_file:
             raise ValueError('Paid execution requires exact registration and parent-only key file')
         check_registration(args.registration, identity)
+        if identity.get('output_path') != str(output.resolve()) or identity.get('attempt_id') != getattr(args,'attempt_id',None):
+            raise ValueError('Registered attempt/output mismatch')
+    session = uuid.uuid4().hex
+    output.parent.mkdir(parents=True, exist_ok=True)
+    state = output.parent/('.isolated-' + session)
+    if args.execute:
+        claim_attempt(Path(config['money_budget']['path']).resolve().parent/'isolated-attempts',
+            attempt_id=getattr(args,'attempt_id',None),output=output,state=state,identity=identity)
     coordinator = Path(__file__).resolve().parents[1]
     # The trusted API coordinator is common infrastructure for both variants;
     # only the child and public producer import the selected frozen method.
@@ -551,9 +616,6 @@ def run_session(args, config, identity):
     if native_identity['source_sha256'] != config['topomen_source_sha256']:
         raise ValueError('Audited native TopoMen source changed before model dispatch')
     method_input, _ = method_input_from_task(benchmark/'public', args.case)
-    session = uuid.uuid4().hex
-    output.parent.mkdir(parents=True, exist_ok=True)
-    state = output.parent/('.isolated-' + session)
     state.mkdir(mode=0o700)
     if shutil.disk_usage(state).free < config.get('min_free_work_disk_bytes', 0):
         raise ValueError('Configured disk admission failed before workspace/model dispatch')
@@ -702,7 +764,7 @@ print(json.dumps(result))
             if args.execute:
                 receipt['money_after'] = provider.money_budget.summary()
                 receipt['parent_budget'] = broker.budget.summary()
-                receipt['terminal_validation'] = validate_method_result(child_slot, args.case, bridge, state/'method-journal')
+                receipt['terminal_validation'] = validate_method_result(child_slot, args.case, bridge, state/'method-journal',broker=broker)
             else:
                 with SafeRoot(child_slot) as child:
                     smoke_result = json.loads(child.read_bytes(args.case+'/isolated-smoke.json', max_bytes=1024*1024))
@@ -738,6 +800,9 @@ print(json.dumps(result))
 
 
 def main():
+    # Registration includes executable bytecode too. Imports during the run must
+    # not mutate the environment being checked at both admission and completion.
+    sys.dont_write_bytecode = True
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument('--inspect', action='store_true')
@@ -745,7 +810,7 @@ def main():
     mode.add_argument('--execute', action='store_true')
     for name in ['method-root', 'benchmark-root', 'config', 'output', 'case', 'python', 'dependency-root']:
         parser.add_argument('--' + name, required=True)
-    for name in ['registration', 'api-key-file', 'runtime-admission', 'seed']:
+    for name in ['registration', 'api-key-file', 'runtime-admission', 'seed', 'attempt-id']:
         parser.add_argument('--' + name)
     args = parser.parse_args()
     identity = execution_identity(args)

@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 
 from run_reliability_worker_v9 import (write,source_files,bind_seed_retry,execute_seed_edit,
@@ -43,7 +44,7 @@ def recover(case,directory,provider,tokenizer,config,benchmark,seed,*,public_run
         max_calls=config['max_model_calls'],on_update=lambda calls:write(directory/'model_calls.json',calls))
     if runtime_started is not None:budget.started=runtime_started
     source=None;feedback=None;integrity=True;rounds=[]
-    status='STARTING';errors=[];selected_patch=None;candidate_decision=None
+    status='STARTING';errors=[];selected_patch=None;candidate_decision=None;recovery_failure=None
     try:
         prepared=runner.prepare(case,workspace,directory/'prepare');source=Path(prepared['source_root'])
         if compute_snapshot(source).snapshot_id!=method.initial_snapshot_id:raise ValueError('Recovery Broken mismatch')
@@ -134,6 +135,13 @@ def recover(case,directory,provider,tokenizer,config,benchmark,seed,*,public_run
                 candidate_decision=continuation['candidate_decision'];integrity=continuation['source_integrity_verified']
                 errors.extend(continuation['errors'])
     except Exception as exc:
+        from contractedge.model.budget import BudgetExceeded
+        from isolated_protocol import ProtocolError
+        if isinstance(exc,BudgetExceeded):category='BUDGET'
+        elif getattr(exc,'response',None) is not None:category='MODEL_POLICY'
+        elif isinstance(exc,ProtocolError):category='CHANNEL'
+        else:category='WORKER_ERROR'
+        recovery_failure={'category':category,'error_type':type(exc).__name__}
         status='RECOVERY_FAILED';errors.append(type(exc).__name__+': '+str(exc))
     finally:
         if not integrity:selected_patch=None
@@ -143,7 +151,7 @@ def recover(case,directory,provider,tokenizer,config,benchmark,seed,*,public_run
             scope='SEEDED_CONTINUATION_NOT_FIRST_PASS',errors=errors,last_feedback=feedback,
             candidate_decision=candidate_decision,budget=budget.summary(),rounds=rounds,
             initial_snapshot_id=method.initial_snapshot_id,final_snapshot_id=compute_snapshot(source).snapshot_id if source else None,
-            source_integrity_verified=integrity)
+            source_integrity_verified=integrity,recovery_failure=recovery_failure)
         write(directory/'repair.trace.json',result)
         if workspace.exists() and not config.get('keep_workspaces'):shutil.rmtree(workspace)
     return result

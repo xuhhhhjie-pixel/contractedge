@@ -107,7 +107,8 @@ def test_public_tool_or_release_drift_invalidates_paid_registration(tmp_path):
     manifest=benchmark/'public/manifest.jsonl';manifest.write_text('fixed release')
     config=tmp_path/'config.json';config.write_text('{}')
     args=SimpleNamespace(method_root=str(method),benchmark_root=str(benchmark),config=str(config),case='CASE',
-        python=sys.executable,dependency_root=str(tmp_path/'deps'),seed=None,runtime_admission=None)
+        python=sys.executable,dependency_root=str(tmp_path/'deps'),seed=None,runtime_admission=None,
+        output=str(tmp_path/'results/CASE'),attempt_id='release-drift')
     initial=isolated.execution_identity(args)
     registration=tmp_path/'registration.json';registration.write_text(json.dumps({**initial,
         'role':'ISOLATED_DEVELOPMENT_VALIDATION','allow_paid':True,'counts_in_46_slot_panel':False}))
@@ -120,7 +121,8 @@ def test_public_tool_or_release_drift_invalidates_paid_registration(tmp_path):
 
 @pytest.mark.parametrize('status,want',[('PUBLIC_EXECUTION_COMPLETE','METHOD_RESULT'),
     ('INVALID_PLAN','METHOD_RESULT'),('STOPPED_UNCERTAIN','METHOD_RESULT'),
-    ('INFRASTRUCTURE_ERROR','INFRASTRUCTURE_STOP'),('BUDGET_EXHAUSTED','INFRASTRUCTURE_STOP')])
+    ('INFRASTRUCTURE_ERROR','INFRASTRUCTURE_STOP'),('BUDGET_EXHAUSTED','INFRASTRUCTURE_STOP'),
+    ('RECOVERY_FAILED','INFRASTRUCTURE_STOP')])
 def test_queue_classifies_method_failure_separately_from_infrastructure_stop(tmp_path,status,want):
     from types import SimpleNamespace
     isolated=load();(tmp_path/'CASE').mkdir();journal=tmp_path/'journal';journal.mkdir()
@@ -155,3 +157,70 @@ def test_candidate_must_match_trusted_export_snapshot_and_actual_patch_bytes(tmp
     assert isolated.validate_method_result(tmp_path,'CASE',bridge,journal)['candidate_verified'] is True
     patch.write_bytes(b'corrupted')
     with pytest.raises(ValueError):isolated.validate_method_result(tmp_path,'CASE',bridge,journal)
+
+
+def test_failed_attempt_cannot_create_new_session_or_reset_journal(tmp_path,monkeypatch):
+    from types import SimpleNamespace
+    from contractedge.dataset import admission,benchmark
+    from contractedge.execution import topomen_agent
+    isolated=load();output=tmp_path/'results/CASE';key=tmp_path/'key';key.write_text('never read')
+    registration=tmp_path/'registration.json'
+    identity={'case_id':'CASE','output_path':str(output),'attempt_id':'dev-attempt-1'}
+    registration.write_text(json.dumps({**identity,'role':'ISOLATED_DEVELOPMENT_VALIDATION',
+        'allow_paid':True,'counts_in_46_slot_panel':False}))
+    args=SimpleNamespace(output=str(output),method_root=str(Path(__file__).resolve().parents[1]),
+        benchmark_root=str(tmp_path/'benchmark'),case='CASE',execute=True,registration=str(registration),
+        api_key_file=str(key),attempt_id='dev-attempt-1',runtime_admission=None)
+    config={'money_budget':{'path':str(tmp_path/'money.json')},
+            'topomen_source_root':str(tmp_path/'native'),'topomen_source_sha256':'native'}
+    monkeypatch.setattr(admission,'check_case_admission',lambda *a:None)
+    monkeypatch.setattr(benchmark,'method_input_from_task',lambda *a:({'initial_snapshot_id':'S0'},{}))
+    monkeypatch.setattr(topomen_agent,'source_identity',lambda *a:{'source_sha256':'native'})
+    reached=[]
+    def interrupted(*a):
+        reached.append(True)
+        state=next(output.parent.glob('.isolated-*'));journal=state/'method-journal';journal.mkdir(exist_ok=True)
+        (journal/'sent.json').write_text(json.dumps({'status':'PENDING'}))
+        raise OSError('simulated interrupted run')
+    monkeypatch.setattr(isolated,'_runtime_admission',interrupted)
+    with pytest.raises(OSError,match='interrupted'):isolated.run_session(args,config,identity)
+    assert not output.exists()
+    with pytest.raises(ValueError,match='already claimed'):isolated.run_session(args,config,identity)
+    assert len(reached)==1 and len(list(output.parent.glob('.isolated-*')))==1
+    # Rewriting registration with a new attempt ID must not recycle the same output.
+    args.attempt_id='dev-attempt-2';identity={**identity,'attempt_id':args.attempt_id}
+    registration.write_text(json.dumps({**identity,'role':'ISOLATED_DEVELOPMENT_VALIDATION',
+        'allow_paid':True,'counts_in_46_slot_panel':False}))
+    with pytest.raises(ValueError,match='already claimed'):isolated.run_session(args,config,identity)
+    assert len(reached)==1
+
+
+def test_trusted_policy_failure_cannot_be_overridden_by_child_success(tmp_path):
+    from types import SimpleNamespace
+    isolated=load();(tmp_path/'CASE').mkdir();journal=tmp_path/'journal';journal.mkdir()
+    (tmp_path/'CASE/repair.trace.json').write_text(json.dumps(dict(case_id='CASE',status='PUBLIC_REVIEW_COMPLETE',candidate=None)))
+    bridge=SimpleNamespace(public_infrastructure_failed=False,exports={})
+    broker=SimpleNamespace(policy_failures=[{'category':'MODEL_POLICY','error_type':'ProviderResponseError'}])
+    assert isolated.validate_method_result(tmp_path,'CASE',bridge,journal,broker=broker)['classification']=='INFRASTRUCTURE_STOP'
+
+
+@pytest.mark.parametrize('package_file',['example.py','native.so','example.pyc','data.json'])
+def test_installed_package_bytes_are_part_of_registered_runtime(tmp_path,package_file):
+    from types import SimpleNamespace
+    isolated=load();venv=tmp_path/'venv';(venv/'bin').mkdir(parents=True)
+    python=venv/'bin/python';python.write_bytes(b'pinned interpreter')
+    (venv/'pyvenv.cfg').write_text('home = /usr/bin\n')
+    site=venv/'lib/python3.10/site-packages';site.mkdir(parents=True)
+    metadata=site/'example-1.dist-info/METADATA';metadata.parent.mkdir();metadata.write_text('Version: 1\n')
+    executable=site/package_file;executable.write_bytes(b'original installed bytes')
+    method=tmp_path/'method';(method/'src').mkdir(parents=True)
+    config=tmp_path/'config.json';config.write_text('{}')
+    args=SimpleNamespace(method_root=str(method),benchmark_root=str(tmp_path/'benchmark'),config=str(config),case='CASE',
+        python=str(python),dependency_root=str(tmp_path/'deps'),seed=None,runtime_admission=None,
+        output=str(tmp_path/'results/CASE'),attempt_id='runtime-drift')
+    initial=isolated.execution_identity(args)
+    registration=tmp_path/'registration.json';registration.write_text(json.dumps({**initial,
+        'role':'ISOLATED_DEVELOPMENT_VALIDATION','allow_paid':True,'counts_in_46_slot_panel':False}))
+    executable.write_bytes(b'changed installed bytes')
+    assert metadata.read_text()=='Version: 1\n'
+    with pytest.raises(ValueError):isolated.check_registration(registration,isolated.execution_identity(args))

@@ -152,6 +152,7 @@ def test_parent_independently_enforces_model_context_calls_and_received_error(tm
     assert broker.complete({'request':req,'timeout_seconds':1})['content']=='answer'
     received=broker.complete({'request':req,'timeout_seconds':1})
     assert received['received_error'] is True and received['content']=='received'
+    assert any(x['category']=='MODEL_POLICY' for x in broker.policy_failures)
     with pytest.raises(BudgetExceeded):broker.complete({'request':req,'timeout_seconds':1})
     assert provider.calls==2 and len(json.loads((tmp_path/'calls.json').read_text()))==2
 
