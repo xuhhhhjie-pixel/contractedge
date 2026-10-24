@@ -1646,11 +1646,18 @@
     "as_of": "2026-10-24T14:22:24.933177+00:00",
     "remaining_upper_bound_cny": 46.344968
   },
-  "staged_revision": null,
+  "staged_revision": "0.6.41",
   "subtests": 22,
   "frozen_method": "outputs/declared-comparison-closure-20261024/frozen-method-v0.6.40.json",
   "same_version_candidate_independent_pass_so_far": 3,
-  "staged_optimization": null,
+  "staged_optimization": {
+    "method_digest": "18bcb324efdb8fd5b4548703f9e5b85ba6544941d7b1c682d1f152a27170f0ac",
+    "scope": "BOUNDED_PARTIAL_NEGATIVE_EVIDENCE",
+    "engineering": "1082+22 full;1049+17 portable;9 native",
+    "real_public_failure_continuation": "RUNNING",
+    "runtime_promoted": false,
+    "report": "docs/reports/2026-10-24-bounded-prefix-failure-closure.md"
+  },
   "current_development_revision": {
     "version": "0.6.38",
     "source_sha256": "5f9e90c459b95e703b0c9f32b9f9d70fff1eb859f90e95489f0083c632f422fe",

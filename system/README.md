@@ -1,4 +1,4 @@
-> 当前开发源码0.6.40，冻结摘要2d117c40ac2c45eb25e440ec33b347da6e25733d5ac300bb4f760d8045246742。全量1069+22、可移植1036+17通过；同版预登记真实结果见 outputs/declared-comparison-closure-20261024/COMPLETION_AUDIT.md。formal_ready=false，原46槽及全部准入门未完成，不继承旧版成绩。
+> 本分支为0.6.41开发候选；日常运行仍为0.6.40。1082+22全量、1049+17可移植通过；新有界前缀失败已进入修订反馈，真实公开失败续修正在验收。formal_ready=false。详见 docs/reports/2026-10-24-bounded-prefix-failure-closure.md。
 
 当前为开发优化版。先阅读 [最新验收](outputs/declared-comparison-closure-20261024/COMPLETION_AUDIT.md) 和 [正式准入计划](docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md)。下方旧版本记录仅作历史参考。
 
