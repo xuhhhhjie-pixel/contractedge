@@ -22,7 +22,9 @@
 ### Task 1: Producer and scope validator
 **Files:** modify src/contractedge/execution/public.py and support.py; create tests/test_public_inventory_scope.py.
 **Interfaces:** support_error(obligation,claim,observations,artifacts=())->str|None unchanged; registered inventory metadata uses existing schema fields.
-- [ ] Write generic producer/consumer positive and adversarial tests, observe current RESOURCE_MISMATCH RED.
-- [ ] Add minimal producer registration and scope matching; keep original direct-object checks.
-- [ ] Replay saved public rejection through fresh trusted production, no HTTP; run related/full/portable suites.
-- [ ] Review concrete scope/operation boundaries; checkpoint only verified source, leaving new-version effect acceptance explicit.
+- [x] Write generic producer/consumer positive and adversarial tests, observe current RESOURCE_MISMATCH RED.
+- [x] Add minimal producer registration and scope matching; keep original direct-object checks.
+- [x] Replay saved public rejection through fresh trusted production, no HTTP; run related/full/portable suites.
+- [x] Review concrete scope/operation boundaries; checkpoint only verified source, leaving new-version effect acceptance explicit.
+
+Completed mechanism and tests; actual .39 one-case independentPASS/publicUNKNOWN is recorded in outputs/public-inventory-scope-20261024/RESULTS.json. This is not a formal-readiness acceptance.
