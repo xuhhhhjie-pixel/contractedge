@@ -1,0 +1,141 @@
+{
+  "schema_version": "ce.development_validation.v1",
+  "development_snapshot_id": "architecture-c1-state-cli-20261024",
+  "snapshot_sha256": "3c4b558b07ae1fe2bdb9b1c95905fbdb33ed76cfe92d790d782c5118462d7fad",
+  "source_sha256": "e21d947f415915fdfa59f979d92b7b84e77f7179363101570d856e2289d8d84c",
+  "status": "VALIDATED_OFFLINE",
+  "portable": "Historical fixture / native integration modules NOT RUN: test_ready_support_consistency.py, test_probe_profiles_v2.py, test_compact_render_inventory.py, test_diagnosis_error_aggregation.py, test_structured_observation_adapters.py, test_topomen_agent.py\n....................................................... [  4%]\n........................................................................ [ 10%]\n........................................................................ [ 17%]\n........................................................................................................................ [ 27%]\n..................................................................... [ 33%]\n.............................................................................................................................................. [ 45%]\n........................................................................ [ 51%]\n........................................................................ [ 58%]\n.............................................................. [ 63%]\n........................................................................ [ 69%]\n..................................ssss............. [ 74%]\n................................................................. [ 79%]\n...................................................................... [ 85%]\n........................................................................ [ 91%]\n........................................................................ [ 98%]\n.....................                                                    [100%]\n1155 passed, 4 skipped, 86 subtests passed in 210.82s (0:03:30)\n",
+  "native": ".........                                                                [100%]\n9 passed in 5.99s\n",
+  "combined_state_cli_and_actual_isolated_public_tests": "............................................................... [ 23%]\n..................................................................... [ 50%]\n............................................................... [ 73%]\n................................................... [ 93%]\n..................                                                    [100%]\n264 passed, 45 subtests passed in 123.02s (0:02:03)\n",
+  "runtime_preflight": {
+    "attempts": [
+      {
+        "exit_code": 1,
+        "operation": "version"
+      },
+      {
+        "exit_code": 0,
+        "operation": "version"
+      },
+      {
+        "exit_code": 0,
+        "operation": "info"
+      },
+      {
+        "exit_code": 0,
+        "operation": "run"
+      }
+    ],
+    "capabilities": {
+      "CgroupVersion": "2",
+      "CpuCfsPeriod": true,
+      "CpuCfsQuota": true,
+      "MemoryLimit": true
+    },
+    "client_api": "1.43",
+    "context": null,
+    "elapsed_seconds": 0.7862383313477039,
+    "endpoint_source": "INHERITED_DOCKER_HOST",
+    "environment_overrides": {
+      "DOCKER_API_VERSION": "1.43"
+    },
+    "errors": [],
+    "global_configuration_changed": false,
+    "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+    "observed_limits": {
+      "cpu": "200000 100000",
+      "memory": "2147483648"
+    },
+    "required_cpus": "2",
+    "required_memory_bytes": 2147483648,
+    "runtime_verified": true,
+    "schema_version": "ce.runtime_preflight.v1",
+    "server_api": "1.43",
+    "status": "PASS"
+  },
+  "six_historical_native_exclusions_retained": true,
+  "regression_evidence": "/home/zyw/contractedge-collab-20261023/evidence/architecture-c1-cli-final-regression-v1",
+  "regression_logs": {
+    "freeze": {
+      "sha256": "3be912476ce0979aa1e5debf2c9eaae9f236362e3dd680385c364ddecc872c99",
+      "elapsed_seconds": 0.16423986852169037
+    },
+    "preflight": {
+      "sha256": "b54bf9bbc0a1acc738d40561cdf347e02a831c331ee9e310d4a3682632ccd5bc",
+      "elapsed_seconds": 0.8660617768764496
+    },
+    "combined": {
+      "sha256": "aa65e8e620a465fcf0aba7b63b3cadbba045577b487762b9a814f5c4ed24634f",
+      "elapsed_seconds": 123.39428209513426
+    },
+    "portable": {
+      "sha256": "2e56be374f2370d0c30b7b55ed70cc1d9f75eb4ca7d2921ad1f00b4771982587",
+      "elapsed_seconds": 211.21708738803864
+    },
+    "native": {
+      "sha256": "e93becdd7fd1cb20cd8d43c0b15527d5d9ed4e03417effa512bba89c1680a796",
+      "elapsed_seconds": 6.3264774940907955
+    },
+    "freeze-after": {
+      "sha256": "3be912476ce0979aa1e5debf2c9eaae9f236362e3dd680385c364ddecc872c99",
+      "elapsed_seconds": 0.16494420170783997
+    }
+  },
+  "Full_equivalence": {
+    "status": "EXACT_EQUIVALENT",
+    "five_cases": {
+      "config-binding": {
+        "call_count": 4,
+        "status": "PUBLIC_REVIEW_COMPLETE",
+        "routes": [
+          "STOP"
+        ]
+      },
+      "reload-state": {
+        "call_count": 4,
+        "status": "PUBLIC_REVIEW_COMPLETE",
+        "routes": [
+          "STOP"
+        ]
+      },
+      "two-consumers": {
+        "call_count": 6,
+        "status": "PUBLIC_REVIEW_COMPLETE",
+        "routes": [
+          "EXECUTE",
+          "STOP"
+        ]
+      },
+      "malformed-once": {
+        "call_count": 5,
+        "status": "PUBLIC_REVIEW_COMPLETE",
+        "routes": [
+          "STOP"
+        ]
+      },
+      "unknown-response": {
+        "call_count": 1,
+        "status": "INFRASTRUCTURE_ERROR",
+        "routes": []
+      }
+    },
+    "result_sha256": "6cac1052383b66dbf24e60576010a9022975bb3881576d374dc41409ac31fb04",
+    "scope": "Actual requests, count, reservations, budget, routes, selected snapshot/patch, feedback and status"
+  },
+  "cli_front_preview_handoff_sha256": "74a81c0bd253a0337be3f7f5b693c30faf959900257770aa69b3b5f1746ad7b9",
+  "recorded_entrypoints": [
+    "repair_case / repair / repair-batch",
+    "public_demo fresh and deliberate READY save/continue",
+    "contractedge run / run_public_case with explicit recording_dir"
+  ],
+  "legacy_entrypoints_not_recorded": [
+    "programmatic run_public_case without recording_dir",
+    "seven historical worker front paths",
+    "offline tape replay without new dispatch"
+  ],
+  "candidate_crash_resume": "NOT_IMPLEMENTED_IN_C1; subsequent C2",
+  "new_model_http_calls": 0,
+  "formal_ready": false,
+  "github_actions": "NOT_RUN_AT_LOCAL_FREEZE",
+  "scope": "C1 state transitions, original error preservation and persistent standard CLI front; C2/D1/D2 and final real single-case validation remain separate."
+}

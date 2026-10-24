@@ -387,7 +387,7 @@ def validate_method_result(child_root, case_id, bridge, journal_root, *, broker=
         'INVALID_DIAGNOSIS', 'INVALID_CHANGESET', 'NEEDS_EVIDENCE', 'INSUFFICIENT_EVIDENCE', 'ROUND_LIMIT',
         'STOPPED_UNCERTAIN', 'CANDIDATE_REGRESSION_REJECTED', 'CANDIDATE_COMPARISON_UNCERTAIN',
         'RECOVERY_PLAN_UNSUPPORTED', 'RECOVERY_NOT_ROUTED', 'RECOVERY_REGRESSION_REJECTED',
-        'RECOVERY_COMPARISON_UNAVAILABLE'}
+        'RECOVERY_COMPARISON_UNAVAILABLE','CONCRETE_EDIT_REJECTED'}
     policy_failures = list(broker.policy_failures) if broker is not None else []
     stopped = (pending > 0 or not_dispatched > 0 or bridge.public_infrastructure_failed
                or bool(policy_failures) or trace.get('recovery_failure') is not None

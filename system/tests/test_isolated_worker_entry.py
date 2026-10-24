@@ -5,6 +5,8 @@ from types import SimpleNamespace
 import sys
 import hashlib
 import subprocess
+import json
+from contractedge.source.snapshot import compute_snapshot
 
 import pytest
 
@@ -46,7 +48,7 @@ def test_unverified_parent_preflight_never_starts_method(receipt,tmp_path):
     assert not (tmp_path/'out').exists()
 
 
-def recovery_fixture(tmp_path, monkeypatch, *, front_error=None):
+def recovery_fixture(tmp_path, monkeypatch, *, front_error=None, mode=None, front_check=None):
     """Only substitute public/model services; exercise actual git seed application."""
     from contractedge.contracts.validation import canonical_digest
     from contractedge.source.snapshot import compute_snapshot
@@ -66,6 +68,7 @@ def recovery_fixture(tmp_path, monkeypatch, *, front_error=None):
     monkeypatch.setattr(probe_specs,'select_probes',lambda *a:[])
     monkeypatch.setattr(observations,'select_observation_adapters',lambda *a:[])
     def front(*a,**kw):
+        if front_check is not None:front_check(source,*a,**kw)
         if front_error is not None:raise front_error
         return SimpleNamespace(to_wire=lambda:{'status':'NEEDS_EVIDENCE','errors':['saved unsupported plan']})
     monkeypatch.setattr(runner,'run_front_half',front)
@@ -79,8 +82,73 @@ def recovery_fixture(tmp_path, monkeypatch, *, front_error=None):
     config=dict(max_total_tokens=100,max_elapsed_seconds=30,max_model_calls=12,
                 method_probe_profiles=[],max_public_evidence_tokens=100,
                 model='test',provider='test',schema_in_prompt=False)
+    if mode is not None:config['seed_planning_snapshot']=mode
     result=entry.recover(value['case_id'],tmp_path/'case',object(),len,config,tmp_path,seed,public_runner=Public())
     return result,source,seed
+
+
+def test_current_candidate_front_uses_seed_bytes_and_valid_handoff_without_claiming_success(tmp_path,monkeypatch):
+    from contractedge.orchestration.feedback import validate_feedback
+    observed=[]
+    def inspect_front(source,method,workspace,provider,config,counter,**kw):
+        assert (source/'main.go').read_text()=='seeded\n'
+        feedback=kw['execution_feedback']
+        validate_feedback(feedback,case_id=method.case_id,input_digest=method.input_digest,
+                          to_snapshot=compute_snapshot(source).snapshot_id)
+        assert feedback['run_id']==config['run_id']
+        assert feedback['semantic_outcome']=='UNKNOWN' and feedback['public_check_results']==[]
+        assert feedback['from_snapshot']==method.initial_snapshot_id
+        assert feedback['to_snapshot']!=method.initial_snapshot_id
+        observed.append(feedback)
+    result,_,_=recovery_fixture(tmp_path,monkeypatch,mode='CURRENT_CANDIDATE',front_check=inspect_front)
+    assert observed and result['status']=='RECOVERY_PLAN_UNSUPPORTED',result['errors']
+    provenance=json.loads((tmp_path/'case/provenance.json').read_text())
+    assert provenance['continuation_protocol']=='ce.seeded_continuation.v6'
+    assert provenance['planning_snapshot']==provenance['seed_snapshot']
+
+
+def test_legacy_snapshot_protocol_remains_explicitly_original_broken(tmp_path,monkeypatch):
+    def inspect_front(source,*a,**kw):
+        assert (source/'main.go').read_text()=='broken\n'
+        assert 'execution_feedback' not in kw
+    result,_,_=recovery_fixture(tmp_path,monkeypatch,front_check=inspect_front)
+    assert result['status']=='RECOVERY_PLAN_UNSUPPORTED'
+
+
+def test_real_front_serializes_current_seed_source_without_relabeling_initial_snapshot(tmp_path):
+    from contractedge.contracts.validation import canonical_digest,parse_method_input
+    from contractedge.orchestration.feedback import make_feedback
+    from contractedge.orchestration.runner import run_front_half
+    from tests.test_contracts import valid_method_input
+    source=tmp_path/'source';source.mkdir()
+    path=source/'main.go';path.write_text('package main\nfunc main(){ enabled := false; _ = enabled }\n')
+    original=compute_snapshot(source).snapshot_id
+    path.write_text('package main\nfunc main(){ enabled := false; seedCurrentMarker := true; _ = enabled; _ = seedCurrentMarker }\n')
+    current=compute_snapshot(source).snapshot_id
+    value=valid_method_input();value.update(initial_snapshot_id=original,
+        requirement_text='When main runs, enabled must be true.',
+        scope_hints=[{'kind':'path','value':'main.go','raw_text':'main.go','origin_ref':'public fixture'}])
+    value['input_digest']=canonical_digest({k:v for k,v in value.items() if k!='input_digest'})
+    method=parse_method_input(value)
+    handoff=make_feedback(case_id=method.case_id,run_id='current-seed-capture',input_digest=method.input_digest,
+        round_id=0,from_snapshot=original,to_snapshot=current,patch_digest='c'*64,
+        execution_status='EXECUTION_PASS',observations=[],plan={},
+        review={'decision':'UNKNOWN','checks':[],'failure_kind':'UNKNOWN'})
+    class Capture:
+        def __init__(self):self.requests=[]
+        def complete_json(self,request):
+            self.requests.append(request)
+            raise RuntimeError('Capture boundary: no HTTP provider configured')
+    provider=Capture()
+    trace=run_front_half(method,source,provider,{'run_id':'current-seed-capture','model':{'model':'fixture'},
+        'max_context_tokens':220000,'initial_diagnosis_context_tokens':120000,'max_total_tokens':2000000,
+        'max_output_tokens':1000,'max_model_calls':12,'max_elapsed_seconds':30,'max_format_retries':0},
+        len,execution_feedback=handoff)
+    assert len(provider.requests)==1,trace.to_wire().get('errors')
+    packet=json.loads(provider.requests[0].messages[1]['content'])
+    assert packet['run_context']['snapshot_id']==current
+    assert 'seedCurrentMarker' in provider.requests[0].messages[1]['content']
+    assert method.initial_snapshot_id==original and handoff['semantic_outcome']=='UNKNOWN'
 
 
 def test_seeded_entry_applies_real_public_patch_before_unsupported_plan_result(tmp_path,monkeypatch):

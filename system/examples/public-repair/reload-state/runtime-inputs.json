@@ -1,0 +1,38 @@
+{
+  "scenarios": [
+    {
+      "id": "selected",
+      "config": {
+        "enabled": true,
+        "selected_name": "orion"
+      },
+      "expected": {
+        "name": "orion"
+      },
+      "warm_config": {
+        "enabled": true,
+        "selected_name": "previous"
+      }
+    },
+    {
+      "id": "disabled",
+      "config": {
+        "enabled": false,
+        "selected_name": "ignored"
+      },
+      "expected": {
+        "name": "default"
+      }
+    },
+    {
+      "id": "stable",
+      "config": {
+        "enabled": true,
+        "selected_name": "orion"
+      },
+      "expected": {
+        "mode": "stable"
+      }
+    }
+  ]
+}

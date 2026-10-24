@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import nullcontext
 import time
 import uuid
 import re
@@ -23,8 +24,13 @@ from contractedge.diagnosis.evidence import bind_evidence_ids, build_evidence_ca
 from contractedge.diagnosis.prompt import build_diagnosis_request
 from contractedge.diagnosis.validate import validate_diagnosis
 from contractedge.model.provider import ModelProvider, ModelResponse
+from contractedge.contracts.stages import StageResult, front_status
+from contractedge.orchestration.state import PolicyLedger, RepairState
+from contractedge.orchestration.transitions import transition
 from contractedge.model.budget import BudgetExceeded
+from contractedge.model.admission import quote_request, context_fits, complete_quoted
 from contractedge.orchestration.feedback import feedback_prompt_view
+from contractedge.orchestration.semantic_delivery import SemanticDeliveryError, delivery_context, install_monitor
 from contractedge.requirement.normalize import normalize_requirement
 from contractedge.retrieval.candidates import CandidateSet, build_candidate_set, extend_once, trim_context_bundle, requires_gap_delivery
 from contractedge.retrieval.edges import build_direct_reference_edges
@@ -522,7 +528,34 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                    token_counter: Callable[[str], int] | None, *,
                    semantic_reviewer: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None = None,
                    execution_feedback: Mapping[str, Any] | None = None,
-                   public_observations: tuple[Mapping[str, Any], ...] = ()) -> RunTrace:
+                   public_observations: tuple[Mapping[str, Any], ...] = (),
+                   journal=None, attempt_id="front") -> RunTrace:
+    dispatch_start = len(journal.dispatches) if journal is not None else 0
+    if journal is not None:
+        install_monitor(provider, journal)
+        journal.primary_error = None
+    trace = _run_front_half_impl(method_input, workspace, provider, config, token_counter,
+        semantic_reviewer=semantic_reviewer, execution_feedback=execution_feedback,
+        public_observations=public_observations, journal=journal, attempt_id=attempt_id)
+    if journal is not None:
+        from contractedge.orchestration.recorder import preserve_error
+        def record_final_front():
+            inputs = tuple(journal.recorder.capture_value(value, kind, snapshot_id=trace.snapshot_id)
+                for value, kind in (
+                    (asdict(method_input) if isinstance(method_input, MethodInput) else dict(method_input), "METHOD_INPUT"),
+                    (dict(config), "FRONT_CONFIG"), (execution_feedback, "EXECUTION_FEEDBACK"),
+                    (list(public_observations), "PUBLIC_OBSERVATIONS")))
+            return journal.final_front(trace, attempt_id=attempt_id,
+                                       dispatch_start=dispatch_start, input_refs=inputs)
+        preserve_error(journal.primary_error, record_final_front)
+    return trace
+
+
+def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspace: str | Path,
+                   provider: ModelProvider, config: Mapping[str, Any],
+                   token_counter: Callable[[str], int] | None, *,
+                   semantic_reviewer=None, execution_feedback=None,
+                   public_observations=(), journal=None, attempt_id="front") -> RunTrace:
     started = time.monotonic()
     parsed = method_input if isinstance(method_input, MethodInput) else parse_method_input(method_input)
     run_id = str(config.get("run_id") or uuid.uuid4())
@@ -531,6 +564,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
     max_elapsed_seconds = float(config.get("max_elapsed_seconds", 1_200))
     max_model_calls = int(config.get('max_model_calls', 24))
     reserved_tokens = 0
+    request_quotes = {}
     run_context_wire = None
     snapshot_id = None
     requirement = None
@@ -546,10 +580,26 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
     separate_truncation_allowance = config.get("planning_truncation_separate_allowance", False)
     if type(separate_truncation_allowance) is not bool:
         raise ValueError("planning_truncation_separate_allowance must be boolean")
-    max_format_retries = max(0, int(config.get("max_format_retries", 1)))
+    engine = getattr(journal, "engine", None)
+    policy = engine.policy if engine is not None else PolicyLedger(config)
+    max_format_retries = policy.limit("format_correction")
     per_evidence_context_correction = config.get('diagnosis_format_retry_per_context', False)
     if type(per_evidence_context_correction) is not bool:
         raise ValueError('diagnosis_format_retry_per_context must be boolean')
+
+    def diagnosis_gate(diagnosis):
+        payload_ref = None
+        call_refs = ()
+        if journal is not None:
+            payload_ref = journal.recorder.capture_value(diagnosis.raw, "FINAL_DIAGNOSIS",
+                                                          snapshot_id=snapshot_id)
+            produced = [receipt for stage, receipt in journal.dispatches if stage.startswith("DIAGNOSIS")]
+            call_refs = produced[-1].call_refs if produced else ()
+        result = StageResult("diagnosis", front_status(diagnosis.status), payload_ref,
+                             call_refs=call_refs, snapshot_id=snapshot_id)
+        live_snapshot = compute_snapshot(source_root).snapshot_id
+        return (engine.step(result, current_snapshot=live_snapshot) if engine is not None else
+                transition(RepairState(live_snapshot), result))
 
     def planning_generation_mode(request):
         """Keep a completed truncation recovery for this prompt in this run only.
@@ -566,20 +616,37 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                 'origin_stage': origin, 'scope': 'CURRENT_FRONT_HALF_PROMPT_VERSION'}})
 
     def complete_recorded(request, stage: str):
+        ledger_start = journal.position() if journal is not None else 0
         prompt_reservation = request_tokens(request)
         previous_timeout = getattr(provider, 'timeout_seconds', None)
         response = None
+        dispatch_error = None
         try:
             remaining = max_elapsed_seconds - (time.monotonic() - started)
             if remaining <= 0:
                 raise BudgetExceeded('Model call cannot start after the run deadline')
             if previous_timeout is not None:
                 provider.timeout_seconds = min(previous_timeout, remaining)
-            response = provider.complete_json(request)
+            monitor = getattr(provider, '_semantic_delivery_monitor', None)
+            planning = stage.startswith(('SEMANTIC_CHANGESET', 'CHANGESET'))
+            semantic = delivery_context(parsed, consumer=stage, snapshot_id=snapshot_id,
+                diagnosis=diagnosis_wire, changeset=changeset_payload, feedback=execution_feedback,
+                necessary_support=(required_planning_source_support(parsed, candidate_set, snapshot_id)
+                                   if planning and candidate_set is not None else ()),
+                prerequisites=(required_source_prerequisites(candidate_set)
+                               if planning and candidate_set is not None else ()),
+                evidence=public_observations, source_requirements=planning)
+            with monitor.scope(semantic) if monitor is not None else nullcontext():
+                response = complete_quoted(provider, request, request_quote(request))
             if time.monotonic() - started >= max_elapsed_seconds:
                 raise BudgetExceeded('Model response exceeded the run deadline')
             return response
         except Exception as exc:
+            dispatch_error = exc
+            if isinstance(exc, SemanticDeliveryError):
+                # Admission attempts are in semantic_delivery receipts, never in
+                # this compatibility model-call view without a real dispatch.
+                raise
             received = getattr(exc, 'response', None)
             if response is None and isinstance(received, ModelResponse):
                 response = received
@@ -598,26 +665,34 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
         finally:
             if previous_timeout is not None:
                 provider.timeout_seconds = previous_timeout
+            if journal is not None:
+                from contractedge.orchestration.recorder import preserve_error
+                primary = dispatch_error
+                preserve_error(primary, lambda: journal.record_dispatch(stage,
+                    attempt_id=attempt_id + ".call-" + str(ledger_start),
+                    snapshot_id=snapshot_id, call_start=ledger_start,
+                    status="ADMISSION_REJECTED" if isinstance(primary, SemanticDeliveryError)
+                           else "ERROR" if primary is not None else "RESPONSE_RECEIVED"))
+
+    def request_quote(request):
+        # Keep each immutable request and its prepared bytes together. A changed
+        # request is validated again by complete_quoted before reservation.
+        key = id(request)
+        if key not in request_quotes:
+            if token_counter is None:
+                raise ValueError("an explicit model tokenizer/token counter is required")
+            request_quotes[key] = (request, quote_request(provider, request, token_counter))
+        return request_quotes[key][1]
 
     def request_tokens(request) -> int:
-        if token_counter is None:
-            raise ValueError("an explicit model tokenizer/token counter is required")
-        count = sum(int(token_counter(str(message.get("content", "")))) for message in request.messages)
-        hook = getattr(provider, 'request_overhead', None)
-        overhead = hook(request) if callable(hook) else ''
-        extra = int(token_counter(overhead)) if overhead else 0
-        if count < 0 or extra < 0:
-            raise ValueError("token counter cannot return a negative count")
-        count += extra
-        return count
+        return request_quote(request).input_tokens
 
     def within_budget(request, prompt_tokens: int) -> bool:
+        quote = request_quote(request)
         return (time.monotonic() - started < max_elapsed_seconds
                 and len(calls) < max_model_calls
-                and prompt_tokens <= int(config['max_context_tokens'])
-                and (config.get('model_context_tokens') is None
-                     or prompt_tokens + request.max_output_tokens <= int(config['model_context_tokens']))
-                and reserved_tokens + prompt_tokens + request.max_output_tokens <= max_total_tokens)
+                and context_fits(quote, int(config['max_context_tokens']), config.get('model_context_tokens'))
+                and reserved_tokens + quote.total_tokens <= max_total_tokens)
 
     def recover_truncated_planning(response, request, stage):
         """Recover known reasoning-starved JSON once within all shared budgets.
@@ -647,9 +722,9 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
         count = request_tokens(retry)
         if not within_budget(retry, count):
             return response
-        truncation_recoveries_used += 1
+        truncation_recoveries_used = policy.consume("truncation_recovery", attempt_id)
         if not separate_truncation_allowance:
-            format_retries_used += 1
+            format_retries_used = policy.consume("format_correction", "diagnosis:" + attempt_id)
         result = complete_recorded(retry, 'PLANNING_TRUNCATION_FORMAT_RETRY')
         reserved_tokens += count + retry.max_output_tokens
         calls.append({'stage': 'PLANNING_TRUNCATION_FORMAT_RETRY', 'prompt_version': retry.prompt_version,
@@ -748,6 +823,10 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
         for record in reversed(fitted.context_audit):
             receipt=record.get('gap_delivery',{})
             if receipt.get('status')=='INCOMPLETE':
+                if engine is not None:
+                    engine.step(StageResult('delivery', 'DELIVERY_INCOMPLETE',
+                        journal.recorder.capture_value(receipt, 'SOURCE_DELIVERY', snapshot_id=snapshot_id),
+                        snapshot_id=snapshot_id))
                 return RunTrace(run_id,parsed.case_id,parsed.input_digest,snapshot.snapshot_id,
                     'EVIDENCE_GAP',requirement,scope,fitted,diagnosis,changeset,tuple(calls),
                     ('REQUIRED_SOURCE_NOT_DELIVERED: '+json.dumps(receipt,ensure_ascii=False),),
@@ -972,7 +1051,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                                     "INVALID_OUTPUT", requirement, scope, candidate_set, None, None,
                                     tuple(calls), (str(validation_error),), "FAIL",
                                     run_context=run_context_wire)
-                format_retries_used += 1
+                format_retries_used = policy.consume("format_correction", "diagnosis:" + attempt_id)
                 validation_feedback = _format_validation_feedback(validation_error, diagnosis_payload)
                 calls[-1]["validation_error"] = str(validation_error)
                 calls[-1]["validation_feedback"] = validation_feedback
@@ -1050,6 +1129,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                                     "gap_search": gap_search_audit, "reason": "no direct query-matched or dropped candidates"}]),
                                 run_context_wire)
             try:
+                policy.consume("evidence_extension", attempt_id)
                 candidate_set = extend_once(
                     candidate_set, diagnosis.evidence_gaps, extension_units,
                     max_context_tokens=int(config["max_context_tokens"]), token_counter=token_counter,
@@ -1110,7 +1190,9 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                                         tuple(calls), (str(exc),), "FAIL", semantic_review,
                                         tuple(retrieval_rounds), run_context_wire)
                     if not per_evidence_context_correction:
-                        format_retries_used += 1
+                        format_retries_used = policy.consume("format_correction", "diagnosis:" + attempt_id)
+                    if per_evidence_context_correction:
+                        policy.consume("format_correction", "diagnosis-extension:" + attempt_id)
                     extension_retry_index = 1 if per_evidence_context_correction else format_retries_used
                     validation_feedback = _format_validation_feedback(exc, diagnosis_payload
                         if isinstance(diagnosis_payload, Mapping) else {})
@@ -1162,10 +1244,19 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                                         "INVALID_OUTPUT", requirement, scope, candidate_set, None, None,
                                         tuple(calls), (str(retry_exc),), "FAIL", semantic_review,
                                         tuple(retrieval_rounds), run_context_wire)
-        if diagnosis.status not in {"READY", "PARTIAL_READY"}:
-            return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id, diagnosis.status,
-                            requirement, scope, candidate_set, diagnosis.raw, None, tuple(calls), (),
+        diagnosis_decision = diagnosis_gate(diagnosis)
+        if diagnosis_decision.action != "PLAN":
+            return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
+                            diagnosis.status if diagnosis_decision.action == "STOP" else "EVIDENCE_GAP",
+                            requirement, scope, candidate_set, diagnosis.raw, None, tuple(calls),
+                            () if diagnosis_decision.action == "STOP" else ("DIAGNOSIS_SNAPSHOT_STALE",),
                             structural_validation, semantic_review, tuple(retrieval_rounds), run_context_wire)
+
+        if config.get('method_mode') == 'without_changeset':
+            return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
+                            'READY', requirement, scope, candidate_set, diagnosis.raw, None,
+                            tuple(calls), (), structural_validation, semantic_review,
+                            tuple(retrieval_rounds), run_context_wire)
 
         feedback: list[Mapping[str, Any]] = []
         changeset_payload = None
@@ -1188,7 +1279,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                         requirement, scope, candidate_set, diagnosis.raw, changeset_payload,
                         tuple(calls), errors, structural_validation, semantic_review,
                         tuple(retrieval_rounds), run_context_wire)
-                planning_corrections_used += 1
+                planning_corrections_used = policy.consume("format_correction", "planning:" + attempt_id)
             if config.get('production_path_review_enabled', False):
                 context = replace(context, retrieval_config={**context.retrieval_config,
                     'production_path_frontier': production_frontier(candidate_set.candidates, parsed.requirement_text)})
@@ -1282,6 +1373,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                         break
                     continue
                 try:
+                    policy.consume("evidence_extension", attempt_id)
                     candidate_set = extend_once(candidate_set, planning_gaps, extra,
                         max_context_tokens=int(config['max_context_tokens']), token_counter=token_counter)
                 except ValueError:
@@ -1327,8 +1419,9 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                                 'INVALID_OUTPUT', requirement, scope, candidate_set, None, changeset_payload,
                                 tuple(calls), (str(exc),), 'FAIL', semantic_review,
                                 tuple(retrieval_rounds), run_context_wire)
-                        planning_context_corrections+=1
-                        if not per_evidence_context_correction:format_retries_used += 1
+                        planning_context_corrections = (policy.consume("format_correction", "planning-evidence:" + attempt_id)
+                            if per_evidence_context_correction else planning_context_corrections + 1)
+                        if not per_evidence_context_correction:format_retries_used = policy.consume("format_correction", "diagnosis:" + attempt_id)
                         history = _append_diagnosis_retry_turn(history, response.content,
                             _format_validation_feedback(exc, body if isinstance(body, Mapping) else {}))
                         retry = replace(request, messages=history,metadata={**request.metadata,
@@ -1340,10 +1433,13 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                             raise BudgetExceeded('Planning evidence correction exceeds the existing round budget')
                         response = complete_recorded(retry, 'DIAGNOSIS_FORMAT_RETRY')
                         reserved_tokens += count + retry.max_output_tokens
-                if diagnosis.status not in {'READY', 'PARTIAL_READY'}:
+                diagnosis_decision = diagnosis_gate(diagnosis)
+                if diagnosis_decision.action != "PLAN":
                     return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
-                        diagnosis.status, requirement, scope, candidate_set, diagnosis.raw, None, tuple(calls),
-                        (), structural_validation, semantic_review, tuple(retrieval_rounds), run_context_wire)
+                        diagnosis.status if diagnosis_decision.action == "STOP" else "EVIDENCE_GAP",
+                        requirement, scope, candidate_set, diagnosis.raw, None, tuple(calls),
+                        () if diagnosis_decision.action == "STOP" else ("DIAGNOSIS_SNAPSHOT_STALE",),
+                        structural_validation, semantic_review, tuple(retrieval_rounds), run_context_wire)
                 # The next plan is based on a new diagnosis. Previous plan
                 # errors do not describe it, but any used correction stays used.
                 feedback = []
@@ -1361,7 +1457,10 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                         diagnosis.raw, changeset_payload, tuple(calls), (), structural_validation, semantic_review,
                         tuple(retrieval_rounds), run_context_wire)
     except Exception as exc:
+        if journal is not None:
+            journal.primary_error = exc
         return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot_id,
+                        "EVIDENCE_DELIVERY_INCOMPLETE" if isinstance(exc, SemanticDeliveryError) else
                         "BUDGET_EXHAUSTED" if isinstance(exc, BudgetExceeded) else "INFRASTRUCTURE_ERROR",
                         requirement, scope, candidate_set, diagnosis_wire, changeset_payload,
                         tuple(calls), (f"{type(exc).__name__}: {exc}",),

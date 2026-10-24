@@ -1,0 +1,9 @@
+# D2 独立规划派发异常保护修订
+
+去关系模式的独立DirectPlan派发在finally中登记调用。原实现遇到provider超时、真实预算拒绝或交付异常，同时发生dispatch回执写入失败时，记录异常可能覆盖原始错误，导致错误分类和原预算终态失真。
+
+本修订只在每次DirectPlan派发保存当前异常，并沿用现有preserve_error保护该次dispatch记录。原模型/预算错误保留，记录错误另存；成功派发后的独立记录失败仍阻断。不会引用旧journal.primary_error吞掉后续错误，也不改变请求、配额、模式输入或正常成功路径。
+
+真实repair_case→generate_nonrelation→BudgetedProvider链通过低层dispatch回执写入I/O注入复现：旧版2失败/1通过；最小修复后3通过，聚焦66项及12子测试通过，无跳过。预算拒绝在provider零调用、账本零dispatch时保留BUDGET_EXHAUSTED；超时派发一次且原账本Timeout保留；成功派发的独立I/O失败不被陈旧primary吞掉。原始红绿、probe与调用栈均保留。
+
+新身份为architecture-d2-method-modes-20261024-r2，承接PR12。r1源码冻结、24格、回归和发布准备保留为上一版本证据；最终r2的实际8格/24格、相关回归、独立审计和CI以同版validation及实际checks为准，不套用r1结果。Full正常请求等价与模式策略结果分别登记。正式模型完整单例另行门控，formal_ready=false。

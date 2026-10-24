@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import os
 import re
 import urllib.request
+from urllib.parse import urlsplit
+from contextvars import ContextVar
 from dataclasses import dataclass, field
 from typing import Any, Mapping, Protocol
 
@@ -56,7 +59,66 @@ def _digest(value):
                                     separators=(',', ':')).encode()).hexdigest()
 
 
+@dataclass(frozen=True)
+class _PreparedRequest:
+    body: bytes
+    metadata: Mapping[str, Any]
+    overhead: str
+    output_schema: Mapping[str, Any] | None = None
+    wire_schema: Mapping[str, Any] | None = None
+
+    def audit_record(self):
+        # Only body and declared settings: never copy HTTP headers or endpoint URLs.
+        settings = {key: self.metadata.get(key) for key in (
+            'output_mode_requested', 'output_mode_effective', 'output_fallback_reason',
+            'strict_schema', 'effective_thinking', 'effective_reasoning_effort',
+            'requested_output_schema_sha256', 'wire_output_schema_sha256')}
+        return {'version': 1, 'adapter': self.metadata['provider'],
+                'adapter_class': self.metadata['adapter_class'], 'method': 'POST',
+                'content_type': 'application/json', 'body_utf8': self.body.decode('utf-8'),
+                'body_bytes': len(self.body), 'body_sha256': hashlib.sha256(self.body).hexdigest(),
+                'effective_settings': settings}
+
+
+_active_prepared_request = ContextVar('contractedge_prepared_request', default=None)
+
+
 class _IdentityProvider:
+    def complete_prepared_json(self, request, prepared):
+        # Keep complete_json overrides active, without storing mutable per-call state
+        # on a shared adapter or serializing its payload a second time.
+        token = _active_prepared_request.set((self, request, prepared))
+        try:
+            return self.complete_json(request)
+        finally:
+            _active_prepared_request.reset(token)
+
+    def _prepared_for(self, request):
+        self._check_available()
+        active = _active_prepared_request.get()
+        if active is not None and active[0] is self:
+            if active[1] is not request:
+                raise ValueError('Provider override changed an already prepared request; transform it before preparation')
+            return active[2]
+        return self.prepare_request(request)
+
+    def safe_error_message(self, exc):
+        message = str(exc).replace(self.base_url, '[provider endpoint]')
+        # Redirect/connection errors can mention a different credential-bearing URL.
+        message = re.sub(r'https?://[^\s<>\"\']+', '[provider endpoint]', message)
+        key_env = getattr(self, 'api_key_env', None)
+        key = os.environ.get(key_env) if key_env else None
+        try:
+            parsed = urlsplit(self.base_url)
+            if parsed.username or parsed.password or parsed.query:
+                # Parser/transport errors can contain arbitrarily encoded fragments.
+                # Keep only the error class for an endpoint carrying credentials.
+                return type(exc).__name__ + ': provider request failed'
+        except ValueError:
+            # A malformed endpoint should not surface its raw parser diagnostic.
+            return type(exc).__name__ + ': provider request failed'
+        return message.replace(key, '[credential]') if key else message
+
     def _configure_identity(self, policy, aliases):
         if policy not in {'record', 'require_match'}:
             raise ValueError('model_identity_policy must be record or require_match')
@@ -159,17 +221,8 @@ class OpenAICompatibleProvider(_IdentityProvider):
         format_value, _, wire = self._format(request)
         return json.dumps(format_value, ensure_ascii=False) if wire is not None else ''
 
-    def complete_json(self, request: ModelRequest) -> ModelResponse:
+    def prepare_request(self, request: ModelRequest):
         format_value, metadata, wire = self._format(request)
-        if self.context_tokens is not None:
-            count = sum(int(self.token_counter(message['content'])) for message in request.messages)
-            overhead = self.request_overhead(request)
-            count += int(self.token_counter(overhead)) if overhead else 0
-            if count + request.max_output_tokens > self.context_tokens:
-                raise ValueError('Serialized output schema and messages exceed the configured model context')
-        api_key = os.environ.get(self.api_key_env)
-        if not api_key:
-            raise RuntimeError(f'model API key env var {self.api_key_env!r} is not configured')
         payload = {'model': request.model, 'messages': list(request.messages),
                    'max_tokens': request.max_output_tokens, 'temperature': request.temperature,
                    'response_format': format_value}
@@ -180,7 +233,27 @@ class OpenAICompatibleProvider(_IdentityProvider):
             payload['thinking'] = {'type': thinking}
         if thinking == 'enabled' and self.reasoning_effort is not None:
             payload['reasoning_effort'] = self.reasoning_effort
-        body = json.dumps(payload, ensure_ascii=False).encode()
+        metadata.update(provider='openai-compatible', prompt_version=request.prompt_version,
+                        adapter_class=type(self).__module__ + '.' + type(self).__qualname__,
+                        strict_schema=wire is not None, effective_thinking=thinking,
+                        effective_reasoning_effort=self.reasoning_effort if thinking == 'enabled' else None)
+        return _PreparedRequest(json.dumps(payload, ensure_ascii=False).encode('utf-8'), metadata,
+            json.dumps(format_value, ensure_ascii=False) if wire is not None else '',
+            copy.deepcopy(request.output_schema), wire)
+
+    def complete_json(self, request: ModelRequest) -> ModelResponse:
+        prepared = self._prepared_for(request)
+        metadata, wire = dict(prepared.metadata), prepared.wire_schema
+        if self.context_tokens is not None:
+            payload = json.loads(prepared.body)
+            count = sum(int(self.token_counter(message['content'])) for message in payload['messages'])
+            count += int(self.token_counter(prepared.overhead)) if prepared.overhead else 0
+            if count + request.max_output_tokens > self.context_tokens:
+                raise ValueError('Serialized output schema and messages exceed the configured model context')
+        api_key = os.environ.get(self.api_key_env)
+        if not api_key:
+            raise RuntimeError(f'model API key env var {self.api_key_env!r} is not configured')
+        body = prepared.body
         http_request = urllib.request.Request(self.base_url + '/chat/completions', data=body,
             headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}, method='POST')
         reservation = None
@@ -196,9 +269,7 @@ class OpenAICompatibleProvider(_IdentityProvider):
         if not isinstance(raw, Mapping):
             raise ProviderResponseError('Chat response is not an object', ModelResponse('', metadata))
         metadata.update(self._identity(request.model, raw.get('model')))
-        metadata.update(provider='openai-compatible', prompt_version=request.prompt_version,
-                        usage=raw.get('usage'), request_id=raw.get('id'), effective_thinking=thinking,
-                        effective_reasoning_effort=self.reasoning_effort if thinking == 'enabled' else None)
+        metadata.update(usage=raw.get('usage'), request_id=raw.get('id'))
         choices = raw.get('choices')
         choice = choices[0] if isinstance(choices, list) and choices and isinstance(choices[0], Mapping) else {}
         message = choice.get('message') or {}
@@ -218,7 +289,7 @@ class OpenAICompatibleProvider(_IdentityProvider):
             raise ProviderResponseError('Chat response is missing message.content', ModelResponse('', metadata))
         if wire is not None:
             metadata['raw_response_content'] = content
-            content, status = restore_strict_content(content, request.output_schema, wire)
+            content, status = restore_strict_content(content, prepared.output_schema, wire)
             metadata['output_schema_restoration'] = status
         return self._accept_response(content, metadata)
 
@@ -243,16 +314,26 @@ class OllamaNativeProvider(_IdentityProvider):
         self._check_available()
         return json.dumps({'format': request.output_schema}, ensure_ascii=False) if request.output_schema is not None else ''
 
-    def complete_json(self, request: ModelRequest) -> ModelResponse:
+    def prepare_request(self, request: ModelRequest):
         self._check_available()
         body = {'model': request.model, 'messages': list(request.messages), 'stream': False,
                 'format': dict(request.output_schema) if request.output_schema is not None else 'json',
                 'options': {'temperature': request.temperature, 'num_predict': request.max_output_tokens}}
         if self.context_tokens is not None:
             body['options']['num_ctx'] = self.context_tokens
-        http_request = urllib.request.Request(self.base_url + '/api/chat',
-            data=json.dumps(body, ensure_ascii=False).encode(), headers={'Content-Type': 'application/json'}, method='POST')
         metadata = self.request_metadata(request)
+        metadata.update(provider='ollama-native', prompt_version=request.prompt_version,
+                        adapter_class=type(self).__module__ + '.' + type(self).__qualname__,
+                        context_tokens=self.context_tokens, strict_schema=False,
+                        effective_thinking=None, effective_reasoning_effort=None)
+        return _PreparedRequest(json.dumps(body, ensure_ascii=False).encode('utf-8'), metadata,
+            self.request_overhead(request), copy.deepcopy(request.output_schema))
+
+    def complete_json(self, request: ModelRequest) -> ModelResponse:
+        prepared = self._prepared_for(request)
+        http_request = urllib.request.Request(self.base_url + '/api/chat',
+            data=prepared.body, headers={'Content-Type': 'application/json'}, method='POST')
+        metadata = dict(prepared.metadata)
         try:
             with urllib.request.urlopen(http_request, timeout=self.timeout_seconds) as response:
                 raw = json.loads(response.read().decode('utf-8'))
@@ -262,8 +343,7 @@ class OllamaNativeProvider(_IdentityProvider):
         if not isinstance(raw, Mapping):
             raise ProviderResponseError('Ollama response is not an object', ModelResponse('', metadata))
         metadata.update(self._identity(request.model, raw.get('model')))
-        metadata.update(provider='ollama-native', prompt_version=request.prompt_version,
-                        finish_reason=raw.get('done_reason'), context_tokens=self.context_tokens,
+        metadata.update(finish_reason=raw.get('done_reason'),
                         usage={'prompt_tokens': raw.get('prompt_eval_count'), 'completion_tokens': raw.get('eval_count')})
         message = raw.get('message')
         if not isinstance(message, Mapping) or not isinstance(message.get('content'), str):

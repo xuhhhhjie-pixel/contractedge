@@ -36,7 +36,28 @@
     "independent_score_claim": false,
     "formal_ready": false
   },
-  "real_public_failure_continuation": "RUNNING",
+  "real_public_failure_continuation": {
+    "status": "CLOSED_FAILED",
+    "recorded_isolation_status": "INFRASTRUCTURE_STOP",
+    "recorded_method_status": "RECOVERY_FAILED",
+    "error": "PlanRejected: Concrete edits are a no-op",
+    "new_model_calls": 8,
+    "new_cost_cny": 0.60354,
+    "independent_score": "NOT_RUN_NOT_ADMITTED",
+    "source_integrity_verified": true,
+    "fresh_applied_edits": 1,
+    "final_public_status": "PARTIAL",
+    "final_public_counterexample": "groups.unique_for_declared_route FAIL",
+    "all_execution_requests_contain_counterexample_kind_and_counts": true,
+    "latest_request_contains_current_snapshot": true,
+    "failure_is_not_information_delivery_loss": true,
+    "no_retry_or_score_transfer": true
+  },
   "seed_independent_status_already": "PASS",
-  "counts_in_46_slot_panel": false
+  "counts_in_46_slot_panel": false,
+  "budget_current": {
+    "limit_cny": 150,
+    "committed_including_reservations_cny": 104.258572,
+    "remaining_upper_bound_cny": 45.741428
+  }
 }

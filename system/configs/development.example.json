@@ -50,6 +50,7 @@
   "review_truncation_retry": "disable_thinking",
   "planning_truncation_separate_allowance": true,
   "production_path_review_enabled": true,
+  "seed_planning_snapshot": "CURRENT_CANDIDATE",
   "method_probe_profiles": [
     "kpt-configpath-v4",
     "alertmanager-reload-v4",

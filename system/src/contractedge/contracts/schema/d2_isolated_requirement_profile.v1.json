@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "fixture_id", "snapshot_id", "input_digest", "candidate_inputs_digest", "public_check_spec_digest", "requirement_profile_digest", "candidate_invocation_digest", "observer_invocation_digest", "observer_script_sha256", "runtime_spec_digest", "status"],
+  "properties": {
+    "schema_version": {"const": "ce.d2_isolated_requirement_profile.v1"},
+    "fixture_id": {"enum": ["config-binding/base", "config-binding/exception-guard", "two-consumers/base", "two-consumers/preserve-one", "reload-state/base", "reload-state/rejected-reload"]},
+    "snapshot_id": {"type": "string", "minLength": 1},
+    "input_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "candidate_inputs_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "public_check_spec_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "requirement_profile_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "candidate_invocation_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "observer_invocation_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "observer_script_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "runtime_spec_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "status": {"enum": ["COMPLETE", "INCOMPLETE"]}
+  }
+}

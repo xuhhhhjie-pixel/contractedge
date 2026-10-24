@@ -173,7 +173,17 @@ def _load_public_member(public_root: Path, case_id: str) -> tuple[dict[str, Any]
     return row, _safe_public_file(public_root, relative)
 
 
-def run_public_case(public_root: str | Path, case_id: str, config: Mapping[str, Any]):
+def run_public_case(public_root: str | Path, case_id: str, config: Mapping[str, Any], *,
+                    recording_dir: str | Path | None = None, output_path: str | Path | None = None,
+                    config_path: str | Path | None = None):
+    """Persistent CLI entry when recording_dir is supplied; otherwise legacy front-only API."""
+    if recording_dir is not None:
+        from contractedge.orchestration.cli_front_recording import run_recorded_public_case
+        return run_recorded_public_case(public_root, case_id, config, recording_dir=recording_dir,
+            output_path=output_path, config_path=config_path, load_public_member=_load_public_member,
+            provider_factory=_build_provider, verify_model=_verify_ollama_model)
+    if output_path is not None or config_path is not None:
+        raise ValueError('output/config source recording requires an explicit recording_dir')
     from contractedge.orchestration.runner import run_front_half
     from contractedge.dataset.admission import check_case_admission
 
@@ -290,6 +300,8 @@ def _parser() -> argparse.ArgumentParser:
     repair.add_argument("--config", required=True)
     repair.add_argument("--output", required=True)
     repair.add_argument("--initial-trace", help="resume one matching ready development trace; its prior budget is retained")
+    repair.add_argument('--resume-output', action='store_true', help='recover this existing output to a terminal selected candidate without model dispatch')
+    repair.add_argument('--consume-received-response', action='store_true', help='with --resume-output, consume one verified durable response at most once before conservative rollback')
     batch = subparsers.add_parser('repair-batch', help='resumable public repair cohort; independent hidden scoring is separate')
     batch.add_argument('--public-root', required=True)
     batch.add_argument('--tools-root', required=True)
@@ -360,9 +372,10 @@ def main(argv: list[str] | None = None) -> int:
             config = _json_file(args.config)
             if not isinstance(config, Mapping):
                 raise ValueError("run config must be a JSON object")
-            trace = run_public_case(args.public_root, args.case_id, config)
-            payload = validate_run_trace(trace.to_wire())
-            _write_json(args.output, payload)
+            trace = run_public_case(args.public_root, args.case_id, config,
+                recording_dir=str(Path(args.output)) + '.artifacts', output_path=args.output,
+                config_path=args.config)
+            validate_run_trace(trace.to_wire())
             print(json.dumps({"case_id": trace.case_id, "status": trace.status,
                               "run_id": trace.run_id, "trace_path": str(Path(args.output).resolve())},
                              ensure_ascii=False, sort_keys=True))
@@ -387,13 +400,20 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "repair":
             from contractedge.orchestration.repair import repair_case
             config = _json_file(args.config)
-            provider, tokenizer = _build_provider(config)
-            if config.get("ollama_model_digest"):
+            if args.consume_received_response and not args.resume_output:
+                raise ValueError('--consume-received-response requires --resume-output')
+            if args.resume_output and args.initial_trace:
+                raise ValueError('--resume-output and --initial-trace are different recovery protocols')
+            provider, tokenizer = (None, None) if args.resume_output else _build_provider(config)
+            if config.get("ollama_model_digest") and not args.resume_output:
                 _verify_ollama_model(config)
             initial = _json_file(args.initial_trace) if args.initial_trace else None
             report = repair_case(args.public_root, args.tools_root, args.case_id, args.output,
-                                 provider, tokenizer, config, initial_trace=initial)
+                                 provider, tokenizer, config, initial_trace=initial,
+                                 resume=args.resume_output, consume_received_response=args.consume_received_response)
             print(json.dumps({key: report[key] for key in ["case_id", "status", "run_id", "candidate", "errors"]}, ensure_ascii=False))
+            if args.resume_output:
+                return 0 if report['exportable'] and not report['errors'] and report['status'].startswith('RECOVERED_') else 1
             return 0 if report["status"] in {"PUBLIC_REVIEW_COMPLETE", "PUBLIC_EXECUTION_COMPLETE"} else 1
         if args.command == "evaluate-benchmark":
             from contractedge.evaluation.benchmark import evaluate_benchmark

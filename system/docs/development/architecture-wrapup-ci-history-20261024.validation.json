@@ -1,0 +1,41 @@
+{
+  "schema_version": "ce.development_validation.v1",
+  "development_snapshot_id": "architecture-wrapup-ci-history-20261024",
+  "snapshot_sha256": "112b8898eed09c9fc4e1079062a9edc579eb373351fbfd58f515cf0114aaf641",
+  "source_sha256": "b9f9a83ebf9ced04a5b1672dd9870de5c57b54d5b6c257246d487759e323735a",
+  "status": "VALIDATED_PACKAGING_SOURCE_UNCHANGED",
+  "checks": [
+    {
+      "name": "freeze-default",
+      "exit_code": 0,
+      "log_sha256": "4ae1bc8b8d3e3474deb5f7376682379d3915ec23215d8c5246d4b22e39ba9287",
+      "tail": "{\"coverage\": {\"configuration\": 11, \"fixture\": 140, \"repository_files\": 1, \"source\": 113, \"tooling_files\": 70}, \"development_snapshot_id\": \"architecture-wrapup-ci-history-20261024\", \"errors\": [], \"formal_ready\": false, \"schema_version\": \"ce.development_snapshot_verification.v1\", \"status\": \"PASS\", \"unbound_legacy_fixture_files\": []}\n"
+    },
+    {
+      "name": "freeze-explicit",
+      "exit_code": 0,
+      "log_sha256": "4ae1bc8b8d3e3474deb5f7376682379d3915ec23215d8c5246d4b22e39ba9287",
+      "tail": "{\"coverage\": {\"configuration\": 11, \"fixture\": 140, \"repository_files\": 1, \"source\": 113, \"tooling_files\": 70}, \"development_snapshot_id\": \"architecture-wrapup-ci-history-20261024\", \"errors\": [], \"formal_ready\": false, \"schema_version\": \"ce.development_snapshot_verification.v1\", \"status\": \"PASS\", \"unbound_legacy_fixture_files\": []}\n"
+    },
+    {
+      "name": "snapshot-regression",
+      "exit_code": 0,
+      "log_sha256": "6bbfc84227d13919deb67463151df17da3a3c5449de436c828642ca49041145d",
+      "tail": "......................................                                   [100%]\n38 passed in 0.41s\n"
+    },
+    {
+      "name": "actual8-admission-plan",
+      "exit_code": 0,
+      "log_sha256": "d7daf1c5a41ce0dd9c93dc077d173e937ed197c19898c2ae3c7a9112d919f80d",
+      "tail": "N\"\n    },\n    {\n      \"dialect\": \"modify-only\",\n      \"point\": \"before-selection\",\n      \"expected_runtime_sessions\": 2,\n      \"status\": \"NOT_RUN\"\n    }\n  ],\n  \"real_model_http_calls\": 0,\n  \"expected_actual_sessions\": 14,\n  \"expected_actual_candidate_observer_containers\": 28,\n  \"runtime\": {\n    \"image\": \"golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d\",\n    \"docker_host\": \"unix:///home/zyw/contractedge-collab-20261023/isolated-docker/docker.sock\"\n  },\n  \"scope\": \"Actual isolation only when executed successfully; no host/mock equivalence claim.\"\n}\n"
+    }
+  ],
+  "source_and_fixture_maps_equal_r2": true,
+  "runtime_acceptance_binding_sha256": "784bbe454e98e60d75e22e83e2cc6f7e3885aa8c49013b9f6abf2d9e0d3d689f",
+  "runtime_binding_base_commit": "2bb059bcae111bd4098d9562b7b11dfb889190bf",
+  "runtime_source_changed": false,
+  "prior_behavior_evidence": "r2 original regression/actual8/actual24 and fresh wrapup smoke; retained under original version, source-identical only",
+  "current_ci": "PENDING_FOR_NEW_HEAD",
+  "new_model_http_calls": 0,
+  "formal_ready": false
+}
