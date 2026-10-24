@@ -1,0 +1,109 @@
+FFF............FFF                                                       [100%]
+=================================== FAILURES ===================================
+_ test_complete_registered_collection_can_support_scoped_presence_or_absence_review[None-team-a] _
+
+name = None, namespace = 'team-a'
+
+    @pytest.mark.parametrize('name,namespace',[(None,'team-a'),('missing-job','team-a'),('missing-job','team-b')])
+    def test_complete_registered_collection_can_support_scoped_presence_or_absence_review(name,namespace):
+        item=inventory()
+>       assert support_error(obligation(name=name,namespace=namespace),claim(item),[item]) is None
+E       assert 'OBSERVATION_RESOURCE_MISMATCH' is None
+E        +  where 'OBSERVATION_RESOURCE_MISMATCH' = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}} = obligation(name=None, namespace='team-a')
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:39: AssertionError
+_ test_complete_registered_collection_can_support_scoped_presence_or_absence_review[missing-job-team-a] _
+
+name = 'missing-job', namespace = 'team-a'
+
+    @pytest.mark.parametrize('name,namespace',[(None,'team-a'),('missing-job','team-a'),('missing-job','team-b')])
+    def test_complete_registered_collection_can_support_scoped_presence_or_absence_review(name,namespace):
+        item=inventory()
+>       assert support_error(obligation(name=name,namespace=namespace),claim(item),[item]) is None
+E       assert 'OBSERVATION_RESOURCE_MISMATCH' is None
+E        +  where 'OBSERVATION_RESOURCE_MISMATCH' = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': 'missing-job', 'namespace': 'team-a'}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': 'missing-job', 'namespace': 'team-a'}}} = obligation(name='missing-job', namespace='team-a')
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:39: AssertionError
+_ test_complete_registered_collection_can_support_scoped_presence_or_absence_review[missing-job-team-b] _
+
+name = 'missing-job', namespace = 'team-b'
+
+    @pytest.mark.parametrize('name,namespace',[(None,'team-a'),('missing-job','team-a'),('missing-job','team-b')])
+    def test_complete_registered_collection_can_support_scoped_presence_or_absence_review(name,namespace):
+        item=inventory()
+>       assert support_error(obligation(name=name,namespace=namespace),claim(item),[item]) is None
+E       assert 'OBSERVATION_RESOURCE_MISMATCH' is None
+E        +  where 'OBSERVATION_RESOURCE_MISMATCH' = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': 'missing-job', 'namespace': 'team-b'}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': 'missing-job', 'namespace': 'team-b'}}} = obligation(name='missing-job', namespace='team-b')
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:39: AssertionError
+_ test_collection_scope_never_hides_a_relevant_operation_failure[team-a-OPERATION_SUCCESS_CONFLICT] _
+
+namespace = 'team-a', want = 'OPERATION_SUCCESS_CONFLICT'
+
+    @pytest.mark.parametrize('namespace,want',[('team-a','OPERATION_SUCCESS_CONFLICT'),('team-b',None)])
+    def test_collection_scope_never_hides_a_relevant_operation_failure(namespace,want):
+        item=inventory();operation=failed();operation.update(id='OP',scenario='control',
+            resource_identity={'kind':'Job','name':'child','namespace':namespace})
+>       assert support_error(obligation(),claim(item),[item,operation])==want
+E       AssertionError: assert 'OBSERVATION_...URCE_MISMATCH' == 'OPERATION_SUCCESS_CONFLICT'
+E         
+E         - OPERATION_SUCCESS_CONFLICT
+E         + OBSERVATION_RESOURCE_MISMATCH
+
+tests/test_public_inventory_scope.py:69: AssertionError
+_ test_collection_scope_never_hides_a_relevant_operation_failure[team-b-None] __
+
+namespace = 'team-b', want = None
+
+    @pytest.mark.parametrize('namespace,want',[('team-a','OPERATION_SUCCESS_CONFLICT'),('team-b',None)])
+    def test_collection_scope_never_hides_a_relevant_operation_failure(namespace,want):
+        item=inventory();operation=failed();operation.update(id='OP',scenario='control',
+            resource_identity={'kind':'Job','name':'child','namespace':namespace})
+>       assert support_error(obligation(),claim(item),[item,operation])==want
+E       assert 'OBSERVATION_RESOURCE_MISMATCH' == None
+E        +  where 'OBSERVATION_RESOURCE_MISMATCH' = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}, {'id': 'OP', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'locator': {'path': 'raw/trigger.pod-spec-0000.json'}, ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}} = obligation()
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:69: AssertionError
+_________ test_real_producer_registers_only_successful_complete_render _________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-412/test_real_producer_registers_o0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f49dbd0e050>
+
+    def test_real_producer_registers_only_successful_complete_render(tmp_path,monkeypatch):
+        tools=tmp_path/'tools';tools.mkdir()
+        for name in ['prepare_case.py','collect_patch.py','launch_public_case.py']:(tools/name).touch()
+        workspace=tmp_path/'workspace';source=workspace/'source';source.mkdir(parents=True)
+        (source/'public.txt').write_text('public source');inputs=workspace/'inputs';inputs.mkdir()
+        (workspace/'workspace.json').write_text(json.dumps({'case_id':'DEMO','source_root':str(source),'inputs_root':str(inputs)}))
+        public=tmp_path/'public';public.mkdir()
+        def execute(argv,log,timeout):
+            log.mkdir();(log/'tool.stdout').write_text('');(log/'tool.stderr').write_text('')
+            output=Path(argv[argv.index('--output')+1]);output.mkdir()
+            (output/'control.stdout').write_text('# Source: demo/job.yaml\nkind: Job\nmetadata:\n  name: other-job\n  namespace: team-a\n')
+            return {'returncode':0,'timed_out':False}
+        monkeypatch.setattr('contractedge.execution.public.run_tool',execute)
+        monkeypatch.setattr('contractedge.execution.public.cleanup_owned_containers',lambda *a,**k:{'status':'OWNED_CONTAINERS_CLOSED','removed':[]})
+        report=BenchmarkPublicRunner(public,tools,lock_root=tmp_path/'locks').observe(workspace,tmp_path/'output')
+        item=next(o for o in report['observations'] if '.render-kind-Job.json' in o['locator']['path'])
+>       assert item.get('adapter_id')==ADAPTER and item.get('structured_complete') is True
+E       AssertionError: assert (None == 'contractedge.render-inventory.v1')
+E        +  where None = <built-in method get of dict object at 0x7f49db37bb80>('adapter_id')
+E        +    where <built-in method get of dict object at 0x7f49db37bb80> = {'id': 'OBS2', 'snapshot_id': '4bd6d70749c176f0ac1fe82cdd40376ba66dbf035ed39e5d7ba4e32ed405c660', 'kind': 'PUBLIC_OBSERVATION', 'evidence_kind': 'PUBLIC_STRUCTURE', ...}.get
+
+tests/test_public_inventory_scope.py:88: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_public_inventory_scope.py::test_complete_registered_collection_can_support_scoped_presence_or_absence_review[None-team-a]
+FAILED tests/test_public_inventory_scope.py::test_complete_registered_collection_can_support_scoped_presence_or_absence_review[missing-job-team-a]
+FAILED tests/test_public_inventory_scope.py::test_complete_registered_collection_can_support_scoped_presence_or_absence_review[missing-job-team-b]
+FAILED tests/test_public_inventory_scope.py::test_collection_scope_never_hides_a_relevant_operation_failure[team-a-OPERATION_SUCCESS_CONFLICT]
+FAILED tests/test_public_inventory_scope.py::test_collection_scope_never_hides_a_relevant_operation_failure[team-b-None]
+FAILED tests/test_public_inventory_scope.py::test_real_producer_registers_only_successful_complete_render
+6 failed, 12 passed in 0.77s

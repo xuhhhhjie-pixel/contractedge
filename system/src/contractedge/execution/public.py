@@ -398,7 +398,10 @@ class BenchmarkPublicRunner:
                 destination = path.with_suffix(suffix)
                 destination.write_text(body)
                 derived_evidence[destination] = {
-                    'evidence_kind': 'PUBLIC_STRUCTURE', 'scenario': path.stem}
+                    'evidence_kind': 'PUBLIC_STRUCTURE', 'scenario': path.stem,
+                    **({'adapter_id':'contractedge.render-inventory.v1','structured_complete':True,
+                        'source_file':record['source_file'],'source_file_sha256':record['source_sha256']}
+                       if record.get('observation_type')=='PARSED_PUBLIC_RESOURCE_INVENTORY' else {})}
             # Keep each pod-bearing resource independently quotable. A large
             # inventory prefix must not crowd target fields out of review context.
             for index, pod in enumerate(pods):
