@@ -1,14 +1,10 @@
-> CURRENT frozen0.6.38 / 5f9e90c459b95e703b0c9f32b9f9d70fff1eb859f90e95489f0083c632f422fe. Full870+22, portable837+17. Prior.37 originalBrokenPASS after real failed-first-trial recovery,9calls/2edits/public8PASS; never transfer that score to.38. Necessary pending-preservation checks protected; fresh.38 slots0/46. Formal150/B closed. No GitHub push. Read CURRENT_STATUS.json and docs/reports/2026-10-24-pending-preservation-guard.md.
+> 当前开发源码0.6.40，冻结摘要2d117c40ac2c45eb25e440ec33b347da6e25733d5ac300bb4f760d8045246742。全量1069+22、可移植1036+17通过；同版预登记真实结果见 outputs/declared-comparison-closure-20261024/COMPLETION_AUDIT.md。formal_ready=false，原46槽及全部准入门未完成，不继承旧版成绩。
 
-**当前为开发交接快照，formal_ready=false。** 完整847+22、可移植814+17。0.6.35单列编译失败续修独立PASS，原始Broken独立失败；0.6.36修复带反馈重诊错误套用初诊容量，回放已恢复当前生产源码送达。0.6.36原始Broken已INVALID_PLAN/NO_CANDIDATE；已定位计划纠错未携带原草稿。0.6.37正在隔离副本补齐，历史和补充结果不拼入固定面板成绩。
-
-见[本版机制修复与验收](docs/reports/2026-10-24-optional-gap-context-closure.md)、[公开证据连续性](docs/reports/2026-10-24-public-evidence-continuity.md)和[0.6.32真实修复结果](docs/reports/2026-10-24-execution-contract-closure.md)。
-
-首先阅读 [正式实验准入与最终优化实施计划](docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md)。它逐项审查0—10步骤、三个核心模块、现有证据和未完成事项，并给出后续任务、验收与停止条件。
+当前为开发优化版。先阅读 [最新验收](outputs/declared-comparison-closure-20261024/COMPLETION_AUDIT.md) 和 [正式准入计划](docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md)。下方旧版本记录仅作历史参考。
 
 ## 内容
 
-- src/：完整当前ContractEdge运行源码及JSON契约，与本地0.6.36冻结摘要一致。
+- src/：完整当前ContractEdge运行源码及JSON契约，与0.6.40冻结摘要一致。
 - tests/、scripts/、configs/、docs/：当前全部测试、工程脚本、历史配置和设计文档。
 - vendor/topomen/：所接入TopoMen运行源码与原MIT许可；调用其DefaultAgent作为源码修复消费者，非完整部署调度系统接入。
 - outputs/：精简历史审计文档、冻结元数据和结果摘要；不是全部多GB工作目录或完整历史回放输入。
@@ -35,6 +31,8 @@ python scripts/test_portable.py
 `test_portable.py`明确排除6个依赖服务器历史数据的测试模块，输出其名单。此结果不等价于服务器完整验收；历史662+22仅代表当时源码，全量`pytest tests`需要额外恢复历史fixture和benchmark public路径，详见优化计划Task5。其他测试仍完整运行。不会静默把缺fixture算通过。
 
 ## 数据与真实运行
+
+当前真实开发验证使用 [隔离运行入口](docs/development/isolated-development.md)：模型进程只访问公开白名单，经受控通道执行公开检查，方法结束后由独立进程评分。旧 `run_reliability_delivery.py` 尚未迁移到该协议，不应直接用于最终固定面板；普通CLI不能替代本计划的隔离验收。
 
 同仓库根目录已有benchmark Release下载工具：`python tools/download_benchmark.py --class all --dest ./datasets --extract`（在仓库根运行）。分类包包含公开/独立评价边界；内部系统历史实验脚本使用统一public/evaluation/tools布局。**不要假定分类包路径就是统一布局**，先核验版本、成员、来源和manifest，并完成计划Task5的路径适配。
 

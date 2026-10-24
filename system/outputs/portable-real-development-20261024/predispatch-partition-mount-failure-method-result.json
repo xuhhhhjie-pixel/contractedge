@@ -1,0 +1,11 @@
+{
+  "role": "SINGLE_CLEAN_CLONE_OPERATIONAL_VALIDATION",
+  "returncode": 2,
+  "method_status": null,
+  "batch_sha256": null,
+  "candidate": null,
+  "source_unchanged": true,
+  "output": "/tmp/contractedge-v0638-development/runs/portable-RW-CAND-130",
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

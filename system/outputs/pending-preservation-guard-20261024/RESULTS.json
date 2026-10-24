@@ -1,0 +1,31 @@
+{
+  "version": "0.6.38",
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "independent_status": "PASS",
+  "model_calls": 7,
+  "edit_rounds": 1,
+  "public_behavior": {
+    "PASS": 8,
+    "FAIL": 0
+  },
+  "semantic_outcome": "UNKNOWN",
+  "route": "STOP",
+  "unverified_obligations": 2,
+  "patch_sha256": "1998d248baadded3aa4ac245ea8056b587263ed61fbe1438f85fb0f08c9486c1",
+  "final_snapshot": "e9cb649d03961f68c63c344c87c320ed7eee22af281c04c23150848ff337688e",
+  "scored": 1,
+  "not_run": 45,
+  "formal_ready": false,
+  "portable_validation_counted": false,
+  "money": {
+    "limit_cny": 150,
+    "committed_including_uncertain_cny": 99.813656,
+    "remaining_upper_cny": 50.186344,
+    "uncertain_reservations": 3,
+    "new_paid_calls": 11,
+    "new_cost_cny": 1.19674,
+    "original_gate_cny": 0.813128,
+    "portable_operational_cny": 0.383612,
+    "attribution": "11uniqueusage+promptmatchedrecords since981; 7originalACK +4separateoperationalRW130. No firststartupfailurecalls. Pinnedconservativepricing, notinvoice."
+  }
+}

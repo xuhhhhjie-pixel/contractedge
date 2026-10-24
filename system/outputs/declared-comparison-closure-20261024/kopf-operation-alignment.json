@@ -1,0 +1,134 @@
+{
+  "schema_version": "ce.operation_alignment_evidence.v1",
+  "method_version": "0.6.40",
+  "case_id": "R3-KOPF-726",
+  "source_front_trace_sha256": "78da2e3851408603931eadede55f076c62fcf1dfa703716dceadedbc6e689a9c",
+  "source_before_observations_sha256": "0a37db033e842d39c8a966c1ec2f8a099cc135e3cd65616cf2a6cb86191273b6",
+  "source_after_observations_sha256": "1b035cf94d303efc2cc2441edda0f76df01412b276bd8c08b2d6c5605c79479b",
+  "before": [
+    {
+      "observation_id": "OBS3",
+      "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+      "name": "cluster-child",
+      "exception": {
+        "message": "Owner must be set explicitly, since running outside of a handler.",
+        "type": "LookupError"
+      },
+      "resource_identity": {
+        "name": "child",
+        "namespace": null,
+        "kind": "Namespace"
+      },
+      "content_digest": "18db48e63eb87efd2c8786c6f7bf976840a5c880a717e3c79104b482d65836ed"
+    },
+    {
+      "observation_id": "OBS4",
+      "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+      "name": "explicit-child-namespace",
+      "exception": {
+        "message": "Owner must be set explicitly, since running outside of a handler.",
+        "type": "LookupError"
+      },
+      "resource_identity": {
+        "name": "child",
+        "namespace": "work-ns",
+        "kind": "ConfigMap"
+      },
+      "content_digest": "efb58f2fbed3895680a59040097b53dbea81dfa32ea2cdf9abde77c766d6885e"
+    },
+    {
+      "observation_id": "OBS2",
+      "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+      "name": "namespaced-owner",
+      "exception": null,
+      "resource_identity": {
+        "name": "child",
+        "namespace": "team-ns",
+        "kind": "ConfigMap"
+      },
+      "content_digest": "648d899adce32bf8eb67af86e667cca99ea8a95fff67faa2dd729bdbda78bf4c"
+    }
+  ],
+  "diagnosis_operation_assessments": [
+    {
+      "operation_id": "OP-27c6f26a4098edae4b99c7b8",
+      "disposition": "UNRELATED",
+      "outcome_refs": [],
+      "rationale": "Namespaced-owner control succeeded and lies outside the cluster-scoped-owner trigger for O1.",
+      "satisfaction": "SATISFIED",
+      "scenario": "public-observation",
+      "scope_evidence_refs": [
+        "OBS2"
+      ]
+    },
+    {
+      "operation_id": "OP-fd5ebe2f08960483f52ed57b",
+      "disposition": "REQUIRES_SUCCESS",
+      "outcome_refs": [
+        "O1"
+      ],
+      "rationale": "Adoption under a cluster-scoped owner must generate the child; it failed with LookupError, so O1 is unsatisfied here.",
+      "satisfaction": "UNSATISFIED",
+      "exception_type": "LookupError",
+      "scenario": "public-observation"
+    },
+    {
+      "operation_id": "OP-8e3bcf12ff4f0dc6afb17cd7",
+      "disposition": "REQUIRES_SUCCESS",
+      "outcome_refs": [
+        "O1"
+      ],
+      "rationale": "Explicitly namespaced child under a cluster-scoped owner must keep its namespace; it failed with LookupError.",
+      "satisfaction": "UNSATISFIED",
+      "exception_type": "LookupError",
+      "scenario": "public-observation"
+    }
+  ],
+  "supported_violations": [
+    "V1",
+    "V2"
+  ],
+  "after": [
+    {
+      "observation_id": "OBS2",
+      "snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
+      "name": "namespaced-owner",
+      "exception": null,
+      "resource_identity": {
+        "name": "child",
+        "namespace": "team-ns",
+        "kind": "ConfigMap"
+      },
+      "content_digest": "648d899adce32bf8eb67af86e667cca99ea8a95fff67faa2dd729bdbda78bf4c"
+    },
+    {
+      "observation_id": "OBS3",
+      "snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
+      "name": "cluster-child",
+      "exception": null,
+      "resource_identity": {
+        "name": "child",
+        "namespace": null,
+        "kind": "Namespace"
+      },
+      "content_digest": "2bcc8fd674b060799f3a814c88395d53df23267d888e3e5dd5d3a4fbc13a0d92"
+    },
+    {
+      "observation_id": "OBS4",
+      "snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
+      "name": "explicit-child-namespace",
+      "exception": null,
+      "resource_identity": {
+        "name": "child",
+        "namespace": "work-ns",
+        "kind": "ConfigMap"
+      },
+      "content_digest": "0dfb4068b0b5bb573588dce8acf8c3bd3970f60340a00ca2dc3756b673d52fb4"
+    }
+  ],
+  "public_decision": "PASS",
+  "independent_status": "PASS",
+  "independent_result_sha256": "db2063e6403e51c5313f9fab6a5a5f7d670d85dd182e11c17607386935c6f8a4",
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

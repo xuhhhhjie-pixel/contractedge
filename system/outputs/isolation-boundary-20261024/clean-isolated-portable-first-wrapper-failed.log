@@ -1,0 +1,479 @@
+Historical fixture / native integration modules NOT RUN: test_ready_support_consistency.py, test_probe_profiles_v2.py, test_compact_render_inventory.py, test_diagnosis_error_aggregation.py, test_structured_observation_adapters.py, test_topomen_agent.py
+................................................................... [  7%]
+........................................................................ [ 14%]
+..................................................................... [ 22%]
+.................................................................... [ 29%]
+..................................................................... [ 36%]
+.............................F.................FFF...................... [ 44%]
+................FFFFFFF......F.......................................... [ 52%]
+...................................................................... [ 59%]
+........................................................................ [ 67%]
+........................................................................ [ 74%]
+........................................................................ [ 82%]
+........................................................................ [ 90%]
+........................................................................ [ 97%]
+...................                                                      [100%]
+=================================== FAILURES ===================================
+_________ test_deep_audit_directory_keeps_real_local_transport_usable __________
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_deep_audit_directory_keep0')
+
+    def test_deep_audit_directory_keeps_real_local_transport_usable(tmp_path):
+        isolated=load()
+        scripts=Path(__file__).resolve().parents[1]/'scripts';sys.path.insert(0,str(scripts))
+        try:import isolated_protocol as rpc
+        finally:sys.path.pop(0)
+        audit=tmp_path/('deep-audit-'*12);audit.mkdir()
+>       channel=isolated.make_channel_root()
+
+tests/test_isolated_coordinator.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:544: in make_channel_root
+    return Path(tempfile.mkdtemp(prefix='ce-rpc-', dir='/tmp'))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+suffix = '', prefix = 'ce-rpc-', dir = '/tmp'
+
+    def mkdtemp(suffix=None, prefix=None, dir=None):
+        """User-callable function to create and return a unique temporary
+        directory.  The return value is the pathname of the directory.
+    
+        Arguments are as for mkstemp, except that the 'text' argument is
+        not accepted.
+    
+        The directory is readable, writable, and searchable only by the
+        creating user.
+    
+        Caller is responsible for deleting the directory when done with it.
+        """
+    
+        prefix, suffix, dir, output_type = _sanitize_params(prefix, suffix, dir)
+    
+        names = _get_candidate_names()
+        if output_type is bytes:
+            names = map(_os.fsencode, names)
+    
+        for seq in range(TMP_MAX):
+            name = next(names)
+            file = _os.path.join(dir, prefix + name + suffix)
+            _sys.audit("tempfile.mkdtemp", file)
+            try:
+>               _os.mkdir(file, 0o700)
+E               OSError: [Errno 30] Read-only file system: '/tmp/ce-rpc-r2683ipb'
+
+/usr/lib/python3.10/tempfile.py:523: OSError
+_ test_typed_provider_preserves_request_schema_metadata_overhead_and_response __
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_typed_provider_preserves_0')
+
+    def test_typed_provider_preserves_request_schema_metadata_overhead_and_response(tmp_path):
+        isolated = load('run_isolated_method'); rpc = load('isolated_protocol')
+        from contractedge.model.provider import ModelRequest
+        request = ModelRequest(model='test-model', prompt_version='diagnosis.v1',
+            messages=({'role':'user','content':'public requirement'},), max_output_tokens=10,
+            metadata={'snapshot_id':'S0'}, output_schema={'type':'object'}, thinking='disabled')
+        captured = []
+        def complete(payload):
+            captured.append(payload)
+            return {'content':'{"answer":1}','metadata':{'finish_reason':'stop','model':'test-model'}}
+        token='rpc-auth-97a386af7a5642b093f10736'
+        handlers = {'model.complete':complete,'model.overhead':lambda p:{'text':'transport schema'},
+                    'model.metadata':lambda p:{'metadata':{'output_mode':'json_schema'}},
+                    'budget.summary':lambda p:{'summary':{'limit_cny':150,'remaining_upper_cny':50}}}
+>       with rpc.JsonRpcServer(tmp_path/'rpc.sock',token,rpc.Journal(tmp_path/'journal'),handlers) as server:
+
+tests/test_isolated_method.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/isolated_protocol.py:239: in __enter__
+    self._server = socketserver.ThreadingUnixStreamServer(str(self.path), Handler)
+/usr/lib/python3.10/socketserver.py:452: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.ThreadingUnixStreamServer object at 0x7f2eb70ec850>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+>       self.socket.bind(self.server_address)
+E       OSError: AF_UNIX path too long
+
+/usr/lib/python3.10/socketserver.py:466: OSError
+_ test_known_received_provider_rejection_preserves_response_for_existing_budget_logic _
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_known_received_provider_r0')
+
+    def test_known_received_provider_rejection_preserves_response_for_existing_budget_logic(tmp_path):
+        isolated=load('run_isolated_method'); rpc=load('isolated_protocol')
+        from contractedge.model.provider import ModelRequest, ProviderResponseError
+        from contractedge.model.budget import BudgetedProvider
+        request=ModelRequest('test','phase',({'role':'user','content':'public'},),5)
+        token='rpc-auth-97a386af7a5642b093f10736'
+        handlers={'model.complete':lambda p:{'received_error':True,'content':'partial',
+                                           'metadata':{'model_identity_status':'MISMATCH'}},
+                  'model.overhead':lambda p:{'text':''},'model.metadata':lambda p:{'metadata':{}}}
+>       with rpc.JsonRpcServer(tmp_path/'s',token,rpc.Journal(tmp_path/'j'),handlers) as server:
+
+tests/test_isolated_method.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/isolated_protocol.py:239: in __enter__
+    self._server = socketserver.ThreadingUnixStreamServer(str(self.path), Handler)
+/usr/lib/python3.10/socketserver.py:452: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.ThreadingUnixStreamServer object at 0x7f2eb7b1b730>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+>       self.socket.bind(self.server_address)
+E       OSError: AF_UNIX path too long
+
+/usr/lib/python3.10/socketserver.py:466: OSError
+______ test_public_proxy_binds_each_operation_to_current_source_snapshot _______
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_public_proxy_binds_each_o0')
+
+    def test_public_proxy_binds_each_operation_to_current_source_snapshot(tmp_path):
+        isolated=load('run_isolated_method');rpc=load('isolated_protocol')
+        from contractedge.source.snapshot import compute_snapshot
+        workspace=tmp_path/'workspace';(workspace/'source').mkdir(parents=True)
+        (workspace/'source/file').write_text('S1')
+        (workspace/'workspace.json').write_text(json.dumps({'source_root':str(workspace/'source')}))
+        calls=[]
+        def capture(payload):calls.append(payload);return {'status':'EXECUTION_PASS'}
+>       with rpc.JsonRpcServer(tmp_path/'s','token',rpc.Journal(tmp_path/'j'),{'public.observe':capture}) as server:
+
+tests/test_isolated_method.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/isolated_protocol.py:239: in __enter__
+    self._server = socketserver.ThreadingUnixStreamServer(str(self.path), Handler)
+/usr/lib/python3.10/socketserver.py:452: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.ThreadingUnixStreamServer object at 0x7f2eb6d6a3e0>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+>       self.socket.bind(self.server_address)
+E       OSError: AF_UNIX path too long
+
+/usr/lib/python3.10/socketserver.py:466: OSError
+____ test_real_channel_rejects_auth_operations_and_secrets_without_dispatch ____
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_real_channel_rejects_auth0')
+
+    def test_real_channel_rejects_auth_operations_and_secrets_without_dispatch(tmp_path):
+        rpc = module()
+        calls = []
+        def effect(payload):
+            calls.append(payload)
+            return {'content': 'public answer'}
+        secret = 'private-test-canary'
+>       with rpc.JsonRpcServer(tmp_path/'channel.sock', 'channel-token', rpc.Journal(tmp_path/'journal'),
+                               {'model.complete': effect}, sensitive_values=[secret]) as server:
+
+tests/test_isolated_protocol.py:98: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/isolated_protocol.py:239: in __enter__
+    self._server = socketserver.ThreadingUnixStreamServer(str(self.path), Handler)
+/usr/lib/python3.10/socketserver.py:452: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.ThreadingUnixStreamServer object at 0x7f2eb72ba140>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+>       self.socket.bind(self.server_address)
+E       OSError: AF_UNIX path too long
+
+/usr/lib/python3.10/socketserver.py:466: OSError
+_______ test_provider_error_does_not_expose_exception_and_cannot_rebill ________
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_provider_error_does_not_e0')
+
+    def test_provider_error_does_not_expose_exception_and_cannot_rebill(tmp_path):
+        rpc = module()
+        calls = []
+        def effect(payload):
+            calls.append(1)
+            raise ValueError('sk-private-test-api-key')
+>       with rpc.JsonRpcServer(tmp_path/'channel.sock', 'token', rpc.Journal(tmp_path/'journal'),
+                               {'model.complete': effect}) as server:
+
+tests/test_isolated_protocol.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/isolated_protocol.py:239: in __enter__
+    self._server = socketserver.ThreadingUnixStreamServer(str(self.path), Handler)
+/usr/lib/python3.10/socketserver.py:452: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.ThreadingUnixStreamServer object at 0x7f2eb74559f0>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+>       self.socket.bind(self.server_address)
+E       OSError: AF_UNIX path too long
+
+/usr/lib/python3.10/socketserver.py:466: OSError
+________ test_oversized_and_nonfinite_or_duplicate_json_never_dispatch _________
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_oversized_and_nonfinite_o0')
+
+    def test_oversized_and_nonfinite_or_duplicate_json_never_dispatch(tmp_path):
+        rpc = module()
+        calls = []
+>       with rpc.JsonRpcServer(tmp_path/'channel.sock', 'token', rpc.Journal(tmp_path/'journal'),
+                               {'budget.summary': lambda p: calls.append(p) or {}}) as server:
+
+tests/test_isolated_protocol.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/isolated_protocol.py:239: in __enter__
+    self._server = socketserver.ThreadingUnixStreamServer(str(self.path), Handler)
+/usr/lib/python3.10/socketserver.py:452: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.ThreadingUnixStreamServer object at 0x7f2eb85562c0>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+>       self.socket.bind(self.server_address)
+E       OSError: AF_UNIX path too long
+
+/usr/lib/python3.10/socketserver.py:466: OSError
+__________ test_client_recovers_lost_local_response_with_same_id_once __________
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_client_recovers_lost_loca0')
+
+    def test_client_recovers_lost_local_response_with_same_id_once(tmp_path):
+        rpc = module()
+        path = tmp_path/'drop.sock'
+        ready = threading.Event()
+        effects, requests = [], []
+        journal = rpc.Journal(tmp_path/'journal')
+        def server():
+            with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as listener:
+                listener.bind(str(path)); listener.listen(); ready.set()
+                for index in range(2):
+                    conn, _ = listener.accept()
+                    with conn:
+                        request = rpc.receive_frame(conn); requests.append(request['request_id'])
+                        result = journal.execute(request['request_id'], {'op': request['op'], 'payload': request['payload']},
+                                                 lambda: effects.append(1) or {'content': 'saved'})
+                        if index:
+                            rpc.send_frame(conn, {'ok': True, 'result': result})
+        worker = threading.Thread(target=server, daemon=True)
+>       worker.start(); assert ready.wait(2)
+E       assert False
+E        +  where False = wait(2)
+E        +    where wait = <threading.Event object at 0x7f2eb7455840>.wait
+
+tests/test_isolated_protocol.py:162: AssertionError
+_____________ test_sensitive_result_is_never_journaled_or_returned _____________
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_sensitive_result_is_never0')
+
+    def test_sensitive_result_is_never_journaled_or_returned(tmp_path):
+        rpc = module()
+        secret = 'private-result-canary'
+>       with rpc.JsonRpcServer(tmp_path/'channel.sock', 'token', rpc.Journal(tmp_path/'journal'),
+                               {'model.complete': lambda p: {'content': secret}}, sensitive_values=[secret]) as server:
+
+tests/test_isolated_protocol.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/isolated_protocol.py:239: in __enter__
+    self._server = socketserver.ThreadingUnixStreamServer(str(self.path), Handler)
+/usr/lib/python3.10/socketserver.py:452: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.ThreadingUnixStreamServer object at 0x7f2eb7059900>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+>       self.socket.bind(self.server_address)
+E       OSError: AF_UNIX path too long
+
+/usr/lib/python3.10/socketserver.py:466: OSError
+_____________ test_transport_timeout_is_not_a_new_semantic_request _____________
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_transport_timeout_is_not_0')
+
+    def test_transport_timeout_is_not_a_new_semantic_request(tmp_path):
+        rpc = module(); effects=[]
+        handlers={'model.complete':lambda p:effects.append(p['timeout_seconds']) or {'content':'saved'}}
+>       with rpc.JsonRpcServer(tmp_path/'s','auth-test-8dce',rpc.Journal(tmp_path/'j'),handlers) as server:
+
+tests/test_isolated_protocol.py:181: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/isolated_protocol.py:239: in __enter__
+    self._server = socketserver.ThreadingUnixStreamServer(str(self.path), Handler)
+/usr/lib/python3.10/socketserver.py:452: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.ThreadingUnixStreamServer object at 0x7f2eb770a620>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+>       self.socket.bind(self.server_address)
+E       OSError: AF_UNIX path too long
+
+/usr/lib/python3.10/socketserver.py:466: OSError
+____ test_live_and_recovered_results_keep_exact_later_prompt_serialization _____
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_live_and_recovered_result0')
+
+    def test_live_and_recovered_results_keep_exact_later_prompt_serialization(tmp_path):
+        rpc=module();effects=[]
+        def public_result(payload):
+            effects.append(1)
+            return {'observation':{'id':'OBS1','snapshot_id':'S0','behavior_check':{'id':'probe','status':'FAIL'}}}
+        for _ in range(2):
+>           with rpc.JsonRpcServer(tmp_path/'s','auth-8d7c',rpc.Journal(tmp_path/'j'),
+                                   {'public.observe':public_result}) as server:
+
+tests/test_isolated_protocol.py:194: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/isolated_protocol.py:239: in __enter__
+    self._server = socketserver.ThreadingUnixStreamServer(str(self.path), Handler)
+/usr/lib/python3.10/socketserver.py:452: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.ThreadingUnixStreamServer object at 0x7f2eb7114910>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+>       self.socket.bind(self.server_address)
+E       OSError: AF_UNIX path too long
+
+/usr/lib/python3.10/socketserver.py:466: OSError
+__________ test_bridge_ignores_poisoned_child_metadata_git_and_inputs __________
+
+tmp_path = PosixPath('/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/pytest-of-xhj/pytest-0/test_bridge_ignores_poisoned_c0')
+
+    def test_bridge_ignores_poisoned_child_metadata_git_and_inputs(tmp_path):
+        producer,transfer=session(tmp_path)
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        sys.path.insert(0,str(scripts))
+        try:
+            import run_isolated_method as isolated
+            import isolated_protocol as rpc
+        finally:sys.path.pop(0)
+        child=tmp_path/'child';child.mkdir();(child/'CASE').mkdir()
+        visible=tmp_path/'visible-cases'
+        handlers={'public.prepare':producer.prepare,'public.observe':producer.observe,'public.export':producer.export}
+>       with rpc.JsonRpcServer(tmp_path/'private.sock','producer-auth-8a70',rpc.Journal(tmp_path/'j'),handlers) as server:
+
+tests/test_isolated_public_worker.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/isolated_protocol.py:239: in __enter__
+    self._server = socketserver.ThreadingUnixStreamServer(str(self.path), Handler)
+/usr/lib/python3.10/socketserver.py:452: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.ThreadingUnixStreamServer object at 0x7f2eb6de2410>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+>       self.socket.bind(self.server_address)
+E       OSError: AF_UNIX path too long
+
+/usr/lib/python3.10/socketserver.py:466: OSError
+=============================== warnings summary ===============================
+tests/test_isolated_protocol.py::test_client_recovers_lost_local_response_with_same_id_once
+  /home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-venv/lib/python3.10/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-5 (server)
+  
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+      self.run()
+    File "/usr/lib/python3.10/threading.py", line 953, in run
+      self._target(*self._args, **self._kwargs)
+    File "/home/xhj/contractedge-github-delivery-20261022/.superpowers/sdd/2026-10-24-isolated-method-boundary/clean-isolated-clone/system/tests/test_isolated_protocol.py", line 152, in server
+      listener.bind(str(path)); listener.listen(); ready.set()
+  OSError: AF_UNIX path too long
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_isolated_coordinator.py::test_deep_audit_directory_keeps_real_local_transport_usable
+FAILED tests/test_isolated_method.py::test_typed_provider_preserves_request_schema_metadata_overhead_and_response
+FAILED tests/test_isolated_method.py::test_known_received_provider_rejection_preserves_response_for_existing_budget_logic
+FAILED tests/test_isolated_method.py::test_public_proxy_binds_each_operation_to_current_source_snapshot
+FAILED tests/test_isolated_protocol.py::test_real_channel_rejects_auth_operations_and_secrets_without_dispatch
+FAILED tests/test_isolated_protocol.py::test_provider_error_does_not_expose_exception_and_cannot_rebill
+FAILED tests/test_isolated_protocol.py::test_oversized_and_nonfinite_or_duplicate_json_never_dispatch
+FAILED tests/test_isolated_protocol.py::test_client_recovers_lost_local_response_with_same_id_once
+FAILED tests/test_isolated_protocol.py::test_sensitive_result_is_never_journaled_or_returned
+FAILED tests/test_isolated_protocol.py::test_transport_timeout_is_not_a_new_semantic_request
+FAILED tests/test_isolated_protocol.py::test_live_and_recovered_results_keep_exact_later_prompt_serialization
+FAILED tests/test_isolated_public_worker.py::test_bridge_ignores_poisoned_child_metadata_git_and_inputs
+12 failed, 926 passed, 1 warning, 17 subtests passed in 76.09s (0:01:16)

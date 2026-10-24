@@ -1,0 +1,174 @@
+{
+  "schema_version": "ce.isolated_seed_recovery.v1",
+  "case_id": "R3-KPT-4673",
+  "method_version": "0.6.38",
+  "scope": "SEEDED_CONTINUATION_NOT_FIRST_PASS",
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "independent_status": "PASS",
+  "model_calls": 6,
+  "fresh_edits": 2,
+  "front_status": "READY",
+  "diagnosis_violations": 1,
+  "plan_changes": 1,
+  "seed_public": {
+    "FAIL": 4,
+    "PASS": 34
+  },
+  "first_trial_public": {
+    "FAIL": 9,
+    "PASS": 29
+  },
+  "final_public": {
+    "PASS": 38
+  },
+  "candidate_decisions": [
+    {
+      "schema_version": "ce.candidate_decision.v1",
+      "decision": "REJECT_REGRESSION",
+      "from_snapshot": "d51cb7e7f27f3842dd448c2814080d19e4a048870d57730c1998f05ebd55777a",
+      "trial_snapshot": "0f4aad5070e5aa907831b17aa2d55ac0b446d01d08b82fbfbfa36b23237a15d7",
+      "regressions": [
+        {
+          "check_id": "kpt-configpath-v4:mutator_selector.later_sees_config",
+          "scenario": "method-kpt-configpath-v4",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843",
+          "before": "PASS",
+          "after": "FAIL"
+        },
+        {
+          "check_id": "kpt-configpath-v4:mutator_selector.owner_excludes_config",
+          "scenario": "method-kpt-configpath-v4",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843",
+          "before": "PASS",
+          "after": "FAIL"
+        },
+        {
+          "check_id": "kpt-configpath-v4:mutator_selector.config_transformed",
+          "scenario": "method-kpt-configpath-v4",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843",
+          "before": "PASS",
+          "after": "FAIL"
+        },
+        {
+          "check_id": "kpt-configpath-v4:mutator_selector.workload_transformed",
+          "scenario": "method-kpt-configpath-v4",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843",
+          "before": "PASS",
+          "after": "FAIL"
+        },
+        {
+          "check_id": "kpt-configpath-v4:mutator_selector.config_retained",
+          "scenario": "method-kpt-configpath-v4",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843",
+          "before": "PASS",
+          "after": "FAIL"
+        },
+        {
+          "check_id": "kpt-configpath-v4:mutator_selector.workload_retained",
+          "scenario": "method-kpt-configpath-v4",
+          "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843",
+          "before": "PASS",
+          "after": "FAIL"
+        },
+        {
+          "check_id": "obligation:retained-6c613b2475a1ecd890ba2057",
+          "scenario": "{\"scenario\": \"method-kpt-configpath-v4\"}",
+          "probe_sha256": "EVIDENCE_BOUND_REVIEW",
+          "before": "PASS",
+          "after": "FAIL"
+        },
+        {
+          "check_id": "obligation:retained-960cd1d9adc1ebd134502721",
+          "scenario": "{\"scenario\": \"method-kpt-configpath-v4\"}",
+          "probe_sha256": "EVIDENCE_BOUND_REVIEW",
+          "before": "PASS",
+          "after": "FAIL"
+        }
+      ],
+      "uncomparable": [],
+      "interpretation": "Observed protected behavior regressed; reject this trial and retain the incumbent."
+    },
+    {
+      "schema_version": "ce.candidate_decision.v1",
+      "decision": "PROMOTE",
+      "from_snapshot": "d51cb7e7f27f3842dd448c2814080d19e4a048870d57730c1998f05ebd55777a",
+      "trial_snapshot": "6023bac3084b12adce3e288a7705dbd3c1e07f644582f5f20f855beb283b3e72",
+      "regressions": [],
+      "uncomparable": [],
+      "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness"
+    }
+  ],
+  "helper_preconditions_in_final_feedback": 3,
+  "final_snapshot": "6023bac3084b12adce3e288a7705dbd3c1e07f644582f5f20f855beb283b3e72",
+  "patch_sha256": "9110e61d907f7a35d1887f2db88648168a9a35b83f9fdf5d65e1005f0e2e6f96",
+  "public_semantic_outcome": "UNKNOWN",
+  "pending_obligations": [
+    {
+      "id": "preserve:PC-A3",
+      "statement": "When configPath is used, a later pipeline function may still see and transform the config resource.",
+      "reason_category": "CHECK_COVERAGE_INSUFFICIENT",
+      "verification_gap": {
+        "predicate": "When configPath is used, a later pipeline function may still see and transform the config resource.",
+        "scenario": "method-kpt-configpath-v4",
+        "required_check_refs": [
+          "kpt-configpath-v4:mutator.later_sees_config",
+          "kpt-configpath-v4:mutator_selector.later_sees_config",
+          "kpt-configpath-v4:mutator_exclusion.later_sees_config",
+          "kpt-configpath-v4:mutator.config_transformed",
+          "kpt-configpath-v4:mutator_selector.config_transformed",
+          "kpt-configpath-v4:mutator_exclusion.config_transformed"
+        ],
+        "coverage": "NECESSARY_ONLY",
+        "remaining_scope": "Original requirement beyond these finite checks remains unverified",
+        "action": "OBTAIN_SUFFICIENT_PUBLIC_EVIDENCE"
+      }
+    },
+    {
+      "id": "preserve:PC-A4",
+      "statement": "When configPath is used, both the config resource and workload resources appear correctly in the final rendered KRM package.",
+      "reason_category": "CHECK_COVERAGE_INSUFFICIENT",
+      "verification_gap": {
+        "predicate": "When configPath is used, both the config resource and workload resources appear correctly in the final rendered KRM package.",
+        "scenario": "method-kpt-configpath-v4",
+        "required_check_refs": [
+          "kpt-configpath-v4:control.final_resources",
+          "kpt-configpath-v4:mutator.config_retained",
+          "kpt-configpath-v4:mutator.workload_retained",
+          "kpt-configpath-v4:validator.config_retained",
+          "kpt-configpath-v4:validator.workload_retained",
+          "kpt-configpath-v4:mutator_selector.config_retained",
+          "kpt-configpath-v4:mutator_selector.workload_retained",
+          "kpt-configpath-v4:mutator_exclusion.config_retained",
+          "kpt-configpath-v4:mutator_exclusion.workload_retained",
+          "kpt-configpath-v4:control.resource_inventory"
+        ],
+        "coverage": "NECESSARY_ONLY",
+        "remaining_scope": "Original requirement beyond these finite checks remains unverified",
+        "action": "OBTAIN_SUFFICIENT_PUBLIC_EVIDENCE"
+      }
+    }
+  ],
+  "terminal_validation": {
+    "classification": "METHOD_RESULT",
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "unknown_requests": 0,
+    "not_dispatched_requests": 0,
+    "candidate_verified": true,
+    "coordinator_policy_failures": [],
+    "recovery_failure": null,
+    "semantic_outcome_upgraded": false
+  },
+  "cleanup": {
+    "status": "OWNED_CONTAINERS_CLOSED",
+    "removed": []
+  },
+  "new_cost_micro_cny": 866948,
+  "budget": {
+    "limit_micro_cny": 150000000,
+    "committed_micro_cny": 101724292,
+    "remaining_upper_micro_cny": 48275708,
+    "ledger_records": 1008
+  }
+}

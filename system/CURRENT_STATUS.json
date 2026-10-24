@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-23T23:54:06.335689+00:00",
+  "as_of": "2026-10-24T14:22:24.933177+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -19,7 +19,7 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.38",
+  "implementation_version": "0.6.40",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
@@ -988,8 +988,8 @@
     "outstanding_delivery_work": []
   },
   "final_delivery_readiness": {
-    "version": "0.6.4",
-    "status": "ACCEPTANCE_IN_PROGRESS",
+    "version": "0.6.38",
+    "status": "ISOLATION_QUALIFIED_FINAL_PANEL_PENDING",
     "formal_ready": false,
     "audit": "outputs/reliability-closure-20261020/COMPLETION_AUDIT.md"
   },
@@ -1254,7 +1254,7 @@
   "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/系统审查与验收.md",
   "reliability_closure": {
     "version": "0.6.38",
-    "status": "FROZEN_SINGLE_REGISTERED_NOT_DISPATCHED",
+    "status": "SINGLE_GATE_PASS_FULL_DELIVERY_PENDING",
     "implementation_completed_claim": false,
     "repair_reliability_accepted": false,
     "formal150_started": false,
@@ -1269,185 +1269,387 @@
     "report": "outputs/final-optimization-20261020/readiness.json",
     "effect_acceptance_passed": false
   },
-  "version": "0.6.38",
-  "status": "V0638_FROZEN_SINGLE_ACK_REGISTERED",
+  "version": "0.6.40",
+  "status": "V0640_ENGINEERING_PASS_CROSS_CASE_QUALIFICATION_COMPLETE",
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "formal_ready": false,
   "formal150_started": false,
-  "registration": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/experiment-registration-v0.6.38.json",
-  "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.38.json",
+  "registration": "outputs/declared-comparison-closure-20261024/REGISTERED_QUALIFICATION.json",
+  "freeze": "outputs/declared-comparison-closure-20261024/frozen-method-v0.6.40.json",
   "current_engineering_evidence": {
-    "version": "0.6.38",
-    "full": {
-      "passed": 870,
-      "subtests": 22
-    },
-    "portable": {
-      "passed": 837,
-      "subtests": 17,
-      "excluded_modules": 6,
-      "fresh_venv": false
-    },
-    "previous_clean_development": {
-      "version": "0.6.37",
-      "clone_commit": "1ec7b26",
-      "passed": 826,
-      "subtests": 17,
-      "native_fixture_separate": 9
-    },
-    "review": "/home/xhj/contractedge-system/outputs/pending-preservation-guard-20261024/fresh-review.json",
-    "same_effect_score_transferred": false
+    "full": 1069,
+    "full_subtests": 22,
+    "portable": 1036,
+    "portable_subtests": 17,
+    "portable_excluded_modules": 6,
+    "fresh_installed_portable": 1036,
+    "fresh_installed_portable_subtests": 17,
+    "fresh_native": 9,
+    "new_generic_tests": 65,
+    "red_failures": 51,
+    "red_existing_passes": 14
   },
   "active_frozen_panels": {
-    "version": "0.6.38",
-    "A": 14,
-    "B": 20,
-    "repeat": 4,
-    "recovery": 8,
-    "scored": 0,
-    "not_run": 46,
-    "B_opened": false
+    "v040_qualification": {
+      "schema_version": "ce.fixed_development_qualification.v1",
+      "version": "0.6.40",
+      "method_digest": "2d117c40ac2c45eb25e440ec33b347da6e25733d5ac300bb4f760d8045246742",
+      "registered_cases": [
+        "RW-CAND-130",
+        "R3-KOPF-726",
+        "RW-ALERTMANAGER-4705"
+      ],
+      "counts_in_46_slot_panel": false,
+      "formal_ready": false,
+      "records": [
+        {
+          "case_id": "RW-CAND-130",
+          "registration_sha256": "21fdeced860e196a4869426113cf0b053ad91db7cbd9acd53f418c2e92d9555b",
+          "receipt_sha256": "76854400bad318307dc133b972b79cad1b397a6f8556a72ea2b454f5ba8cf18b",
+          "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+          "method_status": "PUBLIC_REVIEW_COMPLETE",
+          "public_reviews": [
+            {
+              "round_id": 0,
+              "decision": "PASS",
+              "method": "MODEL_PUBLIC_REVIEW",
+              "checks": [
+                {
+                  "id": "P1",
+                  "status": "PASS",
+                  "evidence_validation": null
+                },
+                {
+                  "id": "P2",
+                  "status": "PASS",
+                  "evidence_validation": null
+                },
+                {
+                  "id": "preserve:PC1",
+                  "status": "PASS",
+                  "evidence_validation": null
+                }
+              ]
+            }
+          ],
+          "model_calls": 5,
+          "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+          "final_snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+          "independent_status": "PASS",
+          "independent_result_sha256": "2271c8ef0d542f5628d64e6603fe2fc499731a2ac9b9838ce9ff26cf2b4d76a0"
+        },
+        {
+          "case_id": "R3-KOPF-726",
+          "registration_sha256": "84ca5cdc55673b8de88445c137c1fd8de86d03dad9cb2e8f9f112a5a74556987",
+          "receipt_sha256": "7c3bd816a5b0668d2cf3c83d4c472e22ec121d4178ff0f8f080418ed9e71438f",
+          "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+          "method_status": "PUBLIC_REVIEW_COMPLETE",
+          "public_reviews": [
+            {
+              "round_id": 0,
+              "decision": "PASS",
+              "method": "MODEL_PUBLIC_REVIEW",
+              "checks": [
+                {
+                  "id": "P1",
+                  "status": "PASS",
+                  "evidence_validation": null
+                },
+                {
+                  "id": "P2",
+                  "status": "PASS",
+                  "evidence_validation": null
+                }
+              ]
+            }
+          ],
+          "model_calls": 5,
+          "patch_sha256": "184fbb09510ebb9c1190dfdf7ff62a50dd6b209889c27e1ad1415f6660b4ad21",
+          "final_snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
+          "independent_status": "PASS",
+          "independent_result_sha256": "db2063e6403e51c5313f9fab6a5a5f7d670d85dd182e11c17607386935c6f8a4"
+        },
+        {
+          "case_id": "RW-ALERTMANAGER-4705",
+          "registration_sha256": "292b70927323f20b9f2d1041970e8812bfdb723f5f126ab88cedeffc04cde65b",
+          "receipt_sha256": "f801a7c36bdb0555deba50d33c377d46273bff0d7b754e8ba3b0897c3c050912",
+          "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+          "method_status": "PUBLIC_EXECUTION_COMPLETE",
+          "public_reviews": [
+            {
+              "round_id": 0,
+              "decision": "UNKNOWN",
+              "method": "MODEL_PUBLIC_REVIEW",
+              "checks": [
+                {
+                  "id": "P1",
+                  "status": "UNKNOWN",
+                  "evidence_validation": null
+                },
+                {
+                  "id": "open:OB1",
+                  "status": "UNKNOWN",
+                  "evidence_validation": null
+                }
+              ]
+            }
+          ],
+          "model_calls": 5,
+          "patch_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
+          "final_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
+          "independent_status": "PASS",
+          "independent_result_sha256": "120111d648e4c061e180b51519d4c173a362d7ef66f5505262e4d528a3f1fe70"
+        }
+      ],
+      "updated_at": "2026-10-24T14:15:22.194331+00:00",
+      "status": "COMPLETE"
+    },
+    "original46": {
+      "current_protocol_status": "PENDING_MIGRATION",
+      "historical_results_transferred": false
+    }
   },
   "optimization_reset": {
-    "as_of": "2026-10-21T14:38:03.778057+00:00",
-    "gate": "V0636_SINGLE_GATE_FAILED_CORRECTION_DRAFT_GAP_REPRODUCED",
+    "as_of": "2026-10-24T12:09:47.694861+00:00",
+    "gate": "ISOLATED_DEVELOPMENT_PASSED_CLEAN_REPRO_AND_FIXED_PANEL_PENDING",
     "formal_ready": false,
     "money_limit_cny": 150,
-    "report": "docs/reports/2026-10-24-feedback-context-admission.md",
-    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.36.json",
-    "public_calibration": "temporal-v2-calibration-corrected/summary.json",
-    "live_result": ".35 originalBroken SEMANTIC_FAIL; supplemental .34savedresponse→.35 continuationPASS/8publicchecksPASS,3newcalls, not panel",
-    "next_revision": "0.6.37 previous draft continuity; staged, not frozen/noAPI"
+    "report": "docs/reports/2026-10-24-isolation-boundary-progress.md",
+    "method_version": "0.6.38",
+    "source_changed": false
   },
-  "latest_live_result": {
-    "version": "0.6.37",
-    "method_status": "PUBLIC_EXECUTION_COMPLETE",
-    "independent_status": "PASS",
-    "model_calls": 9,
-    "edit_rounds": 2,
-    "first_trial_public": {
-      "PASS": 3,
-      "FAIL": 5
-    },
-    "final_public": {
-      "PASS": 8,
-      "FAIL": 0
-    },
-    "semantic_outcome": "UNKNOWN",
-    "route": "STOP",
-    "unverified_obligations": 3,
-    "candidate_patch_sha256": "c52869dbf9a2e0c3521c3e6212c736ee9241392f878b4341414d8adf93006f92",
-    "final_snapshot": "88a30690562fa5f592fecc16895b916aea0ece9f61d64f67190bf35fad88b48d",
-    "scored": 1,
-    "not_run": 45,
-    "formal_ready": false,
-    "gate": {
-      "accepted": true,
-      "reason": "INDEPENDENT_PASS_NO_SELECTED_PUBLIC_FAILURE",
-      "patch_sha256": "c52869dbf9a2e0c3521c3e6212c736ee9241392f878b4341414d8adf93006f92",
-      "snapshot_id": "88a30690562fa5f592fecc16895b916aea0ece9f61d64f67190bf35fad88b48d"
-    },
-    "supplemental_plan_only": {
-      "role": "SUPPLEMENTAL_PLANNING_CORRECTION_ONLY",
-      "new_paid_calls": 1,
-      "saved_responses": 5,
-      "first_five_exact": true,
-      "draft_exact": true,
-      "source_unchanged": true,
-      "input_bound": 150107,
-      "output_bound": 16384,
-      "counts_in_46_slot_panel": false,
-      "counts_as_behavior_repair_success": false,
-      "formal_ready": false,
-      "captured_next_request": true,
-      "next_prompt": "topomen-source-execution.v1",
-      "method_status": null,
-      "validated_plan_status": "READY_PARTIAL",
-      "validation_errors": [],
-      "stopped_before_execution": true
-    },
-    "money": {
-      "limit_cny": 150,
-      "committed_including_uncertain_cny": 98.616916,
-      "remaining_upper_cny": 51.383084,
-      "uncertain_reservations": 3,
-      "new_paid_calls": 10,
-      "new_cost_cny": 1.085144,
-      "attribution": {
-        "original_broken": {
-          "new_paid_calls": 9,
-          "cost_cny": 0.968414,
-          "ledger_record_ids": [
-            "3c6fe60ece7847d1a1919b1cf793082d",
-            "f45c0e07e8c84eedae60639c2177c28d",
-            "133a043e21084a6dab30697506ff57bc",
-            "a543d5e9cd434c71b8507f23c5ac048c",
-            "581d012d4436456ba21a3f99ad8c6fb8",
-            "ce16a4e0b66a49aea93e7018ca07e0b1",
-            "21c44865653a44d7b9a42096fd0f696d",
-            "55d7959f45e64320a1fbcaecfc60143a",
-            "f4f970b1dce84f4fbda3a5be9366bc14"
-          ]
-        },
-        "supplemental_plan_correction": {
-          "new_paid_calls": 1,
-          "cost_cny": 0.11673,
-          "ledger_record_ids": [
-            "bc7f0f4e9eb049618b691789036e8e21"
+  "latest_live_result": [
+    {
+      "case_id": "RW-CAND-130",
+      "registration_sha256": "21fdeced860e196a4869426113cf0b053ad91db7cbd9acd53f418c2e92d9555b",
+      "receipt_sha256": "76854400bad318307dc133b972b79cad1b397a6f8556a72ea2b454f5ba8cf18b",
+      "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "public_reviews": [
+        {
+          "round_id": 0,
+          "decision": "PASS",
+          "method": "MODEL_PUBLIC_REVIEW",
+          "checks": [
+            {
+              "id": "P1",
+              "status": "PASS",
+              "evidence_validation": null
+            },
+            {
+              "id": "P2",
+              "status": "PASS",
+              "evidence_validation": null
+            },
+            {
+              "id": "preserve:PC1",
+              "status": "PASS",
+              "evidence_validation": null
+            }
           ]
         }
-      },
-      "basis": "Unique prompt_version+exactusage matching of10newsettledsharedledgerrecords; savedresponsesnotchargedagain. Pinned conservative2input/8output CNY per million, not provider invoice."
+      ],
+      "model_calls": 5,
+      "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+      "final_snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+      "independent_status": "PASS",
+      "independent_result_sha256": "2271c8ef0d542f5628d64e6603fe2fc499731a2ac9b9838ce9ff26cf2b4d76a0"
     },
-    "scope": "One originalBroken same-version failure→rediagnosis→secondedit→8publicPASS→independentPASS; not46panel acceptance/generalization. Supplementalonecall only validates planning correction, excludedfrompanel/repaircount."
-  },
+    {
+      "case_id": "R3-KOPF-726",
+      "registration_sha256": "84ca5cdc55673b8de88445c137c1fd8de86d03dad9cb2e8f9f112a5a74556987",
+      "receipt_sha256": "7c3bd816a5b0668d2cf3c83d4c472e22ec121d4178ff0f8f080418ed9e71438f",
+      "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "public_reviews": [
+        {
+          "round_id": 0,
+          "decision": "PASS",
+          "method": "MODEL_PUBLIC_REVIEW",
+          "checks": [
+            {
+              "id": "P1",
+              "status": "PASS",
+              "evidence_validation": null
+            },
+            {
+              "id": "P2",
+              "status": "PASS",
+              "evidence_validation": null
+            }
+          ]
+        }
+      ],
+      "model_calls": 5,
+      "patch_sha256": "184fbb09510ebb9c1190dfdf7ff62a50dd6b209889c27e1ad1415f6660b4ad21",
+      "final_snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
+      "independent_status": "PASS",
+      "independent_result_sha256": "db2063e6403e51c5313f9fab6a5a5f7d670d85dd182e11c17607386935c6f8a4"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "registration_sha256": "292b70927323f20b9f2d1041970e8812bfdb723f5f126ab88cedeffc04cde65b",
+      "receipt_sha256": "f801a7c36bdb0555deba50d33c377d46273bff0d7b754e8ba3b0897c3c050912",
+      "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "public_reviews": [
+        {
+          "round_id": 0,
+          "decision": "UNKNOWN",
+          "method": "MODEL_PUBLIC_REVIEW",
+          "checks": [
+            {
+              "id": "P1",
+              "status": "UNKNOWN",
+              "evidence_validation": null
+            },
+            {
+              "id": "open:OB1",
+              "status": "UNKNOWN",
+              "evidence_validation": null
+            }
+          ]
+        }
+      ],
+      "model_calls": 5,
+      "patch_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
+      "final_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
+      "independent_status": "PASS",
+      "independent_result_sha256": "120111d648e4c061e180b51519d4c173a362d7ef66f5505262e4d528a3f1fe70"
+    }
+  ],
   "current_experiment": {
-    "version": "0.6.38",
-    "case_id": "R4-ACK-CLOUDWATCH-2985",
-    "status": "REGISTERED_NOT_DISPATCHED"
+    "schema_version": "ce.fixed_development_qualification.v1",
+    "version": "0.6.40",
+    "method_digest": "2d117c40ac2c45eb25e440ec33b347da6e25733d5ac300bb4f760d8045246742",
+    "registered_cases": [
+      "RW-CAND-130",
+      "R3-KOPF-726",
+      "RW-ALERTMANAGER-4705"
+    ],
+    "counts_in_46_slot_panel": false,
+    "formal_ready": false,
+    "records": [
+      {
+        "case_id": "RW-CAND-130",
+        "registration_sha256": "21fdeced860e196a4869426113cf0b053ad91db7cbd9acd53f418c2e92d9555b",
+        "receipt_sha256": "76854400bad318307dc133b972b79cad1b397a6f8556a72ea2b454f5ba8cf18b",
+        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "public_reviews": [
+          {
+            "round_id": 0,
+            "decision": "PASS",
+            "method": "MODEL_PUBLIC_REVIEW",
+            "checks": [
+              {
+                "id": "P1",
+                "status": "PASS",
+                "evidence_validation": null
+              },
+              {
+                "id": "P2",
+                "status": "PASS",
+                "evidence_validation": null
+              },
+              {
+                "id": "preserve:PC1",
+                "status": "PASS",
+                "evidence_validation": null
+              }
+            ]
+          }
+        ],
+        "model_calls": 5,
+        "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+        "final_snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+        "independent_status": "PASS",
+        "independent_result_sha256": "2271c8ef0d542f5628d64e6603fe2fc499731a2ac9b9838ce9ff26cf2b4d76a0"
+      },
+      {
+        "case_id": "R3-KOPF-726",
+        "registration_sha256": "84ca5cdc55673b8de88445c137c1fd8de86d03dad9cb2e8f9f112a5a74556987",
+        "receipt_sha256": "7c3bd816a5b0668d2cf3c83d4c472e22ec121d4178ff0f8f080418ed9e71438f",
+        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "public_reviews": [
+          {
+            "round_id": 0,
+            "decision": "PASS",
+            "method": "MODEL_PUBLIC_REVIEW",
+            "checks": [
+              {
+                "id": "P1",
+                "status": "PASS",
+                "evidence_validation": null
+              },
+              {
+                "id": "P2",
+                "status": "PASS",
+                "evidence_validation": null
+              }
+            ]
+          }
+        ],
+        "model_calls": 5,
+        "patch_sha256": "184fbb09510ebb9c1190dfdf7ff62a50dd6b209889c27e1ad1415f6660b4ad21",
+        "final_snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
+        "independent_status": "PASS",
+        "independent_result_sha256": "db2063e6403e51c5313f9fab6a5a5f7d670d85dd182e11c17607386935c6f8a4"
+      },
+      {
+        "case_id": "RW-ALERTMANAGER-4705",
+        "registration_sha256": "292b70927323f20b9f2d1041970e8812bfdb723f5f126ab88cedeffc04cde65b",
+        "receipt_sha256": "f801a7c36bdb0555deba50d33c377d46273bff0d7b754e8ba3b0897c3c050912",
+        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+        "method_status": "PUBLIC_EXECUTION_COMPLETE",
+        "public_reviews": [
+          {
+            "round_id": 0,
+            "decision": "UNKNOWN",
+            "method": "MODEL_PUBLIC_REVIEW",
+            "checks": [
+              {
+                "id": "P1",
+                "status": "UNKNOWN",
+                "evidence_validation": null
+              },
+              {
+                "id": "open:OB1",
+                "status": "UNKNOWN",
+                "evidence_validation": null
+              }
+            ]
+          }
+        ],
+        "model_calls": 5,
+        "patch_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
+        "final_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
+        "independent_status": "PASS",
+        "independent_result_sha256": "120111d648e4c061e180b51519d4c173a362d7ef66f5505262e4d528a3f1fe70"
+      }
+    ],
+    "updated_at": "2026-10-24T14:15:22.194331+00:00",
+    "status": "COMPLETE"
   },
-  "G4": "V0636_SINGLE_GATE_FAILED_CORRECTION_DRAFT_GAP_REPRODUCED",
-  "G5": "FIXED_SAME_VERSION_PANEL_PENDING",
+  "G4": "REQUIRED_SAME_VERSION_REPEAT_AND_FRESH_RECOVERY_PENDING",
+  "G5": "ISOLATED_46_SLOT_DRIVER_AND_REGISTRATION_PENDING",
   "B_opened": false,
-  "engineering_tests": 870,
+  "engineering_tests": 1069,
   "budget_snapshot": {
     "limit_cny": 150,
-    "committed_including_uncertain_cny": 98.616916,
-    "remaining_upper_cny": 51.383084,
-    "uncertain_reservations": 3,
-    "new_paid_calls": 10,
-    "new_cost_cny": 1.085144,
-    "attribution": {
-      "original_broken": {
-        "new_paid_calls": 9,
-        "cost_cny": 0.968414,
-        "ledger_record_ids": [
-          "3c6fe60ece7847d1a1919b1cf793082d",
-          "f45c0e07e8c84eedae60639c2177c28d",
-          "133a043e21084a6dab30697506ff57bc",
-          "a543d5e9cd434c71b8507f23c5ac048c",
-          "581d012d4436456ba21a3f99ad8c6fb8",
-          "ce16a4e0b66a49aea93e7018ca07e0b1",
-          "21c44865653a44d7b9a42096fd0f696d",
-          "55d7959f45e64320a1fbcaecfc60143a",
-          "f4f970b1dce84f4fbda3a5be9366bc14"
-        ]
-      },
-      "supplemental_plan_correction": {
-        "new_paid_calls": 1,
-        "cost_cny": 0.11673,
-        "ledger_record_ids": [
-          "bc7f0f4e9eb049618b691789036e8e21"
-        ]
-      }
-    },
-    "basis": "Unique prompt_version+exactusage matching of10newsettledsharedledgerrecords; savedresponsesnotchargedagain. Pinned conservative2input/8output CNY per million, not provider invoice."
+    "committed_including_reservations_cny": 103.655032,
+    "ledger_records": 1028,
+    "new_qualification_calls": 15,
+    "new_qualification_committed_cny": 1.478674,
+    "as_of": "2026-10-24T14:22:24.933177+00:00",
+    "remaining_upper_bound_cny": 46.344968
   },
   "staged_revision": null,
   "subtests": 22,
-  "frozen_method": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.38.json",
-  "same_version_candidate_independent_pass_so_far": 0,
+  "frozen_method": "outputs/declared-comparison-closure-20261024/frozen-method-v0.6.40.json",
+  "same_version_candidate_independent_pass_so_far": 3,
   "staged_optimization": null,
   "current_development_revision": {
     "version": "0.6.38",
@@ -1461,36 +1663,12 @@
   },
   "budget_current": {
     "limit_cny": 150,
-    "committed_including_uncertain_cny": 98.616916,
-    "remaining_upper_cny": 51.383084,
-    "uncertain_reservations": 3,
-    "new_paid_calls": 10,
-    "new_cost_cny": 1.085144,
-    "attribution": {
-      "original_broken": {
-        "new_paid_calls": 9,
-        "cost_cny": 0.968414,
-        "ledger_record_ids": [
-          "3c6fe60ece7847d1a1919b1cf793082d",
-          "f45c0e07e8c84eedae60639c2177c28d",
-          "133a043e21084a6dab30697506ff57bc",
-          "a543d5e9cd434c71b8507f23c5ac048c",
-          "581d012d4436456ba21a3f99ad8c6fb8",
-          "ce16a4e0b66a49aea93e7018ca07e0b1",
-          "21c44865653a44d7b9a42096fd0f696d",
-          "55d7959f45e64320a1fbcaecfc60143a",
-          "f4f970b1dce84f4fbda3a5be9366bc14"
-        ]
-      },
-      "supplemental_plan_correction": {
-        "new_paid_calls": 1,
-        "cost_cny": 0.11673,
-        "ledger_record_ids": [
-          "bc7f0f4e9eb049618b691789036e8e21"
-        ]
-      }
-    },
-    "basis": "Unique prompt_version+exactusage matching of10newsettledsharedledgerrecords; savedresponsesnotchargedagain. Pinned conservative2input/8output CNY per million, not provider invoice."
+    "committed_including_reservations_cny": 103.655032,
+    "ledger_records": 1028,
+    "new_qualification_calls": 15,
+    "new_qualification_committed_cny": 1.478674,
+    "as_of": "2026-10-24T14:22:24.933177+00:00",
+    "remaining_upper_bound_cny": 46.344968
   },
   "previous_live_success": {
     "version": "0.6.32",
@@ -1516,5 +1694,152 @@
     "new_paid_model_calls": 3,
     "public_checks": "8/8PASS",
     "semantic_outcome": "UNKNOWN"
-  }
+  },
+  "latest_portable_validation": {
+    "role": "SINGLE_CLEAN_CLONE_OPERATIONAL_VALIDATION",
+    "status": "PASS_REAL_CLEAN_CLONE_CLI_PUBLIC_PATCH_AND_INDEPENDENT_SCORE",
+    "method_version": "0.6.38",
+    "source_digest": "5f9e90c459b95e703b0c9f32b9f9d70fff1eb859f90e95489f0083c632f422fe",
+    "clone_commit": "8625d0744ceb0cda7911fc60af6aa97ca9c1f9ba",
+    "fresh_venv": true,
+    "case_id": "RW-CAND-130",
+    "method_status": "PUBLIC_REVIEW_COMPLETE",
+    "independent_status": "PASS",
+    "model_calls": 4,
+    "edit_rounds": 1,
+    "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+    "patch_bytes": 1474,
+    "batch_sha256": "72c2d89f897404bb6bf3e73531749cde18ad1b16967ffd8c19c132f9e36af004",
+    "independent_cohort_sha256": "864d68d49772875b6765c4c7cb1c4de7eb4ce9cca82d7ef64fdbc6c6cdb1feb3",
+    "native_agent": "topomen.collaboration.base_agent.DefaultAgent",
+    "native_source_sha256": "3dfc43754d4bae6dbc99051ed607d4cc756b26049b79b7f5cc2f9865ee17b2dd",
+    "public150_input_projection": {
+      "verified": 150,
+      "private_materials_loaded": false,
+      "source_trees_extracted": 0,
+      "release_identity": {
+        "release_id": "ContractEdge-benchmark150-v1-20261019",
+        "release_entry_sha256": "6f0d200363dbe14595f2cb3c4cbbaab324b0cc62eb760acc4393d3fbe02a66ef",
+        "public_manifest_sha256": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+        "selected_cases": 150,
+        "by_class": {
+          "R1": 30,
+          "R2": 30,
+          "R3": 30,
+          "R4": 30,
+          "R5": 30
+        }
+      }
+    },
+    "original_source_roots_absent_in_requests": true,
+    "config_adaptations": [
+      "run_id",
+      "topomen_source_root",
+      "lock_root",
+      "money_budget.path"
+    ],
+    "G3_accepted": false,
+    "G6_complete": false,
+    "counts_in_46_slot_panel": false,
+    "formal_ready": false,
+    "new_cost_cny": 0.383612,
+    "ledger_record_ids": [
+      "aa0a3f80cfa64be7a6d8aa433a5cf01b",
+      "2d99958b59b54c3d9d8ad2acafe718a1",
+      "8fc28548167046fb9152fc61df079152",
+      "a3ddd046b9244104a40792cc3d4fe27b"
+    ],
+    "limits": [
+      "Same Linux host/localGit clone, not remote/newOS",
+      "Docker daemon remains available; no strong G3 claim",
+      "Only pre-model startup recovery exercised; not request-unknown/patch interruption/scoring recovery/full formal scheduling"
+    ]
+  },
+  "historical_optimization_reset_v0_6_36": {
+    "as_of": "2026-10-21T14:38:03.778057+00:00",
+    "gate": "V0636_SINGLE_GATE_FAILED_CORRECTION_DRAFT_GAP_REPRODUCED",
+    "formal_ready": false,
+    "money_limit_cny": 150,
+    "report": "docs/reports/2026-10-24-feedback-context-admission.md",
+    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.36.json",
+    "public_calibration": "temporal-v2-calibration-corrected/summary.json",
+    "live_result": ".35 originalBroken SEMANTIC_FAIL; supplemental .34savedresponse→.35 continuationPASS/8publicchecksPASS,3newcalls, not panel",
+    "next_revision": "0.6.37 previous draft continuity; staged, not frozen/noAPI"
+  },
+  "execution_boundary": {
+    "revision": "c3fdaab4150f9319c2456bd97b8fc6dc52933505",
+    "status": "ENGINEERING_AND_SINGLE_ISOLATED_DEVELOPMENT_PASS",
+    "method_version": "0.6.38",
+    "full_passed": 971,
+    "full_subtests": 22,
+    "portable_passed": 938,
+    "portable_subtests": 17,
+    "portable_excluded_modules": 6,
+    "review_important_fixed": 4,
+    "actual_development": "outputs/isolation-boundary-20261024/RESULTS.json",
+    "counts_in_46_slot_panel": false,
+    "formal_ready": false,
+    "clean_clone_isolated_reproduction": "IN_PROGRESS"
+  },
+  "latest_budget": {
+    "limit_cny": 150,
+    "committed_including_reservations_cny": 103.655032,
+    "ledger_records": 1028,
+    "new_qualification_calls": 15,
+    "new_qualification_committed_cny": 1.478674,
+    "as_of": "2026-10-24T14:22:24.933177+00:00",
+    "remaining_upper_bound_cny": 46.344968
+  },
+  "historical_pre_v040_summary": {
+    "version": "0.6.38",
+    "status": "V0638_SINGLE_GATE_PASS_G3_G6_PENDING",
+    "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.38.json",
+    "G4": "V0636_SINGLE_GATE_FAILED_CORRECTION_DRAFT_GAP_REPRODUCED",
+    "G5": "FIXED_SAME_VERSION_PANEL_PENDING",
+    "engineering_tests": 870,
+    "same_version_candidate_independent_pass_so_far": 1,
+    "active_frozen_panels": {
+      "version": "0.6.38",
+      "A": 14,
+      "B": 20,
+      "repeat": 4,
+      "recovery": 8,
+      "scored": 1,
+      "not_run": 45,
+      "B_opened": false,
+      "status": "HELD_FOR_ISOLATION_AND_RECOVERY_ENGINE_BEFORE_FINAL_PANEL"
+    },
+    "latest_live_result": {
+      "version": "0.6.38",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "model_calls": 7,
+      "edit_rounds": 1,
+      "public_behavior": {
+        "PASS": 8,
+        "FAIL": 0
+      },
+      "semantic_outcome": "UNKNOWN",
+      "route": "STOP",
+      "unverified_obligations": 2,
+      "patch_sha256": "1998d248baadded3aa4ac245ea8056b587263ed61fbe1438f85fb0f08c9486c1",
+      "final_snapshot": "e9cb649d03961f68c63c344c87c320ed7eee22af281c04c23150848ff337688e",
+      "scored": 1,
+      "not_run": 45,
+      "formal_ready": false,
+      "portable_validation_counted": false,
+      "money": {
+        "limit_cny": 150,
+        "committed_including_uncertain_cny": 99.813656,
+        "remaining_upper_cny": 50.186344,
+        "uncertain_reservations": 3,
+        "new_paid_calls": 11,
+        "new_cost_cny": 1.19674,
+        "original_gate_cny": 0.813128,
+        "portable_operational_cny": 0.383612,
+        "attribution": "11uniqueusage+promptmatchedrecords since981; 7originalACK +4separateoperationalRW130. No firststartupfailurecalls. Pinnedconservativepricing, notinvoice."
+      }
+    }
+  },
+  "current_optimization_report": "outputs/declared-comparison-closure-20261024/COMPLETION_AUDIT.md"
 }

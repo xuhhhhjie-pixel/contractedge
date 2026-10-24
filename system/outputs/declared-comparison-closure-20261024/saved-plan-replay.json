@@ -1,0 +1,98 @@
+{
+  "schema_version": "ce.saved_pointer_boundary_replay.v1",
+  "saved_source_version": "0.6.39",
+  "tested_version": "0.6.40",
+  "source_plan_sha256": "de7f9d533d0eea67f1d704652278459aea879cc0fd6476d62c1272782f7569db",
+  "result": "REJECTED_BEFORE_EXECUTION",
+  "invalid_paths": [
+    [
+      "postconditions",
+      0,
+      "comparison_requirements",
+      0,
+      "input_pointer"
+    ],
+    [
+      "postconditions",
+      0,
+      "comparison_requirements",
+      0,
+      "output_pointer"
+    ],
+    [
+      "postconditions",
+      0,
+      "comparison_requirements",
+      1,
+      "input_pointer"
+    ],
+    [
+      "postconditions",
+      0,
+      "comparison_requirements",
+      1,
+      "output_pointer"
+    ],
+    [
+      "postconditions",
+      0,
+      "comparison_requirements",
+      2,
+      "input_pointer"
+    ],
+    [
+      "postconditions",
+      0,
+      "comparison_requirements",
+      2,
+      "output_pointer"
+    ],
+    [
+      "postconditions",
+      1,
+      "comparison_requirements",
+      0,
+      "input_pointer"
+    ],
+    [
+      "postconditions",
+      1,
+      "comparison_requirements",
+      0,
+      "output_pointer"
+    ],
+    [
+      "postconditions",
+      1,
+      "comparison_requirements",
+      1,
+      "input_pointer"
+    ],
+    [
+      "postconditions",
+      1,
+      "comparison_requirements",
+      1,
+      "output_pointer"
+    ],
+    [
+      "postconditions",
+      1,
+      "comparison_requirements",
+      2,
+      "input_pointer"
+    ],
+    [
+      "postconditions",
+      1,
+      "comparison_requirements",
+      2,
+      "output_pointer"
+    ]
+  ],
+  "guidance_in_validation_feedback": true,
+  "http_calls": 0,
+  "corrected_plan_fabricated": false,
+  "independent_effect_claim": false,
+  "formal_ready": false
+}

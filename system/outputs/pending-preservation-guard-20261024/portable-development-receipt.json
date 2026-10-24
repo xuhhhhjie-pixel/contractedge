@@ -1,0 +1,21 @@
+{
+  "status": "PASS_CLEAN_DEVELOPMENT",
+  "version": "0.6.38",
+  "clone_commit": "8625d07",
+  "fresh_venv": true,
+  "source_digest": "5f9e90c459b95e703b0c9f32b9f9d70fff1eb859f90e95489f0083c632f422fe",
+  "portable_passed": 837,
+  "subtests": 17,
+  "excluded_modules": 6,
+  "native_fixture_separate": 9,
+  "real_installed_cli_and_score": "PASS_REAL_CLEAN_CLONE_CLI_PUBLIC_PATCH_AND_INDEPENDENT_SCORE",
+  "G3_accepted": false,
+  "G6_complete": false,
+  "logs": {
+    "clean-install.log": "20fab7cd7ebb707bc096c649dde47c282bbce05ad4d032e34815e73d14df7357",
+    "clean-pip-check.log": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "clean-cli-help.log": "8f0c0a580e5b67aac937d248ff997c586b91be60f27446f03cfcc1dde27e0e96",
+    "masked-clean-portable-tests.log": "0bd2c7194cac61ab0cb081076801c745ea491aacc075525e033686bc9c6db13f",
+    "masked-native-topomen-tests.log": "0f762776cb3b4f2bda7072649c2a6061ee09bb674e074c38dc61b9236389f976"
+  }
+}

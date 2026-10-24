@@ -1,0 +1,217 @@
+{
+  "schema_version": "ce.declared_comparison_qualification.v1",
+  "version": "0.6.40",
+  "method_digest": "2d117c40ac2c45eb25e440ec33b347da6e25733d5ac300bb4f760d8045246742",
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "status": "COMPLETE",
+  "engineering": {
+    "full": 1069,
+    "full_subtests": 22,
+    "portable": 1036,
+    "portable_subtests": 17,
+    "portable_excluded_modules": 6,
+    "fresh_installed_portable": 1036,
+    "fresh_installed_portable_subtests": 17,
+    "fresh_native": 9,
+    "new_generic_tests": 65,
+    "red_failures": 51,
+    "red_existing_passes": 14
+  },
+  "public_input_preflight": {
+    "checked": 150,
+    "status": "PASS",
+    "private_materials_loaded": false,
+    "source_extracted": false,
+    "http_calls": 0,
+    "independent_evaluators_checked": false
+  },
+  "qualification": {
+    "schema_version": "ce.fixed_development_qualification.v1",
+    "version": "0.6.40",
+    "method_digest": "2d117c40ac2c45eb25e440ec33b347da6e25733d5ac300bb4f760d8045246742",
+    "registered_cases": [
+      "RW-CAND-130",
+      "R3-KOPF-726",
+      "RW-ALERTMANAGER-4705"
+    ],
+    "counts_in_46_slot_panel": false,
+    "formal_ready": false,
+    "records": [
+      {
+        "case_id": "RW-CAND-130",
+        "registration_sha256": "21fdeced860e196a4869426113cf0b053ad91db7cbd9acd53f418c2e92d9555b",
+        "receipt_sha256": "76854400bad318307dc133b972b79cad1b397a6f8556a72ea2b454f5ba8cf18b",
+        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "public_reviews": [
+          {
+            "round_id": 0,
+            "decision": "PASS",
+            "method": "MODEL_PUBLIC_REVIEW",
+            "checks": [
+              {
+                "id": "P1",
+                "status": "PASS",
+                "evidence_validation": null
+              },
+              {
+                "id": "P2",
+                "status": "PASS",
+                "evidence_validation": null
+              },
+              {
+                "id": "preserve:PC1",
+                "status": "PASS",
+                "evidence_validation": null
+              }
+            ]
+          }
+        ],
+        "model_calls": 5,
+        "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+        "final_snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+        "independent_status": "PASS",
+        "independent_result_sha256": "2271c8ef0d542f5628d64e6603fe2fc499731a2ac9b9838ce9ff26cf2b4d76a0"
+      },
+      {
+        "case_id": "R3-KOPF-726",
+        "registration_sha256": "84ca5cdc55673b8de88445c137c1fd8de86d03dad9cb2e8f9f112a5a74556987",
+        "receipt_sha256": "7c3bd816a5b0668d2cf3c83d4c472e22ec121d4178ff0f8f080418ed9e71438f",
+        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "public_reviews": [
+          {
+            "round_id": 0,
+            "decision": "PASS",
+            "method": "MODEL_PUBLIC_REVIEW",
+            "checks": [
+              {
+                "id": "P1",
+                "status": "PASS",
+                "evidence_validation": null
+              },
+              {
+                "id": "P2",
+                "status": "PASS",
+                "evidence_validation": null
+              }
+            ]
+          }
+        ],
+        "model_calls": 5,
+        "patch_sha256": "184fbb09510ebb9c1190dfdf7ff62a50dd6b209889c27e1ad1415f6660b4ad21",
+        "final_snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
+        "independent_status": "PASS",
+        "independent_result_sha256": "db2063e6403e51c5313f9fab6a5a5f7d670d85dd182e11c17607386935c6f8a4"
+      },
+      {
+        "case_id": "RW-ALERTMANAGER-4705",
+        "registration_sha256": "292b70927323f20b9f2d1041970e8812bfdb723f5f126ab88cedeffc04cde65b",
+        "receipt_sha256": "f801a7c36bdb0555deba50d33c377d46273bff0d7b754e8ba3b0897c3c050912",
+        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+        "method_status": "PUBLIC_EXECUTION_COMPLETE",
+        "public_reviews": [
+          {
+            "round_id": 0,
+            "decision": "UNKNOWN",
+            "method": "MODEL_PUBLIC_REVIEW",
+            "checks": [
+              {
+                "id": "P1",
+                "status": "UNKNOWN",
+                "evidence_validation": null
+              },
+              {
+                "id": "open:OB1",
+                "status": "UNKNOWN",
+                "evidence_validation": null
+              }
+            ]
+          }
+        ],
+        "model_calls": 5,
+        "patch_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
+        "final_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
+        "independent_status": "PASS",
+        "independent_result_sha256": "120111d648e4c061e180b51519d4c173a362d7ef66f5505262e4d528a3f1fe70"
+      }
+    ],
+    "updated_at": "2026-10-24T14:15:22.194331+00:00",
+    "status": "COMPLETE"
+  },
+  "budget": {
+    "limit_cny": 150,
+    "committed_including_reservations_cny": 103.655032,
+    "ledger_records": 1028,
+    "new_qualification_calls": 15,
+    "new_qualification_committed_cny": 1.478674,
+    "as_of": "2026-10-24T14:22:24.933177+00:00",
+    "remaining_upper_bound_cny": 46.344968
+  },
+  "not_claimed": [
+    "full46_same_protocol_effect_acceptance",
+    "KOPF_or_Alert_two_attempt_repeatability",
+    "fresh_v040_KPT_independent_recovery",
+    "all_G0_G6",
+    "formal150_results"
+  ],
+  "saved_kpt_replay": {
+    "final": {
+      "method_version": "0.6.40",
+      "saved_source_version": "0.6.38",
+      "new_model_calls": 0,
+      "saved_responses": 6,
+      "all_requests_exact": false,
+      "all_requests_equal_after_declared_contract_delta": true,
+      "worker_returncode": 0,
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "final_snapshot": "6023bac3084b12adce3e288a7705dbd3c1e07f644582f5f20f855beb283b3e72",
+      "patch_sha256": "9110e61d907f7a35d1887f2db88648168a9a35b83f9fdf5d65e1005f0e2e6f96",
+      "method_namespace": true,
+      "producer_namespace": false,
+      "saved_public_outputs": true,
+      "counts_in_46_slot_panel": false,
+      "independent_score": "NOT_RUN",
+      "replay_only_ledger_unchanged": true,
+      "global_ledger_unchanged_claim": false,
+      "harness_files": {
+        "isolated_protocol.py": "bcd33c178da305f4fe69836f68d9f158c4b7a520bb089d1231a7d78c4815f9c7",
+        "isolated_paths.py": "f228cfaac3d959d0a3b43c73a5c8c23d953746f065e753515cdc467e190974a8",
+        "run_isolated_method.py": "166bf7da074160b0e74fa759eda38c5191d15539e99d58f66e8bcc2470bc5a13",
+        "isolated_public_worker.py": "3e4652e564ffd37a5d7c7798a5ee19fdf43c6fd82744f2fbc50fbb0afc0275ac",
+        "run_reliability_worker_v10.py": "2c50d6c7289321a7a78c21b124a7d7083e69f26e48a33ab6c44f1d4635097fe0",
+        "run_reliability_worker_v9.py": "261d59c4edeca3cafa631576a9197a02c4cd18308df55572f96f1dabf829ba58"
+      },
+      "unchanged_source_evidence_and_model_budgets": true,
+      "replay_money_ledger": "LOCAL_REPLAY_ONLY_NO_PAID_PROVIDER"
+    },
+    "earlier_replay_tool_failures": [
+      {
+        "workspace": "typed-kpt-replay-v040",
+        "saved_responses": 2,
+        "reason": "normalizer assumed unconstrained description instead of actual maxLength600 schema"
+      },
+      {
+        "workspace": "typed-kpt-replay-v040-v2",
+        "saved_responses": 5,
+        "reason": "normalizer omitted declared public-review v2 contract delta"
+      }
+    ],
+    "earlier_failures_retained": true,
+    "application_source_changed_to_force_replay": false
+  },
+  "inherited_defensive_limits": [
+    "Missing source_file in both manually forged metadata/body remains a defensive auditability gap; registered producer always supplies it and content SHA remains required.",
+    "A nonmapping locator can raise at an internal helper; current producer and observation schema require a mapping."
+  ],
+  "alert_overflow_investigation": {
+    "artifact": "ALERT_OVERFLOW_INVESTIGATION.json",
+    "diagnostic_probe_not_frozen_score": true,
+    "complete_prefix_groups": 15116,
+    "duplicate_identities": 13302,
+    "unique_identities": 1814,
+    "new_model_calls": 0,
+    "implication": "Candidate public behavior defect confirmed despite independent PASS; formal readiness remains false. Preserve response bound and expose local negative facts without proving missing groups absent."
+  }
+}
