@@ -1,0 +1,54 @@
+{
+  "schema_version": "ce.root_cause_closure_map.v1",
+  "rows": [
+    {
+      "component": "Evidence selection",
+      "observed_failure": "Old selected reload publication entry disappeared after acquiring provider/processing evidence",
+      "first_boundary": "extend_once before fit_diagnosis",
+      "implementation": "src/contractedge/orchestration/runner.py:retain_supported_source",
+      "zero_call_evidence": "v048-alert-initial-cross-stage/summary.json",
+      "real_effect": "PENDING_CURRENT_DIAGNOSTIC"
+    },
+    {
+      "component": "Fresh source and bounded reads",
+      "observed_failure": "Stale field contract read was not charged; direct anchor could carry changed bytes under old snapshot",
+      "first_boundary": "locate_gap_roles source read",
+      "implementation": "src/contractedge/retrieval/gap_delivery.py:locate_gap_roles.read",
+      "zero_call_evidence": "../source-boundary-accounting-20261026/boundary-red.log and boundary-green-v3.log",
+      "real_effect": "SAFETY_BOUNDARY_VERIFIED_NOT_SUCCESS_RATE_CLAIM"
+    },
+    {
+      "component": "Precise identifier location",
+      "observed_failure": "Same-file wrong-case or substring declarations displaced the exact declaration",
+      "first_boundary": "extract_gap_extension_units per-unit admission",
+      "implementation": "src/contractedge/source/units.py:precise_match/query_match",
+      "zero_call_evidence": "../source-boundary-accounting-20261026/boundary-red.log and boundary-green-v3.log",
+      "real_effect": "GENERIC_COUNTEREXAMPLES_PASS"
+    },
+    {
+      "component": "Semantic ChangeSet feedback",
+      "observed_failure": "MODIFY + open reference conflict misreported as missing branch edit",
+      "first_boundary": "validate_semantic_changeset production_path_review",
+      "implementation": "src/contractedge/changeset/validate.py and prompt.py",
+      "zero_call_evidence": "CERT_BRANCH_FEEDBACK_REPLAY.json",
+      "real_effect": "PENDING_CURRENT_DIAGNOSTIC; ORIGINAL_INVALID_PLAN_PRESERVED"
+    },
+    {
+      "component": "Planning prerequisites",
+      "observed_failure": "Preserve coverage emitted without explicit preservation; relocation intent omitted availability of req input",
+      "first_boundary": "changeset request and semantic_action",
+      "implementation": "src/contractedge/changeset/prompt.py",
+      "zero_call_evidence": "Original046 public planning requests and current request captures",
+      "real_effect": "PENDING_CURRENT_DIAGNOSTIC; PROMPT_IS_NOT_A_PROOF"
+    },
+    {
+      "component": "Parent terminal and independent scoring",
+      "observed_failure": "Closed BUDGET_EXHAUSTED and native negative results blocked by wrappers",
+      "first_boundary": "run_isolated_method.validate_method_result and score_outcome",
+      "implementation": "scripts/run_isolated_method.py and score_isolated_method.py",
+      "zero_call_evidence": "/home/xhj/contractedge-terminal-budget-amendment-20261026/system/outputs/budget-terminal-amendment-20261026/COMPLETION_AUDIT.md",
+      "real_effect": "ORIGINAL_ALERT_SCORED_SEMANTIC_FAIL_WITH_ZERO_NEW_MODEL_CALLS"
+    }
+  ],
+  "formal_ready": false
+}

@@ -1,0 +1,44 @@
+{
+  "as_of": "2026-10-26",
+  "status": "ENGINEERING_PASS_EFFECT_GATE_FAILED_NEXT_QUERY_ROOT_CAUSE_REPLAY",
+  "formal_ready": false,
+  "original_fixed46": {
+    "A_closed": 14,
+    "remaining_not_run": 32,
+    "candidate_independent_pass": 5,
+    "baseline_independent_pass": 3,
+    "cert_regression": true
+  },
+  "original_v046_diagnostic": [
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "method_status": "BUDGET_EXHAUSTED",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "FAIL",
+      "patch_bytes": 1222
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "method_status": "INVALID_PLAN",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "patch_bytes": 0
+    },
+    {
+      "case_id": "R3-KPT-4673"
+    }
+  ],
+  "active_candidate": {
+    "version": "0.6.48",
+    "worktree": "/home/xhj/contractedge-branch-review-20261026/system",
+    "snapshot": "docs/development/unified-branch-feedback-v048-20261026-v2.snapshot.json",
+    "source_sha256": "707ac9445d6cc422329d165ca3e7d8d5a78db6ae89aa4cca3f11a96a9338de9d",
+    "qualification": "ENGINEERING_AND_RUNTIME_QUALIFICATION_PASS",
+    "code_commit": "45a6dc0",
+    "diagnostic_state": "/home/xhj/contractedge-branch-review-20261026/system/.superpowers/sdd/2026-10-22-formal-experiment-delivery/diagnostic-v048-v2-state.json",
+    "diagnostic": "CLOSED_BOTH_SEMANTIC_FAIL"
+  },
+  "next_gate": "Normalize only explicit query identifiers within existing scope and budgets; saved-trace replay before any further real call",
+  "benchmark150_unchanged": true,
+  "formal150_started": false
+}

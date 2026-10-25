@@ -1,0 +1,9 @@
+{
+  "original_registration_sha256": "2ad009daee768be0053d2acfe22958dcacab838c06b3ed4fe0752a6a5aeee89b",
+  "original_supervisor_state_sha256": "8884ccd17a51655b2a3dc067dc18cd9cc7c111af68f695d0ea78937a5e05219b",
+  "reason": "Missing caller-owned queue directory after method and score already closed; repair metadata only",
+  "original_alert_replayed": false,
+  "source_changed": false,
+  "driver_sha256": "9852f9cef7d7eb847de4447f82b1e2c0079074328661f0d715f9efc2b3ebf267",
+  "formal_ready": false
+}

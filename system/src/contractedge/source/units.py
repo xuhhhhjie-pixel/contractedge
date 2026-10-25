@@ -242,6 +242,17 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
         and len(h['value']) >= 12 and re.fullmatch(r'[A-Za-z_]\w*', h['value'])
         and (re.search(r'[a-z][A-Z]', h['value']) or '_' in h['value'])]
 
+    def precise_match(hint, text):
+        # Preserve the same case-sensitive token boundary at every admission
+        # stage; a sibling declaration must not borrow a file-level hit.
+        return bool(re.search(r'(?<![A-Za-z0-9_$])' + re.escape(hint['value'])
+                              + r'(?![A-Za-z0-9_$])', text))
+
+    def query_match(hint, text):
+        if hint in precise_hints:
+            return precise_match(hint, text)
+        return hint['value'].casefold() in text.casefold()
+
     root = Path(snapshot.source_root).resolve()
     seed = set(seed_paths)
     anchors = [unit for unit in existing_units if str(unit.get("path", "")) in seed]
@@ -322,7 +333,7 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             # A long declaration exposes only its bounded prefix. A precise
             # same-file gap may read a bounded literal window around a later
             # variable/closure use, without claiming a complete syntax unit.
-            queries = [h['value'].casefold() for h in exact_hints.get(relative, [])]
+            queries = exact_hints.get(relative, [])
             lines = text.splitlines(keepends=True)
             offsets = [0]
             for line in lines:
@@ -331,10 +342,10 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             seen_windows = set()
             width = max(1, max_lines)
             for number, line in enumerate(lines, 1):
-                if not any(query in line.casefold() for query in queries):
+                if not any(query_match(query, line) for query in queries):
                     continue
                 if any(int(u['locator']['start_line']) <= number <= int(u['locator']['end_line'])
-                       and any(query in u['text'].casefold() for query in queries) for u in units):
+                       and any(query_match(query, u['text']) for query in queries) for u in units):
                     continue
                 start = max(0, number - 1 - width // 2)
                 end = min(len(lines), start + width)
@@ -359,7 +370,7 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
                 expanded = wide_by_start.get((unit.get('symbol'), unit['locator']['start_line']))
                 if not (unit.get('truncated') and unit.get('kind') == 'FUNCTION_OR_TYPE' and expanded
                         and len(expanded['text']) > len(unit['text'])
-                        and any(h['value'].casefold() in expanded['text'].casefold() for h in same_file_queries)):
+                        and any(query_match(h, expanded['text']) for h in same_file_queries)):
                     continue
                 expanded = dict(expanded)
                 expanded['expanded_from_unit_id'] = unit['id']
@@ -376,8 +387,9 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             or set(map(str, u.get("references", ()))) & seed_symbols for u in units)
         query_hints = [h for h in hints if h['kind'] in {'symbol', 'search_term'}]
         connected_query_ids = {u['id'] for u in units if file_is_connected and any(
-            re.search(r'(?<![A-Za-z0-9_$])' + re.escape(h['value']) + r'(?![A-Za-z0-9_$])',
-                      str(u.get('text', '')), re.IGNORECASE) for h in query_hints)}
+            (precise_match(h, str(u.get('text', ''))) if h in precise_hints else
+             re.search(r'(?<![A-Za-z0-9_$])' + re.escape(h['value']) + r'(?![A-Za-z0-9_$])',
+                       str(u.get('text', '')), re.IGNORECASE)) for h in query_hints)}
         neighbors = []
         for unit in units:
             declared = {str(value) for value in unit.get("declared_symbols", ())}
@@ -389,9 +401,10 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
                 and hint['value'].casefold() in str(unit.get('text', '')).casefold()
                 for hint in hints)
             located_exact = any(
+                precise_match(h, str(unit.get('text', ''))) if h in precise_hints else
                 (re.search(r'(?<![A-Za-z0-9_$])' + re.escape(h['value']) + r'(?![A-Za-z0-9_$])',
                            str(unit.get('text', '')), re.IGNORECASE) if h['kind'] == 'symbol'
-                 else h['value'].casefold() in str(unit.get('text', '')).casefold())
+                 else query_match(h, str(unit.get('text', ''))))
                 for h in exact_hints.get(relative, []))
             if declared & seed_references or references & seed_symbols or located_declaration or located_seed_text or located_exact or unit["id"] in connected_query_ids:
                 neighbors.append(unit)
@@ -406,7 +419,9 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             unit_hints = []
             for hint in hints:
                 value = hint["value"]
-                if hint["kind"] == "symbol":
+                if hint in precise_hints:
+                    match = precise_match(hint, str(unit.get('text', '')))
+                elif hint["kind"] == "symbol":
                     match = re.search(r"(?<![A-Za-z0-9_$])" + re.escape(value) + r"(?![A-Za-z0-9_$])",
                                       unit_content, re.IGNORECASE)
                 elif hint["kind"] == "path":

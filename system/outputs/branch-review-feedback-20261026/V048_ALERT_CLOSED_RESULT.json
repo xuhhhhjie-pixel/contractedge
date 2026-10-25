@@ -1,0 +1,21 @@
+{
+  "case_id": "RW-ALERTMANAGER-4705",
+  "attempt_id": "diagnostic-source048-v2-20261026-rw-alertmanager-4705",
+  "method_status": "NEEDS_EVIDENCE",
+  "independent_status": "SEMANTIC_FAIL",
+  "public_decision": "FAIL",
+  "patch_bytes": 750,
+  "patch_sha256": "6ffbe1a8e21796b74faa9dc82ef1ecb112cc001807db9aed6f7d22feba251c6b",
+  "evidence_files": {
+    "receipt": {
+      "path": "/home/xhj/contractedge-diagnostic-source048-v2-20261026/methods/RW-ALERTMANAGER-4705/.isolated-53f0c1d6450d42ee9dcb8ea5306876b1/receipt.json",
+      "sha256": "a6ecb02115a44935829c5ff2a21d62a20a4a3bb15600c07f1474a1456c6be8ff"
+    },
+    "trace": {
+      "path": "/home/xhj/contractedge-diagnostic-source048-v2-20261026/methods/RW-ALERTMANAGER-4705/RW-ALERTMANAGER-4705/repair.trace.json",
+      "sha256": "fb394017431222511a7f85bc06a0235f4005f84ceb6d413354a7913d042fc2d7"
+    }
+  },
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

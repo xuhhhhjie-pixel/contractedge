@@ -1,0 +1,53 @@
+{
+  "status": "DIAGNOSTIC_CLOSED_REQUIRES_PUBLIC_ROOT_CAUSE_AUDIT",
+  "rows": [
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "attempt_id": "diagnostic-source048-v2-20261026-rw-alertmanager-4705",
+      "method_status": "NEEDS_EVIDENCE",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "FAIL",
+      "patch_bytes": 750,
+      "patch_sha256": "6ffbe1a8e21796b74faa9dc82ef1ecb112cc001807db9aed6f7d22feba251c6b",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-diagnostic-source048-v2-20261026/methods/RW-ALERTMANAGER-4705/.isolated-53f0c1d6450d42ee9dcb8ea5306876b1/receipt.json",
+          "sha256": "a6ecb02115a44935829c5ff2a21d62a20a4a3bb15600c07f1474a1456c6be8ff"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-diagnostic-source048-v2-20261026/methods/RW-ALERTMANAGER-4705/RW-ALERTMANAGER-4705/repair.trace.json",
+          "sha256": "fb394017431222511a7f85bc06a0235f4005f84ceb6d413354a7913d042fc2d7"
+        }
+      },
+      "counts_in_46_slot_panel": false,
+      "formal_ready": false
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "attempt_id": "diagnostic-source048-v2-20261026-rw-certmanager-9116",
+      "method_status": "EVIDENCE_GAP",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "patch_bytes": 0,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-diagnostic-source048-v2-20261026/methods/RW-CERTMANAGER-9116/.isolated-4e21143c2ea74d018e00f075632a5eeb/receipt.json",
+          "sha256": "f7cc5d97b166ab04fe2417601661a97a0572322df5b3bb991d713f61ae5dad09"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-diagnostic-source048-v2-20261026/methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/repair.trace.json",
+          "sha256": "f5567cc61a7a109242e3ffd3516fa3bc1d019fe1e6d11f800f1ba4ed777f9317"
+        }
+      },
+      "counts_in_46_slot_panel": false,
+      "formal_ready": false
+    }
+  ],
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "automatic_retry": false,
+  "B_opened": false,
+  "active_case": null,
+  "target_gate_passed": false
+}

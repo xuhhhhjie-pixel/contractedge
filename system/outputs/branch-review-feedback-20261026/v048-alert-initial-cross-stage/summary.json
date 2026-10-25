@@ -1,0 +1,19 @@
+{
+  "status": "SAVED_RESPONSE_REPLAY_READY_AND_EXECUTION_DELIVERY_PASS",
+  "checks": {
+    "initial_diagnosis": true,
+    "extension_diagnosis": true,
+    "plan": true,
+    "plan_correction": true,
+    "execution": true
+  },
+  "selected_count": 12,
+  "saved_responses": 5,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "source_unchanged": true,
+  "original_calls_sha256": "9e45e9813de84d7e3fbd27aacaeaa6530e13f3f38cee3bfa363ce53eaebcdb0e",
+  "execution_request_sha256": "9fb1832d6ae37fa0962fc54338cc3943b780f410cd8d258a6c3e8159c0d140a1",
+  "formal_ready": false,
+  "interpretation": "Input continuity and Ready validation; old model choices are not a new repair success"
+}

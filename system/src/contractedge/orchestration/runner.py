@@ -459,6 +459,29 @@ def required_source_prerequisites(candidate_set):
 
 
 
+def retain_supported_source(candidate_set, prior, snapshot_id, input_digest):
+    """Pin exact current causal support before any extension can rerank it.
+
+    This preserves source availability, not the truth of an old diagnosis.
+    The existing final request audit still rejects an unfit required set.
+    """
+    if not prior or prior.get('snapshot_id') != snapshot_id or prior.get('input_digest') != input_digest:
+        return candidate_set
+    refs = {ref[4:] for v in prior.get('violations', [])
+            if v.get('causal_status') == 'SUPPORTED' for ref in v.get('evidence_refs', [])
+            if isinstance(ref, str) and ref.startswith('SRC-')}
+    pinned = {u['id'] for u in candidate_set.candidates if u['id'] in refs
+              and u.get('snapshot_id') == snapshot_id
+              and isinstance(u.get('text'), str)
+              and hashlib.sha256(u['text'].encode()).hexdigest() == u.get('content_digest')}
+    return replace(candidate_set, candidates=tuple(
+        {**u, 'required_for_gap_delivery': True,
+         'gap_role_keys': list(dict.fromkeys([*u.get('gap_role_keys', []), 'DIAGNOSIS_CONTINUITY_REFERENCE']))}
+        if u['id'] in pinned else u for u in candidate_set.candidates),
+        required_endpoint_ids=tuple(dict.fromkeys([*candidate_set.required_endpoint_ids,
+            *(u['id'] for u in candidate_set.candidates if u['id'] in pinned)])))
+
+
 def required_planning_source_support(method_input, candidate_set, snapshot_id):
     # The extension is the last bounded acquisition. A diagnosis citation is a
     # claim's support, not a lossless projection of its input context: uncited
@@ -749,17 +772,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
              'gap_role_keys': list(dict.fromkeys([*u.get('gap_role_keys', []), 'SOURCE_CONTRACT:'+u['id']]))}
             if u['id'] in by_unit else u for u in fitted.candidates),
             required_endpoint_ids=tuple(dict.fromkeys([*fitted.required_endpoint_ids, *by_unit])))
-        if prior and prior.get('snapshot_id') == context.snapshot_id and prior.get('input_digest') == context.input_digest:
-            # Reserve exact still-selected source references, within the existing
-            # Top-N. The full request fitter/audit remains authoritative.
-            prior_ids = {ref[4:] for v in prior.get('violations', [])
-                if v.get('causal_status') == 'SUPPORTED' for ref in v.get('evidence_refs', [])
-                if ref.startswith('SRC-')}
-            pinned = [u['id'] for u in fitted.candidates if u['id'] in prior_ids]
-            fitted = replace(fitted, candidates=tuple(
-                {**u, 'gap_role_keys': list(dict.fromkeys([*u.get('gap_role_keys', []), 'DIAGNOSIS_CONTINUITY_REFERENCE']))}
-                if u['id'] in pinned else u for u in fitted.candidates),
-                required_endpoint_ids=tuple(dict.fromkeys([*fitted.required_endpoint_ids, *pinned])))
+        fitted = retain_supported_source(fitted, prior, context.snapshot_id, context.input_digest)
         required_endpoint_ids=list(dict.fromkeys([*fitted.required_endpoint_ids,
             *[c['id'] for c in fitted.candidates if requires_gap_delivery(c)]]))
         while True:
@@ -1131,7 +1144,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             try:
                 policy.consume("evidence_extension", attempt_id)
                 candidate_set = extend_once(
-                    candidate_set, diagnosis.evidence_gaps, extension_units,
+                    (retain_supported_source(candidate_set, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
+                     if config.get('gap_role_delivery_enabled') else candidate_set),
+                    diagnosis.evidence_gaps, extension_units,
                     max_context_tokens=int(config["max_context_tokens"]), token_counter=token_counter,
                 )
                 candidate_set = replace(candidate_set, supplemental_evidence=absence_evidence)
@@ -1374,7 +1389,10 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     continue
                 try:
                     policy.consume("evidence_extension", attempt_id)
-                    candidate_set = extend_once(candidate_set, planning_gaps, extra,
+                    candidate_set = extend_once(
+                        (retain_supported_source(candidate_set, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
+                     if config.get('gap_role_delivery_enabled') else candidate_set),
+                        planning_gaps, extra,
                         max_context_tokens=int(config['max_context_tokens']), token_counter=token_counter)
                 except ValueError:
                     if validation.valid:

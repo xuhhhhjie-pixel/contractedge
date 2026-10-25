@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "tests": 1916,
+  "subtests": 91,
+  "source_sha256": "707ac9445d6cc422329d165ca3e7d8d5a78db6ae89aa4cca3f11a96a9338de9d",
+  "log_sha256": "33c861eadf2cba3d05fa87ff7ac834d141fab792f2b10341addaed3a23feec7b",
+  "actual_isolated_demos_enabled": true,
+  "scope": "Engineering regression, not benchmark efficacy",
+  "formal_ready": false
+}

@@ -1,0 +1,14 @@
+{
+  "status": "REVISED_SNAPSHOT_DIAGNOSIS_PLAN_EXECUTION_REPLAY_PASS",
+  "snapshot_id": "b94ce6ebe641d270a06d6502331ecb807242fb3fd0499e6c10845bf4d3955f4b",
+  "saved_responses": 3,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "source_unchanged": true,
+  "ready_validated": true,
+  "fresh_changed_source_ids": [
+    "SRC-CU-HELPER-5c421cc852cad3c5"
+  ],
+  "formal_ready": false,
+  "interpretation": "Current source re-read and input continuity; replayed repair choices are not new model results"
+}

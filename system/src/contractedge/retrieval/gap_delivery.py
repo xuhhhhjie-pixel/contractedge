@@ -35,47 +35,25 @@ def _go_import_specs(text):
     return result
 
 
-def _local_field_contracts(snapshot, gaps, output, scanned, used, limits, audit):
+def _local_field_contracts(snapshot, gaps, output, read, limits, audit):
     """Two explicit lexical links: receiver field type -> local interface.
 
     No implementation selection, dispatch inference or automatic gap resolution.
-    Shares the caller's file/byte/role limits; incomplete package reads fail closed.
+    Shares the caller's verified read cache and file/byte/role limits.
     """
     root = Path(snapshot.source_root).resolve()
     inventory = snapshot.file_digests
-    max_files = limits.get('max_new_files', 4)
-    max_bytes = limits.get('max_bytes', 4 * 1024 * 1024)
-
-    def read(path):
-        nonlocal used
-        p = root / path
-        if (path not in inventory or p.is_symlink() or not p.is_file()
-                or not p.resolve().is_relative_to(root)):
-            raise ValueError('UNAVAILABLE')
-        if path not in scanned and len(scanned) >= max_files:
-            raise ValueError('FILE_BUDGET')
-        size = p.stat().st_size
-        if size > 1024 * 1024 or (path not in scanned and used + size > max_bytes):
-            raise ValueError('BYTE_BUDGET')
-        raw = p.read_bytes()
-        if hashlib.sha256(raw).hexdigest() != inventory[path]:
-            raise ValueError('SNAPSHOT_MISMATCH')
-        if path not in scanned:
-            scanned[path] = raw.decode('utf-8', errors='replace')
-            used += len(raw)
-        return scanned[path]
-
     module = root / 'go.mod'
     if ('go.mod' not in inventory or module.is_symlink() or not module.is_file()
             or module.stat().st_size > 64000):
-        return used
+        return
     raw = module.read_bytes()
     if hashlib.sha256(raw).hexdigest() != inventory['go.mod']:
         audit.append(dict(status='FIELD_CONTRACT_MODULE_SNAPSHOT_MISMATCH'))
-        return used
+        return
     match = re.search(r'(?m)^module\s+(\S+)', raw.decode(errors='replace'))
     if not match:
-        return used
+        return
     local_module = match[1]
     seen = set()
     for endpoint in list(output):
@@ -151,13 +129,51 @@ def _local_field_contracts(snapshot, gaps, output, scanned, used, limits, audit)
                     audit.append(dict(record, status='FIELD_CONTRACT_FOUND', path=unit['path'], unit_id=unit['id']))
                 except (ValueError, OSError) as exc:
                     audit.append(dict(record, status='FIELD_CONTRACT_' + (str(exc) if isinstance(exc, ValueError) else 'UNAVAILABLE')))
-    return used
+    return
 
 
 def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
     root=Path(snapshot.source_root).resolve(); inventory=snapshot.file_digests
     max_files=limits.get('max_new_files',4);max_bytes=limits.get('max_bytes',4*1024*1024)
     seeds=limits.get('seed_units',[]); output=[];used=0;scanned={};audit=[]
+    rejected = {}
+
+    def read(path):
+        nonlocal used
+        if path in rejected:
+            raise ValueError(rejected[path])
+        if path in scanned:
+            return scanned[path]
+        target = root / path
+        if (path not in inventory or target.is_symlink() or not target.is_file()
+                or not target.resolve().is_relative_to(root)):
+            raise ValueError('UNAVAILABLE')
+        if len(scanned) >= max_files:
+            raise ValueError('FILE_BUDGET')
+        size = target.stat().st_size
+        if size > 1024 * 1024 or used + size > max_bytes:
+            raise ValueError('BYTE_BUDGET')
+        raw = target.read_bytes()
+        # Charge every attempted unique source read before accepting its hash.
+        # Invalid bytes reserve their slot but are never parsed or reused.
+        scanned[path] = ''
+        used += len(raw)
+        error = ('BYTE_BUDGET' if used > max_bytes or len(raw) > 1024 * 1024 else
+                 'SNAPSHOT_MISMATCH' if hashlib.sha256(raw).hexdigest() != inventory[path] else None)
+        if error:
+            rejected[path] = error
+            raise ValueError(error)
+        scanned[path] = raw.decode('utf-8', errors='replace')
+        return scanned[path]
+
+    def try_read(path, stage):
+        try:
+            return read(path)
+        except (ValueError, OSError) as exc:
+            audit.append(dict(path=path, status=stage + '_' +
+                              (str(exc) if isinstance(exc, ValueError) else 'UNAVAILABLE')))
+            return None
+
     shared_queries=set()
     for g in gaps:
         shared_queries |= _terms(g.get('locator_hint',{}).get('search_term',''))
@@ -165,12 +181,9 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
         hint=gap.get('locator_hint',{});path=hint.get('path','')
         if path not in inventory or PurePosixPath(path).is_absolute() or '..' in PurePosixPath(path).parts:continue
         if not (hint.get('symbol') or hint.get('search_term')):continue
-        if path not in scanned:
-            if len(scanned)>=max_files:continue
-            target=root/path
-            if target.is_symlink() or target.stat().st_size>1024*1024 or used+target.stat().st_size>max_bytes:continue
-            text=target.read_text(errors='replace');used+=len(text.encode());scanned[path]=text
-        text=scanned[path];query=hint.get('symbol') or hint.get('search_term','')
+        text = try_read(path, 'EXACT_ANCHOR')
+        if text is None:continue
+        query=hint.get('symbol') or hint.get('search_term','')
         terms=_terms(query)|(_terms(gap.get('summary',''))&shared_queries)
         all_terms=terms|_terms(gap.get('summary',''))
         # The exact gap already justified this bounded file read. Preserve its
@@ -263,25 +276,8 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
         if len(output) >= 6:
             audit.append(dict(record, status='RECEIVER_DECLARATION_ROLE_BUDGET'))
             continue
-        if path not in scanned and len(scanned) >= max_files:
-            audit.append(dict(record, status='RECEIVER_DECLARATION_FILE_BUDGET'))
-            continue
-        target = root / path
-        if path not in inventory or target.is_symlink() or not target.resolve().is_relative_to(root) or not target.is_file():
-            audit.append(dict(record, status='RECEIVER_DECLARATION_UNAVAILABLE'))
-            continue
-        size = target.stat().st_size
-        if size > 1024 * 1024 or (path not in scanned and used + size > max_bytes):
-            audit.append(dict(record, status='RECEIVER_DECLARATION_BYTE_BUDGET'))
-            continue
-        raw = target.read_bytes()
-        if hashlib.sha256(raw).hexdigest() != inventory[path]:
-            audit.append(dict(record, status='RECEIVER_DECLARATION_SNAPSHOT_MISMATCH'))
-            continue
-        text = raw.decode('utf-8', errors='replace')
-        if path not in scanned:
-            used += len(raw)
-            scanned[path] = text
+        text = try_read(path, 'RECEIVER_DECLARATION')
+        if text is None:continue
         matches = [u for u in parse_source_units(path, text, snapshot.snapshot_id,
                     max_lines=160, max_chars=12000) if u.get('symbol') == owner
                    and re.match(r'\s*type\s+' + re.escape(owner) + r'\s+struct\s*\{', u['text'])]
@@ -304,7 +300,7 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
         if not any(u['id'] == item['id'] for u in output):
             output.append(item)
         audit.append(dict(record, unit_id=item['id'], status='FOUND', basis=item['association_status']))
-    used = _local_field_contracts(snapshot, gaps, output, scanned, used, limits, audit)
+    _local_field_contracts(snapshot, gaps, output, read, limits, audit)
     # A reader such as x.Groups() may live behind x := localpkg.NewReader().
     # Follow only an explicit local import + constructor + requested method.
     # This is a lexical locator, not a dispatch/alias or causal proof.
@@ -354,9 +350,8 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
             paths.sort(key=lambda p:(-len(_terms(PurePosixPath(p).stem)&_terms(' '.join(names))),p))
             for path in paths:
                 if len(scanned)>=max_files:break
-                target=root/path
-                if target.is_symlink() or target.stat().st_size>1024*1024 or used+target.stat().st_size>max_bytes:continue
-                text=target.read_text(errors='replace');used+=len(text.encode());scanned[path]=text
+                text = try_read(path, 'LOCAL_CONNECTOR')
+                if text is None:continue
                 matches=[u for u in parse_source_units(path,text,snapshot.snapshot_id,max_lines=768,max_chars=32000)
                          if u.get('symbol') in entry['methods']|entry['async_methods']]
                 matches.sort(key=lambda u:(u.get('symbol') not in entry['methods'],u['locator']['start_line']))
@@ -385,13 +380,8 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
         if len(output)>=6:break
         path=unit['path']
         if any(u['path']==path and u.get('symbol')==unit.get('symbol') for u in output):continue
-        if path not in scanned:
-            if len(scanned)>=max_files:
-                audit.append(dict(path=path,symbol=unit['symbol'],status='NAMED_ENDPOINT_FILE_BUDGET'));continue
-            target=root/path
-            if (path not in inventory or target.is_symlink() or target.stat().st_size>1024*1024
-                    or used+target.stat().st_size>max_bytes):continue
-            text=target.read_text(errors='replace');used+=len(text.encode());scanned[path]=text
+        text = try_read(path, 'NAMED_ENDPOINT')
+        if text is None:continue
         expanded=[u for u in parse_source_units(path,scanned[path],snapshot.snapshot_id,max_lines=768,max_chars=32000)
                   if u.get('symbol')==unit['symbol']]
         if not expanded:continue
@@ -409,13 +399,8 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
     restored_seeds=[]
     for path in dict.fromkeys(u['path'] for u in seeds if u.get('truncated')):
         if path not in inventory:continue
-        if path in scanned:
-            restored_seeds.extend(parse_source_units(path,scanned[path],snapshot.snapshot_id,max_lines=768,max_chars=32000))
-            continue
-        if len(scanned)>=max_files:continue
-        target=root/path
-        if target.is_symlink() or target.stat().st_size>1024*1024 or used+target.stat().st_size>max_bytes:continue
-        text=target.read_text(errors='replace');used+=len(text.encode());scanned[path]=text
+        text = try_read(path, 'RESTORED_SEED')
+        if text is None:continue
         restored_seeds.extend(parse_source_units(path,text,snapshot.snapshot_id,max_lines=768,max_chars=32000))
     seeds=[*restored_seeds,*seeds]
     for depth in range(1,3):

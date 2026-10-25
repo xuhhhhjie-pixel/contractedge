@@ -1,0 +1,113 @@
+{
+  "source_calls_sha256": "f9f7a9bee08b2f38b9dc1394e6bd5a85c7e175847a87680810b2127cb851cdaa",
+  "stages": [
+    {
+      "index": 0,
+      "prompt_version": "diagnosis.v1.1.26",
+      "finish_reason": "stop",
+      "content_bytes": 6745,
+      "completion_tokens": 10588,
+      "reasoning_tokens": 8470,
+      "status": "READY",
+      "changes": 0,
+      "gaps": 0
+    },
+    {
+      "index": 1,
+      "prompt_version": "changeset.v1.1.13",
+      "finish_reason": "length",
+      "content_bytes": 0,
+      "completion_tokens": 16384,
+      "reasoning_tokens": 16384
+    },
+    {
+      "index": 2,
+      "prompt_version": "changeset.v1.1.13",
+      "finish_reason": "stop",
+      "content_bytes": 6951,
+      "completion_tokens": 1905,
+      "reasoning_tokens": 0,
+      "status": "READY_PARTIAL",
+      "changes": 1,
+      "gaps": 0
+    },
+    {
+      "index": 3,
+      "prompt_version": "changeset.v1.1.13",
+      "finish_reason": "stop",
+      "content_bytes": 6715,
+      "completion_tokens": 1836,
+      "reasoning_tokens": 0,
+      "status": "READY_PARTIAL",
+      "changes": 1,
+      "gaps": 0
+    },
+    {
+      "index": 4,
+      "prompt_version": "topomen-source-execution.v1",
+      "finish_reason": "stop",
+      "content_bytes": 1344,
+      "completion_tokens": 453,
+      "reasoning_tokens": 0,
+      "status": null,
+      "changes": 0,
+      "gaps": 0
+    },
+    {
+      "index": 5,
+      "prompt_version": "diagnosis.v1.1.26",
+      "finish_reason": "stop",
+      "content_bytes": 9179,
+      "completion_tokens": 10605,
+      "reasoning_tokens": 7780,
+      "status": "READY",
+      "changes": 0,
+      "gaps": 0
+    },
+    {
+      "index": 6,
+      "prompt_version": "changeset.v1.1.13",
+      "finish_reason": "stop",
+      "content_bytes": 6526,
+      "completion_tokens": 14421,
+      "reasoning_tokens": 12700,
+      "status": "NEEDS_EVIDENCE",
+      "changes": 0,
+      "gaps": 4
+    },
+    {
+      "index": 7,
+      "prompt_version": "diagnosis.v1.1.26",
+      "finish_reason": "stop",
+      "content_bytes": 7383,
+      "completion_tokens": 11400,
+      "reasoning_tokens": 9215,
+      "status": "READY",
+      "changes": 0,
+      "gaps": 0
+    },
+    {
+      "index": 8,
+      "prompt_version": "changeset.v1.1.13",
+      "finish_reason": "stop",
+      "content_bytes": 3633,
+      "completion_tokens": 11072,
+      "reasoning_tokens": 10134,
+      "status": "NEEDS_EVIDENCE",
+      "changes": 0,
+      "gaps": 1
+    },
+    {
+      "index": 9,
+      "prompt_version": "changeset.v1.1.13",
+      "finish_reason": "stop",
+      "content_bytes": 3400,
+      "completion_tokens": 1263,
+      "reasoning_tokens": 374,
+      "status": "NEEDS_EVIDENCE",
+      "changes": 0,
+      "gaps": 1
+    }
+  ],
+  "formal_ready": false
+}

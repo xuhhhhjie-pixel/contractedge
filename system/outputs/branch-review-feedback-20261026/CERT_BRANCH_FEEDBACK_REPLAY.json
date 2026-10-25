@@ -1,0 +1,28 @@
+{
+  "status": "ORIGINAL_PUBLIC_PLAN_ERROR_CLASSIFIED_AND_MINIMAL_FIXTURE_VALIDATED",
+  "case_id": "RW-CERTMANAGER-9116",
+  "front_trace_sha256": "058442d73b53e7a3ddc91a3d3d3aa8258b78bc4c09b4415427c5cc1fe4c1b13f",
+  "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "original_errors": [
+    {
+      "code": "PRODUCTION_BRANCH_CHANGE_INVALID",
+      "path": "production_path_review[0]",
+      "message": "MODIFY requires actual changes targeting this evidenced branch; file equality alone is insufficient"
+    }
+  ],
+  "current_errors": [
+    {
+      "code": "PRODUCTION_BRANCH_MODIFY_OPEN_REFS",
+      "path": "production_path_review[0].open_obligation_refs",
+      "message": "MODIFY requires empty open_obligation_refs in this branch row. Keep unverified runtime behavior in the plan open_obligations and corresponding checks; do not delete those obligations or claim verification. If the repair intent for this branch itself is unresolved, use UNRESOLVED with real open_obligation_refs and no change_refs."
+    }
+  ],
+  "original_plan_still_rejected": true,
+  "fixture_open_obligations_preserved": true,
+  "fixture_accepted_by_both_versions": true,
+  "fixture_is_new_model_result": false,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "source_unchanged": true,
+  "formal_ready": false
+}

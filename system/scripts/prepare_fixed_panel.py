@@ -18,7 +18,15 @@ def main():
     parser.add_argument('--panel-id',required=True)
     parser.add_argument('--runtime-admission',type=Path)
     parser.add_argument('--compatibility-report',type=Path)
+    parser.add_argument('--predecessor-panel',type=Path,
+        help='Closed original panel; retain all slots and normalize only the known parent scoring exit-code bug')
+    parser.add_argument('--terminal-receipt',type=Path,
+        help='Original immutable pre-edit EVIDENCE_GAP receipt, only with predecessor-panel and terminal-score')
+    parser.add_argument('--terminal-score',type=Path,
+        help='Completed independent result of that same sealed candidate, no method rerun')
     args=parser.parse_args()
+    if bool(args.terminal_receipt) != bool(args.terminal_score) or (args.terminal_receipt and not args.predecessor_panel):
+        raise ValueError('Terminal correction requires predecessor-panel, receipt and completed score together')
     if args.output.exists():raise ValueError('Panel already exists; never overwrite its identity')
     original=read(args.original);variants={}
     for name,root,config,reference,key in [
@@ -56,6 +64,32 @@ def main():
         panel['compatibility_report']={'path':str(args.compatibility_report.resolve()),'sha256':sha(args.compatibility_report)}
     identity=execution_identity(arguments(panel,panel['slots'][0],args.output,Path('NO_CREDENTIAL_READ')))
     panel['execution_environment']={key:digest(identity[key]) for key in ENVIRONMENT_KEYS}
+    if args.predecessor_panel:
+        previous=verify_panel(args.predecessor_panel)
+        records_path=Path(previous['output_root'])/'records.json'; rows=read(records_path)
+        if not isinstance(rows,list) or not rows:raise ValueError('A closed predecessor prefix is required')
+        receipt=read(rows[0]['evidence_files']['receipt']['path'])
+        programs=[name for name in previous['harness_files'] if Path(name).name=='score_isolated_method.py']
+        if len(programs)!=1:raise ValueError('Original scorer identity is ambiguous')
+        panel['predecessor']={'schema_version':'ce.fixed_panel_score_parent_amendment.v1',
+            'panel':{'path':str(args.predecessor_panel.resolve()),'sha256':sha(args.predecessor_panel)},
+            'records':{'path':str(records_path),'sha256':sha(records_path)},
+            'scoring_program':{'path':programs[0],'sha256':previous['harness_files'][programs[0]]},
+            'worker_files_before':receipt['identity']['harness_files'],
+            'worker_files_after':identity['harness_files'],'interpretation_policy':'ce.frozen_score_exit.v1'}
+        if args.terminal_receipt:
+            terminal = read(args.terminal_receipt)
+            programs = [p for p in previous['harness_files'] if Path(p).name == 'run_isolated_method.py']
+            if len(programs) != 1:raise ValueError('Recorded terminal program is ambiguous')
+            slot_id = terminal['identity']['attempt_id']
+            queue_state = Path(previous['output_root'])/'queue'/slot_id/'state.json'
+            panel['predecessor'].update(schema_version='ce.fixed_panel_method_terminal_amendment.v1',
+                interpretation_policy='ce.pre_edit_evidence_gap_terminal.v1',
+                worker_files_before=terminal['identity']['harness_files'],
+                terminal_program={'path':programs[0],'sha256':previous['harness_files'][programs[0]]},
+                terminal_receipt={'path':str(args.terminal_receipt.resolve()),'sha256':sha(args.terminal_receipt)},
+                terminal_score={'path':str(args.terminal_score.resolve()),'sha256':sha(args.terminal_score)},
+                queue_state={'path':str(queue_state),'sha256':sha(queue_state)})
     # Validate before publication so failed preparation cannot create authority.
     import tempfile,json
     with tempfile.TemporaryDirectory(prefix='ce-panel-prepare-') as directory:
