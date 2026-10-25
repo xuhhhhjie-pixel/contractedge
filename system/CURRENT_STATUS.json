@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-25T04:58:12.982525+00:00",
+  "as_of": "2026-10-25T13:01:24.062027+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3294,10 +3294,10 @@
     }
   },
   "current_development": {
-    "snapshot": "docs/development/fixed46-ci-binding-v045-20261025-v2.snapshot.json",
-    "snapshot_id": "fixed46-ci-binding-v045-20261025-v2",
+    "snapshot": "docs/development/fixed46-ci-binding-v045-20261025-v3.snapshot.json",
+    "snapshot_id": "fixed46-ci-binding-v045-20261025-v3",
     "snapshot_role": "CURRENT_FROZEN_DEVELOPMENT",
-    "status": "CI_REQUIRED_BWRAP_DEPENDENCY_REVALIDATING",
+    "status": "CI_PINNED_HOST_NAMESPACE_ADMISSION_REVALIDATING",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "NOT_ACCEPTED",
     "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df"

@@ -88,7 +88,7 @@ jobs:
 
   runtime-portable:
     name: Actual Docker limits, isolated public runtime and portable suite
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 20
     env:
       DOCKER_HOST: unix:///var/run/docker.sock
@@ -114,6 +114,20 @@ jobs:
         run: |
           env -u PYTHONPATH python -m pip install -r requirements-dev.lock
           env -u PYTHONPATH python -m pip install --no-deps -e .
+      - name: Admit the actual method namespace before the runtime panels
+        run: |
+          python - <<'PY'
+          import os, subprocess, sys, tempfile
+          from pathlib import Path
+          sys.path.insert(0, str(Path('scripts').resolve()))
+          from run_isolated_method import namespace_command
+          with tempfile.TemporaryDirectory(prefix='ce-ci-namespace-') as directory:
+              work = Path(directory)
+              command = namespace_command(command=['/usr/bin/python3', '-c', 'print("NAMESPACE_READY")'],
+                  readonly={}, writable={work:work}, cwd=work, environment={'PATH':'/usr/bin:/bin'})
+              result = subprocess.run(command, env={'PATH':os.environ['PATH']}, capture_output=True, text=True, timeout=20)
+              assert result.returncode == 0 and result.stdout.strip() == 'NAMESPACE_READY', result.stderr
+          PY
       - name: Cache trusted public probe image
         run: docker pull "$CONTRACTEDGE_RUNTIME_IMAGE"
       - name: Verify CPU and memory enforcement; negotiate task Docker API

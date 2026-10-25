@@ -14,3 +14,5 @@
 详见docs/reports/2026-10-25-ci-source-binding.md、AUDIT.json、actual-eight-summary.json及portable-final.log。formal_ready=false。
 
 远程第一次重验：来源绑定及真实恢复面板已通过；可移植1732项、86子测试通过，2项命名空间测试因GitHub运行器缺少bwrap失败。v2仅补齐工作流必需的bubblewrap安装，不排除测试、不弱化隔离；默认冻结相应更新，待新提交实际CI复验。
+
+第二次远程重验已安装bwrap，但两项实际namespace启动因loopback RTM_NEWADDR EPERM被拒绝。v3将runtime-portable固定为官方提供的ubuntu-26.04，并在完整面板前先运行实际namespace启动检查；不取消隔离、不修改全局sysctl、不排除失败测试。新主机是否可用仍以实际CI为准。官方运行器列表：https://github.com/actions/runner-images 。

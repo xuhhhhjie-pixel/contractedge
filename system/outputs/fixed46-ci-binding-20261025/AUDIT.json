@@ -32,5 +32,11 @@
       "reason": "Required bwrap binary absent on runner; strict namespace tests refuse fallback"
     }
   },
-  "next_fix": "Explicit apt installation of bubblewrap in runtime-portable CI job; no test exclusion or isolation fallback"
+  "next_fix": "Pinned ubuntu-26.04 hosted runtime, explicit bubblewrap installation, exact method namespace admission before full panels; no host fallback or global sysctl changes",
+  "github_bwrap_revalidation": {
+    "run": 40163839636,
+    "status": "FAIL",
+    "real_recovery_binding": "PASS",
+    "remaining_failure": "Actual bwrap network namespace startup: loopback RTM_NEWADDR EPERM; no candidate command executed in two tests"
+  }
 }
