@@ -1,0 +1,49 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+____ test_closed_scored_slot_retires_only_its_reproducible_public_workspace ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-485/test_closed_scored_slot_retire0')
+
+    def test_closed_scored_slot_retires_only_its_reproducible_public_workspace(tmp_path):
+        panel,path,slot,transport=prepared(tmp_path);m=load()
+        panel['transient_workspace_policy']='RETIRE_CLOSED_SCORED_PUBLIC_WORKSPACE'
+        path.write_text(json.dumps(panel));dispatch=transport.dispatch
+        def wrapped(command,log):
+            result=dispatch(command,log)
+            root=Path(panel['output_root'])/'methods'/slot['slot_id']
+            workspace=root/'.isolated-fixture/producer/workspace';workspace.mkdir(parents=True)
+            (workspace/'reconstructible-source').write_text('public source/cache only')
+            logs=root/'.isolated-fixture/producer/observations';logs.mkdir();(logs/'public.log').write_text('keep actual observations')
+            foreign=root/'.foreign-state';foreign.mkdir();(foreign/'keep').write_text('not owned')
+            return result
+        transport.dispatch=wrapped
+        record=m.run_slot(path,slot['slot_id'],tmp_path/'unused-key',transport=transport)
+        root=Path(panel['output_root'])/'methods'/slot['slot_id']
+>       assert not (root/'.isolated-fixture/producer/workspace').exists()
+E       AssertionError: assert not True
+E        +  where True = exists()
+E        +    where exists = (PosixPath('/tmp/pytest-of-xhj/pytest-485/test_closed_scored_slot_retire0/runs/methods/panel-test-5f64533dd0e158304c397e4a') / '.isolated-fixture/producer/workspace').exists
+
+tests/test_fixed_panel_driver.py:167: AssertionError
+__________ test_workspace_retirement_refuses_a_foreign_symlink_target __________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-485/test_workspace_retirement_refu0')
+
+    def test_workspace_retirement_refuses_a_foreign_symlink_target(tmp_path):
+        panel,path,slot,transport=prepared(tmp_path);m=load()
+        panel['transient_workspace_policy']='RETIRE_CLOSED_SCORED_PUBLIC_WORKSPACE';path.write_text(json.dumps(panel))
+        dispatch=transport.dispatch;foreign=tmp_path/'foreign';foreign.mkdir();(foreign/'keep').write_text('keep')
+        def wrapped(command,log):
+            result=dispatch(command,log)
+            producer=Path(panel['output_root'])/'methods'/slot['slot_id']/'.isolated-fixture/producer';producer.mkdir()
+            (producer/'workspace').symlink_to(foreign,target_is_directory=True)
+            return result
+        transport.dispatch=wrapped
+>       with pytest.raises(ValueError,match='workspace'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_fixed_panel_driver.py:185: Failed
+=========================== short test summary info ============================
+FAILED tests/test_fixed_panel_driver.py::test_closed_scored_slot_retires_only_its_reproducible_public_workspace
+FAILED tests/test_fixed_panel_driver.py::test_workspace_retirement_refuses_a_foreign_symlink_target
+2 failed, 7 deselected in 0.41s

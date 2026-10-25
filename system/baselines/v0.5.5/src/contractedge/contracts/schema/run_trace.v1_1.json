@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ContractEdge RunTrace v1.1",
+  "type": "object",
+  "required": [
+    "schema_version", "run_id", "case_id", "input_digest", "snapshot_id", "status",
+    "requirement_spec", "scope_resolution", "candidate_set", "diagnosis", "changeset",
+    "model_calls", "errors", "structural_validation", "semantic_review", "retrieval_rounds", "run_context"
+  ],
+  "properties": {
+    "schema_version": {"const": "ce.run_trace.v1_1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "case_id": {"type": "string", "minLength": 1},
+    "input_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "snapshot_id": {"type": ["string", "null"]},
+    "status": {"type": "string", "minLength": 1},
+    "requirement_spec": {"type": ["object", "null"]},
+    "scope_resolution": {"type": ["object", "null"]},
+    "candidate_set": {"type": ["object", "null"]},
+    "diagnosis": {"type": ["object", "null"]},
+    "changeset": {"type": ["object", "null"]},
+    "model_calls": {"type": "array", "items": {"type": "object"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "structural_validation": {"type": ["string", "null"]},
+    "semantic_review": {"type": ["object", "null"]},
+    "retrieval_rounds": {"type": "array", "items": {"type": "object"}},
+    "run_context": {
+      "type": ["object", "null"],
+      "required": ["run_id", "case_id", "round_id", "snapshot_id", "parent_snapshot_id", "input_digest", "prompt_version", "model_config", "retrieval_config", "budget"],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1},
+        "case_id": {"type": "string", "minLength": 1},
+        "round_id": {"type": "integer", "minimum": 0},
+        "snapshot_id": {"type": "string", "minLength": 1},
+        "parent_snapshot_id": {"type": ["string", "null"]},
+        "input_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "prompt_version": {"type": "string", "minLength": 1},
+        "model_config": {"type": "object"},
+        "retrieval_config": {"type": "object"},
+        "budget": {"type": "object"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

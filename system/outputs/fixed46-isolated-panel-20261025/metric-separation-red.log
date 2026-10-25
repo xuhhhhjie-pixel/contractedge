@@ -1,0 +1,54 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_public_failure_blocks_admission_without_rewriting_independent_metric[baseline] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-499/test_public_failure_blocks_adm0')
+variant = 'baseline'
+
+    @pytest.mark.parametrize('variant',['baseline','candidate'])
+    def test_public_failure_blocks_admission_without_rewriting_independent_metric(tmp_path,variant):
+        panel,path,_,transport=prepared(tmp_path);m=load()
+        slot=next(s for s in panel['slots'] if s['group']=='A' and s['variant']==variant);transport.slot=slot
+        dispatch=transport.dispatch
+        def wrapped(command,log):
+            result=dispatch(command,log)
+            trace=Path(panel['output_root'])/'methods'/slot['slot_id']/slot['case_id']/'repair.trace.json'
+            body=json.loads(trace.read_text());body['last_feedback']['semantic_outcome']='PUBLIC_REVIEW_FAIL';trace.write_text(json.dumps(body))
+            return result
+        transport.dispatch=wrapped
+        result=m.run_slot(path,slot['slot_id'],tmp_path/'unused-key',transport=transport)
+>       assert result['status']=='PASS' and result['independent_status']=='PASS'
+E       AssertionError: assert ('SEMANTIC_FAIL' == 'PASS'
+E         
+E         - PASS
+E         + SEMANTIC_FAIL)
+
+tests/test_fixed_panel_driver.py:249: AssertionError
+_ test_public_failure_blocks_admission_without_rewriting_independent_metric[candidate] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-499/test_public_failure_blocks_adm1')
+variant = 'candidate'
+
+    @pytest.mark.parametrize('variant',['baseline','candidate'])
+    def test_public_failure_blocks_admission_without_rewriting_independent_metric(tmp_path,variant):
+        panel,path,_,transport=prepared(tmp_path);m=load()
+        slot=next(s for s in panel['slots'] if s['group']=='A' and s['variant']==variant);transport.slot=slot
+        dispatch=transport.dispatch
+        def wrapped(command,log):
+            result=dispatch(command,log)
+            trace=Path(panel['output_root'])/'methods'/slot['slot_id']/slot['case_id']/'repair.trace.json'
+            body=json.loads(trace.read_text());body['last_feedback']['semantic_outcome']='PUBLIC_REVIEW_FAIL';trace.write_text(json.dumps(body))
+            return result
+        transport.dispatch=wrapped
+        result=m.run_slot(path,slot['slot_id'],tmp_path/'unused-key',transport=transport)
+>       assert result['status']=='PASS' and result['independent_status']=='PASS'
+E       AssertionError: assert ('SEMANTIC_FAIL' == 'PASS'
+E         
+E         - PASS
+E         + SEMANTIC_FAIL)
+
+tests/test_fixed_panel_driver.py:249: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fixed_panel_driver.py::test_public_failure_blocks_admission_without_rewriting_independent_metric[baseline]
+FAILED tests/test_fixed_panel_driver.py::test_public_failure_blocks_admission_without_rewriting_independent_metric[candidate]
+2 failed, 11 deselected in 0.46s

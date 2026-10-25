@@ -1,0 +1,413 @@
+FFFFFFFFFFFFFFFF                                                         [100%]
+=================================== FAILURES ===================================
+_______ test_original_schedule_is46_unique_and_deterministically_paired ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_original_schedule_is46_un0')
+
+    def test_original_schedule_is46_unique_and_deterministically_paired(tmp_path):
+>       panel,path,original=fixture(tmp_path);module=load()
+
+tests/test_fixed_panel.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+___________ test_panel_rejects_schedule_or_identity_drift[duplicate] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_panel_rejects_schedule_or0')
+mutation = 'duplicate'
+
+    @pytest.mark.parametrize('mutation',['duplicate','replace','reorder','extra','cap','source','config','seed','harness','partition','original'])
+    def test_panel_rejects_schedule_or_identity_drift(tmp_path,mutation):
+>       panel,path,_=fixture(tmp_path)
+
+tests/test_fixed_panel.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+____________ test_panel_rejects_schedule_or_identity_drift[replace] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_panel_rejects_schedule_or1')
+mutation = 'replace'
+
+    @pytest.mark.parametrize('mutation',['duplicate','replace','reorder','extra','cap','source','config','seed','harness','partition','original'])
+    def test_panel_rejects_schedule_or_identity_drift(tmp_path,mutation):
+>       panel,path,_=fixture(tmp_path)
+
+tests/test_fixed_panel.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+____________ test_panel_rejects_schedule_or_identity_drift[reorder] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_panel_rejects_schedule_or2')
+mutation = 'reorder'
+
+    @pytest.mark.parametrize('mutation',['duplicate','replace','reorder','extra','cap','source','config','seed','harness','partition','original'])
+    def test_panel_rejects_schedule_or_identity_drift(tmp_path,mutation):
+>       panel,path,_=fixture(tmp_path)
+
+tests/test_fixed_panel.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+_____________ test_panel_rejects_schedule_or_identity_drift[extra] _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_panel_rejects_schedule_or3')
+mutation = 'extra'
+
+    @pytest.mark.parametrize('mutation',['duplicate','replace','reorder','extra','cap','source','config','seed','harness','partition','original'])
+    def test_panel_rejects_schedule_or_identity_drift(tmp_path,mutation):
+>       panel,path,_=fixture(tmp_path)
+
+tests/test_fixed_panel.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+______________ test_panel_rejects_schedule_or_identity_drift[cap] ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_panel_rejects_schedule_or4')
+mutation = 'cap'
+
+    @pytest.mark.parametrize('mutation',['duplicate','replace','reorder','extra','cap','source','config','seed','harness','partition','original'])
+    def test_panel_rejects_schedule_or_identity_drift(tmp_path,mutation):
+>       panel,path,_=fixture(tmp_path)
+
+tests/test_fixed_panel.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+____________ test_panel_rejects_schedule_or_identity_drift[source] _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_panel_rejects_schedule_or5')
+mutation = 'source'
+
+    @pytest.mark.parametrize('mutation',['duplicate','replace','reorder','extra','cap','source','config','seed','harness','partition','original'])
+    def test_panel_rejects_schedule_or_identity_drift(tmp_path,mutation):
+>       panel,path,_=fixture(tmp_path)
+
+tests/test_fixed_panel.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+____________ test_panel_rejects_schedule_or_identity_drift[config] _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_panel_rejects_schedule_or6')
+mutation = 'config'
+
+    @pytest.mark.parametrize('mutation',['duplicate','replace','reorder','extra','cap','source','config','seed','harness','partition','original'])
+    def test_panel_rejects_schedule_or_identity_drift(tmp_path,mutation):
+>       panel,path,_=fixture(tmp_path)
+
+tests/test_fixed_panel.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+_____________ test_panel_rejects_schedule_or_identity_drift[seed] ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_panel_rejects_schedule_or7')
+mutation = 'seed'
+
+    @pytest.mark.parametrize('mutation',['duplicate','replace','reorder','extra','cap','source','config','seed','harness','partition','original'])
+    def test_panel_rejects_schedule_or_identity_drift(tmp_path,mutation):
+>       panel,path,_=fixture(tmp_path)
+
+tests/test_fixed_panel.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+____________ test_panel_rejects_schedule_or_identity_drift[harness] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_panel_rejects_schedule_or8')
+mutation = 'harness'
+
+    @pytest.mark.parametrize('mutation',['duplicate','replace','reorder','extra','cap','source','config','seed','harness','partition','original'])
+    def test_panel_rejects_schedule_or_identity_drift(tmp_path,mutation):
+>       panel,path,_=fixture(tmp_path)
+
+tests/test_fixed_panel.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+___________ test_panel_rejects_schedule_or_identity_drift[partition] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_panel_rejects_schedule_or9')
+mutation = 'partition'
+
+    @pytest.mark.parametrize('mutation',['duplicate','replace','reorder','extra','cap','source','config','seed','harness','partition','original'])
+    def test_panel_rejects_schedule_or_identity_drift(tmp_path,mutation):
+>       panel,path,_=fixture(tmp_path)
+
+tests/test_fixed_panel.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+___________ test_panel_rejects_schedule_or_identity_drift[original] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_panel_rejects_schedule_or10')
+mutation = 'original'
+
+    @pytest.mark.parametrize('mutation',['duplicate','replace','reorder','extra','cap','source','config','seed','harness','partition','original'])
+    def test_panel_rejects_schedule_or_identity_drift(tmp_path,mutation):
+>       panel,path,_=fixture(tmp_path)
+
+tests/test_fixed_panel.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+___ test_public_partition_cannot_be_bypassed_by_rehashing_validation_member ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_public_partition_cannot_b0')
+
+    def test_public_partition_cannot_be_bypassed_by_rehashing_validation_member(tmp_path):
+>       panel,path,_=fixture(tmp_path);p=Path(panel['benchmark_root'])/'partition/member_groups.jsonl'
+
+tests/test_fixed_panel.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+____________ test_slot_authority_requires_exact_panel_and_identity _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_slot_authority_requires_e0')
+
+    def test_slot_authority_requires_exact_panel_and_identity(tmp_path):
+>       panel,path,_=fixture(tmp_path);slot=panel['slots'][0];identity=slot_identity(panel,slot)
+
+tests/test_fixed_panel.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+____ test_B_requires_verified_A_repeat_and_recovery_without_public_failure _____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_B_requires_verified_A_rep0')
+
+    def test_B_requires_verified_A_repeat_and_recovery_without_public_failure(tmp_path):
+>       panel,_,_=fixture(tmp_path);module=load()
+
+tests/test_fixed_panel.py:112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+_______ test_qualification_registration_still_cannot_claim_a_panel_slot ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-478/test_qualification_registratio0')
+
+    def test_qualification_registration_still_cannot_claim_a_panel_slot(tmp_path):
+        scripts=Path(__file__).resolve().parents[1]/'scripts';sys.path.insert(0,str(scripts))
+        try:
+            from run_isolated_method import check_registration
+>           panel,path,_=fixture(tmp_path);slot=panel['slots'][0];identity=slot_identity(panel,slot)
+
+tests/test_fixed_panel.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_fixed_panel.py:49: in fixture
+    panel['slots']=load().build_schedule(original,panel['panel_id'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts'
+        path=scripts/'fixed_panel.py'
+>       assert path.is_file(), 'Strict fixed-panel adapter not implemented'
+E       AssertionError: Strict fixed-panel adapter not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/fixed_panel.py').is_file
+
+tests/test_fixed_panel.py:15: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fixed_panel.py::test_original_schedule_is46_unique_and_deterministically_paired
+FAILED tests/test_fixed_panel.py::test_panel_rejects_schedule_or_identity_drift[duplicate]
+FAILED tests/test_fixed_panel.py::test_panel_rejects_schedule_or_identity_drift[replace]
+FAILED tests/test_fixed_panel.py::test_panel_rejects_schedule_or_identity_drift[reorder]
+FAILED tests/test_fixed_panel.py::test_panel_rejects_schedule_or_identity_drift[extra]
+FAILED tests/test_fixed_panel.py::test_panel_rejects_schedule_or_identity_drift[cap]
+FAILED tests/test_fixed_panel.py::test_panel_rejects_schedule_or_identity_drift[source]
+FAILED tests/test_fixed_panel.py::test_panel_rejects_schedule_or_identity_drift[config]
+FAILED tests/test_fixed_panel.py::test_panel_rejects_schedule_or_identity_drift[seed]
+FAILED tests/test_fixed_panel.py::test_panel_rejects_schedule_or_identity_drift[harness]
+FAILED tests/test_fixed_panel.py::test_panel_rejects_schedule_or_identity_drift[partition]
+FAILED tests/test_fixed_panel.py::test_panel_rejects_schedule_or_identity_drift[original]
+FAILED tests/test_fixed_panel.py::test_public_partition_cannot_be_bypassed_by_rehashing_validation_member
+FAILED tests/test_fixed_panel.py::test_slot_authority_requires_exact_panel_and_identity
+FAILED tests/test_fixed_panel.py::test_B_requires_verified_A_repeat_and_recovery_without_public_failure
+FAILED tests/test_fixed_panel.py::test_qualification_registration_still_cannot_claim_a_panel_slot
+16 failed in 5.29s

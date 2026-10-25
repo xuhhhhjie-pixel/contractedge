@@ -1,0 +1,220 @@
+........................F..F...FF....................................... [ 84%]
+.............                                                            [100%]
+=================================== FAILURES ===================================
+__________ test_completed_slot_is_verified_and_never_dispatches_again __________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_completed_slot_is_verifie0')
+
+    def test_completed_slot_is_verified_and_never_dispatches_again(tmp_path):
+        panel,path,slot,transport=prepared(tmp_path);m=load()
+>       result=m.run_slot(path,slot['slot_id'],tmp_path/'unused-key',transport=transport)
+
+tests/test_fixed_panel_driver.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_fixed_panel.py:151: in run_slot
+    result = transport.score(receipt_path, panel['benchmark_root'], score_root,
+tests/test_fixed_panel_driver.py:63: in score
+    return run(receipt,benchmark,out,timeout=10,phase=phase)
+scripts/score_isolated_method.py:70: in run
+    identity=binding(receipt,benchmark,output)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+receipt_path = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_completed_slot_is_verifie0/runs/methods/panel-test-5f64533dd0e158304c397e4a/.isolated-fixture/receipt.json')
+benchmark = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_completed_slot_is_verifie0/benchmark')
+output = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_completed_slot_is_verifie0/runs/independent/panel-test-5f64533dd0e158304c397e4a')
+
+    def binding(receipt_path,benchmark,output):
+        receipt_path=Path(receipt_path).resolve(strict=True);receipt=read(receipt_path)
+        benchmark=Path(benchmark).resolve(strict=True);output=Path(output).resolve()
+        case=Path(receipt['identity']['output_path']).resolve(strict=True)
+        state=Path(receipt['state_root']).resolve(strict=True)
+        if (receipt.get('status')!='METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING'
+                or receipt.get('method_returncode')!=0
+                or receipt.get('cleanup',{}).get('status')!='OWNED_CONTAINERS_CLOSED'
+                or receipt.get('terminal_validation',{}).get('classification')!='METHOD_RESULT'
+                or output.is_relative_to(case) or output.is_relative_to(state)
+                or output.is_relative_to(benchmark) or case.is_relative_to(output) or state.is_relative_to(output)):
+            raise ValueError('Independent scoring requires a closed, verified method and separate output')
+        journals=sorted((state/'method-journal').glob('*.json'))
+        records=[read(p) for p in journals]
+        if not records or any(r.get('status')!='DONE' for r in records):
+            raise ValueError('Unresolved method request; independent scoring is not admitted')
+        trace_path=case/'repair.trace.json';trace=read(trace_path);candidate=trace.get('candidate')
+        if trace.get('case_id')!=receipt['case_id'] or not candidate:
+            raise ValueError('No final candidate for this verified method result')
+        patch=Path(candidate['patch_path']).resolve(strict=True)
+        if (not patch.is_relative_to(case) or sha(patch)!=candidate.get('patch_sha256')
+                or patch.stat().st_size!=candidate.get('patch_bytes')
+                or not receipt['terminal_validation'].get('candidate_verified')
+                or not any(r.get('op')=='public.export' and r.get('result')==candidate for r in records)):
+            raise ValueError('Final patch is not bound to the trusted export')
+        entry=benchmark/'RELEASE_ENTRY.json';manifest=benchmark/'evaluation/manifest.jsonl'
+        if sha(manifest)!=read(entry)['evaluation_manifest_sha256']:
+            raise ValueError('Frozen independent evaluator identity mismatch')
+        for name,digest in receipt['identity'].get('public_release_files',{}).items():
+            if sha(benchmark/name)!=digest:raise ValueError('Public release changed after method execution')
+        tools=benchmark/'tools';tool=tools/'score_case.py'
+        tool_files={p.relative_to(tools).as_posix():sha(p) for p in sorted(tools.rglob('*'))
+                    if p.is_file() and p.suffix in {'.py','.json'}}
+        expected=receipt['identity'].get('public_tool_files')
+>       if expected is not None and tool_files!=expected:raise ValueError('Frozen scoring tools changed')
+E       ValueError: Frozen scoring tools changed
+
+scripts/score_isolated_method.py:59: ValueError
+___ test_completed_grading_finalizes_after_parent_exit_without_method_retry ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_completed_grading_finaliz0')
+
+    def test_completed_grading_finalizes_after_parent_exit_without_method_retry(tmp_path):
+        panel,path,slot,transport=prepared(tmp_path);m=load();transport.fail_after_grade=True
+>       with pytest.raises(RuntimeError):m.run_slot(path,slot['slot_id'],tmp_path/'unused-key',transport=transport)
+
+tests/test_fixed_panel_driver.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_fixed_panel.py:151: in run_slot
+    result = transport.score(receipt_path, panel['benchmark_root'], score_root,
+tests/test_fixed_panel_driver.py:61: in score
+    run(receipt,benchmark,out,timeout=10,phase='run');self.fail_after_grade=False
+scripts/score_isolated_method.py:70: in run
+    identity=binding(receipt,benchmark,output)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+receipt_path = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_completed_grading_finaliz0/runs/methods/panel-test-5f64533dd0e158304c397e4a/.isolated-fixture/receipt.json')
+benchmark = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_completed_grading_finaliz0/benchmark')
+output = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_completed_grading_finaliz0/runs/independent/panel-test-5f64533dd0e158304c397e4a')
+
+    def binding(receipt_path,benchmark,output):
+        receipt_path=Path(receipt_path).resolve(strict=True);receipt=read(receipt_path)
+        benchmark=Path(benchmark).resolve(strict=True);output=Path(output).resolve()
+        case=Path(receipt['identity']['output_path']).resolve(strict=True)
+        state=Path(receipt['state_root']).resolve(strict=True)
+        if (receipt.get('status')!='METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING'
+                or receipt.get('method_returncode')!=0
+                or receipt.get('cleanup',{}).get('status')!='OWNED_CONTAINERS_CLOSED'
+                or receipt.get('terminal_validation',{}).get('classification')!='METHOD_RESULT'
+                or output.is_relative_to(case) or output.is_relative_to(state)
+                or output.is_relative_to(benchmark) or case.is_relative_to(output) or state.is_relative_to(output)):
+            raise ValueError('Independent scoring requires a closed, verified method and separate output')
+        journals=sorted((state/'method-journal').glob('*.json'))
+        records=[read(p) for p in journals]
+        if not records or any(r.get('status')!='DONE' for r in records):
+            raise ValueError('Unresolved method request; independent scoring is not admitted')
+        trace_path=case/'repair.trace.json';trace=read(trace_path);candidate=trace.get('candidate')
+        if trace.get('case_id')!=receipt['case_id'] or not candidate:
+            raise ValueError('No final candidate for this verified method result')
+        patch=Path(candidate['patch_path']).resolve(strict=True)
+        if (not patch.is_relative_to(case) or sha(patch)!=candidate.get('patch_sha256')
+                or patch.stat().st_size!=candidate.get('patch_bytes')
+                or not receipt['terminal_validation'].get('candidate_verified')
+                or not any(r.get('op')=='public.export' and r.get('result')==candidate for r in records)):
+            raise ValueError('Final patch is not bound to the trusted export')
+        entry=benchmark/'RELEASE_ENTRY.json';manifest=benchmark/'evaluation/manifest.jsonl'
+        if sha(manifest)!=read(entry)['evaluation_manifest_sha256']:
+            raise ValueError('Frozen independent evaluator identity mismatch')
+        for name,digest in receipt['identity'].get('public_release_files',{}).items():
+            if sha(benchmark/name)!=digest:raise ValueError('Public release changed after method execution')
+        tools=benchmark/'tools';tool=tools/'score_case.py'
+        tool_files={p.relative_to(tools).as_posix():sha(p) for p in sorted(tools.rglob('*'))
+                    if p.is_file() and p.suffix in {'.py','.json'}}
+        expected=receipt['identity'].get('public_tool_files')
+>       if expected is not None and tool_files!=expected:raise ValueError('Frozen scoring tools changed')
+E       ValueError: Frozen scoring tools changed
+
+scripts/score_isolated_method.py:59: ValueError
+____ test_closed_scored_slot_retires_only_its_reproducible_public_workspace ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_closed_scored_slot_retire0')
+
+    def test_closed_scored_slot_retires_only_its_reproducible_public_workspace(tmp_path):
+        panel,path,slot,transport=prepared(tmp_path);m=load()
+        panel['transient_workspace_policy']='RETIRE_CLOSED_SCORED_PUBLIC_WORKSPACE'
+        path.write_text(json.dumps(panel));dispatch=transport.dispatch
+        def wrapped(command,log):
+            result=dispatch(command,log)
+            root=Path(panel['output_root'])/'methods'/slot['slot_id']
+            workspace=root/'.isolated-fixture/producer/workspace';workspace.mkdir(parents=True)
+            (workspace/'reconstructible-source').write_text('public source/cache only')
+            logs=root/'.isolated-fixture/producer/observations';logs.mkdir();(logs/'public.log').write_text('keep actual observations')
+            foreign=root/'.foreign-state';foreign.mkdir();(foreign/'keep').write_text('not owned')
+            return result
+        transport.dispatch=wrapped
+>       record=m.run_slot(path,slot['slot_id'],tmp_path/'unused-key',transport=transport)
+
+tests/test_fixed_panel_driver.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_fixed_panel.py:151: in run_slot
+    result = transport.score(receipt_path, panel['benchmark_root'], score_root,
+tests/test_fixed_panel_driver.py:63: in score
+    return run(receipt,benchmark,out,timeout=10,phase=phase)
+scripts/score_isolated_method.py:70: in run
+    identity=binding(receipt,benchmark,output)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+receipt_path = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_closed_scored_slot_retire0/runs/methods/panel-test-5f64533dd0e158304c397e4a/.isolated-fixture/receipt.json')
+benchmark = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_closed_scored_slot_retire0/benchmark')
+output = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_closed_scored_slot_retire0/runs/independent/panel-test-5f64533dd0e158304c397e4a')
+
+    def binding(receipt_path,benchmark,output):
+        receipt_path=Path(receipt_path).resolve(strict=True);receipt=read(receipt_path)
+        benchmark=Path(benchmark).resolve(strict=True);output=Path(output).resolve()
+        case=Path(receipt['identity']['output_path']).resolve(strict=True)
+        state=Path(receipt['state_root']).resolve(strict=True)
+        if (receipt.get('status')!='METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING'
+                or receipt.get('method_returncode')!=0
+                or receipt.get('cleanup',{}).get('status')!='OWNED_CONTAINERS_CLOSED'
+                or receipt.get('terminal_validation',{}).get('classification')!='METHOD_RESULT'
+                or output.is_relative_to(case) or output.is_relative_to(state)
+                or output.is_relative_to(benchmark) or case.is_relative_to(output) or state.is_relative_to(output)):
+            raise ValueError('Independent scoring requires a closed, verified method and separate output')
+        journals=sorted((state/'method-journal').glob('*.json'))
+        records=[read(p) for p in journals]
+        if not records or any(r.get('status')!='DONE' for r in records):
+            raise ValueError('Unresolved method request; independent scoring is not admitted')
+        trace_path=case/'repair.trace.json';trace=read(trace_path);candidate=trace.get('candidate')
+        if trace.get('case_id')!=receipt['case_id'] or not candidate:
+            raise ValueError('No final candidate for this verified method result')
+        patch=Path(candidate['patch_path']).resolve(strict=True)
+        if (not patch.is_relative_to(case) or sha(patch)!=candidate.get('patch_sha256')
+                or patch.stat().st_size!=candidate.get('patch_bytes')
+                or not receipt['terminal_validation'].get('candidate_verified')
+                or not any(r.get('op')=='public.export' and r.get('result')==candidate for r in records)):
+            raise ValueError('Final patch is not bound to the trusted export')
+        entry=benchmark/'RELEASE_ENTRY.json';manifest=benchmark/'evaluation/manifest.jsonl'
+        if sha(manifest)!=read(entry)['evaluation_manifest_sha256']:
+            raise ValueError('Frozen independent evaluator identity mismatch')
+        for name,digest in receipt['identity'].get('public_release_files',{}).items():
+            if sha(benchmark/name)!=digest:raise ValueError('Public release changed after method execution')
+        tools=benchmark/'tools';tool=tools/'score_case.py'
+        tool_files={p.relative_to(tools).as_posix():sha(p) for p in sorted(tools.rglob('*'))
+                    if p.is_file() and p.suffix in {'.py','.json'}}
+        expected=receipt['identity'].get('public_tool_files')
+>       if expected is not None and tool_files!=expected:raise ValueError('Frozen scoring tools changed')
+E       ValueError: Frozen scoring tools changed
+
+scripts/score_isolated_method.py:59: ValueError
+__________ test_workspace_retirement_refuses_a_foreign_symlink_target __________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-488/test_workspace_retirement_refu0')
+
+    def test_workspace_retirement_refuses_a_foreign_symlink_target(tmp_path):
+        panel,path,slot,transport=prepared(tmp_path);m=load()
+        panel['transient_workspace_policy']='RETIRE_CLOSED_SCORED_PUBLIC_WORKSPACE';path.write_text(json.dumps(panel))
+        dispatch=transport.dispatch;foreign=tmp_path/'foreign';foreign.mkdir();(foreign/'keep').write_text('keep')
+        def wrapped(command,log):
+            result=dispatch(command,log)
+            producer=Path(panel['output_root'])/'methods'/slot['slot_id']/'.isolated-fixture/producer';producer.mkdir()
+            (producer/'workspace').symlink_to(foreign,target_is_directory=True)
+            return result
+        transport.dispatch=wrapped
+>       with pytest.raises(ValueError,match='workspace'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'workspace'
+E         Actual message: 'Frozen scoring tools changed'
+
+tests/test_fixed_panel_driver.py:185: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fixed_panel_driver.py::test_completed_slot_is_verified_and_never_dispatches_again
+FAILED tests/test_fixed_panel_driver.py::test_completed_grading_finalizes_after_parent_exit_without_method_retry
+FAILED tests/test_fixed_panel_driver.py::test_closed_scored_slot_retires_only_its_reproducible_public_workspace
+FAILED tests/test_fixed_panel_driver.py::test_workspace_retirement_refuses_a_foreign_symlink_target
+4 failed, 81 passed in 7.25s
