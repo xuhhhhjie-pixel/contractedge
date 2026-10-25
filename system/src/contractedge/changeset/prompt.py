@@ -12,7 +12,7 @@ from contractedge.contracts.validation import canonical_digest
 from contractedge.model.provider import ModelRequest
 from contractedge.model.schema import constrained_output_schema
 from contractedge.contracts.permissions import target_permission_error
-from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
+from contractedge.contracts.execution_capabilities import resolve_execution_capabilities, public_behavior_check_catalog
 
 
 CHANGESET_SYSTEM_PROMPT = """Produce one ContractEdge SemanticChangeSet v1.1 JSON object. Plan only changes that restore supported planned violations. Every change must cite a supported violation and postcondition. Preserve already satisfied outcomes and list unresolved obligations. Existing targets must use current snapshot paths/digests. A missing target may be NEW only when an EXPECTED_MISSING role and evidence justify it. Read-only source evidence does not grant edit permission: existing_target_paths contains only publicly editable targets. Do not write patch code or claim that any edit has been applied."""
@@ -106,10 +106,8 @@ def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = Non
     for kind in ['postconditions','preserve_constraints','open_obligations']:
         fields = properties[kind]['items']['properties']
         fields.pop('stable_obligation_keys',None)
-        if not raw.get('requirement_spec',{}).get('traceability_required'):
+        if not probe_ids and not raw.get('requirement_spec',{}).get('traceability_required'):
             fields.pop('check_coverage',None);fields.pop('coverage_rationale',None)
-        if probe_ids and raw.get('requirement_spec',{}).get('traceability_required'):
-            properties[kind]['items']['required'].extend(['check_coverage','coverage_rationale'])
         if probe_ids:
             fields['behavior_check_refs']['items']['enum'] = list(probe_ids)
         else:
@@ -171,7 +169,8 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
     capabilities = resolve_execution_capabilities(getattr(run_context, 'retrieval_config', {}).get('public_execution_capabilities'))
     policy = capabilities.get('editable_policy')
     frontier = getattr(run_context, 'retrieval_config', {}).get('production_path_frontier', [])
-    probe_ids = [p['id']+':'+cid for p in capabilities.get('method_behavior_probes',[]) for cid in p['checks']]
+    check_catalog = public_behavior_check_catalog(capabilities)
+    probe_ids = [check['id'] for check in check_catalog]
     editable_targets = {path: ids for path, ids in _unit_ids_by_source_path(diagnosis.raw).items()
                         if target_permission_error(path, policy) is None}
     user_payload = {
@@ -190,10 +189,14 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
         "validation_feedback": list(validation_feedback or []),
         "output_contract": "Return only a SemanticChangeSet v1.1 JSON object; no markdown fences.",
     }
+    if check_catalog:
+        user_payload['public_behavior_check_catalog'] = check_catalog
     if not run_context.model_config.get('schema_in_prompt', True):
         user_payload.pop('output_schema')
         user_payload['output_fields'] = list(_case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)['properties'])
-    system_prompt = CHANGESET_SYSTEM_PROMPT + (COVERAGE_PROMPT + IMPACT_PROMPT if diagnosis.raw.get('requirement_spec',{}).get('traceability_required') else '') + (FRONTIER_PROMPT if frontier else "")
+    traceability = diagnosis.raw.get('requirement_spec',{}).get('traceability_required')
+    system_prompt = (CHANGESET_SYSTEM_PROMPT + (COVERAGE_PROMPT if probe_ids or traceability else '')
+                     + (IMPACT_PROMPT if traceability else '') + (FRONTIER_PROMPT if frontier else ""))
     system_prompt += (" Current execution consumer " + capabilities["consumer_id"] + " supports only "
                       + ", ".join(capabilities["supported_operations"])
                       + ". Do not propose unsupported operations; retain genuinely unresolved obligations instead.")
@@ -222,11 +225,12 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
             'NOT_APPLICABLE has empty reference arrays and a source-grounded relevance rationale. '
             'This is prerequisite accountability, not a static proof that the proposed code or synchronization is correct.')
     if probe_ids:
-        system_prompt += " Registered method_behavior_probes are additional public method-owned observations, not frozen independent scorers. For obligations actually covered by these probe assertions choose PUBLIC_BEHAVIOR, set verification_scope.scenario to the registered method scenario and predeclare all necessary behavior_check_refs. Missing, failed or unrelated check results cannot establish PASS. Respect each probe boundary; do not infer external runtime coverage from local stand-ins."
+        system_prompt += " The public_behavior_check_catalog is a read-only projection of two distinct capability sources. METHOD_BEHAVIOR_PROBE entries are method-owned observations; REGISTERED_PUBLIC_CHECK entries describe the independent frozen public checker. Neither is hidden grading or a check result. For a covered obligation choose PUBLIC_BEHAVIOR, copy its explicit verification_scope from the relevant capability and predeclare the necessary behavior_check_refs and coverage_rationale. An aggregate covered_scenarios list is finite, not universal coverage. Do not guess a scenario from a check ID or invent a binding; leave unsupported scope UNKNOWN. Missing, failed, unrelated or partially covering checks cannot establish PASS."
     model = str(run_context.model_config.get("model", "UNCONFIGURED"))
     max_tokens = int(run_context.budget.get("max_output_tokens", 4096))
     output_schema = _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)
-    return ModelRequest(model=model, prompt_version="changeset.v1.1.11" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.10",
+    return ModelRequest(model=model, prompt_version=("changeset.v1.1.12" if probe_ids else
+                        "changeset.v1.1.11" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.10"),
                         messages=({"role": "system", "content": system_prompt},
                                   {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False, sort_keys=True)}),
                         max_output_tokens=max_tokens, temperature=0.0,

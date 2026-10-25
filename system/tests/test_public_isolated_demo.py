@@ -91,7 +91,10 @@ class BoundarySessions:
                             actual = {'modes': ['regressed'] * len(spec['scenarios'])}
                     else:
                         actual = dict(expected) if status == 'PASS' else {key: 'broken-fixture-value' for key in expected}
-                    checks.append({'id': identifier, 'status': status, 'actual': actual, 'expected': expected})
+                    # Mirror the frozen checker output from its trusted input
+                    # spec; this mock remains no evidence of actual isolation.
+                    checks.append({'id': identifier, 'status': status, 'actual': actual, 'expected': expected,
+                                   **spec['check_specs'][identifier]})
                 path = root / 'mock-observer.stdout'
                 path.write_text(json.dumps({'schema_version': 'ce.public_process_checks.v1',
                     'snapshot_id': spec['snapshot_id'], 'input_digest': spec['input_digest'], 'checks': checks}))

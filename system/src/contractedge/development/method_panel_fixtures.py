@@ -238,6 +238,21 @@ def render(config, state=None):
 
 for _key, _value in CASES.items():
     _value['fixture_id'] = _key
+    # These dimensions come only from the published case/assertion definition.
+    # A check ID names a predicate; it is not necessarily a scenario ID.
+    _scenario_ids = [scenario['id'] for scenario in _value['scenarios']]
+    for _definition in _value['checks']:
+        if _definition['assertions'] == 'stable':
+            _definition['scenario'] = 'all-published-scenarios'
+            _definition['covered_scenarios'] = list(_scenario_ids)
+        else:
+            _asserted = {assertion['scenario_id'] for assertion in _definition['assertions']}
+            if not _asserted or not _asserted <= set(_scenario_ids):
+                raise ValueError('Published check must cover known finite scenarios')
+            _members = [identifier for identifier in _scenario_ids if identifier in _asserted]
+            _definition['scenario'] = (_members[0] if len(_members) == 1 else
+                                       'published-scenarios:' + ','.join(_members))
+            _definition['covered_scenarios'] = _members
     _value['preservation_item_ids'] = [c['id'] for c in _value['checks'] if c['kind'] == 'PRESERVATION']
     _value['repair_item_ids'] = [c['id'] for c in _value['checks'] if c['kind'] == 'REPAIR']
 
@@ -368,6 +383,7 @@ for check in spec['checks']:
             expected.append({'scenario_id':key[0],'step_id':key[1],'fields':assertion['expected'],'exception':None})
             passed=passed and selected==assertion['expected'] and 'exception' not in value
     checks.append({'id':check['id'],'statement':check['statement'],'kind':check['kind'],'scope':check['scope'],
+        'scenario':check['scenario'],'covered_scenarios':check['covered_scenarios'],
         'status':'PASS' if passed else 'FAIL','actual':actual,'expected':expected})
 print(json.dumps({'schema_version':'ce.d2_requirement_checks.v1','fixture_id':spec['fixture_id'],
     'snapshot_id':spec['snapshot_id'],'input_digest':spec['input_digest'],'spec_digest':spec['spec_digest'],
@@ -398,7 +414,9 @@ def check_capabilities(case_id):
     case = case_definition(case_id)
     return {'schema_version': 'ce.public_process_check_capabilities.v1', 'probe_id': PROBE_ID,
             'observer_sha256': hashlib.sha256(OBSERVER.encode()).hexdigest(),
-            'checks': [{'id': PROBE_ID + ':' + c['id'], 'statement': c['statement'], 'scope': SCOPE}
+            'checks': [{'id': PROBE_ID + ':' + c['id'], 'statement': c['statement'], 'scope': SCOPE,
+                        'verification_scope': {'scenario': c['scenario']},
+                        'covered_scenarios': list(c['covered_scenarios'])}
                        for c in case['checks']]}
 
 
@@ -441,7 +459,8 @@ def freeze_panel_case(case_id, output, *, runtime='host'):
 
 def _record_body(check):
     return {'probe_id': PROBE_ID, 'id': check['id'], 'status': check['status'],
-            'statement': check['statement'], 'observed': {
+            'statement': check['statement'], 'scenario': check['scenario'],
+            'covered_scenarios': check['covered_scenarios'], 'observed': {
                 'actual': check['actual'], 'expected': check['expected'], 'scope': SCOPE}}
 
 
@@ -450,10 +469,13 @@ def requirement_observation(case_id, snapshot_id, input_digest, checks, *, locat
     case = case_definition(case_id)
     observations = []
     observer_sha = hashlib.sha256(OBSERVER.encode()).hexdigest()
+    definitions = {check['id']: check for check in case['checks']}
     for check in checks:
+        definition = definitions[check['id']]
         excerpt = json.dumps(_record_body(check), sort_keys=True)
         observations.append({'id': 'OBS-' + check['id'], 'snapshot_id': snapshot_id,
             'kind': 'PUBLIC_OBSERVATION', 'evidence_kind': 'PUBLIC_BEHAVIOR',
+            'scenario': definition['scenario'],
             'locator': {'path': str(locator_path), 'field': check['id'], 'truncated': False, 'whole_file_read': True},
             'content_digest': hashlib.sha256(excerpt.encode()).hexdigest(), 'excerpt': excerpt,
             'origin': 'Independent published D2 requirement observer; host synthetic only',
@@ -516,8 +538,11 @@ def enforce_requirement_profile(review, observation):
             locator = record.get('locator')
             valid = (check.get('statement') == definition['statement'] and check.get('kind') == definition['kind']
                 and check.get('scope') == SCOPE and isinstance(check.get('actual'), list)
+                and check.get('scenario') == definition['scenario']
+                and check.get('covered_scenarios') == definition['covered_scenarios']
                 and isinstance(check.get('expected'), list) and parsed == _record_body(check)
                 and record.get('snapshot_id') == observation['snapshot_id']
+                and record.get('scenario') == definition['scenario']
                 and record.get('evidence_kind') == 'PUBLIC_BEHAVIOR' and record.get('structured_complete') is True
                 and hashlib.sha256(excerpt.encode()).hexdigest() == record.get('content_digest')
                 and isinstance(locator, Mapping) and locator.get('truncated') is False

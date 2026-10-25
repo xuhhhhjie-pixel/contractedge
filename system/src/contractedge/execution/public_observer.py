@@ -6,6 +6,7 @@ or hidden correctness and never imports a candidate in the control process.
 """
 from __future__ import annotations
 
+from copy import deepcopy
 import hashlib
 import json
 import os
@@ -36,7 +37,17 @@ for request in requests:
 print(json.dumps({'schema_version':'ce.public_process_outputs.v1','results':results},sort_keys=True))
 '''
 
+# Canonical scopes are part of this frozen checker, not inferred from output IDs.
+# "stable" checks every published scenario and therefore has an aggregate scope.
+_CHECK_SPECS = {
+    'selected': {'scenario': 'selected', 'covered_scenarios': ['selected']},
+    'disabled': {'scenario': 'disabled', 'covered_scenarios': ['disabled']},
+    'stable': {'scenario': 'all-published-scenarios',
+               'covered_scenarios': ['selected', 'disabled', 'stable']},
+}
+
 _OBSERVER = r'''import json,pathlib
+check_specs=__PUBLIC_CHECK_SPECS__
 def unique(pairs):
     result={}
     for key,value in pairs:
@@ -44,6 +55,7 @@ def unique(pairs):
         result[key]=value
     return result
 spec=json.loads(pathlib.Path('/checks/spec.json').read_text(),object_pairs_hook=unique)
+if spec.get('check_specs',check_specs)!=check_specs:raise ValueError('Public check scopes differ from the frozen checker')
 raw=pathlib.Path('/observations/stdout.bin').read_bytes()
 body=json.loads(raw.decode('utf-8'),object_pairs_hook=unique)
 if not isinstance(body,dict) or set(body)!={'schema_version','results'} or body['schema_version']!='ce.public_process_outputs.v1':
@@ -65,10 +77,11 @@ for scenario in expected:
     else:
         if any(key not in actual for key in wanted):raise ValueError('Missing expected public output field')
         selected={key:actual[key] for key in wanted}
-    checks.append({'id':scenario['id'],'status':'PASS' if selected==wanted else 'FAIL','actual':selected,'expected':wanted})
+    checks.append({'id':scenario['id'],'status':'PASS' if selected==wanted else 'FAIL','actual':selected,'expected':wanted,**check_specs[scenario['id']]})
 print(json.dumps({'schema_version':'ce.public_process_checks.v1','snapshot_id':spec['snapshot_id'],
     'input_digest':spec['input_digest'],'checks':checks},sort_keys=True))
 '''
+_OBSERVER = _OBSERVER.replace('__PUBLIC_CHECK_SPECS__', repr(_CHECK_SPECS))
 
 _STATEMENTS = {
     'selected': 'Enabled production outputs consume the published selected configuration, including declared reload/consumer scenarios.',
@@ -83,7 +96,10 @@ def public_check_capabilities():
     return {'schema_version': 'ce.public_process_check_capabilities.v1', 'probe_id': _PROBE_ID,
         'observer_sha256': hashlib.sha256(_OBSERVER.encode()).hexdigest(),
         'checks': [{'id': _PROBE_ID + ':' + key, 'statement': value,
-                    'scope': 'Published finite process-output scenarios only.'} for key, value in _STATEMENTS.items()]}
+                    'scope': 'Published finite process-output scenarios only.',
+                    'verification_scope': {'scenario': _CHECK_SPECS[key]['scenario']},
+                    'covered_scenarios': list(_CHECK_SPECS[key]['covered_scenarios'])}
+                   for key, value in _STATEMENTS.items()]}
 
 
 def _write(path, value):
@@ -155,7 +171,8 @@ class IsolatedPublicObserver:
         request_file = output / 'candidate-inputs.json'
         _write(request_file, requests)
         check_file = output / 'checks.json'
-        _write(check_file, {**public, 'snapshot_id': snapshot.snapshot_id, 'input_digest': input_digest})
+        _write(check_file, {**public, 'check_specs': _CHECK_SPECS,
+                            'snapshot_id': snapshot.snapshot_id, 'input_digest': input_digest})
         candidate_inputs_digest = canonical_digest({'public-inputs.json': _sha(request_file)})
         public_check_spec_digest = canonical_digest({'spec.json': _sha(check_file)})
         candidate = FrozenInvocation.freeze(('/usr/bin/python3', '-I', '-B', '-c', _CANDIDATE))
@@ -182,7 +199,10 @@ class IsolatedPublicObserver:
                     checks = body['checks']
                     if (not isinstance(checks, list) or len(checks) != len(_STATEMENTS)
                             or {row['id'] for row in checks} != set(_STATEMENTS)
-                            or any(row.get('status') not in {'PASS', 'FAIL'} for row in checks)):
+                            or any(row.get('status') not in {'PASS', 'FAIL'}
+                                or row.get('scenario') != _CHECK_SPECS[row['id']]['scenario']
+                                or row.get('covered_scenarios') != _CHECK_SPECS[row['id']]['covered_scenarios']
+                                for row in checks)):
                         raise ValueError('Observer did not cover every registered public check')
                     status = 'EXECUTION_PASS'
                 else:
@@ -209,11 +229,13 @@ class IsolatedPublicObserver:
             for check in checks:
                 value = {'probe_id': _PROBE_ID, 'id': check['id'], 'status': check['status'],
                     'statement': _STATEMENTS[check['id']],
+                    **deepcopy(_CHECK_SPECS[check['id']]),
                     'observed': {'actual': check['actual'], 'expected': check['expected'],
                         'scope': 'Bounded public candidate process output; no claim about hidden or internal function state.'}}
                 excerpt = json.dumps(value, ensure_ascii=False, sort_keys=True)
                 observations.append({'id': 'OBS-' + check['id'], 'snapshot_id': snapshot.snapshot_id,
                     'kind': 'PUBLIC_OBSERVATION', 'evidence_kind': 'PUBLIC_BEHAVIOR',
+                    'scenario': _CHECK_SPECS[check['id']]['scenario'],
                     'locator': {'path': str((output / 'trusted-checks.json').relative_to(workspace_root)), 'field': check['id'],
                         'truncated': False, 'whole_file_read': True},
                     'content_digest': hashlib.sha256(excerpt.encode()).hexdigest(), 'excerpt': excerpt,
@@ -286,12 +308,15 @@ def enforce_public_profile(review, observation, *, required=False):
                     valid = False
                     break
                 expected = {'probe_id': _PROBE_ID, 'id': check['id'], 'status': check.get('status'),
-                    'statement': _STATEMENTS[check['id']], 'observed': {
+                    'statement': _STATEMENTS[check['id']], **deepcopy(_CHECK_SPECS[check['id']]), 'observed': {
                         'actual': check.get('actual'), 'expected': check.get('expected'),
                         'scope': 'Bounded public candidate process output; no claim about hidden or internal function state.'}}
                 locator = record.get('locator') or {}
                 valid = (record.get('snapshot_id') == observation.get('snapshot_id')
                     and record.get('evidence_kind') == 'PUBLIC_BEHAVIOR'
+                    and record.get('scenario') == _CHECK_SPECS[check['id']]['scenario']
+                    and check.get('scenario') == _CHECK_SPECS[check['id']]['scenario']
+                    and check.get('covered_scenarios') == _CHECK_SPECS[check['id']]['covered_scenarios']
                     and record.get('structured_complete') is True
                     and isinstance(excerpt, str) and hashlib.sha256(excerpt.encode()).hexdigest() == record.get('content_digest')
                     and isinstance(locator, Mapping) and locator.get('truncated') is False and locator.get('whole_file_read') is True
