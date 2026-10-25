@@ -1,0 +1,677 @@
+{
+  "status": "A_CLOSED_EFFECT_GATE_FAILED",
+  "panel": "/home/xhj/contractedge-fixed46-20261025/panel-v045-terminal-r3.json",
+  "panel_sha256": "859466d293b162f393428319b917432bb4bf84e4b7415bfa40a69172c152965a",
+  "verified_closed": 14,
+  "original_registered": 46,
+  "not_run": 32,
+  "A_counts": {
+    "baseline": 3,
+    "candidate": 5
+  },
+  "assessment": {
+    "status": "PENDING",
+    "observed_improvement": true,
+    "behavior_gates_passed": false,
+    "missing": [
+      [
+        "B",
+        "R3-KUBEBUILDER-5119",
+        0,
+        "baseline"
+      ],
+      [
+        "B",
+        "R3-KUBEBUILDER-5119",
+        0,
+        "candidate"
+      ],
+      [
+        "B",
+        "R3-SKAFFOLD-9732",
+        0,
+        "baseline"
+      ],
+      [
+        "B",
+        "R3-SKAFFOLD-9732",
+        0,
+        "candidate"
+      ],
+      [
+        "B",
+        "R4-CAPA-5111",
+        0,
+        "baseline"
+      ],
+      [
+        "B",
+        "R4-CAPA-5111",
+        0,
+        "candidate"
+      ],
+      [
+        "B",
+        "R4-PROVIDER-AWS-2339",
+        0,
+        "baseline"
+      ],
+      [
+        "B",
+        "R4-PROVIDER-AWS-2339",
+        0,
+        "candidate"
+      ],
+      [
+        "B",
+        "RW-ARGO-CD-27136",
+        0,
+        "baseline"
+      ],
+      [
+        "B",
+        "RW-ARGO-CD-27136",
+        0,
+        "candidate"
+      ],
+      [
+        "B",
+        "RW-CAND-114",
+        0,
+        "baseline"
+      ],
+      [
+        "B",
+        "RW-CAND-114",
+        0,
+        "candidate"
+      ],
+      [
+        "B",
+        "RW-CAND-134",
+        0,
+        "baseline"
+      ],
+      [
+        "B",
+        "RW-CAND-134",
+        0,
+        "candidate"
+      ],
+      [
+        "B",
+        "RW-HELM-CONTROLLER-1589",
+        0,
+        "baseline"
+      ],
+      [
+        "B",
+        "RW-HELM-CONTROLLER-1589",
+        0,
+        "candidate"
+      ],
+      [
+        "B",
+        "RW-NATS-SERVER-6609",
+        0,
+        "baseline"
+      ],
+      [
+        "B",
+        "RW-NATS-SERVER-6609",
+        0,
+        "candidate"
+      ],
+      [
+        "B",
+        "RW-PROMETHEUS-19838",
+        0,
+        "baseline"
+      ],
+      [
+        "B",
+        "RW-PROMETHEUS-19838",
+        0,
+        "candidate"
+      ],
+      [
+        "recovery",
+        "R3-KPT-4673",
+        0,
+        "baseline"
+      ],
+      [
+        "recovery",
+        "R3-KPT-4673",
+        0,
+        "candidate"
+      ],
+      [
+        "recovery",
+        "R3-KPT-4673",
+        1,
+        "baseline"
+      ],
+      [
+        "recovery",
+        "R3-KPT-4673",
+        1,
+        "candidate"
+      ],
+      [
+        "recovery",
+        "RW-ALERTMANAGER-4705",
+        0,
+        "baseline"
+      ],
+      [
+        "recovery",
+        "RW-ALERTMANAGER-4705",
+        0,
+        "candidate"
+      ],
+      [
+        "recovery",
+        "RW-ALERTMANAGER-4705",
+        1,
+        "baseline"
+      ],
+      [
+        "recovery",
+        "RW-ALERTMANAGER-4705",
+        1,
+        "candidate"
+      ],
+      [
+        "repeat",
+        "R3-KOPF-726",
+        1,
+        "baseline"
+      ],
+      [
+        "repeat",
+        "R3-KOPF-726",
+        1,
+        "candidate"
+      ],
+      [
+        "repeat",
+        "RW-ALERTMANAGER-4705",
+        1,
+        "baseline"
+      ],
+      [
+        "repeat",
+        "RW-ALERTMANAGER-4705",
+        1,
+        "candidate"
+      ]
+    ],
+    "regressions": [
+      {
+        "group": "A",
+        "case_id": "RW-CERTMANAGER-9116"
+      }
+    ],
+    "historical_successes_preserved": false,
+    "critical_cases_pass_both_attempts": false,
+    "two_repository_recovery_pass_both_attempts": false,
+    "primary_counts": {
+      "baseline": 3,
+      "candidate": 5
+    },
+    "primary_denominator": 17,
+    "recovery_counts": {
+      "baseline": 0,
+      "candidate": 0
+    },
+    "effect_claim": "Observed paired improvement, not statistical significance",
+    "scope": "Behavior acceptance requires separately verified engineering closure. Fixed development panel and finite repetition only; no statistical significance or full150 guarantee Final delivery additionally requires the declared primary and B effect gates.",
+    "delivery_effect_gates_passed": false,
+    "paired_primary_improvement": true,
+    "B_counts": {
+      "baseline": 0,
+      "candidate": 0
+    },
+    "B_not_below_baseline": true,
+    "acceptance_policy": "Final design: all behavior gates, strictly more primary independent PASS, B not below baseline; recovery improvement alone is insufficient"
+  },
+  "B_gate": {
+    "open": false,
+    "missing": [
+      "fixed46-v045-isolated-20261025-v1-4ada1358a8a7db96b35bcd8e",
+      "fixed46-v045-isolated-20261025-v1-92201d988b606f41830e70a5",
+      "fixed46-v045-isolated-20261025-v1-c1cec2a408efc5e10c83fb8e",
+      "fixed46-v045-isolated-20261025-v1-c389d4dfccac51c96e7ee10f",
+      "fixed46-v045-isolated-20261025-v1-b014df76f3113bdb25b07e03",
+      "fixed46-v045-isolated-20261025-v1-44d1f6c59760035709127588",
+      "fixed46-v045-isolated-20261025-v1-f2c810d86ae1d3f2c49a963f",
+      "fixed46-v045-isolated-20261025-v1-1bf2d595d501802118c43695",
+      "fixed46-v045-isolated-20261025-v1-7cf96bc3f16296239e7fb685",
+      "fixed46-v045-isolated-20261025-v1-833d9fec72fc75d823c9c702",
+      "fixed46-v045-isolated-20261025-v1-3c876390d002229b412fc40b",
+      "fixed46-v045-isolated-20261025-v1-0688f115ed8fa72b524b54cd"
+    ],
+    "errors": [
+      "candidate prerequisite failed: fixed46-v045-isolated-20261025-v1-7e110f10f2707f003c394c2c",
+      "candidate prerequisite failed: fixed46-v045-isolated-20261025-v1-5b4e270cd9beb190997cb43f"
+    ]
+  },
+  "dispositions": [
+    {
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f5dd18212d66edb1ba9b9990",
+      "variant": "baseline",
+      "disposition": "CLOSED",
+      "result": "PASS"
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-60944716e7069c9f5423fb67",
+      "variant": "candidate",
+      "disposition": "CLOSED",
+      "result": "PASS"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f30e0215f0d113880a6411c5",
+      "variant": "candidate",
+      "disposition": "CLOSED",
+      "result": "PASS"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-8963f561974092cbd6133317",
+      "variant": "baseline",
+      "disposition": "CLOSED",
+      "result": "PASS"
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-5c9e2b9fddc23e694bc91412",
+      "variant": "baseline",
+      "disposition": "CLOSED",
+      "result": "SEMANTIC_FAIL"
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-a23cab1ffd94f2c287355ce8",
+      "variant": "candidate",
+      "disposition": "CLOSED",
+      "result": "PASS"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-109d1fbfb1987992a1ad4cea",
+      "variant": "baseline",
+      "disposition": "CLOSED",
+      "result": "SEMANTIC_FAIL"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-613366258a101b1af27ecdab",
+      "variant": "candidate",
+      "disposition": "CLOSED",
+      "result": "PASS"
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-a62911320d2450c09640ca1c",
+      "variant": "baseline",
+      "disposition": "CLOSED",
+      "result": "SEMANTIC_FAIL"
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-bcd9a8d56a4e00f2f902f406",
+      "variant": "candidate",
+      "disposition": "CLOSED",
+      "result": "PASS"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-7e110f10f2707f003c394c2c",
+      "variant": "candidate",
+      "disposition": "CLOSED",
+      "result": "SEMANTIC_FAIL"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-5ece967e93e69ab025d7d758",
+      "variant": "baseline",
+      "disposition": "CLOSED",
+      "result": "SEMANTIC_FAIL"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-5b4e270cd9beb190997cb43f",
+      "variant": "candidate",
+      "disposition": "CLOSED",
+      "result": "SEMANTIC_FAIL"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f836a8138f6b34ea264edf20",
+      "variant": "baseline",
+      "disposition": "CLOSED",
+      "result": "PASS"
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "repeat",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-4ada1358a8a7db96b35bcd8e",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "repeat",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-92201d988b606f41830e70a5",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "repeat",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-c1cec2a408efc5e10c83fb8e",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "repeat",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-c389d4dfccac51c96e7ee10f",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "recovery",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-b014df76f3113bdb25b07e03",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "recovery",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-44d1f6c59760035709127588",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "recovery",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f2c810d86ae1d3f2c49a963f",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "recovery",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-1bf2d595d501802118c43695",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "recovery",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-7cf96bc3f16296239e7fb685",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "recovery",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-833d9fec72fc75d823c9c702",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "recovery",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-3c876390d002229b412fc40b",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "recovery",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-0688f115ed8fa72b524b54cd",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-a59cbd0380209008b953b050",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-620390e2891096c1ce2941a2",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-b3b20f10c04f6a0bb9714c0b",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-a4651652e0f25e417ab23767",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-fd56f4f5a51af6f4ac2e99fc",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-519dfe95312a2ee83cc53b34",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-fc7c9a44ca1c4bb7edb04add",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-9bba89f391b684557d228cb6",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-ec66d873adb0dfa95b02688d",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-698d843579dfc385f54e3d69",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-dd301a3401b0a414fdc5a6aa",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-6b3527ac23155cd49933f306",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R4-CAPA-5111",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-d10fede6895c0f6a4b6ea977",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R4-CAPA-5111",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-71c9d960e70ca9aa62560f98",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2339",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f5f2f8178d40fabc3643bd3c",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2339",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-fb4acf66fdeb7fa6ae1fd93d",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-88f579d384b1d05255fc162b",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-02ba2eab146eaa41acb06696",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-53fe08b7488b0cb79a08b6b8",
+      "variant": "candidate",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-15c8e59b7b314d407202a5ed",
+      "variant": "baseline",
+      "disposition": "NOT_RUN_PREREQUISITE_FAILED",
+      "result": null
+    }
+  ],
+  "formal_ready": false
+}

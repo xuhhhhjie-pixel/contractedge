@@ -1,31 +1,21 @@
-# 父侧终态协议续轮审计
+# 原固定开发面板 A 组收束审计
 
-## 原面板实际结果
+当前0.6.45方法的A组7案、14个配对尝试全部关闭并经协议验证。候选独立PASS 5/7，基线3/7。候选新增KOPF、Provider Helm、ACK三个PASS；Cert-manager出现基线PASS而候选FAIL；Alertmanager双方FAIL。候选总数较高不能抵消明确回退。
 
-原46槽来源、基线/候选方法和登记兼容性已经完成零调用验证与隔离接通。原A组已关闭11槽：前5组候选独立PASS 5/5、基线2/5；第6组Alertmanager候选为SEMANTIC_FAIL，方法状态NEEDS_EVIDENCE，未生成实际源码修改（导出空补丁），公开UNKNOWN。失败保留，不能因此开放重复/续修/B。
+原登记46项保留，余下32项记为NOT_RUN_PREREQUISITE_FAILED。重复、续修和B未开启；当前formal_ready=false。原评估器返回PENDING（登记尚未执行完），同时behavior_gates_passed=false和delivery_effect_gates_passed=false；本审计明确当前版本已知效果门未通过。
 
-随后Alertmanager基线进程正常返回EVIDENCE_GAP，导出空补丁，源码和初末快照不变、请求全部闭合、容器已关闭。但父侧合法终态集合遗漏该状态，将其误标INFRASTRUCTURE_STOP。因此原A服务及等待续跑服务均已停止，未重新派发该模型尝试。
+|案例|基线独立结果|候选独立结果|候选公开判断|
+|---|---|---|---|
+|RW130|PASS|PASS|PASS|
+|KPT|PASS|PASS|UNKNOWN|
+|KOPF|FAIL|PASS|PASS|
+|Provider Helm|FAIL|PASS|UNKNOWN|
+|ACK Cloudwatch|FAIL|PASS|UNKNOWN|
+|Alertmanager|FAIL|FAIL|UNKNOWN|
+|Cert-manager|PASS|FAIL|UNKNOWN|
 
-## 本轮已落实
+Alertmanager候选在计划补证后仍NEEDS_EVIDENCE，未产生编辑；Cert-manager候选以EVIDENCE_GAP退出，未产生编辑。独立评分均对原候选执行并保留。当前并无证据将它们解释为评分基础设施错误。
 
-- 父侧合法方法不足状态修正；其他基础设施停止门保留。
-- 对旧父程序的精确摘要提供有界只读解释，校验正常退出、已关闭请求/公共观察/导出/空补丁/快照/清理；保留原始回执。
-- 原评分器r1与r2完成结果只读兼容，不能重新评分已闭合槽。
-- 新面板协议保存全部闭合前缀，仅承接下一原槽的封存结果；方法、配置、原46槽与共享150元额度不变。
-- 父侧分类/记录/评分相关54项及面板继承新11项通过。真实终态与原11槽前缀均已零调用回放，尚未新增真实独立评分或模型调用。
+此前两个父侧协议缺陷（非零评分退出码误分类、合法EVIDENCE_GAP终态遗漏）已经通过受限兼容解释闭合，原回执保持不变；未再次调用模型改写原结果。资格工程验证1812项及91个子测试、实际隔离8格和双方公开沙箱通过，仅证明其明确工程范围。
 
-## 正在执行
-
-新冻结`method-terminal-amendment-v045-20261025-v1`校验PASS，方法源码116份及摘要df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df保持不变。
-
-全量服务`contractedge-terminal-r3-full-20261025`已完成1812项及91项子测试，冻结复核PASS；资格与续A服务`contractedge-terminal-r3-qualify-A-20261025`已进入实际8格。后者继续执行实际8格、双方公开sandbox、原基线候选首次独立评分、保留12原槽的新协议准备与零调用调度，最终仅执行原A中未派发的两槽。任何一步失败停止，无自动重试，不开放B。真实状态以`.superpowers/terminal-r3-20261025/pipeline-result.json`为准。
-
-## 另行离线优化
-
-`/home/xhj/contractedge-coverage-review-20261025`的0.6.46候选新增义务覆盖本地UNKNOWN及完整异常上下文支持校验，改动前后保存KPT/CloudWatch逐项结论相同；前一冻结全量1793+91通过。
-
-针对这次Alertmanager真实失败，继续发现带注释helper与语法片段重复占用强制名额。新增来源声明去重，9个新测试修复前5失败4通过，相关45项通过。使用原首两次响应回放第三次诊断请求，同一Top12预算内processAlert正文实际进入请求。聚合分组生命周期和订阅接口/实现仍未完整送达；当前源码增量未经过全量验证，也没有真实修复成功。不能把前一冻结1793+91成绩套给这个新增增量，更不替换正在补齐记录的0.6.45。
-
-## 未完成与准入
-
-A尚未完整14槽，重复/续修/B尚未执行；Alertmanager候选失败已经使原效果门无法通过。此轮首先解决真实结果不能完整计入的父协议问题，然后根据完整A结果决定下一版本所需的最小通用修改。正式G0—G6未通过，formal_ready=false。不得混版拼分或重试原失败槽到通过。
+后续先离线修复通用断点，验证关键证据在最终请求中共同存在，再登记最小真实验证。方法源码变化后使用新冻结身份，旧14项只作为对照，不继承效果成绩。完整逐项身份和32项未运行原因见A_EFFECT_AUDIT.json；原始结果及证据摘要见A_RESULTS.json。
