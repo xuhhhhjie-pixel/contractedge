@@ -19,6 +19,18 @@
     "test_structured_observation_adapters.py",
     "test_topomen_agent.py"
   ],
-  "github_new_commit_status": "NOT_RUN_YET",
-  "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df"
+  "github_new_commit_status": "PENDING_REVALIDATION",
+  "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df",
+  "github_first_revalidation": {
+    "run": 40163174437,
+    "status": "FAIL",
+    "source_binding_and_real_recovery": "PASS",
+    "portable": {
+      "passed": 1732,
+      "subtests_passed": 86,
+      "failed": 2,
+      "reason": "Required bwrap binary absent on runner; strict namespace tests refuse fallback"
+    }
+  },
+  "next_fix": "Explicit apt installation of bubblewrap in runtime-portable CI job; no test exclusion or isolation fallback"
 }
