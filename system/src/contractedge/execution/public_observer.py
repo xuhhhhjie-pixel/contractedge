@@ -76,6 +76,13 @@ _STATEMENTS = {
     'stable': 'Every published scenario preserves stable mode.',
 }
 _PROBE_ID = 'contractedge-public-process-v1'
+_SCENARIO = 'selected-and-preservation'
+# Frozen coverage definitions, not inferred from model output or a check ID.
+_SCENARIO_MEMBERS = {
+    'selected': ('selected',),
+    'disabled': ('disabled',),
+    'stable': ('selected', 'disabled', 'stable'),
+}
 
 
 def public_check_capabilities():
@@ -83,6 +90,7 @@ def public_check_capabilities():
     return {'schema_version': 'ce.public_process_check_capabilities.v1', 'probe_id': _PROBE_ID,
         'observer_sha256': hashlib.sha256(_OBSERVER.encode()).hexdigest(),
         'checks': [{'id': _PROBE_ID + ':' + key, 'statement': value,
+                    'scenario': _SCENARIO, 'scenario_members': list(_SCENARIO_MEMBERS[key]),
                     'scope': 'Published finite process-output scenarios only.'} for key, value in _STATEMENTS.items()]}
 
 
@@ -155,7 +163,8 @@ class IsolatedPublicObserver:
         request_file = output / 'candidate-inputs.json'
         _write(request_file, requests)
         check_file = output / 'checks.json'
-        _write(check_file, {**public, 'snapshot_id': snapshot.snapshot_id, 'input_digest': input_digest})
+        _write(check_file, {**public, 'snapshot_id': snapshot.snapshot_id, 'input_digest': input_digest,
+                            'check_definitions': public_check_capabilities()})
         candidate_inputs_digest = canonical_digest({'public-inputs.json': _sha(request_file)})
         public_check_spec_digest = canonical_digest({'spec.json': _sha(check_file)})
         candidate = FrozenInvocation.freeze(('/usr/bin/python3', '-I', '-B', '-c', _CANDIDATE))
@@ -209,10 +218,12 @@ class IsolatedPublicObserver:
             for check in checks:
                 value = {'probe_id': _PROBE_ID, 'id': check['id'], 'status': check['status'],
                     'statement': _STATEMENTS[check['id']],
+                    'scenario': _SCENARIO, 'scenario_members': list(_SCENARIO_MEMBERS[check['id']]),
                     'observed': {'actual': check['actual'], 'expected': check['expected'],
                         'scope': 'Bounded public candidate process output; no claim about hidden or internal function state.'}}
                 excerpt = json.dumps(value, ensure_ascii=False, sort_keys=True)
                 observations.append({'id': 'OBS-' + check['id'], 'snapshot_id': snapshot.snapshot_id,
+                    'scenario': _SCENARIO,
                     'kind': 'PUBLIC_OBSERVATION', 'evidence_kind': 'PUBLIC_BEHAVIOR',
                     'locator': {'path': str((output / 'trusted-checks.json').relative_to(workspace_root)), 'field': check['id'],
                         'truncated': False, 'whole_file_read': True},
@@ -286,11 +297,13 @@ def enforce_public_profile(review, observation, *, required=False):
                     valid = False
                     break
                 expected = {'probe_id': _PROBE_ID, 'id': check['id'], 'status': check.get('status'),
+                    'scenario': _SCENARIO, 'scenario_members': list(_SCENARIO_MEMBERS[check['id']]),
                     'statement': _STATEMENTS[check['id']], 'observed': {
                         'actual': check.get('actual'), 'expected': check.get('expected'),
                         'scope': 'Bounded public candidate process output; no claim about hidden or internal function state.'}}
                 locator = record.get('locator') or {}
                 valid = (record.get('snapshot_id') == observation.get('snapshot_id')
+                    and record.get('scenario') == _SCENARIO
                     and record.get('evidence_kind') == 'PUBLIC_BEHAVIOR'
                     and record.get('structured_complete') is True
                     and isinstance(excerpt, str) and hashlib.sha256(excerpt.encode()).hexdigest() == record.get('content_digest')

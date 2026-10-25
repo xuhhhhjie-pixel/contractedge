@@ -1,0 +1,818 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFF..........FFFFF.FFFF........FFFF.F.......... [ 93%]
+.FFFF                                                                    [100%]
+=================================== FAILURES ===================================
+_ test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[config-binding/base] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_all_six_profiles_use_exac0')
+case_id = 'config-binding/base'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles(tmp_path, case_id):
+        report, doubles = observe(tmp_path, case_id)
+>       assert report['status'] == 'EXECUTION_PASS', report['errors']
+E       AssertionError: ['Strict six-case runtime/profile completeness validation failed']
+E       assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E         
+E         - EXECUTION_PASS
+E         + INVALID_OBSERVATION
+
+tests/test_isolated_method_panel.py:135: AssertionError
+_ test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[config-binding/exception-guard] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_all_six_profiles_use_exac1')
+case_id = 'config-binding/exception-guard'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles(tmp_path, case_id):
+        report, doubles = observe(tmp_path, case_id)
+>       assert report['status'] == 'EXECUTION_PASS', report['errors']
+E       AssertionError: ['Strict six-case runtime/profile completeness validation failed']
+E       assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E         
+E         - EXECUTION_PASS
+E         + INVALID_OBSERVATION
+
+tests/test_isolated_method_panel.py:135: AssertionError
+_ test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[two-consumers/base] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_all_six_profiles_use_exac2')
+case_id = 'two-consumers/base'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles(tmp_path, case_id):
+        report, doubles = observe(tmp_path, case_id)
+>       assert report['status'] == 'EXECUTION_PASS', report['errors']
+E       AssertionError: ['Strict six-case runtime/profile completeness validation failed']
+E       assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E         
+E         - EXECUTION_PASS
+E         + INVALID_OBSERVATION
+
+tests/test_isolated_method_panel.py:135: AssertionError
+_ test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[two-consumers/preserve-one] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_all_six_profiles_use_exac3')
+case_id = 'two-consumers/preserve-one'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles(tmp_path, case_id):
+        report, doubles = observe(tmp_path, case_id)
+>       assert report['status'] == 'EXECUTION_PASS', report['errors']
+E       AssertionError: ['Strict six-case runtime/profile completeness validation failed']
+E       assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E         
+E         - EXECUTION_PASS
+E         + INVALID_OBSERVATION
+
+tests/test_isolated_method_panel.py:135: AssertionError
+_ test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[reload-state/base] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_all_six_profiles_use_exac4')
+case_id = 'reload-state/base'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles(tmp_path, case_id):
+        report, doubles = observe(tmp_path, case_id)
+>       assert report['status'] == 'EXECUTION_PASS', report['errors']
+E       AssertionError: ['Strict six-case runtime/profile completeness validation failed']
+E       assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E         
+E         - EXECUTION_PASS
+E         + INVALID_OBSERVATION
+
+tests/test_isolated_method_panel.py:135: AssertionError
+_ test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[reload-state/rejected-reload] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_all_six_profiles_use_exac5')
+case_id = 'reload-state/rejected-reload'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles(tmp_path, case_id):
+        report, doubles = observe(tmp_path, case_id)
+>       assert report['status'] == 'EXECUTION_PASS', report['errors']
+E       AssertionError: ['Strict six-case runtime/profile completeness validation failed']
+E       assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E         
+E         - EXECUTION_PASS
+E         + INVALID_OBSERVATION
+
+tests/test_isolated_method_panel.py:135: AssertionError
+_ test_broken_target_fail_and_all_fixed_preservation_states_are_checked[config-binding/base] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_broken_target_fail_and_al0')
+case_id = 'config-binding/base'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_broken_target_fail_and_all_fixed_preservation_states_are_checked(tmp_path, case_id):
+        report, _ = observe(tmp_path, case_id, broken=True)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:146: AssertionError
+_ test_broken_target_fail_and_all_fixed_preservation_states_are_checked[config-binding/exception-guard] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_broken_target_fail_and_al1')
+case_id = 'config-binding/exception-guard'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_broken_target_fail_and_all_fixed_preservation_states_are_checked(tmp_path, case_id):
+        report, _ = observe(tmp_path, case_id, broken=True)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '7c7f7266666f0ee3ddbb5cc376fe08f77552d01cb733f25cb35266ec8ea7987a', ...})
+
+tests/test_isolated_method_panel.py:146: AssertionError
+_ test_broken_target_fail_and_all_fixed_preservation_states_are_checked[two-consumers/base] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_broken_target_fail_and_al2')
+case_id = 'two-consumers/base'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_broken_target_fail_and_all_fixed_preservation_states_are_checked(tmp_path, case_id):
+        report, _ = observe(tmp_path, case_id, broken=True)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '3851a63e38d78781b1ef5e70f02c81c5236c9198bb6496f3778dfbd2a8f10b9f', ...})
+
+tests/test_isolated_method_panel.py:146: AssertionError
+_ test_broken_target_fail_and_all_fixed_preservation_states_are_checked[two-consumers/preserve-one] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_broken_target_fail_and_al3')
+case_id = 'two-consumers/preserve-one'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_broken_target_fail_and_all_fixed_preservation_states_are_checked(tmp_path, case_id):
+        report, _ = observe(tmp_path, case_id, broken=True)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '3c74a1ea7e7c4231a48afc8bb5cf8fd6e2e7b60308fe6c4e090f56d163ea15bd', ...})
+
+tests/test_isolated_method_panel.py:146: AssertionError
+_ test_broken_target_fail_and_all_fixed_preservation_states_are_checked[reload-state/base] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_broken_target_fail_and_al4')
+case_id = 'reload-state/base'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_broken_target_fail_and_all_fixed_preservation_states_are_checked(tmp_path, case_id):
+        report, _ = observe(tmp_path, case_id, broken=True)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '32238f312a026c0aae8ad2e13182d9927f232cde4f954ab5d95ad823a78085ed', ...})
+
+tests/test_isolated_method_panel.py:146: AssertionError
+_ test_broken_target_fail_and_all_fixed_preservation_states_are_checked[reload-state/rejected-reload] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_broken_target_fail_and_al5')
+case_id = 'reload-state/rejected-reload'
+
+    @pytest.mark.parametrize('case_id', tuple(CASES))
+    def test_broken_target_fail_and_all_fixed_preservation_states_are_checked(tmp_path, case_id):
+        report, _ = observe(tmp_path, case_id, broken=True)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '81f8e5b38e56851c14349cf798610a669730e591f6b2a2182a0ba4fd271d2f81', ...})
+
+tests/test_isolated_method_panel.py:146: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[drop-check] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident0')
+name = 'drop-check'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[stale] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident1')
+name = 'stale'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[wrong-input] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident2')
+name = 'wrong-input'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[old-profile] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident3')
+name = 'old-profile'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[wrong-invocation] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident4')
+name = 'wrong-invocation'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[truncated] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident5')
+name = 'truncated'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[unverified] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident6')
+name = 'unverified'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[missing-kernel] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident7')
+name = 'missing-kernel'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[bad-mount] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident8')
+name = 'bad-mount'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[candidate-cleanup] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident9')
+name = 'candidate-cleanup'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[observer-cleanup] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident10')
+name = 'observer-cleanup'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[close-failed] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident11')
+name = 'close-failed'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[changed-close-run] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident12')
+name = 'changed-close-run'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[changed-resources] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident13')
+name = 'changed-resources'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[wrong-checker-sha] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident14')
+name = 'wrong-checker-sha'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_profile_runtime_and_identity_corruption_cannot_certify_isolation[oversized-output] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_profile_runtime_and_ident15')
+name = 'oversized-output'
+
+    @pytest.mark.parametrize('name', ['drop-check', 'stale', 'wrong-input', 'old-profile', 'wrong-invocation',
+        'truncated', 'unverified', 'missing-kernel', 'bad-mount', 'candidate-cleanup', 'observer-cleanup',
+        'close-failed', 'changed-close-run', 'changed-resources', 'wrong-checker-sha', 'oversized-output'])
+    def test_profile_runtime_and_identity_corruption_cannot_certify_isolation(tmp_path, name):
+        report, _ = observe(tmp_path)
+>       assert isolated_observation_complete(report)
+E       AssertionError: assert False
+E        +  where False = isolated_observation_complete({'schema_version': 'ce.d2_isolated_public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': 'd6d08b657e...f8655acf97d0e5892771c6ce2cbf', 'input_digest': '4b51239c4ce64571d58b6290aacb426de737e98ddc8c96bf0fd6e42a6cee3c20', ...})
+
+tests/test_isolated_method_panel.py:156: AssertionError
+_ test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner[full] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_production_four_mode_brid0')
+mode = 'full'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner(tmp_path, mode):
+        counter = 0
+        def factory(spec, deadline):
+            nonlocal counter
+            counter += 1
+            return RuntimeDouble(spec, deadline, output_fixture('config-binding/base', broken=counter == 1))
+        with patch.object(module.RuntimeSession, 'open', side_effect=factory), patch(
+                'contractedge.development.method_panel_fixtures.PanelRunner.observe', side_effect=AssertionError('host fallback forbidden')):
+            row = run_cell('config-binding/base', mode, tmp_path / mode, runtime_config=RUNTIME)
+>       assert counter == 2
+E       assert 1 == 2
+
+tests/test_isolated_method_panel.py:234: AssertionError
+_ test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner[without_relation] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_production_four_mode_brid1')
+mode = 'without_relation'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner(tmp_path, mode):
+        counter = 0
+        def factory(spec, deadline):
+            nonlocal counter
+            counter += 1
+            return RuntimeDouble(spec, deadline, output_fixture('config-binding/base', broken=counter == 1))
+        with patch.object(module.RuntimeSession, 'open', side_effect=factory), patch(
+                'contractedge.development.method_panel_fixtures.PanelRunner.observe', side_effect=AssertionError('host fallback forbidden')):
+            row = run_cell('config-binding/base', mode, tmp_path / mode, runtime_config=RUNTIME)
+>       assert counter == 2
+E       assert 1 == 2
+
+tests/test_isolated_method_panel.py:234: AssertionError
+_ test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner[without_changeset] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_production_four_mode_brid2')
+mode = 'without_changeset'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner(tmp_path, mode):
+        counter = 0
+        def factory(spec, deadline):
+            nonlocal counter
+            counter += 1
+            return RuntimeDouble(spec, deadline, output_fixture('config-binding/base', broken=counter == 1))
+        with patch.object(module.RuntimeSession, 'open', side_effect=factory), patch(
+                'contractedge.development.method_panel_fixtures.PanelRunner.observe', side_effect=AssertionError('host fallback forbidden')):
+            row = run_cell('config-binding/base', mode, tmp_path / mode, runtime_config=RUNTIME)
+>       assert counter == 2
+E       assert 1 == 2
+
+tests/test_isolated_method_panel.py:234: AssertionError
+_ test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner[direct] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_production_four_mode_brid3')
+mode = 'direct'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner(tmp_path, mode):
+        counter = 0
+        def factory(spec, deadline):
+            nonlocal counter
+            counter += 1
+            return RuntimeDouble(spec, deadline, output_fixture('config-binding/base', broken=counter == 1))
+        with patch.object(module.RuntimeSession, 'open', side_effect=factory), patch(
+                'contractedge.development.method_panel_fixtures.PanelRunner.observe', side_effect=AssertionError('host fallback forbidden')):
+            row = run_cell('config-binding/base', mode, tmp_path / mode, runtime_config=RUNTIME)
+>       assert counter == 2
+E       assert 1 == 2
+
+tests/test_isolated_method_panel.py:234: AssertionError
+___ test_postedit_incomplete_runtime_restores_incumbent_in_production_entry ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_postedit_incomplete_runti0')
+
+    def test_postedit_incomplete_runtime_restores_incumbent_in_production_entry(tmp_path):
+        counter = 0
+        def factory(spec, deadline):
+            nonlocal counter
+            counter += 1
+            return RuntimeDouble(spec, deadline, output_fixture('config-binding/base', broken=counter == 1),
+                close_status='CLOSED' if counter == 1 else 'INFRASTRUCTURE_ERROR')
+        with patch.object(module.RuntimeSession, 'open', side_effect=factory):
+            row = run_cell('config-binding/base', 'direct', tmp_path / 'failure', runtime_config=RUNTIME)
+>       assert row['broken_isolation_complete']
+E       assert False
+
+tests/test_isolated_method_panel.py:249: AssertionError
+________ test_production_mode_dispatches_only_its_own_real_stages[full] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_production_mode_dispatche0')
+mode = 'full'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_production_mode_dispatches_only_its_own_real_stages(tmp_path, mode):
+        row = run_cell('config-binding/base', mode, tmp_path / mode)
+>       assert row['status'] == 'PUBLIC_REVIEW_COMPLETE'
+E       AssertionError: assert 'INFRASTRUCTURE_ERROR' == 'PUBLIC_REVIEW_COMPLETE'
+E         
+E         - PUBLIC_REVIEW_COMPLETE
+E         + INFRASTRUCTURE_ERROR
+
+tests/test_method_modes_panel.py:31: AssertionError
+__ test_production_mode_dispatches_only_its_own_real_stages[without_relation] __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_production_mode_dispatche1')
+mode = 'without_relation'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_production_mode_dispatches_only_its_own_real_stages(tmp_path, mode):
+        row = run_cell('config-binding/base', mode, tmp_path / mode)
+>       assert row['status'] == 'PUBLIC_REVIEW_COMPLETE'
+E       AssertionError: assert 'INFRASTRUCTURE_ERROR' == 'PUBLIC_REVIEW_COMPLETE'
+E         
+E         - PUBLIC_REVIEW_COMPLETE
+E         + INFRASTRUCTURE_ERROR
+
+tests/test_method_modes_panel.py:31: AssertionError
+_ test_production_mode_dispatches_only_its_own_real_stages[without_changeset] __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_production_mode_dispatche2')
+mode = 'without_changeset'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_production_mode_dispatches_only_its_own_real_stages(tmp_path, mode):
+        row = run_cell('config-binding/base', mode, tmp_path / mode)
+>       assert row['status'] == 'PUBLIC_REVIEW_COMPLETE'
+E       AssertionError: assert 'INFRASTRUCTURE_ERROR' == 'PUBLIC_REVIEW_COMPLETE'
+E         
+E         - PUBLIC_REVIEW_COMPLETE
+E         + INFRASTRUCTURE_ERROR
+
+tests/test_method_modes_panel.py:31: AssertionError
+_______ test_production_mode_dispatches_only_its_own_real_stages[direct] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_production_mode_dispatche3')
+mode = 'direct'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_production_mode_dispatches_only_its_own_real_stages(tmp_path, mode):
+        row = run_cell('config-binding/base', mode, tmp_path / mode)
+>       assert row['status'] == 'PUBLIC_REVIEW_COMPLETE'
+E       AssertionError: assert 'INFRASTRUCTURE_ERROR' == 'PUBLIC_REVIEW_COMPLETE'
+E         
+E         - PUBLIC_REVIEW_COMPLETE
+E         + INFRASTRUCTURE_ERROR
+
+tests/test_method_modes_panel.py:31: AssertionError
+___ test_fixed_public_profile_cannot_be_weakened_by_a_model_plan[drop_check] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_fixed_public_profile_cann0')
+corruption = 'drop_check'
+
+    @pytest.mark.parametrize('corruption', ['drop_check', 'stale', 'alter_spec'])
+    def test_fixed_public_profile_cannot_be_weakened_by_a_model_plan(tmp_path, corruption):
+        public = freeze_panel_case('config-binding/base', tmp_path)
+        runner = PanelRunner(public, 'config-binding/base'); workspace = tmp_path / 'workspace'
+        runner.prepare(runner.case, workspace, tmp_path / 'prepare')
+>       observed = runner.observe(workspace, tmp_path / 'observe')
+
+tests/test_method_modes_panel.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/development/method_panel_fixtures.py:623: in observe
+    if not enforce_requirement_profile({'decision': 'UNKNOWN'}, report)['requirement_profile_validation']['binding_valid']:
+src/contractedge/development/method_panel_fixtures.py:554: in enforce_requirement_profile
+    fixed_checks = [{'id': check['id'], 'status': check['status'],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7f26f478fa60>
+
+    fixed_checks = [{'id': check['id'], 'status': check['status'],
+                     'rationale': 'Independent fixed public requirement predicate: ' + check['statement'],
+                     'evidence': [{'observation_id': 'OBS-' + check['id'],
+>                                  'quote': json.dumps(_record_body(check), sort_keys=True)}]}
+                    for check in checks] if valid else []
+E   TypeError: _record_body() missing 1 required positional argument: 'members'
+
+src/contractedge/development/method_panel_fixtures.py:557: TypeError
+_____ test_fixed_public_profile_cannot_be_weakened_by_a_model_plan[stale] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_fixed_public_profile_cann1')
+corruption = 'stale'
+
+    @pytest.mark.parametrize('corruption', ['drop_check', 'stale', 'alter_spec'])
+    def test_fixed_public_profile_cannot_be_weakened_by_a_model_plan(tmp_path, corruption):
+        public = freeze_panel_case('config-binding/base', tmp_path)
+        runner = PanelRunner(public, 'config-binding/base'); workspace = tmp_path / 'workspace'
+        runner.prepare(runner.case, workspace, tmp_path / 'prepare')
+>       observed = runner.observe(workspace, tmp_path / 'observe')
+
+tests/test_method_modes_panel.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/development/method_panel_fixtures.py:623: in observe
+    if not enforce_requirement_profile({'decision': 'UNKNOWN'}, report)['requirement_profile_validation']['binding_valid']:
+src/contractedge/development/method_panel_fixtures.py:554: in enforce_requirement_profile
+    fixed_checks = [{'id': check['id'], 'status': check['status'],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7f26f45e8520>
+
+    fixed_checks = [{'id': check['id'], 'status': check['status'],
+                     'rationale': 'Independent fixed public requirement predicate: ' + check['statement'],
+                     'evidence': [{'observation_id': 'OBS-' + check['id'],
+>                                  'quote': json.dumps(_record_body(check), sort_keys=True)}]}
+                    for check in checks] if valid else []
+E   TypeError: _record_body() missing 1 required positional argument: 'members'
+
+src/contractedge/development/method_panel_fixtures.py:557: TypeError
+___ test_fixed_public_profile_cannot_be_weakened_by_a_model_plan[alter_spec] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_fixed_public_profile_cann2')
+corruption = 'alter_spec'
+
+    @pytest.mark.parametrize('corruption', ['drop_check', 'stale', 'alter_spec'])
+    def test_fixed_public_profile_cannot_be_weakened_by_a_model_plan(tmp_path, corruption):
+        public = freeze_panel_case('config-binding/base', tmp_path)
+        runner = PanelRunner(public, 'config-binding/base'); workspace = tmp_path / 'workspace'
+        runner.prepare(runner.case, workspace, tmp_path / 'prepare')
+>       observed = runner.observe(workspace, tmp_path / 'observe')
+
+tests/test_method_modes_panel.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/development/method_panel_fixtures.py:623: in observe
+    if not enforce_requirement_profile({'decision': 'UNKNOWN'}, report)['requirement_profile_validation']['binding_valid']:
+src/contractedge/development/method_panel_fixtures.py:554: in enforce_requirement_profile
+    fixed_checks = [{'id': check['id'], 'status': check['status'],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7f26f366cd30>
+
+    fixed_checks = [{'id': check['id'], 'status': check['status'],
+                     'rationale': 'Independent fixed public requirement predicate: ' + check['statement'],
+                     'evidence': [{'observation_id': 'OBS-' + check['id'],
+>                                  'quote': json.dumps(_record_body(check), sort_keys=True)}]}
+                    for check in checks] if valid else []
+E   TypeError: _record_body() missing 1 required positional argument: 'members'
+
+src/contractedge/development/method_panel_fixtures.py:557: TypeError
+____________ test_default_full_matches_explicit_full_request_bytes _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_default_full_matches_expl0')
+
+    def test_default_full_matches_explicit_full_request_bytes(tmp_path):
+        requests = []
+        for explicit in (False, True):
+            root = tmp_path / str(explicit); root.mkdir()
+            public = freeze_panel_case('config-binding/base', root)
+            runner = PanelRunner(public, 'config-binding/base'); provider = PanelProvider('config-binding/base', 'full', runner)
+            config = panel_config('full'); config['run_id'] = 'd2-legacy-full-equivalence'
+            if not explicit:
+                config.pop('method_mode')
+            report = repair_case(public, root / 'unused-tools', runner.case, root / 'repair', provider,
+                public_demo.count_tokens, config, public_runner=runner)
+>           assert report['status'] == 'PUBLIC_REVIEW_COMPLETE'
+E           AssertionError: assert 'INFRASTRUCTURE_ERROR' == 'PUBLIC_REVIEW_COMPLETE'
+E             
+E             - PUBLIC_REVIEW_COMPLETE
+E             + INFRASTRUCTURE_ERROR
+
+tests/test_method_modes_panel.py:196: AssertionError
+______ test_separate_feedback_control_preserves_removed_stage_zero_calls _______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_separate_feedback_control0')
+
+    def test_separate_feedback_control_preserves_removed_stage_zero_calls(tmp_path):
+        from contractedge.development.method_panel import run_feedback_study
+        rows = run_feedback_study(tmp_path / 'feedback')
+        for row in rows:
+>           assert row['round_count'] == 2 and row['removed_stage_calls_zero']
+E           assert (0 == 2)
+
+tests/test_method_modes_panel.py:213: AssertionError
+_ test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once[full] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_every_mode_rejects_other_0')
+mode = 'full'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once(tmp_path, mode):
+        public = freeze_panel_case('config-binding/base', tmp_path)
+        runner = PanelRunner(public, 'config-binding/base')
+        config = panel_config(mode)
+        script = tmp_path / 'interrupt.py'; script.write_text(CHILD)
+        result = subprocess.run([sys.executable, '-B', str(script), str(tmp_path), mode, json.dumps(config)],
+            capture_output=True, text=True, timeout=60)
+>       assert result.returncode == 73, result.stderr + result.stdout
+E       AssertionError: 
+E       assert 0 == 73
+E        +  where 0 = CompletedProcess(args=['/home/xhj/contractedge-system/.venv-dev/bin/python', '-B', '/tmp/pytest-of-xhj/pytest-473/test...x_format_retries": 0, "schema_in_prompt": true, "candidate_guard_enabled": true}'], returncode=0, stdout='', stderr='').returncode
+
+tests/test_method_mode_trial_recovery.py:41: AssertionError
+_ test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once[without_relation] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_every_mode_rejects_other_1')
+mode = 'without_relation'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once(tmp_path, mode):
+        public = freeze_panel_case('config-binding/base', tmp_path)
+        runner = PanelRunner(public, 'config-binding/base')
+        config = panel_config(mode)
+        script = tmp_path / 'interrupt.py'; script.write_text(CHILD)
+        result = subprocess.run([sys.executable, '-B', str(script), str(tmp_path), mode, json.dumps(config)],
+            capture_output=True, text=True, timeout=60)
+>       assert result.returncode == 73, result.stderr + result.stdout
+E       AssertionError: 
+E       assert 0 == 73
+E        +  where 0 = CompletedProcess(args=['/home/xhj/contractedge-system/.venv-dev/bin/python', '-B', '/tmp/pytest-of-xhj/pytest-473/test...x_format_retries": 0, "schema_in_prompt": true, "candidate_guard_enabled": true}'], returncode=0, stdout='', stderr='').returncode
+
+tests/test_method_mode_trial_recovery.py:41: AssertionError
+_ test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once[without_changeset] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_every_mode_rejects_other_2')
+mode = 'without_changeset'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once(tmp_path, mode):
+        public = freeze_panel_case('config-binding/base', tmp_path)
+        runner = PanelRunner(public, 'config-binding/base')
+        config = panel_config(mode)
+        script = tmp_path / 'interrupt.py'; script.write_text(CHILD)
+        result = subprocess.run([sys.executable, '-B', str(script), str(tmp_path), mode, json.dumps(config)],
+            capture_output=True, text=True, timeout=60)
+>       assert result.returncode == 73, result.stderr + result.stdout
+E       AssertionError: 
+E       assert 0 == 73
+E        +  where 0 = CompletedProcess(args=['/home/xhj/contractedge-system/.venv-dev/bin/python', '-B', '/tmp/pytest-of-xhj/pytest-473/test...x_format_retries": 0, "schema_in_prompt": true, "candidate_guard_enabled": true}'], returncode=0, stdout='', stderr='').returncode
+
+tests/test_method_mode_trial_recovery.py:41: AssertionError
+_ test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once[direct] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-473/test_every_mode_rejects_other_3')
+mode = 'direct'
+
+    @pytest.mark.parametrize('mode', MODES)
+    def test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once(tmp_path, mode):
+        public = freeze_panel_case('config-binding/base', tmp_path)
+        runner = PanelRunner(public, 'config-binding/base')
+        config = panel_config(mode)
+        script = tmp_path / 'interrupt.py'; script.write_text(CHILD)
+        result = subprocess.run([sys.executable, '-B', str(script), str(tmp_path), mode, json.dumps(config)],
+            capture_output=True, text=True, timeout=60)
+>       assert result.returncode == 73, result.stderr + result.stdout
+E       AssertionError: 
+E       assert 0 == 73
+E        +  where 0 = CompletedProcess(args=['/home/xhj/contractedge-system/.venv-dev/bin/python', '-B', '/tmp/pytest-of-xhj/pytest-473/test...x_format_retries": 0, "schema_in_prompt": true, "candidate_guard_enabled": true}'], returncode=0, stdout='', stderr='').returncode
+
+tests/test_method_mode_trial_recovery.py:41: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_isolated_method_panel.py::test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[config-binding/base]
+FAILED tests/test_isolated_method_panel.py::test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[config-binding/exception-guard]
+FAILED tests/test_isolated_method_panel.py::test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[two-consumers/base]
+FAILED tests/test_isolated_method_panel.py::test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[two-consumers/preserve-one]
+FAILED tests/test_isolated_method_panel.py::test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[reload-state/base]
+FAILED tests/test_isolated_method_panel.py::test_all_six_profiles_use_exact_checker_and_two_distinct_runtime_roles[reload-state/rejected-reload]
+FAILED tests/test_isolated_method_panel.py::test_broken_target_fail_and_all_fixed_preservation_states_are_checked[config-binding/base]
+FAILED tests/test_isolated_method_panel.py::test_broken_target_fail_and_all_fixed_preservation_states_are_checked[config-binding/exception-guard]
+FAILED tests/test_isolated_method_panel.py::test_broken_target_fail_and_all_fixed_preservation_states_are_checked[two-consumers/base]
+FAILED tests/test_isolated_method_panel.py::test_broken_target_fail_and_all_fixed_preservation_states_are_checked[two-consumers/preserve-one]
+FAILED tests/test_isolated_method_panel.py::test_broken_target_fail_and_all_fixed_preservation_states_are_checked[reload-state/base]
+FAILED tests/test_isolated_method_panel.py::test_broken_target_fail_and_all_fixed_preservation_states_are_checked[reload-state/rejected-reload]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[drop-check]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[stale]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[wrong-input]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[old-profile]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[wrong-invocation]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[truncated]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[unverified]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[missing-kernel]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[bad-mount]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[candidate-cleanup]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[observer-cleanup]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[close-failed]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[changed-close-run]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[changed-resources]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[wrong-checker-sha]
+FAILED tests/test_isolated_method_panel.py::test_profile_runtime_and_identity_corruption_cannot_certify_isolation[oversized-output]
+FAILED tests/test_isolated_method_panel.py::test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner[full]
+FAILED tests/test_isolated_method_panel.py::test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner[without_relation]
+FAILED tests/test_isolated_method_panel.py::test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner[without_changeset]
+FAILED tests/test_isolated_method_panel.py::test_production_four_mode_bridge_with_runtime_double_never_uses_host_runner[direct]
+FAILED tests/test_isolated_method_panel.py::test_postedit_incomplete_runtime_restores_incumbent_in_production_entry
+FAILED tests/test_method_modes_panel.py::test_production_mode_dispatches_only_its_own_real_stages[full]
+FAILED tests/test_method_modes_panel.py::test_production_mode_dispatches_only_its_own_real_stages[without_relation]
+FAILED tests/test_method_modes_panel.py::test_production_mode_dispatches_only_its_own_real_stages[without_changeset]
+FAILED tests/test_method_modes_panel.py::test_production_mode_dispatches_only_its_own_real_stages[direct]
+FAILED tests/test_method_modes_panel.py::test_fixed_public_profile_cannot_be_weakened_by_a_model_plan[drop_check]
+FAILED tests/test_method_modes_panel.py::test_fixed_public_profile_cannot_be_weakened_by_a_model_plan[stale]
+FAILED tests/test_method_modes_panel.py::test_fixed_public_profile_cannot_be_weakened_by_a_model_plan[alter_spec]
+FAILED tests/test_method_modes_panel.py::test_default_full_matches_explicit_full_request_bytes
+FAILED tests/test_method_modes_panel.py::test_separate_feedback_control_preserves_removed_stage_zero_calls
+FAILED tests/test_method_mode_trial_recovery.py::test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once[full]
+FAILED tests/test_method_mode_trial_recovery.py::test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once[without_relation]
+FAILED tests/test_method_mode_trial_recovery.py::test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once[without_changeset]
+FAILED tests/test_method_mode_trial_recovery.py::test_every_mode_rejects_other_modes_then_consumes_its_own_received_bytes_once[direct]
+46 failed, 31 passed in 11.20s

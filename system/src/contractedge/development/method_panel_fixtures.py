@@ -30,6 +30,7 @@ from contractedge.source.snapshot import compute_snapshot
 MODES = ('full', 'without_relation', 'without_changeset', 'direct')
 PROBE_ID = 'contractedge-d2-requirement-panel-v1'
 SCOPE = 'Finite published process outputs; no hidden or internal-state claim.'
+SCENARIO = 'public-requirement-panel'
 BOUNDARY = ('Host synthetic-only developer panel. Separate Python candidate and '
             'observer processes; no OS filesystem or network sandbox.')
 
@@ -398,8 +399,15 @@ def check_capabilities(case_id):
     case = case_definition(case_id)
     return {'schema_version': 'ce.public_process_check_capabilities.v1', 'probe_id': PROBE_ID,
             'observer_sha256': hashlib.sha256(OBSERVER.encode()).hexdigest(),
-            'checks': [{'id': PROBE_ID + ':' + c['id'], 'statement': c['statement'], 'scope': SCOPE}
+            'checks': [{'id': PROBE_ID + ':' + c['id'], 'statement': c['statement'], 'scope': SCOPE,
+                        'scenario': SCENARIO, 'scenario_members': _scenario_members(case, c)}
                        for c in case['checks']]}
+
+
+def _scenario_members(case, check):
+    if check['assertions'] == 'stable':
+        return [s['id'] for s in case['scenarios']]
+    return list(dict.fromkeys(a['scenario_id'] for a in check['assertions']))
 
 
 def freeze_panel_case(case_id, output, *, runtime='host'):
@@ -439,8 +447,9 @@ def freeze_panel_case(case_id, output, *, runtime='host'):
     return frozen / 'public'
 
 
-def _record_body(check):
+def _record_body(check, members):
     return {'probe_id': PROBE_ID, 'id': check['id'], 'status': check['status'],
+            'scenario': SCENARIO, 'scenario_members': members,
             'statement': check['statement'], 'observed': {
                 'actual': check['actual'], 'expected': check['expected'], 'scope': SCOPE}}
 
@@ -450,9 +459,12 @@ def requirement_observation(case_id, snapshot_id, input_digest, checks, *, locat
     case = case_definition(case_id)
     observations = []
     observer_sha = hashlib.sha256(OBSERVER.encode()).hexdigest()
+    definitions = {c['id']: c for c in case['checks']}
     for check in checks:
-        excerpt = json.dumps(_record_body(check), sort_keys=True)
+        members = _scenario_members(case, definitions[check['id']])
+        excerpt = json.dumps(_record_body(check, members), sort_keys=True)
         observations.append({'id': 'OBS-' + check['id'], 'snapshot_id': snapshot_id,
+            'scenario': SCENARIO,
             'kind': 'PUBLIC_OBSERVATION', 'evidence_kind': 'PUBLIC_BEHAVIOR',
             'locator': {'path': str(locator_path), 'field': check['id'], 'truncated': False, 'whole_file_read': True},
             'content_digest': hashlib.sha256(excerpt.encode()).hexdigest(), 'excerpt': excerpt,
@@ -507,6 +519,7 @@ def enforce_requirement_profile(review, observation):
                  and all(isinstance(r, Mapping) for r in records)
                  and [r.get('id') for r in records] == ['OBS-' + c['id'] for c in checks])
         for definition, check, record in zip(case['checks'], checks, records if valid else []):
+            members = _scenario_members(case, definition)
             excerpt = record.get('excerpt')
             try:
                 parsed = json.loads(excerpt)
@@ -516,7 +529,8 @@ def enforce_requirement_profile(review, observation):
             locator = record.get('locator')
             valid = (check.get('statement') == definition['statement'] and check.get('kind') == definition['kind']
                 and check.get('scope') == SCOPE and isinstance(check.get('actual'), list)
-                and isinstance(check.get('expected'), list) and parsed == _record_body(check)
+                and isinstance(check.get('expected'), list) and parsed == _record_body(check, members)
+                and record.get('scenario') == SCENARIO
                 and record.get('snapshot_id') == observation['snapshot_id']
                 and record.get('evidence_kind') == 'PUBLIC_BEHAVIOR' and record.get('structured_complete') is True
                 and hashlib.sha256(excerpt.encode()).hexdigest() == record.get('content_digest')
@@ -540,8 +554,8 @@ def enforce_requirement_profile(review, observation):
     fixed_checks = [{'id': check['id'], 'status': check['status'],
                      'rationale': 'Independent fixed public requirement predicate: ' + check['statement'],
                      'evidence': [{'observation_id': 'OBS-' + check['id'],
-                                   'quote': json.dumps(_record_body(check), sort_keys=True)}]}
-                    for check in checks] if valid else []
+                                   'quote': record['excerpt']}]}
+                    for check, record in zip(checks, records)] if valid else []
     return {**review, 'decision': final,
         'public_requirement_checks': fixed_checks,
         'requirement_profile_valid': bool(valid), 'requirement_profile_decision': decision,

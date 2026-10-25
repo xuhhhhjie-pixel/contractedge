@@ -6,6 +6,7 @@ from contractedge.contracts.models import DiagnosisPacket, Snapshot, ValidationR
 from contractedge.contracts.validation import validate_changeset
 from contractedge.contracts.permissions import target_permission_error
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
+from contractedge.contracts.public_checks import public_check_catalog
 
 
 def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: DiagnosisPacket,
@@ -18,6 +19,7 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
     issues = list(result.errors)
     try:
         consumer = resolve_execution_capabilities(capabilities)
+        check_catalog = public_check_catalog(consumer)
     except ValueError as exc:
         issues.append(ValidationIssue('INVALID_EXECUTION_CAPABILITIES', 'public_execution_capabilities', str(exc)))
         return ValidationResult(False, tuple(issues), result.value)
@@ -55,12 +57,24 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
         if error:
             issues.append(ValidationIssue(error, f'changes[{index}].target',
                 'Source evidence is read-only unless public edit policy permits this target: ' + path))
+    for kind in ('postconditions','preserve_constraints','open_obligations'):
+        for i,item in enumerate(payload.get(kind, [])):
+            refs = item.get('behavior_check_refs', [])
+            path = kind + f'[{i}]'
+            if refs and (item.get('check_coverage') not in {'ALL_OF','NECESSARY_ONLY','SUPPORTING'} or not item.get('coverage_rationale')):
+                issues.append(ValidationIssue('CHECK_COVERAGE_REQUIRED', path,
+                    'Probe bindings must explicitly declare necessary/sufficient scope and rationale'))
+            # Legacy standalone validators may have no capability declaration.
+            # Actual declared contexts must not accept invented check IDs.
+            if 'registered_public_checks' in consumer or 'method_behavior_probes' in consumer:
+                for ref in refs:
+                    definition = check_catalog.get(ref)
+                    if definition is None:
+                        issues.append(ValidationIssue('UNREGISTERED_BEHAVIOR_CHECK', path, 'Unknown public check: ' + ref))
+                    elif definition['scenario'] is not None and (item.get('verification_scope') or {}).get('scenario') != definition['scenario']:
+                        issues.append(ValidationIssue('BEHAVIOR_CHECK_SCENARIO_MISMATCH', path,
+                            'Binding ' + ref + ' requires declared scenario ' + definition['scenario']))
     if diagnosis.raw.get('requirement_spec',{}).get('traceability_required'):
-        for kind in ('postconditions','preserve_constraints','open_obligations'):
-            for i,item in enumerate(payload.get(kind, [])):
-                if item.get('behavior_check_refs') and (item.get('check_coverage') not in {'ALL_OF','NECESSARY_ONLY','SUPPORTING'} or not item.get('coverage_rationale')):
-                    issues.append(ValidationIssue('CHECK_COVERAGE_REQUIRED',kind+f'[{i}]',
-                        'New probe bindings must explicitly declare necessary/sufficient scope and rationale'))
         if payload.get('preserve_constraints') and 'preservation_impact' not in payload:
             issues.append(ValidationIssue('PRESERVATION_IMPACT_INCOMPLETE','preservation_impact',
                 'New traceability plans must account for all preservation impacts'))

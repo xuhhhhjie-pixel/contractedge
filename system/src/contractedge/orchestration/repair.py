@@ -19,6 +19,7 @@ from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset
 from contractedge.changeset.prompt import build_changeset_request
 from contractedge.changeset.validate import validate_semantic_changeset
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
+from contractedge.contracts.public_checks import public_check_catalog
 from contractedge.execution.runtime_preflight import check_runtime, scoped_runtime_environment
 from contractedge.contracts.models import RunContext
 from contractedge.contracts.validation import canonical_digest, parse_method_input, validate_run_trace
@@ -122,6 +123,14 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
         current = resolve_execution_capabilities(capabilities)
         if any(recorded[key] != current[key] for key in ('consumer_id', 'supported_operations')):
             raise ValueError('Ready trace execution capabilities differ from current consumer')
+        public_check_catalog(recorded)
+        public_check_catalog(current)
+        # READY/revision cannot authorize a check removed or redefined since
+        # the actual planning request. Bind definitions, not only check names.
+        keys = ('registered_public_checks', 'method_behavior_probes')
+        if canonical_digest({k: recorded[k] for k in keys if k in recorded}) != canonical_digest(
+                {k: current[k] for k in keys if k in current}):
+            raise ValueError('Ready trace public check capabilities differ from current declarations')
     candidates = CandidateSet(**trace['candidate_set'])
     # Revalidate source excerpts in a resumed trace against actual current files.
     for candidate in candidates.candidates:
