@@ -1,0 +1,11 @@
+{
+  "schema_version": "ce.isolated_independent_score.v1",
+  "case_id": "RW-ALERTMANAGER-4705",
+  "status": "SEMANTIC_FAIL",
+  "native_score_status": "SEMANTIC_FAIL",
+  "candidate_selection_frozen": true,
+  "model_calls_added": 0,
+  "score_feedback_to_method": false,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

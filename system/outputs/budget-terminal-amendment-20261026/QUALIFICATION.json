@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "full_tests": 1833,
+  "subtests": 91,
+  "actual_isolated_demos_enabled": true,
+  "public_sandbox_receipt": "/home/xhj/contractedge-budget-terminal-qualification-20261026/candidate/.isolated-b3156e92558348369eb3b959d629b1e2/receipt.json",
+  "model_calls_added": 0,
+  "source_unchanged": true,
+  "formal_ready": false
+}

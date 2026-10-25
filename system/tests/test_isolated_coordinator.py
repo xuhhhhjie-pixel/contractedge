@@ -122,7 +122,7 @@ def test_public_tool_or_release_drift_invalidates_paid_registration(tmp_path):
 @pytest.mark.parametrize('status,want',[('PUBLIC_EXECUTION_COMPLETE','METHOD_RESULT'),
     ('EVIDENCE_GAP','METHOD_RESULT'),
     ('INVALID_PLAN','METHOD_RESULT'),('STOPPED_UNCERTAIN','METHOD_RESULT'),
-    ('INFRASTRUCTURE_ERROR','INFRASTRUCTURE_STOP'),('BUDGET_EXHAUSTED','INFRASTRUCTURE_STOP'),
+    ('INFRASTRUCTURE_ERROR','INFRASTRUCTURE_STOP'),('BUDGET_EXHAUSTED','METHOD_RESULT'),
     ('RECOVERY_FAILED','INFRASTRUCTURE_STOP')])
 def test_queue_classifies_method_failure_separately_from_infrastructure_stop(tmp_path,status,want):
     from types import SimpleNamespace
