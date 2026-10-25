@@ -66,3 +66,17 @@ func ProcessItem() { compare(CertificateRequest, obj.NextPrivateKeySecretName) }
     units,_=extract_gap_extension_units(snap,['docs.md'],seeds,[dict(id='G',locator_hint=dict(
         path='worker',search_term='NextPrivateKeySecretName CertificateRequest CSR compare'))],max_units=1)
     assert [u.get('symbol') for u in units]==['ProcessItem']
+
+
+@pytest.mark.parametrize('suffix,text',[
+    ('.go','package p\nfunc Constructor() { use(IncomingRequestToken) }\nfunc ProcessRecord() { compare(IncomingRequestToken, CurrentKeySecretName) }\n'),
+    ('.py','def constructor():\n    use(IncomingRequestToken)\ndef ProcessRecord():\n    compare(IncomingRequestToken, CurrentKeySecretName)\n'),
+    ('.ts','function constructor() { use(IncomingRequestToken); }\nfunction ProcessRecord() { compare(IncomingRequestToken, CurrentKeySecretName); }\n'),
+])
+def test_pre_cap_query_coverage_works_across_supported_source_languages(tmp_path,suffix,text):
+    (tmp_path/'docs.md').write_text('Background.\n')
+    (tmp_path/'worker').mkdir();(tmp_path/('worker/consumer'+suffix)).write_text(text)
+    snapshot=compute_snapshot(tmp_path);seeds=extract_units(snapshot,{'seed_paths':['docs.md']})
+    units,_=extract_gap_extension_units(snapshot,['docs.md'],seeds,[dict(id='G',locator_hint=dict(
+        path='worker',search_term='CurrentKeySecretName IncomingRequestToken comparison'))],max_units=1)
+    assert [u.get('symbol') for u in units]==['ProcessRecord']

@@ -1,3 +1,5 @@
+> **2026-10-26当前开发候选0.6.49：** 查询与候选池截断修复已零调用回放，尚待本版工程资格和真实验证；formal_ready=false。前版工程通过不等于本版效果通过。当前入口为 CURRENT_STATUS.json 及 outputs/gap-query-tokenization-20261026/COMPLETION_AUDIT.md。下列旧报告按原版本历史范围保留。
+
 > 本工作树为0.6.46离线优化候选，尚未进行同版真实模型验证。正在执行的原固定46槽仍使用0.6.45；不得承接其成绩。当前正式准入为false。
 
 > 当前协议修复进度见[0.6.45审计](outputs/public-check-protocol-20261025/COMPLETION_AUDIT.md)；0.6.44历史成绩保留原口径。

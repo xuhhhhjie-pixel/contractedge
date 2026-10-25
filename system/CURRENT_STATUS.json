@@ -3294,13 +3294,13 @@
     }
   },
   "current_development": {
-    "snapshot": "docs/development/unified-branch-feedback-v048-20261026-v2.snapshot.json",
+    "snapshot": "docs/development/gap-query-tokenization-v049-20261026-v1.snapshot.json",
     "snapshot_id": "bounded-source-delivery-v046-20261026-v6",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V049_QUERY_AND_PRECAP_DELIVERY_REPLAY_PASS_UNFROZEN",
+    "status": "V049_QUERY_AND_CROSS_STAGE_REPLAY_PASS_FULL_PENDING",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "DIAGNOSTIC_IN_PROGRESS_NO_FIXED46_EFFECTIVENESS",
-    "source_sha256": "707ac9445d6cc422329d165ca3e7d8d5a78db6ae89aa4cca3f11a96a9338de9d",
+    "source_sha256": "cdff0f451de34608b0b765a3109c13750f95bbd81e5afed880514bf38d6ff580",
     "engineering": "1832_PASS_91_SUBTESTS_RUNTIME8_AND_PUBLIC_SANDBOX_PASS",
     "promotion": "BLOCKED_BY_TWO_CONFIRMED_BOUNDARY_FINDINGS",
     "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source-v046-v6-20261026/registration.json",
