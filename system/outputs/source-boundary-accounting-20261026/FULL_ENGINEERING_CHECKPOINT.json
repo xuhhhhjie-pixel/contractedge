@@ -1,0 +1,9 @@
+{
+  "status": "FULL_ENGINEERING_NOT_QUALIFIED",
+  "failed": 1,
+  "passed": 1845,
+  "subtests": 91,
+  "formal_ready": false,
+  "reason": "Legacy top1 retrieval inherited strict pre-rerank retention without its feature gate; fixed in separate048v2, old result retained",
+  "log_sha256": "0b8eee8756bf0f422a2f9b2a17a09c053943771f0317218a2261493f67f2e9eb"
+}

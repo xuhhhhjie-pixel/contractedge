@@ -1,0 +1,72 @@
+....................................................... [  2%]
+........................................................................ [  6%]
+........................................................................ [ 10%]
+..................................................................... [ 14%]
+........................................................................ [ 18%]
+................................................................. [ 21%]
+....................................................... [ 24%]
+..................................................................... [ 28%]
+........................................................................ [ 32%]
+........................................................................ [ 36%]
+........................................................................ [ 40%]
+........................................................................ [ 44%]
+...................................................................... [ 48%]
+........................................................................ [ 51%]
+...........F............................................................ [ 55%]
+........................................................................ [ 59%]
+........................................................................ [ 63%]
+.............................................................. [ 67%]
+........................................................................ [ 70%]
+.................................................................................................................... [ 77%]
+........................................................................ [ 81%]
+...................................................................... [ 84%]
+........................................................................ [ 88%]
+........................................................................ [ 92%]
+...................................................................... [ 96%]
+.................................................................        [100%]
+=================================== FAILURES ===================================
+_ OrchestrationTests.test_evidence_gap_searches_a_query_matched_direct_source_neighbor _
+
+self = <tests.test_orchestration.OrchestrationTests testMethod=test_evidence_gap_searches_a_query_matched_direct_source_neighbor>
+
+    def test_evidence_gap_searches_a_query_matched_direct_source_neighbor(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            controller = root / "src/controller.go"
+            service = root / "src/service.go"
+            controller.parent.mkdir()
+            controller.write_text("package app\nfunc Reconcile() { ensureService() }\n", encoding="utf-8")
+            service.write_text("package app\nfunc ensureService() { buildService() }\n", encoding="utf-8")
+            PipelineFixtureProvider._snapshot_digests = {
+                "src/service.go": hashlib.sha256(service.read_bytes()).hexdigest()}
+            method = valid_method_input()
+            method["public_observable_text"] = "The controller does not reach ensureService."
+            method["scope_hints"] = [{"kind": "path", "value": "src/controller.go",
+                                      "raw_text": "src/controller.go", "origin_ref": "scope"}]
+            method["initial_snapshot_id"] = compute_snapshot(root).snapshot_id
+            evidence_payload = {"id": "PUB1", "kind": "PUBLIC_OBSERVATION",
+                                "excerpt": method["public_observable_text"], "origin": "fixture"}
+            evidence_bytes = (json.dumps(evidence_payload, sort_keys=True, indent=2) + "\n").encode()
+            method["public_evidence"] = [{"id": "PUB1", "snapshot_id": method["initial_snapshot_id"],
+                "kind": "PUBLIC_OBSERVATION", "locator": {"path": "evidence/PUB1.json"},
+                "content_digest": hashlib.sha256(evidence_bytes).hexdigest(),
+                "excerpt": method["public_observable_text"], "origin": "fixture"}]
+            method.pop("input_digest", None)
+            method["input_digest"] = canonical_digest(method)
+            provider = NeighborExtensionProvider()
+    
+            trace = run_front_half(method, root, provider,
+                {"run_id": "run-neighbor-extension", "model": {"model": "fixture"},
+                 "top_n": 1, "max_units": 8, "max_extension_files": 0,
+                 "max_context_tokens": 5000}, token_counter=lambda text: len(text.split()))
+    
+>       self.assertEqual(trace.status, "READY", f"{trace.errors}; selected={[u['path'] for u in trace.candidate_set.candidates]}; plan={trace.changeset}")
+E       AssertionError: 'BUDGET_EXHAUSTED' != 'READY'
+E       - BUDGET_EXHAUSTED
+E       + READY
+E        : ('ChangeSet request exceeds the total token or time budget',); selected=['src/controller.go']; plan={'schema_version': 'ce.semantic_changeset.v1_1', 'run_id': 'run-neighbor-extension', 'snapshot_id': '493c4540e9de6f7f3a84ce3b1de33ff38164898947ff6b75a9ed7ed91ca0ea07', 'input_digest': '7e9fb6baaeec4f04076cbbb8c075e5e254e68b514c4fef48ab691538ade4d3ef', 'diagnosis_digest': '68eac28c184ee8b669a5334f299f312b6df8829d47aa513e25092fbecb08863b', 'goal': 'restore selected-name binding', 'planned_violation_ids': ['V1'], 'changes': [{'id': 'C1', 'target': {'kind': 'EXISTING', 'path': 'src/controller.go', 'locator': {'start_line': 2, 'end_line': 2}, 'unit_refs': ['U2'], 'snapshot_id': '493c4540e9de6f7f3a84ce3b1de33ff38164898947ff6b75a9ed7ed91ca0ea07', 'content_digest': 'c609595293707af5f49d1d071c41b44c29c4452bfe6431768aed8c2f4ae7231b'}, 'operation': 'MODIFY', 'semantic_action': 'bind selected name to rendered metadata.name', 'intent': 'restore the requirement relation', 'violation_refs': ['V1'], 'postcondition_refs': ['P1'], 'depends_on': []}], 'postconditions': [{'id': 'P1', 'statement': 'Rendered metadata.name equals selected name', 'requirement_refs': ['O1'], 'obligation_refs': ['A1'], 'relation_refs': ['E1'], 'planned_check': 'render and inspect output', 'check_scope': 'Helm-rendered output'}], 'preserve_constraints': [], 'open_obligations': [], 'outcome_coverage': [{'outcome_id': 'O1', 'repair_supported': ['V1'], 'preserve_required': [], 'unresolved': []}], 'status': 'READY'}
+
+tests/test_orchestration.py:692: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_orchestration.py::OrchestrationTests::test_evidence_gap_searches_a_query_matched_direct_source_neighbor
+1 failed, 1845 passed, 91 subtests passed in 464.18s (0:07:44)
