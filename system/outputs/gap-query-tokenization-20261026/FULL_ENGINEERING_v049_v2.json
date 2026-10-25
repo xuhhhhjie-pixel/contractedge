@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "tests": 1933,
+  "subtests": 91,
+  "source_sha256": "758eb3a563c18eac6ec456f6293647094d86d96ad9b750f0dce448e53bd97683",
+  "log_sha256": "3a0616eb59c3eca4367bd7c9005b788ad19ab3d48e0d4ad86202dd8ca7a7ebb3",
+  "actual_isolated_demos_enabled": true,
+  "formal_ready": false,
+  "scope": "Current frozen source regression; does not establish repair effectiveness"
+}
