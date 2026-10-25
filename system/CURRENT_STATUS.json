@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-25T13:07:35.964232+00:00",
+  "as_of": "2026-10-25T13:09:07.132930+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3294,10 +3294,10 @@
     }
   },
   "current_development": {
-    "snapshot": "docs/development/scoring-parent-amendment-v045-20261025-v1.snapshot.json",
-    "snapshot_id": "scoring-parent-amendment-v045-20261025-v1",
+    "snapshot": "docs/development/scoring-parent-amendment-v045-20261025-v2.snapshot.json",
+    "snapshot_id": "scoring-parent-amendment-v045-20261025-v2",
     "snapshot_role": "CURRENT_FROZEN_DEVELOPMENT",
-    "status": "PARENT_SCORING_FULL_PASS_FINAL_ADMISSION_PENDING",
+    "status": "PARENT_SCORING_FULL_PASS_FINAL_RUNTIME_QUALIFICATION",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "NOT_ACCEPTED",
     "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df"
