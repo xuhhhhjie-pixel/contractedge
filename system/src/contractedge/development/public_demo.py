@@ -254,7 +254,7 @@ class SyntheticExampleProvider:
             else:
                 old, new = 'secondary = "default"', 'secondary = config["selected_name"]'
             payload = {'edits': [{'change_id': 'C1', 'path': 'app.py', 'operation': 'MODIFY', 'old_text': old, 'new_text': new}]}
-        elif version == 'public-postcondition-review.v1':
+        elif version in {'public-postcondition-review.v1','public-postcondition-review.v2'}:
             records = body['public_observations']
             checks = []
             for check in body['checks']:
@@ -285,7 +285,7 @@ class SyntheticExampleProvider:
                                            ('P2', 'Disabled output retains default_name.'), ('P3', 'Mode remains stable for every public scenario.')]],
                 'preserve_constraints': [], 'open_obligations': [],
                 'outcome_coverage': [{'outcome_id': oid, 'repair_supported': ['V1'], 'preserve_required': [], 'unresolved': []}], 'status': 'READY'}
-        if (not version.startswith('diagnosis.') and version not in {'topomen-source-execution.v1', 'public-postcondition-review.v1'}
+        if (not version.startswith('diagnosis.') and version not in {'topomen-source-execution.v1', 'public-postcondition-review.v1', 'public-postcondition-review.v2'}
                 and isinstance(self.runner, IsolatedPublicExampleRunner)):
             # This synthetic provider explicitly declares its finite predicate
             # bindings. Real model responses must supply their own bindings.

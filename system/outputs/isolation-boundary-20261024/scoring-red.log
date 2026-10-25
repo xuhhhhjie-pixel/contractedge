@@ -1,0 +1,130 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+____ test_finished_score_recovers_after_parent_exit_without_rerunning_tool _____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-405/test_finished_score_recovers_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fe95cf17670>
+
+    def test_finished_score_recovers_after_parent_exit_without_rerunning_tool(tmp_path,monkeypatch):
+>       scoring=load();receipt,benchmark,out,patch=fixture(tmp_path)
+
+tests/test_isolated_scoring.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'score_isolated_method.py'
+>       assert path.is_file(),'parent-only scoring checkpoint is not implemented'
+E       AssertionError: parent-only scoring checkpoint is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-github-delivery-20261022/system/scripts/score_isolated_method.py').is_file
+
+tests/test_isolated_scoring.py:13: AssertionError
+___________ test_finalization_rejects_changed_inputs_or_score[patch] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-405/test_finalization_rejects_chan0')
+mutate = 'patch'
+
+    @pytest.mark.parametrize('mutate',['patch','score'])
+    def test_finalization_rejects_changed_inputs_or_score(tmp_path,mutate):
+>       scoring=load();receipt,benchmark,out,patch=fixture(tmp_path)
+
+tests/test_isolated_scoring.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'score_isolated_method.py'
+>       assert path.is_file(),'parent-only scoring checkpoint is not implemented'
+E       AssertionError: parent-only scoring checkpoint is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-github-delivery-20261022/system/scripts/score_isolated_method.py').is_file
+
+tests/test_isolated_scoring.py:13: AssertionError
+___________ test_finalization_rejects_changed_inputs_or_score[score] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-405/test_finalization_rejects_chan1')
+mutate = 'score'
+
+    @pytest.mark.parametrize('mutate',['patch','score'])
+    def test_finalization_rejects_changed_inputs_or_score(tmp_path,mutate):
+>       scoring=load();receipt,benchmark,out,patch=fixture(tmp_path)
+
+tests/test_isolated_scoring.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'score_isolated_method.py'
+>       assert path.is_file(),'parent-only scoring checkpoint is not implemented'
+E       AssertionError: parent-only scoring checkpoint is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-github-delivery-20261022/system/scripts/score_isolated_method.py').is_file
+
+tests/test_isolated_scoring.py:13: AssertionError
+______________ test_uncertain_score_execution_never_auto_restarts ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-405/test_uncertain_score_execution0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fe95cfbace0>
+
+    def test_uncertain_score_execution_never_auto_restarts(tmp_path,monkeypatch):
+>       scoring=load();receipt,benchmark,out,_=fixture(tmp_path)
+
+tests/test_isolated_scoring.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'score_isolated_method.py'
+>       assert path.is_file(),'parent-only scoring checkpoint is not implemented'
+E       AssertionError: parent-only scoring checkpoint is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-github-delivery-20261022/system/scripts/score_isolated_method.py').is_file
+
+tests/test_isolated_scoring.py:13: AssertionError
+_______ test_private_scoring_requires_closed_method_and_separate_output ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-405/test_private_scoring_requires_0')
+
+    def test_private_scoring_requires_closed_method_and_separate_output(tmp_path):
+>       scoring=load();receipt,benchmark,out,patch=fixture(tmp_path)
+
+tests/test_isolated_scoring.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'score_isolated_method.py'
+>       assert path.is_file(),'parent-only scoring checkpoint is not implemented'
+E       AssertionError: parent-only scoring checkpoint is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-github-delivery-20261022/system/scripts/score_isolated_method.py').is_file
+
+tests/test_isolated_scoring.py:13: AssertionError
+_____________ test_pass_json_with_failed_scorer_exit_is_not_a_pass _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-405/test_pass_json_with_failed_sco0')
+
+    def test_pass_json_with_failed_scorer_exit_is_not_a_pass(tmp_path):
+>       scoring=load();receipt,benchmark,out,_=fixture(tmp_path,exit_code=3)
+
+tests/test_isolated_scoring.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'score_isolated_method.py'
+>       assert path.is_file(),'parent-only scoring checkpoint is not implemented'
+E       AssertionError: parent-only scoring checkpoint is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-github-delivery-20261022/system/scripts/score_isolated_method.py').is_file
+
+tests/test_isolated_scoring.py:13: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_isolated_scoring.py::test_finished_score_recovers_after_parent_exit_without_rerunning_tool
+FAILED tests/test_isolated_scoring.py::test_finalization_rejects_changed_inputs_or_score[patch]
+FAILED tests/test_isolated_scoring.py::test_finalization_rejects_changed_inputs_or_score[score]
+FAILED tests/test_isolated_scoring.py::test_uncertain_score_execution_never_auto_restarts
+FAILED tests/test_isolated_scoring.py::test_private_scoring_requires_closed_method_and_separate_output
+FAILED tests/test_isolated_scoring.py::test_pass_json_with_failed_scorer_exit_is_not_a_pass
+6 failed in 0.11s

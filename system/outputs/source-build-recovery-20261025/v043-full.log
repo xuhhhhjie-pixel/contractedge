@@ -1,0 +1,374 @@
+....................................................... [  3%]
+........................................................................ [  7%]
+........................................................................ [ 11%]
+..F.................................................................. [ 15%]
+........................................................................ [ 20%]
+...............................................F................. [ 23%]
+....................................................... [ 27%]
+..................................................................... [ 31%]
+........................................................................ [ 35%]
+........................................................................ [ 39%]
+........................................................................ [ 44%]
+...................................................................... [ 48%]
+........................................................................ [ 52%]
+........................................................................ [ 56%]
+....................................................F................... [ 61%]
+.............................................................. [ 64%]
+........................................................................ [ 69%]
+........................................................................ [ 73%]
+............................................ [ 75%]
+............................FFFFFFFF.................................... [ 80%]
+...................................................................... [ 84%]
+........................................................................ [ 88%]
+........................................................................ [ 92%]
+.......................................F.............................. [ 96%]
+...................................................                      [100%]
+=================================== FAILURES ===================================
+_ CompactRenderInventory.test_complete_control_job_inventory_survives_existing_review_budget _
+
+self = <tests.test_compact_render_inventory.CompactRenderInventory testMethod=test_complete_control_job_inventory_survives_existing_review_budget>
+
+    def test_complete_control_job_inventory_survives_existing_review_budget(self):
+            report=self.replay()
+            selected=select_observations(report['observations'],'Both target Jobs and control nodeSelector',len,36000)
+            inventories=[o for o in selected if o.get('scenario')=='control' and '.render-kind-Job.json' in o['locator']['path']]
+>           self.assertEqual(len(inventories),1,'Complete control inventory must fit alongside trigger objects')
+E           AssertionError: 0 != 1 : Complete control inventory must fit alongside trigger objects
+
+tests/test_compact_render_inventory.py:36: AssertionError
+_ DiagnosisIndependentErrors.test_source_anchor_error_does_not_hide_already_present_path_error _
+
+self = <tests.test_diagnosis_error_aggregation.DiagnosisIndependentErrors testMethod=test_source_anchor_error_does_not_hide_already_present_path_error>
+
+    def test_source_anchor_error_does_not_hide_already_present_path_error(self):
+        root=Path('outputs/deepseek-final-regression-v2-20261020/cases/RW-CAND-130')
+>       front=json.load(open(root/'rounds/0/front.trace.json'))
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/deepseek-final-regression-v2-20261020/cases/RW-CAND-130/rounds/0/front.trace.json'
+
+tests/test_diagnosis_error_aggregation.py:14: FileNotFoundError
+_ ProbeProfilesV2.test_atomic_probe_records_do_not_repeat_whole_state_or_lose_failed_values _
+
+self = <tests.test_probe_profiles_v2.ProbeProfilesV2 testMethod=test_atomic_probe_records_do_not_repeat_whole_state_or_lose_failed_values>
+
+    def test_atomic_probe_records_do_not_repeat_whole_state_or_lose_failed_values(self):
+        import json
+        from contractedge.execution.probes import behavior_records
+        source=Path('outputs/final-optimization-20261020/calibration-R3-KPT-4673/probe/report.json')
+>       report=json.loads(source.read_text())
+
+tests/test_probe_profiles_v2.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('outputs/final-optimization-20261020/calibration-R3-KPT-4673/probe/report.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/final-optimization-20261020/calibration-R3-KPT-4673/probe/report.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+_ test_actual_ready_plan_with_required_delivery_metadata_reaches_consumer_preflight _
+
+    def test_actual_ready_plan_with_required_delivery_metadata_reaches_consumer_preflight():
+>       trace,method,source=saved_fixture()
+
+tests/test_ready_support_consistency.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ready_support_consistency.py:14: in saved_fixture
+    trace=json.loads((case/'rounds/0/front.trace.json').read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/rounds/0/front.trace.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/rounds/0/front.trace.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+_ test_actual_ready_plan_still_rejects_missing_or_forged_source_context[remove] _
+
+change = 'remove'
+
+    @pytest.mark.parametrize('change',['remove','tamper','weaken'])
+    def test_actual_ready_plan_still_rejects_missing_or_forged_source_context(change):
+>       trace,method,source=saved_fixture();trace=deepcopy(trace)
+
+tests/test_ready_support_consistency.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ready_support_consistency.py:14: in saved_fixture
+    trace=json.loads((case/'rounds/0/front.trace.json').read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/rounds/0/front.trace.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/rounds/0/front.trace.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+_ test_actual_ready_plan_still_rejects_missing_or_forged_source_context[tamper] _
+
+change = 'tamper'
+
+    @pytest.mark.parametrize('change',['remove','tamper','weaken'])
+    def test_actual_ready_plan_still_rejects_missing_or_forged_source_context(change):
+>       trace,method,source=saved_fixture();trace=deepcopy(trace)
+
+tests/test_ready_support_consistency.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ready_support_consistency.py:14: in saved_fixture
+    trace=json.loads((case/'rounds/0/front.trace.json').read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/rounds/0/front.trace.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/rounds/0/front.trace.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+_ test_actual_ready_plan_still_rejects_missing_or_forged_source_context[weaken] _
+
+change = 'weaken'
+
+    @pytest.mark.parametrize('change',['remove','tamper','weaken'])
+    def test_actual_ready_plan_still_rejects_missing_or_forged_source_context(change):
+>       trace,method,source=saved_fixture();trace=deepcopy(trace)
+
+tests/test_ready_support_consistency.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ready_support_consistency.py:14: in saved_fixture
+    trace=json.loads((case/'rounds/0/front.trace.json').read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/rounds/0/front.trace.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/rounds/0/front.trace.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+______ test_actual_exception_plan_passes_the_same_ready_consumer_contract ______
+
+    def test_actual_exception_plan_passes_the_same_ready_consumer_contract():
+>       trace,method,source=kopf_ready_fixture()
+
+tests/test_ready_support_consistency.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ready_support_consistency.py:41: in kopf_ready_fixture
+    trace=json.loads((case/'rounds/0/front.trace.json').read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/rounds/0/front.trace.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/rounds/0/front.trace.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+_ test_exception_prerequisite_projection_cannot_be_removed_or_forged[missing] __
+
+change = 'missing'
+
+    @pytest.mark.parametrize('change',['missing','changed_reason','wrong_source'])
+    def test_exception_prerequisite_projection_cannot_be_removed_or_forged(change):
+>       trace,method,source=kopf_ready_fixture();trace=deepcopy(trace)
+
+tests/test_ready_support_consistency.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ready_support_consistency.py:41: in kopf_ready_fixture
+    trace=json.loads((case/'rounds/0/front.trace.json').read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/rounds/0/front.trace.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/rounds/0/front.trace.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+_ test_exception_prerequisite_projection_cannot_be_removed_or_forged[changed_reason] _
+
+change = 'changed_reason'
+
+    @pytest.mark.parametrize('change',['missing','changed_reason','wrong_source'])
+    def test_exception_prerequisite_projection_cannot_be_removed_or_forged(change):
+>       trace,method,source=kopf_ready_fixture();trace=deepcopy(trace)
+
+tests/test_ready_support_consistency.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ready_support_consistency.py:41: in kopf_ready_fixture
+    trace=json.loads((case/'rounds/0/front.trace.json').read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/rounds/0/front.trace.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/rounds/0/front.trace.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+_ test_exception_prerequisite_projection_cannot_be_removed_or_forged[wrong_source] _
+
+change = 'wrong_source'
+
+    @pytest.mark.parametrize('change',['missing','changed_reason','wrong_source'])
+    def test_exception_prerequisite_projection_cannot_be_removed_or_forged(change):
+>       trace,method,source=kopf_ready_fixture();trace=deepcopy(trace)
+
+tests/test_ready_support_consistency.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ready_support_consistency.py:41: in kopf_ready_fixture
+    trace=json.loads((case/'rounds/0/front.trace.json').read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/rounds/0/front.trace.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/rounds/0/front.trace.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+_ StructuredObservationTests.test_provider_observations_are_behavior_not_deployment_claims _
+
+self = <tests.test_structured_observation_adapters.StructuredObservationTests testMethod=test_provider_observations_are_behavior_not_deployment_claims>
+
+    def test_provider_observations_are_behavior_not_deployment_claims(self):
+        original=Path('outputs/deepseek-optimized-new-development-v1-20261020/cases/R4-PROVIDER-HELM-408/rounds/0/public/raw/public-production-oci-http-transport.stdout')
+>       value=json.loads(original.read_text());records,audit=self.derive(value,case='R4-PROVIDER-HELM-408')
+
+tests/test_structured_observation_adapters.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('outputs/deepseek-optimized-new-development-v1-20261020/cases/R4-PROVIDER-HELM-408/rounds/0/public/raw/public-production-oci-http-transport.stdout')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/deepseek-optimized-new-development-v1-20261020/cases/R4-PROVIDER-HELM-408/rounds/0/public/raw/public-production-oci-http-transport.stdout'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_compact_render_inventory.py::CompactRenderInventory::test_complete_control_job_inventory_survives_existing_review_budget
+FAILED tests/test_diagnosis_error_aggregation.py::DiagnosisIndependentErrors::test_source_anchor_error_does_not_hide_already_present_path_error
+FAILED tests/test_probe_profiles_v2.py::ProbeProfilesV2::test_atomic_probe_records_do_not_repeat_whole_state_or_lose_failed_values
+FAILED tests/test_ready_support_consistency.py::test_actual_ready_plan_with_required_delivery_metadata_reaches_consumer_preflight
+FAILED tests/test_ready_support_consistency.py::test_actual_ready_plan_still_rejects_missing_or_forged_source_context[remove]
+FAILED tests/test_ready_support_consistency.py::test_actual_ready_plan_still_rejects_missing_or_forged_source_context[tamper]
+FAILED tests/test_ready_support_consistency.py::test_actual_ready_plan_still_rejects_missing_or_forged_source_context[weaken]
+FAILED tests/test_ready_support_consistency.py::test_actual_exception_plan_passes_the_same_ready_consumer_contract
+FAILED tests/test_ready_support_consistency.py::test_exception_prerequisite_projection_cannot_be_removed_or_forged[missing]
+FAILED tests/test_ready_support_consistency.py::test_exception_prerequisite_projection_cannot_be_removed_or_forged[changed_reason]
+FAILED tests/test_ready_support_consistency.py::test_exception_prerequisite_projection_cannot_be_removed_or_forged[wrong_source]
+FAILED tests/test_structured_observation_adapters.py::StructuredObservationTests::test_provider_observations_are_behavior_not_deployment_claims
+12 failed, 1676 passed, 91 subtests passed in 505.83s (0:08:25)

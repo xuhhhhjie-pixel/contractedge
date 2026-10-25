@@ -1,0 +1,145 @@
+{
+  "label": "after-final",
+  "real_model_http_calls": 0,
+  "saved_responses_consumed": 2,
+  "captured_extension_request": true,
+  "request_count": 3,
+  "first_two_messages_sha256": [
+    "42e51a43390f2a411137ab6ef5df77426bf5e0a4b7cfcb8abfae329ac7013375",
+    "754cedef5385b2fab8af84821d22cc078980506c8470f03aac2c412b297dc43d"
+  ],
+  "source_unchanged": true,
+  "stage": "diagnosis.v1.1.26",
+  "input_bound": 110117,
+  "limit": 120000,
+  "delivery": {
+    "status": "DELIVERED",
+    "records": [
+      {
+        "unit_id": "CU-ae23528649da074e",
+        "roles": [
+          "EG2:anchor"
+        ],
+        "selected": true,
+        "delivered": true
+      },
+      {
+        "unit_id": "CU-527fe5429a26f69f",
+        "roles": [
+          "EG1:anchor"
+        ],
+        "selected": true,
+        "delivered": true
+      },
+      {
+        "unit_id": "CU-99686d29bed27b32",
+        "roles": [
+          "SOURCE_CONTRACT:CU-99686d29bed27b32",
+          "DIAGNOSIS_CONTINUITY_REFERENCE"
+        ],
+        "selected": true,
+        "delivered": true
+      },
+      {
+        "unit_id": "CU-b4b4ad68ceacbddc",
+        "roles": [
+          "RECEIVER_DECLARATION:CU-b4b4ad68ceacbddc"
+        ],
+        "selected": true,
+        "delivered": true
+      },
+      {
+        "unit_id": "CU-be754c069fb990ae",
+        "roles": [
+          "EG3:context",
+          "EG4:context"
+        ],
+        "selected": true,
+        "delivered": true
+      },
+      {
+        "unit_id": "CU-345f8b49f83800c0",
+        "roles": [
+          "CONNECTOR:CU-345f8b49f83800c0"
+        ],
+        "selected": true,
+        "delivered": true
+      }
+    ],
+    "missing_required_ids": [],
+    "interpretation": "Exact endpoint excerpts delivered; does not prove causal relevance or resolve gaps"
+  },
+  "source_evidence": [
+    {
+      "id": "SRC-CU-ae23528649da074e",
+      "locator": {
+        "column_start": 1,
+        "end_line": 167,
+        "path": "pkg/resource/metric_alarm/manager.go",
+        "start_line": 147
+      },
+      "bytes": 662
+    },
+    {
+      "id": "SRC-CU-527fe5429a26f69f",
+      "locator": {
+        "column_start": 1,
+        "end_line": 675,
+        "path": "pkg/resource/metric_alarm/sdk.go",
+        "start_line": 646
+      },
+      "bytes": 784
+    },
+    {
+      "id": "SRC-CU-99686d29bed27b32",
+      "locator": {
+        "column_start": 1,
+        "end_line": 385,
+        "path": "apis/v1alpha1/metric_alarm.go",
+        "start_line": 26
+      },
+      "bytes": 17753
+    },
+    {
+      "id": "SRC-CU-b4b4ad68ceacbddc",
+      "locator": {
+        "column_start": 1,
+        "end_line": 83,
+        "path": "pkg/resource/metric_alarm/manager.go",
+        "start_line": 1
+      },
+      "bytes": 3373
+    },
+    {
+      "id": "SRC-CU-be754c069fb990ae",
+      "locator": {
+        "column_start": 1,
+        "end_line": 931,
+        "path": "pkg/resource/metric_alarm/sdk.go",
+        "start_line": 679
+      },
+      "bytes": 8866
+    },
+    {
+      "id": "SRC-CU-345f8b49f83800c0",
+      "locator": {
+        "column_start": 1,
+        "end_line": 253,
+        "path": "pkg/resource/dashboard/sdk.go",
+        "start_line": 207
+      },
+      "bytes": 1272
+    },
+    {
+      "id": "SRC-CU-932fb09f6dc750c4",
+      "locator": {
+        "column_start": 1,
+        "end_line": 167,
+        "path": "pkg/resource/metric_stream/manager.go",
+        "start_line": 147
+      },
+      "bytes": 662
+    }
+  ],
+  "scope": "Saved two responses reach actual extension diagnosis input, never a regenerated diagnosis, executable plan or successful repair"
+}

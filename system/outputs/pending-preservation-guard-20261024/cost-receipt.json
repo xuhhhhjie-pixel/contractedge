@@ -1,0 +1,11 @@
+{
+  "limit_cny": 150,
+  "committed_including_uncertain_cny": 99.813656,
+  "remaining_upper_cny": 50.186344,
+  "uncertain_reservations": 3,
+  "new_paid_calls": 11,
+  "new_cost_cny": 1.19674,
+  "original_gate_cny": 0.813128,
+  "portable_operational_cny": 0.383612,
+  "attribution": "11uniqueusage+promptmatchedrecords since981; 7originalACK +4separateoperationalRW130. No firststartupfailurecalls. Pinnedconservativepricing, notinvoice."
+}

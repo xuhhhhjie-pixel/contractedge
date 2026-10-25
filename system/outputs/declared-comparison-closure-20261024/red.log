@@ -1,0 +1,1240 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF............FF..FFFFFFF        [100%]
+=================================== FAILURES ===================================
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-input_pointer-postconditions] _
+
+group = 'postconditions', field = 'input_pointer', pointer = 'nodeSelector'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cbe60>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-input_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'input_pointer'
+pointer = 'nodeSelector'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349ccac0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-input_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'input_pointer', pointer = 'nodeSelector'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cccf0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-output_pointer-postconditions] _
+
+group = 'postconditions', field = 'output_pointer', pointer = 'nodeSelector'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda3572f760>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-output_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'output_pointer'
+pointer = 'nodeSelector'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cc740>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-output_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'output_pointer', pointer = 'nodeSelector'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cd070>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-input_pointer-postconditions] _
+
+group = 'postconditions', field = 'input_pointer', pointer = 'resource.value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cd2a0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-input_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'input_pointer'
+pointer = 'resource.value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cb450>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-input_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'input_pointer', pointer = 'resource.value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cc820>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-output_pointer-postconditions] _
+
+group = 'postconditions', field = 'output_pointer', pointer = 'resource.value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cc9e0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-output_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'output_pointer'
+pointer = 'resource.value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cd7e0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-output_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'output_pointer', pointer = 'resource.value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda3572f6f0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-input_pointer-postconditions] _
+
+group = 'postconditions', field = 'input_pointer'
+pointer = 'raw/output.json#value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cd0e0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-input_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'input_pointer'
+pointer = 'raw/output.json#value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cd850>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-input_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'input_pointer'
+pointer = 'raw/output.json#value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cdaf0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-output_pointer-postconditions] _
+
+group = 'postconditions', field = 'output_pointer'
+pointer = 'raw/output.json#value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cbe60>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-output_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'output_pointer'
+pointer = 'raw/output.json#value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cc9e0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-output_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'output_pointer'
+pointer = 'raw/output.json#value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cc890>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-input_pointer-postconditions] _
+
+group = 'postconditions', field = 'input_pointer', pointer = '#/value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cdd90>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-input_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'input_pointer', pointer = '#/value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda3572f920>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-input_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'input_pointer', pointer = '#/value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cceb0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-output_pointer-postconditions] _
+
+group = 'postconditions', field = 'output_pointer', pointer = '#/value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cd620>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-output_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'output_pointer', pointer = '#/value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349ce2d0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-output_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'output_pointer', pointer = '#/value'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cbca0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-input_pointer-postconditions] _
+
+group = 'postconditions', field = 'input_pointer', pointer = '/bad~'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cc820>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-input_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'input_pointer', pointer = '/bad~'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349ce340>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-input_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'input_pointer', pointer = '/bad~'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349ce5e0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-output_pointer-postconditions] _
+
+group = 'postconditions', field = 'output_pointer', pointer = '/bad~'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda3572f5a0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-output_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'output_pointer', pointer = '/bad~'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cdee0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-output_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'output_pointer', pointer = '/bad~'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cc890>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-input_pointer-postconditions] _
+
+group = 'postconditions', field = 'input_pointer', pointer = '/bad~2'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349ce880>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-input_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'input_pointer', pointer = '/bad~2'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cbc30>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-input_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'input_pointer', pointer = '/bad~2'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349cbd10>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-output_pointer-postconditions] _
+
+group = 'postconditions', field = 'output_pointer', pointer = '/bad~2'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda3572fae0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-output_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'output_pointer', pointer = '/bad~2'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda3557c0b0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-output_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'output_pointer', pointer = '/bad~2'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda3557c270>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[\n-input_pointer-postconditions] _
+
+group = 'postconditions', field = 'input_pointer', pointer = '\n'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda3572fbc0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[\n-input_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'input_pointer', pointer = '\n'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda34aab4c0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[\n-input_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'input_pointer', pointer = '\n'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda3557c200>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[\n-output_pointer-postconditions] _
+
+group = 'postconditions', field = 'output_pointer', pointer = '\n'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda3557c740>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[\n-output_pointer-preserve_constraints] _
+
+group = 'preserve_constraints', field = 'output_pointer', pointer = '\n'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda349c9310>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_plan_rejects_invalid_pointer_at_contract_boundary[\n-output_pointer-open_obligations] _
+
+group = 'open_obligations', field = 'output_pointer', pointer = '\n'
+
+    @pytest.mark.parametrize('group', ['postconditions', 'preserve_constraints', 'open_obligations'])
+    @pytest.mark.parametrize('field', ['input_pointer', 'output_pointer'])
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_plan_rejects_invalid_pointer_at_contract_boundary(group, field, pointer):
+        plan = valid_plan()
+        plan[group] = [{'id': 'CHECK', 'comparison_requirements': [dict(
+            artifact_id='INPUT', input_pointer='/value', output_pointer='/value', **{})]}]
+        plan[group][0]['comparison_requirements'][0][field] = pointer
+        # Other incomplete fixture fields may fail too. This specific path must be
+        # rejected by the schema itself, before target resolution or execution.
+        request = build_changeset_request(diagnosis(), SimpleNamespace(run_id='run-1', case_id='CASE',
+            snapshot_id='snap-0', input_digest='a'*64, model_config={'model':'fixture'},
+            budget={'max_output_tokens':1000}))
+        errors = list(Draft202012Validator(request.output_schema).iter_errors(plan))
+>       assert any(list(e.absolute_path) == [group, 0, 'comparison_requirements', 0, field]
+                   for e in errors)
+E       assert False
+E        +  where False = any(<generator object test_plan_rejects_invalid_pointer_at_contract_boundary.<locals>.<genexpr> at 0x7fda3572fbc0>)
+
+tests/test_comparison_pointer_contract.py:41: AssertionError
+_ test_runtime_refuses_malformed_pointer_even_for_matching_literal_keys[/bad~] _
+
+pointer = '/bad~'
+
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_runtime_refuses_malformed_pointer_even_for_matching_literal_keys(pointer):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_comparison_pointer_contract.py:62: Failed
+_ test_runtime_refuses_malformed_pointer_even_for_matching_literal_keys[/bad~2] _
+
+pointer = '/bad~2'
+
+    @pytest.mark.parametrize('pointer', BAD)
+    def test_runtime_refuses_malformed_pointer_even_for_matching_literal_keys(pointer):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_comparison_pointer_contract.py:62: Failed
+_ test_unavailable_explains_boundary_without_fabricating_equality[patch0-INVALID_INPUT_POINTER] _
+
+patch = {'input_pointer': 'value'}, reason = 'INVALID_INPUT_POINTER'
+
+    @pytest.mark.parametrize('patch,reason', [
+        ({'input_pointer':'value'}, 'INVALID_INPUT_POINTER'),
+        ({'output_pointer':'raw/x.json#value'}, 'INVALID_OUTPUT_POINTER'),
+        ({'artifact_id':'MISSING'}, 'INPUT_ARTIFACT_MISSING'),
+        ({'observation_id':'MISSING'}, 'OUTPUT_OBSERVATION_MISSING'),
+        ({'input_pointer':'/missing'}, 'INPUT_FIELD_UNAVAILABLE'),
+        ({'output_pointer':'/missing'}, 'OUTPUT_FIELD_UNAVAILABLE'),
+    ])
+    def test_unavailable_explains_boundary_without_fabricating_equality(patch, reason):
+        spec = dict(artifact_id='INPUT', input_pointer='/value', observation_id='OBS', output_pointer='/value')
+        spec.update(patch)
+        result = compare_declared_input(spec, [{'id':'INPUT','content':'value: true'}], [observation('{"value":true}')])
+        assert result['status'] == 'UNAVAILABLE'
+>       assert result['reason'] == reason
+E       KeyError: 'reason'
+
+tests/test_comparison_pointer_contract.py:90: KeyError
+_ test_unavailable_explains_boundary_without_fabricating_equality[patch1-INVALID_OUTPUT_POINTER] _
+
+patch = {'output_pointer': 'raw/x.json#value'}
+reason = 'INVALID_OUTPUT_POINTER'
+
+    @pytest.mark.parametrize('patch,reason', [
+        ({'input_pointer':'value'}, 'INVALID_INPUT_POINTER'),
+        ({'output_pointer':'raw/x.json#value'}, 'INVALID_OUTPUT_POINTER'),
+        ({'artifact_id':'MISSING'}, 'INPUT_ARTIFACT_MISSING'),
+        ({'observation_id':'MISSING'}, 'OUTPUT_OBSERVATION_MISSING'),
+        ({'input_pointer':'/missing'}, 'INPUT_FIELD_UNAVAILABLE'),
+        ({'output_pointer':'/missing'}, 'OUTPUT_FIELD_UNAVAILABLE'),
+    ])
+    def test_unavailable_explains_boundary_without_fabricating_equality(patch, reason):
+        spec = dict(artifact_id='INPUT', input_pointer='/value', observation_id='OBS', output_pointer='/value')
+        spec.update(patch)
+        result = compare_declared_input(spec, [{'id':'INPUT','content':'value: true'}], [observation('{"value":true}')])
+        assert result['status'] == 'UNAVAILABLE'
+>       assert result['reason'] == reason
+E       KeyError: 'reason'
+
+tests/test_comparison_pointer_contract.py:90: KeyError
+_ test_unavailable_explains_boundary_without_fabricating_equality[patch2-INPUT_ARTIFACT_MISSING] _
+
+patch = {'artifact_id': 'MISSING'}, reason = 'INPUT_ARTIFACT_MISSING'
+
+    @pytest.mark.parametrize('patch,reason', [
+        ({'input_pointer':'value'}, 'INVALID_INPUT_POINTER'),
+        ({'output_pointer':'raw/x.json#value'}, 'INVALID_OUTPUT_POINTER'),
+        ({'artifact_id':'MISSING'}, 'INPUT_ARTIFACT_MISSING'),
+        ({'observation_id':'MISSING'}, 'OUTPUT_OBSERVATION_MISSING'),
+        ({'input_pointer':'/missing'}, 'INPUT_FIELD_UNAVAILABLE'),
+        ({'output_pointer':'/missing'}, 'OUTPUT_FIELD_UNAVAILABLE'),
+    ])
+    def test_unavailable_explains_boundary_without_fabricating_equality(patch, reason):
+        spec = dict(artifact_id='INPUT', input_pointer='/value', observation_id='OBS', output_pointer='/value')
+        spec.update(patch)
+        result = compare_declared_input(spec, [{'id':'INPUT','content':'value: true'}], [observation('{"value":true}')])
+        assert result['status'] == 'UNAVAILABLE'
+>       assert result['reason'] == reason
+E       KeyError: 'reason'
+
+tests/test_comparison_pointer_contract.py:90: KeyError
+_ test_unavailable_explains_boundary_without_fabricating_equality[patch3-OUTPUT_OBSERVATION_MISSING] _
+
+patch = {'observation_id': 'MISSING'}, reason = 'OUTPUT_OBSERVATION_MISSING'
+
+    @pytest.mark.parametrize('patch,reason', [
+        ({'input_pointer':'value'}, 'INVALID_INPUT_POINTER'),
+        ({'output_pointer':'raw/x.json#value'}, 'INVALID_OUTPUT_POINTER'),
+        ({'artifact_id':'MISSING'}, 'INPUT_ARTIFACT_MISSING'),
+        ({'observation_id':'MISSING'}, 'OUTPUT_OBSERVATION_MISSING'),
+        ({'input_pointer':'/missing'}, 'INPUT_FIELD_UNAVAILABLE'),
+        ({'output_pointer':'/missing'}, 'OUTPUT_FIELD_UNAVAILABLE'),
+    ])
+    def test_unavailable_explains_boundary_without_fabricating_equality(patch, reason):
+        spec = dict(artifact_id='INPUT', input_pointer='/value', observation_id='OBS', output_pointer='/value')
+        spec.update(patch)
+        result = compare_declared_input(spec, [{'id':'INPUT','content':'value: true'}], [observation('{"value":true}')])
+        assert result['status'] == 'UNAVAILABLE'
+>       assert result['reason'] == reason
+E       KeyError: 'reason'
+
+tests/test_comparison_pointer_contract.py:90: KeyError
+_ test_unavailable_explains_boundary_without_fabricating_equality[patch4-INPUT_FIELD_UNAVAILABLE] _
+
+patch = {'input_pointer': '/missing'}, reason = 'INPUT_FIELD_UNAVAILABLE'
+
+    @pytest.mark.parametrize('patch,reason', [
+        ({'input_pointer':'value'}, 'INVALID_INPUT_POINTER'),
+        ({'output_pointer':'raw/x.json#value'}, 'INVALID_OUTPUT_POINTER'),
+        ({'artifact_id':'MISSING'}, 'INPUT_ARTIFACT_MISSING'),
+        ({'observation_id':'MISSING'}, 'OUTPUT_OBSERVATION_MISSING'),
+        ({'input_pointer':'/missing'}, 'INPUT_FIELD_UNAVAILABLE'),
+        ({'output_pointer':'/missing'}, 'OUTPUT_FIELD_UNAVAILABLE'),
+    ])
+    def test_unavailable_explains_boundary_without_fabricating_equality(patch, reason):
+        spec = dict(artifact_id='INPUT', input_pointer='/value', observation_id='OBS', output_pointer='/value')
+        spec.update(patch)
+        result = compare_declared_input(spec, [{'id':'INPUT','content':'value: true'}], [observation('{"value":true}')])
+        assert result['status'] == 'UNAVAILABLE'
+>       assert result['reason'] == reason
+E       KeyError: 'reason'
+
+tests/test_comparison_pointer_contract.py:90: KeyError
+_ test_unavailable_explains_boundary_without_fabricating_equality[patch5-OUTPUT_FIELD_UNAVAILABLE] _
+
+patch = {'output_pointer': '/missing'}, reason = 'OUTPUT_FIELD_UNAVAILABLE'
+
+    @pytest.mark.parametrize('patch,reason', [
+        ({'input_pointer':'value'}, 'INVALID_INPUT_POINTER'),
+        ({'output_pointer':'raw/x.json#value'}, 'INVALID_OUTPUT_POINTER'),
+        ({'artifact_id':'MISSING'}, 'INPUT_ARTIFACT_MISSING'),
+        ({'observation_id':'MISSING'}, 'OUTPUT_OBSERVATION_MISSING'),
+        ({'input_pointer':'/missing'}, 'INPUT_FIELD_UNAVAILABLE'),
+        ({'output_pointer':'/missing'}, 'OUTPUT_FIELD_UNAVAILABLE'),
+    ])
+    def test_unavailable_explains_boundary_without_fabricating_equality(patch, reason):
+        spec = dict(artifact_id='INPUT', input_pointer='/value', observation_id='OBS', output_pointer='/value')
+        spec.update(patch)
+        result = compare_declared_input(spec, [{'id':'INPUT','content':'value: true'}], [observation('{"value":true}')])
+        assert result['status'] == 'UNAVAILABLE'
+>       assert result['reason'] == reason
+E       KeyError: 'reason'
+
+tests/test_comparison_pointer_contract.py:90: KeyError
+_____ test_review_correction_explains_pointer_syntax_and_keeps_retry_bound _____
+
+    def test_review_correction_explains_pointer_syntax_and_keeps_retry_bound():
+        claim = {'checks':[{'id':'P','status':'PASS','rationale':'Claim',
+            'comparisons':[dict(artifact_id='INPUT', input_pointer='value',
+                                observation_id='OBS', output_pointer='resource.value')],
+            'evidence':[{'observation_id':'OBS','quote':'true'}]}],
+            'failure_kind':'UNKNOWN','rationale':'Claim'}
+        unknown = copy.deepcopy(claim)
+        unknown['checks'][0].update(status='UNKNOWN', evidence=[], comparisons=[])
+        provider = Sequence([ModelResponse(json.dumps(claim), {}), ModelResponse(json.dumps(unknown), {})])
+        result = ModelPublicReviewer(provider, len, CONFIG).review('Selected value',
+            {'postconditions':[{'id':'P','statement':'Selected value'}]},
+            {'status':'EXECUTION_PASS','observations':[observation('{"value":true}')],
+             'declared_artifacts':[{'id':'INPUT','content':'value: true'}]})
+        feedback = provider.requests[1].messages[-1]['content']
+>       assert 'JSON Pointer' in feedback and '~0' in feedback and '~1' in feedback
+E       assert ('JSON Pointer' in 'Validation rejected the review: Public comparison does not support the claimed PASS: P; failed public comparisons=[{"...rvations, or infer success from execution alone. Use UNKNOWN when the supplied observations do not support a decision.')
+
+tests/test_comparison_pointer_contract.py:108: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-input_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-input_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-input_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-output_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-output_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[nodeSelector-output_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-input_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-input_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-input_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-output_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-output_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[resource.value-output_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-input_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-input_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-input_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-output_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-output_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[raw/output.json#value-output_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-input_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-input_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-input_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-output_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-output_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[#/value-output_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-input_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-input_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-input_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-output_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-output_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~-output_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-input_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-input_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-input_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-output_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-output_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[/bad~2-output_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[\n-input_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[\n-input_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[\n-input_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[\n-output_pointer-postconditions]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[\n-output_pointer-preserve_constraints]
+FAILED tests/test_comparison_pointer_contract.py::test_plan_rejects_invalid_pointer_at_contract_boundary[\n-output_pointer-open_obligations]
+FAILED tests/test_comparison_pointer_contract.py::test_runtime_refuses_malformed_pointer_even_for_matching_literal_keys[/bad~]
+FAILED tests/test_comparison_pointer_contract.py::test_runtime_refuses_malformed_pointer_even_for_matching_literal_keys[/bad~2]
+FAILED tests/test_comparison_pointer_contract.py::test_unavailable_explains_boundary_without_fabricating_equality[patch0-INVALID_INPUT_POINTER]
+FAILED tests/test_comparison_pointer_contract.py::test_unavailable_explains_boundary_without_fabricating_equality[patch1-INVALID_OUTPUT_POINTER]
+FAILED tests/test_comparison_pointer_contract.py::test_unavailable_explains_boundary_without_fabricating_equality[patch2-INPUT_ARTIFACT_MISSING]
+FAILED tests/test_comparison_pointer_contract.py::test_unavailable_explains_boundary_without_fabricating_equality[patch3-OUTPUT_OBSERVATION_MISSING]
+FAILED tests/test_comparison_pointer_contract.py::test_unavailable_explains_boundary_without_fabricating_equality[patch4-INPUT_FIELD_UNAVAILABLE]
+FAILED tests/test_comparison_pointer_contract.py::test_unavailable_explains_boundary_without_fabricating_equality[patch5-OUTPUT_FIELD_UNAVAILABLE]
+FAILED tests/test_comparison_pointer_contract.py::test_review_correction_explains_pointer_syntax_and_keeps_retry_bound
+51 failed, 14 passed in 0.88s

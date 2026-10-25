@@ -1,0 +1,14 @@
+{
+  "real_model_http_calls": 0,
+  "saved_responses_consumed": 3,
+  "status": "READY_PARTIAL",
+  "plan_status": "READY_PARTIAL",
+  "source_unchanged": true,
+  "request_bounds": [
+    95662,
+    110767,
+    116310
+  ],
+  "public_records_preserved": 11,
+  "scope": "Frozen .32 successful front responses replayed against new candidate, including the original planning truncation and correction; no regenerated model result or new repair success."
+}

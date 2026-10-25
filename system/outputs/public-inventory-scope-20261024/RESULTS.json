@@ -1,0 +1,47 @@
+{
+  "schema_version": "ce.public_inventory_scope_qualification.v1",
+  "version": "0.6.39",
+  "method_digest": "d671d5e59ab84d60eae4d0eef511605fa4a2d1ed5088481289d2f22989e5f56c",
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "tests": {
+    "new": 33,
+    "full": 1004,
+    "full_subtests": 22,
+    "portable": 971,
+    "portable_subtests": 17,
+    "portable_excluded_modules": 6
+  },
+  "review": {
+    "important_fixed": 3,
+    "rereview": false,
+    "minor_deferred": 2
+  },
+  "core_changes": [
+    "producer registration for complete raw render kind inventories",
+    "scoped collection capability distinct from object identity",
+    "malformed/empty operation identities retain conservative relevance",
+    "collection cannot bypass completeness via object fallback"
+  ],
+  "saved_public_replay": "saved-public-replay.json",
+  "saved_kpt_six_requests_replay": "KPT_SIX_RESPONSE_REPLAY.json",
+  "new_paid_calls": 5,
+  "real_new_version_result": {
+    "case_id": "RW-CAND-130",
+    "independent_status": "PASS",
+    "public_status": "PUBLIC_REVIEW_INVALID",
+    "public_decision": "UNKNOWN",
+    "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+    "snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+    "cost_cny": 0.452066,
+    "root_cause": "Invalid JSON Pointers accepted in predeclared plan; review cannot repair immutable bindings. No public PASS claimed."
+  },
+  "historical_scores_transferred": false,
+  "limitations": [
+    "Unsupported nonmapping locator may raise at internal helper; producer/schema require mapping",
+    "Missing source_file in both metadata/body remains defensive auditability gap; producer always emits it and content SHA required",
+    "Unknown effective namespaces remain UNKNOWN, not guessed defaults",
+    "Formal isolated panel migration and G0-G6 final admission remain incomplete"
+  ],
+  "ledger_committed_cny": 102.176358
+}

@@ -1,0 +1,54 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_______ test_malformed_scope_cannot_turn_collection_into_matching_object _______
+
+    def test_malformed_scope_cannot_turn_collection_into_matching_object():
+        item=inventory()
+>       assert support_error(obligation(namespace={'not':'an identity'}),claim(item),[item]) is not None
+E       assert None is not None
+E        +  where None = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': {'not': 'an identity'}}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': {'not': 'an identity'}}}} = obligation(namespace={'not': 'an identity'})
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:100: AssertionError
+_____ test_excessively_nested_payload_is_rejected_without_crashing_review ______
+
+    def test_excessively_nested_payload_is_rejected_without_crashing_review():
+        item=inventory();item['excerpt']='['*1200+'0'+']'*1200
+        item['content_digest']=hashlib.sha256(item['excerpt'].encode()).hexdigest()
+>       assert support_error(obligation(),claim(item),[item]) is not None
+
+tests/test_public_inventory_scope.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/support.py:70: in support_error
+    if resource and not (_inventory_covers(record,resource) or
+src/contractedge/execution/support.py:25: in _inventory_covers
+    text=record['excerpt'];body=json.loads(text)
+/usr/lib/python3.10/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+/usr/lib/python3.10/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.decoder.JSONDecoder object at 0x7f737a1cef50>
+s = '[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[...]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]'
+idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+>           obj, end = self.scan_once(s, idx)
+E           RecursionError: maximum recursion depth exceeded while decoding a JSON array from a unicode string
+
+/usr/lib/python3.10/json/decoder.py:353: RecursionError
+=========================== short test summary info ============================
+FAILED tests/test_public_inventory_scope.py::test_malformed_scope_cannot_turn_collection_into_matching_object
+FAILED tests/test_public_inventory_scope.py::test_excessively_nested_payload_is_rejected_without_crashing_review
+2 failed, 24 deselected in 0.20s

@@ -125,7 +125,7 @@ class PanelProvider:
             edits = synthetic_edits(self.case['fixture_id'], self.mode, self.executions)
             payload = {'replacements': [{'key': row['change_id'], 'file': row['path'],
                 'before': row['old_text'], 'after': row['new_text']} for row in edits]}
-        elif version == 'public-postcondition-review.v1':
+        elif version in {'public-postcondition-review.v1','public-postcondition-review.v2'}:
             # Review is generated from this run's raw public records only.
             records = body['public_observations']
             checks = []

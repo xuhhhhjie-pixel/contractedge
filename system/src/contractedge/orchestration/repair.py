@@ -168,7 +168,11 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
                 provider, token_counter, config: Mapping) -> dict:
     packet, context = validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
     request = build_changeset_request(packet, context, [{'code': 'PUBLIC_EXECUTION_PLAN_FEEDBACK',
-                                                        'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}])
+            'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}],
+        previous_attempt=dict(run_id=context.run_id, snapshot_id=context.snapshot_id,
+            input_digest=context.input_digest, diagnosis_digest=canonical_digest(packet.raw),
+            response_content=json.dumps(trace['changeset'], ensure_ascii=False, sort_keys=True),
+            state='CURRENT_PLAN_FOR_REVISION'))
     quote = quote_request(provider, request, token_counter)
     if not context_fits(quote, int(config['max_context_tokens']), config.get('model_context_tokens')):
         raise BudgetExceeded('Plan revision exceeds the full context budget')
@@ -198,10 +202,10 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
             'model_calls': list(trace['model_calls']) + [call]}
 
 
-def rebind_execution_plan(*args, **kwargs):
+def rebind_execution_plan(plan: Mapping, source: Path, feedback: Mapping, *, prior_execution=None) -> dict:
     """Compatibility export; new engine retries go through consumer.prepare."""
     from contractedge.execution.consumers.topomen import rebind_execution_plan as rebind
-    return rebind(*args, **kwargs)
+    return rebind(plan, source, feedback, prior_execution=prior_execution)
 
 
 def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
@@ -869,14 +873,14 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     'COMPLETE' if decision['decision'] == 'PROMOTE' else 'CANDIDATE_REJECTED',
                     journal.latest['candidate_decision'], snapshot_id=after))
                 if decision['decision']!='PROMOTE':
-                    # A registered production startup panic is actionable even
+                    # A source-bound compiler diagnostic or registered startup failure is actionable even
                     # when it prevented completing preservation checks. Keep
                     # their status UNKNOWN, restore the incumbent, and use only
                     # an already available edit round; generic probe/infra
                     # failures still stop without guessing a source repair.
-                    from contractedge.execution.public import has_candidate_runtime_failure
+                    from contractedge.execution.public import has_candidate_execution_failure
                     runtime_failed = (current_observation.get('snapshot_id')==decision['trial_snapshot']
-                        and has_candidate_runtime_failure(current_observation))
+                        and has_candidate_execution_failure(current_observation))
                     # Keep the trial artifacts above, but export only the coherent
                     # incumbent below. Failed trial evidence retains its own snapshot.
                     rejected_context={'snapshot_id':decision['trial_snapshot'],
@@ -899,7 +903,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                         last_execution_attempt={**(last_execution_attempt or {}),'source_snapshot':before,
                             'validation_error':('Candidate rejected: a protected current behavior regressed. '
                                 if decision['decision']=='REJECT_REGRESSION' else
-                                'Candidate rejected: production startup failed and protected behavior could not be verified. ')
+                                'Candidate rejected: source-bound production compilation or startup failed and protected behavior could not be verified. ')
                                 +'Revise the accepted intent on the restored source using historical trial evidence; preserve every current condition.',
                             'rejected_trial':rejected_context}
                     rounds.append(dict(round_id=round_id,from_snapshot=before,

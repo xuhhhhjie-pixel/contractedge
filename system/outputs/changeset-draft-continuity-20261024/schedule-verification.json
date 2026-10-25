@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "slots": {
+    "A": 14,
+    "B": 20,
+    "repeat": 4,
+    "recovery": 8
+  },
+  "total": 46,
+  "paid_calls": 0
+}

@@ -1,0 +1,14 @@
+{
+  "label": "before",
+  "real_model_http_calls": 0,
+  "saved_model_responses_consumed": 8,
+  "request_count": 8,
+  "captured_restored_retry": false,
+  "selected_source_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+  "initial_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+  "source_restored": true,
+  "method_status": "CANDIDATE_COMPARISON_UNCERTAIN",
+  "rounds": 1,
+  "errors": [],
+  "scope": "Saved eight responses and public Broken/build-failure reports only; capture next request after coherent rollback. Not a new model correction or repair outcome."
+}

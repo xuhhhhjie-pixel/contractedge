@@ -32,7 +32,7 @@ from contractedge.model.admission import quote_request, context_fits, complete_q
 from contractedge.orchestration.feedback import feedback_prompt_view
 from contractedge.orchestration.semantic_delivery import SemanticDeliveryError, delivery_context, install_monitor
 from contractedge.requirement.normalize import normalize_requirement
-from contractedge.retrieval.candidates import CandidateSet, build_candidate_set, extend_once, trim_context_bundle
+from contractedge.retrieval.candidates import CandidateSet, build_candidate_set, extend_once, trim_context_bundle, requires_gap_delivery
 from contractedge.retrieval.edges import build_direct_reference_edges
 from contractedge.source.scopes import (
     DEFAULT_SCOPE_MATCHES_PER_HINT, DEFAULT_SCOPE_SEARCH_BYTES, DEFAULT_SCOPE_SEARCH_FILE_BYTES,
@@ -313,6 +313,20 @@ def _bind_diagnosis_envelope(payload: Mapping[str, Any], method_input: MethodInp
     body = _translate_model_outcome_coverage(body)
     catalog = build_evidence_catalog(method_input, candidate_set, context.snapshot_id)
     body["evidence_refs"] = bind_evidence_ids(_collect_diagnosis_evidence_ids(body), catalog)
+    # This is the canonical record registry, not just the model's chosen
+    # citations. Keep already-budgeted current observations available to plans
+    # even when the diagnosis did not use them to justify a causal claim.
+    retained_public_ids = []
+    bound_ids = {record['id'] for record in body['evidence_refs']}
+    for record in catalog:
+        if record.get('kind') != 'PUBLIC_OBSERVATION':
+            continue
+        if record.get('snapshot_id') != context.snapshot_id:
+            raise ValueError('Planning observations must belong to the current snapshot')
+        if record['id'] not in bound_ids:
+            body['evidence_refs'].append(dict(record))
+            bound_ids.add(record['id'])
+            retained_public_ids.append(record['id'])
     body.update(expected)
     from contractedge.requirement.normalize import bind_obligation_sources
     try:
@@ -340,6 +354,7 @@ def _bind_diagnosis_envelope(payload: Mapping[str, Any], method_input: MethodInp
         coverage_encoding = "v1_1_direct"
     return body, {"owner": "runner", "model_supplied_fields": sorted(supplied),
                   "evidence_records_bound": len(body["evidence_refs"]),
+                  "retained_uncited_public_evidence_ids": retained_public_ids,
                   "outcome_coverage_encoding": coverage_encoding,
                   "mismatched_model_fields": sorted(key for key, value in supplied.items()
                                                        if value != expected[key])}
@@ -456,6 +471,18 @@ def required_planning_source_support(method_input, candidate_set, snapshot_id):
                  or any(k.startswith('PUBLIC_LIFECYCLE:') for k in u.get('gap_role_keys',[]))}
     return [{**r,'delivery_required':True} for r in build_evidence_catalog(method_input,candidate_set,snapshot_id)
             if r['id'] in support_ids and r.get('kind')=='SOURCE_SPAN']
+
+
+def requirement_for_rediagnosis(requirement, prior, snapshot_id, input_digest):
+    """Carry validated obligation identities with same-snapshot reassessment."""
+    from copy import deepcopy
+    result = deepcopy(requirement)
+    if (result.get('lineage_required') and prior
+            and prior.get('snapshot_id') == snapshot_id
+            and prior.get('input_digest') == input_digest
+            and prior.get('obligation_lineage')):
+        result['prior_obligation_lineage'] = deepcopy(prior['obligation_lineage'])
+    return result
 
 
 def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *, input_digest):
@@ -734,7 +761,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 if u['id'] in pinned else u for u in fitted.candidates),
                 required_endpoint_ids=tuple(dict.fromkeys([*fitted.required_endpoint_ids, *pinned])))
         required_endpoint_ids=list(dict.fromkeys([*fitted.required_endpoint_ids,
-            *[c['id'] for c in fitted.candidates if c.get('gap_role_keys')]]))
+            *[c['id'] for c in fitted.candidates if requires_gap_delivery(c)]]))
         while True:
             if not fitted.candidates:
                 return fitted,None,0
@@ -759,7 +786,15 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                         ensure_ascii=False)},))
             request = planning_generation_mode(request)
             count = request_tokens(request)
-            first_limit = min(fitted.max_context_tokens, int(config.get('initial_diagnosis_context_tokens', fitted.max_context_tokens)))
+            # The smaller initial allowance is not a second global context cap.
+            # Validated feedback adds obligation/history state on rediagnosis;
+            # fit that stage in the existing total context, reserving output.
+            total_limit = min(int(config['max_context_tokens']),
+                int(config.get('model_context_tokens') or config['max_context_tokens']))
+            first_limit = (min(fitted.max_context_tokens,
+                int(config.get('initial_diagnosis_context_tokens', fitted.max_context_tokens)))
+                if execution_feedback is None else
+                min(fitted.max_context_tokens, total_limit - request.max_output_tokens))
             if count <= first_limit:
                 if config.get('gap_role_delivery_enabled'):
                     from contractedge.retrieval.gap_delivery import audit_gap_delivery
@@ -771,6 +806,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                         return fitted,None,count
                 audit = {'request_tokens': count, 'input_limit': first_limit,
                          'reserved_output_tokens': request.max_output_tokens,
+                         'context_stage': 'INITIAL_DIAGNOSIS' if execution_feedback is None else 'FEEDBACK_REDIAGNOSIS',
+                         'total_context_limit': total_limit,
                          'selected_ids': list(fitted.selected_ids),
                          'surviving_reference_edges': len(fitted.edges),
                          'drop_reasons': dict(fitted.drop_reasons or {})}
@@ -1110,6 +1147,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 "selected_ids": list(candidate_set.selected_ids), "dropped_ids": list(candidate_set.dropped_ids),
                 "gap_search": gap_search_audit})
             if candidate_set.selected_ids:
+                requirement = requirement_for_rediagnosis(requirement, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
                 candidate_set, diagnosis_request, prompt_tokens = fit_diagnosis(
                     candidate_set, run_input, requirement, context, prior=diagnosis.raw, extension_gaps=diagnosis.evidence_gaps)
                 failure=evidence_delivery_failure(candidate_set,diagnosis.raw)
@@ -1226,6 +1264,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
         change_attempt = -1
         planning_corrections_used = 0
         planning_extension_attempted = False
+        previous_changeset_attempt = None
         while True:
             # A valid source request is not a malformed plan. Keep the one
             # acquisition and the configured correction allowance separate;
@@ -1249,7 +1288,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     'necessary_source_support': required_planning_source_support(run_input,candidate_set,snapshot.snapshot_id),
                     'source_prerequisites': required_source_prerequisites(candidate_set)})
             run_context_wire = asdict(context)
-            changeset_request = build_changeset_request(diagnosis, context, feedback)
+            changeset_request = build_changeset_request(diagnosis, context, feedback,
+                previous_attempt=previous_changeset_attempt if feedback else None)
             changeset_request = replace(changeset_request, metadata={**changeset_request.metadata,
                 'planning_format_retry_index': planning_corrections_used})
             changeset_request = planning_generation_mode(changeset_request)
@@ -1281,6 +1321,10 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             identity_bound = False
             changeset_payload = None
             validation = None
+            previous_changeset_attempt = (dict(run_id=run_id, snapshot_id=snapshot.snapshot_id,
+                input_digest=parsed.input_digest, diagnosis_digest=canonical_digest(diagnosis.raw),
+                response_content=changeset_response.content, state='REJECTED_PLAN_DRAFT')
+                if isinstance(changeset_response.content, str) and changeset_response.content.strip() else None)
             try:
                 changeset_payload = parse_json_response(changeset_response.content)
                 changeset_payload, changeset_binding = bind_changeset_envelope(
@@ -1340,6 +1384,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 retrieval_rounds.append({'round_id': 2, 'extension_used': True,
                     'trigger': 'CHANGESET_NEEDS_EVIDENCE', 'selected_ids': list(candidate_set.selected_ids),
                     'gap_search': audit})
+                requirement = requirement_for_rediagnosis(requirement, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
                 candidate_set, request, count = fit_diagnosis(candidate_set, run_input, requirement, context, prior=diagnosis.raw, extension_gaps=planning_gaps)
                 failure=evidence_delivery_failure(candidate_set,diagnosis.raw,changeset_payload)
                 if failure is not None:return failure
@@ -1398,6 +1443,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 # The next plan is based on a new diagnosis. Previous plan
                 # errors do not describe it, but any used correction stays used.
                 feedback = []
+                previous_changeset_attempt = None
                 continue
             if validation.valid:
                 break

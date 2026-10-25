@@ -1,0 +1,20 @@
+{
+  "label": "before",
+  "real_model_http_calls": 0,
+  "saved_responses_consumed": 1,
+  "checks_delivered": [
+    "addition",
+    "removal",
+    "remove_all",
+    "tag_error",
+    "unchanged",
+    "unchanged_other_field",
+    "value_change"
+  ],
+  "source_unchanged": true,
+  "diagnosis_status": "READY",
+  "diagnosis_claims_sha256": "426e3f22770262b953070b81a089133685b64da783111f4217fe4e1fe3e220a6",
+  "input_bound": 106020,
+  "limit": 220000,
+  "scope": "Changed-method saved-response projection to first planning request; no regenerated diagnosis, plan or repair result"
+}

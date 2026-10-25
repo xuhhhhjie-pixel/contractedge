@@ -1,5 +1,7 @@
 # ContractEdge 正式实验准入与最终优化实施计划
 
+> 2026-10-24执行入口：当前开发源码0.6.40（完整1069+22，可移植1036+17）；实际同版开发结果见 outputs/declared-comparison-closure-20261024/COMPLETION_AUDIT.md。下文旧版本为制定或历次实施时的历史状态；原任务与G0—G6退出条件不变。正式准入仍为false。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. 用户已授权执行普通修复；不得重复要求批准，不得擅自改变验收口径。
 
 **Goal:** 在冻结 benchmark150 上，交付可迁移、可复现、通过既定开发效果验收的系统，再开放正式实验。

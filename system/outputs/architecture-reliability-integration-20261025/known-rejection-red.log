@@ -1,0 +1,175 @@
+FFFFFFFFF                                                                [100%]
+=================================== FAILURES ===================================
+_ test_completed_noop_rejection_is_failed_method_result_after_verified_rollback _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-441/test_completed_noop_rejection_0')
+
+    def test_completed_noop_rejection_is_failed_method_result_after_verified_rollback(tmp_path):
+        module=worker();source,before,budget=fixture(tmp_path)
+>       marker=module.completed_edit_rejection(PlanRejected('Concrete edits are a no-op'),budget,0,source,before)
+E       AttributeError: module 'worker_v10' has no attribute 'completed_edit_rejection'
+
+tests/test_seed_known_edit_rejection.py:21: AttributeError
+_ test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[unknown_response] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-441/test_uncertainty_environment_a0')
+problem = 'unknown_response'
+
+    @pytest.mark.parametrize('problem',['unknown_response','no_new_call','foreign_prompt','transport_error',
+                                       'source_changed','response_error','rollback_failed','wrong_restore'])
+    def test_uncertainty_environment_and_source_failures_keep_infrastructure_stop(tmp_path,problem):
+        module=worker();source,before,budget=fixture(tmp_path);error=PlanRejected('rejected');position=0
+        if problem=='unknown_response':budget.calls[0].pop('response_content')
+        elif problem=='no_new_call':position=1
+        elif problem=='foreign_prompt':budget.calls[0]['prompt_version']='diagnosis.v1'
+        elif problem=='transport_error':error=TimeoutError('response unknown')
+        elif problem=='source_changed':(source/'a.go').write_text('partial write\n')
+        elif problem=='response_error':budget.calls[0]['error']='unknown'
+>       marker=module.completed_edit_rejection(error,budget,position,source,before)
+E       AttributeError: module 'worker_v10' has no attribute 'completed_edit_rejection'
+
+tests/test_seed_known_edit_rejection.py:41: AttributeError
+_ test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[no_new_call] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-441/test_uncertainty_environment_a1')
+problem = 'no_new_call'
+
+    @pytest.mark.parametrize('problem',['unknown_response','no_new_call','foreign_prompt','transport_error',
+                                       'source_changed','response_error','rollback_failed','wrong_restore'])
+    def test_uncertainty_environment_and_source_failures_keep_infrastructure_stop(tmp_path,problem):
+        module=worker();source,before,budget=fixture(tmp_path);error=PlanRejected('rejected');position=0
+        if problem=='unknown_response':budget.calls[0].pop('response_content')
+        elif problem=='no_new_call':position=1
+        elif problem=='foreign_prompt':budget.calls[0]['prompt_version']='diagnosis.v1'
+        elif problem=='transport_error':error=TimeoutError('response unknown')
+        elif problem=='source_changed':(source/'a.go').write_text('partial write\n')
+        elif problem=='response_error':budget.calls[0]['error']='unknown'
+>       marker=module.completed_edit_rejection(error,budget,position,source,before)
+E       AttributeError: module 'worker_v10' has no attribute 'completed_edit_rejection'
+
+tests/test_seed_known_edit_rejection.py:41: AttributeError
+_ test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[foreign_prompt] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-441/test_uncertainty_environment_a2')
+problem = 'foreign_prompt'
+
+    @pytest.mark.parametrize('problem',['unknown_response','no_new_call','foreign_prompt','transport_error',
+                                       'source_changed','response_error','rollback_failed','wrong_restore'])
+    def test_uncertainty_environment_and_source_failures_keep_infrastructure_stop(tmp_path,problem):
+        module=worker();source,before,budget=fixture(tmp_path);error=PlanRejected('rejected');position=0
+        if problem=='unknown_response':budget.calls[0].pop('response_content')
+        elif problem=='no_new_call':position=1
+        elif problem=='foreign_prompt':budget.calls[0]['prompt_version']='diagnosis.v1'
+        elif problem=='transport_error':error=TimeoutError('response unknown')
+        elif problem=='source_changed':(source/'a.go').write_text('partial write\n')
+        elif problem=='response_error':budget.calls[0]['error']='unknown'
+>       marker=module.completed_edit_rejection(error,budget,position,source,before)
+E       AttributeError: module 'worker_v10' has no attribute 'completed_edit_rejection'
+
+tests/test_seed_known_edit_rejection.py:41: AttributeError
+_ test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[transport_error] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-441/test_uncertainty_environment_a3')
+problem = 'transport_error'
+
+    @pytest.mark.parametrize('problem',['unknown_response','no_new_call','foreign_prompt','transport_error',
+                                       'source_changed','response_error','rollback_failed','wrong_restore'])
+    def test_uncertainty_environment_and_source_failures_keep_infrastructure_stop(tmp_path,problem):
+        module=worker();source,before,budget=fixture(tmp_path);error=PlanRejected('rejected');position=0
+        if problem=='unknown_response':budget.calls[0].pop('response_content')
+        elif problem=='no_new_call':position=1
+        elif problem=='foreign_prompt':budget.calls[0]['prompt_version']='diagnosis.v1'
+        elif problem=='transport_error':error=TimeoutError('response unknown')
+        elif problem=='source_changed':(source/'a.go').write_text('partial write\n')
+        elif problem=='response_error':budget.calls[0]['error']='unknown'
+>       marker=module.completed_edit_rejection(error,budget,position,source,before)
+E       AttributeError: module 'worker_v10' has no attribute 'completed_edit_rejection'
+
+tests/test_seed_known_edit_rejection.py:41: AttributeError
+_ test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[source_changed] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-441/test_uncertainty_environment_a4')
+problem = 'source_changed'
+
+    @pytest.mark.parametrize('problem',['unknown_response','no_new_call','foreign_prompt','transport_error',
+                                       'source_changed','response_error','rollback_failed','wrong_restore'])
+    def test_uncertainty_environment_and_source_failures_keep_infrastructure_stop(tmp_path,problem):
+        module=worker();source,before,budget=fixture(tmp_path);error=PlanRejected('rejected');position=0
+        if problem=='unknown_response':budget.calls[0].pop('response_content')
+        elif problem=='no_new_call':position=1
+        elif problem=='foreign_prompt':budget.calls[0]['prompt_version']='diagnosis.v1'
+        elif problem=='transport_error':error=TimeoutError('response unknown')
+        elif problem=='source_changed':(source/'a.go').write_text('partial write\n')
+        elif problem=='response_error':budget.calls[0]['error']='unknown'
+>       marker=module.completed_edit_rejection(error,budget,position,source,before)
+E       AttributeError: module 'worker_v10' has no attribute 'completed_edit_rejection'
+
+tests/test_seed_known_edit_rejection.py:41: AttributeError
+_ test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[response_error] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-441/test_uncertainty_environment_a5')
+problem = 'response_error'
+
+    @pytest.mark.parametrize('problem',['unknown_response','no_new_call','foreign_prompt','transport_error',
+                                       'source_changed','response_error','rollback_failed','wrong_restore'])
+    def test_uncertainty_environment_and_source_failures_keep_infrastructure_stop(tmp_path,problem):
+        module=worker();source,before,budget=fixture(tmp_path);error=PlanRejected('rejected');position=0
+        if problem=='unknown_response':budget.calls[0].pop('response_content')
+        elif problem=='no_new_call':position=1
+        elif problem=='foreign_prompt':budget.calls[0]['prompt_version']='diagnosis.v1'
+        elif problem=='transport_error':error=TimeoutError('response unknown')
+        elif problem=='source_changed':(source/'a.go').write_text('partial write\n')
+        elif problem=='response_error':budget.calls[0]['error']='unknown'
+>       marker=module.completed_edit_rejection(error,budget,position,source,before)
+E       AttributeError: module 'worker_v10' has no attribute 'completed_edit_rejection'
+
+tests/test_seed_known_edit_rejection.py:41: AttributeError
+_ test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[rollback_failed] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-441/test_uncertainty_environment_a6')
+problem = 'rollback_failed'
+
+    @pytest.mark.parametrize('problem',['unknown_response','no_new_call','foreign_prompt','transport_error',
+                                       'source_changed','response_error','rollback_failed','wrong_restore'])
+    def test_uncertainty_environment_and_source_failures_keep_infrastructure_stop(tmp_path,problem):
+        module=worker();source,before,budget=fixture(tmp_path);error=PlanRejected('rejected');position=0
+        if problem=='unknown_response':budget.calls[0].pop('response_content')
+        elif problem=='no_new_call':position=1
+        elif problem=='foreign_prompt':budget.calls[0]['prompt_version']='diagnosis.v1'
+        elif problem=='transport_error':error=TimeoutError('response unknown')
+        elif problem=='source_changed':(source/'a.go').write_text('partial write\n')
+        elif problem=='response_error':budget.calls[0]['error']='unknown'
+>       marker=module.completed_edit_rejection(error,budget,position,source,before)
+E       AttributeError: module 'worker_v10' has no attribute 'completed_edit_rejection'
+
+tests/test_seed_known_edit_rejection.py:41: AttributeError
+_ test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[wrong_restore] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-441/test_uncertainty_environment_a7')
+problem = 'wrong_restore'
+
+    @pytest.mark.parametrize('problem',['unknown_response','no_new_call','foreign_prompt','transport_error',
+                                       'source_changed','response_error','rollback_failed','wrong_restore'])
+    def test_uncertainty_environment_and_source_failures_keep_infrastructure_stop(tmp_path,problem):
+        module=worker();source,before,budget=fixture(tmp_path);error=PlanRejected('rejected');position=0
+        if problem=='unknown_response':budget.calls[0].pop('response_content')
+        elif problem=='no_new_call':position=1
+        elif problem=='foreign_prompt':budget.calls[0]['prompt_version']='diagnosis.v1'
+        elif problem=='transport_error':error=TimeoutError('response unknown')
+        elif problem=='source_changed':(source/'a.go').write_text('partial write\n')
+        elif problem=='response_error':budget.calls[0]['error']='unknown'
+>       marker=module.completed_edit_rejection(error,budget,position,source,before)
+E       AttributeError: module 'worker_v10' has no attribute 'completed_edit_rejection'
+
+tests/test_seed_known_edit_rejection.py:41: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_seed_known_edit_rejection.py::test_completed_noop_rejection_is_failed_method_result_after_verified_rollback
+FAILED tests/test_seed_known_edit_rejection.py::test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[unknown_response]
+FAILED tests/test_seed_known_edit_rejection.py::test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[no_new_call]
+FAILED tests/test_seed_known_edit_rejection.py::test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[foreign_prompt]
+FAILED tests/test_seed_known_edit_rejection.py::test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[transport_error]
+FAILED tests/test_seed_known_edit_rejection.py::test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[source_changed]
+FAILED tests/test_seed_known_edit_rejection.py::test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[response_error]
+FAILED tests/test_seed_known_edit_rejection.py::test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[rollback_failed]
+FAILED tests/test_seed_known_edit_rejection.py::test_uncertainty_environment_and_source_failures_keep_infrastructure_stop[wrong_restore]
+9 failed in 0.44s

@@ -1,0 +1,149 @@
+FFF.....FFF                                                              [100%]
+=================================== FAILURES ===================================
+___________ test_recovery_preserves_typed_stop_reason[budget-BUDGET] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-398/test_recovery_preserves_typed_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbf437f7f70>
+kind = 'budget', category = 'BUDGET'
+
+    @pytest.mark.parametrize('kind,category',[('budget','BUDGET'),('identity','MODEL_POLICY'),('worker','WORKER_ERROR')])
+    def test_recovery_preserves_typed_stop_reason(tmp_path,monkeypatch,kind,category):
+        from contractedge.model.budget import BudgetExceeded
+        from contractedge.model.provider import ProviderResponseError,ModelResponse
+        error={'budget':BudgetExceeded('exhausted'),
+               'identity':ProviderResponseError('wrong model',ModelResponse('{}',{'model_identity_status':'MISMATCH'})),
+               'worker':NameError('missing worker dependency')}[kind]
+        result,_,_=recovery_fixture(tmp_path,monkeypatch,front_error=error)
+        assert result['status']=='RECOVERY_FAILED'
+>       assert result.get('recovery_failure',{}).get('category')==category
+E       AssertionError: assert None == 'BUDGET'
+E        +  where None = <built-in method get of dict object at 0x7fbf429a46c0>('category')
+E        +    where <built-in method get of dict object at 0x7fbf429a46c0> = {}.get
+E        +      where {} = <built-in method get of dict object at 0x7fbf42996ec0>('recovery_failure', {})
+E        +        where <built-in method get of dict object at 0x7fbf42996ec0> = {'schema_version': 'ce.repair_trace.v1', 'case_id': 'RW-DEMO-001', 'status': 'RECOVERY_FAILED', 'candidate': {'patch_p...ate.patch', 'patch_bytes': 0, 'patch_sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}, ...}.get
+
+tests/test_isolated_worker_entry.py:103: AssertionError
+_______ test_recovery_preserves_typed_stop_reason[identity-MODEL_POLICY] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-398/test_recovery_preserves_typed_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbf429dbd00>
+kind = 'identity', category = 'MODEL_POLICY'
+
+    @pytest.mark.parametrize('kind,category',[('budget','BUDGET'),('identity','MODEL_POLICY'),('worker','WORKER_ERROR')])
+    def test_recovery_preserves_typed_stop_reason(tmp_path,monkeypatch,kind,category):
+        from contractedge.model.budget import BudgetExceeded
+        from contractedge.model.provider import ProviderResponseError,ModelResponse
+        error={'budget':BudgetExceeded('exhausted'),
+               'identity':ProviderResponseError('wrong model',ModelResponse('{}',{'model_identity_status':'MISMATCH'})),
+               'worker':NameError('missing worker dependency')}[kind]
+        result,_,_=recovery_fixture(tmp_path,monkeypatch,front_error=error)
+        assert result['status']=='RECOVERY_FAILED'
+>       assert result.get('recovery_failure',{}).get('category')==category
+E       AssertionError: assert None == 'MODEL_POLICY'
+E        +  where None = <built-in method get of dict object at 0x7fbf42a048c0>('category')
+E        +    where <built-in method get of dict object at 0x7fbf42a048c0> = {}.get
+E        +      where {} = <built-in method get of dict object at 0x7fbf42997540>('recovery_failure', {})
+E        +        where <built-in method get of dict object at 0x7fbf42997540> = {'schema_version': 'ce.repair_trace.v1', 'case_id': 'RW-DEMO-001', 'status': 'RECOVERY_FAILED', 'candidate': {'patch_p...ate.patch', 'patch_bytes': 0, 'patch_sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}, ...}.get
+
+tests/test_isolated_worker_entry.py:103: AssertionError
+________ test_recovery_preserves_typed_stop_reason[worker-WORKER_ERROR] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-398/test_recovery_preserves_typed_2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbf429dfac0>
+kind = 'worker', category = 'WORKER_ERROR'
+
+    @pytest.mark.parametrize('kind,category',[('budget','BUDGET'),('identity','MODEL_POLICY'),('worker','WORKER_ERROR')])
+    def test_recovery_preserves_typed_stop_reason(tmp_path,monkeypatch,kind,category):
+        from contractedge.model.budget import BudgetExceeded
+        from contractedge.model.provider import ProviderResponseError,ModelResponse
+        error={'budget':BudgetExceeded('exhausted'),
+               'identity':ProviderResponseError('wrong model',ModelResponse('{}',{'model_identity_status':'MISMATCH'})),
+               'worker':NameError('missing worker dependency')}[kind]
+        result,_,_=recovery_fixture(tmp_path,monkeypatch,front_error=error)
+        assert result['status']=='RECOVERY_FAILED'
+>       assert result.get('recovery_failure',{}).get('category')==category
+E       AssertionError: assert None == 'WORKER_ERROR'
+E        +  where None = <built-in method get of dict object at 0x7fbf429a5e80>('category')
+E        +    where <built-in method get of dict object at 0x7fbf429a5e80> = {}.get
+E        +      where {} = <built-in method get of dict object at 0x7fbf42997e80>('recovery_failure', {})
+E        +        where <built-in method get of dict object at 0x7fbf42997e80> = {'schema_version': 'ce.repair_trace.v1', 'case_id': 'RW-DEMO-001', 'status': 'RECOVERY_FAILED', 'candidate': {'patch_p...ate.patch', 'patch_bytes': 0, 'patch_sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}, ...}.get
+
+tests/test_isolated_worker_entry.py:103: AssertionError
+_ test_queue_classifies_method_failure_separately_from_infrastructure_stop[RECOVERY_FAILED-INFRASTRUCTURE_STOP] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-398/test_queue_classifies_method_f5')
+status = 'RECOVERY_FAILED', want = 'INFRASTRUCTURE_STOP'
+
+    @pytest.mark.parametrize('status,want',[('PUBLIC_EXECUTION_COMPLETE','METHOD_RESULT'),
+        ('INVALID_PLAN','METHOD_RESULT'),('STOPPED_UNCERTAIN','METHOD_RESULT'),
+        ('INFRASTRUCTURE_ERROR','INFRASTRUCTURE_STOP'),('BUDGET_EXHAUSTED','INFRASTRUCTURE_STOP'),
+        ('RECOVERY_FAILED','INFRASTRUCTURE_STOP')])
+    def test_queue_classifies_method_failure_separately_from_infrastructure_stop(tmp_path,status,want):
+        from types import SimpleNamespace
+        isolated=load();(tmp_path/'CASE').mkdir();journal=tmp_path/'journal';journal.mkdir()
+        (tmp_path/'CASE/repair.trace.json').write_text(json.dumps(dict(case_id='CASE',status=status,
+                                                                   candidate=None,source_integrity_verified=True)))
+        bridge=SimpleNamespace(public_infrastructure_failed=False,exports={})
+>       assert isolated.validate_method_result(tmp_path,'CASE',bridge,journal)['classification']==want
+E       AssertionError: assert 'METHOD_RESULT' == 'INFRASTRUCTURE_STOP'
+E         
+E         - INFRASTRUCTURE_STOP
+E         + METHOD_RESULT
+
+tests/test_isolated_coordinator.py:131: AssertionError
+______ test_trusted_policy_failure_cannot_be_overridden_by_child_success _______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-398/test_trusted_policy_failure_ca0')
+
+    def test_trusted_policy_failure_cannot_be_overridden_by_child_success(tmp_path):
+        from types import SimpleNamespace
+        isolated=load();(tmp_path/'CASE').mkdir();journal=tmp_path/'journal';journal.mkdir()
+        (tmp_path/'CASE/repair.trace.json').write_text(json.dumps(dict(case_id='CASE',status='PUBLIC_REVIEW_COMPLETE',candidate=None)))
+        bridge=SimpleNamespace(public_infrastructure_failed=False,exports={})
+        broker=SimpleNamespace(policy_failures=[{'category':'MODEL_POLICY','error_type':'ProviderResponseError'}])
+>       assert isolated.validate_method_result(tmp_path,'CASE',bridge,journal,broker=broker)['classification']=='INFRASTRUCTURE_STOP'
+E       TypeError: validate_method_result() got an unexpected keyword argument 'broker'
+
+tests/test_isolated_coordinator.py:203: TypeError
+__ test_parent_independently_enforces_model_context_calls_and_received_error ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-398/test_parent_independently_enfo0')
+
+    def test_parent_independently_enforces_model_context_calls_and_received_error(tmp_path):
+        isolated=load('run_isolated_method')
+        from contractedge.model.provider import ModelRequest,ModelResponse,ProviderResponseError
+        from contractedge.model.budget import BudgetExceeded
+        class PublicService:
+            timeout_seconds=240
+            def __init__(self):self.calls=0
+            def complete_json(self, request):
+                self.calls+=1
+                if self.calls==2:raise ProviderResponseError('provider private detail',ModelResponse('received',{'model_identity_status':'MISMATCH'}))
+                return ModelResponse('answer',{'model':'test'})
+            def request_overhead(self,request):return 'schema'
+            def request_metadata(self,request):return {'output_mode':'json_object'}
+        provider=PublicService()
+        config=dict(model='test',max_model_calls=2,max_total_tokens=200,max_elapsed_seconds=30,
+                    max_context_tokens=100,max_output_tokens=10,execution_max_output_tokens=10,
+                    review_max_output_tokens=5,timeout_seconds=240)
+        broker=isolated.ModelBroker(provider,len,config,tmp_path/'calls.json')
+        req=asdict(ModelRequest('test','phase',({'role':'user','content':'public'},),5))
+        with pytest.raises(ValueError):broker.complete({'request':{**req,'model':'other'},'timeout_seconds':1})
+        oversized={**req,'messages':[{'role':'user','content':'x'*95}]}
+        with pytest.raises(ValueError):broker.complete({'request':oversized,'timeout_seconds':1})
+        assert provider.calls==0
+        assert broker.complete({'request':req,'timeout_seconds':1})['content']=='answer'
+        received=broker.complete({'request':req,'timeout_seconds':1})
+        assert received['received_error'] is True and received['content']=='received'
+>       assert any(x['category']=='MODEL_POLICY' for x in broker.policy_failures)
+E       AttributeError: 'ModelBroker' object has no attribute 'policy_failures'
+
+tests/test_isolated_method.py:155: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_isolated_worker_entry.py::test_recovery_preserves_typed_stop_reason[budget-BUDGET]
+FAILED tests/test_isolated_worker_entry.py::test_recovery_preserves_typed_stop_reason[identity-MODEL_POLICY]
+FAILED tests/test_isolated_worker_entry.py::test_recovery_preserves_typed_stop_reason[worker-WORKER_ERROR]
+FAILED tests/test_isolated_coordinator.py::test_queue_classifies_method_failure_separately_from_infrastructure_stop[RECOVERY_FAILED-INFRASTRUCTURE_STOP]
+FAILED tests/test_isolated_coordinator.py::test_trusted_policy_failure_cannot_be_overridden_by_child_success
+FAILED tests/test_isolated_method.py::test_parent_independently_enforces_model_context_calls_and_received_error
+6 failed, 5 passed, 22 deselected in 0.45s

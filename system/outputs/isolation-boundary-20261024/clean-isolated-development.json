@@ -1,0 +1,48 @@
+{
+  "schema_version": "ce.clean_isolated_development.v1",
+  "clone_commit": "43f2a1e0940a3d5418aaca7b6dc2db10077218d8",
+  "method_version": "0.6.38",
+  "fresh_venv": true,
+  "native_source": "clean clone vendored audited source",
+  "external_dependency_root_empty": true,
+  "original_runtime_mounted_in_method": false,
+  "original_topomen_mounted_in_method": false,
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "independent_status": "PASS",
+  "case_id": "RW-CAND-130",
+  "model_calls": 6,
+  "edit_rounds": 1,
+  "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+  "final_snapshot": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+  "semantic_outcome": "UNKNOWN",
+  "terminal_validation": {
+    "classification": "METHOD_RESULT",
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "unknown_requests": 0,
+    "not_dispatched_requests": 0,
+    "candidate_verified": true,
+    "coordinator_policy_failures": [],
+    "recovery_failure": null,
+    "semantic_outcome_upgraded": false
+  },
+  "cleanup": {
+    "status": "OWNED_CONTAINERS_CLOSED",
+    "removed": []
+  },
+  "new_cost_micro_cny": 605726,
+  "budget": {
+    "limit_micro_cny": 150000000,
+    "committed_micro_cny": 100857344,
+    "remaining_upper_micro_cny": 49142656,
+    "ledger_records": 1002
+  },
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "scope": "One preregistered clean installation operational attempt, not repair-effectiveness generalization",
+  "public_check_counts": {
+    "PASS": 2,
+    "FAIL": 0,
+    "UNKNOWN": 1
+  },
+  "pending_obligations": 1
+}

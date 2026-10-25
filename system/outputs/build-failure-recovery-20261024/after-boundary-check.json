@@ -1,0 +1,44 @@
+{
+  "label": "after-boundary-check",
+  "real_model_http_calls": 0,
+  "saved_model_responses_consumed": 8,
+  "request_count": 9,
+  "captured_restored_retry": true,
+  "selected_source_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+  "initial_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+  "source_restored": true,
+  "retry_prompt_version": "topomen-source-execution.v1",
+  "input_bound": 137331,
+  "output_bound": 16384,
+  "context_limit": 220000,
+  "failed_trial_snapshot": "9896145816cafd2fa9cd98a2178157b41c8d07ae062b6e7d96b926357b8faec6",
+  "error_locations": [
+    {
+      "path": "pkg/resource/metric_alarm/sdk.go",
+      "line": 677,
+      "column": 17,
+      "file_sha256": "b56d4ffe0147b566adf64d5be2e6572d9df0c5717e7c35d22c6b635f6a39f74e"
+    },
+    {
+      "path": "pkg/resource/metric_alarm/sdk.go",
+      "line": 688,
+      "column": 17,
+      "file_sha256": "b56d4ffe0147b566adf64d5be2e6572d9df0c5717e7c35d22c6b635f6a39f74e"
+    }
+  ],
+  "error_excerpt": "pkg/resource/metric_alarm/sdk.go:677:17: cannot use desired.ko.Status.ACKResourceMetadata.ARN (variable of type *\"github.com/aws-controllers-k8s/runtime/apis/core/v1alpha1\".AWSResourceName) as *string value in struct literal\npkg/resource/metric_alarm/sdk.go:688:17: cannot use desired.ko.Status.ACKResourceMetadata.ARN (variable of type *\"github.com/aws-controllers-k8s/runtime/apis/core/v1alpha1\".AWSResourceName) as *string value in struct literal",
+  "current_observation_snapshots": [
+    "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60"
+  ],
+  "first_eight_messages_match_saved": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "scope": "Saved eight responses and public Broken/build-failure reports only; capture next request after coherent rollback. Not a new model correction or repair outcome."
+}

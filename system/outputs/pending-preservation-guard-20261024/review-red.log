@@ -1,0 +1,36 @@
+.......FF                                                                [100%]
+=================================== FAILURES ===================================
+_ test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior[SUPPORTING] _
+
+coverage = 'SUPPORTING'
+
+    @pytest.mark.parametrize('coverage',['SUPPORTING',None])
+    def test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior(coverage):
+        before=run({'error-control':'PASS'},'S1');trial=run({'error-control':'FAIL'},'S2')
+        previous=prior();previous['pending_obligations'][0]['check_coverage']=coverage
+>       assert compare_candidate_checks(before,trial,preservation_check_ids({},previous))['decision']=='PROMOTE'
+E       AssertionError: assert 'REJECT_REGRESSION' == 'PROMOTE'
+E         
+E         - PROMOTE
+E         + REJECT_REGRESSION
+
+../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py:46: AssertionError
+_ test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior[None] _
+
+coverage = None
+
+    @pytest.mark.parametrize('coverage',['SUPPORTING',None])
+    def test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior(coverage):
+        before=run({'error-control':'PASS'},'S1');trial=run({'error-control':'FAIL'},'S2')
+        previous=prior();previous['pending_obligations'][0]['check_coverage']=coverage
+>       assert compare_candidate_checks(before,trial,preservation_check_ids({},previous))['decision']=='PROMOTE'
+E       AssertionError: assert 'REJECT_REGRESSION' == 'PROMOTE'
+E         
+E         - PROMOTE
+E         + REJECT_REGRESSION
+
+../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py:46: AssertionError
+=========================== short test summary info ============================
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py::test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior[SUPPORTING]
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_pending_preservation_guard.py::test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior[None]
+2 failed, 7 passed in 0.16s

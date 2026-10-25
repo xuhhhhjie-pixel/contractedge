@@ -1,0 +1,62 @@
+.FF...F......................                                            [100%]
+=================================== FAILURES ===================================
+_ test_missing_selector_becomes_source_bound_repair_task[main.go:2:13: tree.lookup undefined (type *Tree has no field or method lookup)\n] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-456/test_missing_selector_becomes_0')
+diagnostic = 'main.go:2:13: tree.lookup undefined (type *Tree has no field or method lookup)\n'
+
+    @pytest.mark.parametrize('diagnostic', [
+        'main.go:2:13: tree.lookup undefined (type *Tree has no field or method lookup)\n',
+        'main.go:2:13: value.Name undefined (type Item has no field or method Name)\n',
+    ])
+    def test_missing_selector_becomes_source_bound_repair_task(tmp_path, diagnostic):
+        from contractedge.orchestration.feedback import make_feedback, feedback_prompt_view
+        raw, snapshot, _ = fixture(tmp_path, diagnostic)
+        facts = classify(raw, snapshot)
+>       assert len(facts) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+system/tests/test_candidate_build_failure.py:49: AssertionError
+_ test_missing_selector_becomes_source_bound_repair_task[main.go:2:13: value.Name undefined (type Item has no field or method Name)\n] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-456/test_missing_selector_becomes_1')
+diagnostic = 'main.go:2:13: value.Name undefined (type Item has no field or method Name)\n'
+
+    @pytest.mark.parametrize('diagnostic', [
+        'main.go:2:13: tree.lookup undefined (type *Tree has no field or method lookup)\n',
+        'main.go:2:13: value.Name undefined (type Item has no field or method Name)\n',
+    ])
+    def test_missing_selector_becomes_source_bound_repair_task(tmp_path, diagnostic):
+        from contractedge.orchestration.feedback import make_feedback, feedback_prompt_view
+        raw, snapshot, _ = fixture(tmp_path, diagnostic)
+        facts = classify(raw, snapshot)
+>       assert len(facts) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+system/tests/test_candidate_build_failure.py:49: AssertionError
+_ test_source_build_failure_cannot_replace_runnable_incumbent_without_preserve_ids _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-456/test_source_build_failure_cann0')
+
+    def test_source_build_failure_cannot_replace_runnable_incumbent_without_preserve_ids(tmp_path):
+        from contractedge.orchestration.candidate_guard import compare_candidate_checks
+        raw, snapshot, _ = fixture(tmp_path)
+        incumbent = dict(status='EXECUTION_PASS', snapshot_id='before', observations=[],
+                         input_digest='input', environment_digest='environment')
+        trial = dict(incumbent, status='EXECUTION_FAILED', snapshot_id=snapshot.snapshot_id,
+                     candidate_build_failures=classify(raw, snapshot))
+        decision = compare_candidate_checks(incumbent, trial, [])
+>       assert decision['decision'] == 'UNCOMPARABLE'
+E       AssertionError: assert 'PROMOTE' == 'UNCOMPARABLE'
+E         
+E         - UNCOMPARABLE
+E         + PROMOTE
+
+system/tests/test_candidate_build_failure.py:81: AssertionError
+=========================== short test summary info ============================
+FAILED system/tests/test_candidate_build_failure.py::test_missing_selector_becomes_source_bound_repair_task[main.go:2:13: tree.lookup undefined (type *Tree has no field or method lookup)\n]
+FAILED system/tests/test_candidate_build_failure.py::test_missing_selector_becomes_source_bound_repair_task[main.go:2:13: value.Name undefined (type Item has no field or method Name)\n]
+FAILED system/tests/test_candidate_build_failure.py::test_source_build_failure_cannot_replace_runnable_incumbent_without_preserve_ids
+3 failed, 26 passed in 0.30s

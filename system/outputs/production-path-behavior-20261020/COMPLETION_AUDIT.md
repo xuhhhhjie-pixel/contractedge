@@ -1,3 +1,7 @@
+> 最新开发版本为0.6.40；当前结果见 [本轮验收](../declared-comparison-closure-20261024/COMPLETION_AUDIT.md)。以下为历史审计，不能代替当前正式准入。
+
+> 当前：修复算法仍为冻结0.6.38；新增隔离执行边界已修复4项Important并通过完整971+22、可移植938+17测试。隔离RW130真实4调用、独立PASS；本次不计原46槽。原协议1/46已评分、45待运行并暂停，新协议尚未冻结面板。formal_ready=false，正式150/B关闭。详见 docs/reports/2026-10-24-isolation-boundary-progress.md。
+
 > 2026-10-22最新审查：0.6.27真实ACK最终INVALID_PLAN / NO_CANDIDATE（6次调用），当前不具备正式实验准入。完整后续方案见 docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md。下文为历史记录。
 
 > 最新进度：已冻结 0.6.27，修复诊断到计划的已选源码丢失及计划提示中的前置实现要求；662项测试+22项子测试通过。真实开发效果待验收，上一版ACK为NO_CANDIDATE。详见 [本轮记录](/home/xhj/contractedge-system/outputs/reliability-closure-20261020/DELIVERY_CHECKPOINT_v0627.md)。正式150与B面板仍关闭。

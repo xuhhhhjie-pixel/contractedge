@@ -1,0 +1,13 @@
+{
+  "schema_version": "ce.independent_finalize_recovery.v1",
+  "record_process_ended_before_finalize": true,
+  "completed_checkpoint_status": "TOOL_FINISHED",
+  "same_patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+  "ledger_unchanged": true,
+  "model_calls_added": 0,
+  "grader_reexecuted": false,
+  "independent_status": "PASS",
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "scope": "Normal process boundary after durable scorer completion; hard-death uncertainty tested separately, never automatic rerun"
+}

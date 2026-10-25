@@ -572,10 +572,10 @@
                 "type": "string"
               },
               "input_pointer": {
-                "type": "string"
+                "$ref": "#/$defs/jsonPointer"
               },
               "output_pointer": {
-                "type": "string"
+                "$ref": "#/$defs/jsonPointer"
               }
             }
           }
@@ -761,10 +761,10 @@
                 "type": "string"
               },
               "input_pointer": {
-                "type": "string"
+                "$ref": "#/$defs/jsonPointer"
               },
               "output_pointer": {
-                "type": "string"
+                "$ref": "#/$defs/jsonPointer"
               }
             }
           }
@@ -907,10 +907,10 @@
                 "type": "string"
               },
               "input_pointer": {
-                "type": "string"
+                "$ref": "#/$defs/jsonPointer"
               },
               "output_pointer": {
-                "type": "string"
+                "$ref": "#/$defs/jsonPointer"
               }
             }
           }
@@ -958,6 +958,11 @@
           "description": "Runner-preserved conjunctive statements; aliasing does not establish equivalence or sufficient coverage."
         }
       }
+    },
+    "jsonPointer": {
+      "type": "string",
+      "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])",
+      "description": "JSON Pointer string: empty root or /-prefixed tokens; escape ~ as ~0 and / as ~1. No dot paths, filenames or URI fragments."
     }
   }
 }

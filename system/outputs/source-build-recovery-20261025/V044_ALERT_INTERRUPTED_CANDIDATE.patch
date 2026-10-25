@@ -1,0 +1,115 @@
+diff --git a/cmd/alertmanager/main.go b/cmd/alertmanager/main.go
+index 567f856..edc1630 100644
+--- a/cmd/alertmanager/main.go
++++ b/cmd/alertmanager/main.go
+@@ -462,6 +462,11 @@ func run() int {
+ 
+ 		intervener := timeinterval.NewIntervener(timeIntervals)
+ 
++		var aggrGroupsSnapshot *dispatch.AggrGroupsSnapshot
++		if disp != nil {
++			aggrGroupsSnapshot = disp.SnapshotAggrGroups()
++		}
++
+ 		inhibitor.Stop()
+ 		disp.Stop()
+ 
+@@ -507,6 +512,7 @@ func run() int {
+ 			logger,
+ 			dispMetrics,
+ 		)
++		disp.SetAggrGroupsSnapshot(aggrGroupsSnapshot)
+ 		routes.Walk(func(r *dispatch.Route) {
+ 			if r.RouteOpts.RepeatInterval > *retention {
+ 				configLogger.Warn(
+diff --git a/dispatch/dispatch.go b/dispatch/dispatch.go
+index 1fae2d9..50101eb 100644
+--- a/dispatch/dispatch.go
++++ b/dispatch/dispatch.go
+@@ -141,6 +141,69 @@ func NewDispatcher(
+ 	return disp
+ }
+ 
++// AggrGroupsSnapshot is a snapshot of the dispatcher's aggregation-group state.
++type AggrGroupsSnapshot struct {
++	aggrGroupsPerRoute map[*Route]map[model.Fingerprint]*aggrGroup
++	aggrGroupsNum      int
++}
++
++// SnapshotAggrGroups returns a snapshot of the current aggregation-group state
++// under the dispatcher lock, so it can be handed to a replacement dispatcher
++// during a configuration reload.
++func (d *Dispatcher) SnapshotAggrGroups() *AggrGroupsSnapshot {
++	if d == nil {
++		return nil
++	}
++	d.mtx.RLock()
++	defer d.mtx.RUnlock()
++
++	snapshot := &AggrGroupsSnapshot{
++		aggrGroupsPerRoute: make(map[*Route]map[model.Fingerprint]*aggrGroup, len(d.aggrGroupsPerRoute)),
++		aggrGroupsNum:      d.aggrGroupsNum,
++	}
++	for route, groups := range d.aggrGroupsPerRoute {
++		routeGroups := make(map[model.Fingerprint]*aggrGroup, len(groups))
++		for fp, ag := range groups {
++			routeGroups[fp] = ag
++		}
++		snapshot.aggrGroupsPerRoute[route] = routeGroups
++	}
++	return snapshot
++}
++
++// SetAggrGroupsSnapshot installs a previously captured aggregation-group
++// snapshot into the dispatcher. It must be called before Run so that Run's
++// initialization does not discard the preserved groups.
++func (d *Dispatcher) SetAggrGroupsSnapshot(snapshot *AggrGroupsSnapshot) {
++	if d == nil || snapshot == nil {
++		return
++	}
++	d.mtx.Lock()
++	defer d.mtx.Unlock()
++
++	currentRoutes := make(map[string]*Route)
++	d.route.Walk(func(r *Route) {
++		currentRoutes[r.Key()] = r
++	})
++
++	d.aggrGroupsPerRoute = make(map[*Route]map[model.Fingerprint]*aggrGroup, len(snapshot.aggrGroupsPerRoute))
++	for route, groups := range snapshot.aggrGroupsPerRoute {
++		current, ok := currentRoutes[route.Key()]
++		if !ok {
++			continue
++		}
++		routeGroups := make(map[model.Fingerprint]*aggrGroup, len(groups))
++		for fp, ag := range groups {
++			routeGroups[fp] = ag
++		}
++		d.aggrGroupsPerRoute[current] = routeGroups
++	}
++	d.aggrGroupsNum = snapshot.aggrGroupsNum
++	if d.metrics != nil {
++		d.metrics.aggrGroups.Set(float64(d.aggrGroupsNum))
++	}
++}
++
+ // Run starts dispatching alerts incoming via the updates channel.
+ func (d *Dispatcher) Run(dispatchStartTime time.Time) {
+ 	d.done = make(chan struct{})
+@@ -150,9 +213,13 @@ func (d *Dispatcher) Run(dispatchStartTime time.Time) {
+ 	d.startTimer = time.NewTimer(time.Until(dispatchStartTime))
+ 	d.state = DispatcherStateWaitingToStart
+ 	d.logger.Debug("setting state", "state", "waiting_to_start")
+-	d.aggrGroupsPerRoute = map[*Route]map[model.Fingerprint]*aggrGroup{}
+-	d.aggrGroupsNum = 0
+-	d.metrics.aggrGroups.Set(0)
++	if d.aggrGroupsPerRoute == nil {
++		d.aggrGroupsPerRoute = map[*Route]map[model.Fingerprint]*aggrGroup{}
++		d.aggrGroupsNum = 0
++	}
++	if d.metrics != nil {
++		d.metrics.aggrGroups.Set(float64(d.aggrGroupsNum))
++	}
+ 	d.ctx, d.cancel = context.WithCancel(context.Background())
+ 	d.mtx.Unlock()
+ 

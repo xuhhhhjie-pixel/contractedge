@@ -1,0 +1,25 @@
+{
+  "method_version": "0.6.39",
+  "saved_source_version": "0.6.38",
+  "new_model_calls": 0,
+  "saved_responses": 6,
+  "all_requests_exact": true,
+  "worker_returncode": 0,
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "final_snapshot": "6023bac3084b12adce3e288a7705dbd3c1e07f644582f5f20f855beb283b3e72",
+  "patch_sha256": "9110e61d907f7a35d1887f2db88648168a9a35b83f9fdf5d65e1005f0e2e6f96",
+  "method_namespace": true,
+  "producer_namespace": false,
+  "saved_public_outputs": true,
+  "counts_in_46_slot_panel": false,
+  "independent_score": "NOT_RUN",
+  "ledger_unchanged": true,
+  "harness_files": {
+    "isolated_protocol.py": "bcd33c178da305f4fe69836f68d9f158c4b7a520bb089d1231a7d78c4815f9c7",
+    "isolated_paths.py": "f228cfaac3d959d0a3b43c73a5c8c23d953746f065e753515cdc467e190974a8",
+    "run_isolated_method.py": "166bf7da074160b0e74fa759eda38c5191d15539e99d58f66e8bcc2470bc5a13",
+    "isolated_public_worker.py": "3e4652e564ffd37a5d7c7798a5ee19fdf43c6fd82744f2fbc50fbb0afc0275ac",
+    "run_reliability_worker_v10.py": "2c50d6c7289321a7a78c21b124a7d7083e69f26e48a33ab6c44f1d4635097fe0",
+    "run_reliability_worker_v9.py": "261d59c4edeca3cafa631576a9197a02c4cd18308df55572f96f1dabf829ba58"
+  }
+}

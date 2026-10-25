@@ -1,0 +1,19 @@
+{
+  "clone_commit": "43f2a1e",
+  "source_version": "0.6.38",
+  "fresh_venv": true,
+  "noneditable_install": true,
+  "pip_check": "PASS",
+  "original_runtime_and_integration_masked_for_tests": true,
+  "portable_passed": 938,
+  "portable_subtests": 17,
+  "excluded_modules": 6,
+  "native_passed": 9,
+  "api_run": "PASS_REAL_ISOLATED_PATCH_AND_INDEPENDENT_SCORE",
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "installed_file_count": 3543,
+  "api_model_calls": 6,
+  "original_runtime_mounted_in_method": false,
+  "original_native_mounted_in_method": false
+}

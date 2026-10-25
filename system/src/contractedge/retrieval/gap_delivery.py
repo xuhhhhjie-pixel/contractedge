@@ -6,7 +6,7 @@ import hashlib
 import json
 import re
 from pathlib import Path, PurePosixPath
-from contractedge.retrieval.candidates import _terms
+from contractedge.retrieval.candidates import _terms, merge_gap_context_optional
 from contractedge.source.parsers import parse_source_units, _unit
 
 
@@ -74,18 +74,92 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
                     and unit['locator']['start_line']<=first['locator']['end_line']
                     and first['locator']['start_line']<=unit['locator']['end_line']):continue
             if index and scored[index][0]<.7*scored[0][0]:continue
-            item={**unit,'gap_role_keys':[gap['id']+(':anchor' if index==0 else ':context')],
+            tier = match_tier(unit)
+            item={**unit,'gap_role_keys':[gap['id']+(':anchor' if index==0 and tier else ':context')],
+                  'optional_gap_context': not bool(tier),
                   'evidence_gap_refs':[gap['id']],'anchor_priority':4,
                   'scope_extension':'EVIDENCE_GAP_EXACT_PATH','hop_distance':0,
-                  'association_status':'EXACT_PUBLIC_GAP_QUERY; lexical location only, not causality or edit grant'}
+                  'association_status':('EXACT_PUBLIC_GAP_QUERY' if tier else 'BOUNDED_NONMATCHING_LEXICAL_CONTEXT')+'; lexical location only, not causality or edit grant'}
             prior=next((u for u in output if u['id']==item['id']),None)
             if prior is None:output.append(item)
             else:
+                prior['optional_gap_context'] = merge_gap_context_optional(prior, item)
                 prior['gap_role_keys']=sorted(set(prior['gap_role_keys'])|set(item['gap_role_keys']))
                 prior['evidence_gap_refs']=sorted(set(prior.get('evidence_gap_refs',[]))|set(item['evidence_gap_refs']))
             audit.append(dict(gap_id=gap['id'],unit_id=item['id'],path=path,
                 status='FOUND' if match_tier(unit) else 'LEXICAL_CONTEXT',
                 match_basis={2:'EXACT_SYMBOL',1:'EXACT_LITERAL_REFERENCE',0:'LEXICAL_FALLBACK'}[match_tier(unit)]))
+    # Method-name references do not include Go receiver types. Recover a known
+    # same-package receiver declaration before generic name matches consume the
+    # six role slots. The scope index is a locator only: re-read/hash the file.
+    receiver_keys = set()
+    declarations = [*limits.get('seed_declarations', []), *seeds]
+    for endpoint in list(output):
+        if not endpoint['path'].endswith('.go'):
+            continue
+        receiver = re.match(r'\s*func\s*\(\s*\w+\s+\*?(\w+)\s*\)', endpoint['text'])
+        if not receiver:
+            continue
+        owner = receiver[1]
+        directory = PurePosixPath(endpoint['path']).parent
+        if (directory, owner) in receiver_keys:
+            continue
+        receiver_keys.add((directory, owner))
+        locations = {(u['path'], u['locator']['start_line']) for u in declarations
+                     if u.get('symbol') == owner and u.get('path', '').endswith('.go')
+                     and not u['path'].endswith('_test.go')
+                     and PurePosixPath(u['path']).parent == directory}
+        record = dict(receiver_type=owner, endpoint_path=endpoint['path'])
+        if len(locations) != 1:
+            audit.append(dict(record, status='RECEIVER_DECLARATION_AMBIGUOUS' if locations
+                              else 'RECEIVER_DECLARATION_NOT_IN_SCOPE'))
+            continue
+        path, _ = next(iter(locations))
+        record['path'] = path
+        if len(output) >= 6:
+            audit.append(dict(record, status='RECEIVER_DECLARATION_ROLE_BUDGET'))
+            continue
+        if path not in scanned and len(scanned) >= max_files:
+            audit.append(dict(record, status='RECEIVER_DECLARATION_FILE_BUDGET'))
+            continue
+        target = root / path
+        if path not in inventory or target.is_symlink() or not target.resolve().is_relative_to(root) or not target.is_file():
+            audit.append(dict(record, status='RECEIVER_DECLARATION_UNAVAILABLE'))
+            continue
+        size = target.stat().st_size
+        if size > 1024 * 1024 or (path not in scanned and used + size > max_bytes):
+            audit.append(dict(record, status='RECEIVER_DECLARATION_BYTE_BUDGET'))
+            continue
+        raw = target.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != inventory[path]:
+            audit.append(dict(record, status='RECEIVER_DECLARATION_SNAPSHOT_MISMATCH'))
+            continue
+        text = raw.decode('utf-8', errors='replace')
+        if path not in scanned:
+            used += len(raw)
+            scanned[path] = text
+        matches = [u for u in parse_source_units(path, text, snapshot.snapshot_id,
+                    max_lines=160, max_chars=12000) if u.get('symbol') == owner
+                   and re.match(r'\s*type\s+' + re.escape(owner) + r'\s+struct\s*\{', u['text'])]
+        if len(matches) != 1 or matches[0].get('truncated'):
+            audit.append(dict(record, status='RECEIVER_DECLARATION_UNRESOLVED'))
+            continue
+        unit = matches[0]
+        # Preserve import aliases with a short exact prefix where affordable.
+        # A long prefix is not silently clipped and claimed to resolve imports.
+        prefix = ''.join(text.splitlines(keepends=True)[:unit['locator']['end_line']])
+        if unit['locator']['end_line'] <= 160 and len(prefix) <= 12000:
+            unit = _unit(snapshot.snapshot_id, path, text, 0, len(prefix),
+                         'BOUNDED_RECEIVER_DECLARATION_CONTEXT', unit_kind='FUNCTION_OR_TYPE',
+                         symbol=owner, declared=[owner], max_chars=12000)
+        else:
+            audit.append(dict(record, status='RECEIVER_IMPORT_CONTEXT_NOT_INCLUDED'))
+        item = {**unit, 'gap_role_keys': ['RECEIVER_DECLARATION:' + unit['id']],
+                'required_for_gap_delivery': True, 'anchor_priority': 4, 'hop_distance': 1,
+                'association_status': 'SAME_PACKAGE_RECEIVER_DECLARATION; lexical binding only, not API behavior, causal proof or edit permission'}
+        if not any(u['id'] == item['id'] for u in output):
+            output.append(item)
+        audit.append(dict(record, unit_id=item['id'], status='FOUND', basis=item['association_status']))
     # A reader such as x.Groups() may live behind x := localpkg.NewReader().
     # Follow only an explicit local import + constructor + requested method.
     # This is a lexical locator, not a dispatch/alias or causal proof.

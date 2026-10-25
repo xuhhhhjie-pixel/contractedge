@@ -1,0 +1,18 @@
+{
+  "schema_version": "ce.saved_draft_correction_validation.v1",
+  "role": "SUPPLEMENTAL_PLANNING_CORRECTION_ONLY",
+  "method_version": "0.6.37",
+  "method_digest": "d0d8c56b057c18ee29511d85190c3cb1300ac5b4069878bae732b8169a653d93",
+  "freeze_sha256": "7f51e32252809a7f678ab3cebd62697890289a530e370650b3cbf22dbc94cd9c",
+  "script_sha256": "7aa5508237d939fdadef290027c8dc63865b5f1067adde767214e927860668eb",
+  "saved_calls_sha256": "57a618d2a2fd5369c4e3e84206e521da0a6d82ed09a63c11f7f4306412b04b67",
+  "saved_response_count": 5,
+  "max_new_paid_calls": 1,
+  "max_total_method_calls": 12,
+  "source_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+  "counts_in_46_slot_panel": false,
+  "counts_as_fresh_broken_attempt": false,
+  "counts_as_behavior_repair_success": false,
+  "retry_if_failed": false,
+  "scope": "Replay exactly5publicresponses, one new corrected plan only. Stop before any further model call or source edit; no independent scoring."
+}

@@ -1,0 +1,22 @@
+{
+  "scope": "Counterfactual only: old actual public PASS put_error changed to FAIL in-memory, current real candidate has not been observed regressing this check. No source edit/model call/behavior score.",
+  "label": "after",
+  "protected_check_ids": [
+    "cloudwatch-tags-v2:put_error",
+    "cloudwatch-tags-v2:unchanged",
+    "cloudwatch-tags-v2:unchanged_other_field"
+  ],
+  "decision": "REJECT_REGRESSION",
+  "regressions": [
+    {
+      "check_id": "cloudwatch-tags-v2:put_error",
+      "scenario": "method-cloudwatch-tags-v2",
+      "probe_sha256": "b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f",
+      "before": "PASS",
+      "after": "FAIL"
+    }
+  ],
+  "old_whole_claim_retained_count": 0,
+  "new_model_preserve_constraints": 1,
+  "private_materials_loaded": false
+}

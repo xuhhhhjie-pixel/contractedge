@@ -9,6 +9,7 @@ from typing import Any, Mapping
 from jsonschema import Draft202012Validator
 
 from .evidence import static_search_content_digest, supports_expected_missing_evidence
+from .pointers import JSON_POINTER_GUIDANCE
 from .models import (
     ContractError,
     DiagnosisPacket,
@@ -54,7 +55,10 @@ def _check_schema(payload: Any, version: str) -> None:
         path = ".".join(str(part) for part in error.absolute_path)
         additional = ["SCHEMA_INVALID at " + '.'.join(map(str, e.absolute_path)) + ': ' + e.message[:220]
                       for e in errors[1:12]]
-        raise ContractError("SCHEMA_INVALID", path, error.message +
+        pointer_hint = ('; ' + JSON_POINTER_GUIDANCE if any(
+            e.validator == 'pattern' and list(e.absolute_path)[-1:] in [['input_pointer'], ['output_pointer']]
+            for e in errors) else '')
+        raise ContractError("SCHEMA_INVALID", path, error.message + pointer_hint +
                             ('; additional independent errors: ' + '; '.join(additional) if additional else ''))
 
 
@@ -633,8 +637,13 @@ def validate_changeset(
         issues.append(_issue('STATUS_INCONSISTENT', 'evidence_gaps', 'READY cannot contain unresolved planning evidence gaps'))
     if payload["status"] in {"READY", "READY_PARTIAL"} and not planned:
         issues.append(_issue("STATUS_INCONSISTENT", "planned_violation_ids", "ready plans require a supported planned violation"))
-    if payload["status"] == "NEEDS_EVIDENCE" and (planned or payload["changes"]):
-        issues.append(_issue("STATUS_INCONSISTENT", "status", "NEEDS_EVIDENCE plans cannot contain executable changes"))
+    if payload["status"] == "NEEDS_EVIDENCE":
+        if planned:
+            issues.append(_issue("STATUS_INCONSISTENT", "planned_violation_ids",
+                "NEEDS_EVIDENCE: planned_violation_ids must be empty; supported diagnosis violations are not yet executable repairs. Keep unsupported repair obligations open and name the missing evidence; do not invent changes to cover these IDs."))
+        if payload["changes"]:
+            issues.append(_issue("STATUS_INCONSISTENT", "changes",
+                "NEEDS_EVIDENCE: changes must be empty. Retain unresolved obligations and evidence gaps, or use a ready status only when the existing evidence supports an executable plan."))
 
     return ValidationResult(not issues, tuple(issues), dict(payload))
 

@@ -1,0 +1,3137 @@
+{
+  "schema_version": "ce.method_panel.v1",
+  "cells": [
+    {
+      "fixture_id": "config-binding/base",
+      "method_mode": "full",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "SEMANTIC_CHANGESET",
+      "expected_intent": "SEMANTIC_CHANGESET",
+      "broken_checks": {
+        "selected": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "selected": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "selected": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "selected": "PASS"
+      },
+      "preservation_checks": {
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "f026d16d932834726b06b5d37c41e2725916f9481e580c7016a4fc2491ef1227",
+        "patch_bytes": 338,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/config-binding--base/full/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 1,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "changeset.v1.1.12",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 11.840619344264269,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 4.697827782481909,
+          "provider_seconds": 0.0003031305968761444,
+          "input_tokens_reserved": 41257,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 2228
+        },
+        {
+          "prompt_version": "changeset.v1.1.12",
+          "cumulative_seconds": 4.927102699875832,
+          "provider_seconds": 0.00040714070200920105,
+          "input_tokens_reserved": 25676,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 3077
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 5.610532883554697,
+          "provider_seconds": 0.00023163855075836182,
+          "input_tokens_reserved": 18566,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 128
+        }
+      ],
+      "tokens": {
+        "reserved": 97787,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 11.840619344264269,
+        "provider_seconds": 0.0009419098496437073,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "653aa9c8beb0adf5a81f5850f64e90245d924d042d77b56995d16ab9db0816ef",
+      "method_input_digest": "21d739100828d9104adf9b09b294b13a97ea464de2e671e211b495cd742f8042",
+      "source_archive_sha256": "b4e2e409a570e66c415096f8c4f9a09a311d455474d80bb5ffb9a8b882fb49fc",
+      "initial_snapshot_id": "bf92fff38867cab6a107f60fa9b8180abd5088229838c99f3f978a36633ddf57",
+      "final_snapshot_id": "05083a81baf24bbdd042d54fbb86247e54034f0d613f3ce884f90785ab4e8f77",
+      "config_digest": "5863563e520c3dcccea38dd240b78d8b6230c848d5b356ec3ab9650ccec79df9",
+      "public_profile_digest": "44140ea046e78d3fcc5757beea435f7b18a644b454c79aed6681bb7d074570bd",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "config-binding/base",
+      "method_mode": "without_relation",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "DIRECT_PLAN",
+      "expected_intent": "DIRECT_PLAN",
+      "broken_checks": {
+        "selected": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "selected": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "selected": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "selected": "PASS"
+      },
+      "preservation_checks": {
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "f026d16d932834726b06b5d37c41e2725916f9481e580c7016a4fc2491ef1227",
+        "patch_bytes": 338,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/config-binding--base/without_relation/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 1,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "direct-plan.v1",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 9.160957891494036,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "direct-plan.v1",
+          "cumulative_seconds": 5.044457398355007,
+          "provider_seconds": 0.0001091882586479187,
+          "input_tokens_reserved": 7094,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 594
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 5.212079547345638,
+          "provider_seconds": 0.0001598075032234192,
+          "input_tokens_reserved": 8021,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 128
+        }
+      ],
+      "tokens": {
+        "reserved": 23307,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 9.160957891494036,
+        "provider_seconds": 0.0002689957618713379,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "653aa9c8beb0adf5a81f5850f64e90245d924d042d77b56995d16ab9db0816ef",
+      "method_input_digest": "21d739100828d9104adf9b09b294b13a97ea464de2e671e211b495cd742f8042",
+      "source_archive_sha256": "b4e2e409a570e66c415096f8c4f9a09a311d455474d80bb5ffb9a8b882fb49fc",
+      "initial_snapshot_id": "bf92fff38867cab6a107f60fa9b8180abd5088229838c99f3f978a36633ddf57",
+      "final_snapshot_id": "05083a81baf24bbdd042d54fbb86247e54034f0d613f3ce884f90785ab4e8f77",
+      "config_digest": "51ad53ff077f7260c9ac688827f95bff089e78b28ad62d1b03f0bdd803d5b310",
+      "public_profile_digest": "44140ea046e78d3fcc5757beea435f7b18a644b454c79aed6681bb7d074570bd",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "config-binding/base",
+      "method_mode": "without_changeset",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "RELATION_ONLY",
+      "expected_intent": "RELATION_ONLY",
+      "broken_checks": {
+        "selected": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "selected": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "selected": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "selected": "PASS"
+      },
+      "preservation_checks": {
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "f026d16d932834726b06b5d37c41e2725916f9481e580c7016a4fc2491ef1227",
+        "patch_bytes": 338,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/config-binding--base/without_changeset/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 9.152858264744282,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 4.330284994095564,
+          "provider_seconds": 0.0002990439534187317,
+          "input_tokens_reserved": 41257,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 2228
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.722002975642681,
+          "provider_seconds": 0.00026046112179756165,
+          "input_tokens_reserved": 15128,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 128
+        }
+      ],
+      "tokens": {
+        "reserved": 64577,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 9.152858264744282,
+        "provider_seconds": 0.0005595050752162933,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "653aa9c8beb0adf5a81f5850f64e90245d924d042d77b56995d16ab9db0816ef",
+      "method_input_digest": "21d739100828d9104adf9b09b294b13a97ea464de2e671e211b495cd742f8042",
+      "source_archive_sha256": "b4e2e409a570e66c415096f8c4f9a09a311d455474d80bb5ffb9a8b882fb49fc",
+      "initial_snapshot_id": "bf92fff38867cab6a107f60fa9b8180abd5088229838c99f3f978a36633ddf57",
+      "final_snapshot_id": "05083a81baf24bbdd042d54fbb86247e54034f0d613f3ce884f90785ab4e8f77",
+      "config_digest": "f5ece6b6117d2d929292c5b5393e931cee50c3bcef7024c71428d61ddea4d094",
+      "public_profile_digest": "44140ea046e78d3fcc5757beea435f7b18a644b454c79aed6681bb7d074570bd",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "config-binding/base",
+      "method_mode": "direct",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "REQUIREMENT_ONLY",
+      "expected_intent": "REQUIREMENT_ONLY",
+      "broken_checks": {
+        "selected": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "selected": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "selected": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "selected": "PASS"
+      },
+      "preservation_checks": {
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "f026d16d932834726b06b5d37c41e2725916f9481e580c7016a4fc2491ef1227",
+        "patch_bytes": 338,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/config-binding--base/direct/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 8.146044738590717,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 3.896615233272314,
+          "provider_seconds": 0.00017923489212989807,
+          "input_tokens_reserved": 7291,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 128
+        }
+      ],
+      "tokens": {
+        "reserved": 11387,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 8.146044738590717,
+        "provider_seconds": 0.00017923489212989807,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "653aa9c8beb0adf5a81f5850f64e90245d924d042d77b56995d16ab9db0816ef",
+      "method_input_digest": "21d739100828d9104adf9b09b294b13a97ea464de2e671e211b495cd742f8042",
+      "source_archive_sha256": "b4e2e409a570e66c415096f8c4f9a09a311d455474d80bb5ffb9a8b882fb49fc",
+      "initial_snapshot_id": "bf92fff38867cab6a107f60fa9b8180abd5088229838c99f3f978a36633ddf57",
+      "final_snapshot_id": "05083a81baf24bbdd042d54fbb86247e54034f0d613f3ce884f90785ab4e8f77",
+      "config_digest": "51fd0f479ec403797d6e49a45d42703e7766aa2a8cfb6f2f3532ebf87aa63d0c",
+      "public_profile_digest": "44140ea046e78d3fcc5757beea435f7b18a644b454c79aed6681bb7d074570bd",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "config-binding/exception-guard",
+      "method_mode": "full",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "SEMANTIC_CHANGESET",
+      "expected_intent": "SEMANTIC_CHANGESET",
+      "broken_checks": {
+        "selected": "FAIL",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "selected": "FAIL",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "selected": "PASS",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "selected": "PASS"
+      },
+      "preservation_checks": {
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "7a9b02adc9c2100a698141344957714d424a029a32d43c3e04964492c5fcdf60",
+        "patch_bytes": 437,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/config-binding--exception-guard/full/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 1,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "changeset.v1.1.12",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 10.608624771237373,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 4.2451191842556,
+          "provider_seconds": 0.0005399361252784729,
+          "input_tokens_reserved": 54218,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 3026
+        },
+        {
+          "prompt_version": "changeset.v1.1.12",
+          "cumulative_seconds": 4.601701661944389,
+          "provider_seconds": 0.0004913918673992157,
+          "input_tokens_reserved": 31074,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 4948
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 5.235107019543648,
+          "provider_seconds": 0.00037565454840660095,
+          "input_tokens_reserved": 30805,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 163
+        }
+      ],
+      "tokens": {
+        "reserved": 128385,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 10.608624771237373,
+        "provider_seconds": 0.0014069825410842896,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "069a48df641bef4a244106d465f912adec68da12acb6763f31f6e6fea0bd1ed5",
+      "method_input_digest": "97eed598bebde8a1a5f9dc1cc65c52eb83bad914544bb1c499eb8f125d69f903",
+      "source_archive_sha256": "f4130b77eea4e3d5f83681114f1e514e0c7764868cb9acda6e201e2087bbccbb",
+      "initial_snapshot_id": "32363f4462e90552a204a0e97271f0e5dfe73cad9d4571882a9bea0b9fd89d75",
+      "final_snapshot_id": "a729b5a7a00ddf29a9bd4627ce795c765f6b25199fb2ce3ab7e7618507d245f8",
+      "config_digest": "5863563e520c3dcccea38dd240b78d8b6230c848d5b356ec3ab9650ccec79df9",
+      "public_profile_digest": "549e48a03ad37227ee6c08aad1a5f4311875b22b28e0807ccd43095734814a86",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "config-binding/exception-guard",
+      "method_mode": "without_relation",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "DIRECT_PLAN",
+      "expected_intent": "DIRECT_PLAN",
+      "broken_checks": {
+        "selected": "FAIL",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "selected": "FAIL",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "selected": "PASS",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "selected": "PASS"
+      },
+      "preservation_checks": {
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "7a9b02adc9c2100a698141344957714d424a029a32d43c3e04964492c5fcdf60",
+        "patch_bytes": 437,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/config-binding--exception-guard/without_relation/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 1,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "direct-plan.v1",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 8.188980344682932,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "direct-plan.v1",
+          "cumulative_seconds": 3.8121536932885647,
+          "provider_seconds": 9.748712182044983e-05,
+          "input_tokens_reserved": 12300,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 1088
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 3.95768391340971,
+          "provider_seconds": 0.00022473186254501343,
+          "input_tokens_reserved": 13968,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 163
+        }
+      ],
+      "tokens": {
+        "reserved": 34460,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 8.188980344682932,
+        "provider_seconds": 0.00032221898436546326,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "069a48df641bef4a244106d465f912adec68da12acb6763f31f6e6fea0bd1ed5",
+      "method_input_digest": "97eed598bebde8a1a5f9dc1cc65c52eb83bad914544bb1c499eb8f125d69f903",
+      "source_archive_sha256": "f4130b77eea4e3d5f83681114f1e514e0c7764868cb9acda6e201e2087bbccbb",
+      "initial_snapshot_id": "32363f4462e90552a204a0e97271f0e5dfe73cad9d4571882a9bea0b9fd89d75",
+      "final_snapshot_id": "a729b5a7a00ddf29a9bd4627ce795c765f6b25199fb2ce3ab7e7618507d245f8",
+      "config_digest": "51ad53ff077f7260c9ac688827f95bff089e78b28ad62d1b03f0bdd803d5b310",
+      "public_profile_digest": "549e48a03ad37227ee6c08aad1a5f4311875b22b28e0807ccd43095734814a86",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "config-binding/exception-guard",
+      "method_mode": "without_changeset",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "RELATION_ONLY",
+      "expected_intent": "RELATION_ONLY",
+      "broken_checks": {
+        "selected": "FAIL",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "selected": "FAIL",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "selected": "PASS",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "selected": "PASS"
+      },
+      "preservation_checks": {
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "7a9b02adc9c2100a698141344957714d424a029a32d43c3e04964492c5fcdf60",
+        "patch_bytes": 437,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/config-binding--exception-guard/without_changeset/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 8.99452206119895,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 4.125836785882711,
+          "provider_seconds": 0.00036258623003959656,
+          "input_tokens_reserved": 54218,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 3026
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.661965254694223,
+          "provider_seconds": 0.00030663609504699707,
+          "input_tokens_reserved": 25249,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 163
+        }
+      ],
+      "tokens": {
+        "reserved": 87659,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 8.99452206119895,
+        "provider_seconds": 0.0006692223250865936,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "069a48df641bef4a244106d465f912adec68da12acb6763f31f6e6fea0bd1ed5",
+      "method_input_digest": "97eed598bebde8a1a5f9dc1cc65c52eb83bad914544bb1c499eb8f125d69f903",
+      "source_archive_sha256": "f4130b77eea4e3d5f83681114f1e514e0c7764868cb9acda6e201e2087bbccbb",
+      "initial_snapshot_id": "32363f4462e90552a204a0e97271f0e5dfe73cad9d4571882a9bea0b9fd89d75",
+      "final_snapshot_id": "a729b5a7a00ddf29a9bd4627ce795c765f6b25199fb2ce3ab7e7618507d245f8",
+      "config_digest": "f5ece6b6117d2d929292c5b5393e931cee50c3bcef7024c71428d61ddea4d094",
+      "public_profile_digest": "549e48a03ad37227ee6c08aad1a5f4311875b22b28e0807ccd43095734814a86",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "config-binding/exception-guard",
+      "method_mode": "direct",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "REQUIREMENT_ONLY",
+      "expected_intent": "REQUIREMENT_ONLY",
+      "broken_checks": {
+        "selected": "FAIL",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "selected": "FAIL",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "selected": "PASS",
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "selected": "PASS"
+      },
+      "preservation_checks": {
+        "guard-false-false": "PASS",
+        "guard-false-true": "PASS",
+        "guard-true-true": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "7a9b02adc9c2100a698141344957714d424a029a32d43c3e04964492c5fcdf60",
+        "patch_bytes": 437,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/config-binding--exception-guard/direct/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 8.060041353106499,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.249614845961332,
+          "provider_seconds": 0.00022571906447410583,
+          "input_tokens_reserved": 12744,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 163
+        }
+      ],
+      "tokens": {
+        "reserved": 16840,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 8.060041353106499,
+        "provider_seconds": 0.00022571906447410583,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "069a48df641bef4a244106d465f912adec68da12acb6763f31f6e6fea0bd1ed5",
+      "method_input_digest": "97eed598bebde8a1a5f9dc1cc65c52eb83bad914544bb1c499eb8f125d69f903",
+      "source_archive_sha256": "f4130b77eea4e3d5f83681114f1e514e0c7764868cb9acda6e201e2087bbccbb",
+      "initial_snapshot_id": "32363f4462e90552a204a0e97271f0e5dfe73cad9d4571882a9bea0b9fd89d75",
+      "final_snapshot_id": "a729b5a7a00ddf29a9bd4627ce795c765f6b25199fb2ce3ab7e7618507d245f8",
+      "config_digest": "51fd0f479ec403797d6e49a45d42703e7766aa2a8cfb6f2f3532ebf87aa63d0c",
+      "public_profile_digest": "549e48a03ad37227ee6c08aad1a5f4311875b22b28e0807ccd43095734814a86",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "two-consumers/base",
+      "method_mode": "full",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "SEMANTIC_CHANGESET",
+      "expected_intent": "SEMANTIC_CHANGESET",
+      "broken_checks": {
+        "primary": "FAIL",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "primary": "FAIL",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "primary": "PASS",
+        "secondary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "primary": "PASS",
+        "secondary": "PASS"
+      },
+      "preservation_checks": {
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "65045ab4c35c570f35d6f25fbda4ba5c26bf35d68e48271d7ca9279956f9cdb8",
+        "patch_bytes": 465,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/two-consumers--base/full/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 1,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "changeset.v1.1.12",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 10.78687098622322,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 4.317916594445705,
+          "provider_seconds": 0.0005831494927406311,
+          "input_tokens_reserved": 46474,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 3386
+        },
+        {
+          "prompt_version": "changeset.v1.1.12",
+          "cumulative_seconds": 4.714102614670992,
+          "provider_seconds": 0.0005425885319709778,
+          "input_tokens_reserved": 28605,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 3779
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 5.576655872166157,
+          "provider_seconds": 0.00031929463148117065,
+          "input_tokens_reserved": 24006,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 214
+        }
+      ],
+      "tokens": {
+        "reserved": 111373,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 10.78687098622322,
+        "provider_seconds": 0.0014450326561927795,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "b15fedfe6b496653c202a01affcd72a38e5f5a6d2877ce83ae3fface31a3dba5",
+      "method_input_digest": "e5e48a8187f49f561367deacea562c068949ecc190c4f2fdee9aeb6fb96207ad",
+      "source_archive_sha256": "5791ed3a19fa48d5ae074b2cf2ce8466246a1f0851168262bb4248ad39b0e944",
+      "initial_snapshot_id": "68397d2273a6ee8769a0f546bc75f4147081b041cecd5b9764b31b11a2a52125",
+      "final_snapshot_id": "fe06ecd43f803e9b255fd74aafa76c14433d0082c023697771f7da7dbead5e04",
+      "config_digest": "5863563e520c3dcccea38dd240b78d8b6230c848d5b356ec3ab9650ccec79df9",
+      "public_profile_digest": "883af6c350fb28965a402ded977ae67537f64a42ffbe6574be1a8621476b7e27",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "two-consumers/base",
+      "method_mode": "without_relation",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "DIRECT_PLAN",
+      "expected_intent": "DIRECT_PLAN",
+      "broken_checks": {
+        "primary": "FAIL",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "primary": "FAIL",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "primary": "PASS",
+        "secondary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "primary": "PASS",
+        "secondary": "PASS"
+      },
+      "preservation_checks": {
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "65045ab4c35c570f35d6f25fbda4ba5c26bf35d68e48271d7ca9279956f9cdb8",
+        "patch_bytes": 465,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/two-consumers--base/without_relation/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 1,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "direct-plan.v1",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 8.596256572753191,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "direct-plan.v1",
+          "cumulative_seconds": 4.058289173990488,
+          "provider_seconds": 8.155778050422668e-05,
+          "input_tokens_reserved": 9087,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 682
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.192328337579966,
+          "provider_seconds": 0.00018310546875,
+          "input_tokens_reserved": 10146,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 214
+        }
+      ],
+      "tokens": {
+        "reserved": 27425,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 8.596256572753191,
+        "provider_seconds": 0.0002646632492542267,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "b15fedfe6b496653c202a01affcd72a38e5f5a6d2877ce83ae3fface31a3dba5",
+      "method_input_digest": "e5e48a8187f49f561367deacea562c068949ecc190c4f2fdee9aeb6fb96207ad",
+      "source_archive_sha256": "5791ed3a19fa48d5ae074b2cf2ce8466246a1f0851168262bb4248ad39b0e944",
+      "initial_snapshot_id": "68397d2273a6ee8769a0f546bc75f4147081b041cecd5b9764b31b11a2a52125",
+      "final_snapshot_id": "fe06ecd43f803e9b255fd74aafa76c14433d0082c023697771f7da7dbead5e04",
+      "config_digest": "51ad53ff077f7260c9ac688827f95bff089e78b28ad62d1b03f0bdd803d5b310",
+      "public_profile_digest": "883af6c350fb28965a402ded977ae67537f64a42ffbe6574be1a8621476b7e27",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "two-consumers/base",
+      "method_mode": "without_changeset",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "RELATION_ONLY",
+      "expected_intent": "RELATION_ONLY",
+      "broken_checks": {
+        "primary": "FAIL",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "primary": "FAIL",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "primary": "PASS",
+        "secondary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "primary": "PASS",
+        "secondary": "PASS"
+      },
+      "preservation_checks": {
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "65045ab4c35c570f35d6f25fbda4ba5c26bf35d68e48271d7ca9279956f9cdb8",
+        "patch_bytes": 465,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/two-consumers--base/without_changeset/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 9.03182190284133,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 3.9383573085069656,
+          "provider_seconds": 0.0003886707127094269,
+          "input_tokens_reserved": 46474,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 3386
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.3115185014903545,
+          "provider_seconds": 0.00023930519819259644,
+          "input_tokens_reserved": 19822,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 214
+        }
+      ],
+      "tokens": {
+        "reserved": 74488,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 9.03182190284133,
+        "provider_seconds": 0.0006279759109020233,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "b15fedfe6b496653c202a01affcd72a38e5f5a6d2877ce83ae3fface31a3dba5",
+      "method_input_digest": "e5e48a8187f49f561367deacea562c068949ecc190c4f2fdee9aeb6fb96207ad",
+      "source_archive_sha256": "5791ed3a19fa48d5ae074b2cf2ce8466246a1f0851168262bb4248ad39b0e944",
+      "initial_snapshot_id": "68397d2273a6ee8769a0f546bc75f4147081b041cecd5b9764b31b11a2a52125",
+      "final_snapshot_id": "fe06ecd43f803e9b255fd74aafa76c14433d0082c023697771f7da7dbead5e04",
+      "config_digest": "f5ece6b6117d2d929292c5b5393e931cee50c3bcef7024c71428d61ddea4d094",
+      "public_profile_digest": "883af6c350fb28965a402ded977ae67537f64a42ffbe6574be1a8621476b7e27",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "two-consumers/base",
+      "method_mode": "direct",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "REQUIREMENT_ONLY",
+      "expected_intent": "REQUIREMENT_ONLY",
+      "broken_checks": {
+        "primary": "FAIL",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "primary": "FAIL",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "primary": "PASS",
+        "secondary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "primary": "PASS",
+        "secondary": "PASS"
+      },
+      "preservation_checks": {
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "65045ab4c35c570f35d6f25fbda4ba5c26bf35d68e48271d7ca9279956f9cdb8",
+        "patch_bytes": 465,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/two-consumers--base/direct/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 9.092964593321085,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.524331711232662,
+          "provider_seconds": 0.00029266998171806335,
+          "input_tokens_reserved": 9328,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 214
+        }
+      ],
+      "tokens": {
+        "reserved": 13424,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 9.092964593321085,
+        "provider_seconds": 0.00029266998171806335,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "b15fedfe6b496653c202a01affcd72a38e5f5a6d2877ce83ae3fface31a3dba5",
+      "method_input_digest": "e5e48a8187f49f561367deacea562c068949ecc190c4f2fdee9aeb6fb96207ad",
+      "source_archive_sha256": "5791ed3a19fa48d5ae074b2cf2ce8466246a1f0851168262bb4248ad39b0e944",
+      "initial_snapshot_id": "68397d2273a6ee8769a0f546bc75f4147081b041cecd5b9764b31b11a2a52125",
+      "final_snapshot_id": "fe06ecd43f803e9b255fd74aafa76c14433d0082c023697771f7da7dbead5e04",
+      "config_digest": "51fd0f479ec403797d6e49a45d42703e7766aa2a8cfb6f2f3532ebf87aa63d0c",
+      "public_profile_digest": "883af6c350fb28965a402ded977ae67537f64a42ffbe6574be1a8621476b7e27",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "two-consumers/preserve-one",
+      "method_mode": "full",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "SEMANTIC_CHANGESET",
+      "expected_intent": "SEMANTIC_CHANGESET",
+      "broken_checks": {
+        "primary": "PASS",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "primary": "PASS",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "primary": "PASS",
+        "secondary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "secondary": "PASS"
+      },
+      "preservation_checks": {
+        "primary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "b9915f96ec514d3e2b263df62e2149ac69dae21798a907af1466ed17aa91069f",
+        "patch_bytes": 481,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/two-consumers--preserve-one/full/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 1,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "changeset.v1.1.12",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 10.176755227148533,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 4.315309599041939,
+          "provider_seconds": 0.00038392096757888794,
+          "input_tokens_reserved": 48834,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 3189
+        },
+        {
+          "prompt_version": "changeset.v1.1.12",
+          "cumulative_seconds": 4.570835158228874,
+          "provider_seconds": 0.00046572834253311157,
+          "input_tokens_reserved": 28747,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 3914
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 5.142361290752888,
+          "provider_seconds": 0.0002640038728713989,
+          "input_tokens_reserved": 24475,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 138
+        }
+      ],
+      "tokens": {
+        "reserved": 114344,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 10.176755227148533,
+        "provider_seconds": 0.0011136531829833984,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "aa0af1ddb48a03fec2f5f8f98007a46d588c0b4909238dbd5758c925237a01b2",
+      "method_input_digest": "a2b5c1646be5b82f17fd83334bff6f585177aa9c6ae3165ecc78ef742b90c54f",
+      "source_archive_sha256": "022ff646cfcc14d4f39afdd890173289993e8798269f83e59c4bc33ba20205fd",
+      "initial_snapshot_id": "4d92838b6b3696d4b3dca69a119e8e68d2ee44fced5922d327f7895cea8ee917",
+      "final_snapshot_id": "7b1c75bd874810a8de55ea542e66efa5c7126c954f954d8b5d273b41414c50fa",
+      "config_digest": "5863563e520c3dcccea38dd240b78d8b6230c848d5b356ec3ab9650ccec79df9",
+      "public_profile_digest": "697adc1a6afdf0d9d4c0c506314e4fde138795088093bcb96dbb0dbea30340c9",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "two-consumers/preserve-one",
+      "method_mode": "without_relation",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "DIRECT_PLAN",
+      "expected_intent": "DIRECT_PLAN",
+      "broken_checks": {
+        "primary": "PASS",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "primary": "PASS",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "primary": "PASS",
+        "secondary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "secondary": "PASS"
+      },
+      "preservation_checks": {
+        "primary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "b9915f96ec514d3e2b263df62e2149ac69dae21798a907af1466ed17aa91069f",
+        "patch_bytes": 481,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/two-consumers--preserve-one/without_relation/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 1,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "direct-plan.v1",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 8.233523178845644,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "direct-plan.v1",
+          "cumulative_seconds": 3.902203790843487,
+          "provider_seconds": 8.773431181907654e-05,
+          "input_tokens_reserved": 9234,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 776
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.051279913634062,
+          "provider_seconds": 0.0001896396279335022,
+          "input_tokens_reserved": 10434,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 138
+        }
+      ],
+      "tokens": {
+        "reserved": 27860,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 8.233523178845644,
+        "provider_seconds": 0.00027737393975257874,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "aa0af1ddb48a03fec2f5f8f98007a46d588c0b4909238dbd5758c925237a01b2",
+      "method_input_digest": "a2b5c1646be5b82f17fd83334bff6f585177aa9c6ae3165ecc78ef742b90c54f",
+      "source_archive_sha256": "022ff646cfcc14d4f39afdd890173289993e8798269f83e59c4bc33ba20205fd",
+      "initial_snapshot_id": "4d92838b6b3696d4b3dca69a119e8e68d2ee44fced5922d327f7895cea8ee917",
+      "final_snapshot_id": "7b1c75bd874810a8de55ea542e66efa5c7126c954f954d8b5d273b41414c50fa",
+      "config_digest": "51ad53ff077f7260c9ac688827f95bff089e78b28ad62d1b03f0bdd803d5b310",
+      "public_profile_digest": "697adc1a6afdf0d9d4c0c506314e4fde138795088093bcb96dbb0dbea30340c9",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "two-consumers/preserve-one",
+      "method_mode": "without_changeset",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "RELATION_ONLY",
+      "expected_intent": "RELATION_ONLY",
+      "broken_checks": {
+        "primary": "PASS",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "primary": "PASS",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "primary": "PASS",
+        "secondary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "secondary": "PASS"
+      },
+      "preservation_checks": {
+        "primary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "b9915f96ec514d3e2b263df62e2149ac69dae21798a907af1466ed17aa91069f",
+        "patch_bytes": 481,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/two-consumers--preserve-one/without_changeset/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 9.725517898797989,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 3.8931799978017807,
+          "provider_seconds": 0.00037676841020584106,
+          "input_tokens_reserved": 48834,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 3189
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.239574924111366,
+          "provider_seconds": 0.0002728886902332306,
+          "input_tokens_reserved": 20109,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 138
+        }
+      ],
+      "tokens": {
+        "reserved": 77135,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 9.725517898797989,
+        "provider_seconds": 0.0006496571004390717,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "aa0af1ddb48a03fec2f5f8f98007a46d588c0b4909238dbd5758c925237a01b2",
+      "method_input_digest": "a2b5c1646be5b82f17fd83334bff6f585177aa9c6ae3165ecc78ef742b90c54f",
+      "source_archive_sha256": "022ff646cfcc14d4f39afdd890173289993e8798269f83e59c4bc33ba20205fd",
+      "initial_snapshot_id": "4d92838b6b3696d4b3dca69a119e8e68d2ee44fced5922d327f7895cea8ee917",
+      "final_snapshot_id": "7b1c75bd874810a8de55ea542e66efa5c7126c954f954d8b5d273b41414c50fa",
+      "config_digest": "f5ece6b6117d2d929292c5b5393e931cee50c3bcef7024c71428d61ddea4d094",
+      "public_profile_digest": "697adc1a6afdf0d9d4c0c506314e4fde138795088093bcb96dbb0dbea30340c9",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "two-consumers/preserve-one",
+      "method_mode": "direct",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "REQUIREMENT_ONLY",
+      "expected_intent": "REQUIREMENT_ONLY",
+      "broken_checks": {
+        "primary": "PASS",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "primary": "PASS",
+        "secondary": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "primary": "PASS",
+        "secondary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "secondary": "PASS"
+      },
+      "preservation_checks": {
+        "primary": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "b9915f96ec514d3e2b263df62e2149ac69dae21798a907af1466ed17aa91069f",
+        "patch_bytes": 481,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/two-consumers--preserve-one/direct/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 8.463012911379337,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.2196972742676735,
+          "provider_seconds": 0.00017927587032318115,
+          "input_tokens_reserved": 9522,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 138
+        }
+      ],
+      "tokens": {
+        "reserved": 13618,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 8.463012911379337,
+        "provider_seconds": 0.00017927587032318115,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "aa0af1ddb48a03fec2f5f8f98007a46d588c0b4909238dbd5758c925237a01b2",
+      "method_input_digest": "a2b5c1646be5b82f17fd83334bff6f585177aa9c6ae3165ecc78ef742b90c54f",
+      "source_archive_sha256": "022ff646cfcc14d4f39afdd890173289993e8798269f83e59c4bc33ba20205fd",
+      "initial_snapshot_id": "4d92838b6b3696d4b3dca69a119e8e68d2ee44fced5922d327f7895cea8ee917",
+      "final_snapshot_id": "7b1c75bd874810a8de55ea542e66efa5c7126c954f954d8b5d273b41414c50fa",
+      "config_digest": "51fd0f479ec403797d6e49a45d42703e7766aa2a8cfb6f2f3532ebf87aa63d0c",
+      "public_profile_digest": "697adc1a6afdf0d9d4c0c506314e4fde138795088093bcb96dbb0dbea30340c9",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "reload-state/base",
+      "method_mode": "full",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "SEMANTIC_CHANGESET",
+      "expected_intent": "SEMANTIC_CHANGESET",
+      "broken_checks": {
+        "warm-A": "PASS",
+        "reload-B": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "warm-A": "PASS",
+        "reload-B": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "warm-A": "PASS",
+        "reload-B": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "reload-B": "PASS"
+      },
+      "preservation_checks": {
+        "warm-A": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "bd36275516400b110522a954b060ecc08c1d31690efd1de38b9928b01f5a1f64",
+        "patch_bytes": 466,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/reload-state--base/full/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 1,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "changeset.v1.1.12",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 10.165044322609901,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 4.142284646630287,
+          "provider_seconds": 0.0003287196159362793,
+          "input_tokens_reserved": 47322,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 2470
+        },
+        {
+          "prompt_version": "changeset.v1.1.12",
+          "cumulative_seconds": 4.405294992029667,
+          "provider_seconds": 0.0004455782473087311,
+          "input_tokens_reserved": 27969,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 3818
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.987637925893068,
+          "provider_seconds": 0.0002819262444972992,
+          "input_tokens_reserved": 23660,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 174
+        }
+      ],
+      "tokens": {
+        "reserved": 111239,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 10.165044322609901,
+        "provider_seconds": 0.0010562241077423096,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "536690afca326eec0e9e0e6187ab46ebdf36f61e5d0c7eaa6342dcd3a0b5c658",
+      "method_input_digest": "efbcabe9a59c356068691a9518a3e21c0be295e337c2178e6b416051877b0b80",
+      "source_archive_sha256": "b83a3c7ca5ce79af75e00b15a2bdaf9afa2fe3a9b032c228aa57806aad57840f",
+      "initial_snapshot_id": "86da146e90378a518caa32015bb0927160aaa6d26055731ac9c00f3d62047ac0",
+      "final_snapshot_id": "7fbb99fa4cff66a1328e214ca97df058b2fbad2ff2666aa538b681f6066ac25d",
+      "config_digest": "5863563e520c3dcccea38dd240b78d8b6230c848d5b356ec3ab9650ccec79df9",
+      "public_profile_digest": "d5e26533854d20e4b00d2b534053ede6f1e56fce5af8c0384bffce85df46b726",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "reload-state/base",
+      "method_mode": "without_relation",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "DIRECT_PLAN",
+      "expected_intent": "DIRECT_PLAN",
+      "broken_checks": {
+        "warm-A": "PASS",
+        "reload-B": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "warm-A": "PASS",
+        "reload-B": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "warm-A": "PASS",
+        "reload-B": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "reload-B": "PASS"
+      },
+      "preservation_checks": {
+        "warm-A": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "bd36275516400b110522a954b060ecc08c1d31690efd1de38b9928b01f5a1f64",
+        "patch_bytes": 466,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/reload-state--base/without_relation/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 1,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "direct-plan.v1",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 8.907569270581007,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "direct-plan.v1",
+          "cumulative_seconds": 4.07783817499876,
+          "provider_seconds": 0.00011270865797996521,
+          "input_tokens_reserved": 9280,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 736
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.373551469296217,
+          "provider_seconds": 0.00021971389651298523,
+          "input_tokens_reserved": 10420,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 174
+        }
+      ],
+      "tokens": {
+        "reserved": 27892,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 8.907569270581007,
+        "provider_seconds": 0.00033242255449295044,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "536690afca326eec0e9e0e6187ab46ebdf36f61e5d0c7eaa6342dcd3a0b5c658",
+      "method_input_digest": "efbcabe9a59c356068691a9518a3e21c0be295e337c2178e6b416051877b0b80",
+      "source_archive_sha256": "b83a3c7ca5ce79af75e00b15a2bdaf9afa2fe3a9b032c228aa57806aad57840f",
+      "initial_snapshot_id": "86da146e90378a518caa32015bb0927160aaa6d26055731ac9c00f3d62047ac0",
+      "final_snapshot_id": "7fbb99fa4cff66a1328e214ca97df058b2fbad2ff2666aa538b681f6066ac25d",
+      "config_digest": "51ad53ff077f7260c9ac688827f95bff089e78b28ad62d1b03f0bdd803d5b310",
+      "public_profile_digest": "d5e26533854d20e4b00d2b534053ede6f1e56fce5af8c0384bffce85df46b726",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "reload-state/base",
+      "method_mode": "without_changeset",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "RELATION_ONLY",
+      "expected_intent": "RELATION_ONLY",
+      "broken_checks": {
+        "warm-A": "PASS",
+        "reload-B": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "warm-A": "PASS",
+        "reload-B": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "warm-A": "PASS",
+        "reload-B": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "reload-B": "PASS"
+      },
+      "preservation_checks": {
+        "warm-A": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "bd36275516400b110522a954b060ecc08c1d31690efd1de38b9928b01f5a1f64",
+        "patch_bytes": 466,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/reload-state--base/without_changeset/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 11.449373438954353,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 6.424608591943979,
+          "provider_seconds": 0.0003262162208557129,
+          "input_tokens_reserved": 47322,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 2470
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 6.821212183684111,
+          "provider_seconds": 0.00023862719535827637,
+          "input_tokens_reserved": 19410,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 174
+        }
+      ],
+      "tokens": {
+        "reserved": 74924,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 11.449373438954353,
+        "provider_seconds": 0.0005648434162139893,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "536690afca326eec0e9e0e6187ab46ebdf36f61e5d0c7eaa6342dcd3a0b5c658",
+      "method_input_digest": "efbcabe9a59c356068691a9518a3e21c0be295e337c2178e6b416051877b0b80",
+      "source_archive_sha256": "b83a3c7ca5ce79af75e00b15a2bdaf9afa2fe3a9b032c228aa57806aad57840f",
+      "initial_snapshot_id": "86da146e90378a518caa32015bb0927160aaa6d26055731ac9c00f3d62047ac0",
+      "final_snapshot_id": "7fbb99fa4cff66a1328e214ca97df058b2fbad2ff2666aa538b681f6066ac25d",
+      "config_digest": "f5ece6b6117d2d929292c5b5393e931cee50c3bcef7024c71428d61ddea4d094",
+      "public_profile_digest": "d5e26533854d20e4b00d2b534053ede6f1e56fce5af8c0384bffce85df46b726",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "reload-state/base",
+      "method_mode": "direct",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "REQUIREMENT_ONLY",
+      "expected_intent": "REQUIREMENT_ONLY",
+      "broken_checks": {
+        "warm-A": "PASS",
+        "reload-B": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "warm-A": "PASS",
+        "reload-B": "FAIL",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "warm-A": "PASS",
+        "reload-B": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "reload-B": "PASS"
+      },
+      "preservation_checks": {
+        "warm-A": "PASS",
+        "disabled": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "bd36275516400b110522a954b060ecc08c1d31690efd1de38b9928b01f5a1f64",
+        "patch_bytes": 466,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/reload-state--base/direct/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 8.785058379173279,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.1802775375545025,
+          "provider_seconds": 0.0003578774631023407,
+          "input_tokens_reserved": 9548,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 174
+        }
+      ],
+      "tokens": {
+        "reserved": 13644,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 8.785058379173279,
+        "provider_seconds": 0.0003578774631023407,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "536690afca326eec0e9e0e6187ab46ebdf36f61e5d0c7eaa6342dcd3a0b5c658",
+      "method_input_digest": "efbcabe9a59c356068691a9518a3e21c0be295e337c2178e6b416051877b0b80",
+      "source_archive_sha256": "b83a3c7ca5ce79af75e00b15a2bdaf9afa2fe3a9b032c228aa57806aad57840f",
+      "initial_snapshot_id": "86da146e90378a518caa32015bb0927160aaa6d26055731ac9c00f3d62047ac0",
+      "final_snapshot_id": "7fbb99fa4cff66a1328e214ca97df058b2fbad2ff2666aa538b681f6066ac25d",
+      "config_digest": "51fd0f479ec403797d6e49a45d42703e7766aa2a8cfb6f2f3532ebf87aa63d0c",
+      "public_profile_digest": "d5e26533854d20e4b00d2b534053ede6f1e56fce5af8c0384bffce85df46b726",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "reload-state/rejected-reload",
+      "method_mode": "full",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "SEMANTIC_CHANGESET",
+      "expected_intent": "SEMANTIC_CHANGESET",
+      "broken_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "FAIL",
+        "read-after-B": "FAIL",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "FAIL",
+        "read-after-B": "FAIL",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "PASS",
+        "read-after-B": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "accept-B": "PASS",
+        "read-after-B": "PASS"
+      },
+      "preservation_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "f55f607668b12260a50ff61acec223a60b442e5271156910ff3f191f55dec717",
+        "patch_bytes": 443,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/reload-state--rejected-reload/full/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 1,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "changeset.v1.1.12",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 10.264635656028986,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 4.15210384875536,
+          "provider_seconds": 0.0004097186028957367,
+          "input_tokens_reserved": 57157,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 2839
+        },
+        {
+          "prompt_version": "changeset.v1.1.12",
+          "cumulative_seconds": 4.504781249910593,
+          "provider_seconds": 0.0005118213593959808,
+          "input_tokens_reserved": 32490,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 5229
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 5.188628323376179,
+          "provider_seconds": 0.000344693660736084,
+          "input_tokens_reserved": 34283,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 164
+        }
+      ],
+      "tokens": {
+        "reserved": 136218,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 10.264635656028986,
+        "provider_seconds": 0.0012662336230278015,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "f90b6b1d987fd2a9ef8463c10ce7be8c7c71f432a2d811f3f7f608161aa369ae",
+      "method_input_digest": "91908f49973b226e5e75bf304a64d7ef2470dada3ba3cbd897df4c2395f64875",
+      "source_archive_sha256": "445a0688a3183e20dee950ddb6617a0c897acb634755dc0d22a4431ecd32515f",
+      "initial_snapshot_id": "9ff40300145d3e34fbcb87e86efce7ec30e76e901f18035d8d8a684c0ff37fa2",
+      "final_snapshot_id": "960f334823efbd3f181e975cb390ce8fdd93f323921dac70df346e7941b681cf",
+      "config_digest": "5863563e520c3dcccea38dd240b78d8b6230c848d5b356ec3ab9650ccec79df9",
+      "public_profile_digest": "6ba476fdc7f83a802ec6cfd44c04c1b81a1a3f8bc66e3f08148792339ab99bb6",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "reload-state/rejected-reload",
+      "method_mode": "without_relation",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "DIRECT_PLAN",
+      "expected_intent": "DIRECT_PLAN",
+      "broken_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "FAIL",
+        "read-after-B": "FAIL",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "FAIL",
+        "read-after-B": "FAIL",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "PASS",
+        "read-after-B": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "accept-B": "PASS",
+        "read-after-B": "PASS"
+      },
+      "preservation_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "f55f607668b12260a50ff61acec223a60b442e5271156910ff3f191f55dec717",
+        "patch_bytes": 443,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/reload-state--rejected-reload/without_relation/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 1,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "direct-plan.v1",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 8.856177661567926,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "direct-plan.v1",
+          "cumulative_seconds": 4.033013425767422,
+          "provider_seconds": 0.00011001527309417725,
+          "input_tokens_reserved": 14242,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 982
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.1934967041015625,
+          "provider_seconds": 0.00024083256721496582,
+          "input_tokens_reserved": 15751,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 164
+        }
+      ],
+      "tokens": {
+        "reserved": 38185,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 8.856177661567926,
+        "provider_seconds": 0.00035084784030914307,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "f90b6b1d987fd2a9ef8463c10ce7be8c7c71f432a2d811f3f7f608161aa369ae",
+      "method_input_digest": "91908f49973b226e5e75bf304a64d7ef2470dada3ba3cbd897df4c2395f64875",
+      "source_archive_sha256": "445a0688a3183e20dee950ddb6617a0c897acb634755dc0d22a4431ecd32515f",
+      "initial_snapshot_id": "9ff40300145d3e34fbcb87e86efce7ec30e76e901f18035d8d8a684c0ff37fa2",
+      "final_snapshot_id": "960f334823efbd3f181e975cb390ce8fdd93f323921dac70df346e7941b681cf",
+      "config_digest": "51ad53ff077f7260c9ac688827f95bff089e78b28ad62d1b03f0bdd803d5b310",
+      "public_profile_digest": "6ba476fdc7f83a802ec6cfd44c04c1b81a1a3f8bc66e3f08148792339ab99bb6",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "reload-state/rejected-reload",
+      "method_mode": "without_changeset",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "RELATION_ONLY",
+      "expected_intent": "RELATION_ONLY",
+      "broken_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "FAIL",
+        "read-after-B": "FAIL",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "FAIL",
+        "read-after-B": "FAIL",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "PASS",
+        "read-after-B": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "accept-B": "PASS",
+        "read-after-B": "PASS"
+      },
+      "preservation_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "f55f607668b12260a50ff61acec223a60b442e5271156910ff3f191f55dec717",
+        "patch_bytes": 443,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/reload-state--rejected-reload/without_changeset/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 1,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "diagnosis.v1.1.24",
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 9.548123627901077,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "diagnosis.v1.1.24",
+          "cumulative_seconds": 4.225585535168648,
+          "provider_seconds": 0.00038160383701324463,
+          "input_tokens_reserved": 57157,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 2839
+        },
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 4.657683782279491,
+          "provider_seconds": 0.0003111734986305237,
+          "input_tokens_reserved": 28499,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 164
+        }
+      ],
+      "tokens": {
+        "reserved": 93848,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 9.548123627901077,
+        "provider_seconds": 0.0006927773356437683,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "f90b6b1d987fd2a9ef8463c10ce7be8c7c71f432a2d811f3f7f608161aa369ae",
+      "method_input_digest": "91908f49973b226e5e75bf304a64d7ef2470dada3ba3cbd897df4c2395f64875",
+      "source_archive_sha256": "445a0688a3183e20dee950ddb6617a0c897acb634755dc0d22a4431ecd32515f",
+      "initial_snapshot_id": "9ff40300145d3e34fbcb87e86efce7ec30e76e901f18035d8d8a684c0ff37fa2",
+      "final_snapshot_id": "960f334823efbd3f181e975cb390ce8fdd93f323921dac70df346e7941b681cf",
+      "config_digest": "f5ece6b6117d2d929292c5b5393e931cee50c3bcef7024c71428d61ddea4d094",
+      "public_profile_digest": "6ba476fdc7f83a802ec6cfd44c04c1b81a1a3f8bc66e3f08148792339ab99bb6",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    },
+    {
+      "fixture_id": "reload-state/rejected-reload",
+      "method_mode": "direct",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "execution_backend": "direct",
+      "consumer": "contractedge.modify_only_consumer.v1",
+      "intent": "REQUIREMENT_ONLY",
+      "expected_intent": "REQUIREMENT_ONLY",
+      "broken_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "FAIL",
+        "read-after-B": "FAIL",
+        "stable": "PASS"
+      },
+      "expected_broken_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "FAIL",
+        "read-after-B": "FAIL",
+        "stable": "PASS"
+      },
+      "broken_target_fail_proven": true,
+      "candidate_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "accept-B": "PASS",
+        "read-after-B": "PASS",
+        "stable": "PASS"
+      },
+      "target_checks": {
+        "accept-B": "PASS",
+        "read-after-B": "PASS"
+      },
+      "preservation_checks": {
+        "initial-A": "PASS",
+        "reject-invalid": "PASS",
+        "read-after-reject": "PASS",
+        "stable": "PASS"
+      },
+      "candidate_export": {
+        "patch_sha256": "f55f607668b12260a50ff61acec223a60b442e5271156910ff3f191f55dec717",
+        "patch_bytes": 443,
+        "patch_path": "/home/xhj/contractedge-v044-runtime-acceptance-20261025/method24/reload-state--rejected-reload/direct/repair/candidate.patch"
+      },
+      "stage_counts": {
+        "relation": 0,
+        "changeset": 0,
+        "direct_plan": 0,
+        "execution": 1,
+        "review": 0
+      },
+      "removed_stage_calls_zero": true,
+      "actual_prompt_versions": [
+        "modify-only-literal-execution.v1"
+      ],
+      "elapsed_seconds": 7.772605035454035,
+      "stage_elapsed_seconds": [
+        {
+          "prompt_version": "modify-only-literal-execution.v1",
+          "cumulative_seconds": 3.850675258785486,
+          "provider_seconds": 0.0002341344952583313,
+          "input_tokens_reserved": 14633,
+          "output_tokens_reserved": 4096,
+          "transport_overhead_tokens_reserved": 0,
+          "response_bytes": 164
+        }
+      ],
+      "tokens": {
+        "reserved": 18729,
+        "source": "Conservative UTF-8 byte fixture counter; reservation, not model usage"
+      },
+      "overhead": {
+        "case_elapsed_seconds": 7.772605035454035,
+        "provider_seconds": 0.0002341344952583313,
+        "source": "Case wall clock and actual synthetic complete_json wall clock; difference includes retrieval, admission, recording, processes, observation, and export",
+        "format_corrections": 0,
+        "preparation_invocations": 1,
+        "repeated_preparation_invocations": 0
+      },
+      "money": {
+        "amount_cny": 0,
+        "source": "Trusted synthetic fixture; no provider/HTTP/token usage bill",
+        "http_requests": 0
+      },
+      "raw_requirement_digest": "f90b6b1d987fd2a9ef8463c10ce7be8c7c71f432a2d811f3f7f608161aa369ae",
+      "method_input_digest": "91908f49973b226e5e75bf304a64d7ef2470dada3ba3cbd897df4c2395f64875",
+      "source_archive_sha256": "445a0688a3183e20dee950ddb6617a0c897acb634755dc0d22a4431ecd32515f",
+      "initial_snapshot_id": "9ff40300145d3e34fbcb87e86efce7ec30e76e901f18035d8d8a684c0ff37fa2",
+      "final_snapshot_id": "960f334823efbd3f181e975cb390ce8fdd93f323921dac70df346e7941b681cf",
+      "config_digest": "51fd0f479ec403797d6e49a45d42703e7766aa2a8cfb6f2f3532ebf87aa63d0c",
+      "public_profile_digest": "6ba476fdc7f83a802ec6cfd44c04c1b81a1a3f8bc66e3f08148792339ab99bb6",
+      "shared_resource_config_digest": "c3940915cb1b45ace490c67e1f0534d3fb1b38d235a12439e81372856334d710",
+      "formal_ready": false,
+      "scope": "EXPOSED_PUBLIC_DEVELOPMENT_FIXTURE_ISOLATED_SYNTHETIC",
+      "runtime": "isolated",
+      "broken_isolation_complete": true,
+      "candidate_isolation_complete": true,
+      "runtime_identity": {
+        "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "candidate_invocation_digest": "ec2f61f5b329b37c32f56ef35279e05579c23d83f654f036fcfd197821e6f787",
+        "observer_invocation_digest": "ce67dc9eb535d80863fdf2888afe6f9d2b2af07f1b0b94337eb508a6c426cbe2"
+      }
+    }
+  ],
+  "cell_count": 24,
+  "main_comparison": "ONE_ROUND_NO_FEEDBACK_REPAIR",
+  "formal_ready": false,
+  "boundary": "ACTUAL_RUNTIME_SESSION_ISOLATED_SYNTHETIC",
+  "http_requests": 0,
+  "source_identity": {
+    "digest": "f211dbb1234fe4fe1920037ac69670746f7a0dd1a6b6287496e0da44bc222ceb",
+    "files": [
+      {
+        "path": "scripts/run_public_demo.py",
+        "sha256": "204c161ef8b30d6901514d8ed9663fb59e486432d7ab7d69dfef3ab9f515967a"
+      },
+      {
+        "path": "src/contractedge/__init__.py",
+        "sha256": "695516a46a182bb50bd32f2adbf470c01ff87d05ad0e1c4d984175570c1f6b43"
+      },
+      {
+        "path": "src/contractedge/changeset/__init__.py",
+        "sha256": "fe549dcea53cff6060e5cd0613c85a9c87fb98f2f23b2bc9caa4eb48490d3a3c"
+      },
+      {
+        "path": "src/contractedge/changeset/adapter.py",
+        "sha256": "4c49bf991685235dde3ab4b29abc942544b4769a371342047d648cccb9af7fd0"
+      },
+      {
+        "path": "src/contractedge/changeset/prompt.py",
+        "sha256": "d910498f0e4ee06fd4f3aa1ab7b99bd4a0128d2d477b0928dcd61b82f70406d2"
+      },
+      {
+        "path": "src/contractedge/changeset/topomen.py",
+        "sha256": "da3408768719dadcc201f8eb97272990cf8e3ee4bbc7b4cf9a3d3d2e218d1ab5"
+      },
+      {
+        "path": "src/contractedge/changeset/validate.py",
+        "sha256": "49a29af59960ba9db51c600858b99d511e21ca3c69905ac6c3dcf7781dfedd4e"
+      },
+      {
+        "path": "src/contractedge/cli.py",
+        "sha256": "9fda9441d35c310064f1895c52dd570b466c5792942e505b112230f3ee254b37"
+      },
+      {
+        "path": "src/contractedge/contracts/__init__.py",
+        "sha256": "93ce844fc567a6444515bd4c99b5fce4d7e5426622177489b4da252b23ae8dac"
+      },
+      {
+        "path": "src/contractedge/contracts/artifacts.py",
+        "sha256": "2435ca9dbf5a64af4dedc5e5f7d9d7cc38508e475a348a3556a89efd452e9641"
+      },
+      {
+        "path": "src/contractedge/contracts/delivery.py",
+        "sha256": "3b7e7901ce1fbecce02ccb32c13df7f1dabff57a76d77129e865814643efbaf2"
+      },
+      {
+        "path": "src/contractedge/contracts/evidence.py",
+        "sha256": "4ec6533175029ac7604c085dac8a03a9b6d90175efac8ad710082c638f46fe4d"
+      },
+      {
+        "path": "src/contractedge/contracts/execution_capabilities.py",
+        "sha256": "d3d5404f529e16b3a66870939742ad8191c1549c9995b30671d6a7c55897326e"
+      },
+      {
+        "path": "src/contractedge/contracts/models.py",
+        "sha256": "df2fe87ddbe758d85dc29de376d8a0ed200cd91f981c525da8950cd27c643519"
+      },
+      {
+        "path": "src/contractedge/contracts/permissions.py",
+        "sha256": "b490d2ab1c2f5da06ee79dca2b9f9dcca9e042aec65fb914f45db3fffd265294"
+      },
+      {
+        "path": "src/contractedge/contracts/pointers.py",
+        "sha256": "081b3c4a8d8416ddf0ff6c54269697523f3cee4428bce092e6a4023ba1f78c93"
+      },
+      {
+        "path": "src/contractedge/contracts/repair_intent.py",
+        "sha256": "3b7fe84cde31cb72e3e2419d33c9d4a0059b123fa87339358506e00dec8012ac"
+      },
+      {
+        "path": "src/contractedge/contracts/runtime.py",
+        "sha256": "e706f4a86e4733bbfc1ac1c1eee2a5c854e7f8d9dd79b1ede800340a47b7817c"
+      },
+      {
+        "path": "src/contractedge/contracts/schema/d2_isolated_requirement_profile.v1.json",
+        "sha256": "0f550fd080e0159183098d6e91346cc52572ec7a6f6d5955fe12c38dfcfdd05d"
+      },
+      {
+        "path": "src/contractedge/contracts/schema/diagnosis_packet.v1_1.json",
+        "sha256": "2919205518376bb95ed5036f5adce5564a6ad661e7facb8f33849df9aae5df19"
+      },
+      {
+        "path": "src/contractedge/contracts/schema/execution_feedback.v1.json",
+        "sha256": "5a9854525d21e146e11842194f330d1fc0e97e81a75890eb874e4ae32e53a5aa"
+      },
+      {
+        "path": "src/contractedge/contracts/schema/method_input.v1_1.json",
+        "sha256": "72fae319c9a13b672813727130be3e3bb83ef9b738d4f718d5a31b1483a7f2e6"
+      },
+      {
+        "path": "src/contractedge/contracts/schema/requirement_spec.v1_1.json",
+        "sha256": "1805fb91870b674cd457bc7cd23600b6a9263de653c7652fdcda474357d0c139"
+      },
+      {
+        "path": "src/contractedge/contracts/schema/run_trace.v1_1.json",
+        "sha256": "21ff10c0ca5f52db4e52ba5b48b112064556cbe441a7401580ecb58905fe2c48"
+      },
+      {
+        "path": "src/contractedge/contracts/schema/semantic_changeset.v1_1.json",
+        "sha256": "2d32a2e115793eea7305bc7e271dfd44bf94dbd6b399e895d28c50816f1520b6"
+      },
+      {
+        "path": "src/contractedge/contracts/stages.py",
+        "sha256": "0aba00dc9acbcba29350c8de746ad1ee8eff16409271d2f5a23e7927bfefcf74"
+      },
+      {
+        "path": "src/contractedge/contracts/validation.py",
+        "sha256": "13a8663ce7ba746e0c547706a64e74d99261d4d812ab4e2db2eba40ae2deef91"
+      },
+      {
+        "path": "src/contractedge/dataset/__init__.py",
+        "sha256": "94647c82cfb80fbadb0d0bcc285dbeee12d271da0683a9b498305640ef89d331"
+      },
+      {
+        "path": "src/contractedge/dataset/admission.py",
+        "sha256": "1ab6739ad1ff4f59f4b5006513dc89c517a954ac9262ef8de5c301817e8cbf93"
+      },
+      {
+        "path": "src/contractedge/dataset/archive.py",
+        "sha256": "cc15c7ecf500de6414b456eedbbf82aa3cdad47d11cb68d5feb6e0f11d1b8091"
+      },
+      {
+        "path": "src/contractedge/dataset/audit.py",
+        "sha256": "27cbeee424a70693d621518b6613eed808ce9edd631e98ba585b250ef8438867"
+      },
+      {
+        "path": "src/contractedge/dataset/benchmark.py",
+        "sha256": "c6b56fb8c3be307881f8adf35f4425fa5d689c4bd3fb14ac040bcd264c0f21d4"
+      },
+      {
+        "path": "src/contractedge/dataset/export.py",
+        "sha256": "67a501d3c5ae88fdffcfa2c43f20386e21b14eaeb5a5855fabbccdcf7b384a48"
+      },
+      {
+        "path": "src/contractedge/dataset/releases.py",
+        "sha256": "dcd446840662f881c278a7bd0637077c3c5b23f1a19395fcaaa779300e8c3043"
+      },
+      {
+        "path": "src/contractedge/development/__init__.py",
+        "sha256": "83d805d2c9c5daa7f5b1132d76f281722b8a664a11fcd56f1033745b9e31664c"
+      },
+      {
+        "path": "src/contractedge/development/isolated_panel.py",
+        "sha256": "da16988ed8be2ef9c85eb17aa521af0aa6d6da6dc57c217e6296363fe1e7d6ca"
+      },
+      {
+        "path": "src/contractedge/development/method_panel.py",
+        "sha256": "072860718cbda27e600370d8ee40005a26129a31298eb7dc2ad7384f2c1d5de8"
+      },
+      {
+        "path": "src/contractedge/development/method_panel_fixtures.py",
+        "sha256": "caaf46f96972808ea56e259bd6d97434dcfe39bcc8701913e1735a60f0f6d98f"
+      },
+      {
+        "path": "src/contractedge/development/public_demo.py",
+        "sha256": "6f5962f5b0c0576c0873187a41710432e9ef23bd08e1bd2139871996dead6cd9"
+      },
+      {
+        "path": "src/contractedge/diagnosis/__init__.py",
+        "sha256": "a1eac102f83f856612ac44386b40522afa8a861527b6c6d436378e055dd10757"
+      },
+      {
+        "path": "src/contractedge/diagnosis/evidence.py",
+        "sha256": "aa69f22ccb962a855074a64c22d40c25c9e1f0903c51a0073b311b638d0add0d"
+      },
+      {
+        "path": "src/contractedge/diagnosis/operation_consistency.py",
+        "sha256": "d6ff5675dfceeb654c43fbd4d1af2e244f5ce01fb3ef0b6cf9db6ea801f6a613"
+      },
+      {
+        "path": "src/contractedge/diagnosis/parse.py",
+        "sha256": "3a2cca348d49f4d3afc72d1cf6561f48d81beed1bc21657be94bc298b6ca0de6"
+      },
+      {
+        "path": "src/contractedge/diagnosis/prompt.py",
+        "sha256": "f4b264631835eb54d6ad1f08ea4c17c3b9d0660c05ba61d423e8386422cfe428"
+      },
+      {
+        "path": "src/contractedge/diagnosis/validate.py",
+        "sha256": "5b04437981b5ad46c8a74f046cbed56dd2e05f54012919b33238addf3b8493c1"
+      },
+      {
+        "path": "src/contractedge/evaluation/__init__.py",
+        "sha256": "c5f517b055fa38c046faeb36dc4cccb37a07b1fa9e7f037f50708c5a03762d3a"
+      },
+      {
+        "path": "src/contractedge/evaluation/batch.py",
+        "sha256": "a571c71dcf88e9afc0933e3dac37ff19904cdb57dbae0c3e7132bfe93e711d0f"
+      },
+      {
+        "path": "src/contractedge/evaluation/benchmark.py",
+        "sha256": "7dfcc84bb9096844a01b933bc85e760931d324b269af8d85636a6380311923aa"
+      },
+      {
+        "path": "src/contractedge/evaluation/gt_adapter.py",
+        "sha256": "1afab9bd7c8f5a5d5623af37459634a98f96453f773e033066bafaac2755a14f"
+      },
+      {
+        "path": "src/contractedge/evaluation/repair_batch.py",
+        "sha256": "91768bacd1ceaf9f551356a81e51e04c4ecad8f938f30d57ef7ed44afda73975"
+      },
+      {
+        "path": "src/contractedge/execution/__init__.py",
+        "sha256": "4ede206b9e2c1d0e0b619abd84930d2b5851abc35892fc7857624d5e15a413f9"
+      },
+      {
+        "path": "src/contractedge/execution/cloudwatch_probe.py",
+        "sha256": "4c84dae468ee04d630857ac1c9872a61ccb9fb7729b2adea7ac0fc6cdd101702"
+      },
+      {
+        "path": "src/contractedge/execution/code_change.py",
+        "sha256": "45f0ff876dcd6232ad9bf3f818c555483b77bb7a0b6dbbb778281bf26b50215b"
+      },
+      {
+        "path": "src/contractedge/execution/comparison.py",
+        "sha256": "8bb08f709d2dc2d67c3b6d3f108c0970a8fb9c63d8aafc13ae6c5997c3175bf0"
+      },
+      {
+        "path": "src/contractedge/execution/consumer.py",
+        "sha256": "05b59de8deb85099ccdc0d353338c5bc75c52d50cd7e9cf7ca612f946d081676"
+      },
+      {
+        "path": "src/contractedge/execution/consumer_recovery.py",
+        "sha256": "874345ca24be4febbd4c351c57e7ddb0a793db06081f0e3a6d0a79f0b26a7a27"
+      },
+      {
+        "path": "src/contractedge/execution/consumers/__init__.py",
+        "sha256": "ed1701a065da82f87a68b6eea67dfad10b6cc72f88fef5f972745fdc7b89bc6e"
+      },
+      {
+        "path": "src/contractedge/execution/consumers/direct.py",
+        "sha256": "2861e2aad2058a86e62395c2e9741a905472dce7091d958d702ea1cbe932dd9f"
+      },
+      {
+        "path": "src/contractedge/execution/consumers/topomen.py",
+        "sha256": "ad6ffb2ba4e47e9f77080fa98bd7233c3814fb18dfae95ee42a502614f9e0376"
+      },
+      {
+        "path": "src/contractedge/execution/helper_context.py",
+        "sha256": "acbe302437d4911747fd0e76c03dff27f4cf520a5c54caaf26a3327c6cd3e1a3"
+      },
+      {
+        "path": "src/contractedge/execution/literal.py",
+        "sha256": "24abbed6150a46434f6fb89bfbafef6d49f2d72e083277859e5c1432f8aa3d29"
+      },
+      {
+        "path": "src/contractedge/execution/observations.py",
+        "sha256": "292aa57be8fb3c920b2802ddeed9283114f62d341f3728f0fad440a631b878e5"
+      },
+      {
+        "path": "src/contractedge/execution/panel_observer.py",
+        "sha256": "3e3d1239c921f95db679eb7a6a9d34284c4fa0edc4f0fd0fdc425ee47692050f"
+      },
+      {
+        "path": "src/contractedge/execution/preconditions.py",
+        "sha256": "468ea76ed15358c95abcd1f41712b7ca3323f9015ff4c2f1cdbe012ae9d51d51"
+      },
+      {
+        "path": "src/contractedge/execution/probe_specs.py",
+        "sha256": "fd10e4949ff8d037211ed999c29d69b16e682a85a3088232aaf339cf822e5c7a"
+      },
+      {
+        "path": "src/contractedge/execution/probes.py",
+        "sha256": "8bab854e8f55607c72dea4801f63b9723a35e4c7f3e86ff3d0314293080cd277"
+      },
+      {
+        "path": "src/contractedge/execution/public.py",
+        "sha256": "d43fe6899e099b321bd2d75bc29ea752fa7b7cdbe4856af471a34f5f4e45fb6f"
+      },
+      {
+        "path": "src/contractedge/execution/public_observer.py",
+        "sha256": "dabe3d8b9b40dab9c7e122595e0b34ced0e192ff00763ef089541e0aac2b207a"
+      },
+      {
+        "path": "src/contractedge/execution/review.py",
+        "sha256": "2d505d45c249f2bbb2432a845baea1325c15af4a0818c4b836f3b564676c7cee"
+      },
+      {
+        "path": "src/contractedge/execution/runtime_preflight.py",
+        "sha256": "6e5f7f676de07745d35cfc271fa67efb4ee12aa3bbb725aa0b583355a55984fc"
+      },
+      {
+        "path": "src/contractedge/execution/runtime_probe.py",
+        "sha256": "1cc07a85df5b2479e22355f3b29dc638f945499a0c6151fbf9a1593250356745"
+      },
+      {
+        "path": "src/contractedge/execution/runtime_session.py",
+        "sha256": "06b37bf5d7e5c3f621c0fe74dd9c1d30f55a1f47d11796486d35e50e59e92137"
+      },
+      {
+        "path": "src/contractedge/execution/support.py",
+        "sha256": "e1494ca4560bb50d110419d84c63fa25be6b1ee83458efa09c1d45af715aedfb"
+      },
+      {
+        "path": "src/contractedge/execution/topomen.py",
+        "sha256": "9ba68031165b4f22d1b6842da75189aedbea51d2e99c00b5a6c2dfeb9177778d"
+      },
+      {
+        "path": "src/contractedge/execution/topomen_agent.py",
+        "sha256": "49726ccf12cbec5cc1823da05d4f1e192500879e28f97e3e5b3b0f022f92b0a8"
+      },
+      {
+        "path": "src/contractedge/execution/writeback_context.py",
+        "sha256": "8b69b7361061350189956aaf9bf6d98c0529dd7f32133b67fdf3b5ae1c07b0e7"
+      },
+      {
+        "path": "src/contractedge/experiments/__init__.py",
+        "sha256": "007219a36bf576935a97e8ac2a2e61f10cf6f7cd7fb48bf41f9dfc002db2929b"
+      },
+      {
+        "path": "src/contractedge/experiments/modes.py",
+        "sha256": "19e43f07a967453531a72155e2fe2dc775a0f4dee8f87bf2772613a8634735b8"
+      },
+      {
+        "path": "src/contractedge/model/__init__.py",
+        "sha256": "ecb72f11a5522bdd4691f012299cc934a7f51de5e3ac176f3f7e5321cf95e527"
+      },
+      {
+        "path": "src/contractedge/model/admission.py",
+        "sha256": "09f1b3c368fbb07635e03e65cc210415af2932cf8976f98173ee631489408caa"
+      },
+      {
+        "path": "src/contractedge/model/budget.py",
+        "sha256": "2745ff03732aa6a6c87637603a7875c0770eaa945a5e385cb57804e84ae49c5e"
+      },
+      {
+        "path": "src/contractedge/model/money.py",
+        "sha256": "ac09292c059914af6c737789491e9aea24c2e036cb384e02c7ba6dad65aff813"
+      },
+      {
+        "path": "src/contractedge/model/output_contract.py",
+        "sha256": "6353849e111978eeb4fa66e4a8d01391dceda956bf16155428e0055b345ee0ad"
+      },
+      {
+        "path": "src/contractedge/model/provider.py",
+        "sha256": "94be6aa50f990d95a4478ba65db748bae012f90dc35fb41c2ddc6e1f2508f670"
+      },
+      {
+        "path": "src/contractedge/model/schema.py",
+        "sha256": "8405a7c7c0c66d0931268ad84094a0cf9e6fc1b7e3ba4c67bfa0d6d403b04ce5"
+      },
+      {
+        "path": "src/contractedge/orchestration/__init__.py",
+        "sha256": "11961ea8c82e428c79b84c7ae1447f42e24c08a55eb6966cf785514d4726c4cb"
+      },
+      {
+        "path": "src/contractedge/orchestration/batch.py",
+        "sha256": "32ed1a4a247338a33cfb0da1909fcfc5ee8646d9e22522b45996c6bda1104f37"
+      },
+      {
+        "path": "src/contractedge/orchestration/candidate_guard.py",
+        "sha256": "11e9fe98b7f90bda35ca5cf0d146c66fbb6fdce4926545015107d3b86e1d0ca7"
+      },
+      {
+        "path": "src/contractedge/orchestration/cli_front_recording.py",
+        "sha256": "db09f3b7b3173fb0495c615906d4c00546bb5b237d64b48d0ec011d42471d1bd"
+      },
+      {
+        "path": "src/contractedge/orchestration/evidence_delivery.py",
+        "sha256": "a7cdc0ae3cecf1b08cc9436b4596b81230d2b2ea22ce3d6e2e4bcc5266a16eaf"
+      },
+      {
+        "path": "src/contractedge/orchestration/feedback.py",
+        "sha256": "b7547647d61be7faf5dde9233607d940ab248b6dca246e6f054ad478eb3a6302"
+      },
+      {
+        "path": "src/contractedge/orchestration/front_delivery.py",
+        "sha256": "47f5de6daaf0b7f1fa6750060d593c206ecda169c8a97c19b4ce99551b21d618"
+      },
+      {
+        "path": "src/contractedge/orchestration/recorder.py",
+        "sha256": "987555a886df40c659e7559a921294df1c325499c708a72beef0ce208781d4f4"
+      },
+      {
+        "path": "src/contractedge/orchestration/repair.py",
+        "sha256": "62212abe94d24211b7ad2e5467223a3804fe8b3672c675c2353e05c6410ba4b5"
+      },
+      {
+        "path": "src/contractedge/orchestration/resume.py",
+        "sha256": "30383f81e3b80078f7e476d5745d06ca1c8786737102c4f9c02a0a6702373bb5"
+      },
+      {
+        "path": "src/contractedge/orchestration/runner.py",
+        "sha256": "ce7f3a091452385826c4cd3ddb5a32f1acb3c2d12835987e1334145ea8c5af13"
+      },
+      {
+        "path": "src/contractedge/orchestration/semantic_delivery.py",
+        "sha256": "70ae71e157185cf6bdd053f0907d7ac87040ae8793882e9f8573ed77be028925"
+      },
+      {
+        "path": "src/contractedge/orchestration/state.py",
+        "sha256": "96d256605c180c7fcc60e54c7654970b1173872837bfa08164cbd39f818105e1"
+      },
+      {
+        "path": "src/contractedge/orchestration/transitions.py",
+        "sha256": "559474ba582dd02a22a636d56b28ddbff7b3aae12fc99185a2951d568c349d38"
+      },
+      {
+        "path": "src/contractedge/orchestration/trial.py",
+        "sha256": "2dd4a016d3dbba9a43f130e36e8affc75bd7c0a04680429b0631d1e66face654"
+      },
+      {
+        "path": "src/contractedge/requirement/__init__.py",
+        "sha256": "a85ad83a62cea215e43cdc500ad54d74fc5d264eba80c8cdafe70ac7061b570e"
+      },
+      {
+        "path": "src/contractedge/requirement/lineage.py",
+        "sha256": "d18430c95072eb974c02f245daca68c0c779aa72066a5553cd548b1579060fc6"
+      },
+      {
+        "path": "src/contractedge/requirement/normalize.py",
+        "sha256": "61e6d40235514bf747e9f062187a4ed505abf43db1dd67cad893d355d534ca6d"
+      },
+      {
+        "path": "src/contractedge/retrieval/__init__.py",
+        "sha256": "e3c4976f8502c1544b74ac541a46edcaf35f0c2d1f3fcfbf6697336b49bab407"
+      },
+      {
+        "path": "src/contractedge/retrieval/candidates.py",
+        "sha256": "705aab579997e3537d2d53cfebab063a7dc742c55ceabf33ec133b87f3a58553"
+      },
+      {
+        "path": "src/contractedge/retrieval/edges.py",
+        "sha256": "c60241528f295f533491fe34115bf23d669ee3979ddfee3a64f165de10b98274"
+      },
+      {
+        "path": "src/contractedge/retrieval/frontier.py",
+        "sha256": "7693229754c9b59bf6c9011cf554b64021f74ab5ffae7fe3fc2b478d9979ffce"
+      },
+      {
+        "path": "src/contractedge/retrieval/gap_delivery.py",
+        "sha256": "7847177004f74049a94fe58ce6eb0c060260c16a184f0d8266291b1eb94967e8"
+      },
+      {
+        "path": "src/contractedge/source/__init__.py",
+        "sha256": "25c98d6e2368d69bc8a686d94c51ff2602ae7c20fb48debdcffd375679962e23"
+      },
+      {
+        "path": "src/contractedge/source/absence.py",
+        "sha256": "bf6f0f59f16f9789d0db087fca947d937dc002e19080b9a5f23410bf9e4b2ad1"
+      },
+      {
+        "path": "src/contractedge/source/entrypoints.py",
+        "sha256": "1afbe6bfe03fd38853becb5b110a6bc39ee8f92ec56c5de223e15c0c7638ebec"
+      },
+      {
+        "path": "src/contractedge/source/parsers.py",
+        "sha256": "6b84a711f0d8531ba59e291f4709b16a06d04384553c893545828fa17c298f0a"
+      },
+      {
+        "path": "src/contractedge/source/scopes.py",
+        "sha256": "7191e96945b52d59c60495ef12ba3ea57dee64c716ff32084c86db9ac9052120"
+      },
+      {
+        "path": "src/contractedge/source/snapshot.py",
+        "sha256": "63c5006d006930231b5b56753e81865e891a76256d623a5ad6798c6f16fc99fd"
+      },
+      {
+        "path": "src/contractedge/source/units.py",
+        "sha256": "c8fd2bb3b0872e9cb7b571a3ef5c82653229fe650b57676d12df56b0ddb65dc3"
+      },
+      {
+        "path": "src/contractedge/tokenizers.py",
+        "sha256": "e7e2a7060e903ac8192fedb97133aa2113fc00231b1fe964c0e9d0284246b2ef"
+      }
+    ]
+  },
+  "shared_inputs_checks_consumer_and_budgets": true,
+  "interpretation": "Fixed exposed public engineering development panel, not benchmark repair rate or 24 paid API runs.",
+  "acceptance": {
+    "status": "PASS",
+    "scope": "Fixed exposed synthetic fixture outcomes; not model effectiveness",
+    "expected_cell_count": 24,
+    "unique_cells_complete": true,
+    "missing_cells": [],
+    "failed_cells": []
+  }
+}

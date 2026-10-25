@@ -1,0 +1,39 @@
+{
+  "case_id": "RW-ALERTMANAGER-4705",
+  "scope": "INTERRUPTED_CANDIDATE_ENGINEERING_AUDIT_NOT_COMPLETED_METHOD",
+  "source_snapshot": "54de36d862cb98ab45376c98f2b46cc6fbcab2ecf4219b28fd4e6fef931b593f",
+  "patch_sha256": "26add1d969c57da631e5bb6819114947accdf7978c45319690e76a1428d7abfe",
+  "model_calls_added": 0,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "public_probe_status": "COMPLETE",
+  "checks": [
+    {
+      "id": "groups.visible_during_reload",
+      "status": "PASS",
+      "statement": "The injected active alert remains in the production groups API at each successful sample during twenty valid configuration reloads"
+    },
+    {
+      "id": "groups.visible_after_reload",
+      "status": "PASS",
+      "statement": "The injected active alert is visible in the production groups API after the reload sampling window"
+    },
+    {
+      "id": "groups.unique_for_declared_route",
+      "status": "PASS",
+      "statement": "In the declared single receiver and group_by alertname scenario, groups have unique label/receiver identities and no unexpected receiver or extra group"
+    },
+    {
+      "id": "groups.visible_at_reload_return",
+      "status": "PASS",
+      "statement": "Immediately after each of twenty successful reload responses, the production groups API contains all2048 injected active alert names"
+    }
+  ],
+  "source_unchanged": true,
+  "independent_status": "PASS",
+  "native_score_status": "PASS",
+  "scorer_returncode": 0,
+  "score_sha256": "2349e595bc0cbd296c1d6bdb1aa679a058fc330c35673a993b33459a79f8c129",
+  "score_feedback_to_method": false,
+  "finished_utc": "2026-10-25T02:13:10.096137+00:00"
+}
