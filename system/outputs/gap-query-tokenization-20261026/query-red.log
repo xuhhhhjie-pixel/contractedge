@@ -1,0 +1,40 @@
+FF.......                                                                [100%]
+=================================== FAILURES ===================================
+___ test_directory_plus_multiple_terms_locates_the_named_implementation_only ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-569/test_directory_plus_multiple_t0')
+
+    def test_directory_plus_multiple_terms_locates_the_named_implementation_only(tmp_path):
+        snap,seeds=fixture(tmp_path)
+        gap=dict(id='G1',locator_hint=dict(path='worker',search_term='NextPrivateKeySecretName CertificateRequest CSR compare'))
+        units,audit=extract_gap_extension_units(snap,['docs.md'],seeds,[gap])
+>       assert [(u['path'],u.get('symbol')) for u in units]==[('worker/controller.go','ProcessItem')]
+E       AssertionError: assert [] == [('worker/con...ProcessItem')]
+E         
+E         Right contains one more item: ('worker/controller.go', 'ProcessItem')
+E         Use -v to get more diff
+
+tests/test_gap_query_tokens.py:22: AssertionError
+_________ test_decomposed_tokens_keep_case_boundary_and_same_gap_scope _________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-569/test_decomposed_tokens_keep_ca0')
+
+    def test_decomposed_tokens_keep_case_boundary_and_same_gap_scope(tmp_path):
+        snap,seeds=fixture(tmp_path,'''package worker
+    func WrongCase() { consume(obj.nextPrivateKeySecretName) }
+    func Substring() { consume(obj.PreviousNextPrivateKeySecretName) }
+    func Correct() { consume(obj.NextPrivateKeySecretName) }
+    ''')
+        units,_=extract_gap_extension_units(snap,['docs.md'],seeds,[dict(id='G',locator_hint=dict(
+            path='worker',search_term='NextPrivateKeySecretName handling compare'))],max_units=1)
+>       assert [(u['path'],u.get('symbol')) for u in units]==[('worker/controller.go','Correct')]
+E       AssertionError: assert [] == [('worker/con...', 'Correct')]
+E         
+E         Right contains one more item: ('worker/controller.go', 'Correct')
+E         Use -v to get more diff
+
+tests/test_gap_query_tokens.py:36: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_gap_query_tokens.py::test_directory_plus_multiple_terms_locates_the_named_implementation_only
+FAILED tests/test_gap_query_tokens.py::test_decomposed_tokens_keep_case_boundary_and_same_gap_scope
+2 failed, 7 passed in 0.95s

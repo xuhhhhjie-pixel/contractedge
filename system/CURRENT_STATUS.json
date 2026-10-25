@@ -19,7 +19,7 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.48",
+  "implementation_version": "0.6.49",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
@@ -3297,7 +3297,7 @@
     "snapshot": "docs/development/unified-branch-feedback-v048-20261026-v2.snapshot.json",
     "snapshot_id": "bounded-source-delivery-v046-20261026-v6",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V048_V2_ENGINEERING_QUALIFIED_TWO_TARGET_DIAGNOSTIC_RUNNING",
+    "status": "V049_QUERY_AND_PRECAP_DELIVERY_REPLAY_PASS_UNFROZEN",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "DIAGNOSTIC_IN_PROGRESS_NO_FIXED46_EFFECTIVENESS",
     "source_sha256": "707ac9445d6cc422329d165ca3e7d8d5a78db6ae89aa4cca3f11a96a9338de9d",
@@ -3305,10 +3305,11 @@
     "promotion": "BLOCKED_BY_TWO_CONFIRMED_BOUNDARY_FINDINGS",
     "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source-v046-v6-20261026/registration.json",
     "formal_ready": false,
-    "report": "outputs/branch-review-feedback-20261026/COMPLETION_AUDIT.md",
+    "report": "outputs/gap-query-tokenization-20261026/COMPLETION_AUDIT.md",
     "full_tests": 1916,
     "subtests": 91,
-    "runtime_qualification": "outputs/branch-review-feedback-20261026/RUNTIME_QUALIFICATION_v048_v2.json"
+    "runtime_qualification": "outputs/branch-review-feedback-20261026/RUNTIME_QUALIFICATION_v048_v2.json",
+    "predecessor_worktree": "/home/xhj/contractedge-branch-review-20261026/system"
   },
   "staged_implementation_version": "0.6.45",
   "runtime_implementation_version": "0.6.40",

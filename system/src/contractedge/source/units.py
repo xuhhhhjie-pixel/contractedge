@@ -232,6 +232,19 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
     if not hints:
         return [], {"inspected_files": 0, "matched_files": [], "candidate_count": 0,
                     "truncated_search": False, "queries": []}
+    # A model may supply several identifiers and connective prose in one
+    # search_term. Preserve the original literal query, then add at most four
+    # explicit long identifiers from that same query. This is token location,
+    # not semantic expansion or a guessed synonym. Same-gap paths still apply.
+    for hint in list(hints):
+        query = hint['value']
+        if hint['kind'] != 'search_term' or re.fullmatch(r'[A-Za-z_]\w*', query):
+            continue
+        tokens = list(dict.fromkeys(re.findall(r'(?<![A-Za-z0-9_$])([A-Za-z_][A-Za-z0-9_]*)(?![A-Za-z0-9_$])', query)))
+        precise = [token for token in tokens if len(token) >= 12
+                   and (re.search(r'[a-z][A-Z]', token) or '_' in token)]
+        hints.extend({'gap_id': hint['gap_id'], 'kind': 'search_term', 'value': token,
+                      'literal_token': True, 'parent_query': query} for token in precise[:4])
 
     # A precise public identifier is itself a bounded read locator. Requiring
     # a pre-existing call edge first makes disconnected production consumers
@@ -249,7 +262,7 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
                               + r'(?![A-Za-z0-9_$])', text))
 
     def query_match(hint, text):
-        if hint in precise_hints:
+        if hint in precise_hints or hint.get('literal_token'):
             return precise_match(hint, text)
         return hint['value'].casefold() in text.casefold()
 
@@ -387,7 +400,7 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             or set(map(str, u.get("references", ()))) & seed_symbols for u in units)
         query_hints = [h for h in hints if h['kind'] in {'symbol', 'search_term'}]
         connected_query_ids = {u['id'] for u in units if file_is_connected and any(
-            (precise_match(h, str(u.get('text', ''))) if h in precise_hints else
+            (precise_match(h, str(u.get('text', ''))) if h in precise_hints or h.get('literal_token') else
              re.search(r'(?<![A-Za-z0-9_$])' + re.escape(h['value']) + r'(?![A-Za-z0-9_$])',
                        str(u.get('text', '')), re.IGNORECASE)) for h in query_hints)}
         neighbors = []
@@ -401,7 +414,7 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
                 and hint['value'].casefold() in str(unit.get('text', '')).casefold()
                 for hint in hints)
             located_exact = any(
-                precise_match(h, str(unit.get('text', ''))) if h in precise_hints else
+                precise_match(h, str(unit.get('text', ''))) if h in precise_hints or h.get('literal_token') else
                 (re.search(r'(?<![A-Za-z0-9_$])' + re.escape(h['value']) + r'(?![A-Za-z0-9_$])',
                            str(unit.get('text', '')), re.IGNORECASE) if h['kind'] == 'symbol'
                  else query_match(h, str(unit.get('text', ''))))
@@ -419,7 +432,7 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             unit_hints = []
             for hint in hints:
                 value = hint["value"]
-                if hint in precise_hints:
+                if hint in precise_hints or hint.get('literal_token'):
                     match = precise_match(hint, str(unit.get('text', '')))
                 elif hint["kind"] == "symbol":
                     match = re.search(r"(?<![A-Za-z0-9_$])" + re.escape(value) + r"(?![A-Za-z0-9_$])",
@@ -490,6 +503,18 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
     by_path = {}
     for item in output:
         by_path.setdefault(item['path'], []).append(item)
+    if any(h.get('literal_token') for h in hints):
+        def token_priority(item):
+            hits = {h['value'] for h in hints if h.get('literal_token')
+                    and h['gap_id'] in item.get('evidence_gap_refs', [])
+                    and precise_match(h, str(item.get('text', '')))}
+            # A constructor mentioning one generic type must not displace the
+            # consumer containing both explicit query identifiers before the
+            # final ranker ever sees it. No extra unit or read slots are added.
+            return (-len(hits), -max(map(len, hits), default=0))
+        for group in by_path.values():
+            group.sort(key=token_priority)
+        by_path = dict(sorted(by_path.items(), key=lambda pair: token_priority(pair[1][0])))
     output = [item for row in zip_longest(*by_path.values()) for item in row if item is not None][:max_units]
     return output, {"inspected_files": inspected, "matched_files": sorted(set(matched_files)),
                     "candidate_count": candidate_count, "truncated_search": truncated_search or byte_limit_hit,

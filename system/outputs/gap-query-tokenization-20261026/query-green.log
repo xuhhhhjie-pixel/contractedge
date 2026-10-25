@@ -1,0 +1,21 @@
+......F................................                               [100%]
+=================================== FAILURES ===================================
+__ test_token_decomposition_does_not_increase_read_or_candidate_limits[files] __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-570/test_token_decomposition_does_0')
+limit = 'files'
+
+    @pytest.mark.parametrize('limit',['files','bytes','units'])
+    def test_token_decomposition_does_not_increase_read_or_candidate_limits(tmp_path,limit):
+        snap,seeds=fixture(tmp_path)
+        kwargs={'max_files':1} if limit=='files' else {'max_search_bytes':1} if limit=='bytes' else {'max_units':0}
+        # The existing seed is visited first for a pathless query.
+        units,_=extract_gap_extension_units(snap,['docs.md'],seeds,[dict(id='G',locator_hint=dict(
+            search_term='NextPrivateKeySecretName CSR comparison'))],**kwargs)
+>       assert not units
+E       AssertionError: assert not [{'id': 'CU-972189d949c98b5f', 'kind': 'FUNCTION_OR_TYPE', 'path': 'other.go', 'locator': {'start_line': 2, 'end_line': 2, 'column_start': 1}, ...}]
+
+tests/test_gap_query_tokens.py:53: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_gap_query_tokens.py::test_token_decomposition_does_not_increase_read_or_candidate_limits[files]
+1 failed, 38 passed, 3 subtests passed in 0.36s

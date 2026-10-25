@@ -1,0 +1,635 @@
+{
+  "audit": {
+    "inspected_files": 1049,
+    "matched_files": [
+      "internal/apis/certmanager/types_issuer.go",
+      "internal/apis/certmanager/v1/zz_generated.conversion.go",
+      "internal/apis/certmanager/zz_generated.deepcopy.go",
+      "internal/controller/certificaterequests/apply_test.go",
+      "internal/controller/certificates/policies/gatherer_test.go",
+      "internal/generated/openapi/zz_generated.openapi.go",
+      "pkg/apis/certmanager/v1/types_issuer.go",
+      "pkg/apis/certmanager/v1/zz_generated.deepcopy.go",
+      "pkg/controller/certificaterequests/acme/acme.go",
+      "pkg/controller/certificaterequests/acme/acme_test.go",
+      "pkg/controller/certificaterequests/approver/approver_test.go",
+      "pkg/controller/certificaterequests/ca/ca.go",
+      "pkg/controller/certificaterequests/ca/ca_test.go",
+      "pkg/controller/certificaterequests/controller.go",
+      "pkg/controller/certificaterequests/fake/fake.go",
+      "pkg/controller/certificaterequests/selfsigned/checks_test.go",
+      "pkg/controller/certificaterequests/selfsigned/selfsigned.go",
+      "pkg/controller/certificaterequests/selfsigned/selfsigned_test.go",
+      "pkg/controller/certificaterequests/sync.go",
+      "pkg/controller/certificaterequests/sync_test.go",
+      "pkg/controller/certificaterequests/util/reporter_test.go",
+      "pkg/controller/certificaterequests/vault/fuzz_test.go",
+      "pkg/controller/certificaterequests/vault/vault.go",
+      "pkg/controller/certificaterequests/vault/vault_test.go",
+      "pkg/controller/certificaterequests/venafi/fuzz_test.go",
+      "pkg/controller/certificaterequests/venafi/venafi.go",
+      "pkg/controller/certificaterequests/venafi/venafi_test.go",
+      "pkg/controller/certificates/issuing/fuzz_test.go",
+      "pkg/controller/certificates/issuing/internal/keystore.go",
+      "pkg/controller/certificates/issuing/internal/keystore_test.go",
+      "pkg/controller/certificates/issuing/internal/secret_test.go",
+      "pkg/controller/certificates/issuing/issuing_controller.go",
+      "pkg/controller/certificates/issuing/issuing_controller_test.go",
+      "pkg/controller/certificates/issuing/secret_manager.go",
+      "pkg/controller/certificates/issuing/secret_manager_test.go",
+      "pkg/controller/certificates/keymanager/fuzz_test.go",
+      "pkg/controller/certificates/keymanager/keymanager_controller_test.go",
+      "pkg/controller/certificates/readiness/readiness_controller_test.go",
+      "pkg/controller/certificates/requestmanager/fuzz_test.go",
+      "pkg/controller/certificates/requestmanager/requestmanager_controller_test.go",
+      "pkg/controller/certificates/revisionmanager/fuzz_test.go",
+      "pkg/controller/certificates/revisionmanager/revisionmanager_controller.go",
+      "pkg/controller/certificates/revisionmanager/revisionmanager_controller_test.go",
+      "pkg/controller/certificates/trigger/trigger_controller_test.go",
+      "pkg/controller/certificatesigningrequests/acme/acme.go",
+      "pkg/controller/context.go",
+      "pkg/util/cmapichecker/cmapichecker.go",
+      "pkg/util/cmapichecker/cmapichecker_test.go",
+      "pkg/util/pki/certificatetemplate.go",
+      "pkg/util/pki/csr.go",
+      "pkg/util/pki/generate.go",
+      "pkg/util/pki/match.go",
+      "pkg/util/pki/parse.go",
+      "test/e2e/framework/helper/certificaterequests.go",
+      "test/e2e/framework/helper/validation/certificaterequests/certificaterequests.go",
+      "test/e2e/framework/matcher/have_condition_matcher.go",
+      "test/integration/certificates/generates_new_private_key_per_request_test.go",
+      "test/integration/certificates/revisionmanager_controller_test.go",
+      "test/integration/validation/certificaterequest_test.go",
+      "test/unit/crypto/crypto.go",
+      "test/unit/gen/certificaterequest.go",
+      "third_party/forked/acme/internal/acmeprobe/prober.go",
+      "third_party/forked/acme/rfc8555_test.go"
+    ],
+    "candidate_count": 221,
+    "truncated_search": false,
+    "inspected_bytes": 11318749,
+    "queries": [
+      {
+        "gap_id": "G1",
+        "kind": "path",
+        "value": "pkg/controller/certificates/issuing"
+      },
+      {
+        "gap_id": "G1",
+        "kind": "search_term",
+        "value": "NextPrivateKeySecretName CertificateRequest CSR compare"
+      },
+      {
+        "gap_id": "G2",
+        "kind": "path",
+        "value": "pkg/controller/certificates/issuing"
+      },
+      {
+        "gap_id": "G2",
+        "kind": "search_term",
+        "value": "stale request replaced key not fail issuance terminal state"
+      },
+      {
+        "gap_id": "G1",
+        "kind": "search_term",
+        "value": "NextPrivateKeySecretName",
+        "literal_token": true,
+        "parent_query": "NextPrivateKeySecretName CertificateRequest CSR compare"
+      },
+      {
+        "gap_id": "G1",
+        "kind": "search_term",
+        "value": "CertificateRequest",
+        "literal_token": true,
+        "parent_query": "NextPrivateKeySecretName CertificateRequest CSR compare"
+      }
+    ]
+  },
+  "units": [
+    {
+      "id": "CU-8ebf7a71b9e4b8f7",
+      "path": "pkg/controller/certificates/issuing/fuzz_test.go",
+      "symbol": "init",
+      "locator": {
+        "start_line": 41,
+        "end_line": 53,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECTORY_PATH",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-e49b73ef5ec2c8d2",
+      "path": "pkg/controller/certificates/issuing/internal/keystore.go",
+      "symbol": "encodeJKSKeystore",
+      "locator": {
+        "start_line": 99,
+        "end_line": 144,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECTORY_PATH",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-e16d3b4eba21c098",
+      "path": "pkg/controller/certificates/issuing/internal/keystore_test.go",
+      "symbol": "TestEncodeJKSKeystore",
+      "locator": {
+        "start_line": 154,
+        "end_line": 233,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECTORY_PATH",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-7cfc41ac67c327eb",
+      "path": "pkg/controller/certificates/issuing/internal/secret_test.go",
+      "symbol": "Test_SecretsManager",
+      "locator": {
+        "start_line": 57,
+        "end_line": 136,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECTORY_PATH",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-0d2b98f5648d088b",
+      "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+      "symbol": "NewController",
+      "locator": {
+        "start_line": 90,
+        "end_line": 173,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECTORY_PATH",
+      "truncated": false,
+      "evidence_gap_refs": [
+        "G1"
+      ]
+    },
+    {
+      "id": "CU-249b04249f693405",
+      "path": "pkg/controller/certificates/issuing/issuing_controller_test.go",
+      "symbol": "TestIssuingController",
+      "locator": {
+        "start_line": 57,
+        "end_line": 568,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECTORY_PATH",
+      "truncated": true,
+      "evidence_gap_refs": [
+        "G1"
+      ]
+    },
+    {
+      "id": "CU-cece6b9175fb3fe1",
+      "path": "pkg/controller/certificates/issuing/secret_manager.go",
+      "symbol": "ensureSecretData",
+      "locator": {
+        "start_line": 38,
+        "end_line": 106,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECTORY_PATH",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-d138c3faf59c970b",
+      "path": "pkg/controller/certificates/issuing/secret_manager_test.go",
+      "symbol": "Test_ensureSecretData",
+      "locator": {
+        "start_line": 37,
+        "end_line": 116,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECTORY_PATH",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-a1974a398bce6df3",
+      "path": "internal/generated/openapi/zz_generated.openapi.go",
+      "symbol": "GetOpenAPIDefinitions",
+      "locator": {
+        "start_line": 36,
+        "end_line": 115,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_SEED_UNIT",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-9637ac49a25f542b",
+      "path": "internal/apis/certmanager/types_issuer.go",
+      "symbol": "IssuerConfig",
+      "locator": {
+        "start_line": 88,
+        "end_line": 109,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_SEED_UNIT",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-3b2a7da9cfb978a3",
+      "path": "pkg/apis/certmanager/v1/types_issuer.go",
+      "symbol": "IssuerConfig",
+      "locator": {
+        "start_line": 106,
+        "end_line": 132,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_SEED_UNIT",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-5a502780cf029acf",
+      "path": "internal/apis/certmanager/zz_generated.deepcopy.go",
+      "symbol": "DeepCopyInto",
+      "locator": {
+        "start_line": 320,
+        "end_line": 327,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_SEED_UNIT",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-10cd09c0aa0c2933",
+      "path": "pkg/apis/certmanager/v1/zz_generated.deepcopy.go",
+      "symbol": "DeepCopyInto",
+      "locator": {
+        "start_line": 320,
+        "end_line": 327,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_SEED_UNIT",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-ccd9bc13851f2e23",
+      "path": "pkg/util/pki/csr.go",
+      "symbol": "GenerateCSR",
+      "locator": {
+        "start_line": 156,
+        "end_line": 235,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_SEED_UNIT",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-c42c25b363442177",
+      "path": "pkg/util/pki/match.go",
+      "symbol": "RequestMatchesSpec",
+      "locator": {
+        "start_line": 128,
+        "end_line": 207,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_SEED_UNIT",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-fdf860ddbd966805",
+      "path": "internal/apis/certmanager/v1/zz_generated.conversion.go",
+      "symbol": "autoConvert_v1_CertificateRequest_To_certmanager_CertificateRequest",
+      "locator": {
+        "start_line": 856,
+        "end_line": 865,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_SEED_UNIT",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-f8d59357c208727c",
+      "path": "test/unit/crypto/crypto.go",
+      "symbol": "CryptoBundle",
+      "locator": {
+        "start_line": 42,
+        "end_line": 73,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_SEED_UNIT",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-24a3705ef1bfe51c",
+      "path": "internal/controller/certificaterequests/apply_test.go",
+      "symbol": "Test_serializeApply",
+      "locator": {
+        "start_line": 34,
+        "end_line": 82,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-ca13c859c487856f",
+      "path": "internal/controller/certificates/policies/gatherer_test.go",
+      "symbol": "TestDataForCertificate",
+      "locator": {
+        "start_line": 39,
+        "end_line": 118,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-cee961f58a942ead",
+      "path": "pkg/controller/certificaterequests/acme/acme.go",
+      "symbol": "init",
+      "locator": {
+        "start_line": 75,
+        "end_line": 104,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-acb16d3b591a613a",
+      "path": "pkg/controller/certificaterequests/acme/acme_test.go",
+      "symbol": "TestSign",
+      "locator": {
+        "start_line": 78,
+        "end_line": 157,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-d774e7a4aac263ae",
+      "path": "pkg/controller/certificaterequests/approver/approver_test.go",
+      "symbol": "TestProcessItem",
+      "locator": {
+        "start_line": 33,
+        "end_line": 112,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-faab6910c6db31cd",
+      "path": "pkg/controller/certificaterequests/ca/ca.go",
+      "symbol": "Sign",
+      "locator": {
+        "start_line": 75,
+        "end_line": 134,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-e2ce04adb2cf1a99",
+      "path": "pkg/controller/certificaterequests/ca/ca_test.go",
+      "symbol": "TestSign",
+      "locator": {
+        "start_line": 91,
+        "end_line": 170,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-e7e4a0a227005f07",
+      "path": "pkg/controller/certificaterequests/controller.go",
+      "symbol": "Issuer",
+      "locator": {
+        "start_line": 43,
+        "end_line": 45,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-122a112d93c48007",
+      "path": "pkg/controller/certificaterequests/fake/fake.go",
+      "symbol": "Issuer",
+      "locator": {
+        "start_line": 27,
+        "end_line": 29,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-ca50ce396541f413",
+      "path": "pkg/controller/certificaterequests/selfsigned/checks_test.go",
+      "symbol": "Test_handleSecretReferenceWorkFunc",
+      "locator": {
+        "start_line": 37,
+        "end_line": 116,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-973a72b3d8e0ac61",
+      "path": "pkg/controller/certificaterequests/selfsigned/selfsigned.go",
+      "symbol": "Sign",
+      "locator": {
+        "start_line": 118,
+        "end_line": 197,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-1c187aacd6d70e7e",
+      "path": "pkg/controller/certificaterequests/selfsigned/selfsigned_test.go",
+      "symbol": "TestSign",
+      "locator": {
+        "start_line": 62,
+        "end_line": 141,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-1775339bea617d65",
+      "path": "pkg/controller/certificaterequests/sync.go",
+      "symbol": "Sync",
+      "locator": {
+        "start_line": 42,
+        "end_line": 121,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-458313f5afba9673",
+      "path": "pkg/controller/certificaterequests/sync_test.go",
+      "symbol": "generateSelfSignedCert",
+      "locator": {
+        "start_line": 64,
+        "end_line": 89,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_CONNECTED_FILE_QUERY",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-eebda206cedf0dd6",
+      "path": "pkg/controller/certificaterequests/util/reporter_test.go",
+      "symbol": "reporterT",
+      "locator": {
+        "start_line": 40,
+        "end_line": 51,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_CONNECTED_FILE_QUERY",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-be5acd868a7818a9",
+      "path": "pkg/controller/certificaterequests/vault/fuzz_test.go",
+      "symbol": "FuzzVaultCRController",
+      "locator": {
+        "start_line": 61,
+        "end_line": 140,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-368c3b331813af1c",
+      "path": "pkg/controller/certificaterequests/vault/vault.go",
+      "symbol": "Sign",
+      "locator": {
+        "start_line": 76,
+        "end_line": 120,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-8ff44df222a70131",
+      "path": "pkg/controller/certificaterequests/vault/vault_test.go",
+      "symbol": "generateSelfSignedCertFromCR",
+      "locator": {
+        "start_line": 67,
+        "end_line": 85,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_CONNECTED_FILE_QUERY",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-d647325fc2135e33",
+      "path": "pkg/controller/certificaterequests/venafi/fuzz_test.go",
+      "symbol": "FuzzVenafiCRController",
+      "locator": {
+        "start_line": 57,
+        "end_line": 136,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-29fb42f32b35fc3b",
+      "path": "pkg/controller/certificaterequests/venafi/venafi.go",
+      "symbol": "Sign",
+      "locator": {
+        "start_line": 81,
+        "end_line": 160,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-d4c3498ede4cf2fc",
+      "path": "pkg/controller/certificaterequests/venafi/venafi_test.go",
+      "symbol": "testT",
+      "locator": {
+        "start_line": 926,
+        "end_line": 937,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_CONNECTED_FILE_QUERY",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-1d377621088b38bb",
+      "path": "pkg/controller/certificates/keymanager/fuzz_test.go",
+      "symbol": "FuzzProcessItem",
+      "locator": {
+        "start_line": 40,
+        "end_line": 99,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": false,
+      "evidence_gap_refs": []
+    },
+    {
+      "id": "CU-4855ccab2d002f50",
+      "path": "pkg/controller/certificates/keymanager/keymanager_controller_test.go",
+      "symbol": "TestProcessItem",
+      "locator": {
+        "start_line": 76,
+        "end_line": 155,
+        "column_start": 1
+      },
+      "scope_extension": "EVIDENCE_GAP_DIRECT_NEIGHBOR",
+      "truncated": true,
+      "evidence_gap_refs": []
+    }
+  ]
+}
