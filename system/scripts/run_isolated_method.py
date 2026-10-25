@@ -384,7 +384,7 @@ def validate_method_result(child_root, case_id, bridge, journal_root, *, broker=
             elif status != 'DONE':
                 pending += 1
     method_statuses = {'PUBLIC_EXECUTION_COMPLETE', 'PUBLIC_REVIEW_COMPLETE', 'INVALID_PLAN', 'INVALID_OUTPUT',
-        'INVALID_DIAGNOSIS', 'INVALID_CHANGESET', 'NEEDS_EVIDENCE', 'INSUFFICIENT_EVIDENCE', 'ROUND_LIMIT',
+        'INVALID_DIAGNOSIS', 'INVALID_CHANGESET', 'NEEDS_EVIDENCE', 'EVIDENCE_GAP', 'INSUFFICIENT_EVIDENCE', 'ROUND_LIMIT', 'BUDGET_EXHAUSTED',
         'STOPPED_UNCERTAIN', 'CANDIDATE_REGRESSION_REJECTED', 'CANDIDATE_COMPARISON_UNCERTAIN',
         'RECOVERY_PLAN_UNSUPPORTED', 'RECOVERY_NOT_ROUTED', 'RECOVERY_REGRESSION_REJECTED',
         'RECOVERY_COMPARISON_UNAVAILABLE','CONCRETE_EDIT_REJECTED'}
@@ -397,6 +397,92 @@ def validate_method_result(child_root, case_id, bridge, journal_root, *, broker=
             'not_dispatched_requests': not_dispatched, 'candidate_verified': bool(candidate),
             'coordinator_policy_failures':policy_failures,'recovery_failure':trace.get('recovery_failure'),
             'semantic_outcome_upgraded': False}
+
+
+PRE_GAP_TERMINAL_PROGRAM_SHA256 = '8b3fbb0e57c2822dd3fbdf30683fd7733410cdc9f482315414df1ad895f4a500'
+PRE_BUDGET_TERMINAL_PROGRAM_SHA256 = '73d45369d08edeffcf2eacd513061a89836cf99ac2792ab13ec8a18154f34ac9'
+
+
+def read_recorded_terminal(receipt_path, *, recorded_program):
+    """Read-only adjudication of known closed terminal-classification bugs.
+
+    This cannot waive unknown calls, a failed public runner, a changed source,
+    an unverified export or any other infrastructure stop. The old receipt and
+    failed classification remain immutable; no method request is dispatched.
+    """
+    def sealed(path):
+        path = Path(path)
+        if path.is_symlink() or not path.is_file() or path.stat().st_size > 8*1024**2:
+            raise ValueError('Expected a bounded regular terminal proof')
+        data = path.read_bytes()
+        return data, hashlib.sha256(data).hexdigest()
+    program, program_hash = sealed(recorded_program['path'])
+    if program_hash not in {PRE_GAP_TERMINAL_PROGRAM_SHA256, PRE_BUDGET_TERMINAL_PROGRAM_SHA256} or recorded_program.get('sha256') != program_hash:
+        raise ValueError('Unknown recorded terminal implementation')
+    budget_mode = program_hash == PRE_BUDGET_TERMINAL_PROGRAM_SHA256
+    method_status = 'BUDGET_EXHAUSTED' if budget_mode else 'EVIDENCE_GAP'
+    raw_bytes, receipt_hash = sealed(receipt_path)
+    raw = json.loads(raw_bytes); state = Path(raw['state_root']).resolve(strict=True)
+    case = Path(raw['identity']['output_path']).resolve(strict=True)
+    if Path(receipt_path).resolve() != state/'receipt.json' or case.is_relative_to(state) or state.is_relative_to(case):
+        raise ValueError('Recorded terminal proof layout is invalid')
+    files = raw['identity'].get('harness_files', {})
+    if [v for k,v in files.items() if Path(k).name == 'run_isolated_method.py'] != [program_hash]:
+        raise ValueError('Recorded terminal program was not bound to this run')
+    trace_bytes, trace_hash = sealed(case/'repair.trace.json'); trace = json.loads(trace_bytes)
+    candidate = trace.get('candidate')
+    expected = dict(classification='INFRASTRUCTURE_STOP', method_status=method_status,
+        unknown_requests=0, not_dispatched_requests=0, candidate_verified=True,
+        coordinator_policy_failures=[], recovery_failure=None, semantic_outcome_upgraded=False)
+    if (raw.get('status') != 'INFRASTRUCTURE_STOP' or raw.get('method_returncode') != 0
+            or raw.get('method_source_unchanged') is not True
+            or raw.get('cleanup', {}).get('status') != 'OWNED_CONTAINERS_CLOSED'
+            or raw.get('terminal_validation') != expected
+            or trace.get('case_id') != raw.get('case_id') or trace.get('status') != method_status
+            or trace.get('source_integrity_verified') is False or trace.get('recovery_failure') is not None
+            or not trace.get('initial_snapshot_id') or not trace.get('final_snapshot_id')
+            or not isinstance(candidate, dict)
+            or (not budget_mode and (trace.get('errors') or trace.get('rounds')
+                or trace['initial_snapshot_id'] != trace['final_snapshot_id'] or candidate.get('patch_bytes') != 0))):
+        raise ValueError('Only the known closed method terminal can be adjudicated')
+    patch = Path(candidate['patch_path']).resolve(strict=True)
+    patch_bytes, patch_hash = sealed(patch)
+    if (not patch.is_relative_to(case) or len(patch_bytes) != candidate.get('patch_bytes')
+            or (patch_bytes and not budget_mode) or patch_hash != candidate.get('patch_sha256')):
+        raise ValueError('The recorded candidate is not the sealed export')
+    journal_files = sorted((state/'method-journal').glob('*.json'))
+    journal_hashes = {}; records = []
+    for path in journal_files:
+        data, checksum = sealed(path); row = json.loads(data)
+        if row.get('status') != 'DONE':
+            raise ValueError('Unresolved recorded method request cannot be waived')
+        journal_hashes[path.name] = checksum; records.append(row)
+    observations = [r.get('result', {}) for r in records if r.get('op') == 'public.observe']
+    if (not observations or any(r.get('status') != 'EXECUTION_PASS' for r in observations)
+            or not any(r.get('op') == 'public.export' and r.get('result') == candidate for r in records)):
+        raise ValueError('A failed public runner or unbound export is not a terminal classification bug')
+    if budget_mode:
+        budget = trace.get('budget') or {}
+        ints = ('model_calls', 'max_calls', 'reserved_tokens', 'max_tokens', 'resumed_model_calls')
+        numbers = ('elapsed_seconds', 'max_seconds')
+        if (trace.get('errors') != ['Global model token/time/call budget exhausted']
+                or not isinstance(trace.get('rounds'), list)
+                or any(type(budget.get(k)) is not int or budget[k] < 0 for k in ints)
+                or any(type(budget.get(k)) not in {int, float} or not math.isfinite(budget[k]) or budget[k] < 0 for k in numbers)
+                or budget['max_calls'] <= 0 or budget['model_calls'] != budget['max_calls']
+                or budget['resumed_model_calls'] != 0
+                or budget['model_calls'] != sum(r.get('op') == 'model.complete' for r in records)
+                or budget['max_tokens'] <= 0 or budget['reserved_tokens'] > budget['max_tokens']
+                or budget['max_seconds'] <= 0 or budget['elapsed_seconds'] > budget['max_seconds']):
+            raise ValueError('Only a proven closed local call-limit exit can be adjudicated')
+    view = json.loads(raw_bytes)
+    view['status'] = 'METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING'
+    view['terminal_validation']['classification'] = 'METHOD_RESULT'
+    return dict(receipt=view, raw_receipt=raw, model_calls_added=0,
+        interpretation_policy=('ce.closed_local_call_budget_terminal.v1' if budget_mode else 'ce.pre_edit_evidence_gap_terminal.v1'),
+        proof=dict(receipt_sha256=receipt_hash, trace_sha256=trace_hash,
+                   patch_sha256=patch_hash, method_journal_files=journal_hashes,
+                   recorded_program_sha256=program_hash))
 
 
 def check_registration(path, identity, *, panel_path=None):

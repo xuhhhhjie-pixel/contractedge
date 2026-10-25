@@ -123,9 +123,16 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
                                 and loc['start_line'] <= branch['end_line'] and loc['end_line'] >= branch['start_line']):
                                 return True
                     return False
-                if not refs or not all(covers(c) for c in refs) or row['open_obligation_refs']:
+                if not refs or not all(covers(c) for c in refs):
                     issues.append(ValidationIssue('PRODUCTION_BRANCH_CHANGE_INVALID', path,
                         'MODIFY requires actual changes targeting this evidenced branch; file equality alone is insufficient'))
+                if row['open_obligation_refs']:
+                    issues.append(ValidationIssue('PRODUCTION_BRANCH_MODIFY_OPEN_REFS',
+                        path + '.open_obligation_refs',
+                        'MODIFY requires empty open_obligation_refs in this branch row. '
+                        'Keep unverified runtime behavior in the plan open_obligations and corresponding checks; '
+                        'do not delete those obligations or claim verification. If the repair intent for this branch '
+                        'itself is unresolved, use UNRESOLVED with real open_obligation_refs and no change_refs.'))
             elif row['disposition'] == 'UNRESOLVED':
                 refs = row['open_obligation_refs']
                 if not refs or not set(refs) <= opened or row['change_refs']:

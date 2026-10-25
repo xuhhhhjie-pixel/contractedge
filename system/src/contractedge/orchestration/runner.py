@@ -1144,7 +1144,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             try:
                 policy.consume("evidence_extension", attempt_id)
                 candidate_set = extend_once(
-                    retain_supported_source(candidate_set, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest),
+                    (retain_supported_source(candidate_set, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
+                     if config.get('gap_role_delivery_enabled') else candidate_set),
                     diagnosis.evidence_gaps, extension_units,
                     max_context_tokens=int(config["max_context_tokens"]), token_counter=token_counter,
                 )
@@ -1389,7 +1390,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 try:
                     policy.consume("evidence_extension", attempt_id)
                     candidate_set = extend_once(
-                        retain_supported_source(candidate_set, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest),
+                        (retain_supported_source(candidate_set, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
+                     if config.get('gap_role_delivery_enabled') else candidate_set),
                         planning_gaps, extra,
                         max_context_tokens=int(config['max_context_tokens']), token_counter=token_counter)
                 except ValueError:

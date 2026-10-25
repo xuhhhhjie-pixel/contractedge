@@ -34,7 +34,8 @@ def test_real_extension_boundary_reserves_supported_source_before_ranking(tmp_pa
         return extend_once(candidates, *args, **kwargs)
     with patch('contractedge.orchestration.runner.extend_once', side_effect=inspect):
         trace = run_front_half(value, tmp_path, provider,
-            dict(model={'model':'fixture'},max_context_tokens=24000,max_output_tokens=1024,max_total_tokens=100000),
+            dict(model={'model':'fixture'},max_context_tokens=24000,max_output_tokens=1024,max_total_tokens=100000,
+                 gap_role_delivery_enabled=True),
             lambda text: len(text.split()))
     assert observed
     assert trace.status in {'READY','NEEDS_EVIDENCE'}, trace.errors

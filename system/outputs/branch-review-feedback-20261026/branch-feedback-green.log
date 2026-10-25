@@ -1,0 +1,17 @@
+.F...........................                                            [100%]
+=================================== FAILURES ===================================
+______ test_fixing_branch_reference_does_not_discard_unverified_behavior _______
+
+    def test_fixing_branch_reference_does_not_discard_unverified_behavior():
+        packet,plan,frontier=fixture()
+        plan['production_path_review'][0]['open_obligation_refs']=[]
+        result=validate_semantic_changeset(plan,packet,None,frontier=frontier)
+>       assert result.valid,result.errors
+E       AssertionError: (ValidationIssue(code='STATUS_INCONSISTENT', path='status', message='READY_PARTIAL requires an unresolved outcome'),)
+E       assert False
+E        +  where False = ValidationResult(valid=False, errors=(ValidationIssue(code='STATUS_INCONSISTENT', path='status', message='READY_PARTIA... this concrete source branch; runtime coverage remains limited.', 'change_refs': ['C1'], 'open_obligation_refs': []}]}).valid
+
+tests/test_branch_review_feedback.py:40: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_branch_review_feedback.py::test_fixing_branch_reference_does_not_discard_unverified_behavior
+1 failed, 28 passed in 1.37s

@@ -1,0 +1,57 @@
+{
+  "status": "DIAGNOSTIC_FINISHED_REQUIRES_PUBLIC_ROOT_CAUSE_AUDIT",
+  "rows": [
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "attempt_id": "diagnostic-source-v046-v6-20261026-rw-alertmanager-4705",
+      "method_status": "BUDGET_EXHAUSTED",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "FAIL",
+      "raw_receipt_status": "INFRASTRUCTURE_STOP",
+      "terminal_interpretation": "ce.closed_local_call_budget_terminal.v1",
+      "patch_bytes": 1222,
+      "patch_sha256": "3dc487cedfce516baaf1d72719446d506b4cd9fc4c5e36457fc87d68d4549faa",
+      "receipt": {
+        "path": "/home/xhj/contractedge-diagnostic-source-v046-v6-20261026/methods/RW-ALERTMANAGER-4705/.isolated-e668e64e6e83450eb6d9bcdbb071575d/receipt.json",
+        "sha256": "2ecc46c1ee8e3fc0af5b7411a6ea89c595e7f9b43b766e2a0397c4bef7c7b12b"
+      },
+      "trace": {
+        "path": "/home/xhj/contractedge-diagnostic-source-v046-v6-20261026/methods/RW-ALERTMANAGER-4705/RW-ALERTMANAGER-4705/repair.trace.json",
+        "sha256": "0a61353cbc2737bd6a6660131367ba22739453ad8af9839f3bfa43a466fc6881"
+      },
+      "counts_in_46_slot_panel": false,
+      "formal_ready": false
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "attempt_id": "diagnostic-source-v046-v6-20261026-rw-certmanager-9116",
+      "method_status": "INVALID_PLAN",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "raw_receipt_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+      "terminal_interpretation": null,
+      "patch_bytes": 0,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receipt": {
+        "path": "/home/xhj/contractedge-diagnostic-source-v046-v6-20261026/methods/RW-CERTMANAGER-9116/.isolated-d86c5698a5644347aa06f3483d6a7aa1/receipt.json",
+        "sha256": "600383a3758f0f705c82752bacbd5d3e4ebc5098480122913601d9e2787e869c"
+      },
+      "trace": {
+        "path": "/home/xhj/contractedge-diagnostic-source-v046-v6-20261026/methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/repair.trace.json",
+        "sha256": "7d7fb4ba6dd068f2e0047b9ab1271244d79b50ddd2458b6b35e91f461eb8ff92"
+      },
+      "counts_in_46_slot_panel": false,
+      "formal_ready": false
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "status": "NOT_RUN_TARGET_GATE_FAILED",
+      "counts_in_46_slot_panel": false
+    }
+  ],
+  "formal_ready": false,
+  "automatic_retry": false,
+  "counts_in_46_slot_panel": false,
+  "active_case": null,
+  "method_wrapper_exit": 0
+}
