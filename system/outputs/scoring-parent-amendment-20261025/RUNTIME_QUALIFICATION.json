@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "actual_eight_summary": "/home/xhj/contractedge-fixed46-20261025/compatibility-scoring-r2/actual-eight/summary.json",
+  "actual_eight_sha256": "a99b6e891260ca17588f23aaf2ba3b150281ca1987d99498d171757e28f12eaa",
+  "public_sandboxes": [
+    {
+      "variant": "baseline",
+      "receipt": "/home/xhj/contractedge-fixed46-20261025/compatibility-scoring-r2/baseline/.isolated-b1bd64d95685467ea1f39c6a7845ab33/receipt.json",
+      "sha256": "4b8f672412d4f5ab549ce2e11d821749b5ea19cb9762985240ede96d4ccb7de4",
+      "status": "PUBLIC_ONLY_SMOKE_COMPLETE"
+    },
+    {
+      "variant": "candidate",
+      "receipt": "/home/xhj/contractedge-fixed46-20261025/compatibility-scoring-r2/candidate/.isolated-b85afe1cf7804d929e9e774326385c54/receipt.json",
+      "sha256": "cad85beb7edd097d7faad8a7599713042b6d8b6029baeea1e1e09a4fdde12238",
+      "status": "PUBLIC_ONLY_SMOKE_COMPLETE"
+    }
+  ],
+  "new_model_http_calls": 0,
+  "formal_ready": false
+}

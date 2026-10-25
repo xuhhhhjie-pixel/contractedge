@@ -1,0 +1,15 @@
+{
+  "panel": "/home/xhj/contractedge-fixed46-20261025/panel-v045-scoring-r2.json",
+  "sha256": "110b0717cd7c33978a4a41ac79e36d926560358d93a144aa50ee0ae633be3b63",
+  "old_panel_sha256": "399760d9a7230f1143179fb12d470137d388ef6583665db45b98b5555ea5f25b",
+  "slots": 46,
+  "inherited_terminal_slots": 5,
+  "method_and_grader_reruns": 0,
+  "new_model_http_calls_at_admission": 0,
+  "source_sha256": {
+    "baseline": "c9c5b75060549e0e22eb725b3082dee2e7994deecc0d653379c801b0a1f9fc6e",
+    "candidate": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df"
+  },
+  "B_opened": false,
+  "formal_ready": false
+}

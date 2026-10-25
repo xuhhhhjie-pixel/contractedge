@@ -1,0 +1,123 @@
+FFFF..FF                                                                 [100%]
+=================================== FAILURES ===================================
+____ test_native_negative_with_contract_exit_one_is_retained[SEMANTIC_FAIL] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-504/test_native_negative_with_cont0')
+status = 'SEMANTIC_FAIL'
+
+    @pytest.mark.parametrize('status', ['SEMANTIC_FAIL', 'BUILD_FAIL', 'PATCH_APPLY_FAIL', 'FAIL'])
+    def test_native_negative_with_contract_exit_one_is_retained(tmp_path, status):
+        receipt, benchmark, output, _ = fixture(tmp_path, exit_code=1)
+        tool = benchmark/'tools/score_case.py'
+        tool.write_text(tool.read_text().replace("'status':'PASS'", "'status':"+repr(status)))
+        result = load().run(receipt, benchmark, output, phase='all')
+>       assert result['status'] == status and result['native_score_status'] == status
+E       AssertionError: assert ('SCORER_ERROR' == 'SEMANTIC_FAIL'
+E         
+E         - SEMANTIC_FAIL
+E         + SCORER_ERROR)
+
+tests/test_score_exit_contract.py:18: AssertionError
+_____ test_native_negative_with_contract_exit_one_is_retained[BUILD_FAIL] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-504/test_native_negative_with_cont1')
+status = 'BUILD_FAIL'
+
+    @pytest.mark.parametrize('status', ['SEMANTIC_FAIL', 'BUILD_FAIL', 'PATCH_APPLY_FAIL', 'FAIL'])
+    def test_native_negative_with_contract_exit_one_is_retained(tmp_path, status):
+        receipt, benchmark, output, _ = fixture(tmp_path, exit_code=1)
+        tool = benchmark/'tools/score_case.py'
+        tool.write_text(tool.read_text().replace("'status':'PASS'", "'status':"+repr(status)))
+        result = load().run(receipt, benchmark, output, phase='all')
+>       assert result['status'] == status and result['native_score_status'] == status
+E       AssertionError: assert ('SCORER_ERROR' == 'BUILD_FAIL'
+E         
+E         - BUILD_FAIL
+E         + SCORER_ERROR)
+
+tests/test_score_exit_contract.py:18: AssertionError
+__ test_native_negative_with_contract_exit_one_is_retained[PATCH_APPLY_FAIL] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-504/test_native_negative_with_cont2')
+status = 'PATCH_APPLY_FAIL'
+
+    @pytest.mark.parametrize('status', ['SEMANTIC_FAIL', 'BUILD_FAIL', 'PATCH_APPLY_FAIL', 'FAIL'])
+    def test_native_negative_with_contract_exit_one_is_retained(tmp_path, status):
+        receipt, benchmark, output, _ = fixture(tmp_path, exit_code=1)
+        tool = benchmark/'tools/score_case.py'
+        tool.write_text(tool.read_text().replace("'status':'PASS'", "'status':"+repr(status)))
+        result = load().run(receipt, benchmark, output, phase='all')
+>       assert result['status'] == status and result['native_score_status'] == status
+E       AssertionError: assert ('SCORER_ERROR' == 'PATCH_APPLY_FAIL'
+E         
+E         - PATCH_APPLY_FAIL
+E         + SCORER_ERROR)
+
+tests/test_score_exit_contract.py:18: AssertionError
+________ test_native_negative_with_contract_exit_one_is_retained[FAIL] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-504/test_native_negative_with_cont3')
+status = 'FAIL'
+
+    @pytest.mark.parametrize('status', ['SEMANTIC_FAIL', 'BUILD_FAIL', 'PATCH_APPLY_FAIL', 'FAIL'])
+    def test_native_negative_with_contract_exit_one_is_retained(tmp_path, status):
+        receipt, benchmark, output, _ = fixture(tmp_path, exit_code=1)
+        tool = benchmark/'tools/score_case.py'
+        tool.write_text(tool.read_text().replace("'status':'PASS'", "'status':"+repr(status)))
+        result = load().run(receipt, benchmark, output, phase='all')
+>       assert result['status'] == status and result['native_score_status'] == status
+E       AssertionError: assert ('SCORER_ERROR' == 'FAIL'
+E         
+E         - FAIL
+E         + SCORER_ERROR)
+
+tests/test_score_exit_contract.py:18: AssertionError
+_ test_inconsistent_exit_and_native_status_remain_infrastructure_errors[SEMANTIC_FAIL-0] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-504/test_inconsistent_exit_and_nat2')
+status = 'SEMANTIC_FAIL', code = 0
+
+    @pytest.mark.parametrize('status,code', [('PASS', 1), ('SEMANTIC_FAIL', 2), ('SEMANTIC_FAIL', 0)])
+    def test_inconsistent_exit_and_native_status_remain_infrastructure_errors(tmp_path, status, code):
+        receipt, benchmark, output, _ = fixture(tmp_path, exit_code=code)
+        tool = benchmark/'tools/score_case.py'
+        tool.write_text(tool.read_text().replace("'status':'PASS'", "'status':"+repr(status)))
+>       assert load().run(receipt, benchmark, output, phase='all')['status'] == 'SCORER_ERROR'
+E       AssertionError: assert 'SEMANTIC_FAIL' == 'SCORER_ERROR'
+E         
+E         - SCORER_ERROR
+E         + SEMANTIC_FAIL
+
+tests/test_score_exit_contract.py:26: AssertionError
+____ test_recorded_v1_error_is_interpreted_without_overwriting_or_rerunning ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-504/test_recorded_v1_error_is_inte0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ff3d98cd9c0>
+
+    def test_recorded_v1_error_is_interpreted_without_overwriting_or_rerunning(tmp_path, monkeypatch):
+        receipt, benchmark, output, _ = fixture(tmp_path, exit_code=1)
+        tool = benchmark/'tools/score_case.py'
+        tool.write_text(tool.read_text().replace("'status':'PASS'", "'status':'SEMANTIC_FAIL'"))
+        program = Path(__file__).with_name('fixtures')/'isolated_score_v1.py'
+        spec = importlib.util.spec_from_file_location('ce_legacy_score_fixture', program)
+        legacy = importlib.util.module_from_spec(spec)
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'scripts'))
+        spec.loader.exec_module(legacy)
+        old = legacy.run(receipt, benchmark, output, phase='all')
+        assert old['status'] == 'SCORER_ERROR' and old['native_score_status'] == 'SEMANTIC_FAIL'
+        before = {str(p):p.read_bytes() for p in output.rglob('*') if p.is_file()}
+        scoring = load()
+>       assert hasattr(scoring, 'read_recorded_score'), 'Read-only legacy interpretation is not implemented'
+E       AssertionError: Read-only legacy interpretation is not implemented
+E       assert False
+E        +  where False = hasattr(<module 'isolated_scoring' from '/home/xhj/contractedge-score-amendment-20261025/system/scripts/score_isolated_method.py'>, 'read_recorded_score')
+
+tests/test_score_exit_contract.py:42: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_score_exit_contract.py::test_native_negative_with_contract_exit_one_is_retained[SEMANTIC_FAIL]
+FAILED tests/test_score_exit_contract.py::test_native_negative_with_contract_exit_one_is_retained[BUILD_FAIL]
+FAILED tests/test_score_exit_contract.py::test_native_negative_with_contract_exit_one_is_retained[PATCH_APPLY_FAIL]
+FAILED tests/test_score_exit_contract.py::test_native_negative_with_contract_exit_one_is_retained[FAIL]
+FAILED tests/test_score_exit_contract.py::test_inconsistent_exit_and_native_status_remain_infrastructure_errors[SEMANTIC_FAIL-0]
+FAILED tests/test_score_exit_contract.py::test_recorded_v1_error_is_interpreted_without_overwriting_or_rerunning
+6 failed, 2 passed in 8.67s

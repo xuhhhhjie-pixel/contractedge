@@ -1,0 +1,144 @@
+FF..FFFFF                                                                [100%]
+=================================== FAILURES ===================================
+_____ test_prior_negative_is_normalized_without_changing_its_raw_evidence ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-509/test_prior_negative_is_normali0')
+
+    def test_prior_negative_is_normalized_without_changing_its_raw_evidence(tmp_path):
+        panel, path, old, current, amended = prior_fixture(tmp_path)
+        module = core()
+        module.verify_panel(amended)
+        before = {str(p):p.read_bytes() for p in Path(panel['output_root']).rglob('*') if p.is_file()}
+        rows = module.verified_records(amended)
+>       assert len(rows) == 1 and rows[0]['status'] == 'SEMANTIC_FAIL'
+E       assert (0 == 1)
+E        +  where 0 = len([])
+
+tests/test_panel_scoring_amendment.py:67: AssertionError
+_ test_parent_correction_cannot_change_method_schedule_or_common_environment[config] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-509/test_parent_correction_cannot_0')
+change = 'config'
+
+    @pytest.mark.parametrize('change', ['config', 'source', 'slot', 'runtime', 'environment', 'worker'])
+    def test_parent_correction_cannot_change_method_schedule_or_common_environment(tmp_path, change):
+        panel, path, old, current, amended = prior_fixture(tmp_path)
+        if change == 'config':
+            p = tmp_path/'other-config.json';p.write_bytes(Path(current['variants']['candidate']['config']).read_bytes())
+            current['variants']['candidate']['config'] = str(p)
+        elif change == 'source':
+            current['variants']['candidate']['source_reference'] = {'path':'other','sha256':'a'*64}
+        elif change == 'slot': current['slots'].reverse()
+        elif change == 'runtime': current['runtime']['python'] = '/different/python'
+        elif change == 'environment': current['execution_environment']['python_environment'] = 'b'*64
+        elif change == 'worker':
+            current['predecessor']['worker_files_after'] = {'worker.py':'c'*64}
+            current['execution_environment']['harness_files'] = core().digest({'worker.py':'c'*64})
+        amended.write_text(json.dumps(current))
+>       with pytest.raises((ValueError, FileNotFoundError)):core().verify_panel(amended)
+E       Failed: DID NOT RAISE any of (ValueError, FileNotFoundError)
+
+tests/test_panel_scoring_amendment.py:89: Failed
+_ test_parent_correction_cannot_change_method_schedule_or_common_environment[runtime] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-509/test_parent_correction_cannot_3')
+change = 'runtime'
+
+    @pytest.mark.parametrize('change', ['config', 'source', 'slot', 'runtime', 'environment', 'worker'])
+    def test_parent_correction_cannot_change_method_schedule_or_common_environment(tmp_path, change):
+        panel, path, old, current, amended = prior_fixture(tmp_path)
+        if change == 'config':
+            p = tmp_path/'other-config.json';p.write_bytes(Path(current['variants']['candidate']['config']).read_bytes())
+            current['variants']['candidate']['config'] = str(p)
+        elif change == 'source':
+            current['variants']['candidate']['source_reference'] = {'path':'other','sha256':'a'*64}
+        elif change == 'slot': current['slots'].reverse()
+        elif change == 'runtime': current['runtime']['python'] = '/different/python'
+        elif change == 'environment': current['execution_environment']['python_environment'] = 'b'*64
+        elif change == 'worker':
+            current['predecessor']['worker_files_after'] = {'worker.py':'c'*64}
+            current['execution_environment']['harness_files'] = core().digest({'worker.py':'c'*64})
+        amended.write_text(json.dumps(current))
+>       with pytest.raises((ValueError, FileNotFoundError)):core().verify_panel(amended)
+E       Failed: DID NOT RAISE any of (ValueError, FileNotFoundError)
+
+tests/test_panel_scoring_amendment.py:89: Failed
+_ test_parent_correction_cannot_change_method_schedule_or_common_environment[environment] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-509/test_parent_correction_cannot_4')
+change = 'environment'
+
+    @pytest.mark.parametrize('change', ['config', 'source', 'slot', 'runtime', 'environment', 'worker'])
+    def test_parent_correction_cannot_change_method_schedule_or_common_environment(tmp_path, change):
+        panel, path, old, current, amended = prior_fixture(tmp_path)
+        if change == 'config':
+            p = tmp_path/'other-config.json';p.write_bytes(Path(current['variants']['candidate']['config']).read_bytes())
+            current['variants']['candidate']['config'] = str(p)
+        elif change == 'source':
+            current['variants']['candidate']['source_reference'] = {'path':'other','sha256':'a'*64}
+        elif change == 'slot': current['slots'].reverse()
+        elif change == 'runtime': current['runtime']['python'] = '/different/python'
+        elif change == 'environment': current['execution_environment']['python_environment'] = 'b'*64
+        elif change == 'worker':
+            current['predecessor']['worker_files_after'] = {'worker.py':'c'*64}
+            current['execution_environment']['harness_files'] = core().digest({'worker.py':'c'*64})
+        amended.write_text(json.dumps(current))
+>       with pytest.raises((ValueError, FileNotFoundError)):core().verify_panel(amended)
+E       Failed: DID NOT RAISE any of (ValueError, FileNotFoundError)
+
+tests/test_panel_scoring_amendment.py:89: Failed
+_ test_parent_correction_cannot_change_method_schedule_or_common_environment[worker] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-509/test_parent_correction_cannot_5')
+change = 'worker'
+
+    @pytest.mark.parametrize('change', ['config', 'source', 'slot', 'runtime', 'environment', 'worker'])
+    def test_parent_correction_cannot_change_method_schedule_or_common_environment(tmp_path, change):
+        panel, path, old, current, amended = prior_fixture(tmp_path)
+        if change == 'config':
+            p = tmp_path/'other-config.json';p.write_bytes(Path(current['variants']['candidate']['config']).read_bytes())
+            current['variants']['candidate']['config'] = str(p)
+        elif change == 'source':
+            current['variants']['candidate']['source_reference'] = {'path':'other','sha256':'a'*64}
+        elif change == 'slot': current['slots'].reverse()
+        elif change == 'runtime': current['runtime']['python'] = '/different/python'
+        elif change == 'environment': current['execution_environment']['python_environment'] = 'b'*64
+        elif change == 'worker':
+            current['predecessor']['worker_files_after'] = {'worker.py':'c'*64}
+            current['execution_environment']['harness_files'] = core().digest({'worker.py':'c'*64})
+        amended.write_text(json.dumps(current))
+>       with pytest.raises((ValueError, FileNotFoundError)):core().verify_panel(amended)
+E       Failed: DID NOT RAISE any of (ValueError, FileNotFoundError)
+
+tests/test_panel_scoring_amendment.py:89: Failed
+_______________ test_prior_record_cannot_be_omitted_or_upgraded ________________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-509/test_prior_record_cannot_be_om0')
+
+    def test_prior_record_cannot_be_omitted_or_upgraded(tmp_path):
+        panel, path, old, current, amended = prior_fixture(tmp_path)
+        root = Path(current['output_root']); root.mkdir()
+        records = root/'records.json'; records.write_text('[]')
+>       with pytest.raises(ValueError):core().verified_records(amended)
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_panel_scoring_amendment.py:96: Failed
+______ test_genuine_prior_infrastructure_error_cannot_be_imported_as_done ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-509/test_genuine_prior_infrastruct0')
+
+    def test_genuine_prior_infrastructure_error_cannot_be_imported_as_done(tmp_path):
+        panel, path, old, current, amended = prior_fixture(tmp_path, code=2)
+>       with pytest.raises(ValueError):core().verify_panel(amended)
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_panel_scoring_amendment.py:104: Failed
+=========================== short test summary info ============================
+FAILED tests/test_panel_scoring_amendment.py::test_prior_negative_is_normalized_without_changing_its_raw_evidence
+FAILED tests/test_panel_scoring_amendment.py::test_parent_correction_cannot_change_method_schedule_or_common_environment[config]
+FAILED tests/test_panel_scoring_amendment.py::test_parent_correction_cannot_change_method_schedule_or_common_environment[runtime]
+FAILED tests/test_panel_scoring_amendment.py::test_parent_correction_cannot_change_method_schedule_or_common_environment[environment]
+FAILED tests/test_panel_scoring_amendment.py::test_parent_correction_cannot_change_method_schedule_or_common_environment[worker]
+FAILED tests/test_panel_scoring_amendment.py::test_prior_record_cannot_be_omitted_or_upgraded
+FAILED tests/test_panel_scoring_amendment.py::test_genuine_prior_infrastructure_error_cannot_be_imported_as_done
+7 failed, 2 passed, 1 deselected in 1.15s

@@ -18,6 +18,8 @@ def main():
     parser.add_argument('--panel-id',required=True)
     parser.add_argument('--runtime-admission',type=Path)
     parser.add_argument('--compatibility-report',type=Path)
+    parser.add_argument('--predecessor-panel',type=Path,
+        help='Closed original panel; retain all slots and normalize only the known parent scoring exit-code bug')
     args=parser.parse_args()
     if args.output.exists():raise ValueError('Panel already exists; never overwrite its identity')
     original=read(args.original);variants={}
@@ -56,6 +58,19 @@ def main():
         panel['compatibility_report']={'path':str(args.compatibility_report.resolve()),'sha256':sha(args.compatibility_report)}
     identity=execution_identity(arguments(panel,panel['slots'][0],args.output,Path('NO_CREDENTIAL_READ')))
     panel['execution_environment']={key:digest(identity[key]) for key in ENVIRONMENT_KEYS}
+    if args.predecessor_panel:
+        previous=verify_panel(args.predecessor_panel)
+        records_path=Path(previous['output_root'])/'records.json'; rows=read(records_path)
+        if not isinstance(rows,list) or not rows:raise ValueError('A closed predecessor prefix is required')
+        receipt=read(rows[0]['evidence_files']['receipt']['path'])
+        programs=[name for name in previous['harness_files'] if Path(name).name=='score_isolated_method.py']
+        if len(programs)!=1:raise ValueError('Original scorer identity is ambiguous')
+        panel['predecessor']={'schema_version':'ce.fixed_panel_score_parent_amendment.v1',
+            'panel':{'path':str(args.predecessor_panel.resolve()),'sha256':sha(args.predecessor_panel)},
+            'records':{'path':str(records_path),'sha256':sha(records_path)},
+            'scoring_program':{'path':programs[0],'sha256':previous['harness_files'][programs[0]]},
+            'worker_files_before':receipt['identity']['harness_files'],
+            'worker_files_after':identity['harness_files'],'interpretation_policy':'ce.frozen_score_exit.v1'}
     # Validate before publication so failed preparation cannot create authority.
     import tempfile,json
     with tempfile.TemporaryDirectory(prefix='ce-panel-prepare-') as directory:

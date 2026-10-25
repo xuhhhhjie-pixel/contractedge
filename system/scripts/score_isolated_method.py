@@ -13,6 +13,18 @@ import sys
 
 from run_isolated_method import write_json
 
+LEGACY_PROGRAM_SHA256 = 'f7c401b45845fe83adb329281cc79bd2a3db8971653f2babda455fc56f0e062a'
+NEGATIVE_RESULTS = frozenset({'SEMANTIC_FAIL', 'BUILD_FAIL', 'PATCH_APPLY_FAIL', 'METHOD_FAIL', 'FAIL'})
+
+
+def score_outcome(checkpoint, native):
+    """Frozen score_case CLI: 0=PASS, 1=negative result, 2=tool error."""
+    if checkpoint['timed_out']: return 'SCORER_TIMEOUT'
+    status = native.get('status')
+    if checkpoint['returncode'] == 0 and status == 'PASS': return status
+    if checkpoint['returncode'] == 1 and status in NEGATIVE_RESULTS: return status
+    return 'SCORER_ERROR'
+
 
 def read(path):
     return json.loads(Path(path).read_text())
@@ -22,7 +34,9 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def binding(receipt_path,benchmark,output):
+def binding(receipt_path,benchmark,output,*,_recorded_program_sha256=None):
+    if _recorded_program_sha256 not in {None, LEGACY_PROGRAM_SHA256}:
+        raise ValueError('Unknown recorded scoring implementation')
     receipt_path=Path(receipt_path).resolve(strict=True);receipt=read(receipt_path)
     benchmark=Path(benchmark).resolve(strict=True);output=Path(output).resolve()
     case=Path(receipt['identity']['output_path']).resolve(strict=True)
@@ -61,7 +75,49 @@ def binding(receipt_path,benchmark,output):
         'trace_sha256':sha(trace_path),'patch_sha256':sha(patch),'patch_path':str(patch),
         'final_snapshot_id':trace.get('final_snapshot_id'),'evaluation_manifest_sha256':sha(manifest),
         'public_release_sha256':sha(entry),'public_tool_files':tool_files,
-        'scoring_program_sha256':sha(__file__),'interpreter_sha256':sha(sys.executable)}
+        'scoring_program_sha256':_recorded_program_sha256 or sha(__file__),'interpreter_sha256':sha(sys.executable)}
+
+
+def finished_score(output, identity):
+    """Validate exact completed bytes; never start or repeat a grader."""
+    output = Path(output); checkpoint = output/'checkpoint.json'; saved = read(checkpoint)
+    if saved.get('status') != 'TOOL_FINISHED' or saved.get('identity') != identity:
+        raise ValueError('Scoring outcome unknown or binding changed; never auto-rerun')
+    native = output/'native/score.json'; digest = sha(native) if native.is_file() else None
+    if digest != saved.get('score_sha256') or sha(output/'grader.log') != saved.get('grader_log_sha256'):
+        raise ValueError('Independent scoring output changed after completion')
+    value = read(native) if digest else {}
+    if value and (value.get('case_id') != identity['case_id'] or value.get('patch_sha256') != identity['patch_sha256']):
+        raise ValueError('Independent score case/patch mismatch')
+    return saved, value, digest
+
+
+def score_record(output, identity, value, digest, status):
+    return {'schema_version':'ce.isolated_independent_score.v1','case_id':identity['case_id'],
+        'status':status,'native_score_status':value.get('status'),
+        'identity':identity,'checkpoint_sha256':sha(Path(output)/'checkpoint.json'),'score_sha256':digest,
+        'candidate_selection_frozen':True,'model_calls_added':0,'score_feedback_to_method':False,
+        'counts_in_46_slot_panel':False,'formal_ready':False}
+
+
+def read_recorded_score(receipt, benchmark, output, *, recorded_program):
+    """Read-only normalization of the one known v1 exit-status wrapper.
+
+    The legacy program, every input, completed checkpoint and raw result must
+    match. Its result file is retained, including its erroneous SCORER_ERROR.
+    """
+    if (recorded_program.get('sha256') != LEGACY_PROGRAM_SHA256
+            or sha(recorded_program['path']) != LEGACY_PROGRAM_SHA256):
+        raise ValueError('Unrecognized immutable legacy scorer')
+    identity = binding(receipt, benchmark, output, _recorded_program_sha256=LEGACY_PROGRAM_SHA256)
+    saved, value, digest = finished_score(output, identity)
+    legacy_status = ('SCORER_TIMEOUT' if saved['timed_out'] else 'SCORER_ERROR'
+                     if saved['returncode'] != 0 else value.get('status', 'SCORER_ERROR'))
+    raw = read(Path(output)/'result.json')
+    if raw != score_record(output, identity, value, digest, legacy_status):
+        raise ValueError('Recorded legacy result differs from its completed proof')
+    return {'raw':raw,'interpreted_status':score_outcome(saved, value),
+            'interpretation_policy':'ce.frozen_score_exit.v1','model_calls_added':0}
 
 
 def run(receipt,benchmark,output,*,timeout=7200,phase='all'):
@@ -85,24 +141,8 @@ def run(receipt,benchmark,output,*,timeout=7200,phase='all'):
             'timed_out':timed_out,'score_sha256':sha(native) if native.is_file() else None,
             'grader_log_sha256':sha(output/'grader.log')})
         if phase=='run':return read(checkpoint)
-    saved=read(checkpoint)
-    if saved.get('status')!='TOOL_FINISHED' or saved.get('identity')!=identity:
-        raise ValueError('Scoring outcome unknown or binding changed; never auto-rerun')
-    native=output/'native/score.json'
-    digest=sha(native) if native.is_file() else None
-    if digest!=saved.get('score_sha256') or sha(output/'grader.log')!=saved.get('grader_log_sha256'):
-        raise ValueError('Independent scoring output changed after completion')
-    value=read(native) if digest else {}
-    if value and (value.get('case_id')!=identity['case_id'] or value.get('patch_sha256')!=identity['patch_sha256']):
-        raise ValueError('Independent score case/patch mismatch')
-    status=value.get('status','SCORER_ERROR')
-    if saved['timed_out']:status='SCORER_TIMEOUT'
-    elif saved['returncode']!=0:status='SCORER_ERROR'
-    result={'schema_version':'ce.isolated_independent_score.v1','case_id':identity['case_id'],
-        'status':status,'native_score_status':value.get('status'),
-        'identity':identity,'checkpoint_sha256':sha(checkpoint),'score_sha256':digest,
-        'candidate_selection_frozen':True,'model_calls_added':0,'score_feedback_to_method':False,
-        'counts_in_46_slot_panel':False,'formal_ready':False}
+    saved, value, digest = finished_score(output, identity)
+    result = score_record(output, identity, value, digest, score_outcome(saved, value))
     target=output/'result.json'
     if target.exists():
         if read(target)!=result:raise ValueError('Existing final score differs; no overwrite')

@@ -1,0 +1,14 @@
+# 原固定46槽评分协议修正：全量工程验证通过，待最终派发
+
+方法仍为0.6.45，源df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df；基线原0.5.5保持c9c5b75060549e0e22eb725b3082dee2e7994deecc0d653379c801b0a1f9fc6e。原A组停止于第5槽：KOPF基线的原生SEMANTIC_FAIL退出1，被旧wrapper误写SCORER_ERROR。
+
+新共同父侧代码识别冻结CLI的0/1/2约定；负向评分不再冒充基础设施错误。不一致退出仍拒绝。原panel、全部5槽、补丁、checkpoint、原始result及其错误标记保留；新的登记只读承接原完整前缀、原46个逻辑槽位及全局一次性调用身份，不能删除失败或重跑已完成成员。方法与隐藏评分器未修改。
+
+针对性64项通过。冻结原控制器上的新反例7失败、2通过；修正后全量1785项、91子测试通过，实际isolated demos开启，前后冻结文件摘要一致。最初测试fixture导入路径问题单列，不当作根因。完整回归使用明确的历史公开夹具及同一vendored TopoMen入口。
+
+实际原5槽零调用回放：4个PASS保持；KOPF基线按原生结果保留SEMANTIC_FAIL。新增模型、grader调用均为0。B仍关闭，formal_ready=false。
+
+后续：合入CI环境修订、生成最终当前parent freeze、新绑定的工程恢复面板与双方法公开沙箱复核，通过后封存新parent登记，从未运行的KOPF候选继续A。不能把这些工程结果称为原46槽完成。
+
+
+2026-10-25T13:18:44.529454+00:00：最终v2仅合入固定CI主机及对应新来源绑定，Python方法、父侧脚本和测试保持全量1785+91已验收字节。新绑定实际8格PASS、14会话28容器；双冻结方法public-only沙箱PASS并确认关闭。准入阶段模型与grader重跑均0。新parent登记SHA 110b0717cd7c33978a4a41ac79e36d926560358d93a144aa50ee0ae633be3b63，沿用原46个逻辑ID；完整承接5槽后已从KOPF候选恢复A，B关闭。上游CI环境修订7b020d8全部远程检查成功；本parent新增修正的独立CI另行核查。见REGISTERED_PANEL_SUMMARY、RUNTIME_QUALIFICATION和EXECUTION_CHECKPOINT。
