@@ -181,6 +181,8 @@ def predecessor_rows(panel):
     """
     amendment = panel.get('predecessor')
     if amendment is None: return []
+    if amendment.get('schema_version') == 'ce.fixed_panel_method_terminal_amendment.v1':
+        return terminal_predecessor_rows(panel)
     if (amendment.get('schema_version') != 'ce.fixed_panel_score_parent_amendment.v1'
             or amendment.get('interpretation_policy') != 'ce.frozen_score_exit.v1'):
         raise ValueError('Unknown parent scoring amendment')
@@ -236,6 +238,103 @@ def predecessor_rows(panel):
         imported.append({**row, 'status':status, 'independent_status':status,
             'recorded_status':row['status'], 'predecessor_panel_sha256':amendment['panel']['sha256'],
             'predecessor_record_sha256':digest(row), 'interpretation_policy':'ce.frozen_score_exit.v1'})
+    return imported
+
+
+def terminal_predecessor_rows(panel):
+    """Retain the closed prefix plus one sealed pre-edit terminal correction.
+
+    Only the original panel or its known scoring correction may precede this
+    amendment. Every logical attempt remains the same; no method is replayed.
+    """
+    amendment = panel['predecessor']
+    if amendment.get('interpretation_policy') != 'ce.pre_edit_evidence_gap_terminal.v1':
+        raise ValueError('Unknown recorded method terminal policy')
+    for name in ['panel','records','scoring_program','terminal_program','terminal_receipt','terminal_score','queue_state']:
+        ref = amendment[name]
+        if sha(ref['path']) != ref['sha256']:
+            raise ValueError('Recorded terminal amendment proof changed: '+name)
+    old_path = amendment['panel']['path']; old = read(old_path)
+    earlier = old.get('predecessor')
+    if earlier is not None and earlier.get('schema_version') != 'ce.fixed_panel_score_parent_amendment.v1':
+        raise ValueError('Terminal amendments cannot be chained or replace an unknown protocol')
+    old = verify_panel(old_path)
+    unchanged = ['panel_id','slots','variants','original_registration','benchmark_root','data_files',
+                 'seeds','runtime','model_call_cap','fresh_edit_cap','formal_ready',
+                 'compatibility_report','continuation_protocol','transient_workspace_policy']
+    if any(panel.get(k) != old.get(k) for k in unchanged):
+        raise ValueError('Terminal correction cannot change methods, resources or original slots')
+    before_root = Path(old['output_root']).resolve(); after_root = Path(panel['output_root']).resolve()
+    if before_root.is_relative_to(after_root) or after_root.is_relative_to(before_root):
+        raise ValueError('Terminal correction needs separate records, preserving all original files')
+    if any(panel['execution_environment'][k] != old['execution_environment'][k]
+           for k in ENVIRONMENT_KEYS if k != 'harness_files'):
+        raise ValueError('Terminal correction cannot change the common method environment')
+    before, after = amendment['worker_files_before'], amendment['worker_files_after']
+    if (set(before) != set(after) or digest(before) != old['execution_environment']['harness_files']
+            or digest(after) != panel['execution_environment']['harness_files']
+            or any(before[k] != after[k] and Path(k).name not in {'fixed_panel.py','run_isolated_method.py'} for k in before)):
+        raise ValueError('Only terminal classification and parent authority may change')
+    for mapping, owner in [(before,old),(after,panel)]:
+        for name, expected in mapping.items():
+            matches = [p for p in owner['harness_files'] if Path(p).name == Path(name).name]
+            if len(matches) != 1 or owner['harness_files'][matches[0]] != expected:
+                raise ValueError('Worker is outside the frozen parent bundle')
+    for name in ['scoring_program','terminal_program']:
+        ref = amendment[name]
+        if old['harness_files'].get(ref['path']) != ref['sha256']:
+            raise ValueError('Recorded program was not part of the predecessor')
+    if sha(before_root/'records.json') != amendment['records']['sha256']:
+        raise ValueError('The entire predecessor prefix must be retained')
+    rows = read(amendment['records']['path'])
+    if (not isinstance(rows,list) or not rows or len(rows) >= len(old['slots'])
+            or [r['slot_id'] for r in rows] != [s['slot_id'] for s in old['slots'][:len(rows)]]):
+        raise ValueError('Terminal correction requires the exact original closed prefix')
+    imported = []
+    from score_isolated_method import read_recorded_score, run as score
+    for row in rows:
+        verify_record(old_path,old,row,_recorded_program=amendment['scoring_program'])
+        status = row['status']
+        if 'score' in row['evidence_files']:
+            if row.get('predecessor_panel_sha256') is None:
+                status = read_recorded_score(row['evidence_files']['receipt']['path'],old['benchmark_root'],
+                    Path(row['evidence_files']['score']['path']).parent,
+                    recorded_program=amendment['scoring_program'])['interpreted_status']
+        if status not in TERMINAL_OUTCOMES:
+            raise ValueError('An unresolved predecessor cannot be converted into a result')
+        imported.append({**row,'status':status,'independent_status':status,'recorded_status':row['status'],
+            'predecessor_panel_sha256':amendment['panel']['sha256'],'predecessor_record_sha256':digest(row),
+            'interpretation_policy':amendment['interpretation_policy']})
+    from run_isolated_method import read_recorded_terminal
+    receipt_path = Path(amendment['terminal_receipt']['path'])
+    result = read_recorded_terminal(receipt_path,recorded_program=amendment['terminal_program'])
+    receipt = result['raw_receipt']; identity = receipt['identity']; slot = old['slots'][len(rows)]
+    case = before_root/'methods'/slot['slot_id']/slot['case_id']; state = read(amendment['queue_state']['path'])
+    if (receipt.get('panel_slot') != slot or receipt.get('counts_in_46_slot_panel') is not True
+            or receipt.get('panel_registration_sha256') != sha(old_path)
+            or Path(identity.get('output_path','')).resolve() != case
+            or identity.get('attempt_id') != slot['slot_id'] or identity.get('case_id') != slot['case_id']
+            or identity.get('panel_slot_id') != slot['slot_id'] or identity.get('panel_registration_sha256') != sha(old_path)
+            or identity.get('method_files') != old['variants'][slot['variant']]['source_files']
+            or identity.get('config_sha256') != old['variants'][slot['variant']]['config_sha256']
+            or Path(amendment['queue_state']['path']).resolve() != before_root/'queue'/slot['slot_id']/'state.json'
+            or state.get('status') != 'METHOD_RETURNED_ERROR' or state.get('returncode') != 2
+            or state.get('identity_sha256') != digest(identity) or state.get('panel_sha256') != sha(old_path)):
+        raise ValueError('The terminal correction does not match the next original claimed slot')
+    verify_environment(old,identity)
+    if Path(amendment['terminal_score']['path']).name != 'result.json':
+        raise ValueError('Terminal score proof must be the completed independent result')
+    scored = score(receipt_path,old['benchmark_root'],Path(amendment['terminal_score']['path']).parent,
+                   phase='finalize',_terminal_program=amendment['terminal_program'])
+    if scored['status'] not in TERMINAL_OUTCOMES or scored != read(amendment['terminal_score']['path']):
+        raise ValueError('Recorded terminal candidate scoring has not completed')
+    imported.append({**slot,'status':scored['status'],'independent_status':scored['status'],
+        'method_status':'EVIDENCE_GAP','public_decision':'UNKNOWN','terminal_verified':True,
+        'counts_in_46_slot_panel':True,'formal_ready':False,'identity_sha256':digest(identity),
+        'evidence_files':{name:{'path':str(path),'sha256':sha(path)} for name,path in [
+            ('receipt',receipt_path),('trace',case/'repair.trace.json'),('score',Path(amendment['terminal_score']['path']))]},
+        'recorded_status':'INFRASTRUCTURE_STOP','predecessor_panel_sha256':amendment['panel']['sha256'],
+        'predecessor_record_sha256':digest(result['proof']),'interpretation_policy':amendment['interpretation_policy']})
     return imported
 
 

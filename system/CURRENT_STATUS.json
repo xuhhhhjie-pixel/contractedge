@@ -3294,17 +3294,17 @@
     }
   },
   "current_development": {
-    "snapshot": "docs/development/scoring-parent-amendment-v045-20261025-v2.snapshot.json",
-    "snapshot_id": "scoring-parent-amendment-v045-20261025-v2",
+    "snapshot": "docs/development/method-terminal-amendment-v045-20261025-v1.snapshot.json",
+    "snapshot_id": "method-terminal-amendment-v045-20261025-v1",
     "snapshot_role": "CURRENT_FROZEN_DEVELOPMENT",
-    "status": "PARENT_SCORING_QUALIFIED_ORIGINAL_A_RESUMED",
+    "status": "PARENT_TERMINAL_R3_ENGINEERING_PASS_RUNTIME_QUALIFICATION_RUNNING",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "NOT_ACCEPTED",
     "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df"
   },
   "staged_implementation_version": "0.6.45",
   "runtime_implementation_version": "0.6.40",
-  "current_optimization_audit": "outputs/fixed46-isolated-panel-20261025/COMPLETION_AUDIT.md",
+  "current_optimization_audit": "outputs/method-terminal-amendment-20261025/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {
     "status": "INTERRUPTED_PUBLIC_OBSERVATION_NO_FINAL_METHOD_RESULT",
     "model_calls_completed": 4,

@@ -1,0 +1,10 @@
+{
+  "status": "PASS_READ_ONLY_ORIGINAL_PREFIX",
+  "verified_slots": 11,
+  "panel_sha256": "110b0717cd7c33978a4a41ac79e36d926560358d93a144aa50ee0ae633be3b63",
+  "record_sha256": "4e9adf3aeea8ac49ac59843a5e9d99e15c9e61a11fc60f320f0da652cef0fa12",
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "formal_ready": false,
+  "created_utc": "2026-10-25T15:04:42.212518+00:00"
+}

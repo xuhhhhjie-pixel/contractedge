@@ -154,7 +154,7 @@ jobs:
         run: >-
           env -u DEEPSEEK_API_KEY -u OPENAI_API_KEY PYTHONDONTWRITEBYTECODE=1
           python -B scripts/run_trial_isolation_panel.py --system "$PWD"
-          --binding configs/trial-isolation-acceptance-v045-scoring-r2.example.json
+          --binding configs/trial-isolation-acceptance-v045-terminal-r3.example.json
           --output "$RUNNER_TEMP/trial-recovery-tests"
           --image "$CONTRACTEDGE_RUNTIME_IMAGE" --docker-host "$DOCKER_HOST"
           --docker-api-version "${DOCKER_API_VERSION:-}"

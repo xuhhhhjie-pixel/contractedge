@@ -20,7 +20,13 @@ def main():
     parser.add_argument('--compatibility-report',type=Path)
     parser.add_argument('--predecessor-panel',type=Path,
         help='Closed original panel; retain all slots and normalize only the known parent scoring exit-code bug')
+    parser.add_argument('--terminal-receipt',type=Path,
+        help='Original immutable pre-edit EVIDENCE_GAP receipt, only with predecessor-panel and terminal-score')
+    parser.add_argument('--terminal-score',type=Path,
+        help='Completed independent result of that same sealed candidate, no method rerun')
     args=parser.parse_args()
+    if bool(args.terminal_receipt) != bool(args.terminal_score) or (args.terminal_receipt and not args.predecessor_panel):
+        raise ValueError('Terminal correction requires predecessor-panel, receipt and completed score together')
     if args.output.exists():raise ValueError('Panel already exists; never overwrite its identity')
     original=read(args.original);variants={}
     for name,root,config,reference,key in [
@@ -71,6 +77,19 @@ def main():
             'scoring_program':{'path':programs[0],'sha256':previous['harness_files'][programs[0]]},
             'worker_files_before':receipt['identity']['harness_files'],
             'worker_files_after':identity['harness_files'],'interpretation_policy':'ce.frozen_score_exit.v1'}
+        if args.terminal_receipt:
+            terminal = read(args.terminal_receipt)
+            programs = [p for p in previous['harness_files'] if Path(p).name == 'run_isolated_method.py']
+            if len(programs) != 1:raise ValueError('Recorded terminal program is ambiguous')
+            slot_id = terminal['identity']['attempt_id']
+            queue_state = Path(previous['output_root'])/'queue'/slot_id/'state.json'
+            panel['predecessor'].update(schema_version='ce.fixed_panel_method_terminal_amendment.v1',
+                interpretation_policy='ce.pre_edit_evidence_gap_terminal.v1',
+                worker_files_before=terminal['identity']['harness_files'],
+                terminal_program={'path':programs[0],'sha256':previous['harness_files'][programs[0]]},
+                terminal_receipt={'path':str(args.terminal_receipt.resolve()),'sha256':sha(args.terminal_receipt)},
+                terminal_score={'path':str(args.terminal_score.resolve()),'sha256':sha(args.terminal_score)},
+                queue_state={'path':str(queue_state),'sha256':sha(queue_state)})
     # Validate before publication so failed preparation cannot create authority.
     import tempfile,json
     with tempfile.TemporaryDirectory(prefix='ce-panel-prepare-') as directory:
