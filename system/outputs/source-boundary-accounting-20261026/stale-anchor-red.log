@@ -1,0 +1,20 @@
+....F                                                                    [100%]
+=================================== FAILURES ===================================
+_____ test_stale_exact_anchor_is_charged_and_never_labelled_current_source _____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-556/test_stale_exact_anchor_is_cha0')
+
+    def test_stale_exact_anchor_is_charged_and_never_labelled_current_source(tmp_path):
+        path = tmp_path / 'worker.go'
+        path.write_text('package worker\nfunc Reload() { PreviousState() }\n')
+        snap = compute_snapshot(tmp_path)
+        path.write_text('package worker\nfunc Reload() { WrongSnapshotState() }\n')
+        units, audit = locate_gap_roles(snap,
+            [dict(id='G1', locator_hint={'path': 'worker.go', 'symbol': 'Reload'})], {})
+>       assert not units
+E       AssertionError: assert not [{'id': 'CU-a2932c7fab90fd9b', 'kind': 'FUNCTION_OR_TYPE', 'path': 'worker.go', 'locator': {'start_line': 2, 'end_line': 2, 'column_start': 1}, ...}]
+
+tests/test_precise_gap_boundary_accounting.py:68: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_precise_gap_boundary_accounting.py::test_stale_exact_anchor_is_charged_and_never_labelled_current_source
+1 failed, 4 passed in 2.64s

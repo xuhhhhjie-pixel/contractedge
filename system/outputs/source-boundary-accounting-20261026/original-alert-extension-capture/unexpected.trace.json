@@ -1,0 +1,21 @@
+{
+  "run_id": "6b9f877c-4c05-4757-a068-b433edd1df12",
+  "case_id": "RW-ALERTMANAGER-4705",
+  "input_digest": "b0ec1187c6a3cc594ba5ccfd3b6c7b618b509e32ad4e6fbd5af08a422d967467",
+  "snapshot_id": null,
+  "status": "INFRASTRUCTURE_ERROR",
+  "requirement_spec": null,
+  "scope_resolution": null,
+  "candidate_set": null,
+  "diagnosis": null,
+  "changeset": null,
+  "model_calls": [],
+  "errors": [
+    "FileNotFoundError: [Errno 2] No such file or directory: '/home/xhj/contractedge-system/outputs/reliability-closure-20261020/public-source-alertmanager/alertmanager-e9278051f805b4b40b809155009a535fc1c58ddc/alertmanager-e9278051f805b4b40b809155009a535fc1c58ddc'"
+  ],
+  "structural_validation": null,
+  "semantic_review": null,
+  "retrieval_rounds": [],
+  "run_context": null,
+  "schema_version": "ce.run_trace.v1_1"
+}

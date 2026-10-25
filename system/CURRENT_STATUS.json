@@ -19,7 +19,7 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.46",
+  "implementation_version": "0.6.47",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
@@ -38,7 +38,7 @@
     "3": "source/ and retrieval/",
     "4": "diagnosis/",
     "5_6": "changeset/ and orchestration/runner.py",
-    "7": "execution/topomen_agent.py → actual topomen.collaboration.base_agent.DefaultAgent → scoped source transaction",
+    "7": "execution/topomen_agent.py \u2192 actual topomen.collaboration.base_agent.DefaultAgent \u2192 scoped source transaction",
     "8": "execution/public.py",
     "9": "orchestration/feedback.py and repair.py",
     "10": "evaluation/benchmark.py and frozen score_case.py"
@@ -134,7 +134,7 @@
     "independent_score": "PASS",
     "score": "outputs/benchmark150-independent-native-topomen-score-20261019/score.json",
     "autonomous_model_success_claim": false,
-    "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/源码审查与接入验收.md",
+    "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/\u6e90\u7801\u5ba1\u67e5\u4e0e\u63a5\u5165\u9a8c\u6536.md",
     "plan_format_owner": "ContractEdge, not native TopoMen",
     "docker_deployment_scheduler_used": false
   },
@@ -448,7 +448,7 @@
     ],
     "report": "outputs/final-optimization-20261020/final-validation.json"
   },
-  "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/单条真实实验验收与系统优化-20261020.md",
+  "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u5355\u6761\u771f\u5b9e\u5b9e\u9a8c\u9a8c\u6536\u4e0e\u7cfb\u7edf\u4f18\u5316-20261020.md",
   "release_integrity": {
     "report": "outputs/deepseek-method-preflight-v6-20261020/release150-verified.json",
     "cases": 150,
@@ -552,7 +552,7 @@
     "formal_case_count": 150,
     "remaining_money_upper_bound_cny": 67.596464,
     "all_experiment_model_calls": 167,
-    "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/预算上限调整至80元.md",
+    "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u9884\u7b97\u4e0a\u9650\u8c03\u6574\u81f380\u5143.md",
     "engineering_retry_regression": {
       "directory": "outputs/deepseek-empty-reasoning-live-regression-v1-20261020",
       "case_id": "RW-ALERTMANAGER-4705",
@@ -564,7 +564,7 @@
       "included_in_primary_cohort": false
     },
     "budget_amendment": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/budget-amendment-20-to-80.json",
-    "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/正式150运行前验收-20261020.md"
+    "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u6b63\u5f0f150\u8fd0\u884c\u524d\u9a8c\u6536-20261020.md"
   },
   "historical_protocol_tests_pre_acceptance_optimization": {
     "status": "PASS",
@@ -1253,7 +1253,7 @@
     }
   },
   "historical_independent_code_review_pre_final_optimization": "outputs/benchmark150-independent-code-review-20261019.json",
-  "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/系统审查与验收.md",
+  "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/\u7cfb\u7edf\u5ba1\u67e5\u4e0e\u9a8c\u6536.md",
   "reliability_closure": {
     "version": "0.6.38",
     "status": "SINGLE_GATE_PASS_FULL_DELIVERY_PENDING",
@@ -1771,7 +1771,7 @@
     "report": "docs/reports/2026-10-24-feedback-context-admission.md",
     "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.36.json",
     "public_calibration": "temporal-v2-calibration-corrected/summary.json",
-    "live_result": ".35 originalBroken SEMANTIC_FAIL; supplemental .34savedresponse→.35 continuationPASS/8publicchecksPASS,3newcalls, not panel",
+    "live_result": ".35 originalBroken SEMANTIC_FAIL; supplemental .34savedresponse\u2192.35 continuationPASS/8publicchecksPASS,3newcalls, not panel",
     "next_revision": "0.6.37 previous draft continuity; staged, not frozen/noAPI"
   },
   "execution_boundary": {
@@ -1949,7 +1949,7 @@
           "3": "source/ and retrieval/",
           "4": "diagnosis/",
           "5_6": "changeset/ and orchestration/runner.py",
-          "7": "execution/topomen_agent.py → actual topomen.collaboration.base_agent.DefaultAgent → scoped source transaction",
+          "7": "execution/topomen_agent.py \u2192 actual topomen.collaboration.base_agent.DefaultAgent \u2192 scoped source transaction",
           "8": "execution/public.py",
           "9": "orchestration/feedback.py and repair.py",
           "10": "evaluation/benchmark.py and frozen score_case.py"
@@ -2045,7 +2045,7 @@
           "independent_score": "PASS",
           "score": "outputs/benchmark150-independent-native-topomen-score-20261019/score.json",
           "autonomous_model_success_claim": false,
-          "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/源码审查与接入验收.md",
+          "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/\u6e90\u7801\u5ba1\u67e5\u4e0e\u63a5\u5165\u9a8c\u6536.md",
           "plan_format_owner": "ContractEdge, not native TopoMen",
           "docker_deployment_scheduler_used": false
         },
@@ -2359,7 +2359,7 @@
           ],
           "report": "outputs/final-optimization-20261020/final-validation.json"
         },
-        "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/单条真实实验验收与系统优化-20261020.md",
+        "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u5355\u6761\u771f\u5b9e\u5b9e\u9a8c\u9a8c\u6536\u4e0e\u7cfb\u7edf\u4f18\u5316-20261020.md",
         "release_integrity": {
           "report": "outputs/deepseek-method-preflight-v6-20261020/release150-verified.json",
           "cases": 150,
@@ -2463,7 +2463,7 @@
           "formal_case_count": 150,
           "remaining_money_upper_bound_cny": 67.596464,
           "all_experiment_model_calls": 167,
-          "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/预算上限调整至80元.md",
+          "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u9884\u7b97\u4e0a\u9650\u8c03\u6574\u81f380\u5143.md",
           "engineering_retry_regression": {
             "directory": "outputs/deepseek-empty-reasoning-live-regression-v1-20261020",
             "case_id": "RW-ALERTMANAGER-4705",
@@ -2475,7 +2475,7 @@
             "included_in_primary_cohort": false
           },
           "budget_amendment": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/budget-amendment-20-to-80.json",
-          "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/正式150运行前验收-20261020.md"
+          "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u6b63\u5f0f150\u8fd0\u884c\u524d\u9a8c\u6536-20261020.md"
         },
         "historical_protocol_tests_pre_acceptance_optimization": {
           "status": "PASS",
@@ -3164,7 +3164,7 @@
           }
         },
         "historical_independent_code_review_pre_final_optimization": "outputs/benchmark150-independent-code-review-20261019.json",
-        "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/系统审查与验收.md",
+        "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/\u7cfb\u7edf\u5ba1\u67e5\u4e0e\u9a8c\u6536.md",
         "reliability_closure": {
           "version": "0.6.19",
           "status": "G4_V0619_LIVE_SINGLE_RUNNING",
@@ -3294,16 +3294,17 @@
     }
   },
   "current_development": {
-    "snapshot": "docs/development/bounded-source-delivery-v046-20261026-v6.snapshot.json",
+    "snapshot": "docs/development/source-boundary-continuity-v047-20261026-v1.snapshot.json",
     "snapshot_id": "bounded-source-delivery-v046-20261026-v6",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V046_V6_TARGETED_DIAGNOSTIC_IN_PROGRESS_REVIEW_DEFECTS",
+    "status": "V047_BOUNDARY_CONTINUITY_OFFLINE_VERIFIED_FULL_PENDING",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "DIAGNOSTIC_IN_PROGRESS_NO_FIXED46_EFFECTIVENESS",
-    "source_sha256": "b5c5f9490893dd1366174e16abc16b464371d793b6d59bd03db6781e0b0d6fe6",
+    "source_sha256": "81bebaf62c90b0046ad73b63535f16e5445a7fa614113264dee23d1089a522bd",
     "engineering": "1832_PASS_91_SUBTESTS_RUNTIME8_AND_PUBLIC_SANDBOX_PASS",
     "promotion": "BLOCKED_BY_TWO_CONFIRMED_BOUNDARY_FINDINGS",
-    "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source-v046-v6-20261026/registration.json"
+    "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source-v046-v6-20261026/registration.json",
+    "formal_ready": false
   },
   "staged_implementation_version": "0.6.45",
   "runtime_implementation_version": "0.6.40",

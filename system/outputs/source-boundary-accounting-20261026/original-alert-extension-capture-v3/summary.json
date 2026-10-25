@@ -1,0 +1,124 @@
+{
+  "status": "CAPTURED_FINAL_EXTENSION_REQUEST_WITH_PRIOR_AND_NEW_ENDPOINTS",
+  "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "old_model_calls_sha256": "9e45e9813de84d7e3fbd27aacaeaa6530e13f3f38cee3bfa363ce53eaebcdb0e",
+  "captured_request_sha256": "1c94790aadd2656621bdd3e35efb26596a224f014c937f1aab6bfe5839f92a1e",
+  "saved_responses": 2,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "selected_count": 12,
+  "rows": [
+    {
+      "fact": "reload_publication",
+      "old_request_source_ids": [],
+      "current_source_matches": [
+        {
+          "id": "SRC-CU-647de303c8be8ecb",
+          "locator": {
+            "column_start": 1,
+            "end_line": 603,
+            "path": "cmd/alertmanager/main.go",
+            "start_line": 131
+          },
+          "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "content_digest": "68be3801fe83736d649a895f1eac6618ee835235080fd0e9b5f20a89d35720fd"
+        }
+      ]
+    },
+    {
+      "fact": "initialization",
+      "old_request_source_ids": [
+        "SRC-CU-HELPER-c76cc3560e30e77d"
+      ],
+      "current_source_matches": [
+        {
+          "id": "SRC-CU-HELPER-c76cc3560e30e77d",
+          "locator": {
+            "end_line": 161,
+            "path": "dispatch/dispatch.go",
+            "start_line": 144
+          },
+          "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "content_digest": "c76cc3560e30e77d5a52da462fbb9cef2b2e29a0397ebd9e6ae55bca62324799"
+        }
+      ]
+    },
+    {
+      "fact": "processing",
+      "old_request_source_ids": [
+        "SRC-CU-522017edd36e9f21"
+      ],
+      "current_source_matches": [
+        {
+          "id": "SRC-CU-522017edd36e9f21",
+          "locator": {
+            "column_start": 1,
+            "end_line": 396,
+            "path": "dispatch/dispatch.go",
+            "start_line": 340
+          },
+          "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "content_digest": "516e376ed347e7a7a159f1049e06f738d87731d4473d700aed68665a9afd80b5"
+        }
+      ]
+    },
+    {
+      "fact": "replay_subscription",
+      "old_request_source_ids": [
+        "SRC-CU-7c0a61be10b72c0c"
+      ],
+      "current_source_matches": [
+        {
+          "id": "SRC-CU-7c0a61be10b72c0c",
+          "locator": {
+            "column_start": 1,
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 179
+          },
+          "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "content_digest": "113980c316d07d2e9dc3cfa43931970776ae67d7cb7a1c7d4093d0ec154ad638"
+        }
+      ]
+    },
+    {
+      "fact": "groups_read",
+      "old_request_source_ids": [
+        "SRC-CU-HELPER-bc10f713a675d94d"
+      ],
+      "current_source_matches": [
+        {
+          "id": "SRC-CU-HELPER-bc10f713a675d94d",
+          "locator": {
+            "end_line": 314,
+            "path": "dispatch/dispatch.go",
+            "start_line": 250
+          },
+          "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "content_digest": "bc10f713a675d94d79076c88b3742e2cc9856b107371eec5ccfd340655988ecd"
+        }
+      ]
+    },
+    {
+      "fact": "api_observer",
+      "old_request_source_ids": [
+        "SRC-CU-928113e3ed603e76"
+      ],
+      "current_source_matches": [
+        {
+          "id": "SRC-CU-928113e3ed603e76",
+          "locator": {
+            "column_start": 1,
+            "end_line": 435,
+            "path": "api/v2/api.go",
+            "start_line": 375
+          },
+          "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "content_digest": "e9c550ce2d1551abfdb83166375972ebc9d7b940f11cb88529cf4afd76c48d1d"
+        }
+      ]
+    }
+  ],
+  "formal_ready": false,
+  "interpretation": "Evidence delivery only; saved outputs are not new model or repair results"
+}

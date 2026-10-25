@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-source-boundary-20261026/system/outputs/source-boundary-accounting-20261026/replay_prior_source_extension.py", line 35, in <module>
+    raise AssertionError('Did not reach extension request: '+trace.status+str(trace.errors))
+AssertionError: Did not reach extension request: INFRASTRUCTURE_ERROR("FileNotFoundError: [Errno 2] No such file or directory: '/home/xhj/contractedge-system/outputs/reliability-closure-20261020/public-source-alertmanager/alertmanager-e9278051f805b4b40b809155009a535fc1c58ddc/alertmanager-e9278051f805b4b40b809155009a535fc1c58ddc'",)
