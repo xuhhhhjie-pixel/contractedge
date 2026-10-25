@@ -33,8 +33,10 @@
     "worktree": "/home/xhj/contractedge-branch-review-20261026/system",
     "snapshot": "docs/development/unified-branch-feedback-v048-20261026-v2.snapshot.json",
     "source_sha256": "707ac9445d6cc422329d165ca3e7d8d5a78db6ae89aa4cca3f11a96a9338de9d",
-    "qualification": "FULL_1916_PLUS_91_PASS_ACTUAL8_RUNNING",
-    "code_commit": "45a6dc0"
+    "qualification": "ENGINEERING_AND_RUNTIME_QUALIFICATION_PASS",
+    "code_commit": "45a6dc0",
+    "diagnostic_state": "/home/xhj/contractedge-branch-review-20261026/system/.superpowers/sdd/2026-10-22-formal-experiment-delivery/diagnostic-v048-v2-state.json",
+    "diagnostic": "RUNNING_TWO_PREDECLARED_TARGETS_ONCE"
   },
   "next_gate": "Full regression and exact runtime qualification, then predeclared targeted diagnostic; never replay old claims",
   "benchmark150_unchanged": true,

@@ -1,0 +1,34 @@
+{
+  "schema_version": "ce.minimal_root_cause_diagnostic.v1",
+  "source_sha256": "707ac9445d6cc422329d165ca3e7d8d5a78db6ae89aa4cca3f11a96a9338de9d",
+  "freeze_sha256": "a42aa9997a8bbcadcb9cbaf083d8ab5c5d761751423b4a8ba15bb6e3a936e015",
+  "qualification_sha256": "9d482e6a15ade19f84539252f5be3afdd232db93de77fa5741b7ec51c27ab3e4",
+  "driver_sha256": "0cc687ac91d5bc0534c8eef3bd0d845c4034274adc90c3fb48c450d5343558bf",
+  "attempts": [
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "attempt_id": "diagnostic-source048-v2-20261026-rw-alertmanager-4705",
+      "output": "/home/xhj/contractedge-diagnostic-source048-v2-20261026/methods/RW-ALERTMANAGER-4705/RW-ALERTMANAGER-4705",
+      "registration": "/home/xhj/contractedge-diagnostic-source048-v2-20261026/registrations/RW-ALERTMANAGER-4705.json",
+      "registration_sha256": "d1fe94f59047b830f50be1b35de9fe7643a4762a1c1564e988e9181747ecd4bf"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "attempt_id": "diagnostic-source048-v2-20261026-rw-certmanager-9116",
+      "output": "/home/xhj/contractedge-diagnostic-source048-v2-20261026/methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116",
+      "registration": "/home/xhj/contractedge-diagnostic-source048-v2-20261026/registrations/RW-CERTMANAGER-9116.json",
+      "registration_sha256": "450d9b2e9f9a0db485484d405182054e4cd557e0d79e9af32db3d41ab7b477ce"
+    }
+  ],
+  "once_per_case": true,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "cumulative_api_limit_cny": 150,
+  "original_v046_outcomes": "BOTH_SEMANTIC_FAIL_PRESERVED",
+  "hypotheses": [
+    "Prior supported source remains available through evidence extension and planning",
+    "Accurate branch conflict feedback allows correction while preserving unverified obligations"
+  ],
+  "success_gate": "Both independent PASS and neither public FAIL; partial improvement does not open the fixed panel",
+  "transient_workspace_policy": "RETIRE_CLOSED_SCORED_PUBLIC_WORKSPACE"
+}

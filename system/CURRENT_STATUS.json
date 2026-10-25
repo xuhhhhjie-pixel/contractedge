@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-25T18:15:10.949851+00:00",
+  "as_of": "2026-10-25T18:17:28.440705+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3297,7 +3297,7 @@
     "snapshot": "docs/development/unified-branch-feedback-v048-20261026-v2.snapshot.json",
     "snapshot_id": "bounded-source-delivery-v046-20261026-v6",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V048_V2_FULL_PASS_RUNTIME_QUALIFICATION_RUNNING",
+    "status": "V048_V2_ENGINEERING_QUALIFIED_TWO_TARGET_DIAGNOSTIC_RUNNING",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "DIAGNOSTIC_IN_PROGRESS_NO_FIXED46_EFFECTIVENESS",
     "source_sha256": "707ac9445d6cc422329d165ca3e7d8d5a78db6ae89aa4cca3f11a96a9338de9d",
@@ -3305,9 +3305,10 @@
     "promotion": "BLOCKED_BY_TWO_CONFIRMED_BOUNDARY_FINDINGS",
     "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source-v046-v6-20261026/registration.json",
     "formal_ready": false,
-    "report": "docs/reports/2026-10-26-branch-feedback-and-unified-candidate.md",
+    "report": "outputs/branch-review-feedback-20261026/COMPLETION_AUDIT.md",
     "full_tests": 1916,
-    "subtests": 91
+    "subtests": 91,
+    "runtime_qualification": "outputs/branch-review-feedback-20261026/RUNTIME_QUALIFICATION_v048_v2.json"
   },
   "staged_implementation_version": "0.6.45",
   "runtime_implementation_version": "0.6.40",
