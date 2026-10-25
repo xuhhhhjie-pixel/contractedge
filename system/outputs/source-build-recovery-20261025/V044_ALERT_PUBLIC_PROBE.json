@@ -1,0 +1,137 @@
+{
+  "schema_version": "ce.method_behavior_probes.v1",
+  "case_id": "RW-ALERTMANAGER-4705",
+  "snapshot_id": "54de36d862cb98ab45376c98f2b46cc6fbcab2ecf4219b28fd4e6fef931b593f",
+  "status": "COMPLETE",
+  "probes": [
+    {
+      "probe_id": "alertmanager-reload-v4",
+      "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62",
+      "snapshot_id": "54de36d862cb98ab45376c98f2b46cc6fbcab2ecf4219b28fd4e6fef931b593f",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges:true",
+        "--user=1008:1008",
+        "--pids-limit=512",
+        "--memory=6442450944",
+        "--cpus=2",
+        "--tmpfs=/tmp:rw,nosuid,nodev,exec,size=4g",
+        "--tmpfs=/work/.cache:rw,nosuid,nodev,exec,size=2g,mode=1777",
+        "--mount=type=bind,src=/home/xhj/contractedge-latest-integration-20261024/.superpowers/sdd/2026-10-24-latest-main-integration/alert-v044-interrupted-candidate-audit/ce-method-probe-2a7jx7dy/source,dst=/work,readonly",
+        "--workdir=/work",
+        "--env=HOME=/tmp",
+        "--env=GOCACHE=/work/.cache/gocache",
+        "--mount=type=bind,src=/home/xhj/contractedge-latest-integration-20261024/.superpowers/sdd/2026-10-24-latest-main-integration/alert-v044-interrupted-candidate-audit/ce-method-probe-2a7jx7dy/0/gomod,dst=/work/.contractedge-deps/gomod,readonly",
+        "--mount=type=bind,src=/home/xhj/contractedge-latest-integration-20261024/.superpowers/sdd/2026-10-24-latest-main-integration/alert-v044-interrupted-candidate-audit/ce-method-probe-2a7jx7dy/1/public-build-v2,dst=/work/.contractedge-deps/public-build,readonly",
+        "--mount=type=bind,src=/home/xhj/contractedge-latest-integration-20261024/.superpowers/sdd/2026-10-24-latest-main-integration/alert-v044-interrupted-candidate-audit/public-probe/alertmanager-reload-v4,dst=/method-probe,readonly",
+        "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+        "sh",
+        "-eu",
+        "-c",
+        "export GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off GOMAXPROCS=2 GOMODCACHE=/work/.contractedge-deps/gomod GOCACHE=/tmp/ce-gocache CGO_ENABLED=0 GOFLAGS=\"-mod=readonly -buildvcs=false\"; exec go run -p=1 /method-probe/main.go"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "output_limited": false,
+      "boundary": "Local production process HTTP API; 2ms target sampling during twenty valid reloads; no guarantee at unsampled instants or distributed convergence; not tamper-proof or independent grading",
+      "scenario": "method-alertmanager-reload-v4",
+      "status": "COMPLETE",
+      "checks": [
+        {
+          "id": "groups.visible_during_reload",
+          "status": "PASS",
+          "observed": {
+            "after_unique": true,
+            "after_visible": true,
+            "at_return_missing": 0,
+            "at_return_samples": 20,
+            "baseline_visible": true,
+            "injected_groups": 2048,
+            "missing_samples": 0,
+            "non_unique_samples": 0,
+            "samples": 264,
+            "sampling_interval_ms": 2,
+            "sampling_workers": 4,
+            "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+            "successful_reloads": 20
+          },
+          "statement": "The injected active alert remains in the production groups API at each successful sample during twenty valid configuration reloads"
+        },
+        {
+          "id": "groups.visible_after_reload",
+          "status": "PASS",
+          "observed": {
+            "after_unique": true,
+            "after_visible": true,
+            "at_return_missing": 0,
+            "at_return_samples": 20,
+            "baseline_visible": true,
+            "injected_groups": 2048,
+            "missing_samples": 0,
+            "non_unique_samples": 0,
+            "samples": 264,
+            "sampling_interval_ms": 2,
+            "sampling_workers": 4,
+            "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+            "successful_reloads": 20
+          },
+          "statement": "The injected active alert is visible in the production groups API after the reload sampling window"
+        },
+        {
+          "id": "groups.unique_for_declared_route",
+          "status": "PASS",
+          "observed": {
+            "after_unique": true,
+            "after_visible": true,
+            "at_return_missing": 0,
+            "at_return_samples": 20,
+            "baseline_visible": true,
+            "injected_groups": 2048,
+            "missing_samples": 0,
+            "non_unique_samples": 0,
+            "samples": 264,
+            "sampling_interval_ms": 2,
+            "sampling_workers": 4,
+            "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+            "successful_reloads": 20
+          },
+          "statement": "In the declared single receiver and group_by alertname scenario, groups have unique label/receiver identities and no unexpected receiver or extra group"
+        },
+        {
+          "id": "groups.visible_at_reload_return",
+          "status": "PASS",
+          "observed": {
+            "after_unique": true,
+            "after_visible": true,
+            "at_return_missing": 0,
+            "at_return_samples": 20,
+            "baseline_visible": true,
+            "injected_groups": 2048,
+            "missing_samples": 0,
+            "non_unique_samples": 0,
+            "samples": 264,
+            "sampling_interval_ms": 2,
+            "sampling_workers": 4,
+            "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+            "successful_reloads": 20
+          },
+          "statement": "Immediately after each of twenty successful reload responses, the production groups API contains all2048 injected active alert names"
+        }
+      ]
+    }
+  ],
+  "source_unchanged": true,
+  "cleanup": {
+    "status": "OWNED_CONTAINERS_CLOSED",
+    "removed": []
+  },
+  "private_materials_loaded": false,
+  "hidden_semantic_evaluation": "NOT_RUN",
+  "elapsed_seconds": 146.63819303363562
+}

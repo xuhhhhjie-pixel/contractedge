@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-24T16:45:15.874047+00:00",
+  "as_of": "2026-10-25T02:15:41.036031+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3295,12 +3295,36 @@
     "snapshot": "docs/development/native-continuation-recovery-20261025-v044-doc-r2.snapshot.json",
     "snapshot_id": "native-continuation-recovery-20261025-v044-doc-r2",
     "snapshot_role": "CURRENT_FROZEN_DEVELOPMENT",
-    "status": "ENGINEERING_PASS_REGISTERED_CONTINUATION_STARTING",
+    "status": "ENGINEERING_PASS_RW_ORIGINAL_PASS_INTERRUPTED_ALERT_CANDIDATE_AUDIT_PASS",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "NOT_ACCEPTED",
     "source_sha256": "b8e46f43a53387f62b6b343de2edf8bf21424eb9423586c35f56ee5f06f8926b"
   },
   "staged_implementation_version": "0.6.44",
   "runtime_implementation_version": "0.6.40",
-  "current_optimization_audit": "outputs/source-build-recovery-20261025/COMPLETION_AUDIT.md"
+  "current_optimization_audit": "outputs/source-build-recovery-20261025/COMPLETION_AUDIT.md",
+  "interrupted_v044_continuation": {
+    "status": "INTERRUPTED_PUBLIC_OBSERVATION_NO_FINAL_METHOD_RESULT",
+    "model_calls_completed": 4,
+    "unknown_model_requests": 0,
+    "report": "outputs/source-build-recovery-20261025/V044_INTERRUPTION_AUDIT.json",
+    "paid_retry": false
+  },
+  "v044_qualification": {
+    "original_broken_rw130": {
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "independent_status": "PASS",
+      "model_calls": 5,
+      "report": "outputs/source-build-recovery-20261025/V044_RW130_QUALIFICATION.json"
+    },
+    "interrupted_alert_candidate": {
+      "original_attempt": "INTERRUPTED_NO_FINAL_METHOD_RESULT",
+      "public_checks_passed": 4,
+      "independent_status": "PASS",
+      "model_calls_added": 0,
+      "report": "outputs/source-build-recovery-20261025/V044_ALERT_CANDIDATE_AUDIT.json"
+    },
+    "counts_in_46_slot_panel": false,
+    "formal_ready": false
+  }
 }

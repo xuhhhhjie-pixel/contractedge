@@ -1,0 +1,42 @@
+diff --git a/templates/cluster-gateway/job-patch.yaml b/templates/cluster-gateway/job-patch.yaml
+index 2395646..d0979ed 100644
+--- a/templates/cluster-gateway/job-patch.yaml
++++ b/templates/cluster-gateway/job-patch.yaml
+@@ -78,6 +78,18 @@ spec:
+       imagePullSecrets:
+       {{- toYaml . | nindent 8 }}
+       {{- end }}
++      {{- with .Values.nodeSelector }}
++      nodeSelector:
++      {{- toYaml . | nindent 8 }}
++      {{- end }}
++      {{- with .Values.tolerations }}
++      tolerations:
++      {{- toYaml . | nindent 8 }}
++      {{- end }}
++      {{- with .Values.affinity }}
++      affinity:
++      {{- toYaml . | nindent 8 }}
++      {{- end }}
+       containers:
+       - name: create
+         image: {{ .Values.imageRegistry }}{{ .Values.admissionWebhooks.patch.image.repository }}:{{ .Values.admissionWebhooks.patch.image.tag }}
+@@ -123,6 +135,18 @@ spec:
+       imagePullSecrets:
+       {{- toYaml . | nindent 8 }}
+       {{- end }}
++      {{- with .Values.nodeSelector }}
++      nodeSelector:
++      {{- toYaml . | nindent 8 }}
++      {{- end }}
++      {{- with .Values.tolerations }}
++      tolerations:
++      {{- toYaml . | nindent 8 }}
++      {{- end }}
++      {{- with .Values.affinity }}
++      affinity:
++      {{- toYaml . | nindent 8 }}
++      {{- end }}
+       containers:
+       - name: patch
+         image: {{ .Values.imageRegistry }}{{ .Values.multicluster.clusterGateway.image.repository }}:{{ .Values.multicluster.clusterGateway.image.tag }}

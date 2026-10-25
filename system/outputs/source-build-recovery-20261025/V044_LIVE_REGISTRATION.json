@@ -11,9 +11,10 @@
   "registration_created_utc": "2026-10-24T16:40:15.254237+00:00",
   "purpose": "Validate source-bound compiler repair tasks, guard rollback and merged seed operation proof after saved replay; new engineering .44, not a repeat-until-pass alias",
   "comparison_scope": "Independent single development continuation, not original46 or originalBroken first pass",
-  "status": "REGISTERED_NOT_DISPATCHED",
+  "status": "INTERRUPTED_NO_FINAL_METHOD_RESULT_CANDIDATE_SEPARATELY_AUDITED",
   "version": "0.6.44",
   "source_sha256": "b8e46f43a53387f62b6b343de2edf8bf21424eb9423586c35f56ee5f06f8926b",
   "counts_in_46_slot_panel": false,
-  "formal_ready": false
+  "formal_ready": false,
+  "candidate_audit": "V044_ALERT_CANDIDATE_AUDIT.json"
 }
