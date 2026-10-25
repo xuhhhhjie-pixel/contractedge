@@ -1,0 +1,31 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+__ test_known_directory_is_not_emitted_as_complete_zero_hit_exact_file_search __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-576/test_known_directory_is_not_em0')
+
+    def test_known_directory_is_not_emitted_as_complete_zero_hit_exact_file_search(tmp_path):
+        snapshot=fixture(tmp_path)
+        records,audit=collect_absence_search_evidence(snapshot,[dict(id='G',locator_hint=dict(path='worker',search_term='Present controller'))],max_files=0,max_bytes=0)
+>       assert not records
+E       AssertionError: assert not ({'id': 'SEARCH-ec6da593d7cb2801', 'snapshot_id': '305174faacf6dc13ae8332d433c19d8d88c268ca008e5c969547f460f991816d', ...ery_kind': 'EXACT_PATH', 'query': 'worker', 'scope': 'snapshot_file_inventory', 'inspected_file_count': 1, ...}, ...},)
+
+outputs/gap-query-tokenization-20261026/absence_directory_tests.py:15: AssertionError
+___ test_directory_hint_does_not_disable_valid_missing_file_or_symbol_checks ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-576/test_directory_hint_does_not_d0')
+
+    def test_directory_hint_does_not_disable_valid_missing_file_or_symbol_checks(tmp_path):
+        snapshot=fixture(tmp_path)
+        records,audit=collect_absence_search_evidence(snapshot,[
+            dict(id='G',locator_hint=dict(path='worker',symbol='NeverDeclared')),
+            dict(id='F',locator_hint=dict(path='worker/missing.go'))],max_files=20)
+>       assert len(records)==2
+E       AssertionError: assert 3 == 2
+E        +  where 3 = len(({'id': 'SEARCH-ec6da593d7cb2801', 'snapshot_id': '305174faacf6dc13ae8332d433c19d8d88c268ca008e5c969547f460f991816d', ... 'EXACT_PATH', 'query': 'worker/missing.go', 'scope': 'snapshot_file_inventory', 'inspected_file_count': 1, ...}, ...}))
+
+outputs/gap-query-tokenization-20261026/absence_directory_tests.py:25: AssertionError
+=========================== short test summary info ============================
+FAILED outputs/gap-query-tokenization-20261026/absence_directory_tests.py::test_known_directory_is_not_emitted_as_complete_zero_hit_exact_file_search
+FAILED outputs/gap-query-tokenization-20261026/absence_directory_tests.py::test_directory_hint_does_not_disable_valid_missing_file_or_symbol_checks
+2 failed, 1 passed in 0.10s

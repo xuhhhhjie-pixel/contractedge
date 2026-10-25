@@ -1,0 +1,12 @@
+{
+  "status": "V049_V2_FROZEN_FULL_ENGINEERING_RUNNING",
+  "formal_ready": false,
+  "source_sha256": "758eb3a563c18eac6ec456f6293647094d86d96ad9b750f0dce448e53bd97683",
+  "snapshot": "docs/development/gap-query-tokenization-v049-20261026-v2.snapshot.json",
+  "saved_trace_delivery": "CERT_DIRECTORY_CONSISTENCY_CHECKPOINT.json",
+  "qualification_state": "/home/xhj/contractedge-gap-query-20261026/system/.superpowers/sdd/2026-10-22-formal-experiment-delivery/qualification-v049-v2-state.json",
+  "diagnostic_state": "/home/xhj/contractedge-gap-query-20261026/system/.superpowers/sdd/2026-10-22-formal-experiment-delivery/diagnostic-v049-v2-state.json",
+  "v1_dispatched": false,
+  "api_limit_cny": 150,
+  "formal150_started": false
+}
