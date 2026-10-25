@@ -168,7 +168,75 @@ def verify_panel(path):
     public = {json.loads(line)['case_id'] for line in (benchmark/'public/manifest.jsonl').read_text().splitlines() if line}
     if not {s['case_id'] for s in panel['slots']} <= development & public:
         raise ValueError('Fixed panel must contain only public development members')
+    if panel.get('predecessor') is not None:
+        predecessor_rows(panel)
     return panel
+
+
+def predecessor_rows(panel):
+    """Carry the entire closed prefix across one bounded parent-only correction.
+
+    The old panel, records and scoring bytes remain immutable. Only the known
+    exit-status wrapper is interpreted; a method or grader is never rerun.
+    """
+    amendment = panel.get('predecessor')
+    if amendment is None: return []
+    if (amendment.get('schema_version') != 'ce.fixed_panel_score_parent_amendment.v1'
+            or amendment.get('interpretation_policy') != 'ce.frozen_score_exit.v1'):
+        raise ValueError('Unknown parent scoring amendment')
+    for key in ['panel', 'records', 'scoring_program']:
+        ref = amendment[key]
+        if sha(ref['path']) != ref['sha256']: raise ValueError('Predecessor proof changed')
+    old_path = amendment['panel']['path']; old = read(old_path)
+    if old.get('predecessor') is not None:
+        raise ValueError('Only the explicitly supported original scoring correction is admitted')
+    old = verify_panel(old_path)
+    unchanged = ['panel_id', 'slots', 'variants', 'original_registration', 'benchmark_root', 'data_files',
+                 'seeds', 'runtime', 'model_call_cap', 'fresh_edit_cap', 'formal_ready',
+                 'compatibility_report', 'continuation_protocol', 'transient_workspace_policy']
+    if any(panel.get(k) != old.get(k) for k in unchanged):
+        raise ValueError('Parent correction must retain every method, resource, case and original slot')
+    before_root = Path(old['output_root']).resolve(); after_root = Path(panel['output_root']).resolve()
+    if before_root.is_relative_to(after_root) or after_root.is_relative_to(before_root):
+        raise ValueError('New parent records must be separate from immutable predecessor output')
+    if any(panel['execution_environment'][k] != old['execution_environment'][k]
+           for k in ENVIRONMENT_KEYS if k != 'harness_files'):
+        raise ValueError('Parent scoring correction cannot change the common method environment')
+    before = amendment['worker_files_before']; after = amendment['worker_files_after']
+    if (set(before) != set(after)
+            or digest(before) != old['execution_environment']['harness_files']
+            or digest(after) != panel['execution_environment']['harness_files']
+            or any(before[k] != after[k] and Path(k).name != 'fixed_panel.py' for k in before)):
+        raise ValueError('Only the parent authority module may differ; repair workers remain unchanged')
+    for files, owner in [(before, old), (after, panel)]:
+        for name, expected in files.items():
+            matches = [h for h in owner['harness_files'] if Path(h).name == Path(name).name]
+            if len(matches) != 1 or owner['harness_files'][matches[0]] != expected:
+                raise ValueError('Worker identity is not bound to the frozen parent bundle')
+    program = amendment['scoring_program']
+    if old['harness_files'].get(program['path']) != program['sha256']:
+        raise ValueError('Recorded scorer was not part of the original frozen parent')
+    original_records = before_root/'records.json'
+    if sha(original_records) != amendment['records']['sha256']:
+        raise ValueError('Predecessor must retain its entire original closed prefix')
+    rows = read(amendment['records']['path'])
+    if not isinstance(rows, list) or not rows or len({r['slot_id'] for r in rows}) != len(rows):
+        raise ValueError('Malformed predecessor prefix')
+    from score_isolated_method import read_recorded_score
+    imported = []
+    for row in rows:
+        verify_record(old_path, old, row, _recorded_program=program)
+        status = row['status']
+        if 'score' in row['evidence_files']:
+            result = read_recorded_score(row['evidence_files']['receipt']['path'], old['benchmark_root'],
+                Path(row['evidence_files']['score']['path']).parent, recorded_program=program)
+            status = result['interpreted_status']
+        if status not in TERMINAL_OUTCOMES:
+            raise ValueError('Unresolved predecessor infrastructure error cannot become a completed slot')
+        imported.append({**row, 'status':status, 'independent_status':status,
+            'recorded_status':row['status'], 'predecessor_panel_sha256':amendment['panel']['sha256'],
+            'predecessor_record_sha256':digest(row), 'interpretation_policy':'ce.frozen_score_exit.v1'})
+    return imported
 
 
 def validate_slot_registration(record, identity, panel_path):
@@ -199,8 +267,13 @@ def validate_slot_registration(record, identity, panel_path):
     return slot
 
 
-def verify_record(panel_path, panel, record):
+def verify_record(panel_path, panel, record, *, _recorded_program=None):
     """Recheck terminal proof, never trust a cached PASS boolean for admission."""
+    if record.get('predecessor_panel_sha256') is not None:
+        expected = next((r for r in predecessor_rows(panel) if r['slot_id'] == record.get('slot_id')), None)
+        if expected is None or expected != record:
+            raise ValueError('Inherited slot differs from its immutable original proof')
+        return record
     slot = next((s for s in panel['slots'] if s['slot_id'] == record.get('slot_id')), None)
     if slot is None or any(record.get(k) != v for k, v in slot.items()):
         raise ValueError('Terminal record does not belong to the exact slot')
@@ -242,11 +315,13 @@ def verify_record(panel_path, panel, record):
     if receipt['terminal_validation'].get('candidate_verified') is not bool(trace.get('candidate')):
         raise ValueError('Candidate export verification disagrees with terminal trace')
     if trace.get('candidate'):
-        from score_isolated_method import run
+        from score_isolated_method import run, read_recorded_score
         score_root = root/'independent'/slot['slot_id']
         if paths.get('score') != score_root/'result.json':
             raise ValueError('Missing independent result for final candidate')
-        result = run(paths['receipt'], panel['benchmark_root'], score_root, phase='finalize')
+        result = (run(paths['receipt'], panel['benchmark_root'], score_root, phase='finalize')
+                  if _recorded_program is None else read_recorded_score(paths['receipt'], panel['benchmark_root'],
+                      score_root, recorded_program=_recorded_program)['raw'])
         independent = result['status']
     else:
         if 'score' in paths: raise ValueError('No candidate must not have a fabricated score')
@@ -262,9 +337,12 @@ def verify_record(panel_path, panel, record):
 def verified_records(panel_path, panel=None):
     panel = panel or verify_panel(panel_path)
     path = Path(panel['output_root'])/'records.json'
-    rows = read(path) if path.exists() else []
+    inherited = predecessor_rows(panel)
+    rows = read(path) if path.exists() else inherited
     if not isinstance(rows, list) or len({r['slot_id'] for r in rows}) != len(rows):
         raise ValueError('Duplicate/malformed terminal records')
+    if not {r['slot_id'] for r in inherited} <= {r['slot_id'] for r in rows}:
+        raise ValueError('A predecessor result was dropped')
     return [verify_record(panel_path, panel, row) for row in rows]
 
 

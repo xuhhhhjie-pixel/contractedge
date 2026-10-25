@@ -202,6 +202,8 @@ def run_panel(panel_path, group, key):
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         selected = [s for s in panel['slots'] if group == 'all' or s['group'] == group]
         rows = verified_records(panel_path, panel)
+        if panel.get('predecessor') and not (root/'records.json').exists():
+            write_json(root/'records.json', rows)
         done = {r['slot_id'] for r in rows}
         for index, slot in enumerate(selected):
             if slot['slot_id'] in done: continue

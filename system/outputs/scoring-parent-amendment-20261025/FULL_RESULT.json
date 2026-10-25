@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "passed": 1785,
+  "subtests_passed": 91,
+  "actual_isolated_demos_enabled": true,
+  "freeze_sha256_before": "2df4ca5795d10a794c87739df16f6209f7d70fc5d6ef2012b7112650738ee2d5",
+  "freeze_sha256_after": "2df4ca5795d10a794c87739df16f6209f7d70fc5d6ef2012b7112650738ee2d5",
+  "bound_code_unchanged": true,
+  "new_model_http_calls": 0,
+  "scope": "Full test set with explicit historical public fixture links and consistent vendored TopoMen source; no fixed46 efficacy inference"
+}

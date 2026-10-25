@@ -1,0 +1,366 @@
+FFFFFFFFFF......................................................         [100%]
+=================================== FAILURES ===================================
+_____ test_prior_negative_is_normalized_without_changing_its_raw_evidence ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-507/test_prior_negative_is_normali0')
+
+    def test_prior_negative_is_normalized_without_changing_its_raw_evidence(tmp_path):
+>       panel, path, old, current, amended = prior_fixture(tmp_path)
+
+tests/test_panel_scoring_amendment.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_panel_scoring_amendment.py:36: in prior_fixture
+    legacy = importlib.util.module_from_spec(spec); spec.loader.exec_module(legacy)
+<frozen importlib._bootstrap_external>:883: in exec_module
+    ???
+<frozen importlib._bootstrap>:241: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Parent-only frozen candidate scoring; completed checkpoints finalize without reruns.
+    
+    Never mount this program or its outputs in a method process. ``run`` persists
+    the grader outcome; ``finalize`` only validates and aggregates that exact result.
+    An interrupted dispatch without a completed checkpoint requires operator audit.
+    """
+    import argparse
+    import hashlib
+    import json
+    from pathlib import Path
+    import subprocess
+    import sys
+    
+>   from run_isolated_method import write_json
+E   ModuleNotFoundError: No module named 'run_isolated_method'
+
+/tmp/pytest-of-xhj/pytest-507/test_prior_negative_is_normali0/legacy/score_isolated_method.py:14: ModuleNotFoundError
+_ test_parent_correction_cannot_change_method_schedule_or_common_environment[config] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_0')
+change = 'config'
+
+    @pytest.mark.parametrize('change', ['config', 'source', 'slot', 'runtime', 'environment', 'worker'])
+    def test_parent_correction_cannot_change_method_schedule_or_common_environment(tmp_path, change):
+>       panel, path, old, current, amended = prior_fixture(tmp_path)
+
+tests/test_panel_scoring_amendment.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_panel_scoring_amendment.py:36: in prior_fixture
+    legacy = importlib.util.module_from_spec(spec); spec.loader.exec_module(legacy)
+<frozen importlib._bootstrap_external>:883: in exec_module
+    ???
+<frozen importlib._bootstrap>:241: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Parent-only frozen candidate scoring; completed checkpoints finalize without reruns.
+    
+    Never mount this program or its outputs in a method process. ``run`` persists
+    the grader outcome; ``finalize`` only validates and aggregates that exact result.
+    An interrupted dispatch without a completed checkpoint requires operator audit.
+    """
+    import argparse
+    import hashlib
+    import json
+    from pathlib import Path
+    import subprocess
+    import sys
+    
+>   from run_isolated_method import write_json
+E   ModuleNotFoundError: No module named 'run_isolated_method'
+
+/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_0/legacy/score_isolated_method.py:14: ModuleNotFoundError
+_ test_parent_correction_cannot_change_method_schedule_or_common_environment[source] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_1')
+change = 'source'
+
+    @pytest.mark.parametrize('change', ['config', 'source', 'slot', 'runtime', 'environment', 'worker'])
+    def test_parent_correction_cannot_change_method_schedule_or_common_environment(tmp_path, change):
+>       panel, path, old, current, amended = prior_fixture(tmp_path)
+
+tests/test_panel_scoring_amendment.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_panel_scoring_amendment.py:36: in prior_fixture
+    legacy = importlib.util.module_from_spec(spec); spec.loader.exec_module(legacy)
+<frozen importlib._bootstrap_external>:883: in exec_module
+    ???
+<frozen importlib._bootstrap>:241: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Parent-only frozen candidate scoring; completed checkpoints finalize without reruns.
+    
+    Never mount this program or its outputs in a method process. ``run`` persists
+    the grader outcome; ``finalize`` only validates and aggregates that exact result.
+    An interrupted dispatch without a completed checkpoint requires operator audit.
+    """
+    import argparse
+    import hashlib
+    import json
+    from pathlib import Path
+    import subprocess
+    import sys
+    
+>   from run_isolated_method import write_json
+E   ModuleNotFoundError: No module named 'run_isolated_method'
+
+/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_1/legacy/score_isolated_method.py:14: ModuleNotFoundError
+_ test_parent_correction_cannot_change_method_schedule_or_common_environment[slot] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_2')
+change = 'slot'
+
+    @pytest.mark.parametrize('change', ['config', 'source', 'slot', 'runtime', 'environment', 'worker'])
+    def test_parent_correction_cannot_change_method_schedule_or_common_environment(tmp_path, change):
+>       panel, path, old, current, amended = prior_fixture(tmp_path)
+
+tests/test_panel_scoring_amendment.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_panel_scoring_amendment.py:36: in prior_fixture
+    legacy = importlib.util.module_from_spec(spec); spec.loader.exec_module(legacy)
+<frozen importlib._bootstrap_external>:883: in exec_module
+    ???
+<frozen importlib._bootstrap>:241: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Parent-only frozen candidate scoring; completed checkpoints finalize without reruns.
+    
+    Never mount this program or its outputs in a method process. ``run`` persists
+    the grader outcome; ``finalize`` only validates and aggregates that exact result.
+    An interrupted dispatch without a completed checkpoint requires operator audit.
+    """
+    import argparse
+    import hashlib
+    import json
+    from pathlib import Path
+    import subprocess
+    import sys
+    
+>   from run_isolated_method import write_json
+E   ModuleNotFoundError: No module named 'run_isolated_method'
+
+/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_2/legacy/score_isolated_method.py:14: ModuleNotFoundError
+_ test_parent_correction_cannot_change_method_schedule_or_common_environment[runtime] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_3')
+change = 'runtime'
+
+    @pytest.mark.parametrize('change', ['config', 'source', 'slot', 'runtime', 'environment', 'worker'])
+    def test_parent_correction_cannot_change_method_schedule_or_common_environment(tmp_path, change):
+>       panel, path, old, current, amended = prior_fixture(tmp_path)
+
+tests/test_panel_scoring_amendment.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_panel_scoring_amendment.py:36: in prior_fixture
+    legacy = importlib.util.module_from_spec(spec); spec.loader.exec_module(legacy)
+<frozen importlib._bootstrap_external>:883: in exec_module
+    ???
+<frozen importlib._bootstrap>:241: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Parent-only frozen candidate scoring; completed checkpoints finalize without reruns.
+    
+    Never mount this program or its outputs in a method process. ``run`` persists
+    the grader outcome; ``finalize`` only validates and aggregates that exact result.
+    An interrupted dispatch without a completed checkpoint requires operator audit.
+    """
+    import argparse
+    import hashlib
+    import json
+    from pathlib import Path
+    import subprocess
+    import sys
+    
+>   from run_isolated_method import write_json
+E   ModuleNotFoundError: No module named 'run_isolated_method'
+
+/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_3/legacy/score_isolated_method.py:14: ModuleNotFoundError
+_ test_parent_correction_cannot_change_method_schedule_or_common_environment[environment] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_4')
+change = 'environment'
+
+    @pytest.mark.parametrize('change', ['config', 'source', 'slot', 'runtime', 'environment', 'worker'])
+    def test_parent_correction_cannot_change_method_schedule_or_common_environment(tmp_path, change):
+>       panel, path, old, current, amended = prior_fixture(tmp_path)
+
+tests/test_panel_scoring_amendment.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_panel_scoring_amendment.py:36: in prior_fixture
+    legacy = importlib.util.module_from_spec(spec); spec.loader.exec_module(legacy)
+<frozen importlib._bootstrap_external>:883: in exec_module
+    ???
+<frozen importlib._bootstrap>:241: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Parent-only frozen candidate scoring; completed checkpoints finalize without reruns.
+    
+    Never mount this program or its outputs in a method process. ``run`` persists
+    the grader outcome; ``finalize`` only validates and aggregates that exact result.
+    An interrupted dispatch without a completed checkpoint requires operator audit.
+    """
+    import argparse
+    import hashlib
+    import json
+    from pathlib import Path
+    import subprocess
+    import sys
+    
+>   from run_isolated_method import write_json
+E   ModuleNotFoundError: No module named 'run_isolated_method'
+
+/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_4/legacy/score_isolated_method.py:14: ModuleNotFoundError
+_ test_parent_correction_cannot_change_method_schedule_or_common_environment[worker] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_5')
+change = 'worker'
+
+    @pytest.mark.parametrize('change', ['config', 'source', 'slot', 'runtime', 'environment', 'worker'])
+    def test_parent_correction_cannot_change_method_schedule_or_common_environment(tmp_path, change):
+>       panel, path, old, current, amended = prior_fixture(tmp_path)
+
+tests/test_panel_scoring_amendment.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_panel_scoring_amendment.py:36: in prior_fixture
+    legacy = importlib.util.module_from_spec(spec); spec.loader.exec_module(legacy)
+<frozen importlib._bootstrap_external>:883: in exec_module
+    ???
+<frozen importlib._bootstrap>:241: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Parent-only frozen candidate scoring; completed checkpoints finalize without reruns.
+    
+    Never mount this program or its outputs in a method process. ``run`` persists
+    the grader outcome; ``finalize`` only validates and aggregates that exact result.
+    An interrupted dispatch without a completed checkpoint requires operator audit.
+    """
+    import argparse
+    import hashlib
+    import json
+    from pathlib import Path
+    import subprocess
+    import sys
+    
+>   from run_isolated_method import write_json
+E   ModuleNotFoundError: No module named 'run_isolated_method'
+
+/tmp/pytest-of-xhj/pytest-507/test_parent_correction_cannot_5/legacy/score_isolated_method.py:14: ModuleNotFoundError
+_______________ test_prior_record_cannot_be_omitted_or_upgraded ________________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-507/test_prior_record_cannot_be_om0')
+
+    def test_prior_record_cannot_be_omitted_or_upgraded(tmp_path):
+>       panel, path, old, current, amended = prior_fixture(tmp_path)
+
+tests/test_panel_scoring_amendment.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_panel_scoring_amendment.py:36: in prior_fixture
+    legacy = importlib.util.module_from_spec(spec); spec.loader.exec_module(legacy)
+<frozen importlib._bootstrap_external>:883: in exec_module
+    ???
+<frozen importlib._bootstrap>:241: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Parent-only frozen candidate scoring; completed checkpoints finalize without reruns.
+    
+    Never mount this program or its outputs in a method process. ``run`` persists
+    the grader outcome; ``finalize`` only validates and aggregates that exact result.
+    An interrupted dispatch without a completed checkpoint requires operator audit.
+    """
+    import argparse
+    import hashlib
+    import json
+    from pathlib import Path
+    import subprocess
+    import sys
+    
+>   from run_isolated_method import write_json
+E   ModuleNotFoundError: No module named 'run_isolated_method'
+
+/tmp/pytest-of-xhj/pytest-507/test_prior_record_cannot_be_om0/legacy/score_isolated_method.py:14: ModuleNotFoundError
+______ test_genuine_prior_infrastructure_error_cannot_be_imported_as_done ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-507/test_genuine_prior_infrastruct0')
+
+    def test_genuine_prior_infrastructure_error_cannot_be_imported_as_done(tmp_path):
+>       panel, path, old, current, amended = prior_fixture(tmp_path, code=2)
+
+tests/test_panel_scoring_amendment.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_panel_scoring_amendment.py:36: in prior_fixture
+    legacy = importlib.util.module_from_spec(spec); spec.loader.exec_module(legacy)
+<frozen importlib._bootstrap_external>:883: in exec_module
+    ???
+<frozen importlib._bootstrap>:241: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Parent-only frozen candidate scoring; completed checkpoints finalize without reruns.
+    
+    Never mount this program or its outputs in a method process. ``run`` persists
+    the grader outcome; ``finalize`` only validates and aggregates that exact result.
+    An interrupted dispatch without a completed checkpoint requires operator audit.
+    """
+    import argparse
+    import hashlib
+    import json
+    from pathlib import Path
+    import subprocess
+    import sys
+    
+>   from run_isolated_method import write_json
+E   ModuleNotFoundError: No module named 'run_isolated_method'
+
+/tmp/pytest-of-xhj/pytest-507/test_genuine_prior_infrastruct0/legacy/score_isolated_method.py:14: ModuleNotFoundError
+____________ test_original_completed_slot_is_never_dispatched_again ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-507/test_original_completed_slot_i0')
+
+    def test_original_completed_slot_is_never_dispatched_again(tmp_path):
+>       panel, path, old, current, amended = prior_fixture(tmp_path)
+
+tests/test_panel_scoring_amendment.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_panel_scoring_amendment.py:36: in prior_fixture
+    legacy = importlib.util.module_from_spec(spec); spec.loader.exec_module(legacy)
+<frozen importlib._bootstrap_external>:883: in exec_module
+    ???
+<frozen importlib._bootstrap>:241: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Parent-only frozen candidate scoring; completed checkpoints finalize without reruns.
+    
+    Never mount this program or its outputs in a method process. ``run`` persists
+    the grader outcome; ``finalize`` only validates and aggregates that exact result.
+    An interrupted dispatch without a completed checkpoint requires operator audit.
+    """
+    import argparse
+    import hashlib
+    import json
+    from pathlib import Path
+    import subprocess
+    import sys
+    
+>   from run_isolated_method import write_json
+E   ModuleNotFoundError: No module named 'run_isolated_method'
+
+/tmp/pytest-of-xhj/pytest-507/test_original_completed_slot_i0/legacy/score_isolated_method.py:14: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_panel_scoring_amendment.py::test_prior_negative_is_normalized_without_changing_its_raw_evidence
+FAILED tests/test_panel_scoring_amendment.py::test_parent_correction_cannot_change_method_schedule_or_common_environment[config]
+FAILED tests/test_panel_scoring_amendment.py::test_parent_correction_cannot_change_method_schedule_or_common_environment[source]
+FAILED tests/test_panel_scoring_amendment.py::test_parent_correction_cannot_change_method_schedule_or_common_environment[slot]
+FAILED tests/test_panel_scoring_amendment.py::test_parent_correction_cannot_change_method_schedule_or_common_environment[runtime]
+FAILED tests/test_panel_scoring_amendment.py::test_parent_correction_cannot_change_method_schedule_or_common_environment[environment]
+FAILED tests/test_panel_scoring_amendment.py::test_parent_correction_cannot_change_method_schedule_or_common_environment[worker]
+FAILED tests/test_panel_scoring_amendment.py::test_prior_record_cannot_be_omitted_or_upgraded
+FAILED tests/test_panel_scoring_amendment.py::test_genuine_prior_infrastructure_error_cannot_be_imported_as_done
+FAILED tests/test_panel_scoring_amendment.py::test_original_completed_slot_is_never_dispatched_again
+10 failed, 54 passed in 5.89s
