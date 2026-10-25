@@ -1,6 +1,6 @@
 {
   "as_of": "2026-10-26",
-  "status": "OPTIMIZATION_IN_PROGRESS_FORMAL_NOT_ADMITTED",
+  "status": "ENGINEERING_PASS_EFFECT_GATE_FAILED_NEXT_QUERY_ROOT_CAUSE_REPLAY",
   "formal_ready": false,
   "original_fixed46": {
     "A_closed": 14,
@@ -36,9 +36,9 @@
     "qualification": "ENGINEERING_AND_RUNTIME_QUALIFICATION_PASS",
     "code_commit": "45a6dc0",
     "diagnostic_state": "/home/xhj/contractedge-branch-review-20261026/system/.superpowers/sdd/2026-10-22-formal-experiment-delivery/diagnostic-v048-v2-state.json",
-    "diagnostic": "RUNNING_TWO_PREDECLARED_TARGETS_ONCE"
+    "diagnostic": "CLOSED_BOTH_SEMANTIC_FAIL"
   },
-  "next_gate": "Full regression and exact runtime qualification, then predeclared targeted diagnostic; never replay old claims",
+  "next_gate": "Normalize only explicit query identifiers within existing scope and budgets; saved-trace replay before any further real call",
   "benchmark150_unchanged": true,
   "formal150_started": false
 }

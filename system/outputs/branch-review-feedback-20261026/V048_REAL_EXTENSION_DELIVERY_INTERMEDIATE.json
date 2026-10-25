@@ -1,0 +1,47 @@
+{
+  "status": "INTERMEDIATE_REAL_REQUEST_DELIVERY_VERIFIED",
+  "call_index": 7,
+  "source_snapshot": "cbd2db9879d21b6b0b1272ef67965feb89a043fa0f34adc496ab72720c76886a",
+  "selected_count": 12,
+  "facts": {
+    "publication": [
+      {
+        "id": "SRC-CU-ba0dfd8438201a8b",
+        "locator": {
+          "column_start": 1,
+          "end_line": 605,
+          "path": "cmd/alertmanager/main.go",
+          "start_line": 131
+        },
+        "content_digest": "d6f9674a01fb66e3b72d1093fbe3938a879397a838e3723d260ee86b5cf758ce"
+      }
+    ],
+    "initialization": [
+      {
+        "id": "SRC-CU-HELPER-c76cc3560e30e77d",
+        "locator": {
+          "end_line": 161,
+          "path": "dispatch/dispatch.go",
+          "start_line": 144
+        },
+        "content_digest": "c76cc3560e30e77d5a52da462fbb9cef2b2e29a0397ebd9e6ae55bca62324799"
+      }
+    ],
+    "processing": [
+      {
+        "id": "SRC-CU-3f4db8a81bbe5f39",
+        "locator": {
+          "column_start": 1,
+          "end_line": 396,
+          "path": "dispatch/dispatch.go",
+          "start_line": 340
+        },
+        "content_digest": "516e376ed347e7a7a159f1049e06f738d87731d4473d700aed68665a9afd80b5"
+      }
+    ]
+  },
+  "request_digest": "a6cf632300caa7c776a8624c48f75dcec018668afb9824cc4ff9d39d6cc33b8a",
+  "new_paid_calls_for_audit": 0,
+  "not_a_repair_success": true,
+  "formal_ready": false
+}
