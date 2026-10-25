@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-25T02:15:41.036031+00:00",
+  "as_of": "2026-10-25T03:06:22.158626+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -1271,8 +1271,8 @@
     "report": "outputs/final-optimization-20261020/readiness.json",
     "effect_acceptance_passed": false
   },
-  "version": "0.6.40",
-  "status": "V0640_ENGINEERING_PASS_CROSS_CASE_QUALIFICATION_COMPLETE",
+  "version": "0.6.45",
+  "status": "V0645_PUBLIC_CHECK_PROTOCOL_ENGINEERING_PASS",
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "formal_ready": false,
@@ -1638,7 +1638,7 @@
   "G4": "REQUIRED_SAME_VERSION_REPEAT_AND_FRESH_RECOVERY_PENDING",
   "G5": "ISOLATED_46_SLOT_DRIVER_AND_REGISTRATION_PENDING",
   "B_opened": false,
-  "engineering_tests": 1069,
+  "engineering_tests": 1727,
   "budget_snapshot": {
     "limit_cny": 150,
     "committed_including_reservations_cny": 103.655032,
@@ -1649,9 +1649,9 @@
     "remaining_upper_bound_cny": 46.344968
   },
   "staged_revision": "0.6.42",
-  "subtests": 22,
+  "subtests": 91,
   "frozen_method": "outputs/declared-comparison-closure-20261024/frozen-method-v0.6.40.json",
-  "same_version_candidate_independent_pass_so_far": 3,
+  "same_version_candidate_independent_pass_so_far": 0,
   "staged_optimization": {
     "status": "MERGED_PENDING_REGRESSION",
     "source_branch_base": "43c3589",
@@ -1662,10 +1662,12 @@
     "formal_ready": false
   },
   "current_development_revision": {
-    "version": "0.6.44",
-    "source_sha256": "b8e46f43a53387f62b6b343de2edf8bf21424eb9423586c35f56ee5f06f8926b",
+    "version": "0.6.45",
+    "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df",
     "upstream_commit": "89b97f5",
-    "is_original_v0627_freeze": false
+    "is_original_v0627_freeze": false,
+    "benchmark_effectiveness": "NOT_RUN_FOR_V045",
+    "counts_in_46_slot_panel": false
   },
   "budget_current": {
     "limit_cny": 150,
@@ -1847,7 +1849,7 @@
       }
     }
   },
-  "current_optimization_report": "outputs/declared-comparison-closure-20261024/COMPLETION_AUDIT.md",
+  "current_optimization_report": "outputs/public-check-protocol-20261025/COMPLETION_AUDIT.md",
   "upstream_architecture_status": {
     "schema_version": "ce.current_system_status.v1",
     "as_of": "2026-10-23T18:48:32.623091+00:00",
@@ -3292,10 +3294,10 @@
     }
   },
   "current_development": {
-    "snapshot": "docs/development/public-check-protocol-20261025-v045.snapshot.json",
-    "snapshot_id": "public-check-protocol-20261025-v045",
+    "snapshot": "docs/development/public-check-protocol-20261025-v045-doc-r2.snapshot.json",
+    "snapshot_id": "public-check-protocol-20261025-v045-doc-r2",
     "snapshot_role": "CURRENT_FROZEN_DEVELOPMENT",
-    "status": "FULL_REGRESSION_PASS_RUNTIME_ACCEPTANCE_PENDING",
+    "status": "ENGINEERING_PASS_PUBLIC_CHECK_PROTOCOL_CLOSED",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "NOT_ACCEPTED",
     "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df"
@@ -3326,5 +3328,38 @@
     },
     "counts_in_46_slot_panel": false,
     "formal_ready": false
-  }
+  },
+  "historical_pre_v045_summary": {
+    "version": "0.6.40",
+    "status": "V0640_ENGINEERING_PASS_CROSS_CASE_QUALIFICATION_COMPLETE",
+    "engineering_tests": 1069,
+    "subtests": 22,
+    "current_development_revision": {
+      "version": "0.6.44",
+      "source_sha256": "b8e46f43a53387f62b6b343de2edf8bf21424eb9423586c35f56ee5f06f8926b",
+      "upstream_commit": "89b97f5",
+      "is_original_v0627_freeze": false
+    },
+    "current_optimization_report": "outputs/declared-comparison-closure-20261024/COMPLETION_AUDIT.md",
+    "same_version_candidate_independent_pass_so_far": 3
+  },
+  "v045_validation": {
+    "full_tests": 1727,
+    "full_subtests": 91,
+    "portable_tests": 1694,
+    "portable_subtests": 86,
+    "installed_tests": 75,
+    "installed_subtests": 28,
+    "actual8": "PASS_14_SESSIONS_28_CONTAINERS",
+    "actual24": "PASS_48_SESSIONS_96_RUNS",
+    "new_model_http_calls": 0,
+    "full_independent_code_review": "NOT_COMPLETED_SERVICE_LIMIT_AFTER_TWO_FIXED_FINDINGS",
+    "report": "outputs/public-check-protocol-20261025/validation.json",
+    "formal_ready": false
+  },
+  "next_actions": [
+    "Migrate original fixed46 registration/dispatch to isolated protocol with exact baseline/candidate identities and once-only attempt claims",
+    "Zero-HTTP compatibility, schedule, corruption and recovery checks before paid panel",
+    "Freeze same-version A/repeat/recovery runs; open preselected B only after original gates; then G0-G6 final admission"
+  ]
 }

@@ -1,0 +1,301 @@
+{
+  "schema_version": "ce.v045_runtime_inventory.v1",
+  "status": "PASS",
+  "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df",
+  "scope": "ACTUAL_ISOLATION_SYNTHETIC_NOT_BENCHMARK_EFFECT",
+  "method24_cells": 24,
+  "closed_sessions": 48,
+  "candidate_and_observer_runs": 96,
+  "model_http_calls": 0,
+  "sessions": [
+    {
+      "path": "method24/config-binding--base/direct/repair/broken-public/runtime/session.json",
+      "sha256": "3bc637e67978bb728366f8775d3f9ae4026975b82682d6a39e43691dc9e8ee4d",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--base/direct/repair/rounds/0/public/runtime/session.json",
+      "sha256": "4a28e2082cda96ac2ab20d30fba9e156272ea07debb75253e8bb34b0f9e9e29f",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--base/full/repair/broken-public/runtime/session.json",
+      "sha256": "fc37aa9f354106aa4952242b562664cbf57bb694628644a47adc238ef0553392",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--base/full/repair/rounds/0/public/runtime/session.json",
+      "sha256": "fbff6253a93f0119e6ce511c67fd4a87f30b69190832f6684d59317cad6efffc",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--base/without_changeset/repair/broken-public/runtime/session.json",
+      "sha256": "1114c5f1464354a33b8c741f56479d563f0d2e4bfb589bac9284dead66a396f0",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--base/without_changeset/repair/rounds/0/public/runtime/session.json",
+      "sha256": "0aa4c85af6750ee5c0673bdd9e2a2d180019f25f2175bd20c796667d06b2e06f",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--base/without_relation/repair/broken-public/runtime/session.json",
+      "sha256": "d56c8df8980c69580215047990bae131c472706652d5c3b04b7a05555d759dbe",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--base/without_relation/repair/rounds/0/public/runtime/session.json",
+      "sha256": "5ef87e3689cd1acd25cc8db7c06404a1438bff43b63872bd4fc15a1166b86f90",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--exception-guard/direct/repair/broken-public/runtime/session.json",
+      "sha256": "423a80b306845dc782e56d4dac015094216b5d8c92797ed22ed86aa9dc023706",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--exception-guard/direct/repair/rounds/0/public/runtime/session.json",
+      "sha256": "3b8ef1f1fd3bcfe16882c30c63d22d5f1de9d3d1f952d82e21a88a0d612e0729",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--exception-guard/full/repair/broken-public/runtime/session.json",
+      "sha256": "33907ea13b9b8c9dbbc5080362b4db72daeac351942978b98c1ab75696cc8c2e",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--exception-guard/full/repair/rounds/0/public/runtime/session.json",
+      "sha256": "092e3c66f3cfa7cb2bb53f1e5c975dd1fa093d7d7070c471835db3d3fd5d75fe",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--exception-guard/without_changeset/repair/broken-public/runtime/session.json",
+      "sha256": "6ff71f51f82c3fd7c6d80fee19b354cc59c7dc4a869127c83551e9b75b1f21f2",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--exception-guard/without_changeset/repair/rounds/0/public/runtime/session.json",
+      "sha256": "ee776deb9849d7cef84fbbfcc3bf81087043a0a4bb509f039c144ac8bc3e2808",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--exception-guard/without_relation/repair/broken-public/runtime/session.json",
+      "sha256": "85c4bd62d1c08b7a28bbff2745108c532d287d52057cc12bddce1099b217079c",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/config-binding--exception-guard/without_relation/repair/rounds/0/public/runtime/session.json",
+      "sha256": "3dc2984c8efc0c7224eabdb670d65c09041f7a3ec8f2cf67ac525dec31d1993b",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--base/direct/repair/broken-public/runtime/session.json",
+      "sha256": "a228c1a7eec2f02a7b42b627d02725dca5111587855f3a57443d23724602cea7",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--base/direct/repair/rounds/0/public/runtime/session.json",
+      "sha256": "6144f469133fbc6bc56a1d3704cdbcd139fa8f91ab5db1587296dd0f282d15ba",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--base/full/repair/broken-public/runtime/session.json",
+      "sha256": "991eca907ad95d3fb2135ef43fdc2d55095638168c4e5d4e36079a80530ff35b",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--base/full/repair/rounds/0/public/runtime/session.json",
+      "sha256": "a0646f40ee1193dcb116c19d790b76f5f870dcc4f60a7e6263aae201bfb49515",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--base/without_changeset/repair/broken-public/runtime/session.json",
+      "sha256": "7a5b708061c73cb53fb5b346c633577f1b60a7796ec07131aadb5490aa31bb1b",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--base/without_changeset/repair/rounds/0/public/runtime/session.json",
+      "sha256": "5a17a7d2cf38c4406ef5f70af3636c70054d2da176902e61dbcad4c606e4df54",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--base/without_relation/repair/broken-public/runtime/session.json",
+      "sha256": "9e56f8b38e8d9cb1830819f9c76e2c9299236edbafabe30c29a3e065be1827a3",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--base/without_relation/repair/rounds/0/public/runtime/session.json",
+      "sha256": "46ae7b6ce82350c574b62edb842d7ae10fbae02d33463b342f609e717c87f36d",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--rejected-reload/direct/repair/broken-public/runtime/session.json",
+      "sha256": "9e3b00e65166d41dafda31ecf42d2f1ca0377da80f66383b03e18e2384880505",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--rejected-reload/direct/repair/rounds/0/public/runtime/session.json",
+      "sha256": "2d5652b84ec4ab240e32d8282c0e15f7fa5bec6bd1c185ed8df656c6772cf828",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--rejected-reload/full/repair/broken-public/runtime/session.json",
+      "sha256": "b0286dbdbd7cdbc038229f4560e28b438384a1b0ac12eac29d46f6cfbed062b4",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--rejected-reload/full/repair/rounds/0/public/runtime/session.json",
+      "sha256": "96b38994d1ce60d7b12bfe0bc2e1040946747f0bb3c471acb08bb4fed3401429",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--rejected-reload/without_changeset/repair/broken-public/runtime/session.json",
+      "sha256": "02426be380c70010e48249e92ce85798670ca06436236be2b8ab74e62151931a",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--rejected-reload/without_changeset/repair/rounds/0/public/runtime/session.json",
+      "sha256": "4aa9caac11e15978c6d82d63b131a5534d1d4487cd6fb20b994a9d6bb7f38954",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--rejected-reload/without_relation/repair/broken-public/runtime/session.json",
+      "sha256": "f4b5390d6af92fe13f768d20f2dda3f838b20ed82a0a38f8b0b0906aa7f32c30",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/reload-state--rejected-reload/without_relation/repair/rounds/0/public/runtime/session.json",
+      "sha256": "d65d452471e92bea8cc7b8a590e9e6de4d89ff45760a4c75fbdc86fde93817f4",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--base/direct/repair/broken-public/runtime/session.json",
+      "sha256": "b3fb801140dee0fc334316dd8413e86f17fbfaf4740790842a44ed0f210dd62a",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--base/direct/repair/rounds/0/public/runtime/session.json",
+      "sha256": "d7c6af17548a31ff24e89dc59a15f23af87ceb11bf449cb1b9655489b08d7e6f",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--base/full/repair/broken-public/runtime/session.json",
+      "sha256": "c2956f4367004380930662cf5ff40edf71395a0d74edab022b3a0f717a95f431",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--base/full/repair/rounds/0/public/runtime/session.json",
+      "sha256": "17fb11c23142b8259354452f7b954ca2f7edaaebcda79934780a8e862ca80e29",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--base/without_changeset/repair/broken-public/runtime/session.json",
+      "sha256": "857793e0c3edcf30ab0e70cfce45bd925327933308c567196a750f83516e2617",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--base/without_changeset/repair/rounds/0/public/runtime/session.json",
+      "sha256": "2969eb1bedfff5fcf98e3605e7e1109e164774ee4118daab10cbcfb3a9c798d7",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--base/without_relation/repair/broken-public/runtime/session.json",
+      "sha256": "c074e5899675a910b96b7cc5ff354ea8a2c6d6dd68e71927b0ee13917ed11c04",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--base/without_relation/repair/rounds/0/public/runtime/session.json",
+      "sha256": "7d9382754eb20df5301c43d5009ca68d06f44f44eb0d6dc716e90b82321292ef",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--preserve-one/direct/repair/broken-public/runtime/session.json",
+      "sha256": "4e8891c13a6e47cb8818f4666368499b8d5a710d4611d4ca58f859f9648d0a6f",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--preserve-one/direct/repair/rounds/0/public/runtime/session.json",
+      "sha256": "376b518b86f0526b26607fe64ea903dff2a7fafbc8dc99f1d8057086c540f943",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--preserve-one/full/repair/broken-public/runtime/session.json",
+      "sha256": "b858d05572d3285e97e216820b94ea1fafa9027f18a72931cbd3fe1d1fcfbc3b",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--preserve-one/full/repair/rounds/0/public/runtime/session.json",
+      "sha256": "11ebed395544b2e2fa9d6c9adb920344792594e2d55e26829678077825d74f64",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--preserve-one/without_changeset/repair/broken-public/runtime/session.json",
+      "sha256": "eab18051af401413b252ac5c50f24edf328c84ad9d4b8552ac186248c6a94e08",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--preserve-one/without_changeset/repair/rounds/0/public/runtime/session.json",
+      "sha256": "20e70f4c8bc9c2ffe8934ad4ca05cdd8c532482e72cef23038997f8ea95f65f8",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--preserve-one/without_relation/repair/broken-public/runtime/session.json",
+      "sha256": "a5532266afc9e7890429f9a8bc6ae82f784b5177db8952de7255dde1d6fb2e68",
+      "status": "CLOSED",
+      "run_count": 2
+    },
+    {
+      "path": "method24/two-consumers--preserve-one/without_relation/repair/rounds/0/public/runtime/session.json",
+      "sha256": "1bf33fa0ee72b14ca7443dd8e2b053b3241fc50b527304217059d93726636144",
+      "status": "CLOSED",
+      "run_count": 2
+    }
+  ],
+  "formal_ready": false
+}

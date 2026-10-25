@@ -18,12 +18,16 @@
 - New method identity 0.6.45, retained .44 snapshot. Runtime stays .40; no formal150 or paid panel started.
 
 ## Tasks / acceptance
-- [ ] Write failing tests for registered-only planning schema, all three obligation kinds, mixed probe catalogs, unknown IDs, duplicate declarations, missing/mismatched scenarios and coverage.
-- [ ] Implement catalog use in changeset/prompt.py and validate.py. Fresh/correction/revision requests retain declarations; READY preflight uses same validator. Legacy probe behavior remains.
-- [ ] Write failing observer-to-review tests using actual frozen checker with runtime boundary double; require matching scenario, preserve finite aggregate members; malformed/stale/wrong-scenario/insufficient coverage rejected. Include process and six-case observers.
-- [ ] Add explicit scenario/members to trusted capability, observation excerpt/record and profile validation; update synthetic providers to explicitly author the same protocol, never alter real responses.
-- [ ] Run focused tests, real isolated three-case/READY regression, full tests and portable suite. Separate deterministic runtime proof from model-effect claims.
-- [ ] Fresh independent code review, fix confirmed findings once, retain red/green records. Freeze exact source/tests/tooling/config; report next panel integration work and remaining formal gates.
+- [x] Write failing tests for registered-only planning schema, all three obligation kinds, mixed probe catalogs, unknown IDs, duplicate declarations, missing/mismatched scenarios and coverage.
+- [x] Implement catalog use in changeset/prompt.py and validate.py. Fresh/correction/revision requests retain declarations; READY preflight uses same validator. Legacy probe behavior remains.
+- [x] Write failing observer-to-review tests using actual frozen checker with runtime boundary double; require matching scenario, preserve finite aggregate members; malformed/stale/wrong-scenario/insufficient coverage rejected. Include process and six-case observers.
+- [x] Add explicit scenario/members to trusted capability, observation excerpt/record and profile validation; update synthetic providers to explicitly author the same protocol, never alter real responses.
+- [x] Run focused tests, real isolated three-case/READY regression, full tests and portable suite. Separate deterministic runtime proof from model-effect claims.
+- [x] Review: independent reviewer returned two Important findings, both reproduced and fixed; its final conclusion was unavailable due service usage limit. Root completed supplementary source/contract review; no complete independent clean-review claim. Retain red/green records. Freeze exact source/tests/tooling/config; report next panel integration work and remaining formal gates.
 
 ## Review focus
 Unknown/malformed/duplicate registry; two declaration sources; finite aggregate vs single scenario; legacy/no-registry path; profile tampering with recomputed digest. Each belongs to tests above. Existing frozen public failures remain unchanged.
+
+## Completion record
+
+0.6.45 source is unchanged after full regression. Full1727+91, portable1694+86, noneditable75+28, actual8(14 sessions/28 containers), actual24(48 sessions/96 runs) PASS. No model HTTP. Actual six-stage request/observation/feedback alignment recorded. Review service limitation and all early failures are retained. Next work is the original46-slot protocol migration described in docs/reports/2026-10-25-public-check-protocol-closure.md; not implemented by this priority repair.
