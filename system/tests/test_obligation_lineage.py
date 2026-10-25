@@ -64,14 +64,17 @@ class ObligationLineageTests(unittest.TestCase):
     def test_paraphrase_of_necessary_predicate_keeps_failure_usable(self):
         from contractedge.execution.support import support_error
         old={'statement':'Retain configuration','source_snapshot':'S0','stable_obligation_keys':['a'],
-            'verification_kind':'PUBLIC_BEHAVIOR','behavior_check_refs':['a'],'check_coverage':'NECESSARY_ONLY'}
+            'verification_kind':'PUBLIC_BEHAVIOR','behavior_check_refs':['a'],'check_coverage':'NECESSARY_ONLY',
+            'verification_scope':{'scenario':'finite-retention-fixture'},
+            'coverage_rationale':'The declared finite retention check is necessary for this fixture predicate; failure refutes retention while success alone does not establish it.'}
         new={**old,'id':'P','statement':'Keep configuration'}
         review=review_plan_with_retained({'postconditions':[new],'preserve_constraints':[],'open_obligations':[]},
             {'retained_constraints':[old]})
         condition=review['postconditions'][0]
         self.assertEqual(condition['check_coverage'],'NECESSARY_ONLY')
         self.assertIsNone(support_error(condition,{'status':'FAIL','evidence':[{'observation_id':'a'}]},
-            [{'id':'a','evidence_kind':'PUBLIC_BEHAVIOR','behavior_check':{'id':'a','status':'FAIL'}}]))
+            [{'id':'a','evidence_kind':'PUBLIC_BEHAVIOR','scenario':'finite-retention-fixture',
+              'behavior_check':{'id':'a','status':'FAIL'}}]))
 
     def test_shared_source_quote_can_distinguish_literal_object_scopes(self):
         from contractedge.requirement.normalize import bind_obligation_sources

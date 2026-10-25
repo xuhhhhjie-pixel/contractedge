@@ -9,10 +9,13 @@ class MethodProbeGateTests(unittest.TestCase):
   return {'id':check,'evidence_kind':'PUBLIC_BEHAVIOR','scenario':'method-kpt-configpath-v1',
           'behavior_check':{'id':check,'status':status,'probe_sha256':'a'*64}}
  def test_failed_behavior_probe_cannot_be_cited_as_pass(self):
-  o=self.observation('p:owner','FAIL');ob={'verification_kind':'PUBLIC_BEHAVIOR','behavior_check_refs':['p:owner']}
+  o=self.observation('p:owner','FAIL');o['snapshot_id']='S1'
+  ob={'statement':'The single finite fixture owner check succeeds','verification_kind':'PUBLIC_BEHAVIOR',
+      'verification_scope':{'scenario':'method-kpt-configpath-v1'},'behavior_check_refs':['p:owner'],
+      'check_coverage':'ALL_OF','coverage_rationale':'This predicate is exactly the single finite owner check; its result is necessary and sufficient.'}
   claim={'status':'PASS','evidence':[{'observation_id':'p:owner'}]}
-  self.assertEqual(support_error(ob,claim,[o]),'METHOD_BEHAVIOR_RESULT_UNSUPPORTED')
-  self.assertIsNone(support_error(ob,{**claim,'status':'FAIL'},[o]))
+  self.assertEqual(support_error(ob,claim,[o],snapshot_id=o['snapshot_id']),'METHOD_BEHAVIOR_RESULT_UNSUPPORTED')
+  self.assertIsNone(support_error(ob,{**claim,'status':'FAIL'},[o],snapshot_id=o['snapshot_id']))
  def test_required_probe_checks_cannot_be_replaced_with_an_unrelated_pass(self):
   o=self.observation('p:control','PASS');ob={'verification_kind':'PUBLIC_BEHAVIOR','behavior_check_refs':['p:owner']}
   self.assertEqual(support_error(ob,{'status':'PASS','evidence':[{'observation_id':'p:control'}]},[o]),'METHOD_BEHAVIOR_CHECKS_INCOMPLETE')
@@ -62,16 +65,21 @@ class MethodProbeReviewIntegrationTests(unittest.TestCase):
   from contractedge.model.provider import FixtureProvider
   obs=record('{"id":"owner","status":"FAIL","ordinary_inputs":["settings","workload"]}','PUBLIC_BEHAVIOR','method-kpt-configpath-v1')
   obs['behavior_check']={'id':'kpt-configpath-v1:mutator.owner_excludes_config','status':'FAIL','probe_sha256':'a'*64}
-  p=plan('PUBLIC_BEHAVIOR',behavior_check_refs=[obs['behavior_check']['id']],verification_scope={'scenario':'method-kpt-configpath-v1'})
+  p=plan('PUBLIC_BEHAVIOR',statement='The owning configuration resource is excluded from ordinary inputs in this finite method fixture.',
+    behavior_check_refs=[obs['behavior_check']['id']],verification_scope={'scenario':'method-kpt-configpath-v1'})
   c=claim('"status":"FAIL"')
   reviewer=ModelPublicReviewer(FixtureProvider({'checks':[c],'failure_kind':'UNKNOWN','rationale':'Incorrect positive'}),len,{'model':'fixture','max_context_tokens':30000})
-  reviewed=reviewer.review('Exclude owning config resource',p,{'status':'EXECUTION_PASS','observations':[obs]})
+  reviewed=reviewer.review('Exclude owning config resource',p,{'status':'EXECUTION_PASS','snapshot_id':obs['snapshot_id'],'observations':[obs]})
   self.assertEqual(reviewed['decision'],'UNKNOWN')
   self.assertEqual(reviewed['checks'][0]['submitted_status'],'PASS')
   f=feedback(p,c,obs);self.assertEqual(f['semantic_outcome'],'UNKNOWN');self.assertEqual(len(f['pending_obligations']),1)
   from contractedge.orchestration.feedback import make_feedback
+  # The attempted positive claim above deliberately lacks sufficient coverage.
+  # For the negative claim, this concrete exclusion check is explicitly necessary.
+  p['postconditions'][0].update(check_coverage='NECESSARY_ONLY',
+    coverage_rationale='The owning-config exclusion check is necessary for this finite fixture predicate; its failure refutes the predicate without establishing full success.')
   c['status']='FAIL'
-  f=make_feedback(case_id='CASE',run_id='run',input_digest='a'*64,round_id=0,from_snapshot='S0',to_snapshot='S1',
+  f=make_feedback(case_id='CASE',run_id='run',input_digest='a'*64,round_id=0,from_snapshot='S0',to_snapshot=obs['snapshot_id'],
     patch_digest='b'*64,execution_status='EXECUTION_PASS',observations=[obs],plan=p,
     review={'decision':'FAIL','checks':[c],'failure_kind':'EXECUTION'})
   self.assertEqual(f['semantic_outcome'],'PUBLIC_REVIEW_FAIL')

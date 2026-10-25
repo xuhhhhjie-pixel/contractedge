@@ -104,6 +104,7 @@ class PanelProvider:
                 'planned_check': 'Run the fixed published requirement profile.',
                 'check_scope': 'Finite public candidate process outputs.',
                 'verification_kind': 'PUBLIC_BEHAVIOR',
+                'verification_scope': {'scenario': check['scenario']},
                 'behavior_check_refs': [PROBE_ID + ':' + check['id']],
                 'check_coverage': 'ALL_OF',
                 'coverage_rationale': 'This authored condition is restricted to its exact finite public predicate.'}

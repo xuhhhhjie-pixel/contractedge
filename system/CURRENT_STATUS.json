@@ -1,7 +1,7 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-23T18:48:32.623091+00:00",
-  "status": "STAGED_RUNTIME_OBSERVER_VALIDATION_PENDING",
+  "as_of": "2026-10-25T06:27:50.501190+00:00",
+  "status": "ENGINEERING_STAGE_VALIDATED_PUBLICATION_AND_PAUSE",
   "implementation_version": "0.6.27",
   "version_scope": "Package version retained; method identity is the current development snapshot source/configuration/panel digests.",
   "formal_ready": false,
@@ -9,24 +9,28 @@
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "current_development": {
-    "snapshot": "docs/development/architecture-wrapup-ci-history-20261024.snapshot.json",
-    "snapshot_id": "architecture-wrapup-ci-history-20261024",
+    "snapshot": "docs/development/architecture-public-check-protocol-20261025-r3.snapshot.json",
+    "snapshot_id": "architecture-public-check-protocol-20261025-r3",
     "snapshot_role": "CURRENT_FROZEN_DEVELOPMENT",
-    "status": "VALIDATED_PACKAGING_SOURCE_UNCHANGED",
-    "scope": "Wrapup CI full Git history only; identical r2 runtime source, tests, observer and acceptance inputs",
+    "status": "VALIDATED_OFFLINE",
+    "scope": "Public-check catalog, explicit coverage/scope and current snapshot identity; same-source synthetic development validation only",
     "verification_command": "python scripts/verify_development_snapshot.py",
-    "planned_verification_command": "python scripts/verify_development_snapshot.py --snapshot docs/development/architecture-wrapup-ci-history-20261024.snapshot.json --require-current-bindings",
+    "planned_verification_command": "python scripts/verify_development_snapshot.py --snapshot docs/development/architecture-public-check-protocol-20261025-r3.snapshot.json --require-current-bindings",
     "test_command": "python scripts/test_portable.py",
     "native_test_command": "python -m pytest -q tests/test_topomen_agent.py",
     "isolated_test_command": "CONTRACTEDGE_RUN_ISOLATED_DEMOS=1 python -m pytest -q tests/test_runtime_session_integration.py tests/test_public_isolated_demo.py",
     "ci_workflow": "../.github/workflows/development.yml",
-    "github_actions_execution": "PENDING_FOR_CURRENT_WRAPUP_HEAD",
+    "github_actions_execution": "CHECK_GITHUB_CHECKS_FOR_CHECKED_OUT_COMMIT",
     "formal_effectiveness": "NOT_EVALUATED",
     "verification": {
-      "runtime_source_and_fixtures": "Exact original r2 bytes; prior behavior evidence retained in its original identity",
-      "current_freeze": "PASS default/explicit and snapshot regression",
-      "current_ci": "PENDING",
-      "actual8_admission": "PASS --plan only; actual execution follows in CI"
+      "freeze": "PASS default/explicit and before/after",
+      "protocol": "34 passed",
+      "related": "205 passed /30 subtests;4 real tests run in combined",
+      "combined": "511 passed, 47 subtests passed in 294.43s (0:04:54)",
+      "portable": "1342 passed, 4 skipped, 86 subtests passed in 381.41s (0:06:21)",
+      "native": "9 passed in 9.29s",
+      "actual8": "8 cells;14 sessions/28 containers;cleanup/absence confirmed",
+      "actual24": "24 unique cells;48 sessions/96 containers;raw-file audit PASS;HTTP0"
     },
     "last_validated_baseline": {
       "snapshot": "docs/development/architecture-a-delivery-admission-20261023.snapshot.json",
@@ -47,15 +51,15 @@
     },
     "runtime_limits": "Actual cgroup CPU 200000/100000 and memory 2147483648 verified; RuntimeSession integration is included in portable.",
     "validated_parent": {
-      "commit": "d487c4648b144c4eb2f04a84ab37010bfa8043f9",
-      "snapshot": "docs/development/architecture-d2-method-modes-20261024-r2.snapshot.json"
+      "commit": "89b97f5add97e771abcd1ac283d63eca0a6f43b4",
+      "snapshot": "docs/development/architecture-wrapup-ci-history-20261024.snapshot.json"
     },
-    "validation": "docs/development/architecture-wrapup-ci-history-20261024.validation.json"
+    "validation": "docs/development/architecture-public-check-protocol-20261025-r3.validation.json"
   },
   "next_actions": [
-    "Finish exact-head wrapup CI, merge reviewed integration to main as requested, then pause further system optimization.",
-    "Public-check schema/scenario protocol draft remains unvalidated and unshipped; resume only when user requests.",
-    "First real single-case is UNKNOWN; no new API retest or formal150 during wrapup."
+    "Current user requested publication/merge after exact-head CI and then pause further optimization; use GitHub Checks for the checked-out commit.",
+    "Resume only on user request: limited same-version real-provider retest, paper ablation/generalization and fresh-machine deployment acceptance.",
+    "Retain original single-case UNKNOWN and unavailable original ACK failure-package limitation; formal_ready=false."
   ],
   "historical_status": {
     "scope": "REFERENCE_ONLY: the following original status/results are historical records, not current development gates or current method scores.",
@@ -1427,7 +1431,7 @@
     "budget_limit_cny": 30,
     "http_calls": 0,
     "cost_cny": 0,
-    "scope": "No new real-provider result is claimed for pending Stage B. Documentation and CI use synthetic fixtures; any later approved paid attempt requires its own same-version registration and the original persistent ledger.",
+    "scope": "This protocol snapshot has no new paid model calls. Original architecture attempt had 4 HTTP calls, candidate and public3 PASS, semantic UNKNOWN; retained separately.",
     "unknown_response_policy": "retain full reservation; no automatic resend"
   },
   "prior_api_reference": {
@@ -1439,5 +1443,13 @@
     "conservative_cost_cny": 0.081603,
     "official_bill": false,
     "scope": "Prior public config-binding front planning only; no candidate execution or semantic effectiveness claim."
+  },
+  "prior_architecture_api_reference": {
+    "snapshot_source_sha256": "b9f9a83ebf9ced04a5b1672dd9870de5c57b54d5b6c257246d487759e323735a",
+    "http_calls": 4,
+    "patch_bytes": 307,
+    "public_checks": "3 PASS",
+    "semantic_outcome": "UNKNOWN",
+    "scope": "Prior frozen source only; not backfilled by protocol repair"
   }
 }

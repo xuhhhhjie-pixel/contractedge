@@ -10,11 +10,15 @@ from tests.test_observation_capability_gate import record, claim, plan
 def behavior_feedback(*, round_id=0, changed=True, bound=True, status='FAIL'):
     observation = record('{"status":"FAIL"}', 'PUBLIC_BEHAVIOR', 'method-probe')
     observation['behavior_check'] = {'id':'probe:keep', 'status':'FAIL', 'probe_sha256':'a'*64}
-    p = plan('PUBLIC_BEHAVIOR', **({'behavior_check_refs':['probe:keep']} if bound else {}))
+    binding = ({'behavior_check_refs':['probe:keep'], 'check_coverage':'NECESSARY_ONLY',
+                'coverage_rationale':'For this finite method-probe fixture, probe:keep is necessary for retaining the declared configuration.'}
+               if bound else {})
+    p = plan('PUBLIC_BEHAVIOR', statement='Retain the declared configuration in the finite method-probe fixture.',
+             verification_scope={'scenario':'method-probe'}, **binding)
     p.update(status='READY', changes=[{'id':'C1', 'postcondition_refs':['P']}])
     c = claim('FAIL'); c['status'] = status
     return make_feedback(case_id='CASE',run_id='run',input_digest='a'*64,round_id=round_id,
-        from_snapshot='S0' if changed else 'S1',to_snapshot='S1',patch_digest='b'*64,
+        from_snapshot='S0' if changed else observation['snapshot_id'],to_snapshot=observation['snapshot_id'],patch_digest='b'*64,
         execution_status='EXECUTION_PASS',observations=[observation],plan=p,
         review={'decision':'FAIL','checks':[c],'failure_kind':'PLAN','rationale':'Postcondition failed, therefore plan failure'})
 
@@ -73,7 +77,10 @@ def test_mechanical_failure_can_try_accepted_intent_once_without_claiming_root_c
     from contractedge.orchestration.feedback import make_feedback
     obs=f['public_observations']
     plan={'status':'READY','changes':[{'id':'C1','postcondition_refs':['P']}],
-      'postconditions':[{'id':'P','statement':'Retain config','behavior_check_refs':['probe:keep']}],
+      'postconditions':[{'id':'P','statement':'Retain config','verification_kind':'PUBLIC_BEHAVIOR',
+        'verification_scope':{'scenario':'method-probe'},'behavior_check_refs':['probe:keep'],
+        'check_coverage':'NECESSARY_ONLY',
+        'coverage_rationale':'For this finite method-probe fixture, probe:keep is necessary for retaining the declared configuration.'}],
       'preserve_constraints':[],'open_obligations':[]}
     review={'method':'BOUND_CHECK_AGGREGATION','decision':'FAIL','failure_kind':'UNKNOWN','checks':f['public_check_results']}
     r=make_feedback(case_id=f['case_id'],run_id=f['run_id'],input_digest=f['input_digest'],round_id=0,

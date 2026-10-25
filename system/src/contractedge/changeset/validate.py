@@ -5,7 +5,7 @@ from typing import Any, Mapping
 from contractedge.contracts.models import DiagnosisPacket, Snapshot, ValidationResult, ValidationIssue
 from contractedge.contracts.validation import validate_changeset
 from contractedge.contracts.permissions import target_permission_error
-from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
+from contractedge.contracts.execution_capabilities import resolve_execution_capabilities, behavior_binding_error
 
 
 def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: DiagnosisPacket,
@@ -55,12 +55,13 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
         if error:
             issues.append(ValidationIssue(error, f'changes[{index}].target',
                 'Source evidence is read-only unless public edit policy permits this target: ' + path))
+    for kind in ('postconditions','preserve_constraints','open_obligations'):
+        for i,item in enumerate(payload.get(kind, [])):
+            binding_error = behavior_binding_error(item, capabilities)
+            if binding_error:
+                issues.append(ValidationIssue(binding_error,kind+f'[{i}]',
+                    'Behavior bindings need explicit scope, coverage and rationale matching the available public checks'))
     if diagnosis.raw.get('requirement_spec',{}).get('traceability_required'):
-        for kind in ('postconditions','preserve_constraints','open_obligations'):
-            for i,item in enumerate(payload.get(kind, [])):
-                if item.get('behavior_check_refs') and (item.get('check_coverage') not in {'ALL_OF','NECESSARY_ONLY','SUPPORTING'} or not item.get('coverage_rationale')):
-                    issues.append(ValidationIssue('CHECK_COVERAGE_REQUIRED',kind+f'[{i}]',
-                        'New probe bindings must explicitly declare necessary/sufficient scope and rationale'))
         if payload.get('preserve_constraints') and 'preservation_impact' not in payload:
             issues.append(ValidationIssue('PRESERVATION_IMPACT_INCOMPLETE','preservation_impact',
                 'New traceability plans must account for all preservation impacts'))
