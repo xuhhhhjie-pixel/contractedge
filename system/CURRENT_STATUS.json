@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-25T19:25:40.745443+00:00",
+  "as_of": "2026-10-25T19:38:01.590944+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3298,7 +3298,7 @@
     "snapshot": "docs/development/gap-query-tokenization-v049-20261026-v2.snapshot.json",
     "snapshot_id": "bounded-source-delivery-v046-20261026-v6",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V049_V2_FULL_PASS_RUNTIME_QUALIFICATION_RUNNING",
+    "status": "V049_V2_ENGINEERING_PASS_TARGET_EFFECT_GATE_FAILED",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "DIAGNOSTIC_IN_PROGRESS_NO_FIXED46_EFFECTIVENESS",
     "source_sha256": "758eb3a563c18eac6ec456f6293647094d86d96ad9b750f0dce448e53bd97683",
@@ -3310,7 +3310,8 @@
     "full_tests": 1933,
     "subtests": 91,
     "runtime_qualification": "outputs/branch-review-feedback-20261026/RUNTIME_QUALIFICATION_v048_v2.json",
-    "predecessor_worktree": "/home/xhj/contractedge-branch-review-20261026/system"
+    "predecessor_worktree": "/home/xhj/contractedge-branch-review-20261026/system",
+    "diagnostic_results": "outputs/gap-query-tokenization-20261026/V049_DIAGNOSTIC_RESULTS.json"
   },
   "staged_implementation_version": "0.6.45",
   "runtime_implementation_version": "0.6.40",

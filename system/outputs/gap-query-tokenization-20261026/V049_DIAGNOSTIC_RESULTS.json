@@ -1,0 +1,38 @@
+{
+  "status": "DIAGNOSTIC_CLOSED_REQUIRES_EFFECT_AND_PUBLIC_TRACE_AUDIT",
+  "rows": [
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "attempt_id": "diagnostic-source049-v2-20261026-rw-certmanager-9116",
+      "method_status": "EVIDENCE_GAP",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "patch_bytes": 0,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-diagnostic-source049-v2-20261026/methods/RW-CERTMANAGER-9116/.isolated-45aaa2613ec24a02856b24f8ad1efc79/receipt.json",
+          "sha256": "0e171c1d9de904b8f5afa23abca15994af600274d18dae5885b14104b7b7dced"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-diagnostic-source049-v2-20261026/methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/repair.trace.json",
+          "sha256": "16c627fc13d7db77a6e5119fb85b3a340db4858be44670b435ba5d87f7861e33"
+        }
+      },
+      "counts_in_46_slot_panel": false,
+      "formal_ready": false
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "status": "NOT_RUN_TARGET_GATE_FAILED",
+      "counts_in_46_slot_panel": false
+    }
+  ],
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "automatic_retry": false,
+  "B_opened": false,
+  "registration": "/home/xhj/contractedge-diagnostic-source049-v2-20261026/registration.json",
+  "active_case": null,
+  "target_gate_passed": false
+}
