@@ -292,6 +292,7 @@ class SyntheticExampleProvider:
             for condition in payload['postconditions']:
                 suffix = {'P1': 'selected', 'P2': 'disabled', 'P3': 'stable'}[condition['id']]
                 condition.update(verification_kind='PUBLIC_BEHAVIOR',
+                    verification_scope={'scenario': 'selected-and-preservation'},
                     behavior_check_refs=['contractedge-public-process-v1:' + suffix],
                     check_coverage='ALL_OF',
                     coverage_rationale='This postcondition is restricted to its published finite process-output predicate; it makes no hidden or internal-state claim.')

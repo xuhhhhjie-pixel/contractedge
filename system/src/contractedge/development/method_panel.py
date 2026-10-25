@@ -105,6 +105,7 @@ class PanelProvider:
                 'check_scope': 'Finite public candidate process outputs.',
                 'verification_kind': 'PUBLIC_BEHAVIOR',
                 'behavior_check_refs': [PROBE_ID + ':' + check['id']],
+                'verification_scope': {'scenario': 'public-requirement-panel'},
                 'check_coverage': 'ALL_OF',
                 'coverage_rationale': 'This authored condition is restricted to its exact finite public predicate.'}
                 for index, check in enumerate(self.case['checks'])]

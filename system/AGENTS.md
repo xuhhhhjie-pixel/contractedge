@@ -1,9 +1,11 @@
-> 当前交付候选源码0.6.44，运行目录仍保留0.6.40。当前冻结由CURRENT_STATUS.json选择；原46槽及G0—G6尚未完成，不继承旧版成绩。详见outputs/source-build-recovery-20261025/COMPLETION_AUDIT.md。
+> 当前协议修复进度见[0.6.45审计](outputs/public-check-protocol-20261025/COMPLETION_AUDIT.md)；0.6.44历史成绩保留原口径。
+
+> 当前交付候选源码0.6.45，运行目录仍保留0.6.40。当前冻结由CURRENT_STATUS.json选择；原46槽及G0—G6尚未完成，不继承旧版成绩。详见outputs/source-build-recovery-20261025/COMPLETION_AUDIT.md。
 
 # ContractEdge system handoff
 
 Read README.md and docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md first.
-This isolated delivery worktree source is 0.6.44; formal_ready=false. The separately preserved runtime /home/xhj/contractedge-system remains 0.6.40 until qualification. Historical reports contain superseded status; CURRENT_STATUS.json and the handoff plan identify the current failed gate.
+This isolated delivery worktree source is 0.6.45; formal_ready=false. The separately preserved runtime /home/xhj/contractedge-system remains 0.6.40 until qualification. Historical reports contain superseded status; CURRENT_STATUS.json and the handoff plan identify the current failed gate.
 Preserve benchmark/ and tools/ in the repository root. Do not put credentials, hidden graders, GT/Fixed, runtime workspaces or caches into model context or Git.
 Use saved public failure replay before behavior changes; verify actual final serialized requests across diagnosis, plan, execution and re-diagnosis. Re-read the current snapshot after edits.
 Run python scripts/test_portable.py for the self-contained development subset; report explicitly that six historical/native modules are excluded. Full tests require the documented external fixtures. Never call subset results a full 662-test reproduction.

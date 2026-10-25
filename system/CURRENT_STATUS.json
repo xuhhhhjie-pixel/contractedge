@@ -19,7 +19,7 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.44",
+  "implementation_version": "0.6.45",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
@@ -3292,17 +3292,17 @@
     }
   },
   "current_development": {
-    "snapshot": "docs/development/native-continuation-recovery-20261025-v044-doc-r2.snapshot.json",
-    "snapshot_id": "native-continuation-recovery-20261025-v044-doc-r2",
+    "snapshot": "docs/development/public-check-protocol-20261025-v045.snapshot.json",
+    "snapshot_id": "public-check-protocol-20261025-v045",
     "snapshot_role": "CURRENT_FROZEN_DEVELOPMENT",
-    "status": "ENGINEERING_PASS_RW_ORIGINAL_PASS_INTERRUPTED_ALERT_CANDIDATE_AUDIT_PASS",
+    "status": "FULL_REGRESSION_PASS_RUNTIME_ACCEPTANCE_PENDING",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "NOT_ACCEPTED",
-    "source_sha256": "b8e46f43a53387f62b6b343de2edf8bf21424eb9423586c35f56ee5f06f8926b"
+    "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df"
   },
-  "staged_implementation_version": "0.6.44",
+  "staged_implementation_version": "0.6.45",
   "runtime_implementation_version": "0.6.40",
-  "current_optimization_audit": "outputs/source-build-recovery-20261025/COMPLETION_AUDIT.md",
+  "current_optimization_audit": "outputs/public-check-protocol-20261025/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {
     "status": "INTERRUPTED_PUBLIC_OBSERVATION_NO_FINAL_METHOD_RESULT",
     "model_calls_completed": 4,

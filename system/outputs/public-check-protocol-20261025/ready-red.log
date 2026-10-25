@@ -1,0 +1,364 @@
+FFFFFFFFFF                                                               [100%]
+=================================== FAILURES ===================================
+__ test_ready_and_revision_reject_current_check_contract_drift[ready-removed] __
+
+ready_context = (<tests.test_feedback_context.FeedbackContextTests testMethod=runTest>, {'registered_public_checks': {'schema_version'...table mode.', 'scenario': 'selected-and-preservation', 'scenario_members': ['selected', 'disabled', 'stable'], ...}]}})
+mutation = 'removed', entry = 'ready'
+
+    @pytest.mark.parametrize('mutation', ['removed', 'scenario', 'members', 'observer', 'statement'])
+    @pytest.mark.parametrize('entry', ['ready', 'revision'])
+    def test_ready_and_revision_reject_current_check_contract_drift(ready_context, mutation, entry):
+        from contractedge.orchestration.repair import validate_ready_trace, revise_plan
+        fixture, original = ready_context
+        method = parse_method_input(fixture.method)
+        validate_ready_trace(fixture.trace, method, fixture.source, capabilities=original)
+        current = copy.deepcopy(original)
+        registry = current['registered_public_checks']
+        if mutation == 'removed': registry['checks'].pop(0)
+        if mutation == 'scenario': registry['checks'][0]['scenario'] = 'other'
+        if mutation == 'members': registry['checks'][0]['scenario_members'] = ['disabled']
+        if mutation == 'observer': registry['observer_sha256'] = 'f'*64
+        if mutation == 'statement': registry['checks'][0]['statement'] = 'A different public predicate'
+        class NeverCall:
+            def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+>       with pytest.raises(ValueError, match='public check'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_registered_check_protocol.py:160: Failed
+_ test_ready_and_revision_reject_current_check_contract_drift[ready-scenario] __
+
+ready_context = (<tests.test_feedback_context.FeedbackContextTests testMethod=runTest>, {'registered_public_checks': {'schema_version'...table mode.', 'scenario': 'selected-and-preservation', 'scenario_members': ['selected', 'disabled', 'stable'], ...}]}})
+mutation = 'scenario', entry = 'ready'
+
+    @pytest.mark.parametrize('mutation', ['removed', 'scenario', 'members', 'observer', 'statement'])
+    @pytest.mark.parametrize('entry', ['ready', 'revision'])
+    def test_ready_and_revision_reject_current_check_contract_drift(ready_context, mutation, entry):
+        from contractedge.orchestration.repair import validate_ready_trace, revise_plan
+        fixture, original = ready_context
+        method = parse_method_input(fixture.method)
+        validate_ready_trace(fixture.trace, method, fixture.source, capabilities=original)
+        current = copy.deepcopy(original)
+        registry = current['registered_public_checks']
+        if mutation == 'removed': registry['checks'].pop(0)
+        if mutation == 'scenario': registry['checks'][0]['scenario'] = 'other'
+        if mutation == 'members': registry['checks'][0]['scenario_members'] = ['disabled']
+        if mutation == 'observer': registry['observer_sha256'] = 'f'*64
+        if mutation == 'statement': registry['checks'][0]['statement'] = 'A different public predicate'
+        class NeverCall:
+            def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+>       with pytest.raises(ValueError, match='public check'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_registered_check_protocol.py:160: Failed
+__ test_ready_and_revision_reject_current_check_contract_drift[ready-members] __
+
+ready_context = (<tests.test_feedback_context.FeedbackContextTests testMethod=runTest>, {'registered_public_checks': {'schema_version'...table mode.', 'scenario': 'selected-and-preservation', 'scenario_members': ['selected', 'disabled', 'stable'], ...}]}})
+mutation = 'members', entry = 'ready'
+
+    @pytest.mark.parametrize('mutation', ['removed', 'scenario', 'members', 'observer', 'statement'])
+    @pytest.mark.parametrize('entry', ['ready', 'revision'])
+    def test_ready_and_revision_reject_current_check_contract_drift(ready_context, mutation, entry):
+        from contractedge.orchestration.repair import validate_ready_trace, revise_plan
+        fixture, original = ready_context
+        method = parse_method_input(fixture.method)
+        validate_ready_trace(fixture.trace, method, fixture.source, capabilities=original)
+        current = copy.deepcopy(original)
+        registry = current['registered_public_checks']
+        if mutation == 'removed': registry['checks'].pop(0)
+        if mutation == 'scenario': registry['checks'][0]['scenario'] = 'other'
+        if mutation == 'members': registry['checks'][0]['scenario_members'] = ['disabled']
+        if mutation == 'observer': registry['observer_sha256'] = 'f'*64
+        if mutation == 'statement': registry['checks'][0]['statement'] = 'A different public predicate'
+        class NeverCall:
+            def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+>       with pytest.raises(ValueError, match='public check'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_registered_check_protocol.py:160: Failed
+_ test_ready_and_revision_reject_current_check_contract_drift[ready-observer] __
+
+ready_context = (<tests.test_feedback_context.FeedbackContextTests testMethod=runTest>, {'registered_public_checks': {'schema_version'...table mode.', 'scenario': 'selected-and-preservation', 'scenario_members': ['selected', 'disabled', 'stable'], ...}]}})
+mutation = 'observer', entry = 'ready'
+
+    @pytest.mark.parametrize('mutation', ['removed', 'scenario', 'members', 'observer', 'statement'])
+    @pytest.mark.parametrize('entry', ['ready', 'revision'])
+    def test_ready_and_revision_reject_current_check_contract_drift(ready_context, mutation, entry):
+        from contractedge.orchestration.repair import validate_ready_trace, revise_plan
+        fixture, original = ready_context
+        method = parse_method_input(fixture.method)
+        validate_ready_trace(fixture.trace, method, fixture.source, capabilities=original)
+        current = copy.deepcopy(original)
+        registry = current['registered_public_checks']
+        if mutation == 'removed': registry['checks'].pop(0)
+        if mutation == 'scenario': registry['checks'][0]['scenario'] = 'other'
+        if mutation == 'members': registry['checks'][0]['scenario_members'] = ['disabled']
+        if mutation == 'observer': registry['observer_sha256'] = 'f'*64
+        if mutation == 'statement': registry['checks'][0]['statement'] = 'A different public predicate'
+        class NeverCall:
+            def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+>       with pytest.raises(ValueError, match='public check'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_registered_check_protocol.py:160: Failed
+_ test_ready_and_revision_reject_current_check_contract_drift[ready-statement] _
+
+ready_context = (<tests.test_feedback_context.FeedbackContextTests testMethod=runTest>, {'registered_public_checks': {'schema_version'...table mode.', 'scenario': 'selected-and-preservation', 'scenario_members': ['selected', 'disabled', 'stable'], ...}]}})
+mutation = 'statement', entry = 'ready'
+
+    @pytest.mark.parametrize('mutation', ['removed', 'scenario', 'members', 'observer', 'statement'])
+    @pytest.mark.parametrize('entry', ['ready', 'revision'])
+    def test_ready_and_revision_reject_current_check_contract_drift(ready_context, mutation, entry):
+        from contractedge.orchestration.repair import validate_ready_trace, revise_plan
+        fixture, original = ready_context
+        method = parse_method_input(fixture.method)
+        validate_ready_trace(fixture.trace, method, fixture.source, capabilities=original)
+        current = copy.deepcopy(original)
+        registry = current['registered_public_checks']
+        if mutation == 'removed': registry['checks'].pop(0)
+        if mutation == 'scenario': registry['checks'][0]['scenario'] = 'other'
+        if mutation == 'members': registry['checks'][0]['scenario_members'] = ['disabled']
+        if mutation == 'observer': registry['observer_sha256'] = 'f'*64
+        if mutation == 'statement': registry['checks'][0]['statement'] = 'A different public predicate'
+        class NeverCall:
+            def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+>       with pytest.raises(ValueError, match='public check'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_registered_check_protocol.py:160: Failed
+_ test_ready_and_revision_reject_current_check_contract_drift[revision-removed] _
+
+ready_context = (<tests.test_feedback_context.FeedbackContextTests testMethod=runTest>, {'registered_public_checks': {'schema_version'...table mode.', 'scenario': 'selected-and-preservation', 'scenario_members': ['selected', 'disabled', 'stable'], ...}]}})
+mutation = 'removed', entry = 'revision'
+
+    @pytest.mark.parametrize('mutation', ['removed', 'scenario', 'members', 'observer', 'statement'])
+    @pytest.mark.parametrize('entry', ['ready', 'revision'])
+    def test_ready_and_revision_reject_current_check_contract_drift(ready_context, mutation, entry):
+        from contractedge.orchestration.repair import validate_ready_trace, revise_plan
+        fixture, original = ready_context
+        method = parse_method_input(fixture.method)
+        validate_ready_trace(fixture.trace, method, fixture.source, capabilities=original)
+        current = copy.deepcopy(original)
+        registry = current['registered_public_checks']
+        if mutation == 'removed': registry['checks'].pop(0)
+        if mutation == 'scenario': registry['checks'][0]['scenario'] = 'other'
+        if mutation == 'members': registry['checks'][0]['scenario_members'] = ['disabled']
+        if mutation == 'observer': registry['observer_sha256'] = 'f'*64
+        if mutation == 'statement': registry['checks'][0]['statement'] = 'A different public predicate'
+        class NeverCall:
+            def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+        with pytest.raises(ValueError, match='public check'):
+            if entry == 'ready':
+                validate_ready_trace(fixture.trace, method, fixture.source, capabilities=current)
+            else:
+>               revise_plan(fixture.trace, method, fixture.source, fixture.feedback, NeverCall(), len,
+                            {**fixture.config, 'public_execution_capabilities': current})
+
+tests/test_registered_check_protocol.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/orchestration/repair.py:185: in revise_plan
+    response = complete_quoted(provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_registered_check_protocol.test_ready_and_revision_reject_current_check_contract_drift.<locals>.NeverCall object at 0x7fe683b84700>
+request = ModelRequest(model='fixture', prompt_version='changeset.v1.1.14', messages=({'role': 'system', 'content': "Produce one...ength': 600}, 'search_term': {'type': 'string', 'maxLength': 600}}, 'additionalProperties': False}}}}}}, thinking=None)
+
+>   def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+E   AssertionError: Changed registry must be rejected before dispatch
+
+tests/test_registered_check_protocol.py:159: AssertionError
+_ test_ready_and_revision_reject_current_check_contract_drift[revision-scenario] _
+
+ready_context = (<tests.test_feedback_context.FeedbackContextTests testMethod=runTest>, {'registered_public_checks': {'schema_version'...table mode.', 'scenario': 'selected-and-preservation', 'scenario_members': ['selected', 'disabled', 'stable'], ...}]}})
+mutation = 'scenario', entry = 'revision'
+
+    @pytest.mark.parametrize('mutation', ['removed', 'scenario', 'members', 'observer', 'statement'])
+    @pytest.mark.parametrize('entry', ['ready', 'revision'])
+    def test_ready_and_revision_reject_current_check_contract_drift(ready_context, mutation, entry):
+        from contractedge.orchestration.repair import validate_ready_trace, revise_plan
+        fixture, original = ready_context
+        method = parse_method_input(fixture.method)
+        validate_ready_trace(fixture.trace, method, fixture.source, capabilities=original)
+        current = copy.deepcopy(original)
+        registry = current['registered_public_checks']
+        if mutation == 'removed': registry['checks'].pop(0)
+        if mutation == 'scenario': registry['checks'][0]['scenario'] = 'other'
+        if mutation == 'members': registry['checks'][0]['scenario_members'] = ['disabled']
+        if mutation == 'observer': registry['observer_sha256'] = 'f'*64
+        if mutation == 'statement': registry['checks'][0]['statement'] = 'A different public predicate'
+        class NeverCall:
+            def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+        with pytest.raises(ValueError, match='public check'):
+            if entry == 'ready':
+                validate_ready_trace(fixture.trace, method, fixture.source, capabilities=current)
+            else:
+>               revise_plan(fixture.trace, method, fixture.source, fixture.feedback, NeverCall(), len,
+                            {**fixture.config, 'public_execution_capabilities': current})
+
+tests/test_registered_check_protocol.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/orchestration/repair.py:185: in revise_plan
+    response = complete_quoted(provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_registered_check_protocol.test_ready_and_revision_reject_current_check_contract_drift.<locals>.NeverCall object at 0x7fe683b80e80>
+request = ModelRequest(model='fixture', prompt_version='changeset.v1.1.14', messages=({'role': 'system', 'content': "Produce one...ength': 600}, 'search_term': {'type': 'string', 'maxLength': 600}}, 'additionalProperties': False}}}}}}, thinking=None)
+
+>   def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+E   AssertionError: Changed registry must be rejected before dispatch
+
+tests/test_registered_check_protocol.py:159: AssertionError
+_ test_ready_and_revision_reject_current_check_contract_drift[revision-members] _
+
+ready_context = (<tests.test_feedback_context.FeedbackContextTests testMethod=runTest>, {'registered_public_checks': {'schema_version'...table mode.', 'scenario': 'selected-and-preservation', 'scenario_members': ['selected', 'disabled', 'stable'], ...}]}})
+mutation = 'members', entry = 'revision'
+
+    @pytest.mark.parametrize('mutation', ['removed', 'scenario', 'members', 'observer', 'statement'])
+    @pytest.mark.parametrize('entry', ['ready', 'revision'])
+    def test_ready_and_revision_reject_current_check_contract_drift(ready_context, mutation, entry):
+        from contractedge.orchestration.repair import validate_ready_trace, revise_plan
+        fixture, original = ready_context
+        method = parse_method_input(fixture.method)
+        validate_ready_trace(fixture.trace, method, fixture.source, capabilities=original)
+        current = copy.deepcopy(original)
+        registry = current['registered_public_checks']
+        if mutation == 'removed': registry['checks'].pop(0)
+        if mutation == 'scenario': registry['checks'][0]['scenario'] = 'other'
+        if mutation == 'members': registry['checks'][0]['scenario_members'] = ['disabled']
+        if mutation == 'observer': registry['observer_sha256'] = 'f'*64
+        if mutation == 'statement': registry['checks'][0]['statement'] = 'A different public predicate'
+        class NeverCall:
+            def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+        with pytest.raises(ValueError, match='public check'):
+            if entry == 'ready':
+                validate_ready_trace(fixture.trace, method, fixture.source, capabilities=current)
+            else:
+>               revise_plan(fixture.trace, method, fixture.source, fixture.feedback, NeverCall(), len,
+                            {**fixture.config, 'public_execution_capabilities': current})
+
+tests/test_registered_check_protocol.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/orchestration/repair.py:185: in revise_plan
+    response = complete_quoted(provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_registered_check_protocol.test_ready_and_revision_reject_current_check_contract_drift.<locals>.NeverCall object at 0x7fe683c48340>
+request = ModelRequest(model='fixture', prompt_version='changeset.v1.1.14', messages=({'role': 'system', 'content': "Produce one...ength': 600}, 'search_term': {'type': 'string', 'maxLength': 600}}, 'additionalProperties': False}}}}}}, thinking=None)
+
+>   def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+E   AssertionError: Changed registry must be rejected before dispatch
+
+tests/test_registered_check_protocol.py:159: AssertionError
+_ test_ready_and_revision_reject_current_check_contract_drift[revision-observer] _
+
+ready_context = (<tests.test_feedback_context.FeedbackContextTests testMethod=runTest>, {'registered_public_checks': {'schema_version'...table mode.', 'scenario': 'selected-and-preservation', 'scenario_members': ['selected', 'disabled', 'stable'], ...}]}})
+mutation = 'observer', entry = 'revision'
+
+    @pytest.mark.parametrize('mutation', ['removed', 'scenario', 'members', 'observer', 'statement'])
+    @pytest.mark.parametrize('entry', ['ready', 'revision'])
+    def test_ready_and_revision_reject_current_check_contract_drift(ready_context, mutation, entry):
+        from contractedge.orchestration.repair import validate_ready_trace, revise_plan
+        fixture, original = ready_context
+        method = parse_method_input(fixture.method)
+        validate_ready_trace(fixture.trace, method, fixture.source, capabilities=original)
+        current = copy.deepcopy(original)
+        registry = current['registered_public_checks']
+        if mutation == 'removed': registry['checks'].pop(0)
+        if mutation == 'scenario': registry['checks'][0]['scenario'] = 'other'
+        if mutation == 'members': registry['checks'][0]['scenario_members'] = ['disabled']
+        if mutation == 'observer': registry['observer_sha256'] = 'f'*64
+        if mutation == 'statement': registry['checks'][0]['statement'] = 'A different public predicate'
+        class NeverCall:
+            def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+        with pytest.raises(ValueError, match='public check'):
+            if entry == 'ready':
+                validate_ready_trace(fixture.trace, method, fixture.source, capabilities=current)
+            else:
+>               revise_plan(fixture.trace, method, fixture.source, fixture.feedback, NeverCall(), len,
+                            {**fixture.config, 'public_execution_capabilities': current})
+
+tests/test_registered_check_protocol.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/orchestration/repair.py:185: in revise_plan
+    response = complete_quoted(provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_registered_check_protocol.test_ready_and_revision_reject_current_check_contract_drift.<locals>.NeverCall object at 0x7fe683a2ab60>
+request = ModelRequest(model='fixture', prompt_version='changeset.v1.1.14', messages=({'role': 'system', 'content': "Produce one...ength': 600}, 'search_term': {'type': 'string', 'maxLength': 600}}, 'additionalProperties': False}}}}}}, thinking=None)
+
+>   def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+E   AssertionError: Changed registry must be rejected before dispatch
+
+tests/test_registered_check_protocol.py:159: AssertionError
+_ test_ready_and_revision_reject_current_check_contract_drift[revision-statement] _
+
+ready_context = (<tests.test_feedback_context.FeedbackContextTests testMethod=runTest>, {'registered_public_checks': {'schema_version'...table mode.', 'scenario': 'selected-and-preservation', 'scenario_members': ['selected', 'disabled', 'stable'], ...}]}})
+mutation = 'statement', entry = 'revision'
+
+    @pytest.mark.parametrize('mutation', ['removed', 'scenario', 'members', 'observer', 'statement'])
+    @pytest.mark.parametrize('entry', ['ready', 'revision'])
+    def test_ready_and_revision_reject_current_check_contract_drift(ready_context, mutation, entry):
+        from contractedge.orchestration.repair import validate_ready_trace, revise_plan
+        fixture, original = ready_context
+        method = parse_method_input(fixture.method)
+        validate_ready_trace(fixture.trace, method, fixture.source, capabilities=original)
+        current = copy.deepcopy(original)
+        registry = current['registered_public_checks']
+        if mutation == 'removed': registry['checks'].pop(0)
+        if mutation == 'scenario': registry['checks'][0]['scenario'] = 'other'
+        if mutation == 'members': registry['checks'][0]['scenario_members'] = ['disabled']
+        if mutation == 'observer': registry['observer_sha256'] = 'f'*64
+        if mutation == 'statement': registry['checks'][0]['statement'] = 'A different public predicate'
+        class NeverCall:
+            def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+        with pytest.raises(ValueError, match='public check'):
+            if entry == 'ready':
+                validate_ready_trace(fixture.trace, method, fixture.source, capabilities=current)
+            else:
+>               revise_plan(fixture.trace, method, fixture.source, fixture.feedback, NeverCall(), len,
+                            {**fixture.config, 'public_execution_capabilities': current})
+
+tests/test_registered_check_protocol.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/orchestration/repair.py:185: in revise_plan
+    response = complete_quoted(provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_registered_check_protocol.test_ready_and_revision_reject_current_check_contract_drift.<locals>.NeverCall object at 0x7fe684a86dd0>
+request = ModelRequest(model='fixture', prompt_version='changeset.v1.1.14', messages=({'role': 'system', 'content': "Produce one...ength': 600}, 'search_term': {'type': 'string', 'maxLength': 600}}, 'additionalProperties': False}}}}}}, thinking=None)
+
+>   def complete_json(self, request): raise AssertionError('Changed registry must be rejected before dispatch')
+E   AssertionError: Changed registry must be rejected before dispatch
+
+tests/test_registered_check_protocol.py:159: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[ready-removed]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[ready-scenario]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[ready-members]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[ready-observer]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[ready-statement]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[revision-removed]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[revision-scenario]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[revision-members]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[revision-observer]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[revision-statement]
+10 failed, 25 deselected in 1.91s

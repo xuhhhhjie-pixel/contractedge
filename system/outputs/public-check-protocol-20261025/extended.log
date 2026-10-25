@@ -1,0 +1,49 @@
+.......................F........                                         [100%]
+=================================== FAILURES ===================================
+____ test_bound_failure_reaches_feedback_without_a_model_inventing_a_reason ____
+
+    def test_bound_failure_reaches_feedback_without_a_model_inventing_a_reason():
+        from contractedge.execution.review import ModelPublicReviewer
+        from contractedge.orchestration.feedback import make_feedback
+        case = observer_tests.RequiredPublicProfileTests(); case.setUp()
+        try: report = case.observation(selected='wrong')
+        finally: case.doCleanups()
+        class NoModel:
+            def complete_json(self, request): raise AssertionError('Bound failure must be aggregated')
+        plan = {'status': 'READY', 'changes': [{'id': 'C', 'postcondition_refs': ['P']}],
+                'postconditions': [predicate('contractedge-public-process-v1:selected')]}
+        review = ModelPublicReviewer(NoModel(), len, {'model': 'fixture'}).review('Finite output', plan, report)
+>       feedback = make_feedback(case_id='C', run_id='r', input_digest='a'*64, round_id=0,
+            from_snapshot='S0', to_snapshot=report['snapshot_id'], patch_digest='b'*64,
+            execution_status='EXECUTION_PASS', observations=report['observations'], plan=plan, review=review)
+
+tests/test_registered_check_protocol.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/orchestration/feedback.py:609: in make_feedback
+    return validate_feedback(payload, case_id=case_id, input_digest=input_digest, to_snapshot=to_snapshot)
+src/contractedge/orchestration/feedback.py:382: in validate_feedback
+    _check_schema(value, 'ce.execution_feedback.v1')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'schema_version': 'ce.execution_feedback.v1', 'case_id': 'C', 'run_id': 'r', 'input_digest': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', ...}
+version = 'ce.execution_feedback.v1'
+
+    def _check_schema(payload: Any, version: str) -> None:
+        schema = _load_schema(version)
+        errors = sorted(Draft202012Validator(schema).iter_errors(payload), key=lambda e: tuple(str(x) for x in e.absolute_path))
+        if errors:
+            error = errors[0]
+            path = ".".join(str(part) for part in error.absolute_path)
+            additional = ["SCHEMA_INVALID at " + '.'.join(map(str, e.absolute_path)) + ': ' + e.message[:220]
+                          for e in errors[1:12]]
+            pointer_hint = ('; ' + JSON_POINTER_GUIDANCE if any(
+                e.validator == 'pattern' and list(e.absolute_path)[-1:] in [['input_pointer'], ['output_pointer']]
+                for e in errors) else '')
+>           raise ContractError("SCHEMA_INVALID", path, error.message + pointer_hint +
+                                ('; additional independent errors: ' + '; '.join(additional) if additional else ''))
+E           contractedge.contracts.models.ContractError: SCHEMA_INVALID at public_observations.0: Additional properties are not allowed ('scenario_members' was unexpected); additional independent errors: SCHEMA_INVALID at public_observations.1: Additional properties are not allowed ('scenario_members' was unexpected); SCHEMA_INVALID at public_observations.2: Additional properties are not allowed ('scenario_members' was unexpected)
+
+src/contractedge/contracts/validation.py:61: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_registered_check_protocol.py::test_bound_failure_reaches_feedback_without_a_model_inventing_a_reason
+1 failed, 31 passed in 1.15s

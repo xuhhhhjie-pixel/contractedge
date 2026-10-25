@@ -13,6 +13,7 @@ from contractedge.model.provider import ModelRequest
 from contractedge.model.schema import constrained_output_schema
 from contractedge.contracts.permissions import target_permission_error
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
+from contractedge.contracts.public_checks import public_check_catalog
 
 
 from contractedge.contracts.pointers import JSON_POINTER_GUIDANCE
@@ -110,7 +111,7 @@ def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = Non
     for kind in ['postconditions','preserve_constraints','open_obligations']:
         fields = properties[kind]['items']['properties']
         fields.pop('stable_obligation_keys',None)
-        if not raw.get('requirement_spec',{}).get('traceability_required'):
+        if not probe_ids and not raw.get('requirement_spec',{}).get('traceability_required'):
             fields.pop('check_coverage',None);fields.pop('coverage_rationale',None)
         if probe_ids and raw.get('requirement_spec',{}).get('traceability_required'):
             properties[kind]['items']['required'].extend(['check_coverage','coverage_rationale'])
@@ -176,7 +177,7 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
     capabilities = resolve_execution_capabilities(getattr(run_context, 'retrieval_config', {}).get('public_execution_capabilities'))
     policy = capabilities.get('editable_policy')
     frontier = getattr(run_context, 'retrieval_config', {}).get('production_path_frontier', [])
-    probe_ids = [p['id']+':'+cid for p in capabilities.get('method_behavior_probes',[]) for cid in p['checks']]
+    probe_ids = list(public_check_catalog(capabilities))
     editable_targets = {path: ids for path, ids in _unit_ids_by_source_path(diagnosis.raw).items()
                         if target_permission_error(path, policy) is None}
     user_payload = {
@@ -228,6 +229,14 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
             'This is prerequisite accountability, not a static proof that the proposed code or synchronization is correct.')
     if probe_ids:
         system_prompt += " Registered method_behavior_probes are additional public method-owned observations, not frozen independent scorers. For obligations actually covered by these probe assertions choose PUBLIC_BEHAVIOR, set verification_scope.scenario to the registered method scenario and predeclare all necessary behavior_check_refs. Missing, failed or unrelated check results cannot establish PASS. Respect each probe boundary; do not infer external runtime coverage from local stand-ins."
+    if capabilities.get('registered_public_checks'):
+        system_prompt += (' registered_public_checks also declare available public observations. For each binding '
+            'copy its exact registered check ID and scenario into behavior_check_refs and verification_scope.scenario. '
+            'scenario_members limits the finite inputs covered by that predicate; it is not a different execution scenario. '
+            'Checks may share a suite scenario while asserting different predicates. Do not infer scenario from a check ID, '
+            'or bind unrelated checks. Declare check_coverage and coverage_rationale for every bound obligation. '
+            'ALL_OF applies only to a concrete predicate fully covered by those checks; broader requirements retain '
+            'NECESSARY_ONLY or unresolved obligations. No binding or PASS is supplied on your behalf.')
     model = str(run_context.model_config.get("model", "UNCONFIGURED"))
     max_tokens = int(run_context.budget.get("max_output_tokens", 4096))
     output_schema = _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)
@@ -255,7 +264,8 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
                 'Return one complete SemanticChangeSet with every required field. Do not emit this revision wrapper.'),
             ensure_ascii=False, sort_keys=True)})
         draft_metadata = dict(previous_changeset_sha256=digest, previous_changeset_state=previous_attempt['state'])
-    return ModelRequest(model=model, prompt_version="changeset.v1.1.13" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.12",
+    return ModelRequest(model=model, prompt_version=("changeset.v1.1.14" if capabilities.get('registered_public_checks') else
+                        "changeset.v1.1.13" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.12"),
                         messages=messages,
                         max_output_tokens=max_tokens, temperature=0.0,
                         metadata={"run_id": run_context.run_id, "snapshot_id": run_context.snapshot_id,

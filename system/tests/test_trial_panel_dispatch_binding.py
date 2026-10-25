@@ -15,7 +15,7 @@ def panel():
 
 def calls(dialect):
     return [{'prompt_version': version} for version in [
-        'diagnosis.v1.1.24', 'changeset.v1.1.12',
+        'diagnosis.v1.1.24', 'changeset.v1.1.14',
         'topomen-source-execution.v1' if dialect == 'topomen-native'
         else 'modify-only-literal-execution.v1']]
 
@@ -28,11 +28,13 @@ def test_actual_current_fixture_dispatch_reaches_intended_fault_boundary(tmp_pat
     assert result['actual_prompt_versions'] == [item['prompt_version'] for item in calls(dialect)]
 
 
-@pytest.mark.parametrize('mutation', ['old-planner', 'reordered', 'extra-review', 'wrong-consumer'])
+@pytest.mark.parametrize('mutation', ['old-planner', 'pre-registry-planner', 'reordered', 'extra-review', 'wrong-consumer'])
 def test_dispatch_binding_still_rejects_stale_or_unexpected_calls(tmp_path, mutation):
     actual = calls('topomen-native')
     if mutation == 'old-planner':
         actual[1]['prompt_version'] = 'changeset.v1.1.10'
+    elif mutation == 'pre-registry-planner':
+        actual[1]['prompt_version'] = 'changeset.v1.1.12'
     elif mutation == 'reordered':
         actual[0], actual[1] = actual[1], actual[0]
     elif mutation == 'extra-review':
