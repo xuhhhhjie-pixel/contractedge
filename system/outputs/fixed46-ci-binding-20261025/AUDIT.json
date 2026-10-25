@@ -1,0 +1,42 @@
+{
+  "as_of_utc": "2026-10-25T04:46:25.326176+00:00",
+  "upstream_ci_failure": "https://github.com/xuhhhhjie-pixel/contractedge/actions/runs/40162130939/job/121075708554",
+  "cause": "Workflow selected stale v044 source binding against unchanged v045 code; strict binding rejection at pyproject.toml",
+  "new_binding": "configs/trial-isolation-acceptance-v045-fixed46.example.json",
+  "new_binding_sha256": "6d6950ab5913e268f7581f8aa6226a98b3f7431ef23ab810115160d21b19890d",
+  "actual_eight_status": "PASS",
+  "actual_eight_summary_sha256": "2c7e885c5becc1c722611da9c60de579a08139e2b55af9788b88a2a2804a947c",
+  "scope": "Exact current binding, 8 cells,14 sessions,28 actual containers; zero model HTTP. Not fixed46 efficacy. Active paid cohort in separate original worktree remains untouched.",
+  "portable_status": "PASS",
+  "formal_ready": false,
+  "portable_passed": 1734,
+  "portable_subtests_passed": 86,
+  "portable_exclusions": [
+    "test_ready_support_consistency.py",
+    "test_probe_profiles_v2.py",
+    "test_compact_render_inventory.py",
+    "test_diagnosis_error_aggregation.py",
+    "test_structured_observation_adapters.py",
+    "test_topomen_agent.py"
+  ],
+  "github_new_commit_status": "PENDING_REVALIDATION",
+  "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df",
+  "github_first_revalidation": {
+    "run": 40163174437,
+    "status": "FAIL",
+    "source_binding_and_real_recovery": "PASS",
+    "portable": {
+      "passed": 1732,
+      "subtests_passed": 86,
+      "failed": 2,
+      "reason": "Required bwrap binary absent on runner; strict namespace tests refuse fallback"
+    }
+  },
+  "next_fix": "Pinned ubuntu-26.04 hosted runtime, explicit bubblewrap installation, exact method namespace admission before full panels; no host fallback or global sysctl changes",
+  "github_bwrap_revalidation": {
+    "run": 40163839636,
+    "status": "FAIL",
+    "real_recovery_binding": "PASS",
+    "remaining_failure": "Actual bwrap network namespace startup: loopback RTM_NEWADDR EPERM; no candidate command executed in two tests"
+  }
+}
