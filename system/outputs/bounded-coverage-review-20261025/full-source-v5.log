@@ -1,0 +1,56 @@
+....................................................... [  3%]
+........................................................................ [  6%]
+........................................................................ [ 10%]
+..................................................................... [ 14%]
+........................................................................ [ 18%]
+................................................................. [ 22%]
+....................................................... [ 25%]
+..................................................................... [ 28%]
+........................................................................ [ 32%]
+........................................................................ [ 36%]
+........................................................................ [ 40%]
+........................................................................ [ 44%]
+...................................................................... [ 48%]
+........................................................................ [ 52%]
+............................F........................................... [ 56%]
+........................................................................ [ 60%]
+...................................................................................................................................... [ 67%]
+........................................................................ [ 71%]
+............................................................. [ 74%]
+....................................................... [ 77%]
+........................................................................ [ 81%]
+...................................................................... [ 85%]
+........................................................................ [ 89%]
+........................................................................ [ 93%]
+...................................................................... [ 97%]
+...................................................                      [100%]
+=================================== FAILURES ===================================
+_ BoundedExtractionTests.test_evidence_gap_search_adds_only_query_matching_direct_neighbor _
+
+self = <tests.test_parsers.BoundedExtractionTests testMethod=test_evidence_gap_search_adds_only_query_matching_direct_neighbor>
+
+    def test_evidence_gap_search_adds_only_query_matching_direct_neighbor(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "controller.go").write_text(
+                "package p\nfunc Reconcile() { ensureService() }\n", encoding="utf-8")
+            (root / "service.go").write_text(
+                "package p\nfunc ensureService() { buildService() }\n", encoding="utf-8")
+            (root / "unrelated.go").write_text(
+                "package p\nfunc reconcileDatabase() { migrate() }\n", encoding="utf-8")
+            snapshot = Snapshot("snap-gap", str(root), {
+                "controller.go": "a" * 64, "service.go": "b" * 64, "unrelated.go": "c" * 64})
+            seed = extract_units(snapshot, {"seed_paths": ("controller.go",)}, max_extension_files=0)
+    
+            extension, audit = extract_gap_extension_units(snapshot, ("controller.go",), seed, [
+                {"id": "G1", "summary": "Inspect the ensureService implementation", "locator_hint": {"symbol": "ensureService"}}
+            ])
+    
+>       self.assertEqual({unit["path"] for unit in extension}, {"service.go"})
+E       AssertionError: Items in the second set but not the first:
+E       'service.go'
+
+tests/test_parsers.py:191: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_parsers.py::BoundedExtractionTests::test_evidence_gap_search_adds_only_query_matching_direct_neighbor
+1 failed, 1831 passed, 91 subtests passed in 457.32s (0:07:37)

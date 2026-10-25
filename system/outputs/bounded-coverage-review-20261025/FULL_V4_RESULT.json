@@ -1,0 +1,15 @@
+{
+  "status": "FAIL",
+  "passed": 1817,
+  "subtests": 91,
+  "failed": 1,
+  "failing_tests": [
+    "tests/test_required_extension_selection.py::test_deduplicated_location_requires_the_actual_catalog_identity"
+  ],
+  "log": "full-source-v4.log",
+  "snapshot": "docs/development/bounded-source-delivery-v046-20261025-v4.snapshot.json",
+  "scope": "Complete pytest with actual Docker demos and explicit vendored TopoMen source; no model calls",
+  "failure_fix": "Equal completeness/length must keep newly supplied canonical identity; focused76 test run passed after fix. Full new revision pending.",
+  "post_full_verifier": "The saved post-full verifier ran after adding the new import-negative test and therefore reports a fixture hash mismatch; do not claim post-full no-drift PASS.",
+  "formal_ready": false
+}

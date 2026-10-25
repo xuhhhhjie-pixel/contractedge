@@ -1,0 +1,36 @@
+{
+  "status": "DIAGNOSIS_DELIVERY_VERIFIED_ZERO_CALL",
+  "source_sha256": "b5c5f9490893dd1366174e16abc16b464371d793b6d59bd03db6781e0b0d6fe6",
+  "freeze_sha256": "2c9a70eb14ddf96a6584e61dd980cc28fe4e75e838e6c5ca738eb096769e8c95",
+  "records": [
+    {
+      "capture": "v6-alert-diagnosis-capture",
+      "request_sha256": "ee116a393bc389e1c5267e481d1cfde4bf3b879898e85ce48f103d4bdb3b5fc4",
+      "prompt_version": "diagnosis.v1.1.26",
+      "evidence": {
+        "type Alerts interface": [
+          "SRC-CU-7b55e3104c9335ec"
+        ],
+        "func (d *Dispatcher) processAlert(": [
+          "SRC-CU-522017edd36e9f21"
+        ]
+      }
+    },
+    {
+      "capture": "v6-cert-diagnosis-capture",
+      "request_sha256": "173812b5ef6b05ba15ed375a66cb2a75b806857b4c2a9b9ba55ac602e6f63431",
+      "prompt_version": "diagnosis.v1.1.26",
+      "evidence": {
+        "func (c *controller) ProcessItem(": [
+          "SRC-CU-5c5caa728669d5fe",
+          "SRC-CU-7e4d235001260b67",
+          "SRC-CU-88a1ded120726e2b"
+        ]
+      }
+    }
+  ],
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "plan_and_execution": "NOT_VERIFIED_WITH_REAL_NEW_METHOD_OUTPUT",
+  "formal_ready": false
+}

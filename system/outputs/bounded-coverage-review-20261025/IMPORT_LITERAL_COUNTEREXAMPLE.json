@@ -1,0 +1,11 @@
+{
+  "status": "IMPORT_LITERAL_COUNTEREXAMPLE",
+  "external_import_should_remain_unresolved": true,
+  "incorrect_local_contract_found": true,
+  "delivered_paths": [
+    "bus/bus.go"
+  ],
+  "new_model_calls": 0,
+  "required_fix": "Read import specs only at actual import keyword positions in code, never inside comments or strings",
+  "formal_ready": false
+}

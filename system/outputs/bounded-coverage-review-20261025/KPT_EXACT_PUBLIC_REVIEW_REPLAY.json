@@ -1,0 +1,212 @@
+{
+  "scope": "Saved exact public-review input; no hidden evaluation or new model request. Not a new benchmark repair attempt.",
+  "case_id": "R3-KPT-4673",
+  "old_decision": "UNKNOWN",
+  "new_decision": "UNKNOWN",
+  "old_statuses": {
+    "P1": "PASS",
+    "P2": "PASS",
+    "preserve:PC-A1": "UNKNOWN",
+    "preserve:PC-A3": "UNKNOWN",
+    "preserve:PC-A4": "UNKNOWN",
+    "preserve:PC-A5": "UNKNOWN"
+  },
+  "new_statuses": {
+    "P1": "PASS",
+    "P2": "PASS",
+    "preserve:PC-A1": "UNKNOWN",
+    "preserve:PC-A3": "UNKNOWN",
+    "preserve:PC-A4": "UNKNOWN",
+    "preserve:PC-A5": "UNKNOWN"
+  },
+  "new_model_http_calls": 0,
+  "current_review_model_calls": 2,
+  "old_method": "0.6.45",
+  "candidate_role": "OFFLINE_ONLY_NOT_DEPLOYED",
+  "source_files": {
+    "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-f30e0215f0d113880a6411c5/R3-KPT-4673/rounds/0/front.trace.json": "25e7180dae0749cdbf5d76ab4cc1571381ef641d3bb1a425fb01be8752c97f8d",
+    "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-f30e0215f0d113880a6411c5/R3-KPT-4673/rounds/0/public-review-plan.json": "88f0c344bd3082b2197439282288427fee656f371bb16c5d4330873790136f24",
+    "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-f30e0215f0d113880a6411c5/R3-KPT-4673/rounds/0/public-observation.json": "6b3aa02048afa9ab5f0dbb969f02fcb9b1e24080ff6379eba9bfe3a19015b33d",
+    "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-f30e0215f0d113880a6411c5/R3-KPT-4673/rounds/0/public-review.json": "3685d82606091617b779b41117850ba4c3717112ea87623cac4a25348cda9b82"
+  },
+  "review_result": {
+    "checks": [
+      {
+        "id": "P1",
+        "status": "PASS",
+        "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+        "evidence": [
+          {
+            "observation_id": "OBS4",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/3/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS15",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/2/observed\",\"raw_source\":\"stdout\"}\n"
+          }
+        ],
+        "decision_method": "BOUND_CHECK_AGGREGATION"
+      },
+      {
+        "id": "P2",
+        "status": "PASS",
+        "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+        "evidence": [
+          {
+            "observation_id": "OBS5",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/12/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS18",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/11/observed\",\"raw_source\":\"stdout\"}\n"
+          }
+        ],
+        "decision_method": "BOUND_CHECK_AGGREGATION"
+      },
+      {
+        "id": "preserve:PC-A1",
+        "status": "UNKNOWN",
+        "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. Failure of any owner_binding check would disprove this preserved behavior in that scenario, but success of these four checks does not exhaust all possible pipelines.",
+        "evidence": [
+          {
+            "observation_id": "OBS15",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/2/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS18",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/11/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS21",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/22/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS24",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/31/observed\",\"raw_source\":\"stdout\"}\n"
+          }
+        ],
+        "decision_method": "BOUND_CHECK_AGGREGATION"
+      },
+      {
+        "id": "preserve:PC-A3",
+        "status": "UNKNOWN",
+        "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. Failed workload transformation or retention checks would disprove this preserved behavior in those mutator scenarios, but these checks do not exhaust all possible functions or pipelines.",
+        "evidence": [
+          {
+            "observation_id": "OBS16",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/8/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS22",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/28/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS25",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/37/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS28",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/6/observed\",\"raw_source\":\"stdout\"}\n"
+          }
+        ],
+        "decision_method": "BOUND_CHECK_AGGREGATION"
+      },
+      {
+        "id": "preserve:PC-A4",
+        "status": "UNKNOWN",
+        "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. Failed later-sees or later-transform checks would disprove this preserved behavior in those scenarios, but these checks do not exhaust all later-pipeline possibilities.",
+        "evidence": [
+          {
+            "observation_id": "OBS1",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\",\"settings\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/4/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS2",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"settings\",\"workload\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/24/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS3",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"settings\",\"workload\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/33/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS10",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/7/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS11",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/15/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS12",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/27/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS13",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/36/observed\",\"raw_source\":\"stdout\"}\n"
+          }
+        ],
+        "decision_method": "BOUND_CHECK_AGGREGATION"
+      },
+      {
+        "id": "preserve:PC-A5",
+        "status": "UNKNOWN",
+        "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. Failed resource-inventory or retained-resource checks would disprove this preserved final-package behavior in those scenarios, but these checks do not exhaust all render variants.",
+        "evidence": [
+          {
+            "observation_id": "OBS14",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/0/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS17",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/9/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS20",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/20/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS23",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/29/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS27",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/5/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS28",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/6/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS30",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/13/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS31",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/14/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS34",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/25/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS35",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/26/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS37",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/34/observed\",\"raw_source\":\"stdout\"}\n"
+          },
+          {
+            "observation_id": "OBS38",
+            "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/35/observed\",\"raw_source\":\"stdout\"}\n"
+          }
+        ],
+        "decision_method": "BOUND_CHECK_AGGREGATION"
+      }
+    ],
+    "failure_kind": "UNKNOWN",
+    "method": "BOUND_CHECK_AGGREGATION",
+    "decision": "UNKNOWN",
+    "independent_hidden_evaluation": false
+  }
+}

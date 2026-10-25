@@ -1,0 +1,32 @@
+{
+  "status": "FOCUSED_PASS_FULL_REGRESSION_NOT_RUN_FOR_THIS_DELTA",
+  "created_utc": "2026-10-25T15:10:21.646997+00:00",
+  "source_sha256": "6e2130d81f0da0b2cc8c0635638f9db6ca83c9f37ba9a3fd5abf33d58cd28c18",
+  "method_version": "0.6.46-offline",
+  "regression_tests_passed": 45,
+  "new_cases": 9,
+  "new_cases_before_fix": {
+    "failed": 5,
+    "passed": 4
+  },
+  "reports": [
+    "declaration-red.log",
+    "declaration-green.log",
+    "ALERT_DECLARATION_CAPTURE_SUMMARY.json"
+  ],
+  "source_delta": [
+    "execution/helper_context.py",
+    "retrieval/candidates.py"
+  ],
+  "mechanism": "Preserve exact declaration provenance while coalescing equivalent helper/parser excerpts, all required roles, stable wider evidence identity and lexical edges",
+  "limits_unchanged": {
+    "top_n": 12,
+    "gap_extensions": 1
+  },
+  "actual_replayed_diagnosis": "processAlert is now delivered in the third request; remaining provider/group lifetime gaps not resolved",
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "preceding_full_result": "1793+91 passed BEFORE declaration coalescing; not inherited for current source",
+  "new_full_freeze": "PENDING; current selected freezev3 is preceding frozen development",
+  "formal_ready": false
+}

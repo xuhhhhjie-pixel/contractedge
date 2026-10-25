@@ -1,0 +1,34 @@
+{
+  "status": "PRODUCTION_BODY_DELIVERED_CAPTURE_ONLY",
+  "before_after": [
+    {
+      "request": "outputs/bounded-coverage-review-20261025/certmanager-v4-boundary-replay/request.json",
+      "sha256": "47d0b8879e104328ea9890cdc81e3aedabee847aa1f07834fb3eaba7d50f92ab",
+      "controller_records": []
+    },
+    {
+      "request": "outputs/bounded-coverage-review-20261025/certmanager-query-repaired-replay/request.json",
+      "sha256": "0f9c247361d9f41c73c7d15bd50f25c0b83e694f4b841948f2c2e4a1afce2612",
+      "controller_records": [
+        {
+          "id": "SRC-CU-7e4d235001260b67",
+          "locator": {
+            "column_start": 1,
+            "end_line": 406,
+            "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+            "start_line": 175
+          },
+          "sha256": "21ddd173b93d18720a2ec13d3b7394f3f40add609075586ffbd38d9b7474a61d",
+          "bytes": 10170
+        }
+      ]
+    }
+  ],
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "formal_ready": false,
+  "remaining": [
+    "Real model diagnosis/plan/patch not tested",
+    "Cross-stage delivery and regression verification pending"
+  ]
+}

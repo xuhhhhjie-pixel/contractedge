@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from itertools import zip_longest
+import hashlib
 import re
 from typing import Any, Mapping
 
@@ -232,6 +233,15 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
         return [], {"inspected_files": 0, "matched_files": [], "candidate_count": 0,
                     "truncated_search": False, "queries": []}
 
+    # A precise public identifier is itself a bounded read locator. Requiring
+    # a pre-existing call edge first makes disconnected production consumers
+    # impossible to discover even when this scan already reads their files.
+    # Generic words/prose and path-specific gaps keep their existing scope.
+    precise_hints = [h for h in hints if h['kind'] in {'symbol', 'search_term'}
+        and not any(p['kind'] == 'path' and p['gap_id'] == h['gap_id'] for p in hints)
+        and len(h['value']) >= 12 and re.fullmatch(r'[A-Za-z_]\w*', h['value'])
+        and (re.search(r'[a-z][A-Z]', h['value']) or '_' in h['value'])]
+
     root = Path(snapshot.source_root).resolve()
     seed = set(seed_paths)
     anchors = [unit for unit in existing_units if str(unit.get("path", "")) in seed]
@@ -279,6 +289,7 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
     truncated_search = len(eligible_paths) > max_files
     for relative in eligible_paths[:max_files]:
         inspected += 1
+        if (root / relative).is_symlink():continue
         path = (root / relative).resolve()
         try:
             path.relative_to(root)
@@ -291,10 +302,20 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             if read_bytes + size > max_search_bytes:
                 byte_limit_hit = True
                 break
-            text = path.read_text(encoding="utf-8", errors="replace")
-            read_bytes += size
+            raw = path.read_bytes()
+            read_bytes += len(raw)
+            if read_bytes > max_search_bytes or len(raw) > max_file_bytes:
+                byte_limit_hit = True
+                break
+            if hashlib.sha256(raw).hexdigest() != snapshot.file_digests[relative]:
+                continue
+            text = raw.decode(encoding="utf-8", errors="replace")
         except (OSError, ValueError):
             continue
+        literal_hints = [h for h in precise_hints if relative not in seed and relative.endswith('.go') and re.search(
+            r'(?<![A-Za-z0-9_$])' + re.escape(h['value']) + r'(?![A-Za-z0-9_$])', text)]
+        if literal_hints:
+            exact_hints.setdefault(relative, []).extend(literal_hints)
         units = parse_source_units(relative, text, snapshot.snapshot_id,
                                    max_lines=max_lines, max_chars=max_chars)
         if relative in requested_paths and (relative in seed or exact_hints.get(relative)):
@@ -331,7 +352,6 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
         # the complete request budget remains authoritative.
         same_file_queries = exact_hints.get(relative, [])
         if max_declaration_lines > max_lines and same_file_queries and any(u.get('truncated') and u.get('kind') == 'FUNCTION_OR_TYPE' for u in units):
-            import hashlib
             wider = parse_source_units(relative, text, snapshot.snapshot_id,
                 max_lines=max(max_lines, max_declaration_lines), max_chars=max_chars)
             wide_by_start = {(u.get('symbol'), u['locator']['start_line']): u for u in wider}
@@ -414,17 +434,22 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             if key in existing_keys:
                 continue
             item = dict(unit)
+            direct = (set(map(str, unit.get('declared_symbols', ()))) & seed_references
+                      or set(map(str, unit.get('references', ()))) & seed_symbols)
             item["scope_extension"] = ("EVIDENCE_GAP_SEED_UNIT" if relative in seed else
                                        "EVIDENCE_GAP_DIRECTORY_PATH" if relative in directory_paths else
                                        "EVIDENCE_GAP_EXACT_PATH" if relative in requested_paths
+                                       else "EVIDENCE_GAP_PRECISE_IDENTIFIER" if not direct and any(h in literal_hints for h in matched_hints)
                                        else "EVIDENCE_GAP_DIRECT_NEIGHBOR")
+            if item['scope_extension'] == 'EVIDENCE_GAP_PRECISE_IDENTIFIER':
+                item['read_scope_basis'] = 'BOUNDED_PUBLIC_PRECISE_IDENTIFIER_TEXT_LOCATION'
+                item['association_status'] = 'EXACT_IDENTIFIER_TEXT_LOCATION; not a verified reference/causal edge, unique binding or edit grant'
             if item['scope_extension'] in {'EVIDENCE_GAP_EXACT_PATH', 'EVIDENCE_GAP_DIRECTORY_PATH'}:
                 item['read_scope_basis'] = ('BOUNDED_PUBLIC_DIRECTORY_AND_SAME_GAP_QUERY' if relative in directory_paths
                                             else 'EXACT_PUBLIC_SOURCE_PATH_AND_SAME_GAP_QUERY')
                 item['association_status'] = 'LOCATED_TEXT_ONLY; not a verified causal/reference edge or edit grant'
-            direct = (set(map(str, unit.get('declared_symbols', ()))) & seed_references
-                      or set(map(str, unit.get('references', ()))) & seed_symbols)
-            if unit['id'] in connected_query_ids and not direct and relative not in seed and relative not in requested_paths:
+            if (unit['id'] in connected_query_ids and not direct and relative not in seed
+                    and relative not in requested_paths and item['scope_extension'] != 'EVIDENCE_GAP_PRECISE_IDENTIFIER'):
                 item['scope_extension'] = 'EVIDENCE_GAP_CONNECTED_FILE_QUERY'
                 item['association_status'] = 'LEXICAL_CONNECTED_FILE_QUERY; not a verified causal edge or edit grant'
                 item['hop_distance'] = 2

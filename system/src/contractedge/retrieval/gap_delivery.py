@@ -10,6 +10,150 @@ from contractedge.retrieval.candidates import _terms, merge_gap_context_optional
 from contractedge.source.parsers import parse_source_units, _unit
 
 
+def _go_code(text, *, keep_strings=False):
+    pattern = r'"(?:\\.|[^"\\])*"|`[^`]*`|\'(?:\\.|[^\'\\])*\'|//[^\n]*|/\*[\s\S]*?\*/'
+    return re.sub(pattern, lambda m: m[0] if keep_strings and not m[0].startswith('/')
+                  else re.sub(r'[^\n]', ' ', m[0]), text)
+
+
+def _go_import_specs(text):
+    code, literals = _go_code(text), _go_code(text, keep_strings=True)
+    result = []
+    # Locate import keywords in code with strings/comments masked first;
+    # inspect literal paths only within those actual specification ranges.
+    for match in re.finditer(r'(?m)^[ \t]*import\b', code):
+        pos = match.end()
+        start = re.match(r'\s*', literals[pos:]).end() + pos
+        if start < len(code) and code[start] == '(':
+            end = code.find(')', start + 1)
+            if end < 0:continue
+            block = literals[start + 1:end]
+        else:
+            block = literals[start:].split('\n', 1)[0]
+        result.extend((alias or path.rsplit('/', 1)[-1], path)
+            for alias, path in re.findall(r'(?m)^[ \t]*(?:(\w+|[._])\s+)?"([^"\n]+)"[ \t]*;?[ \t]*$', block))
+    return result
+
+
+def _local_field_contracts(snapshot, gaps, output, scanned, used, limits, audit):
+    """Two explicit lexical links: receiver field type -> local interface.
+
+    No implementation selection, dispatch inference or automatic gap resolution.
+    Shares the caller's file/byte/role limits; incomplete package reads fail closed.
+    """
+    root = Path(snapshot.source_root).resolve()
+    inventory = snapshot.file_digests
+    max_files = limits.get('max_new_files', 4)
+    max_bytes = limits.get('max_bytes', 4 * 1024 * 1024)
+
+    def read(path):
+        nonlocal used
+        p = root / path
+        if (path not in inventory or p.is_symlink() or not p.is_file()
+                or not p.resolve().is_relative_to(root)):
+            raise ValueError('UNAVAILABLE')
+        if path not in scanned and len(scanned) >= max_files:
+            raise ValueError('FILE_BUDGET')
+        size = p.stat().st_size
+        if size > 1024 * 1024 or (path not in scanned and used + size > max_bytes):
+            raise ValueError('BYTE_BUDGET')
+        raw = p.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != inventory[path]:
+            raise ValueError('SNAPSHOT_MISMATCH')
+        if path not in scanned:
+            scanned[path] = raw.decode('utf-8', errors='replace')
+            used += len(raw)
+        return scanned[path]
+
+    module = root / 'go.mod'
+    if ('go.mod' not in inventory or module.is_symlink() or not module.is_file()
+            or module.stat().st_size > 64000):
+        return used
+    raw = module.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != inventory['go.mod']:
+        audit.append(dict(status='FIELD_CONTRACT_MODULE_SNAPSHOT_MISMATCH'))
+        return used
+    match = re.search(r'(?m)^module\s+(\S+)', raw.decode(errors='replace'))
+    if not match:
+        return used
+    local_module = match[1]
+    seen = set()
+    for endpoint in list(output):
+        receiver = re.match(r'\s*func\s*\(\s*(\w+)\s+\*?(\w+)\s*\)', endpoint['text'])
+        if not endpoint['path'].endswith('.go') or not receiver:
+            continue
+        calls = set(re.findall(r'\b' + re.escape(receiver[1]) + r'\.(\w+)\.(\w+)\s*\(',
+                               _go_code(endpoint['text'])))
+        for gap in gaps:
+            hint = gap.get('locator_hint', {})
+            if hint.get('path') != endpoint['path']:
+                continue
+            requested = set(re.findall(r'\b(\w+)\.(\w+)\b', hint.get('search_term', '')))
+            for field, method in sorted(calls & requested):
+                key = (endpoint['path'], receiver[2], field, method, gap['id'])
+                if key in seen:
+                    continue
+                seen.add(key)
+                record = dict(gap_id=gap['id'], endpoint_path=endpoint['path'],
+                              receiver_type=receiver[2], field=field, method=method)
+                try:
+                    if len(output) >= 6:
+                        raise ValueError('ROLE_BUDGET')
+                    # Both the caller and the owner declaration must still belong
+                    # to this snapshot. The scope index alone is never evidence.
+                    read(endpoint['path'])
+                    owners = [u for u in output if u.get('symbol') == receiver[2]
+                              and PurePosixPath(u['path']).parent == PurePosixPath(endpoint['path']).parent
+                              and 'SAME_PACKAGE_RECEIVER_DECLARATION' in u.get('association_status', '')]
+                    if len(owners) != 1:
+                        raise ValueError('OWNER_UNRESOLVED')
+                    owner_text = read(owners[0]['path'])
+                    types = [u for u in parse_source_units(owners[0]['path'], owner_text,
+                             snapshot.snapshot_id, max_lines=160, max_chars=12000)
+                             if u.get('symbol') == receiver[2] and not u.get('truncated')]
+                    if len(types) != 1:
+                        raise ValueError('OWNER_UNRESOLVED')
+                    fields = re.findall(r'(?m)^\s*' + re.escape(field) + r'\s+\*?(\w+)\.(\w+)\s*$',
+                                        _go_code(types[0]['text']))
+                    if len(fields) != 1:
+                        raise ValueError('FIELD_UNRESOLVED')
+                    alias, type_name = fields[0]
+                    imports = _go_import_specs(owner_text)
+                    packages = [p[len(local_module) + 1:] for a, p in imports
+                                if a == alias and a not in {'_', '.'} and p.startswith(local_module + '/')]
+                    if len(packages) != 1:
+                        raise ValueError('IMPORT_UNRESOLVED')
+                    paths = sorted(p for p in inventory if str(PurePosixPath(p).parent) == packages[0]
+                                   and p.endswith('.go') and not p.endswith('_test.go'))
+                    matches = []
+                    for path in paths:
+                        matches.extend(u for u in parse_source_units(path, read(path), snapshot.snapshot_id,
+                                       max_lines=160, max_chars=12000) if u.get('symbol') == type_name)
+                    if len(matches) != 1 or matches[0].get('truncated'):
+                        raise ValueError('TYPE_UNRESOLVED_OR_AMBIGUOUS')
+                    unit = matches[0]
+                    code = _go_code(unit['text'])
+                    if (not re.match(r'\s*type\s+' + re.escape(type_name) + r'\s+interface\s*\{', code)
+                            or not re.search(r'(?m)^\s*' + re.escape(method) + r'\s*\(', code)):
+                        raise ValueError('METHOD_NOT_DECLARED')
+                    item = {**unit, 'gap_role_keys': [gap['id'] + ':field_contract'],
+                            'evidence_gap_refs': [gap['id']], 'required_for_gap_delivery': True,
+                            'anchor_priority': 4, 'hop_distance': 2,
+                            'scope_extension': 'EXPLICIT_LOCAL_FIELD_CONTRACT',
+                            'association_status': 'EXPLICIT_FIELD_LOCAL_INTERFACE; lexical contract location, not implementation, readiness, causality or edit permission'}
+                    prior = next((u for u in output if u['id'] == item['id']), None)
+                    if prior is None:
+                        output.append(item)
+                    else:
+                        for name in ('gap_role_keys', 'evidence_gap_refs'):
+                            prior[name] = sorted(set(prior.get(name, [])) | set(item[name]))
+                        prior['required_for_gap_delivery'] = True
+                    audit.append(dict(record, status='FIELD_CONTRACT_FOUND', path=unit['path'], unit_id=unit['id']))
+                except (ValueError, OSError) as exc:
+                    audit.append(dict(record, status='FIELD_CONTRACT_' + (str(exc) if isinstance(exc, ValueError) else 'UNAVAILABLE')))
+    return used
+
+
 def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
     root=Path(snapshot.source_root).resolve(); inventory=snapshot.file_digests
     max_files=limits.get('max_new_files',4);max_bytes=limits.get('max_bytes',4*1024*1024)
@@ -160,6 +304,7 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
         if not any(u['id'] == item['id'] for u in output):
             output.append(item)
         audit.append(dict(record, unit_id=item['id'], status='FOUND', basis=item['association_status']))
+    used = _local_field_contracts(snapshot, gaps, output, scanned, used, limits, audit)
     # A reader such as x.Groups() may live behind x := localpkg.NewReader().
     # Follow only an explicit local import + constructor + requested method.
     # This is a lexical locator, not a dispatch/alias or causal proof.
@@ -263,7 +408,11 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
     # initial 80-line prefix may omit a callback or state replacement in its tail.
     restored_seeds=[]
     for path in dict.fromkeys(u['path'] for u in seeds if u.get('truncated')):
-        if len(scanned)>=max_files or path not in inventory:break
+        if path not in inventory:continue
+        if path in scanned:
+            restored_seeds.extend(parse_source_units(path,scanned[path],snapshot.snapshot_id,max_lines=768,max_chars=32000))
+            continue
+        if len(scanned)>=max_files:continue
         target=root/path
         if target.is_symlink() or target.stat().st_size>1024*1024 or used+target.stat().st_size>max_bytes:continue
         text=target.read_text(errors='replace');used+=len(text.encode());scanned[path]=text
@@ -285,6 +434,35 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
             item={**unit,'gap_role_keys':['CONNECTOR:'+unit['id']], 'anchor_priority':4,
                 'hop_distance':depth,'association_status':'LEXICAL_REFERENCE_HINT; no verified dispatch or causal edge'}
             output.append(item);frontier.append(item);seen.add(item['id'])
+    # Six reserved endpoints must not make a directly called local body
+    # disappear from the ordinary candidate pool. Reuse already read bytes,
+    # add at most two optional same-receiver declarations, and leave Top-N,
+    # token limits and the six preferred roles unchanged.
+    optional_count = 0
+    for endpoint in list(output):
+        if optional_count >= 2:break
+        if not any(role.endswith(':anchor') for role in endpoint.get('gap_role_keys', [])):continue
+        receiver = re.match(r'\s*func\s*\(\s*(\w+)\s+\*?(\w+)\s*\)', endpoint['text'])
+        path = endpoint['path']
+        if not receiver or path not in scanned:continue
+        names = list(dict.fromkeys(re.findall(r'\b' + re.escape(receiver[1]) + r'\.(\w+)\s*\(',
+                                              _go_code(endpoint['text']))))
+        declarations = parse_source_units(path, scanned[path], snapshot.snapshot_id,
+                                          max_lines=160, max_chars=12000)
+        for name in names:
+            if optional_count >= 2:break
+            matches = [u for u in declarations if u.get('symbol') == name
+                       and re.match(r'\s*func\s*\(\s*\w+\s+\*?' + re.escape(receiver[2]) + r'\s*\)', u['text'])]
+            if len(matches) != 1 or matches[0].get('truncated'):continue
+            unit = matches[0]
+            if any(u['path'] == path and u.get('symbol') == name and not u.get('truncated') for u in output):continue
+            output.append({**unit, 'evidence_gap_refs': list(endpoint.get('evidence_gap_refs', [])),
+                'same_receiver_callee_support': True,
+                'anchor_priority': 4, 'hop_distance': 1,
+                'scope_extension': 'ALREADY_READ_SAME_RECEIVER_CALLEE',
+                'association_status': 'EXPLICIT_SAME_RECEIVER_CALL; optional lexical support, not verified dispatch, readiness, causality or edit permission'})
+            optional_count += 1
+            audit.append(dict(path=path, symbol=name, unit_id=unit['id'], status='OPTIONAL_SAME_RECEIVER_CALLEE'))
     return output,dict(inspected_files=len(scanned),inspected_bytes=used,records=audit,
         role_basis='Task-specific requested endpoints plus bounded lexical connectors',
         truncated=len(scanned)>=max_files or used>=max_bytes)

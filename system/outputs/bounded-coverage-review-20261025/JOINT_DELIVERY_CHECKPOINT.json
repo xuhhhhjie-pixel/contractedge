@@ -1,0 +1,74 @@
+{
+  "status": "JOINT_DELIVERY_VERIFIED_CAPTURE_ONLY",
+  "selected_source": 12,
+  "records": {
+    "subscription_interface": [
+      {
+        "id": "SRC-CU-7b55e3104c9335ec",
+        "locator": {
+          "column_start": 1,
+          "end_line": 86,
+          "path": "provider/provider.go",
+          "start_line": 74
+        },
+        "sha256": "843ef15f565010f6b33b6e6568e8b48b62ed169ef143925849bf050676cc20eb"
+      }
+    ],
+    "processing_body": [
+      {
+        "id": "SRC-CU-522017edd36e9f21",
+        "locator": {
+          "column_start": 1,
+          "end_line": 396,
+          "path": "dispatch/dispatch.go",
+          "start_line": 340
+        },
+        "sha256": "516e376ed347e7a7a159f1049e06f738d87731d4473d700aed68665a9afd80b5"
+      }
+    ],
+    "state_read_body": [
+      {
+        "id": "SRC-CU-HELPER-bc10f713a675d94d",
+        "locator": {
+          "end_line": 314,
+          "path": "dispatch/dispatch.go",
+          "start_line": 250
+        },
+        "sha256": "bc10f713a675d94d79076c88b3742e2cc9856b107371eec5ccfd340655988ecd"
+      }
+    ],
+    "api_observer_body": [
+      {
+        "id": "SRC-CU-928113e3ed603e76",
+        "locator": {
+          "column_start": 1,
+          "end_line": 435,
+          "path": "api/v2/api.go",
+          "start_line": 375
+        },
+        "sha256": "e9c550ce2d1551abfdb83166375972ebc9d7b940f11cb88529cf4afd76c48d1d"
+      }
+    ],
+    "dispatch_start_body": [
+      {
+        "id": "SRC-CU-HELPER-c76cc3560e30e77d",
+        "locator": {
+          "end_line": 161,
+          "path": "dispatch/dispatch.go",
+          "start_line": 144
+        },
+        "sha256": "c76cc3560e30e77d5a52da462fbb9cef2b2e29a0397ebd9e6ae55bca62324799"
+      }
+    ]
+  },
+  "request_sha256": "21fbfed8f5b52eadcf26874eed7eaed0341df5bd0426067e68a8e4b1c9344e53",
+  "original_snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "remaining": [
+    "aggrGroup lifetime/ownership declaration not selected",
+    "Subscription interface alone does not establish concrete iterator replay completion",
+    "Live diagnosis, plan, execution and re-diagnosis not yet verified for this method"
+  ],
+  "formal_ready": false
+}

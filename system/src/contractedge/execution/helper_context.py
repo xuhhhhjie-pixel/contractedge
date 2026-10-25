@@ -140,7 +140,9 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
             result.append(record)
             audit.append({'id':record['id'],'path':path,'symbol':unit['symbol'],'result':'INCLUDED_READ_ONLY_HELPER',
                           'basis':'LOCAL_CONSTRUCTOR_ASYNC_RECEIVER' if rank<4 else 'DIRECT_LOCAL_IMPORT',
-                          'lifecycle_role':('ASYNC_ENTRY' if rank==0 else 'ASYNC_SUPPORT') if rank<4 else None})
+                          'lifecycle_role':('ASYNC_ENTRY' if rank==0 else 'ASYNC_SUPPORT') if rank<4 else None,
+                          'declaration_locator':dict(loc),
+                          'declaration_content_digest':hashlib.sha256(unit['text'].encode()).hexdigest()})
     return result, audit
 
 
@@ -185,6 +187,7 @@ def source_lifecycle_units(snapshot, selected, *, max_files=4, max_records=6):
     audit.extend(lookup)
     lifecycle_ids = {r['id'] for r in lookup if r.get('basis') == 'LOCAL_CONSTRUCTOR_ASYNC_RECEIVER'}
     entry_ids = {r['id'] for r in lookup if r.get('lifecycle_role') == 'ASYNC_ENTRY'}
+    declarations = {r['id']:r for r in lookup if r.get('declaration_locator')}
     units = []
     for record in records:
         if record['id'] not in lifecycle_ids:
@@ -199,6 +202,8 @@ def source_lifecycle_units(snapshot, selected, *, max_files=4, max_records=6):
             snapshot_id=snapshot.snapshot_id, content_digest=record['content_digest'], truncated=False,
             anchor_priority=4, gap_role_keys=['PUBLIC_LIFECYCLE:'+record['id']],
             required_for_gap_delivery=True, precondition_review_required=record['id'] in entry_ids,
+            declaration_locator=declarations[record['id']]['declaration_locator'],
+            declaration_content_digest=declarations[record['id']]['declaration_content_digest'],
             association_status=record['origin']))
     if not units:
         audit.append(dict(result='LIFECYCLE_EVIDENCE_UNRESOLVED', paths=sorted(targets)))

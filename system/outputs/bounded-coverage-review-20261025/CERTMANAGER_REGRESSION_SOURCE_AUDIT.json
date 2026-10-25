@@ -1,0 +1,49 @@
+{
+  "status": "REGRESSION_ROOT_CAUSE_INVESTIGATION",
+  "archive_sha256": "884a0d04adbc61933d0f5f80af9b2870050f3ae7bedfa2e032a38419de28776e",
+  "source_path": "pkg/controller/certificates/issuing/issuing_controller.go",
+  "source_sha256": "33cfb3ab055a4a168ea6db02bd9ea93f7450ede34b02cc7e14be1189ac7b9233",
+  "query_occurrences": [
+    127,
+    208,
+    209,
+    215
+  ],
+  "initial_queries": [
+    {
+      "id": "G1",
+      "summary": "No supplied source evidence locates the issuing controller code that compares CertificateRequest CSR with the current NextPrivateKey Secret.",
+      "locator_hint": {
+        "search_term": "NextPrivateKeySecretName"
+      }
+    },
+    {
+      "id": "G2",
+      "summary": "No supplied evidence shows stale CertificateRequest handling when the request was built from a replaced key, so non-failure of the current Certificate issuance remains unverified.",
+      "locator_hint": {
+        "search_term": "certificate-revision"
+      }
+    }
+  ],
+  "final_selected_paths": [
+    "pkg/controller/certificates/issuing/fuzz_test.go",
+    "internal/controller/certificates/policies/gatherer_test.go",
+    "pkg/controller/certificates/issuing/issuing_controller_test.go",
+    "pkg/controller/certificates/requestmanager/fuzz_test.go",
+    "test/integration/certificates/issuing_controller_test.go",
+    "internal/apis/certmanager/v1/zz_generated.conversion.go",
+    "pkg/controller/certificates/requestmanager/requestmanager_controller_test.go",
+    "internal/generated/openapi/zz_generated.openapi.go",
+    "pkg/controller/certificates/issuing/issuing_controller_test.go",
+    "test/integration/certificates/issuing_controller_test.go",
+    "pkg/controller/certificates/trigger/trigger_controller_test.go",
+    "test/integration/certificates/issuing_controller_test.go"
+  ],
+  "production_file_in_selected": false,
+  "method_result": "EVIDENCE_GAP",
+  "patch_bytes": 0,
+  "new_model_calls": 0,
+  "hidden_grader_contents_read": false,
+  "remaining": "Reproduce why bounded query-only extension rejects existing production declaration while returning test/generated matches; no corrective method change for this regression yet",
+  "formal_ready": false
+}

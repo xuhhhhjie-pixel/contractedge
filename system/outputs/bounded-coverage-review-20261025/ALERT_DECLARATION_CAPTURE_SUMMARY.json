@@ -1,0 +1,33 @@
+{
+  "created_utc": "2026-10-25T15:04:42.321336+00:00",
+  "status": "DELIVERY_IMPROVED_ZERO_CALL_CAPTURE_ONLY",
+  "original_snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "replayed_snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "original_selected": 12,
+  "replayed_selected": 12,
+  "old_processAlert": [],
+  "new_processAlert": [
+    {
+      "id": "SRC-CU-522017edd36e9f21",
+      "locator": {
+        "column_start": 1,
+        "end_line": 396,
+        "path": "dispatch/dispatch.go",
+        "start_line": 340
+      },
+      "content_digest": "516e376ed347e7a7a159f1049e06f738d87731d4473d700aed68665a9afd80b5"
+    }
+  ],
+  "request_sha256": "e7068cb57d1cc0f528d1ea5d3626f850f84e6bae2233f2a73563d11a478bcde1",
+  "original_calls_sha256": "8b75b470f4f9ed78eecbee937f4d98d48959c7e1ede61a1dd106b2239c150707",
+  "fixture_responses_used": 2,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "source_unchanged": true,
+  "remaining_gaps": [
+    "aggregation group ownership/lifetime definition not delivered",
+    "provider subscription interface/implementation not delivered"
+  ],
+  "formal_ready": false,
+  "scope": "Original first two public model responses replayed; intercepted third request before sending it. Intentional StopReplay was returned as fixture INFRASTRUCTURE_ERROR; not a real experiment result or repair success."
+}

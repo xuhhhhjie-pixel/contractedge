@@ -79,7 +79,8 @@ class ModelPublicReviewer:
         mechanical = [deterministic_check_result(c, observation['observations'], snapshot_id=observation.get('snapshot_id')) for c in checks]
         if all(mechanical):
             resolved=[{'id':c['id'],**r} for c,r in zip(checks,mechanical)]
-            return {'decision':'FAIL' if any(r['status']=='FAIL' for r in resolved) else 'PASS',
+            return {'decision':'FAIL' if any(r['status']=='FAIL' for r in resolved) else
+                    'PASS' if all(r['status']=='PASS' for r in resolved) else 'UNKNOWN',
                     'checks':resolved,'failure_kind':'UNKNOWN','method':'BOUND_CHECK_AGGREGATION',
                     'rationale':'Bound predicates aggregated deterministically; no causal attribution inferred.',
                     'independent_hidden_evaluation':False}

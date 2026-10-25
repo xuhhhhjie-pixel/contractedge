@@ -137,12 +137,22 @@ def deterministic_check_result(obligation, observations, *, snapshot_id):
     records = [o for o in observations if o.get('snapshot_id') == snapshot_id
                and o.get('behavior_check', {}).get('id') in bound and o.get('excerpt')]
     available = {o['behavior_check']['id']: o['behavior_check']['status'] for o in records}
-    status = ('FAIL' if any(available.get(k) == 'FAIL' for k in bound) else
-              'PASS' if coverage == 'ALL_OF' and bound <= available.keys()
-              and all(available[k] == 'PASS' for k in bound) else None)
-    if status is None:
+    if any(available.get(k) == 'FAIL' for k in bound):
+        status = 'FAIL'
+    elif bound <= available.keys() and all(available[k] == 'PASS' for k in bound):
+        status = 'PASS' if coverage == 'ALL_OF' else 'UNKNOWN'
+    else:
         return None
-    claim = {'status':status, 'rationale':'Deterministic aggregation of predeclared '+coverage+' check bindings; semantic coverage remains declared, not independently proven.',
+    if status == 'UNKNOWN':
+        rationale = ('All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. '
+                     + (obligation.get('coverage_rationale') or ''))
+    else:
+        rationale = ('Deterministic aggregation of predeclared '+coverage
+                     +' check bindings; semantic coverage remains declared, not independently proven.')
+    claim = {'status':status, 'rationale':rationale,
              'evidence':[{'observation_id':o['id'], 'quote':o['excerpt']} for o in records],
              'decision_method':'BOUND_CHECK_AGGREGATION'}
-    return claim if support_error(obligation,claim,records) is None else None
+    # The selected checks determine the finite predicate, but do not erase
+    # uncited operation facts from the same scope and snapshot. In particular,
+    # an otherwise positive check cannot hide a failed related operation.
+    return claim if support_error(obligation,claim,observations) is None else None

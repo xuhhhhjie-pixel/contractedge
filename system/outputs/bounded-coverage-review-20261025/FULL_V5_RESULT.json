@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "passed": 1831,
+  "subtests": 91,
+  "failed": 1,
+  "failed_test": "tests/test_parsers.py::BoundedExtractionTests::test_evidence_gap_search_adds_only_query_matching_direct_neighbor",
+  "log": "full-source-v5.log",
+  "post_full_freeze": "v5-after-full.json",
+  "root_cause": "Fixture uses fabricated source file hashes; current-snapshot reads correctly reject mismatched bytes. Replace fixture with compute_snapshot, retaining direct-neighbor assertions and separate stale-source rejection test.",
+  "formal_ready": false
+}

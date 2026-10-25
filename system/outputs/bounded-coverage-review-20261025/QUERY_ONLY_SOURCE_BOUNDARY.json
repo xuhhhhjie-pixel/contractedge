@@ -1,0 +1,46 @@
+{
+  "status": "GENERIC_QUERY_ONLY_BOUNDARY_REPRODUCED",
+  "query": "NextQueueTokenName",
+  "production_literal_present": true,
+  "query_only_found": false,
+  "same_query_with_exact_path_found": true,
+  "query_only_audit": {
+    "inspected_files": 1,
+    "matched_files": [],
+    "candidate_count": 0,
+    "truncated_search": false,
+    "inspected_bytes": 94,
+    "queries": [
+      {
+        "gap_id": "G1",
+        "kind": "search_term",
+        "value": "NextQueueTokenName"
+      }
+    ]
+  },
+  "exact_path_audit": {
+    "inspected_files": 1,
+    "matched_files": [
+      "controller.go"
+    ],
+    "candidate_count": 1,
+    "truncated_search": false,
+    "inspected_bytes": 94,
+    "queries": [
+      {
+        "gap_id": "G1",
+        "kind": "path",
+        "value": "controller.go"
+      },
+      {
+        "gap_id": "G1",
+        "kind": "search_term",
+        "value": "NextQueueTokenName"
+      }
+    ]
+  },
+  "new_model_calls": 0,
+  "root_cause": "Current extension admits direct-reference neighbors or explicit path+query; a disconnected production file with an exact identifier alone is excluded even after the file is scanned.",
+  "next": "Design a bounded precise-identifier read locator with explicit provenance and ambiguity/negative tests; never claim a causal edge or expand edit scope",
+  "formal_ready": false
+}

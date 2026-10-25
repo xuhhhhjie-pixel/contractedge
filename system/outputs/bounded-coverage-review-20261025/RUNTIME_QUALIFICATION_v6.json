@@ -1,0 +1,23 @@
+{
+  "status": "PASS_ENGINEERING_AND_ZERO_CALL_QUALIFICATION",
+  "source_sha256": "b5c5f9490893dd1366174e16abc16b464371d793b6d59bd03db6781e0b0d6fe6",
+  "full": {
+    "passed": 1832,
+    "subtests": 91,
+    "log": "outputs/bounded-coverage-review-20261025/full-source-v6.log",
+    "sha256": "c0c57fb13e5e7e5055da4acadbb6119f4365446e306c5a6f771ef2fd091192d2"
+  },
+  "actual8": {
+    "path": "/home/xhj/contractedge-fixed46-20261025/source-v046-v6-qualification-20261026/actual-eight/summary.json",
+    "sha256": "874917d71ec29775db1544e8c2a27ec92d60aa5a3d3acd2eecb1c73cc8b30be0"
+  },
+  "sandbox": {
+    "path": "/home/xhj/contractedge-fixed46-20261025/source-v046-v6-qualification-20261026/candidate/.isolated-f2e394aea6df4775b6e3f22e0991b35e/receipt.json",
+    "sha256": "0a61549abbb5ced7d24c9ce14b05d98c162d152d75fde7e773656e443bcca8d6"
+  },
+  "qualification_state_sha256": "a4fc20423e0fd55f46c8e5684b51012dea6631fc774ba7daa904b9655d812d74",
+  "new_qualification_model_calls": 0,
+  "formal_ready": false,
+  "promotion_blocked_by_review": true,
+  "review": "SOURCE_REVIEW_v6.json"
+}

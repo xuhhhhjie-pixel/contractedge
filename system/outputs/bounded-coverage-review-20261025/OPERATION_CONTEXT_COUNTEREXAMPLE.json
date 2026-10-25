@@ -1,0 +1,88 @@
+{
+  "scope": "Finite registered public fixture; zero model calls; current local aggregator drops non-bound operation context before the shared support gate. No source changes made during full tests.",
+  "obligation": {
+    "verification_kind": "PUBLIC_BEHAVIOR",
+    "verification_scope": {
+      "scenario": "trigger"
+    },
+    "behavior_check_refs": [
+      "a",
+      "b"
+    ],
+    "check_coverage": "ALL_OF"
+  },
+  "observations": [
+    {
+      "kind": "PUBLIC_OBSERVATION",
+      "locator": {
+        "path": "check.json"
+      },
+      "origin": "Trusted test fixture",
+      "content_digest": "783b173fb8eec97c19a27521573cd90ff71aaae2533a2cba68b777e558748e43",
+      "id": "a",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "trigger",
+      "snapshot_id": "S1",
+      "excerpt": "{\"status\":\"PASS\"}",
+      "behavior_check": {
+        "id": "a",
+        "status": "PASS",
+        "probe_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "kind": "PUBLIC_OBSERVATION",
+      "locator": {
+        "path": "check.json"
+      },
+      "origin": "Trusted test fixture",
+      "content_digest": "783b173fb8eec97c19a27521573cd90ff71aaae2533a2cba68b777e558748e43",
+      "id": "b",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "trigger",
+      "snapshot_id": "S1",
+      "excerpt": "{\"status\":\"PASS\"}",
+      "behavior_check": {
+        "id": "b",
+        "status": "PASS",
+        "probe_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "id": "OBS",
+      "kind": "PUBLIC_OBSERVATION",
+      "snapshot_id": "S1",
+      "locator": {
+        "path": "raw/trigger.pod-spec-0000.json"
+      },
+      "excerpt": "{\"name\": \"child\", \"resource\": {\"kind\": \"Namespace\", \"metadata\": {\"name\": \"child\"}}, \"exception\": {\"type\": \"LookupError\", \"message\": \"Owner required\"}}",
+      "content_digest": "ffe3ed499222bd70b1b0c30430e5e12813663e10b7a97fcece1759146394ae21",
+      "origin": "trusted runner fixture",
+      "evidence_kind": "PUBLIC_STRUCTURE",
+      "scenario": "trigger",
+      "adapter_id": "public-object-adoption-v1",
+      "structured_complete": true,
+      "producer_manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "source_pointer": "/observations/1",
+      "source_file_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ],
+  "local_claim": {
+    "status": "PASS",
+    "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+    "evidence": [
+      {
+        "observation_id": "a",
+        "quote": "{\"status\":\"PASS\"}"
+      },
+      {
+        "observation_id": "b",
+        "quote": "{\"status\":\"PASS\"}"
+      }
+    ],
+    "decision_method": "BOUND_CHECK_AGGREGATION"
+  },
+  "same_claim_full_context_error": "OPERATION_SUCCESS_CONFLICT",
+  "source_sha256": "01c23d7a118cac4abc252a59118a237ad466ece217aa49ca7567a9819b58f720",
+  "status": "REPRODUCED_PENDING_FIX_AFTER_CURRENT_TEST_RUN"
+}

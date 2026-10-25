@@ -215,7 +215,9 @@ def test_wrong_scenario_stale_snapshot_and_partial_coverage_do_not_pass(process_
     assert support_error(ob, {'status': 'PASS', 'evidence': [{'observation_id': 'OBS-selected'}]}, records) == 'OBSERVATION_SCENARIO_MISMATCH'
     ob['verification_scope']['scenario'] = 'selected-and-preservation'
     ob['check_coverage'] = 'NECESSARY_ONLY'
-    assert deterministic_check_result(ob, records, snapshot_id=snapshot) is None
+    result = deterministic_check_result(ob, records, snapshot_id=snapshot)
+    assert result['status'] == 'UNKNOWN'
+    assert result['decision_method'] == 'BOUND_CHECK_AGGREGATION'
 
 
 @pytest.mark.parametrize('field,value', [('scenario', 'other'), ('scenario_members', ['selected'])])
