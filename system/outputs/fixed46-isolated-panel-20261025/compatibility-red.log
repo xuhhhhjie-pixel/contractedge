@@ -1,0 +1,19 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_current_seed_protocol_cannot_dispatch_without_both_variant_compatibility_proof _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-496/test_current_seed_protocol_can0')
+
+    def test_current_seed_protocol_cannot_dispatch_without_both_variant_compatibility_proof(tmp_path):
+        panel,path,_=fixture(tmp_path)
+        for variant in panel['variants'].values():
+            p=Path(variant['config']);config=json.loads(p.read_text());config['seed_planning_snapshot']='CURRENT_CANDIDATE';p.write_text(json.dumps(config))
+            variant['config_sha256']=hashlib.sha256(p.read_bytes()).hexdigest()
+        path.write_text(json.dumps(panel))
+>       with pytest.raises(ValueError,match='compatibility'):load().verify_panel(path)
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_fixed_panel.py:107: Failed
+=========================== short test summary info ============================
+FAILED tests/test_fixed_panel.py::test_current_seed_protocol_cannot_dispatch_without_both_variant_compatibility_proof
+1 failed, 24 deselected in 0.27s

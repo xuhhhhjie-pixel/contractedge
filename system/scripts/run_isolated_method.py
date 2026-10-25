@@ -399,12 +399,18 @@ def validate_method_result(child_root, case_id, bridge, journal_root, *, broker=
             'semantic_outcome_upgraded': False}
 
 
-def check_registration(path, identity):
+def check_registration(path, identity, *, panel_path=None):
     registration = json.loads(Path(path).read_text())
+    if panel_path is not None:
+        from fixed_panel import validate_slot_registration
+        slot = validate_slot_registration(registration, identity, panel_path)
+        return {'counts_in_46_slot_panel': True, 'panel_slot': slot,
+                'panel_registration_sha256': hashlib.sha256(Path(panel_path).read_bytes()).hexdigest()}
     if (not isinstance(registration, dict) or registration.get('role') != 'ISOLATED_DEVELOPMENT_VALIDATION'
             or registration.get('allow_paid') is not True or registration.get('counts_in_46_slot_panel') is not False
             or any(registration.get(key) != value for key, value in identity.items())):
         raise ValueError('Paid development registration does not match this exact run')
+    return {'counts_in_46_slot_panel': False}
 
 
 def claim_attempt(root, *, attempt_id, output, state, identity):
@@ -477,7 +483,8 @@ def cleanup_session(executable, session, *, environment):
 
 
 HARNESS_NAMES = ('isolated_protocol.py', 'isolated_paths.py', 'run_isolated_method.py',
-                 'isolated_public_worker.py', 'run_reliability_worker_v10.py', 'run_reliability_worker_v9.py')
+                 'isolated_public_worker.py', 'run_reliability_worker_v10.py', 'run_reliability_worker_v9.py',
+                 'fixed_panel.py')
 
 
 def source_files(root):
@@ -526,6 +533,9 @@ def execution_identity(args):
         identity['seed_sha256'] = sha(args.seed)
     if args.runtime_admission:
         identity['runtime_admission_sha256'] = sha(args.runtime_admission)
+    if getattr(args, 'panel_registration', None):
+        identity['panel_registration_sha256'] = sha(args.panel_registration)
+        identity['panel_slot_id'] = getattr(args, 'panel_slot', None)
     return identity
 
 
@@ -588,10 +598,12 @@ def run_session(args, config, identity):
     output, method, benchmark = Path(args.output).absolute(), Path(args.method_root).absolute(), Path(args.benchmark_root).absolute()
     if output.name != args.case or output.exists():
         raise ValueError('Fresh output named exactly after this case is required')
+    panel_authority = {'counts_in_46_slot_panel': False}
     if args.execute:
         if not args.registration or not args.api_key_file:
             raise ValueError('Paid execution requires exact registration and parent-only key file')
-        check_registration(args.registration, identity)
+        panel_authority = check_registration(args.registration, identity,
+            panel_path=getattr(args, 'panel_registration', None))
         if identity.get('output_path') != str(output.resolve()) or identity.get('attempt_id') != getattr(args,'attempt_id',None):
             raise ValueError('Registered attempt/output mismatch')
     session = uuid.uuid4().hex
@@ -625,7 +637,7 @@ def run_session(args, config, identity):
     started = time.monotonic()
     receipt = {'schema_version': 'ce.isolated_run.v1', 'session': session, 'case_id': args.case,
                'identity': identity, 'status': 'ADMISSION', 'paid_enabled': args.execute,
-               'counts_in_46_slot_panel': False, 'formal_ready': False, 'state_root': str(state)}
+               **panel_authority, 'formal_ready': False, 'state_root': str(state)}
     receipt['native_topomen'] = native_identity
     receipt['model_coordinator_policy'] = {'model_identity_policy': 'require_match',
         'scope': 'Common frozen API transport for both variants; selected method still owns all prompts, schemas, retries and edits',
@@ -810,7 +822,8 @@ def main():
     mode.add_argument('--execute', action='store_true')
     for name in ['method-root', 'benchmark-root', 'config', 'output', 'case', 'python', 'dependency-root']:
         parser.add_argument('--' + name, required=True)
-    for name in ['registration', 'api-key-file', 'runtime-admission', 'seed', 'attempt-id']:
+    for name in ['registration', 'api-key-file', 'runtime-admission', 'seed', 'attempt-id',
+                 'panel-registration', 'panel-slot']:
         parser.add_argument('--' + name)
     args = parser.parse_args()
     identity = execution_identity(args)

@@ -1,0 +1,125 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+__________ test_completed_slot_is_verified_and_never_dispatches_again __________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-480/test_completed_slot_is_verifie0')
+
+    def test_completed_slot_is_verified_and_never_dispatches_again(tmp_path):
+>       panel,path,slot,transport=prepared(tmp_path);m=load()
+
+tests/test_fixed_panel_driver.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'run_fixed_panel.py'
+>       assert path.is_file(), 'Durable isolated panel driver is not implemented'
+E       AssertionError: Durable isolated panel driver is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/run_fixed_panel.py').is_file
+
+tests/test_fixed_panel_driver.py:20: AssertionError
+____________ test_no_candidate_is_recorded_without_invoking_grader _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-480/test_no_candidate_is_recorded_0')
+
+    def test_no_candidate_is_recorded_without_invoking_grader(tmp_path):
+>       panel,path,slot,transport=prepared(tmp_path,candidate=False);m=load()
+
+tests/test_fixed_panel_driver.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'run_fixed_panel.py'
+>       assert path.is_file(), 'Durable isolated panel driver is not implemented'
+E       AssertionError: Durable isolated panel driver is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/run_fixed_panel.py').is_file
+
+tests/test_fixed_panel_driver.py:20: AssertionError
+__________ test_uncertain_dispatch_cannot_be_restarted_by_controller ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-480/test_uncertain_dispatch_cannot0')
+
+    def test_uncertain_dispatch_cannot_be_restarted_by_controller(tmp_path):
+>       panel,path,slot,transport=prepared(tmp_path);m=load()
+
+tests/test_fixed_panel_driver.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'run_fixed_panel.py'
+>       assert path.is_file(), 'Durable isolated panel driver is not implemented'
+E       AssertionError: Durable isolated panel driver is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/run_fixed_panel.py').is_file
+
+tests/test_fixed_panel_driver.py:20: AssertionError
+___ test_completed_grading_finalizes_after_parent_exit_without_method_retry ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-480/test_completed_grading_finaliz0')
+
+    def test_completed_grading_finalizes_after_parent_exit_without_method_retry(tmp_path):
+>       panel,path,slot,transport=prepared(tmp_path);m=load();transport.fail_after_grade=True
+
+tests/test_fixed_panel_driver.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'run_fixed_panel.py'
+>       assert path.is_file(), 'Durable isolated panel driver is not implemented'
+E       AssertionError: Durable isolated panel driver is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/run_fixed_panel.py').is_file
+
+tests/test_fixed_panel_driver.py:20: AssertionError
+____________ test_handwritten_terminal_flags_cannot_open_B_dispatch ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-480/test_handwritten_terminal_flag0')
+
+    def test_handwritten_terminal_flags_cannot_open_B_dispatch(tmp_path):
+        from tests.test_fixed_panel import records,load as core
+>       panel,path,_,transport=prepared(tmp_path);m=load()
+
+tests/test_fixed_panel_driver.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'run_fixed_panel.py'
+>       assert path.is_file(), 'Durable isolated panel driver is not implemented'
+E       AssertionError: Durable isolated panel driver is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/run_fixed_panel.py').is_file
+
+tests/test_fixed_panel_driver.py:20: AssertionError
+___________ test_rehashed_cached_PASS_cannot_replace_a_real_failure ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-480/test_rehashed_cached_PASS_cann0')
+
+    def test_rehashed_cached_PASS_cannot_replace_a_real_failure(tmp_path):
+>       panel,path,slot,transport=prepared(tmp_path,candidate=False);m=load()
+
+tests/test_fixed_panel_driver.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load():
+        scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'run_fixed_panel.py'
+>       assert path.is_file(), 'Durable isolated panel driver is not implemented'
+E       AssertionError: Durable isolated panel driver is not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/run_fixed_panel.py').is_file
+
+tests/test_fixed_panel_driver.py:20: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fixed_panel_driver.py::test_completed_slot_is_verified_and_never_dispatches_again
+FAILED tests/test_fixed_panel_driver.py::test_no_candidate_is_recorded_without_invoking_grader
+FAILED tests/test_fixed_panel_driver.py::test_uncertain_dispatch_cannot_be_restarted_by_controller
+FAILED tests/test_fixed_panel_driver.py::test_completed_grading_finalizes_after_parent_exit_without_method_retry
+FAILED tests/test_fixed_panel_driver.py::test_handwritten_terminal_flags_cannot_open_B_dispatch
+FAILED tests/test_fixed_panel_driver.py::test_rehashed_cached_PASS_cannot_replace_a_real_failure
+6 failed in 2.86s

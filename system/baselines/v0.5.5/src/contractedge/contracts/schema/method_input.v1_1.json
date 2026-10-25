@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ContractEdge MethodInput v1.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "release_id",
+    "original_broken_revision",
+    "archive_path",
+    "archive_sha256",
+    "source_root",
+    "initial_snapshot_id",
+    "requirement_text",
+    "public_observable_text",
+    "scope_hints",
+    "public_evidence",
+    "declared_artifacts",
+    "input_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ce.method_input.v1_1"
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "release_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "original_broken_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "archive_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "archive_sha256": {
+      "$ref": "#/$defs/digest"
+    },
+    "source_root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "initial_snapshot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requirement_text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "public_observable_text": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "scope_hints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/scopeHint"
+      }
+    },
+    "public_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "declared_artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/declaredArtifact"
+      }
+    },
+    "input_digest": {
+      "$ref": "#/$defs/digest"
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "scopeHint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value",
+        "raw_text",
+        "origin_ref"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "path",
+            "symbol",
+            "field",
+            "concept"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        },
+        "raw_text": {
+          "type": "string"
+        },
+        "origin_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "snapshot_id",
+        "kind",
+        "locator",
+        "content_digest",
+        "excerpt",
+        "origin"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "REQUIREMENT_TEXT",
+            "SOURCE_SPAN",
+            "SOURCE_INVENTORY",
+            "STATIC_SEARCH",
+            "PUBLIC_OBSERVATION",
+            "DECLARED_ARTIFACT"
+          ]
+        },
+        "locator": {
+          "type": "object"
+        },
+        "content_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "excerpt": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_kind": {
+          "enum": [
+            "EXECUTION_ONLY",
+            "PUBLIC_STRUCTURE",
+            "PUBLIC_BEHAVIOR"
+          ]
+        },
+        "scenario": {
+          "type": "string"
+        },
+        "resource_identity": {
+          "type": "object"
+        },
+        "behavior_check": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "status",
+            "probe_sha256"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL"
+              ]
+            },
+            "probe_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "source_pointer": {
+          "type": "string"
+        },
+        "source_file": {
+          "type": "string"
+        },
+        "source_file_sha256": {
+          "type": "string"
+        },
+        "adapter_id": {
+          "type": "string"
+        },
+        "producer_manifest_sha256": {
+          "type": "string"
+        },
+        "structured_complete": {
+          "type": "boolean"
+        }
+      }
+    },
+    "declaredArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "media_type",
+        "content_digest",
+        "content"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "content_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 1000000
+        }
+      }
+    }
+  }
+}

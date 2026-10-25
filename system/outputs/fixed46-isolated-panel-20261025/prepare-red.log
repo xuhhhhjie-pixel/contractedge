@@ -1,0 +1,36 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_prepare_cli_binds_frozen_sources_and_preserves_original_registration[False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-494/test_prepare_cli_binds_frozen_0')
+changed = False
+
+    @pytest.mark.parametrize('changed',[False,True])
+    def test_prepare_cli_binds_frozen_sources_and_preserves_original_registration(tmp_path,changed):
+        panel,_,_=fixture(tmp_path);script=Path(__file__).resolve().parents[1]/'scripts/prepare_fixed_panel.py'
+>       assert script.is_file(),'Portable fixed46 preparation entry not implemented'
+E       AssertionError: Portable fixed46 preparation entry not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/prepare_fixed_panel.py').is_file
+
+tests/test_fixed_panel_prepare.py:15: AssertionError
+_ test_prepare_cli_binds_frozen_sources_and_preserves_original_registration[True] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-494/test_prepare_cli_binds_frozen_1')
+changed = True
+
+    @pytest.mark.parametrize('changed',[False,True])
+    def test_prepare_cli_binds_frozen_sources_and_preserves_original_registration(tmp_path,changed):
+        panel,_,_=fixture(tmp_path);script=Path(__file__).resolve().parents[1]/'scripts/prepare_fixed_panel.py'
+>       assert script.is_file(),'Portable fixed46 preparation entry not implemented'
+E       AssertionError: Portable fixed46 preparation entry not implemented
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/xhj/contractedge-latest-integration-20261024/system/scripts/prepare_fixed_panel.py').is_file
+
+tests/test_fixed_panel_prepare.py:15: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fixed_panel_prepare.py::test_prepare_cli_binds_frozen_sources_and_preserves_original_registration[False]
+FAILED tests/test_fixed_panel_prepare.py::test_prepare_cli_binds_frozen_sources_and_preserves_original_registration[True]
+2 failed in 0.15s

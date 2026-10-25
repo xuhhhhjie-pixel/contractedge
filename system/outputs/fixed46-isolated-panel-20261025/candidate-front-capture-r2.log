@@ -1,0 +1,1 @@
+{"status": "FIRST_REQUEST_CAPTURED_ZERO_HTTP", "variant": "candidate", "case_id": "RW-CAND-130", "source_unchanged": true, "prompt_version": "diagnosis.v1.1.26", "seeded": false, "scope": "Real frozen front API with synthetic observation fixture; not behavior or model effectiveness", "request_sha256": "e72b3d5b71b8076d43ae6184c906a9b67b782676422564b8426ce7fef560d445"}

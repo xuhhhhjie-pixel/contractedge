@@ -1,0 +1,469 @@
+"""Bounded public repair loop: O/E/V/C/P -> concrete patch -> S1 -> feedback.
+
+This module has no evaluator-root or private-score input. Hidden scoring is a
+separate command/process after final candidate selection.
+"""
+from __future__ import annotations
+
+from dataclasses import asdict, replace
+import json
+import os
+from pathlib import Path
+import uuid
+from typing import Mapping
+
+from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset_envelope
+from contractedge.changeset.prompt import build_changeset_request
+from contractedge.changeset.topomen import translate_for_topomen
+from contractedge.changeset.validate import validate_semantic_changeset
+from contractedge.contracts.models import RunContext
+from contractedge.contracts.validation import canonical_digest, parse_method_input, validate_run_trace
+from contractedge.dataset.benchmark import execution_contract, editable_policy, file_sha, method_input_from_task, public_task
+from contractedge.diagnosis.validate import validate_diagnosis
+from contractedge.execution.public import BenchmarkPublicRunner
+from contractedge.execution.review import ModelPublicReviewer
+from contractedge.execution.topomen import ModelPlanExecutor, PlanRejected, accept_plan
+from contractedge.model.budget import BudgetedProvider, BudgetExceeded
+from contractedge.execution.topomen import execution_review_mapping
+from contractedge.orchestration.feedback import make_feedback, validate_feedback, review_plan_with_retained, feedback_prompt_view
+from contractedge.orchestration.runner import run_front_half
+from contractedge.retrieval.candidates import CandidateSet
+from contractedge.source.snapshot import compute_snapshot
+
+
+def write_json(path: Path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + '.tmp')
+    with temporary.open('w') as stream:
+        stream.write(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+        stream.flush()
+        os.fsync(stream.fileno())
+    temporary.replace(path)
+    descriptor = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def select_observations(observations, query: str, token_counter, max_tokens: int = 4000):
+    """Fit public evidence independently of source retrieval, retaining exact quotes."""
+    import re
+    terms = set(re.findall(r'[a-z][a-z0-9_-]{3,}', query.casefold()))
+    ranked = sorted(observations, key=lambda o: (-sum(term in o['excerpt'].casefold() for term in terms), o['id']))
+    # Keep complete-parse/count headers from each scenario, including controls
+    # whose missing target names otherwise make lexical ranking discard them.
+    headers = [o for o in ranked if o['locator'].get('start_byte') == 0
+               and o['locator']['path'].endswith('.render-overview.json')]
+    pod_records = [o for o in ranked if '.pod-spec-' in o['locator']['path']]
+    identity_terms = set(re.findall(r'[a-z0-9]+', query.casefold()))
+    def pod_identity_priority(record):
+        try:
+            resource = json.loads(record['excerpt'])['resource']
+            kind = str(resource.get('kind', '')).casefold()
+            name_terms = set(re.findall(r'[a-z0-9]+', str(resource.get('name', '')).casefold()))
+        except (ValueError, KeyError, TypeError):
+            return (0, 0)
+        # Missing fields reduce a broken target's lexical score. Rank resource
+        # identity first so a working sibling cannot hide that missing evidence.
+        return (-int(kind in identity_terms or kind+'s' in identity_terms),
+                -len(name_terms & identity_terms))
+    pod_records.sort(key=pod_identity_priority)
+    inventories = [o for o in ranked if '.render-kind-' in o['locator']['path']]
+    def relevant_kind(record):
+        try:
+            kind = str(json.loads(record['excerpt'])['kind']).casefold()
+        except (ValueError, KeyError, TypeError):
+            return False
+        return kind in identity_terms or kind+'s' in identity_terms
+    relevant_inventories = [o for o in inventories if relevant_kind(o)]
+    result, used, selected = [], 0, set()
+    structured = [o for o in ranked if o.get('structured_complete') or o.get('behavior_check')]
+    for record in headers + relevant_inventories + pod_records + structured + ranked:
+        if record['id'] in selected:
+            continue
+        cost = token_counter(record['excerpt'])
+        if used + cost <= max_tokens:
+            result.append(record)
+            selected.add(record['id'])
+            used += cost
+    return tuple(result)
+
+
+def validate_ready_trace(trace: Mapping, method_input, source: Path):
+    validate_run_trace(trace)
+    snapshot = compute_snapshot(source)
+    if (trace['case_id'] != method_input.case_id or trace['input_digest'] != method_input.input_digest
+            or trace['snapshot_id'] != snapshot.snapshot_id):
+        raise ValueError('Ready trace belongs to another case/input/source snapshot')
+    if trace['status'] not in {'READY', 'READY_PARTIAL'} or not trace.get('candidate_set'):
+        raise ValueError('Trace does not contain a validated executable plan')
+    context = RunContext(**trace['run_context'])
+    candidates = CandidateSet(**trace['candidate_set'])
+    # Revalidate source excerpts in a resumed trace against actual current files.
+    for candidate in candidates.candidates:
+        if candidate.get('origin_kind') == 'DECLARED_ARTIFACT':
+            continue
+        if candidate['path'] not in snapshot.file_digests:
+            raise ValueError('Resumed trace cites a path outside the current source inventory')
+        path = (source / candidate['path']).resolve(strict=True)
+        path.relative_to(source.resolve())
+        text = path.read_text()
+        fragment = candidate['text']
+        if fragment not in text or canonical_text_digest(fragment) != candidate['content_digest']:
+            raise ValueError('Resumed trace source excerpt does not match current source')
+    # Runtime evidence lives in the trace, not a mutation of original MethodInput.
+    public = tuple(e for e in trace['diagnosis']['evidence_refs'] if e['kind'] == 'PUBLIC_OBSERVATION')
+    run_input = replace(method_input, public_evidence=public or method_input.public_evidence)
+    if context.retrieval_config.get('production_path_review_enabled'):
+        from contractedge.retrieval.frontier import production_frontier
+        expected_frontier = production_frontier(candidates.candidates, method_input.requirement_text)
+        if expected_frontier != context.retrieval_config.get('production_path_frontier'):
+            raise ValueError('Resumed trace production frontier differs from actually supplied source')
+    packet = validate_diagnosis(trace['diagnosis'], run_input, context, candidates)
+    validation = validate_semantic_changeset(trace['changeset'], packet, snapshot,
+        policy=(context.retrieval_config.get('public_execution_capabilities') or {}).get('editable_policy'),
+        frontier=context.retrieval_config.get('production_path_frontier'))
+    if not validation.valid:
+        raise ValueError('Ready trace plan failed consumer preflight: ' + str(validation.errors))
+    return packet, context
+
+
+def canonical_text_digest(text):
+    import hashlib
+    return hashlib.sha256(text.encode()).hexdigest()
+
+
+def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
+                provider, token_counter, config: Mapping) -> dict:
+    packet, context = validate_ready_trace(trace, method_input, source)
+    request = build_changeset_request(packet, context, [{'code': 'PUBLIC_EXECUTION_PLAN_FEEDBACK',
+                                                        'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}])
+    if sum(token_counter(m['content']) for m in request.messages) + request.max_output_tokens > config['max_context_tokens']:
+        raise BudgetExceeded('Plan revision exceeds the full context budget')
+    response = provider.complete_json(request)
+    payload = json.loads(response.content)
+    payload, binding = bind_changeset_envelope(payload, packet, context.run_id, context.snapshot_id, context.input_digest)
+    payload = adapt_model_changeset(payload, packet, compute_snapshot(source))
+    validation = validate_semantic_changeset(payload, packet, compute_snapshot(source),
+        policy=(config.get('public_execution_capabilities') or {}).get('editable_policy'),
+        frontier=context.retrieval_config.get('production_path_frontier'))
+    if not validation.valid:
+        raise PlanRejected('Feedback plan revision failed: ' + str(validation.errors))
+    call = {'stage': 'EXECUTION_PLAN_REVISION', 'prompt_version': request.prompt_version,
+            'response_content': response.content, 'response_metadata': dict(response.metadata), 'runner_binding': binding,
+            'prompt_tokens_reserved': sum(token_counter(m['content']) for m in request.messages),
+            'output_tokens_reserved': request.max_output_tokens,
+            'elapsed_seconds': provider.summary()['elapsed_seconds'] if isinstance(provider, BudgetedProvider) else 0}
+    return {**trace, 'changeset': payload, 'status': payload['status'],
+            'model_calls': list(trace['model_calls']) + [call]}
+
+
+def rebind_execution_plan(plan: Mapping, source: Path, feedback: Mapping) -> dict:
+    """Keep semantic intent for EXECUTE retries, bind only fresh concrete targets."""
+    snapshot = compute_snapshot(source)
+    rebound = json.loads(json.dumps(plan))
+    old_digest = canonical_digest(plan)
+    rebound['snapshot_id'] = snapshot.snapshot_id
+    for op in rebound['operations']:
+        target = op['target']
+        if target['kind'] == 'EXISTING':
+            if target['path'] not in snapshot.file_digests:
+                raise PlanRejected('Execution retry lost an existing target; rediagnosis required')
+            target['snapshot_id'] = snapshot.snapshot_id
+            target['content_digest'] = snapshot.file_digests[target['path']]
+        elif (source / target['proposed_path']).exists():
+            # CREATE already materialized; revise its concrete implementation.
+            op['operation'] = 'MODIFY'
+            op['target'] = {'kind': 'EXISTING', 'path': target['proposed_path'],
+                            'snapshot_id': snapshot.snapshot_id,
+                            'content_digest': snapshot.file_digests[target['proposed_path']],
+                            'unit_refs': [], 'locator': {}}
+    rebound['execution_continuation'] = {'prior_plan_digest': old_digest,
+        'feedback_digest': canonical_digest(feedback), 'route': 'EXECUTE',
+        'interpretation': 'Semantic intent retained; old diagnosis evidence is historical, not rebound as fresh facts.'}
+    return rebound
+
+
+def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
+                output: str | Path, provider, token_counter, config: Mapping, *,
+                initial_trace: Mapping | None = None, public_runner=None,
+                executor=None, reviewer=None) -> dict:
+    root = Path(public_root).resolve(strict=True)
+    from contractedge.dataset.admission import check_case_admission
+    check_case_admission(root, case_id, config)
+    out = Path(output).resolve()
+    if out.is_relative_to(root) or root.is_relative_to(out):
+        raise ValueError('Repair output must be independent of frozen public tasks')
+    out.mkdir(parents=True, exist_ok=False)
+    method_value, projection = method_input_from_task(root, case_id)
+    config = {**dict(config), 'public_execution_capabilities': projection.get('public_execution_capabilities')}
+    method_input = parse_method_input(method_value)
+    _, task_root, task, manifest = public_task(root, case_id)
+    policy = editable_policy(task, execution_contract(task_root, task, manifest))
+    run_id = initial_trace['run_id'] if initial_trace else str(config.get('run_id') or uuid.uuid4())
+    budget = BudgetedProvider(provider, token_counter, max_tokens=int(config.get('max_total_tokens', 160000)),
+        max_seconds=float(config.get('max_elapsed_seconds', 2400)), max_calls=int(config.get('max_model_calls', 24)),
+        on_update=lambda calls: write_json(out / 'model_calls.json', calls))
+    runner = public_runner or BenchmarkPublicRunner(root, tools_root,
+        lock_root=config.get('lock_root', '/tmp/contractedge-system-native-locks'),
+        timeout_seconds=float(config.get('public_timeout_seconds', 600)), query=method_input.requirement_text,
+        method_probe_profiles=config.get('method_probe_profiles', []))
+    if executor is None:
+        backend = config.get('execution_backend', 'direct')
+        if backend == 'topomen_agent':
+            from contractedge.execution.topomen_agent import TopoMenAgentExecutor
+            executor = TopoMenAgentExecutor(budget, token_counter, config,
+                on_trace=lambda trace: write_json(out / 'topomen-native-last-trace.json', trace))
+        elif backend == 'direct':
+            executor = ModelPlanExecutor(budget, token_counter, config)
+        else:
+            raise ValueError('Unknown execution backend: ' + str(backend))
+    reviewer = reviewer or ModelPublicReviewer(budget, token_counter, config)
+    workspace = out / 'workspace'
+    trace, plan, feedback, current_observation = None, None, None, None
+    last_execution_attempt = None
+    execution_format_corrections = 0
+    rounds, errors = [], []
+    status = 'STARTING'
+    source = None
+    initial_snapshot = method_input.initial_snapshot_id
+    max_rounds = int(config.get('max_rounds', 2))
+    if not 1 <= max_rounds <= 16:
+        raise ValueError('max_rounds must be between1and16')
+    write_json(out / 'method_input.json', method_value)
+    write_json(out / 'projection.json', projection)
+    def reserve_public_time():
+        if budget.remaining_seconds <= 0:
+            raise BudgetExceeded('Global wall-clock budget exhausted before public execution')
+        if hasattr(runner, 'timeout_seconds'):
+            runner.timeout_seconds = min(float(config.get('public_timeout_seconds', 600)), budget.remaining_seconds)
+    try:
+        if initial_trace:
+            calls = initial_trace['model_calls']
+            for call in calls:
+                for field in ['prompt_tokens_reserved', 'output_tokens_reserved']:
+                    if not isinstance(call.get(field), int) or call[field] < 0:
+                        raise ValueError('Resuming requires explicit nonnegative prior token reservations')
+                if not isinstance(call.get('elapsed_seconds'), (int, float)) or call['elapsed_seconds'] < 0:
+                    raise ValueError('Resuming requires explicit nonnegative prior elapsed time')
+            budget.reserved_tokens += sum(c['prompt_tokens_reserved'] + c['output_tokens_reserved'] for c in calls)
+            budget.prior_calls = len(calls)
+            budget.started -= max((float(c['elapsed_seconds']) for c in calls), default=0)
+            if budget.reserved_tokens > budget.max_tokens or budget.prior_calls >= budget.max_calls:
+                raise BudgetExceeded('Resumed trace already exhausted the declared model budget')
+        write_json(out / 'state.json', {'status': 'PREPARING', 'case_id': case_id})
+        reserve_public_time()
+        record = runner.prepare(case_id, workspace, out / 'prepare')
+        source = Path(record['source_root']).resolve(strict=True)
+        if compute_snapshot(source).snapshot_id != initial_snapshot:
+            raise ValueError('Public prepare source tree differs from frozen MethodInput S0')
+        if config.get('method_probe_profiles'):
+            from contractedge.execution.probe_specs import select_probes
+            specs = select_probes(method_input.requirement_text, source, config['method_probe_profiles'])
+            descriptions = [{k:v for k,v in spec.items() if k!='program'} for spec in specs]
+            config['public_execution_capabilities'] = {**config['public_execution_capabilities'],
+                'method_behavior_probes': descriptions}
+            write_json(out / 'method-probe-specifications.json', descriptions)
+        from contractedge.execution.observations import select_observation_adapters
+        adapters = select_observation_adapters(public_root, case_id)
+        if adapters:
+            config['public_execution_capabilities'] = {**config['public_execution_capabilities'],
+                'registered_public_observation_adapters': adapters}
+            write_json(out / 'public-observation-adapters.json', adapters)
+        if initial_trace:
+            validate_ready_trace(initial_trace, method_input, source)
+            trace = dict(initial_trace)
+            # Resuming a real development trace does not replenish model budgets.
+            write_json(out / 'initial-front.trace.json', trace)
+        if config.get('observe_broken', True):
+            write_json(out / 'state.json', {'status': 'OBSERVING_BROKEN', 'case_id': case_id})
+            reserve_public_time()
+            current_observation = runner.observe(workspace, out / 'broken-public')
+            if current_observation['status'] in {'INFRA_ERROR', 'INVALID_OBSERVATION', 'BUDGET_EXCEEDED'}:
+                status = current_observation['status']
+                raise ValueError('Initial public observation could not be produced')
+        for round_id in range(max_rounds):
+            if budget.remaining_seconds <= 0:
+                raise BudgetExceeded('Global wall-clock budget exhausted')
+            directory = out / 'rounds' / str(round_id)
+            directory.mkdir(parents=True)
+            write_json(out / 'state.json', {'status': 'PLANNING', 'case_id': case_id, 'round_id': round_id})
+            observations = select_observations((current_observation or {}).get('observations', []),
+                method_input.requirement_text, token_counter, int(config.get('max_public_evidence_tokens', 4000)))
+            if trace is None or (feedback and feedback['route'] == 'DIAGNOSIS'):
+                round_config = {**dict(config), 'run_id': run_id,
+                    'max_total_tokens': max(1, budget.max_tokens - budget.reserved_tokens),
+                    'max_elapsed_seconds': budget.remaining_seconds,
+                    'model': {'model': config['model'], 'provider': config.get('provider', 'configured'),
+                              'schema_in_prompt': config.get('schema_in_prompt', True)}}
+                trace = run_front_half(method_input, source if method_input.source_root == '.' else source.parent,
+                    budget, round_config, token_counter, execution_feedback=feedback,
+                    public_observations=observations).to_wire()
+                plan = None
+            if trace['status'] not in {'READY', 'READY_PARTIAL'}:
+                write_json(directory / 'front.trace.json', trace)
+                status = trace['status']
+                errors.extend(trace.get('errors', []))
+                break
+            if feedback and feedback['route'] == 'CHANGESET':
+                if trace['snapshot_id'] == compute_snapshot(source).snapshot_id:
+                    trace = revise_plan(trace, method_input, source, feedback, budget, token_counter, config)
+                    plan = None
+                else:
+                    # Old source evidence cannot be relabelled as current solely to reuse a diagnosis.
+                    feedback = {**feedback, 'route': 'DIAGNOSIS', 'failure_kind': 'DIAGNOSIS',
+                                'rationale': 'Plan feedback requires rediagnosis because source evidence is stale.'}
+                    trace = run_front_half(method_input, source if method_input.source_root == '.' else source.parent,
+                        budget, {**dict(config), 'run_id': run_id, 'model': {'model': config['model'],
+                            'schema_in_prompt': config.get('schema_in_prompt', True)}},
+                        token_counter, execution_feedback=feedback, public_observations=observations).to_wire()
+                    plan = None
+            write_json(directory / 'front.trace.json', trace)
+            if trace['status'] not in {'READY', 'READY_PARTIAL'}:
+                status = trace['status']
+                errors.extend(trace.get('errors', []))
+                break
+            if feedback and feedback['route'] == 'EXECUTE' and plan:
+                plan = rebind_execution_plan(plan, source, feedback)
+            else:
+                validate_ready_trace(trace, method_input, source)
+                plan = translate_for_topomen(trace['changeset'], 'contractedge.topomen_plan.v1',
+                    diagnosis=trace.get('diagnosis'), public_capabilities=config.get('public_execution_capabilities'))
+            before = compute_snapshot(source).snapshot_id
+            write_json(directory / 'plan.json', plan)
+            review_plan = review_plan_with_retained({**trace['changeset'],
+                'declared_artifacts': list(method_input.declared_artifacts),
+                'public_execution_capabilities': config.get('public_execution_capabilities')}, feedback)
+            write_json(directory / 'public-review-plan.json', review_plan)
+            write_json(out / 'state.json', {'status': 'EXECUTING', 'case_id': case_id, 'round_id': round_id})
+            execution_status, review = 'INVALID_OBSERVATION', None
+            rejection_kind = None
+            try:
+                acceptance = accept_plan(plan, source, policy)
+                write_json(directory / 'consumer-acceptance.json', acceptance)
+            except PlanRejected as exc:
+                rejection_kind = 'PLAN'
+                execution_result = {'status': 'PLAN_REJECTED', 'error': str(exc)}
+            else:
+                attempts = []
+                while True:
+                    calls_before_execution = len(budget.calls)
+                    rejection_kind = None
+                    try:
+                        execution_result = executor.execute(plan, source, policy,
+                            requirement=method_input.requirement_text, declared_artifacts=method_input.declared_artifacts,
+                            observations=observations, feedback=feedback, previous_attempt=last_execution_attempt)
+                    except (PlanRejected, ValueError) as exc:
+                        rejection_kind = 'EXECUTION'
+                        execution_result = {'status': 'CONCRETE_EDIT_REJECTED', 'error': str(exc)}
+                        if getattr(executor, 'last_trace', None) is not None:
+                            execution_result['topomen_trace'] = executor.last_trace
+                    completed_response = False
+                    if len(budget.calls) > calls_before_execution:
+                        call = budget.calls[-1]
+                        if (call.get('prompt_version') == 'topomen-source-execution.v1'
+                                and isinstance(call.get('response_content'), str) and not call.get('error')):
+                            completed_response = True
+                            last_execution_attempt = {'model_response': call['response_content'],
+                                'response_metadata': call.get('response_metadata', {}),
+                                'validation_error': execution_result.get('error'),
+                                'plan_digest': canonical_digest(plan), 'source_snapshot': before}
+                            execution_result['execution_attempt'] = last_execution_attempt
+                    attempts.append(execution_result)
+                    write_json(directory / 'execution-attempts' / (str(len(attempts) - 1) + '.json'), execution_result)
+                    can_correct = (config.get('execution_format_retry_in_round', False)
+                        and rejection_kind == 'EXECUTION' and completed_response
+                        and compute_snapshot(source).snapshot_id == before
+                        and execution_format_corrections < max(0, int(config.get('max_format_retries', 1))))
+                    if not can_correct:
+                        break
+                    # One existing concrete-generation correction belongs inside
+                    # the round: no S1 or fresh execution feedback exists yet.
+                    # Never retry a missing/unknown HTTP response. Shared case
+                    # tokens, calls, wall time and money still guard the request.
+                    execution_format_corrections += 1
+                execution_result = {**execution_result, 'generation_attempts': len(attempts),
+                                    'format_corrections_used': execution_format_corrections}
+            write_json(directory / 'execution.json', execution_result)
+            patch_info = runner.export(workspace, directory / 'candidate.patch', directory / 'export')
+            write_json(directory / 'patch.json', patch_info)
+            if rejection_kind is None:
+                write_json(out / 'state.json', {'status': 'PUBLIC_CHECK', 'case_id': case_id, 'round_id': round_id})
+                reserve_public_time()
+                current_observation = runner.observe(workspace, directory / 'public')
+                execution_status = current_observation['status']
+                review_observation = {**current_observation, 'declared_artifacts': list(method_input.declared_artifacts),
+                    'public_execution_capabilities': config.get('public_execution_capabilities'),
+                    'execution_mapping': execution_review_mapping(execution_result),
+                    'observations': list(select_observations(
+                    current_observation['observations'], method_input.requirement_text + '\n' + '\n'.join(
+                        p['statement'] for kind in ['postconditions', 'preserve_constraints', 'open_obligations']
+                        for p in review_plan.get(kind, [])),
+                    token_counter, int(config.get('max_review_evidence_tokens', 9000))))}
+                try:
+                    review = reviewer.review(method_input.requirement_text, review_plan, review_observation)
+                except (ValueError, KeyError) as exc:
+                    review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
+                              'method': 'PUBLIC_REVIEW_INVALID', 'rationale': str(exc)}
+                write_json(directory / 'public-review.json', review)
+            after = compute_snapshot(source).snapshot_id
+            raw_observations = (current_observation or {}).get('observations', [])
+            fresh = [o for o in raw_observations if o['snapshot_id'] == after]
+            feedback = make_feedback(case_id=case_id, run_id=run_id, input_digest=method_input.input_digest,
+                round_id=round_id, from_snapshot=before, to_snapshot=after,
+                patch_digest=patch_info['patch_sha256'], execution_status=execution_status,
+                observations=fresh, plan=review_plan, review=review, diagnosis=trace.get('diagnosis'),
+                observation_diagnostics=[*(current_observation or {}).get('observation_adapter_audit', []),
+                    *([{'kind':'METHOD_PROBE_ERROR','status':'PROBE_ERROR'}] if (current_observation or {}).get('method_probe_status')=='PROBE_ERROR' else [])])
+            if rejection_kind:
+                feedback.update(build_state='NOT_RUN', failure_kind=rejection_kind,
+                    route='CHANGESET' if rejection_kind == 'PLAN' else 'EXECUTE',
+                    route_confidence='HIGH', rationale=execution_result['error'])
+                validate_feedback(feedback, case_id=case_id, input_digest=method_input.input_digest, to_snapshot=after)
+            write_json(directory / 'feedback.json', feedback)
+            rounds.append({'round_id': round_id, 'from_snapshot': before, 'to_snapshot': after,
+                           'feedback': str((directory / 'feedback.json').relative_to(out)),
+                           'patch_sha256': patch_info['patch_sha256'], 'route': feedback['route']})
+            if (config.get('execution_format_retry_in_round', False) and rejection_kind == 'EXECUTION' and before == after):
+                status = 'INVALID_OUTPUT'
+                errors.append('Concrete generation could not produce an accepted edit within its existing correction allowance')
+                break
+            if feedback['route'] == 'STOP':
+                status = ('PUBLIC_REVIEW_COMPLETE' if feedback['semantic_outcome'] == 'PUBLIC_REVIEW_PASS' else
+                          'PUBLIC_EXECUTION_COMPLETE' if feedback['build_state'] == 'PASSED' else
+                          'INFRASTRUCTURE_ERROR' if feedback['failure_kind'] == 'ENVIRONMENT' else 'STOPPED_UNCERTAIN')
+                break
+            status = 'ROUND_LIMIT'
+    except BudgetExceeded as exc:
+        status = 'BUDGET_EXHAUSTED'
+        errors.append(str(exc))
+    except Exception as exc:
+        if budget.remaining_seconds <= 0:
+            status = 'BUDGET_EXHAUSTED'
+        elif status not in {'INFRA_ERROR', 'INVALID_OBSERVATION', 'BUDGET_EXCEEDED'}:
+            status = 'INFRASTRUCTURE_ERROR'
+        errors.append(type(exc).__name__ + ': ' + str(exc))
+    final_patch = None
+    if source is not None:
+        try:
+            final_patch = runner.export(workspace, out / 'candidate.patch', out / 'final-export')
+        except Exception as exc:
+            status = 'INFRASTRUCTURE_ERROR'
+            errors.append('Final patch export: ' + str(exc))
+    report = {'schema_version': 'ce.repair_trace.v1', 'case_id': case_id,
+              'release_id': method_input.release_id, 'run_id': run_id,
+              'input_digest': method_input.input_digest, 'requirement_digest': canonical_text_digest(method_input.requirement_text),
+              'initial_snapshot_id': initial_snapshot,
+              'final_snapshot_id': compute_snapshot(source).snapshot_id if source else None,
+              'status': status, 'candidate': final_patch, 'rounds': rounds,
+              'last_feedback': feedback, 'budget': budget.summary(), 'errors': errors,
+              'execution_format_corrections_used': execution_format_corrections,
+              'hidden_evaluation': 'NOT_RUN; final patch must be scored in an independent evaluator process',
+              'scope': 'Public repair execution. A public review is an uncertain method signal, not a benchmark PASS.'}
+    if initial_trace:
+        report['resumed_front_trace_digest'] = canonical_digest(initial_trace)
+    write_json(out / 'model_calls.json', budget.calls)
+    write_json(out / 'repair.trace.json', report)
+    write_json(out / 'state.json', {'status': status, 'case_id': case_id, 'rounds_completed': len(rounds)})
+    return report
