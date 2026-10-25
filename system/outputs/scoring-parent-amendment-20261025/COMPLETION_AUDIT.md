@@ -9,3 +9,6 @@
 实际原5槽零调用回放：4个PASS保持；KOPF基线按原生结果保留SEMANTIC_FAIL。新增模型、grader调用均为0。B仍关闭，formal_ready=false。
 
 后续：合入CI环境修订、生成最终当前parent freeze、新绑定的工程恢复面板与双方法公开沙箱复核，通过后封存新parent登记，从未运行的KOPF候选继续A。不能把这些工程结果称为原46槽完成。
+
+
+2026-10-25T13:18:44.529454+00:00：最终v2仅合入固定CI主机及对应新来源绑定，Python方法、父侧脚本和测试保持全量1785+91已验收字节。新绑定实际8格PASS、14会话28容器；双冻结方法public-only沙箱PASS并确认关闭。准入阶段模型与grader重跑均0。新parent登记SHA 110b0717cd7c33978a4a41ac79e36d926560358d93a144aa50ee0ae633be3b63，沿用原46个逻辑ID；完整承接5槽后已从KOPF候选恢复A，B关闭。上游CI环境修订7b020d8全部远程检查成功；本parent新增修正的独立CI另行核查。见REGISTERED_PANEL_SUMMARY、RUNTIME_QUALIFICATION和EXECUTION_CHECKPOINT。

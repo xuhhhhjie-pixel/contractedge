@@ -1,0 +1,221 @@
+{
+  "schema_version": "ce.fixed46_execution_checkpoint.v2",
+  "as_of_utc": "2026-10-25T13:18:44.529454+00:00",
+  "scope": "Documentary only; immutable old/new panel and terminal proofs authoritative",
+  "panel_sha256": "110b0717cd7c33978a4a41ac79e36d926560358d93a144aa50ee0ae633be3b63",
+  "panel": "/home/xhj/contractedge-fixed46-20261025/panel-v045-scoring-r2.json",
+  "registered_slots": 46,
+  "verified_closed_slots": 5,
+  "records": [
+    {
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f5dd18212d66edb1ba9b9990",
+      "variant": "baseline",
+      "independent_status": "PASS",
+      "public_decision": "PASS",
+      "status": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "d8157a87182e6654bb32526b3991b321d613b26bebe3b200a738eadbf6ecdc38",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-f5dd18212d66edb1ba9b9990/.isolated-9f2bc287488f4ec78ed6dc74f1b3018d/receipt.json",
+          "sha256": "96771540ebcc206ab628fef25e4032e59fa4bed231d702d0be5699891f7bc60d"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-f5dd18212d66edb1ba9b9990/RW-CAND-130/repair.trace.json",
+          "sha256": "e679794e783cabc621fa35e33f4eeb7729fe6e4e318f17d2146ebe8f26c607b5"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/independent/fixed46-v045-isolated-20261025-v1-f5dd18212d66edb1ba9b9990/result.json",
+          "sha256": "5422274a9ad5fd32f37a742baec80d89e7907cf3f9c370160302782f428867cd"
+        }
+      },
+      "formal_ready": false,
+      "recorded_status": "PASS",
+      "predecessor_panel_sha256": "399760d9a7230f1143179fb12d470137d388ef6583665db45b98b5555ea5f25b",
+      "predecessor_record_sha256": "3fafcf944aaf5aaab3c69e91857d9c1ebc1bf030d5659b837db752498962673c",
+      "interpretation_policy": "ce.frozen_score_exit.v1"
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-60944716e7069c9f5423fb67",
+      "variant": "candidate",
+      "independent_status": "PASS",
+      "public_decision": "PASS",
+      "status": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "1776d7ad693de09dc5ac2941cb1ef56b07cf01aee08156a44e05b44413e8c61e",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-60944716e7069c9f5423fb67/.isolated-ebb3aed77e334c93bf615a568e45abb3/receipt.json",
+          "sha256": "6ddc126ad578bbcde554618aa0f6d3f00c42b1c8ef4872edc009ff8f228cb1a2"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-60944716e7069c9f5423fb67/RW-CAND-130/repair.trace.json",
+          "sha256": "3b53a444a0b76707be449c15bf98ea03855312d0418c27e7b0b7ec5dca7602ec"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/independent/fixed46-v045-isolated-20261025-v1-60944716e7069c9f5423fb67/result.json",
+          "sha256": "c3f0c42b5424820d3bbdf81aa572da096442326515c207ba8a7582c62e103109"
+        }
+      },
+      "formal_ready": false,
+      "recorded_status": "PASS",
+      "predecessor_panel_sha256": "399760d9a7230f1143179fb12d470137d388ef6583665db45b98b5555ea5f25b",
+      "predecessor_record_sha256": "f8e4f59e45a497928b47b9a51d053f74a48e45e0bc56252c67bf16b15dfb42db",
+      "interpretation_policy": "ce.frozen_score_exit.v1"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f30e0215f0d113880a6411c5",
+      "variant": "candidate",
+      "independent_status": "PASS",
+      "public_decision": "UNKNOWN",
+      "status": "PASS",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "e223244a6eac45e8cd011b2e73ff874a39855ad5043b4622786fe621e1ce1e8a",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-f30e0215f0d113880a6411c5/.isolated-a8ce2a325f804ea385356396bf8ce4b2/receipt.json",
+          "sha256": "151c77c9f83af9b4a3fa61fb1e36b877642b3788ab51181128995c049284b2f7"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-f30e0215f0d113880a6411c5/R3-KPT-4673/repair.trace.json",
+          "sha256": "08b52ff2182a52bd5aed83bf513d0765f82ed3e39f21958d306133d666c7a7dc"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/independent/fixed46-v045-isolated-20261025-v1-f30e0215f0d113880a6411c5/result.json",
+          "sha256": "6462c5e876b6298b9c065ef65cc5bf37c2cdde5b35a07aebf93748317057761a"
+        }
+      },
+      "formal_ready": false,
+      "recorded_status": "PASS",
+      "predecessor_panel_sha256": "399760d9a7230f1143179fb12d470137d388ef6583665db45b98b5555ea5f25b",
+      "predecessor_record_sha256": "161ec93a3d3c0a1fad685f17954cccbf1bade76ec2068c2c9ad3d09165acba15",
+      "interpretation_policy": "ce.frozen_score_exit.v1"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-8963f561974092cbd6133317",
+      "variant": "baseline",
+      "independent_status": "PASS",
+      "public_decision": "PASS",
+      "status": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "0754e25d23c3b1b8a05df61cc81141bbe40a9f0f55b0878f1ccd1441e04bde2a",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-8963f561974092cbd6133317/.isolated-210c286f98934f208c05a76152311e99/receipt.json",
+          "sha256": "62dcdaed66e97b0984860e6642cf2ad4b828e2070b1ac3247dda128706bcd103"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-8963f561974092cbd6133317/R3-KPT-4673/repair.trace.json",
+          "sha256": "539230022a055c90707ce9416154eb9841c55cbf4680e99ea52d76fc0bcfc12c"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/independent/fixed46-v045-isolated-20261025-v1-8963f561974092cbd6133317/result.json",
+          "sha256": "f4a8b5e175efa7da1ffbd95177521e9bc59730a0e5231207b957fde53d30538e"
+        }
+      },
+      "formal_ready": false,
+      "recorded_status": "PASS",
+      "predecessor_panel_sha256": "399760d9a7230f1143179fb12d470137d388ef6583665db45b98b5555ea5f25b",
+      "predecessor_record_sha256": "6a2f255d8920f430ea8373651a3790e484f3d7e4efca79f10659aafb4aa07eb1",
+      "interpretation_policy": "ce.frozen_score_exit.v1"
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-5c9e2b9fddc23e694bc91412",
+      "variant": "baseline",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "FAIL",
+      "status": "SEMANTIC_FAIL",
+      "method_status": "ROUND_LIMIT",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "6ea06e48c67e23880c5bf119083ec843f889a82d6370ddeba1ab7bc197009ca5",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-5c9e2b9fddc23e694bc91412/.isolated-65730fb39220438ab2f12aaaeb2d5ee3/receipt.json",
+          "sha256": "66d5c4c1d04950aaaa4e977856364f33b54f46d1c079bbe590a4d79b70dd9e61"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-5c9e2b9fddc23e694bc91412/R3-KOPF-726/repair.trace.json",
+          "sha256": "c7161200dc5277cb95efc9d9cf1980b0ec7b9175331284ef46999e04861634a1"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/independent/fixed46-v045-isolated-20261025-v1-5c9e2b9fddc23e694bc91412/result.json",
+          "sha256": "f7cff369d4d057ed0261550eae9c7426384036fa16dc7ed11c1df67193cad76f"
+        }
+      },
+      "formal_ready": false,
+      "recorded_status": "SCORER_ERROR",
+      "predecessor_panel_sha256": "399760d9a7230f1143179fb12d470137d388ef6583665db45b98b5555ea5f25b",
+      "predecessor_record_sha256": "6b3516305410266e4cc0cd670cddca803b8509fa39406c205e4c2544ba4d95ed",
+      "interpretation_policy": "ce.frozen_score_exit.v1"
+    }
+  ],
+  "state": {
+    "status": "RUNNING",
+    "active_slot": {
+      "case_id": "R3-KOPF-726",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-a23cab1ffd94f2c287355ce8",
+      "variant": "candidate"
+    },
+    "panel_sha256": "110b0717cd7c33978a4a41ac79e36d926560358d93a144aa50ee0ae633be3b63"
+  },
+  "B_gate": {
+    "open": false,
+    "missing": [
+      "fixed46-v045-isolated-20261025-v1-a23cab1ffd94f2c287355ce8",
+      "fixed46-v045-isolated-20261025-v1-109d1fbfb1987992a1ad4cea",
+      "fixed46-v045-isolated-20261025-v1-613366258a101b1af27ecdab",
+      "fixed46-v045-isolated-20261025-v1-a62911320d2450c09640ca1c",
+      "fixed46-v045-isolated-20261025-v1-bcd9a8d56a4e00f2f902f406",
+      "fixed46-v045-isolated-20261025-v1-7e110f10f2707f003c394c2c",
+      "fixed46-v045-isolated-20261025-v1-5ece967e93e69ab025d7d758",
+      "fixed46-v045-isolated-20261025-v1-5b4e270cd9beb190997cb43f",
+      "fixed46-v045-isolated-20261025-v1-f836a8138f6b34ea264edf20",
+      "fixed46-v045-isolated-20261025-v1-4ada1358a8a7db96b35bcd8e",
+      "fixed46-v045-isolated-20261025-v1-92201d988b606f41830e70a5",
+      "fixed46-v045-isolated-20261025-v1-c1cec2a408efc5e10c83fb8e",
+      "fixed46-v045-isolated-20261025-v1-c389d4dfccac51c96e7ee10f",
+      "fixed46-v045-isolated-20261025-v1-b014df76f3113bdb25b07e03",
+      "fixed46-v045-isolated-20261025-v1-44d1f6c59760035709127588",
+      "fixed46-v045-isolated-20261025-v1-f2c810d86ae1d3f2c49a963f",
+      "fixed46-v045-isolated-20261025-v1-1bf2d595d501802118c43695",
+      "fixed46-v045-isolated-20261025-v1-7cf96bc3f16296239e7fb685",
+      "fixed46-v045-isolated-20261025-v1-833d9fec72fc75d823c9c702",
+      "fixed46-v045-isolated-20261025-v1-3c876390d002229b412fc40b",
+      "fixed46-v045-isolated-20261025-v1-0688f115ed8fa72b524b54cd"
+    ],
+    "errors": []
+  },
+  "formal_ready": false,
+  "upstream_CI": {
+    "run": 40195757196,
+    "commit": "7b020d829f4d4f37e20053888c11081c5e4542bb",
+    "status": "SUCCESS",
+    "scope": "Pinned host and namespace CI; current scoring amendment CI pending"
+  }
+}

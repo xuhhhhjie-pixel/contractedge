@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-25T13:09:07.132930+00:00",
+  "as_of": "2026-10-25T13:18:44.529454+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3297,7 +3297,7 @@
     "snapshot": "docs/development/scoring-parent-amendment-v045-20261025-v2.snapshot.json",
     "snapshot_id": "scoring-parent-amendment-v045-20261025-v2",
     "snapshot_role": "CURRENT_FROZEN_DEVELOPMENT",
-    "status": "PARENT_SCORING_FULL_PASS_FINAL_RUNTIME_QUALIFICATION",
+    "status": "PARENT_SCORING_QUALIFIED_ORIGINAL_A_RESUMED",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "NOT_ACCEPTED",
     "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df"
@@ -3373,11 +3373,14 @@
     "formal_ready": false
   },
   "fixed46_execution": {
-    "status": "STOPPED_ON_V1_EXIT_MISCLASSIFICATION",
+    "status": "RUNNING",
+    "method_version": "0.6.45",
+    "parent_harness_revision": 2,
     "registered_slots": 46,
     "verified_completed_slots": 5,
-    "checkpoint": "outputs/fixed46-isolated-panel-20261025/EXECUTION_CHECKPOINT.json",
+    "inherited_slots": 5,
     "audit": "outputs/scoring-parent-amendment-20261025/COMPLETION_AUDIT.md",
+    "checkpoint": "outputs/scoring-parent-amendment-20261025/EXECUTION_CHECKPOINT.json",
     "formal_ready": false
   },
   "active_fixed46_execution_worktree": "/home/xhj/contractedge-latest-integration-20261024",
