@@ -33,7 +33,8 @@
     "worktree": "/home/xhj/contractedge-branch-review-20261026/system",
     "snapshot": "docs/development/unified-branch-feedback-v048-20261026-v2.snapshot.json",
     "source_sha256": "707ac9445d6cc422329d165ca3e7d8d5a78db6ae89aa4cca3f11a96a9338de9d",
-    "qualification": "RUNNING"
+    "qualification": "FULL_1916_PLUS_91_PASS_ACTUAL8_RUNNING",
+    "code_commit": "45a6dc0"
   },
   "next_gate": "Full regression and exact runtime qualification, then predeclared targeted diagnostic; never replay old claims",
   "benchmark150_unchanged": true,
