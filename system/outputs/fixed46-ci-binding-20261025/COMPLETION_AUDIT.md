@@ -12,3 +12,5 @@
 初次8格用新内容临时复用旧v045名称，现已恢复旧文件并按最终新名称完整重跑；preliminary记录只作过程记录，不替代最终8格。最初两次不合法计划命令的拒绝日志也保留，不当作来源回放通过。
 
 详见docs/reports/2026-10-25-ci-source-binding.md、AUDIT.json、actual-eight-summary.json及portable-final.log。formal_ready=false。
+
+远程第一次重验：来源绑定及真实恢复面板已通过；可移植1732项、86子测试通过，2项命名空间测试因GitHub运行器缺少bwrap失败。v2仅补齐工作流必需的bubblewrap安装，不排除测试、不弱化隔离；默认冻结相应更新，待新提交实际CI复验。

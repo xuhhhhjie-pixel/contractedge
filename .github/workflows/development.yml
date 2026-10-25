@@ -105,6 +105,11 @@ jobs:
           python-version: '3.12'
           cache: pip
           cache-dependency-path: system/requirements-dev.lock
+      - name: Install required method namespace isolation tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends bubblewrap
+          bwrap --version
       - name: Install portable development environment
         run: |
           env -u PYTHONPATH python -m pip install -r requirements-dev.lock
