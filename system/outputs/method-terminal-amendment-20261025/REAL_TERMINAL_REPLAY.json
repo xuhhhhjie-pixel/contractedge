@@ -1,0 +1,28 @@
+{
+  "created_utc": "2026-10-25T14:56:09.909635+00:00",
+  "status": "PASS_READ_ONLY_TERMINAL_INTERPRETATION",
+  "case_id": "RW-ALERTMANAGER-4705",
+  "raw_status": "INFRASTRUCTURE_STOP",
+  "interpreted_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+  "method_status": "EVIDENCE_GAP",
+  "proof": {
+    "receipt_sha256": "e0066eeb006bbd3da7168f4fb6d41147272002f2c659e61532960c85a1fd875c",
+    "trace_sha256": "18201cc540531a769ca6b83470f2556eef38f9f298ec4ccf145a46bf424a0cb1",
+    "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "method_journal_files": {
+      "45217ce8a12e41579a662a4ba07d20e3.json": "e209549bb0d9b71f274b1d2fc150dbb1e4c18c3276bbf556ae318ce1fbb3d646",
+      "5f53ae2967cb4035a94aafdb5f6715bb.json": "43b47fff874cd68128ad53fa1bb21a4ed1311a3a4172ed3708f5a00654e94224",
+      "638e7dd5eaf44fa08f7c609a982a01ce.json": "5b9f1ede1ca63abeb742b14f840287146e26d7d9fc1eb1b5e692f6e9efeb3efe",
+      "8bb0c7c43c174d24ab09807f12e01d58.json": "af284dd5c5321f7eb2c5f92da77c0e3a3a028b4a01948758c589311c79cee7f6",
+      "8dd1d55c61274142a7710c68880f7270.json": "a42c4e51f876af2d72d043161a4b047d4a1e3ebed0fe8aecd88e5c2269c22b3c",
+      "ee91958c355a4a29a4d39b63228f7521.json": "ab2d6575e90a1ceb9d4eadac85ed15bcc761f50c204c8f26dc523c8c230f1a14",
+      "fd11ae5a427c4baf9021c67fa6c9da69.json": "7b2f0550d4232dba48f229ac1df6b358cbcd36f93f96316bcb8aa382f3105cda"
+    },
+    "recorded_program_sha256": "8b3fbb0e57c2822dd3fbdf30683fd7733410cdc9f482315414df1ad895f4a500"
+  },
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "original_receipt_unchanged": true,
+  "formal_ready": false,
+  "scope": "Only terminal classification replay; not panel recovery or independent score completion"
+}

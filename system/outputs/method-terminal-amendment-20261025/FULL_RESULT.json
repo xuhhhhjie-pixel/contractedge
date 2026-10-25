@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "passed": 1812,
+  "subtests_passed": 91,
+  "duration_seconds": 474.24,
+  "actual_isolated_demos_enabled": true,
+  "full_suite": "tests; historical/native fixtures available, no six-module exclusion",
+  "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df",
+  "snapshot": "docs/development/method-terminal-amendment-v045-20261025-v1.snapshot.json",
+  "snapshot_sha256": "1b96eb3a62800984760c533e9ffdbada898c048368c35354a53054d9da6a9fb3",
+  "bound_files_verified_after_full": true,
+  "new_model_http_calls_in_engineering": 0,
+  "formal_ready": false,
+  "created_utc": "2026-10-25T15:15:37.546144+00:00"
+}

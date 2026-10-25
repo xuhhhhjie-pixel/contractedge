@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "registered_panel": "/home/xhj/contractedge-fixed46-20261025/panel-v045-terminal-r3.json",
+  "panel_sha256": "859466d293b162f393428319b917432bb4bf84e4b7415bfa40a69172c152965a",
+  "inherited_slots": 12,
+  "method_reruns": 0,
+  "new_model_calls_before_continuation": 0,
+  "original_baseline_independent_status": "SEMANTIC_FAIL",
+  "actual8": "PASS",
+  "sandbox_variants": [
+    "baseline",
+    "candidate"
+  ],
+  "formal_ready": false
+}

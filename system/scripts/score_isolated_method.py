@@ -14,6 +14,7 @@ import sys
 from run_isolated_method import write_json
 
 LEGACY_PROGRAM_SHA256 = 'f7c401b45845fe83adb329281cc79bd2a3db8971653f2babda455fc56f0e062a'
+SCORING_R2_PROGRAM_SHA256 = '8b95010ac65b1ec95d6a4a3c29fb97a270a9f1762b507da8473057dbb6843bed'
 NEGATIVE_RESULTS = frozenset({'SEMANTIC_FAIL', 'BUILD_FAIL', 'PATCH_APPLY_FAIL', 'METHOD_FAIL', 'FAIL'})
 
 
@@ -34,10 +35,16 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def binding(receipt_path,benchmark,output,*,_recorded_program_sha256=None):
-    if _recorded_program_sha256 not in {None, LEGACY_PROGRAM_SHA256}:
+def binding(receipt_path,benchmark,output,*,_recorded_program_sha256=None,_terminal_program=None):
+    if _recorded_program_sha256 not in {None, LEGACY_PROGRAM_SHA256, SCORING_R2_PROGRAM_SHA256}:
         raise ValueError('Unknown recorded scoring implementation')
     receipt_path=Path(receipt_path).resolve(strict=True);receipt=read(receipt_path)
+    interpretation = None
+    if _terminal_program is not None:
+        from run_isolated_method import read_recorded_terminal
+        adjudication = read_recorded_terminal(receipt_path, recorded_program=_terminal_program)
+        receipt = adjudication['receipt']
+        interpretation = {'policy':adjudication['interpretation_policy'],'proof':adjudication['proof']}
     benchmark=Path(benchmark).resolve(strict=True);output=Path(output).resolve()
     case=Path(receipt['identity']['output_path']).resolve(strict=True)
     state=Path(receipt['state_root']).resolve(strict=True)
@@ -71,11 +78,13 @@ def binding(receipt_path,benchmark,output,*,_recorded_program_sha256=None):
                 if p.is_file() and p.suffix in {'.py','.json'}}
     expected=receipt['identity'].get('public_tool_files')
     if expected is not None and tool_files!=expected:raise ValueError('Frozen scoring tools changed')
-    return {'case_id':receipt['case_id'],'receipt_sha256':sha(receipt_path),
+    result = {'case_id':receipt['case_id'],'receipt_sha256':sha(receipt_path),
         'trace_sha256':sha(trace_path),'patch_sha256':sha(patch),'patch_path':str(patch),
         'final_snapshot_id':trace.get('final_snapshot_id'),'evaluation_manifest_sha256':sha(manifest),
         'public_release_sha256':sha(entry),'public_tool_files':tool_files,
         'scoring_program_sha256':_recorded_program_sha256 or sha(__file__),'interpreter_sha256':sha(sys.executable)}
+    if interpretation is not None: result['terminal_interpretation'] = interpretation
+    return result
 
 
 def finished_score(output, identity):
@@ -106,13 +115,15 @@ def read_recorded_score(receipt, benchmark, output, *, recorded_program):
     The legacy program, every input, completed checkpoint and raw result must
     match. Its result file is retained, including its erroneous SCORER_ERROR.
     """
-    if (recorded_program.get('sha256') != LEGACY_PROGRAM_SHA256
-            or sha(recorded_program['path']) != LEGACY_PROGRAM_SHA256):
+    program_hash = recorded_program.get('sha256')
+    if (program_hash not in {LEGACY_PROGRAM_SHA256, SCORING_R2_PROGRAM_SHA256}
+            or sha(recorded_program['path']) != program_hash):
         raise ValueError('Unrecognized immutable legacy scorer')
-    identity = binding(receipt, benchmark, output, _recorded_program_sha256=LEGACY_PROGRAM_SHA256)
+    identity = binding(receipt, benchmark, output, _recorded_program_sha256=program_hash)
     saved, value, digest = finished_score(output, identity)
-    legacy_status = ('SCORER_TIMEOUT' if saved['timed_out'] else 'SCORER_ERROR'
+    legacy_status = (('SCORER_TIMEOUT' if saved['timed_out'] else 'SCORER_ERROR'
                      if saved['returncode'] != 0 else value.get('status', 'SCORER_ERROR'))
+                     if program_hash == LEGACY_PROGRAM_SHA256 else score_outcome(saved, value))
     raw = read(Path(output)/'result.json')
     if raw != score_record(output, identity, value, digest, legacy_status):
         raise ValueError('Recorded legacy result differs from its completed proof')
@@ -120,10 +131,10 @@ def read_recorded_score(receipt, benchmark, output, *, recorded_program):
             'interpretation_policy':'ce.frozen_score_exit.v1','model_calls_added':0}
 
 
-def run(receipt,benchmark,output,*,timeout=7200,phase='all'):
+def run(receipt,benchmark,output,*,timeout=7200,phase='all',_terminal_program=None):
     if phase not in {'all','run','finalize'}:raise ValueError('Invalid scoring phase')
     output=Path(output).resolve();benchmark=Path(benchmark).resolve(strict=True)
-    identity=binding(receipt,benchmark,output)
+    identity=binding(receipt,benchmark,output,_terminal_program=_terminal_program)
     checkpoint=output/'checkpoint.json'
     if phase!='finalize':
         try:output.mkdir(parents=True,exist_ok=False)

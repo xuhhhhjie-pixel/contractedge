@@ -1,0 +1,24 @@
+{
+  "updated_utc": "2026-10-25T15:23:34.347878+00:00",
+  "status": "A_CLOSED_EFFECT_GATE_FAILED",
+  "panel": "/home/xhj/contractedge-fixed46-20261025/panel-v045-terminal-r3.json",
+  "panel_sha256": "859466d293b162f393428319b917432bb4bf84e4b7415bfa40a69172c152965a",
+  "closed_original_slots": 14,
+  "new_method_reruns": 0,
+  "qualification_model_calls": 0,
+  "full_tests": 1812,
+  "full_subtests": 91,
+  "actual8": "PASS_14_SESSIONS_28_CONTAINERS",
+  "sandbox_baseline": "PASS_CLOSED_SOURCE_UNCHANGED",
+  "sandbox_candidate": "PASS_CLOSED_SOURCE_UNCHANGED",
+  "baseline_terminal_score": "SEMANTIC_FAIL",
+  "active_slot": null,
+  "B_opened": false,
+  "formal_ready": false,
+  "github_pr": "https://github.com/xuhhhhjie-pixel/contractedge/pull/21",
+  "not_run_slots": 32,
+  "A_independent_pass_counts": {
+    "baseline": 3,
+    "candidate": 5
+  }
+}

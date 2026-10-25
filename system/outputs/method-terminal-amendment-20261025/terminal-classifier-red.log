@@ -1,0 +1,28 @@
+.F.....                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_queue_classifies_method_failure_separately_from_infrastructure_stop[EVIDENCE_GAP-METHOD_RESULT] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-515/test_queue_classifies_method_f1')
+status = 'EVIDENCE_GAP', want = 'METHOD_RESULT'
+
+    @pytest.mark.parametrize('status,want',[('PUBLIC_EXECUTION_COMPLETE','METHOD_RESULT'),
+        ('EVIDENCE_GAP','METHOD_RESULT'),
+        ('INVALID_PLAN','METHOD_RESULT'),('STOPPED_UNCERTAIN','METHOD_RESULT'),
+        ('INFRASTRUCTURE_ERROR','INFRASTRUCTURE_STOP'),('BUDGET_EXHAUSTED','INFRASTRUCTURE_STOP'),
+        ('RECOVERY_FAILED','INFRASTRUCTURE_STOP')])
+    def test_queue_classifies_method_failure_separately_from_infrastructure_stop(tmp_path,status,want):
+        from types import SimpleNamespace
+        isolated=load();(tmp_path/'CASE').mkdir();journal=tmp_path/'journal';journal.mkdir()
+        (tmp_path/'CASE/repair.trace.json').write_text(json.dumps(dict(case_id='CASE',status=status,
+                                                                   candidate=None,source_integrity_verified=True)))
+        bridge=SimpleNamespace(public_infrastructure_failed=False,exports={})
+>       assert isolated.validate_method_result(tmp_path,'CASE',bridge,journal)['classification']==want
+E       AssertionError: assert 'INFRASTRUCTURE_STOP' == 'METHOD_RESULT'
+E         
+E         - METHOD_RESULT
+E         + INFRASTRUCTURE_STOP
+
+tests/test_isolated_coordinator.py:133: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_isolated_coordinator.py::test_queue_classifies_method_failure_separately_from_infrastructure_stop[EVIDENCE_GAP-METHOD_RESULT]
+1 failed, 6 passed, 14 deselected in 8.28s
