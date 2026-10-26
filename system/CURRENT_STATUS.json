@@ -3296,8 +3296,8 @@
     }
   },
   "current_development": {
-    "status": "V059_V2_EXACT_PACKAGING_CONFIG_FULL_QUALIFICATION_PENDING",
-    "snapshot": "docs/development/helper-input-contracts-v059-20261027-v2.snapshot.json",
+    "status": "V059_ENGINEERING_PASS_WAITING_ISOLATION_AND_CANONICAL_GATE",
+    "snapshot": "docs/development/helper-input-contracts-v059-20261027-v3.snapshot.json",
     "planned_version": "0.6.59",
     "base_commit": "894119f7ba688bd8764fa93c77decc6b1ad5a26a",
     "source_sha256": "1cbdce8740890e423e9be12bb7362ae571ff6e679fd0918154dbbe7e0f018a2a",
