@@ -1,0 +1,212 @@
+.......................FFFFFFFF                                          [100%]
+=================================== FAILURES ===================================
+____ test_actual_extension_and_format_correction_keep_planner_concern[True] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-635/test_actual_extension_and_form1')
+invalid_outcome = True
+
+    @pytest.mark.parametrize('invalid_outcome',[False,True])
+    def test_actual_extension_and_format_correction_keep_planner_concern(tmp_path,invalid_outcome):
+        from contractedge.model.provider import ModelResponse
+        from contractedge.orchestration.runner import run_front_half
+        from tests.test_planning_evidence_extension import PlanningGapProvider,front_fixture
+        value,source=front_fixture(tmp_path)
+        class Provider(PlanningGapProvider):
+            def __init__(self):super().__init__();self.concern_seen=[]
+            def complete_json(self,request):
+                request_body=json.loads(request.messages[1]['content'])
+                if request.prompt_version.startswith('diagnosis.') and self.diagnosis_calls:
+                    rows=request_body['diagnosis_continuity'].get('planning_branch_assessments',[])
+                    if invalid_outcome:
+                        assert rows==[]
+                        self.concern_seen.append(None)
+                        return super().complete_json(request)
+                    assert len(rows)==1 and rows[0]['rationale']=='Another supplied production branch remains unresolved.'
+                    assert rows[0]['open_obligations'][0]['id']=='G1'
+                    catalog={e['id']:e for e in request_body['evidence_catalog']}
+                    assert rows[0]['source_evidence_ref'] in catalog
+                    assert rows[0]['source_content_digest']==catalog[rows[0]['source_evidence_ref']]['content_digest']
+                    self.concern_seen.append(rows[0])
+                response=super().complete_json(request)
+                if request.prompt_version.startswith('changeset.') and self.plan_calls==1:
+                    body=json.loads(response.content)
+                    record=next(e for e in request_body['diagnosis_packet']['evidence_refs'] if e['kind']=='SOURCE_SPAN')
+                    if invalid_outcome:body['open_obligations'][0]['outcome_id']='ABSENT'
+                    body['production_path_review']=[dict(source_evidence_id=record['id'],disposition='UNRESOLVED',rationale='Another supplied production branch remains unresolved.',change_refs=[],open_obligation_refs=['G1'])]
+                    return ModelResponse(json.dumps(body),{})
+                if request.prompt_version.startswith('diagnosis.') and self.diagnosis_calls==2:
+                    body=json.loads(response.content);body['violations'][0]['support_basis']='INVALID'
+                    return ModelResponse(json.dumps(body),{})
+                return response
+        provider=Provider();provider._snapshot_digests={'templates/serviceaccount.yaml':hashlib.sha256(source.read_bytes()).hexdigest()}
+        trace=run_front_half(value,tmp_path,provider,dict(model={'model':'fixture'},max_context_tokens=24000,
+            max_output_tokens=1024,max_total_tokens=100000,max_format_retries=1,
+            diagnosis_format_retry_per_context=True),lambda text:len(text.split()))
+>       assert trace.status=='READY',trace.errors
+E       AssertionError: ("AssertionError: assert [{'dispositio...olved.', ...}] == []
+E           
+E           Left contains one more item: {'disposition': 'UNR...ists', ...}], 'rationale': 'Another supplied production branch remains unresolved.', ...}
+E           Use -v to get more diff",)
+E       assert 'INFRASTRUCTURE_ERROR' == 'READY'
+E         
+E         - READY
+E         + INFRASTRUCTURE_ERROR
+
+tests/test_planning_branch_continuity.py:123: AssertionError
+_ test_invalid_obligation_cannot_become_reassessment_context[unknown_outcome] __
+
+mutation = 'unknown_outcome'
+
+    @pytest.mark.parametrize('mutation',['unknown_outcome','wrong_parent','empty_atoms','empty_statement','null_statement','unknown_field','duplicate_open_id'])
+    def test_invalid_obligation_cannot_become_reassessment_context(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='unknown_outcome':plan['open_obligations'][0]['outcome_id']='ABSENT'
+        elif mutation=='wrong_parent':prior['obligation_atoms'][0]['outcome_id']='O2'
+        elif mutation=='empty_atoms':plan['open_obligations'][0]['obligation_refs']=[]
+        elif mutation=='empty_statement':plan['open_obligations'][0]['statement']=''
+        elif mutation=='null_statement':plan['open_obligations'][0]['statement']=None
+        elif mutation=='unknown_field':plan['open_obligations'][0]['unregistered_claim']=True
+        elif mutation=='duplicate_open_id':plan['open_obligations'].append({**plan['open_obligations'][0],'statement':'Contradictory duplicate'})
+        result=call(prior,plan,evidence)
+>       assert not (result or {}).get('planning_branch_assessments')
+E       AssertionError: assert not [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+E        +  where [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}] = <built-in method get of dict object at 0x7f67355eaf00>('planning_branch_assessments')
+E        +    where <built-in method get of dict object at 0x7f67355eaf00> = ({'snapshot_id': 'S', 'prior_diagnosis_digest': '6438509fe926948cee947b9b0ff2b1800cc1fac719f68734186c626a91de7e54', 'claims_for_reassessment': [], 'omitted_claim_count': 0, ...}).get
+
+tests/test_planning_branch_continuity.py:142: AssertionError
+___ test_invalid_obligation_cannot_become_reassessment_context[wrong_parent] ___
+
+mutation = 'wrong_parent'
+
+    @pytest.mark.parametrize('mutation',['unknown_outcome','wrong_parent','empty_atoms','empty_statement','null_statement','unknown_field','duplicate_open_id'])
+    def test_invalid_obligation_cannot_become_reassessment_context(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='unknown_outcome':plan['open_obligations'][0]['outcome_id']='ABSENT'
+        elif mutation=='wrong_parent':prior['obligation_atoms'][0]['outcome_id']='O2'
+        elif mutation=='empty_atoms':plan['open_obligations'][0]['obligation_refs']=[]
+        elif mutation=='empty_statement':plan['open_obligations'][0]['statement']=''
+        elif mutation=='null_statement':plan['open_obligations'][0]['statement']=None
+        elif mutation=='unknown_field':plan['open_obligations'][0]['unregistered_claim']=True
+        elif mutation=='duplicate_open_id':plan['open_obligations'].append({**plan['open_obligations'][0],'statement':'Contradictory duplicate'})
+        result=call(prior,plan,evidence)
+>       assert not (result or {}).get('planning_branch_assessments')
+E       AssertionError: assert not [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+E        +  where [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}] = <built-in method get of dict object at 0x7f673570fc40>('planning_branch_assessments')
+E        +    where <built-in method get of dict object at 0x7f673570fc40> = ({'snapshot_id': 'S', 'prior_diagnosis_digest': '1d7d87f8d5ef1c5d7220bbf3d740507c803fa8713dc399b21788d27c783159ec', 'claims_for_reassessment': [], 'omitted_claim_count': 0, ...}).get
+
+tests/test_planning_branch_continuity.py:142: AssertionError
+___ test_invalid_obligation_cannot_become_reassessment_context[empty_atoms] ____
+
+mutation = 'empty_atoms'
+
+    @pytest.mark.parametrize('mutation',['unknown_outcome','wrong_parent','empty_atoms','empty_statement','null_statement','unknown_field','duplicate_open_id'])
+    def test_invalid_obligation_cannot_become_reassessment_context(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='unknown_outcome':plan['open_obligations'][0]['outcome_id']='ABSENT'
+        elif mutation=='wrong_parent':prior['obligation_atoms'][0]['outcome_id']='O2'
+        elif mutation=='empty_atoms':plan['open_obligations'][0]['obligation_refs']=[]
+        elif mutation=='empty_statement':plan['open_obligations'][0]['statement']=''
+        elif mutation=='null_statement':plan['open_obligations'][0]['statement']=None
+        elif mutation=='unknown_field':plan['open_obligations'][0]['unregistered_claim']=True
+        elif mutation=='duplicate_open_id':plan['open_obligations'].append({**plan['open_obligations'][0],'statement':'Contradictory duplicate'})
+        result=call(prior,plan,evidence)
+>       assert not (result or {}).get('planning_branch_assessments')
+E       AssertionError: assert not [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+E        +  where [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}] = <built-in method get of dict object at 0x7f673566cc40>('planning_branch_assessments')
+E        +    where <built-in method get of dict object at 0x7f673566cc40> = ({'snapshot_id': 'S', 'prior_diagnosis_digest': '6438509fe926948cee947b9b0ff2b1800cc1fac719f68734186c626a91de7e54', 'claims_for_reassessment': [], 'omitted_claim_count': 0, ...}).get
+
+tests/test_planning_branch_continuity.py:142: AssertionError
+_ test_invalid_obligation_cannot_become_reassessment_context[empty_statement] __
+
+mutation = 'empty_statement'
+
+    @pytest.mark.parametrize('mutation',['unknown_outcome','wrong_parent','empty_atoms','empty_statement','null_statement','unknown_field','duplicate_open_id'])
+    def test_invalid_obligation_cannot_become_reassessment_context(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='unknown_outcome':plan['open_obligations'][0]['outcome_id']='ABSENT'
+        elif mutation=='wrong_parent':prior['obligation_atoms'][0]['outcome_id']='O2'
+        elif mutation=='empty_atoms':plan['open_obligations'][0]['obligation_refs']=[]
+        elif mutation=='empty_statement':plan['open_obligations'][0]['statement']=''
+        elif mutation=='null_statement':plan['open_obligations'][0]['statement']=None
+        elif mutation=='unknown_field':plan['open_obligations'][0]['unregistered_claim']=True
+        elif mutation=='duplicate_open_id':plan['open_obligations'].append({**plan['open_obligations'][0],'statement':'Contradictory duplicate'})
+        result=call(prior,plan,evidence)
+>       assert not (result or {}).get('planning_branch_assessments')
+E       AssertionError: assert not [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+E        +  where [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}] = <built-in method get of dict object at 0x7f673570e500>('planning_branch_assessments')
+E        +    where <built-in method get of dict object at 0x7f673570e500> = ({'snapshot_id': 'S', 'prior_diagnosis_digest': '6438509fe926948cee947b9b0ff2b1800cc1fac719f68734186c626a91de7e54', 'claims_for_reassessment': [], 'omitted_claim_count': 0, ...}).get
+
+tests/test_planning_branch_continuity.py:142: AssertionError
+__ test_invalid_obligation_cannot_become_reassessment_context[null_statement] __
+
+mutation = 'null_statement'
+
+    @pytest.mark.parametrize('mutation',['unknown_outcome','wrong_parent','empty_atoms','empty_statement','null_statement','unknown_field','duplicate_open_id'])
+    def test_invalid_obligation_cannot_become_reassessment_context(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='unknown_outcome':plan['open_obligations'][0]['outcome_id']='ABSENT'
+        elif mutation=='wrong_parent':prior['obligation_atoms'][0]['outcome_id']='O2'
+        elif mutation=='empty_atoms':plan['open_obligations'][0]['obligation_refs']=[]
+        elif mutation=='empty_statement':plan['open_obligations'][0]['statement']=''
+        elif mutation=='null_statement':plan['open_obligations'][0]['statement']=None
+        elif mutation=='unknown_field':plan['open_obligations'][0]['unregistered_claim']=True
+        elif mutation=='duplicate_open_id':plan['open_obligations'].append({**plan['open_obligations'][0],'statement':'Contradictory duplicate'})
+        result=call(prior,plan,evidence)
+>       assert not (result or {}).get('planning_branch_assessments')
+E       AssertionError: assert not [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+E        +  where [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}] = <built-in method get of dict object at 0x7f67356749c0>('planning_branch_assessments')
+E        +    where <built-in method get of dict object at 0x7f67356749c0> = ({'snapshot_id': 'S', 'prior_diagnosis_digest': '6438509fe926948cee947b9b0ff2b1800cc1fac719f68734186c626a91de7e54', 'claims_for_reassessment': [], 'omitted_claim_count': 0, ...}).get
+
+tests/test_planning_branch_continuity.py:142: AssertionError
+__ test_invalid_obligation_cannot_become_reassessment_context[unknown_field] ___
+
+mutation = 'unknown_field'
+
+    @pytest.mark.parametrize('mutation',['unknown_outcome','wrong_parent','empty_atoms','empty_statement','null_statement','unknown_field','duplicate_open_id'])
+    def test_invalid_obligation_cannot_become_reassessment_context(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='unknown_outcome':plan['open_obligations'][0]['outcome_id']='ABSENT'
+        elif mutation=='wrong_parent':prior['obligation_atoms'][0]['outcome_id']='O2'
+        elif mutation=='empty_atoms':plan['open_obligations'][0]['obligation_refs']=[]
+        elif mutation=='empty_statement':plan['open_obligations'][0]['statement']=''
+        elif mutation=='null_statement':plan['open_obligations'][0]['statement']=None
+        elif mutation=='unknown_field':plan['open_obligations'][0]['unregistered_claim']=True
+        elif mutation=='duplicate_open_id':plan['open_obligations'].append({**plan['open_obligations'][0],'statement':'Contradictory duplicate'})
+        result=call(prior,plan,evidence)
+>       assert not (result or {}).get('planning_branch_assessments')
+E       AssertionError: assert not [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+E        +  where [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}] = <built-in method get of dict object at 0x7f673566ac80>('planning_branch_assessments')
+E        +    where <built-in method get of dict object at 0x7f673566ac80> = ({'snapshot_id': 'S', 'prior_diagnosis_digest': '6438509fe926948cee947b9b0ff2b1800cc1fac719f68734186c626a91de7e54', 'claims_for_reassessment': [], 'omitted_claim_count': 0, ...}).get
+
+tests/test_planning_branch_continuity.py:142: AssertionError
+_ test_invalid_obligation_cannot_become_reassessment_context[duplicate_open_id] _
+
+mutation = 'duplicate_open_id'
+
+    @pytest.mark.parametrize('mutation',['unknown_outcome','wrong_parent','empty_atoms','empty_statement','null_statement','unknown_field','duplicate_open_id'])
+    def test_invalid_obligation_cannot_become_reassessment_context(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='unknown_outcome':plan['open_obligations'][0]['outcome_id']='ABSENT'
+        elif mutation=='wrong_parent':prior['obligation_atoms'][0]['outcome_id']='O2'
+        elif mutation=='empty_atoms':plan['open_obligations'][0]['obligation_refs']=[]
+        elif mutation=='empty_statement':plan['open_obligations'][0]['statement']=''
+        elif mutation=='null_statement':plan['open_obligations'][0]['statement']=None
+        elif mutation=='unknown_field':plan['open_obligations'][0]['unregistered_claim']=True
+        elif mutation=='duplicate_open_id':plan['open_obligations'].append({**plan['open_obligations'][0],'statement':'Contradictory duplicate'})
+        result=call(prior,plan,evidence)
+>       assert not (result or {}).get('planning_branch_assessments')
+E       AssertionError: assert not [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+E        +  where [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}] = <built-in method get of dict object at 0x7f67356f1080>('planning_branch_assessments')
+E        +    where <built-in method get of dict object at 0x7f67356f1080> = ({'snapshot_id': 'S', 'prior_diagnosis_digest': '6438509fe926948cee947b9b0ff2b1800cc1fac719f68734186c626a91de7e54', 'claims_for_reassessment': [], 'omitted_claim_count': 0, ...}).get
+
+tests/test_planning_branch_continuity.py:142: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_planning_branch_continuity.py::test_actual_extension_and_format_correction_keep_planner_concern[True]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_obligation_cannot_become_reassessment_context[unknown_outcome]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_obligation_cannot_become_reassessment_context[wrong_parent]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_obligation_cannot_become_reassessment_context[empty_atoms]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_obligation_cannot_become_reassessment_context[empty_statement]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_obligation_cannot_become_reassessment_context[null_statement]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_obligation_cannot_become_reassessment_context[unknown_field]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_obligation_cannot_become_reassessment_context[duplicate_open_id]
+8 failed, 23 passed in 0.44s

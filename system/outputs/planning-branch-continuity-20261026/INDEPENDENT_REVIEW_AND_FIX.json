@@ -1,0 +1,21 @@
+{
+  "status": "ONE_IMPORTANT_FIXED_REQUIRES_FULL_SUITE",
+  "reviewer": "planning_branch_handoff_review",
+  "critical": [],
+  "important": [
+    {
+      "issue": "Open obligation schema/parent outcome/duplicate identity were not validated before handoff",
+      "fixed": true,
+      "red": "8 failed,23 passed",
+      "green": "71 related passed,31 new tests",
+      "integration": "Invalid ABSENT outcome is not carried; original validation feedback retained"
+    }
+  ],
+  "minor": [],
+  "limitations": [
+    "No effect superiority judgment",
+    "No provider/grader calls",
+    "No independent full-suite rerun"
+  ],
+  "formal_ready": false
+}

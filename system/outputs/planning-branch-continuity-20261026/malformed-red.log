@@ -1,0 +1,355 @@
+..............FFFFFFFF                                                   [100%]
+=================================== FAILURES ===================================
+_____ test_invalid_model_plan_fields_cannot_crash_reassessment[open_none] ______
+
+mutation = 'open_none'
+
+    @pytest.mark.parametrize('mutation',['open_none','open_string','open_nonrecord','rows_string','row_none','refs_object','atoms_none','reason_object'])
+    def test_invalid_model_plan_fields_cannot_crash_reassessment(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='open_none':plan['open_obligations']=None
+        elif mutation=='open_string':plan['open_obligations']='bad'
+        elif mutation=='open_nonrecord':plan['open_obligations']=[None]
+        elif mutation=='rows_string':plan['production_path_review']='bad'
+        elif mutation=='row_none':plan['production_path_review']=[None]
+        elif mutation=='refs_object':plan['production_path_review'][0]['open_obligation_refs']=[{}]
+        elif mutation=='atoms_none':plan['open_obligations'][0]['obligation_refs']=None
+        elif mutation=='reason_object':plan['production_path_review'][0]['rationale']={}
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_planning_branch_continuity.py:17: in call
+    return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+snapshot_id = 'S'
+evidence_catalog = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+extension_gaps = [], input_digest = 'I'
+planning_context = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+
+    def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *, input_digest,
+                             planning_context=None):
+        """Carry reviewable claims, never prior verdicts as current evidence."""
+        if not prior or prior.get('snapshot_id') != snapshot_id or prior.get('input_digest') != input_digest:
+            return None
+        previous = {e['id']:e for e in prior.get('evidence_refs', [])}
+        current = {e['id']:e for e in evidence_catalog}
+        relations = {r['id']:r for r in prior.get('expected_relations', [])}
+        claims = []
+        omitted = 0
+        for violation in prior.get('violations', []):
+            if violation.get('causal_status') != 'SUPPORTED':
+                continue
+            refs = violation.get('evidence_refs', [])
+            available = [ref for ref in refs if ref in previous and ref in current
+                and all(previous[ref].get(k) == current[ref].get(k)
+                    for k in ('snapshot_id','kind','locator','content_digest','excerpt'))]
+            claim = {'violation': dict(violation),
+                     'relation': relations.get(violation.get('relation_id')),
+                     'current_evidence_refs': available,
+                     'unavailable_prior_evidence_refs': [ref for ref in refs if ref not in available]}
+            trial = json.dumps(claims + [claim], ensure_ascii=False).encode('utf-8')
+            if len(claims) >= 8 or len(trial) > 12000:
+                omitted += 1
+            else:
+                claims.append(claim)
+        branches, omitted_branches = [], 0
+        if (isinstance(planning_context, Mapping) and prior.get('run_id')
+                and all(planning_context.get(k) == prior.get(k)
+                        for k in ('run_id', 'snapshot_id', 'input_digest'))):
+>           opened = {o['id']: o for o in planning_context.get('open_obligations', [])}
+E           TypeError: 'NoneType' object is not iterable
+
+src/contractedge/orchestration/runner.py:553: TypeError
+____ test_invalid_model_plan_fields_cannot_crash_reassessment[open_string] _____
+
+mutation = 'open_string'
+
+    @pytest.mark.parametrize('mutation',['open_none','open_string','open_nonrecord','rows_string','row_none','refs_object','atoms_none','reason_object'])
+    def test_invalid_model_plan_fields_cannot_crash_reassessment(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='open_none':plan['open_obligations']=None
+        elif mutation=='open_string':plan['open_obligations']='bad'
+        elif mutation=='open_nonrecord':plan['open_obligations']=[None]
+        elif mutation=='rows_string':plan['production_path_review']='bad'
+        elif mutation=='row_none':plan['production_path_review']=[None]
+        elif mutation=='refs_object':plan['production_path_review'][0]['open_obligation_refs']=[{}]
+        elif mutation=='atoms_none':plan['open_obligations'][0]['obligation_refs']=None
+        elif mutation=='reason_object':plan['production_path_review'][0]['rationale']={}
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_planning_branch_continuity.py:17: in call
+    return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+src/contractedge/orchestration/runner.py:553: in diagnosis_continuity
+    opened = {o['id']: o for o in planning_context.get('open_obligations', [])}
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <str_iterator object at 0x7f2456f74a90>
+
+>   opened = {o['id']: o for o in planning_context.get('open_obligations', [])}
+E   TypeError: string indices must be integers
+
+src/contractedge/orchestration/runner.py:553: TypeError
+___ test_invalid_model_plan_fields_cannot_crash_reassessment[open_nonrecord] ___
+
+mutation = 'open_nonrecord'
+
+    @pytest.mark.parametrize('mutation',['open_none','open_string','open_nonrecord','rows_string','row_none','refs_object','atoms_none','reason_object'])
+    def test_invalid_model_plan_fields_cannot_crash_reassessment(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='open_none':plan['open_obligations']=None
+        elif mutation=='open_string':plan['open_obligations']='bad'
+        elif mutation=='open_nonrecord':plan['open_obligations']=[None]
+        elif mutation=='rows_string':plan['production_path_review']='bad'
+        elif mutation=='row_none':plan['production_path_review']=[None]
+        elif mutation=='refs_object':plan['production_path_review'][0]['open_obligation_refs']=[{}]
+        elif mutation=='atoms_none':plan['open_obligations'][0]['obligation_refs']=None
+        elif mutation=='reason_object':plan['production_path_review'][0]['rationale']={}
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_planning_branch_continuity.py:17: in call
+    return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+src/contractedge/orchestration/runner.py:553: in diagnosis_continuity
+    opened = {o['id']: o for o in planning_context.get('open_obligations', [])}
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7f2456c173d0>
+
+>   opened = {o['id']: o for o in planning_context.get('open_obligations', [])}
+E   TypeError: 'NoneType' object is not subscriptable
+
+src/contractedge/orchestration/runner.py:553: TypeError
+____ test_invalid_model_plan_fields_cannot_crash_reassessment[rows_string] _____
+
+mutation = 'rows_string'
+
+    @pytest.mark.parametrize('mutation',['open_none','open_string','open_nonrecord','rows_string','row_none','refs_object','atoms_none','reason_object'])
+    def test_invalid_model_plan_fields_cannot_crash_reassessment(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='open_none':plan['open_obligations']=None
+        elif mutation=='open_string':plan['open_obligations']='bad'
+        elif mutation=='open_nonrecord':plan['open_obligations']=[None]
+        elif mutation=='rows_string':plan['production_path_review']='bad'
+        elif mutation=='row_none':plan['production_path_review']=[None]
+        elif mutation=='refs_object':plan['production_path_review'][0]['open_obligation_refs']=[{}]
+        elif mutation=='atoms_none':plan['open_obligations'][0]['obligation_refs']=None
+        elif mutation=='reason_object':plan['production_path_review'][0]['rationale']={}
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_planning_branch_continuity.py:17: in call
+    return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+snapshot_id = 'S'
+evidence_catalog = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+extension_gaps = [], input_digest = 'I'
+planning_context = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+
+    def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *, input_digest,
+                             planning_context=None):
+        """Carry reviewable claims, never prior verdicts as current evidence."""
+        if not prior or prior.get('snapshot_id') != snapshot_id or prior.get('input_digest') != input_digest:
+            return None
+        previous = {e['id']:e for e in prior.get('evidence_refs', [])}
+        current = {e['id']:e for e in evidence_catalog}
+        relations = {r['id']:r for r in prior.get('expected_relations', [])}
+        claims = []
+        omitted = 0
+        for violation in prior.get('violations', []):
+            if violation.get('causal_status') != 'SUPPORTED':
+                continue
+            refs = violation.get('evidence_refs', [])
+            available = [ref for ref in refs if ref in previous and ref in current
+                and all(previous[ref].get(k) == current[ref].get(k)
+                    for k in ('snapshot_id','kind','locator','content_digest','excerpt'))]
+            claim = {'violation': dict(violation),
+                     'relation': relations.get(violation.get('relation_id')),
+                     'current_evidence_refs': available,
+                     'unavailable_prior_evidence_refs': [ref for ref in refs if ref not in available]}
+            trial = json.dumps(claims + [claim], ensure_ascii=False).encode('utf-8')
+            if len(claims) >= 8 or len(trial) > 12000:
+                omitted += 1
+            else:
+                claims.append(claim)
+        branches, omitted_branches = [], 0
+        if (isinstance(planning_context, Mapping) and prior.get('run_id')
+                and all(planning_context.get(k) == prior.get(k)
+                        for k in ('run_id', 'snapshot_id', 'input_digest'))):
+            opened = {o['id']: o for o in planning_context.get('open_obligations', [])}
+            atoms = {a['id'] for a in prior.get('obligation_atoms', [])}
+            seen = set()
+            for row in planning_context.get('production_path_review', []):
+>               eid = row.get('source_evidence_id')
+E               AttributeError: 'str' object has no attribute 'get'
+
+src/contractedge/orchestration/runner.py:557: AttributeError
+______ test_invalid_model_plan_fields_cannot_crash_reassessment[row_none] ______
+
+mutation = 'row_none'
+
+    @pytest.mark.parametrize('mutation',['open_none','open_string','open_nonrecord','rows_string','row_none','refs_object','atoms_none','reason_object'])
+    def test_invalid_model_plan_fields_cannot_crash_reassessment(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='open_none':plan['open_obligations']=None
+        elif mutation=='open_string':plan['open_obligations']='bad'
+        elif mutation=='open_nonrecord':plan['open_obligations']=[None]
+        elif mutation=='rows_string':plan['production_path_review']='bad'
+        elif mutation=='row_none':plan['production_path_review']=[None]
+        elif mutation=='refs_object':plan['production_path_review'][0]['open_obligation_refs']=[{}]
+        elif mutation=='atoms_none':plan['open_obligations'][0]['obligation_refs']=None
+        elif mutation=='reason_object':plan['production_path_review'][0]['rationale']={}
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_planning_branch_continuity.py:17: in call
+    return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+snapshot_id = 'S'
+evidence_catalog = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+extension_gaps = [], input_digest = 'I'
+planning_context = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+
+    def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *, input_digest,
+                             planning_context=None):
+        """Carry reviewable claims, never prior verdicts as current evidence."""
+        if not prior or prior.get('snapshot_id') != snapshot_id or prior.get('input_digest') != input_digest:
+            return None
+        previous = {e['id']:e for e in prior.get('evidence_refs', [])}
+        current = {e['id']:e for e in evidence_catalog}
+        relations = {r['id']:r for r in prior.get('expected_relations', [])}
+        claims = []
+        omitted = 0
+        for violation in prior.get('violations', []):
+            if violation.get('causal_status') != 'SUPPORTED':
+                continue
+            refs = violation.get('evidence_refs', [])
+            available = [ref for ref in refs if ref in previous and ref in current
+                and all(previous[ref].get(k) == current[ref].get(k)
+                    for k in ('snapshot_id','kind','locator','content_digest','excerpt'))]
+            claim = {'violation': dict(violation),
+                     'relation': relations.get(violation.get('relation_id')),
+                     'current_evidence_refs': available,
+                     'unavailable_prior_evidence_refs': [ref for ref in refs if ref not in available]}
+            trial = json.dumps(claims + [claim], ensure_ascii=False).encode('utf-8')
+            if len(claims) >= 8 or len(trial) > 12000:
+                omitted += 1
+            else:
+                claims.append(claim)
+        branches, omitted_branches = [], 0
+        if (isinstance(planning_context, Mapping) and prior.get('run_id')
+                and all(planning_context.get(k) == prior.get(k)
+                        for k in ('run_id', 'snapshot_id', 'input_digest'))):
+            opened = {o['id']: o for o in planning_context.get('open_obligations', [])}
+            atoms = {a['id'] for a in prior.get('obligation_atoms', [])}
+            seen = set()
+            for row in planning_context.get('production_path_review', []):
+>               eid = row.get('source_evidence_id')
+E               AttributeError: 'NoneType' object has no attribute 'get'
+
+src/contractedge/orchestration/runner.py:557: AttributeError
+____ test_invalid_model_plan_fields_cannot_crash_reassessment[refs_object] _____
+
+mutation = 'refs_object'
+
+    @pytest.mark.parametrize('mutation',['open_none','open_string','open_nonrecord','rows_string','row_none','refs_object','atoms_none','reason_object'])
+    def test_invalid_model_plan_fields_cannot_crash_reassessment(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='open_none':plan['open_obligations']=None
+        elif mutation=='open_string':plan['open_obligations']='bad'
+        elif mutation=='open_nonrecord':plan['open_obligations']=[None]
+        elif mutation=='rows_string':plan['production_path_review']='bad'
+        elif mutation=='row_none':plan['production_path_review']=[None]
+        elif mutation=='refs_object':plan['production_path_review'][0]['open_obligation_refs']=[{}]
+        elif mutation=='atoms_none':plan['open_obligations'][0]['obligation_refs']=None
+        elif mutation=='reason_object':plan['production_path_review'][0]['rationale']={}
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_planning_branch_continuity.py:17: in call
+    return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+src/contractedge/orchestration/runner.py:560: in diagnosis_continuity
+    or not refs or any(ref not in opened for ref in refs) or eid in seen):
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7f2456dba7d0>
+
+>   or not refs or any(ref not in opened for ref in refs) or eid in seen):
+E   TypeError: unhashable type: 'dict'
+
+src/contractedge/orchestration/runner.py:560: TypeError
+_____ test_invalid_model_plan_fields_cannot_crash_reassessment[atoms_none] _____
+
+mutation = 'atoms_none'
+
+    @pytest.mark.parametrize('mutation',['open_none','open_string','open_nonrecord','rows_string','row_none','refs_object','atoms_none','reason_object'])
+    def test_invalid_model_plan_fields_cannot_crash_reassessment(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='open_none':plan['open_obligations']=None
+        elif mutation=='open_string':plan['open_obligations']='bad'
+        elif mutation=='open_nonrecord':plan['open_obligations']=[None]
+        elif mutation=='rows_string':plan['production_path_review']='bad'
+        elif mutation=='row_none':plan['production_path_review']=[None]
+        elif mutation=='refs_object':plan['production_path_review'][0]['open_obligation_refs']=[{}]
+        elif mutation=='atoms_none':plan['open_obligations'][0]['obligation_refs']=None
+        elif mutation=='reason_object':plan['production_path_review'][0]['rationale']={}
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_planning_branch_continuity.py:17: in call
+    return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+src/contractedge/orchestration/runner.py:571: in diagnosis_continuity
+    or any(not set(opened[ref].get('obligation_refs', [])) <= atoms for ref in refs)):
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7f2456c91690>
+
+>   or any(not set(opened[ref].get('obligation_refs', [])) <= atoms for ref in refs)):
+E   TypeError: 'NoneType' object is not iterable
+
+src/contractedge/orchestration/runner.py:571: TypeError
+___ test_invalid_model_plan_fields_cannot_crash_reassessment[reason_object] ____
+
+mutation = 'reason_object'
+
+    @pytest.mark.parametrize('mutation',['open_none','open_string','open_nonrecord','rows_string','row_none','refs_object','atoms_none','reason_object'])
+    def test_invalid_model_plan_fields_cannot_crash_reassessment(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='open_none':plan['open_obligations']=None
+        elif mutation=='open_string':plan['open_obligations']='bad'
+        elif mutation=='open_nonrecord':plan['open_obligations']=[None]
+        elif mutation=='rows_string':plan['production_path_review']='bad'
+        elif mutation=='row_none':plan['production_path_review']=[None]
+        elif mutation=='refs_object':plan['production_path_review'][0]['open_obligation_refs']=[{}]
+        elif mutation=='atoms_none':plan['open_obligations'][0]['obligation_refs']=None
+        elif mutation=='reason_object':plan['production_path_review'][0]['rationale']={}
+        result=call(prior,plan,evidence)
+>       assert not (result or {}).get('planning_branch_assessments')
+E       AssertionError: assert not [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+E        +  where [{'source_evidence_ref': 'SRC-rule', 'snapshot_id': 'S', 'source_content_digest': '48e7a678e72eb583327eeb6f4759bd3e0499e3ecc3918dfe7cb59131c11f401f', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}] = <built-in method get of dict object at 0x7f2456237ec0>('planning_branch_assessments')
+E        +    where <built-in method get of dict object at 0x7f2456237ec0> = ({'snapshot_id': 'S', 'prior_diagnosis_digest': '760d9d56cdf0d3a7950dbb1f56fe3004589d164051710a4dab5ab4380789f664', 'claims_for_reassessment': [], 'omitted_claim_count': 0, ...}).get
+
+tests/test_planning_branch_continuity.py:83: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_planning_branch_continuity.py::test_invalid_model_plan_fields_cannot_crash_reassessment[open_none]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_model_plan_fields_cannot_crash_reassessment[open_string]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_model_plan_fields_cannot_crash_reassessment[open_nonrecord]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_model_plan_fields_cannot_crash_reassessment[rows_string]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_model_plan_fields_cannot_crash_reassessment[row_none]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_model_plan_fields_cannot_crash_reassessment[refs_object]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_model_plan_fields_cannot_crash_reassessment[atoms_none]
+FAILED tests/test_planning_branch_continuity.py::test_invalid_model_plan_fields_cannot_crash_reassessment[reason_object]
+8 failed, 14 passed in 0.63s

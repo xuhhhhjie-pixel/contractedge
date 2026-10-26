@@ -1,0 +1,43 @@
+{
+  "status": "CLOSED_DIAGNOSIS_CONTRACT_FAILURE_HANDOFF_NOT_EXERCISED",
+  "registered_result": {
+    "status": "SINGLE_KPT_CLOSED_REQUIRES_ACTUAL_HANDOFF_AND_EFFECT_AUDIT",
+    "rows": [
+      {
+        "case_id": "R3-KPT-4673",
+        "method_status": "INVALID_OUTPUT",
+        "independent_status": "SEMANTIC_FAIL",
+        "public_outcome": "UNKNOWN",
+        "patch_bytes": 0,
+        "output": "/home/xhj/contractedge-diagnostic-source056-v2-20261026/methods/R3-KPT-4673/R3-KPT-4673",
+        "evidence_files": {
+          "receipt": {
+            "path": "/home/xhj/contractedge-diagnostic-source056-v2-20261026/methods/R3-KPT-4673/.isolated-c61153233d1747169c24675e84379158/receipt.json",
+            "sha256": "04c8f4d97b6553ec5f46cf915138cd21cc0687d0bfa3af2d9ae732f7df9a069b"
+          },
+          "trace": {
+            "path": "/home/xhj/contractedge-diagnostic-source056-v2-20261026/methods/R3-KPT-4673/R3-KPT-4673/repair.trace.json",
+            "sha256": "22e02cbfeca999acdb7e46cb38d971432f9a55d8fd711ed9254a8182aa5f4dfc"
+          }
+        }
+      }
+    ],
+    "formal_ready": false,
+    "counts_in_46_slot_panel": false,
+    "automatic_retry": false,
+    "registration": "/home/xhj/contractedge-diagnostic-source056-v2-20261026/registration.json"
+  },
+  "model_calls": 2,
+  "patch_bytes": 0,
+  "mechanism_exercised": false,
+  "first_error": "PRODUCTION_PATH_INCOMPLETE: existing source consumers U2/U3 are bypassed in relation endpoint IDs",
+  "correction_error": "PRODUCTION_CONSUMER_UNEVIDENCED: newly added U9 uses only public observations",
+  "independent_status": "SEMANTIC_FAIL",
+  "new_api_occupied_cny": 0.297212,
+  "total_occupied_cny": 125.429154,
+  "remaining_upper_bound_cny": 24.570846,
+  "archive_sha256": "34a93737729b88f2caad7be57c6dd8018d9cec3a33ddd8015e5a84183f3e400e",
+  "archive_files": 117,
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false
+}

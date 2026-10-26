@@ -520,7 +520,8 @@ def requirement_for_rediagnosis(requirement, prior, snapshot_id, input_digest):
     return result
 
 
-def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *, input_digest):
+def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *, input_digest,
+                         planning_context=None):
     """Carry reviewable claims, never prior verdicts as current evidence."""
     if not prior or prior.get('snapshot_id') != snapshot_id or prior.get('input_digest') != input_digest:
         return None
@@ -545,9 +546,68 @@ def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *
             omitted += 1
         else:
             claims.append(claim)
-    if not claims and not omitted:
+    branches, omitted_branches = [], 0
+    if (isinstance(planning_context, Mapping) and prior.get('run_id')
+            and all(planning_context.get(k) == prior.get(k)
+                    for k in ('run_id', 'snapshot_id', 'input_digest'))):
+        open_rows = planning_context.get('open_obligations', [])
+        from jsonschema import Draft202012Validator
+        from contractedge.contracts.validation import _load_schema
+        schema = _load_schema('ce.semantic_changeset.v1_1')
+        open_validator = Draft202012Validator({'$defs': schema['$defs'], '$ref': '#/$defs/openObligation'})
+        parents = {a['id']: a.get('outcome_id') for a in prior.get('obligation_atoms', [])}
+        outcomes = {o['id'] for o in prior.get('requirement_spec', {}).get('outcomes', [])}
+        opened, seen_open = {}, set()
+        for obligation in open_rows if isinstance(open_rows, list) else []:
+            if not isinstance(obligation, Mapping) or not isinstance(obligation.get('id'), str):
+                continue
+            oid = obligation['id']
+            if oid in seen_open:
+                opened.pop(oid, None)  # Duplicate IDs are ambiguous, never last-wins.
+                continue
+            seen_open.add(oid)
+            if (open_validator.is_valid(obligation) and obligation['outcome_id'] in outcomes
+                    and all(parents.get(ref) == obligation['outcome_id'] for ref in obligation['obligation_refs'])):
+                opened[oid] = obligation
+        atoms = {a['id'] for a in prior.get('obligation_atoms', [])}
+        seen = set()
+        reviews = planning_context.get('production_path_review', [])
+        for row in reviews if isinstance(reviews, list) else []:
+            if not isinstance(row, Mapping):
+                continue
+            eid = row.get('source_evidence_id')
+            refs = row.get('open_obligation_refs', [])
+            if (row.get('disposition') != 'UNRESOLVED' or row.get('change_refs') != []
+                    or not isinstance(eid, str) or not isinstance(row.get('rationale'), str)
+                    or not isinstance(refs, list) or not refs
+                    or any(not isinstance(ref, str) or ref not in opened for ref in refs)
+                    or any(not isinstance(opened[ref].get('obligation_refs', []), list)
+                           or not all(isinstance(a, str) for a in opened[ref].get('obligation_refs', [])) for ref in refs)
+                    or eid in seen):
+                continue
+            seen.add(eid)
+            record = current.get(eid, {})
+            original = previous.get(eid, {})
+            text = record.get('excerpt')
+            if (record.get('kind') != 'SOURCE_SPAN' or record.get('snapshot_id') != snapshot_id
+                    or not isinstance(text, str)
+                    or hashlib.sha256(text.encode()).hexdigest() != record.get('content_digest')
+                    or any(original.get(k) != record.get(k) for k in
+                           ('snapshot_id', 'kind', 'locator', 'content_digest', 'excerpt'))
+                    or any(not set(opened[ref].get('obligation_refs', [])) <= atoms for ref in refs)):
+                omitted_branches += 1
+                continue
+            concern = dict(source_evidence_ref=eid, snapshot_id=snapshot_id,
+                source_content_digest=record['content_digest'], locator=dict(record['locator']),
+                disposition='UNRESOLVED', rationale=row.get('rationale', ''),
+                open_obligations=[dict(opened[ref]) for ref in refs])
+            if len(branches) >= 4 or len(json.dumps(branches + [concern], ensure_ascii=False).encode()) > 8000:
+                omitted_branches += 1
+                continue
+            branches.append(concern)
+    if not claims and not omitted and not branches and not omitted_branches:
         return None
-    return {'snapshot_id': snapshot_id, 'prior_diagnosis_digest': canonical_digest(prior),
+    result = {'snapshot_id': snapshot_id, 'prior_diagnosis_digest': canonical_digest(prior),
         'claims_for_reassessment': claims, 'omitted_claim_count': omitted,
         'extension_gaps': [dict(g) for g in extension_gaps[:8]],
         'instruction': 'Prior claims are not trusted facts or edit permission. Cite only exact current evidence_catalog records; unavailable IDs cannot support claims. '
@@ -555,6 +615,16 @@ def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *
             'Revise or withdraw claims when current evidence warrants it; explain in causal_explanation/evidence_gaps.summary. '
             'Missing repair helpers may be introduced only with evidenced caller/interface prerequisites and edit permission. '
             'Unobserved outcomes remain UNKNOWN. Do not automatically retain old verdicts.'}
+    if branches or omitted_branches:
+        result.update(planning_branch_assessments=branches,
+            omitted_planning_branch_count=omitted_branches,
+            planning_context_digest=canonical_digest(planning_context),
+            planning_branch_interpretation='Unverified same-snapshot planning concerns, not new evidence, '
+                'supported violations or edit permission. Reassess each branch against the current source, '
+                'public observations and obligation scope. Bind participating branches to appropriate semantic '
+                'units only when justified; explain remaining uncertainty or irrelevance. Do not narrow a broad '
+                'obligation to one branch merely because the earlier supported diagnosis covered only that branch.')
+    return result
 
 
 
@@ -772,7 +842,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             recovered_generation_modes[request.prompt_version] = stage
         return result
 
-    def fit_diagnosis(candidate_set, method, requirement, context, *, prior=None, extension_gaps=()):
+    def fit_diagnosis(candidate_set, method, requirement, context, *, prior=None, extension_gaps=(),
+                      planning_context=None):
         """Fit the complete serialized request, including fixed prompt overhead, in context."""
         fitted = candidate_set
         contracts = field_contract_contexts(fitted.candidates, parsed.requirement_text)
@@ -798,7 +869,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             request = build_diagnosis_request(method, requirement, fitted, context,
                                               scope_resolution=scope)
             continuity = diagnosis_continuity(prior, context.snapshot_id,
-                build_evidence_catalog(method, fitted, context.snapshot_id), extension_gaps, input_digest=context.input_digest)
+                build_evidence_catalog(method, fitted, context.snapshot_id), extension_gaps,
+                input_digest=context.input_digest, planning_context=planning_context)
             if continuity is not None:
                 body = json.loads(request.messages[1]['content'])
                 body['diagnosis_continuity'] = continuity
@@ -1440,7 +1512,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     'trigger': extension_trigger, 'selected_ids': list(candidate_set.selected_ids),
                     'gap_search': audit})
                 requirement = requirement_for_rediagnosis(requirement, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
-                candidate_set, request, count = fit_diagnosis(candidate_set, run_input, requirement, context, prior=diagnosis.raw, extension_gaps=planning_gaps)
+                candidate_set, request, count = fit_diagnosis(candidate_set, run_input, requirement, context,
+                    prior=diagnosis.raw, extension_gaps=planning_gaps, planning_context=changeset_payload)
                 failure=evidence_delivery_failure(candidate_set,diagnosis.raw,changeset_payload)
                 if failure is not None:return failure
                 if request is None or not within_budget(request, count):

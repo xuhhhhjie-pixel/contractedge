@@ -1,0 +1,431 @@
+FFFFFFFFFFFFFF                                                           [100%]
+=================================== FAILURES ===================================
+_ test_unresolved_branch_and_open_predicate_survive_even_without_supported_claims _
+
+    def test_unresolved_branch_and_open_predicate_survive_even_without_supported_claims():
+>       prior,plan,evidence=fixture();result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+_ test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[snapshot] _
+
+mutation = 'snapshot'
+
+    @pytest.mark.parametrize('mutation',['snapshot','input','run','digest','excerpt','missing_source','unknown_open','wrong_atom','out_of_scope','preserve','claimed_edit'])
+    def test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='snapshot':plan['snapshot_id']='OLD'
+        elif mutation=='input':plan['input_digest']='OTHER'
+        elif mutation=='run':plan['run_id']='OTHER'
+        elif mutation=='digest':evidence[0]['content_digest']='0'*64
+        elif mutation=='excerpt':evidence[0]['excerpt']='other source'
+        elif mutation=='missing_source':evidence=[]
+        elif mutation=='unknown_open':plan['production_path_review'][0]['open_obligation_refs']=['absent']
+        elif mutation=='wrong_atom':plan['open_obligations'][0]['obligation_refs']=['absent']
+        elif mutation=='out_of_scope':plan['production_path_review'][0]['disposition']='OUT_OF_SCOPE'
+        elif mutation=='preserve':plan['production_path_review'][0]['disposition']='PRESERVE'
+        elif mutation=='claimed_edit':plan['production_path_review'][0]['change_refs']=['CH1']
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'OLD', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+__ test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[input] ___
+
+mutation = 'input'
+
+    @pytest.mark.parametrize('mutation',['snapshot','input','run','digest','excerpt','missing_source','unknown_open','wrong_atom','out_of_scope','preserve','claimed_edit'])
+    def test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='snapshot':plan['snapshot_id']='OLD'
+        elif mutation=='input':plan['input_digest']='OTHER'
+        elif mutation=='run':plan['run_id']='OTHER'
+        elif mutation=='digest':evidence[0]['content_digest']='0'*64
+        elif mutation=='excerpt':evidence[0]['excerpt']='other source'
+        elif mutation=='missing_source':evidence=[]
+        elif mutation=='unknown_open':plan['production_path_review'][0]['open_obligation_refs']=['absent']
+        elif mutation=='wrong_atom':plan['open_obligations'][0]['obligation_refs']=['absent']
+        elif mutation=='out_of_scope':plan['production_path_review'][0]['disposition']='OUT_OF_SCOPE'
+        elif mutation=='preserve':plan['production_path_review'][0]['disposition']='PRESERVE'
+        elif mutation=='claimed_edit':plan['production_path_review'][0]['change_refs']=['CH1']
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'OTHER', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+___ test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[run] ____
+
+mutation = 'run'
+
+    @pytest.mark.parametrize('mutation',['snapshot','input','run','digest','excerpt','missing_source','unknown_open','wrong_atom','out_of_scope','preserve','claimed_edit'])
+    def test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='snapshot':plan['snapshot_id']='OLD'
+        elif mutation=='input':plan['input_digest']='OTHER'
+        elif mutation=='run':plan['run_id']='OTHER'
+        elif mutation=='digest':evidence[0]['content_digest']='0'*64
+        elif mutation=='excerpt':evidence[0]['excerpt']='other source'
+        elif mutation=='missing_source':evidence=[]
+        elif mutation=='unknown_open':plan['production_path_review'][0]['open_obligation_refs']=['absent']
+        elif mutation=='wrong_atom':plan['open_obligations'][0]['obligation_refs']=['absent']
+        elif mutation=='out_of_scope':plan['production_path_review'][0]['disposition']='OUT_OF_SCOPE'
+        elif mutation=='preserve':plan['production_path_review'][0]['disposition']='PRESERVE'
+        elif mutation=='claimed_edit':plan['production_path_review'][0]['change_refs']=['CH1']
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'OTHER', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+__ test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[digest] __
+
+mutation = 'digest'
+
+    @pytest.mark.parametrize('mutation',['snapshot','input','run','digest','excerpt','missing_source','unknown_open','wrong_atom','out_of_scope','preserve','claimed_edit'])
+    def test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='snapshot':plan['snapshot_id']='OLD'
+        elif mutation=='input':plan['input_digest']='OTHER'
+        elif mutation=='run':plan['run_id']='OTHER'
+        elif mutation=='digest':evidence[0]['content_digest']='0'*64
+        elif mutation=='excerpt':evidence[0]['excerpt']='other source'
+        elif mutation=='missing_source':evidence=[]
+        elif mutation=='unknown_open':plan['production_path_review'][0]['open_obligation_refs']=['absent']
+        elif mutation=='wrong_atom':plan['open_obligations'][0]['obligation_refs']=['absent']
+        elif mutation=='out_of_scope':plan['production_path_review'][0]['disposition']='OUT_OF_SCOPE'
+        elif mutation=='preserve':plan['production_path_review'][0]['disposition']='PRESERVE'
+        elif mutation=='claimed_edit':plan['production_path_review'][0]['change_refs']=['CH1']
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+_ test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[excerpt] __
+
+mutation = 'excerpt'
+
+    @pytest.mark.parametrize('mutation',['snapshot','input','run','digest','excerpt','missing_source','unknown_open','wrong_atom','out_of_scope','preserve','claimed_edit'])
+    def test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='snapshot':plan['snapshot_id']='OLD'
+        elif mutation=='input':plan['input_digest']='OTHER'
+        elif mutation=='run':plan['run_id']='OTHER'
+        elif mutation=='digest':evidence[0]['content_digest']='0'*64
+        elif mutation=='excerpt':evidence[0]['excerpt']='other source'
+        elif mutation=='missing_source':evidence=[]
+        elif mutation=='unknown_open':plan['production_path_review'][0]['open_obligation_refs']=['absent']
+        elif mutation=='wrong_atom':plan['open_obligations'][0]['obligation_refs']=['absent']
+        elif mutation=='out_of_scope':plan['production_path_review'][0]['disposition']='OUT_OF_SCOPE'
+        elif mutation=='preserve':plan['production_path_review'][0]['disposition']='PRESERVE'
+        elif mutation=='claimed_edit':plan['production_path_review'][0]['change_refs']=['CH1']
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+_ test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[missing_source] _
+
+mutation = 'missing_source'
+
+    @pytest.mark.parametrize('mutation',['snapshot','input','run','digest','excerpt','missing_source','unknown_open','wrong_atom','out_of_scope','preserve','claimed_edit'])
+    def test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='snapshot':plan['snapshot_id']='OLD'
+        elif mutation=='input':plan['input_digest']='OTHER'
+        elif mutation=='run':plan['run_id']='OTHER'
+        elif mutation=='digest':evidence[0]['content_digest']='0'*64
+        elif mutation=='excerpt':evidence[0]['excerpt']='other source'
+        elif mutation=='missing_source':evidence=[]
+        elif mutation=='unknown_open':plan['production_path_review'][0]['open_obligation_refs']=['absent']
+        elif mutation=='wrong_atom':plan['open_obligations'][0]['obligation_refs']=['absent']
+        elif mutation=='out_of_scope':plan['production_path_review'][0]['disposition']='OUT_OF_SCOPE'
+        elif mutation=='preserve':plan['production_path_review'][0]['disposition']='PRESERVE'
+        elif mutation=='claimed_edit':plan['production_path_review'][0]['change_refs']=['CH1']
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = []
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+_ test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[unknown_open] _
+
+mutation = 'unknown_open'
+
+    @pytest.mark.parametrize('mutation',['snapshot','input','run','digest','excerpt','missing_source','unknown_open','wrong_atom','out_of_scope','preserve','claimed_edit'])
+    def test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='snapshot':plan['snapshot_id']='OLD'
+        elif mutation=='input':plan['input_digest']='OTHER'
+        elif mutation=='run':plan['run_id']='OTHER'
+        elif mutation=='digest':evidence[0]['content_digest']='0'*64
+        elif mutation=='excerpt':evidence[0]['excerpt']='other source'
+        elif mutation=='missing_source':evidence=[]
+        elif mutation=='unknown_open':plan['production_path_review'][0]['open_obligation_refs']=['absent']
+        elif mutation=='wrong_atom':plan['open_obligations'][0]['obligation_refs']=['absent']
+        elif mutation=='out_of_scope':plan['production_path_review'][0]['disposition']='OUT_OF_SCOPE'
+        elif mutation=='preserve':plan['production_path_review'][0]['disposition']='PRESERVE'
+        elif mutation=='claimed_edit':plan['production_path_review'][0]['change_refs']=['CH1']
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+_ test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[wrong_atom] _
+
+mutation = 'wrong_atom'
+
+    @pytest.mark.parametrize('mutation',['snapshot','input','run','digest','excerpt','missing_source','unknown_open','wrong_atom','out_of_scope','preserve','claimed_edit'])
+    def test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='snapshot':plan['snapshot_id']='OLD'
+        elif mutation=='input':plan['input_digest']='OTHER'
+        elif mutation=='run':plan['run_id']='OTHER'
+        elif mutation=='digest':evidence[0]['content_digest']='0'*64
+        elif mutation=='excerpt':evidence[0]['excerpt']='other source'
+        elif mutation=='missing_source':evidence=[]
+        elif mutation=='unknown_open':plan['production_path_review'][0]['open_obligation_refs']=['absent']
+        elif mutation=='wrong_atom':plan['open_obligations'][0]['obligation_refs']=['absent']
+        elif mutation=='out_of_scope':plan['production_path_review'][0]['disposition']='OUT_OF_SCOPE'
+        elif mutation=='preserve':plan['production_path_review'][0]['disposition']='PRESERVE'
+        elif mutation=='claimed_edit':plan['production_path_review'][0]['change_refs']=['CH1']
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+_ test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[out_of_scope] _
+
+mutation = 'out_of_scope'
+
+    @pytest.mark.parametrize('mutation',['snapshot','input','run','digest','excerpt','missing_source','unknown_open','wrong_atom','out_of_scope','preserve','claimed_edit'])
+    def test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='snapshot':plan['snapshot_id']='OLD'
+        elif mutation=='input':plan['input_digest']='OTHER'
+        elif mutation=='run':plan['run_id']='OTHER'
+        elif mutation=='digest':evidence[0]['content_digest']='0'*64
+        elif mutation=='excerpt':evidence[0]['excerpt']='other source'
+        elif mutation=='missing_source':evidence=[]
+        elif mutation=='unknown_open':plan['production_path_review'][0]['open_obligation_refs']=['absent']
+        elif mutation=='wrong_atom':plan['open_obligations'][0]['obligation_refs']=['absent']
+        elif mutation=='out_of_scope':plan['production_path_review'][0]['disposition']='OUT_OF_SCOPE'
+        elif mutation=='preserve':plan['production_path_review'][0]['disposition']='PRESERVE'
+        elif mutation=='claimed_edit':plan['production_path_review'][0]['change_refs']=['CH1']
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+_ test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[preserve] _
+
+mutation = 'preserve'
+
+    @pytest.mark.parametrize('mutation',['snapshot','input','run','digest','excerpt','missing_source','unknown_open','wrong_atom','out_of_scope','preserve','claimed_edit'])
+    def test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='snapshot':plan['snapshot_id']='OLD'
+        elif mutation=='input':plan['input_digest']='OTHER'
+        elif mutation=='run':plan['run_id']='OTHER'
+        elif mutation=='digest':evidence[0]['content_digest']='0'*64
+        elif mutation=='excerpt':evidence[0]['excerpt']='other source'
+        elif mutation=='missing_source':evidence=[]
+        elif mutation=='unknown_open':plan['production_path_review'][0]['open_obligation_refs']=['absent']
+        elif mutation=='wrong_atom':plan['open_obligations'][0]['obligation_refs']=['absent']
+        elif mutation=='out_of_scope':plan['production_path_review'][0]['disposition']='OUT_OF_SCOPE'
+        elif mutation=='preserve':plan['production_path_review'][0]['disposition']='PRESERVE'
+        elif mutation=='claimed_edit':plan['production_path_review'][0]['change_refs']=['CH1']
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+_ test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[claimed_edit] _
+
+mutation = 'claimed_edit'
+
+    @pytest.mark.parametrize('mutation',['snapshot','input','run','digest','excerpt','missing_source','unknown_open','wrong_atom','out_of_scope','preserve','claimed_edit'])
+    def test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted(mutation):
+        prior,plan,evidence=fixture()
+        if mutation=='snapshot':plan['snapshot_id']='OLD'
+        elif mutation=='input':plan['input_digest']='OTHER'
+        elif mutation=='run':plan['run_id']='OTHER'
+        elif mutation=='digest':evidence[0]['content_digest']='0'*64
+        elif mutation=='excerpt':evidence[0]['excerpt']='other source'
+        elif mutation=='missing_source':evidence=[]
+        elif mutation=='unknown_open':plan['production_path_review'][0]['open_obligation_refs']=['absent']
+        elif mutation=='wrong_atom':plan['open_obligations'][0]['obligation_refs']=['absent']
+        elif mutation=='out_of_scope':plan['production_path_review'][0]['disposition']='OUT_OF_SCOPE'
+        elif mutation=='preserve':plan['production_path_review'][0]['disposition']='PRESERVE'
+        elif mutation=='claimed_edit':plan['production_path_review'][0]['change_refs']=['CH1']
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+_______________ test_context_free_legacy_continuity_is_unchanged _______________
+
+    def test_context_free_legacy_continuity_is_unchanged():
+        prior,plan,evidence=fixture()
+        assert diagnosis_continuity(prior,'S',evidence,[],input_digest='I') is None
+        prior['violations']=[dict(id='V1',relation_id='R1',causal_status='SUPPORTED',evidence_refs=['SRC-rule'])]
+        before=diagnosis_continuity(prior,'S',evidence,[],input_digest='I')
+        wrong={**plan,'snapshot_id':'OLD'}
+>       assert call(prior,wrong,evidence)==before
+
+tests/test_planning_branch_continuity.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}], ...}
+plan = {'snapshot_id': 'OLD', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+_____ test_complete_records_fit_four_record_eight_kib_bound_with_omissions _____
+
+    def test_complete_records_fit_four_record_eight_kib_bound_with_omissions():
+        prior,plan,evidence=fixture();rows=[]
+        for i in range(8):
+            source={**evidence[0],'id':f'SRC-{i}'};evidence.append(source);prior['evidence_refs'].append(source)
+            rows.append({**plan['production_path_review'][0],'source_evidence_id':source['id'],'rationale':'why '*500})
+        plan['production_path_review']=rows
+>       result=call(prior,plan,evidence)
+
+tests/test_planning_branch_continuity.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+prior = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'evidence_refs': [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', '...d': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}, ...], ...}
+plan = {'snapshot_id': 'S', 'input_digest': 'I', 'run_id': 'R', 'status': 'NEEDS_EVIDENCE', ...}
+evidence = [{'id': 'SRC-rule', 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_li..., 'kind': 'SOURCE_SPAN', 'snapshot_id': 'S', 'locator': {'path': 'flow.go', 'start_line': 9, 'end_line': 9}, ...}, ...]
+
+    def call(prior,plan,evidence):
+>       return diagnosis_continuity(prior,'S',evidence,[],input_digest='I',planning_context=plan)
+E       TypeError: diagnosis_continuity() got an unexpected keyword argument 'planning_context'
+
+tests/test_planning_branch_continuity.py:17: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_planning_branch_continuity.py::test_unresolved_branch_and_open_predicate_survive_even_without_supported_claims
+FAILED tests/test_planning_branch_continuity.py::test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[snapshot]
+FAILED tests/test_planning_branch_continuity.py::test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[input]
+FAILED tests/test_planning_branch_continuity.py::test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[run]
+FAILED tests/test_planning_branch_continuity.py::test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[digest]
+FAILED tests/test_planning_branch_continuity.py::test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[excerpt]
+FAILED tests/test_planning_branch_continuity.py::test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[missing_source]
+FAILED tests/test_planning_branch_continuity.py::test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[unknown_open]
+FAILED tests/test_planning_branch_continuity.py::test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[wrong_atom]
+FAILED tests/test_planning_branch_continuity.py::test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[out_of_scope]
+FAILED tests/test_planning_branch_continuity.py::test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[preserve]
+FAILED tests/test_planning_branch_continuity.py::test_unbound_or_unresolved_inapplicable_context_cannot_be_promoted[claimed_edit]
+FAILED tests/test_planning_branch_continuity.py::test_context_free_legacy_continuity_is_unchanged
+FAILED tests/test_planning_branch_continuity.py::test_complete_records_fit_four_record_eight_kib_bound_with_omissions
+14 failed in 0.38s
