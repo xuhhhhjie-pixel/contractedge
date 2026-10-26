@@ -1,0 +1,62 @@
+......................FF                                                 [100%]
+=================================== FAILURES ===================================
+____ test_shadowed_callback_is_not_mistaken_for_package_implementation[var] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-655/test_shadowed_callback_is_not_3')
+binding = 'var'
+
+    @pytest.mark.parametrize('binding',['parameter','local','range','var','var_block'])
+    def test_shadowed_callback_is_not_mistaken_for_package_implementation(tmp_path,binding):
+        targets,ops=fixture(tmp_path)
+        signature='items []string, rules []policy.Rule'
+        if binding=='parameter':
+            signature+=', keep func([]string, policy.Rule) []string';body='return keep(items, rules[0])'
+        elif binding=='local':
+            body='keep := otherCallback; return keep(items, rules[0])'
+        elif binding=='var':
+            body='var other, keep func([]string, policy.Rule) []string; _ = other; return keep(items, rules[0])'
+        elif binding=='var_block':
+            body='var (\n other, keep func([]string, policy.Rule) []string\n); _ = other; return keep(items, rules[0])'
+        else:
+            signature+=', callbacks []func([]string, policy.Rule) []string';body='for _, keep := range callbacks { return keep(items, rules[0]) }; return items'
+        (tmp_path/'engine/apply.go').write_text('package engine\nimport policy "example.org/typed/api"\n'+
+            f'func Apply({signature}) []string {{ {body} }}\n'+
+            'func keep(items []string, rule policy.Rule) []string { return items }\n')
+        records,_=local_go_helper_support(compute_snapshot(tmp_path),targets,ops)
+>       assert not any(r['excerpt'].lstrip().startswith('func keep(') for r in records)
+E       assert not True
+E        +  where True = any(<generator object test_shadowed_callback_is_not_mistaken_for_package_implementation.<locals>.<genexpr> at 0x7f27af82cdd0>)
+
+tests/test_helper_input_contracts.py:165: AssertionError
+_ test_shadowed_callback_is_not_mistaken_for_package_implementation[var_block] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-655/test_shadowed_callback_is_not_4')
+binding = 'var_block'
+
+    @pytest.mark.parametrize('binding',['parameter','local','range','var','var_block'])
+    def test_shadowed_callback_is_not_mistaken_for_package_implementation(tmp_path,binding):
+        targets,ops=fixture(tmp_path)
+        signature='items []string, rules []policy.Rule'
+        if binding=='parameter':
+            signature+=', keep func([]string, policy.Rule) []string';body='return keep(items, rules[0])'
+        elif binding=='local':
+            body='keep := otherCallback; return keep(items, rules[0])'
+        elif binding=='var':
+            body='var other, keep func([]string, policy.Rule) []string; _ = other; return keep(items, rules[0])'
+        elif binding=='var_block':
+            body='var (\n other, keep func([]string, policy.Rule) []string\n); _ = other; return keep(items, rules[0])'
+        else:
+            signature+=', callbacks []func([]string, policy.Rule) []string';body='for _, keep := range callbacks { return keep(items, rules[0]) }; return items'
+        (tmp_path/'engine/apply.go').write_text('package engine\nimport policy "example.org/typed/api"\n'+
+            f'func Apply({signature}) []string {{ {body} }}\n'+
+            'func keep(items []string, rule policy.Rule) []string { return items }\n')
+        records,_=local_go_helper_support(compute_snapshot(tmp_path),targets,ops)
+>       assert not any(r['excerpt'].lstrip().startswith('func keep(') for r in records)
+E       assert not True
+E        +  where True = any(<generator object test_shadowed_callback_is_not_mistaken_for_package_implementation.<locals>.<genexpr> at 0x7f27af61da10>)
+
+tests/test_helper_input_contracts.py:165: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_helper_input_contracts.py::test_shadowed_callback_is_not_mistaken_for_package_implementation[var]
+FAILED tests/test_helper_input_contracts.py::test_shadowed_callback_is_not_mistaken_for_package_implementation[var_block]
+2 failed, 22 passed in 0.32s

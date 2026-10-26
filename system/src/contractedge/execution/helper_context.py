@@ -226,8 +226,11 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
                     input_packages.update(factories[a]['package'] for a in binding['args'] if a in factories)
     files, scanned_bytes = 0, 0; scanned = {}; queued = []
     target_paths = {t['path'] for t in targets}
-    for package in sorted({p for p,_ in queries},key=lambda p:(p not in async_queries,p not in input_packages,p)):
-        symbols={s for p,s in queries if p==package};async_entry=async_queries.get(package,{})
+    def scan_package(package):
+        nonlocal files, scanned_bytes
+        if package in scanned:
+            return scanned[package]
+        async_entry=async_queries.get(package,{})
         paths=[p for p in sorted(snapshot.file_digests) if str(PurePosixPath(p).parent)==package and p.endswith('.go') and not p.endswith('_test.go') and p not in target_paths]
         candidates=[]
         for path in paths:
@@ -247,7 +250,12 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
             for unit in parse_source_units(path,text,snapshot.snapshot_id,max_lines=768 if async_entry or package in input_packages else 80,max_chars=32000 if async_entry or package in input_packages else 16000):
                 candidates.append((path,lines,unit))
             if async_entry and _go_async_complete(candidates, async_entry): break
-        scanned[package]=candidates;receiver_types={}
+        scanned[package]=candidates
+        return candidates
+
+    for package in sorted({p for p,_ in queries},key=lambda p:(p not in async_queries,p not in input_packages,p)):
+        symbols={s for p,s in queries if p==package};async_entry=async_queries.get(package,{})
+        candidates=scan_package(package);receiver_types={}
         for _,_,unit in candidates:
             if unit.get('symbol') not in async_entry or unit.get('truncated'):continue
             signature=_go_signature(unit)
@@ -283,6 +291,81 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
             if rank==4 and unit['locator']['end_line']-unit['locator']['start_line']>=80:continue
             queued.append((rank,path,lines,unit,None))
     queued.extend((1,path,lines,unit,link) for path,lines,unit,link in _go_field_dependencies(scanned,bindings,audit))
+    # A helper's input type is part of its calling contract. Locate only simple
+    # concrete local types and methods literally mentioned by that helper; this
+    # remains lexical context rather than inferred dispatch or type checking.
+    contract_links={}
+    for rank,path,lines,unit,link in tuple(queued):
+        if rank!=4 or unit.get('truncated'):
+            continue
+        code=_go_code(unit['text'])
+        signature=re.match(r'\s*func\s+(?:\([^)]*\)\s*)?'+re.escape(unit.get('symbol',''))+r'\s*\(',code)
+        end=_go_close(code,signature.end()-1) if signature else None
+        if end is None:
+            continue
+        aliases={alias:import_path[len(module)+1:] for alias,import_path in _go_import_specs(''.join(lines))
+                 if alias not in {'_', '.'} and import_path.startswith(module+'/')}
+        mentioned_methods=set(re.findall(r'\.\s*(\w+)\s*\(',code[end+1:]))
+        own_package=str(PurePosixPath(path).parent)
+        parameters=_go_split(code[signature.end():end])
+        bound_names={match[1] for part in parameters if (match:=re.match(r'(\w+)',part))}
+        body=code[end+1:]
+        for match in re.finditer(r'(?<![\w.])(\w+(?:\s*,\s*\w+)*)\s*:=',body):
+            bound_names.update(name.strip() for name in match[1].split(','))
+        for names in re.findall(r'\b(?:var|const|type)\s+(\w+(?:\s*,\s*\w+)*)',body):
+            bound_names.update(name.strip() for name in names.split(','))
+        for block in re.findall(r'\b(?:var|const)\s*\(([\s\S]*?)\)',body):
+            for names in re.findall(r'(?m)^\s*(\w+(?:\s*,\s*\w+)*)',block):
+                bound_names.update(name.strip() for name in names.split(','))
+        for function in re.finditer(r'\bfunc\s*\(',body):
+            close=_go_close(body,function.end()-1)
+            if close is not None:
+                bound_names.update(match[1] for part in _go_split(body[function.end():close])
+                                   if (match:=re.match(r'(\w+)',part)))
+        found_input=False
+        for parameter in parameters:
+            named=re.fullmatch(r'(\w+)\s+((?:\[\]|\*|\.\.\.)*(?:(\w+)\.)?(\w+))',parameter)
+            if not named or named[1]=='_':
+                continue
+            alias,type_name=named[3],named[4]
+            package=aliases.get(alias) if alias else own_package
+            if package is None:
+                continue
+            rows=scan_package(package)
+            declarations=[row for row in rows if re.match(
+                r'\s*type\s+'+re.escape(type_name)+r'\s+struct\b',_go_code(row[2]['text']))]
+            if len(declarations)!=1 or declarations[0][2].get('truncated'):
+                audit.append(dict(result='HELPER_INPUT_CONTRACT_UNRESOLVED',helper=unit['symbol'],
+                                  package=package,type_name=type_name))
+                continue
+            found_input=True
+            dependency=dict(helper_path=path,helper_symbol=unit['symbol'],package=package,type_name=type_name)
+            type_path,type_lines,type_unit=declarations[0]
+            queued.append((5,type_path,type_lines,type_unit,None))
+            contract_links[(type_path,type_unit['id'])]=('LOCAL_HELPER_INPUT_TYPE',dependency)
+            for method in sorted(mentioned_methods):
+                implementations=[row for row in rows if re.match(
+                    r'\s*func\s*\(\s*\w+\s+\*?'+re.escape(type_name)+r'\s*\)\s*'+re.escape(method)+r'\s*\(',
+                    _go_code(row[2]['text']))]
+                if len(implementations)!=1 or implementations[0][2].get('truncated'):
+                    continue
+                method_path,method_lines,method_unit=implementations[0]
+                queued.append((6,method_path,method_lines,method_unit,None))
+                contract_links[(method_path,method_unit['id'])]=('LOCAL_HELPER_INPUT_METHOD',{**dependency,'method':method})
+        if found_input:
+            calls=set(re.findall(r'(?<![\w.])(\w+)\s*\(',code[end+1:]))
+            for name in sorted(calls-{unit['symbol']}):
+                if name in bound_names:
+                    audit.append(dict(result='HELPER_LOCAL_CALL_SHADOWED',helper=unit['symbol'],name=name))
+                    continue
+                matches=[row for row in scanned.get(own_package,[]) if re.match(
+                    r'\s*func\s+'+re.escape(name)+r'\s*\(',_go_code(row[2]['text']))]
+                if len(matches)!=1 or matches[0][2].get('truncated'):
+                    continue
+                call_path,call_lines,call_unit=matches[0]
+                queued.append((7,call_path,call_lines,call_unit,None))
+                contract_links[(call_path,call_unit['id'])]=('LOCAL_HELPER_LOCAL_CALL',
+                    dict(helper_path=path,helper_symbol=unit['symbol'],callee=name))
     included_bytes=0;seen=set()
     for rank,path,lines,unit,link in sorted(queued,key=lambda row:(row[0],row[1],row[3]['locator']['start_line'],row[4] is None)):
         loc=unit['locator'];start=loc['start_line']-1
@@ -293,15 +376,18 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
         if included_bytes+size>max_bytes or len(result)>=8:
             audit.append(dict(path=path,symbol=unit['symbol'],result='READ_ONLY_SUPPORT_BUDGET'));continue
         included_bytes+=size;seen.add((path,digest))
-        basis='LOCAL_CONSTRUCTOR_FIELD_RECEIVER' if link else 'LOCAL_CONSTRUCTOR_ASYNC_RECEIVER' if rank<4 else 'DIRECT_LOCAL_IMPORT'
-        origin=('Explicit constructor argument/field/return link; read-only concrete-method candidate, not verified dispatch, readiness, causality or edit permission' if link else
+        contract=contract_links.get((path,unit['id'])) if rank>4 else None
+        basis=contract[0] if contract else 'LOCAL_CONSTRUCTOR_FIELD_RECEIVER' if link else 'LOCAL_CONSTRUCTOR_ASYNC_RECEIVER' if rank<4 else 'DIRECT_LOCAL_IMPORT'
+        origin=('Local helper input type/method or direct local callee; exact read-only declaration, not inferred dispatch, causality or edit permission' if contract else
+                'Explicit constructor argument/field/return link; read-only concrete-method candidate, not verified dispatch, readiness, causality or edit permission' if link else
                 'Explicit local construction and asynchronous receiver call; read-only lexical hint, not readiness or verified dispatch/causality/edit permission' if rank<4 else
                 'Direct qualified call in accepted target; local Go import lexical lookup; read-only, not a verified causal edge or edit permission')
         record=dict(id='HELPER-'+digest[:16],kind='SOURCE_SPAN',snapshot_id=snapshot.snapshot_id,locator=dict(path=path,start_line=start+1,end_line=loc['end_line']),content_digest=digest,excerpt=excerpt,origin=origin)
         result.append(record)
         audit.append(dict(id=record['id'],path=path,symbol=unit['symbol'],result='INCLUDED_READ_ONLY_HELPER',basis=basis,
             lifecycle_role='FIELD_INPUT' if link else ('ASYNC_ENTRY' if rank==0 else 'ASYNC_SUPPORT') if rank<4 else None,
-            declaration_locator=dict(loc),declaration_content_digest=hashlib.sha256(unit['text'].encode()).hexdigest(),**({'field_link':link} if link else {})))
+            declaration_locator=dict(loc),declaration_content_digest=hashlib.sha256(unit['text'].encode()).hexdigest(),
+            **({'input_contract_link':contract[1]} if contract else {}),**({'field_link':link} if link else {})))
     audit.append(dict(result='HELPER_SCAN_TOTALS',indexed_files=files,indexed_bytes=scanned_bytes))
     return result,audit
 

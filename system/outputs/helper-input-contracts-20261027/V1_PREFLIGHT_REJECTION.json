@@ -1,0 +1,11 @@
+{
+  "status": "REJECTED_STALE_PACKAGING_CONFIG_HASH_BEFORE_TEST_DISPATCH",
+  "freeze_sha256": "ee2a8625e279921c626bc14f80d91a8b50257ccc29c04f2002d592a1436455c4",
+  "stale_configuration_files": [
+    "pyproject.toml"
+  ],
+  "pytest_started": false,
+  "qualification_started": false,
+  "new_model_calls": 0,
+  "source_sha256": "1cbdce8740890e423e9be12bb7362ae571ff6e679fd0918154dbbe7e0f018a2a"
+}

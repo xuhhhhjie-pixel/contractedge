@@ -1,0 +1,7 @@
+Processing /home/xhj/contractedge-planning-branch-continuity-20261026/.superpowers/sdd/2026-10-27-helper-input-contracts/wheels-final/contractedge_system-0.6.59-py3-none-any.whl
+Installing collected packages: contractedge-system
+  Attempting uninstall: contractedge-system
+    Found existing installation: contractedge-system 0.6.59
+    Uninstalling contractedge-system-0.6.59:
+      Successfully uninstalled contractedge-system-0.6.59
+Successfully installed contractedge-system-0.6.59

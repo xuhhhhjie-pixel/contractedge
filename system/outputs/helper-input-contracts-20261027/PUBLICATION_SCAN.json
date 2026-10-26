@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "explicit_public_files": 41,
+  "credential_pattern_matches": 0,
+  "excluded": "Runtime, independent score details, dependency caches, symlinks and running output"
+}

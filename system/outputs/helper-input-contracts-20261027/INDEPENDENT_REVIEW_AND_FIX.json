@@ -1,0 +1,20 @@
+{
+  "review_findings": [
+    {
+      "severity": "Important",
+      "issue": "Truncated duplicate declarations ignored before ambiguity check",
+      "fix": "Count all identities before delivery eligibility",
+      "red_green_cases": 3
+    },
+    {
+      "severity": "Important",
+      "issue": "Shadowed callback treated as package function",
+      "fix": "Conservative local binding inventory for parameters/assignments/ranges/var groups",
+      "red_green_cases": 5
+    }
+  ],
+  "targeted_after_fix": 62,
+  "reviewer": "helper_input_contracts_final_review",
+  "effectiveness": "UNPROVEN",
+  "no_second_review": true
+}
