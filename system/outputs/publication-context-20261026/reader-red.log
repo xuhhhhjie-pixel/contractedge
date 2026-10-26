@@ -1,0 +1,331 @@
+FFFFFFFFFFFFF                                                            [100%]
+=================================== FAILURES ===================================
+_ test_exact_reader_and_later_write_are_highlighted_without_runtime_claim[active-view-Count] _
+
+slot = 'active', callback = 'view', method = 'Count'
+
+    @pytest.mark.parametrize('slot,callback,method',[('active','view','Count'),('selected','readState','Snapshot')])
+    def test_exact_reader_and_later_write_are_highlighted_without_runtime_claim(slot,callback,method):
+        text=SOURCE.replace('active',slot).replace('view',callback).replace('Count',method)
+>       rows=contexts(units(text));assert len(rows)==1
+
+tests/test_reader_reference_context.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-19fbfa1cb575f587', 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line': 7, 'column_start': 1}, ...}]
+limits = {}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+_ test_exact_reader_and_later_write_are_highlighted_without_runtime_claim[selected-readState-Snapshot] _
+
+slot = 'selected', callback = 'readState', method = 'Snapshot'
+
+    @pytest.mark.parametrize('slot,callback,method',[('active','view','Count'),('selected','readState','Snapshot')])
+    def test_exact_reader_and_later_write_are_highlighted_without_runtime_claim(slot,callback,method):
+        text=SOURCE.replace('active',slot).replace('view',callback).replace('Count',method)
+>       rows=contexts(units(text));assert len(rows)==1
+
+tests/test_reader_reference_context.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-966382ef70c37662', 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line': 7, 'column_start': 1}, ...}]
+limits = {}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+__ test_unsupported_or_unbound_relationship_is_not_a_reference_fact[comment] ___
+
+mutation = 'comment'
+
+    @pytest.mark.parametrize('mutation',['comment','string','shadow','constant','non_go','stale_digest','truncated','parameter_shadow'])
+    def test_unsupported_or_unbound_relationship_is_not_a_reference_fact(mutation):
+        text=SOURCE;path='reader.go'
+        if mutation=='comment':text=text.replace('    view :=','    // view :=')
+        elif mutation=='string':text=text.replace('    view := func() int { return active.Count() }','    s := `view := func() int { return active.Count() }`')
+        elif mutation=='shadow':text=text.replace('    active =','    active :=')
+        elif mutation=='constant':text=text.replace('    active = makeEngine()\n','')
+        elif mutation=='parameter_shadow':text=text.replace('func() int { return active.Count() }','func(active *Engine) int { return active.Count() }')
+        elif mutation=='non_go':path='reader.py'
+        data=units(text,path)
+        if mutation=='stale_digest':data=[{**u,'content_digest':'0'*64} for u in data]
+        if mutation=='truncated':data=[{**u,'truncated':True} for u in data]
+>       assert contexts(data)==[]
+
+tests/test_reader_reference_context.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-c35299dbba3cc410', 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line': 7, 'column_start': 1}, ...}]
+limits = {}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+___ test_unsupported_or_unbound_relationship_is_not_a_reference_fact[string] ___
+
+mutation = 'string'
+
+    @pytest.mark.parametrize('mutation',['comment','string','shadow','constant','non_go','stale_digest','truncated','parameter_shadow'])
+    def test_unsupported_or_unbound_relationship_is_not_a_reference_fact(mutation):
+        text=SOURCE;path='reader.go'
+        if mutation=='comment':text=text.replace('    view :=','    // view :=')
+        elif mutation=='string':text=text.replace('    view := func() int { return active.Count() }','    s := `view := func() int { return active.Count() }`')
+        elif mutation=='shadow':text=text.replace('    active =','    active :=')
+        elif mutation=='constant':text=text.replace('    active = makeEngine()\n','')
+        elif mutation=='parameter_shadow':text=text.replace('func() int { return active.Count() }','func(active *Engine) int { return active.Count() }')
+        elif mutation=='non_go':path='reader.py'
+        data=units(text,path)
+        if mutation=='stale_digest':data=[{**u,'content_digest':'0'*64} for u in data]
+        if mutation=='truncated':data=[{**u,'truncated':True} for u in data]
+>       assert contexts(data)==[]
+
+tests/test_reader_reference_context.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-a535470e8c6350ef', 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line': 7, 'column_start': 1}, ...}]
+limits = {}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+___ test_unsupported_or_unbound_relationship_is_not_a_reference_fact[shadow] ___
+
+mutation = 'shadow'
+
+    @pytest.mark.parametrize('mutation',['comment','string','shadow','constant','non_go','stale_digest','truncated','parameter_shadow'])
+    def test_unsupported_or_unbound_relationship_is_not_a_reference_fact(mutation):
+        text=SOURCE;path='reader.go'
+        if mutation=='comment':text=text.replace('    view :=','    // view :=')
+        elif mutation=='string':text=text.replace('    view := func() int { return active.Count() }','    s := `view := func() int { return active.Count() }`')
+        elif mutation=='shadow':text=text.replace('    active =','    active :=')
+        elif mutation=='constant':text=text.replace('    active = makeEngine()\n','')
+        elif mutation=='parameter_shadow':text=text.replace('func() int { return active.Count() }','func(active *Engine) int { return active.Count() }')
+        elif mutation=='non_go':path='reader.py'
+        data=units(text,path)
+        if mutation=='stale_digest':data=[{**u,'content_digest':'0'*64} for u in data]
+        if mutation=='truncated':data=[{**u,'truncated':True} for u in data]
+>       assert contexts(data)==[]
+
+tests/test_reader_reference_context.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-0b16cb4fb8336882', 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line': 7, 'column_start': 1}, ...}]
+limits = {}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+__ test_unsupported_or_unbound_relationship_is_not_a_reference_fact[constant] __
+
+mutation = 'constant'
+
+    @pytest.mark.parametrize('mutation',['comment','string','shadow','constant','non_go','stale_digest','truncated','parameter_shadow'])
+    def test_unsupported_or_unbound_relationship_is_not_a_reference_fact(mutation):
+        text=SOURCE;path='reader.go'
+        if mutation=='comment':text=text.replace('    view :=','    // view :=')
+        elif mutation=='string':text=text.replace('    view := func() int { return active.Count() }','    s := `view := func() int { return active.Count() }`')
+        elif mutation=='shadow':text=text.replace('    active =','    active :=')
+        elif mutation=='constant':text=text.replace('    active = makeEngine()\n','')
+        elif mutation=='parameter_shadow':text=text.replace('func() int { return active.Count() }','func(active *Engine) int { return active.Count() }')
+        elif mutation=='non_go':path='reader.py'
+        data=units(text,path)
+        if mutation=='stale_digest':data=[{**u,'content_digest':'0'*64} for u in data]
+        if mutation=='truncated':data=[{**u,'truncated':True} for u in data]
+>       assert contexts(data)==[]
+
+tests/test_reader_reference_context.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-d7e65a47bb00979d', 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line': 6, 'column_start': 1}, ...}]
+limits = {}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+___ test_unsupported_or_unbound_relationship_is_not_a_reference_fact[non_go] ___
+
+mutation = 'non_go'
+
+    @pytest.mark.parametrize('mutation',['comment','string','shadow','constant','non_go','stale_digest','truncated','parameter_shadow'])
+    def test_unsupported_or_unbound_relationship_is_not_a_reference_fact(mutation):
+        text=SOURCE;path='reader.go'
+        if mutation=='comment':text=text.replace('    view :=','    // view :=')
+        elif mutation=='string':text=text.replace('    view := func() int { return active.Count() }','    s := `view := func() int { return active.Count() }`')
+        elif mutation=='shadow':text=text.replace('    active =','    active :=')
+        elif mutation=='constant':text=text.replace('    active = makeEngine()\n','')
+        elif mutation=='parameter_shadow':text=text.replace('func() int { return active.Count() }','func(active *Engine) int { return active.Count() }')
+        elif mutation=='non_go':path='reader.py'
+        data=units(text,path)
+        if mutation=='stale_digest':data=[{**u,'content_digest':'0'*64} for u in data]
+        if mutation=='truncated':data=[{**u,'truncated':True} for u in data]
+>       assert contexts(data)==[]
+
+tests/test_reader_reference_context.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-383802f40aa49246', 'kind': 'SOURCE_TEXT', 'path': 'reader.py', 'locator': {'start_line': 1, 'end_line': 7, 'column_start': 1}, ...}]
+limits = {}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+_ test_unsupported_or_unbound_relationship_is_not_a_reference_fact[stale_digest] _
+
+mutation = 'stale_digest'
+
+    @pytest.mark.parametrize('mutation',['comment','string','shadow','constant','non_go','stale_digest','truncated','parameter_shadow'])
+    def test_unsupported_or_unbound_relationship_is_not_a_reference_fact(mutation):
+        text=SOURCE;path='reader.go'
+        if mutation=='comment':text=text.replace('    view :=','    // view :=')
+        elif mutation=='string':text=text.replace('    view := func() int { return active.Count() }','    s := `view := func() int { return active.Count() }`')
+        elif mutation=='shadow':text=text.replace('    active =','    active :=')
+        elif mutation=='constant':text=text.replace('    active = makeEngine()\n','')
+        elif mutation=='parameter_shadow':text=text.replace('func() int { return active.Count() }','func(active *Engine) int { return active.Count() }')
+        elif mutation=='non_go':path='reader.py'
+        data=units(text,path)
+        if mutation=='stale_digest':data=[{**u,'content_digest':'0'*64} for u in data]
+        if mutation=='truncated':data=[{**u,'truncated':True} for u in data]
+>       assert contexts(data)==[]
+
+tests/test_reader_reference_context.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-19fbfa1cb575f587', 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line': 7, 'column_start': 1}, ...}]
+limits = {}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+_ test_unsupported_or_unbound_relationship_is_not_a_reference_fact[truncated] __
+
+mutation = 'truncated'
+
+    @pytest.mark.parametrize('mutation',['comment','string','shadow','constant','non_go','stale_digest','truncated','parameter_shadow'])
+    def test_unsupported_or_unbound_relationship_is_not_a_reference_fact(mutation):
+        text=SOURCE;path='reader.go'
+        if mutation=='comment':text=text.replace('    view :=','    // view :=')
+        elif mutation=='string':text=text.replace('    view := func() int { return active.Count() }','    s := `view := func() int { return active.Count() }`')
+        elif mutation=='shadow':text=text.replace('    active =','    active :=')
+        elif mutation=='constant':text=text.replace('    active = makeEngine()\n','')
+        elif mutation=='parameter_shadow':text=text.replace('func() int { return active.Count() }','func(active *Engine) int { return active.Count() }')
+        elif mutation=='non_go':path='reader.py'
+        data=units(text,path)
+        if mutation=='stale_digest':data=[{**u,'content_digest':'0'*64} for u in data]
+        if mutation=='truncated':data=[{**u,'truncated':True} for u in data]
+>       assert contexts(data)==[]
+
+tests/test_reader_reference_context.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-19fbfa1cb575f587', 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line': 7, 'column_start': 1}, ...}]
+limits = {}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+_ test_unsupported_or_unbound_relationship_is_not_a_reference_fact[parameter_shadow] _
+
+mutation = 'parameter_shadow'
+
+    @pytest.mark.parametrize('mutation',['comment','string','shadow','constant','non_go','stale_digest','truncated','parameter_shadow'])
+    def test_unsupported_or_unbound_relationship_is_not_a_reference_fact(mutation):
+        text=SOURCE;path='reader.go'
+        if mutation=='comment':text=text.replace('    view :=','    // view :=')
+        elif mutation=='string':text=text.replace('    view := func() int { return active.Count() }','    s := `view := func() int { return active.Count() }`')
+        elif mutation=='shadow':text=text.replace('    active =','    active :=')
+        elif mutation=='constant':text=text.replace('    active = makeEngine()\n','')
+        elif mutation=='parameter_shadow':text=text.replace('func() int { return active.Count() }','func(active *Engine) int { return active.Count() }')
+        elif mutation=='non_go':path='reader.py'
+        data=units(text,path)
+        if mutation=='stale_digest':data=[{**u,'content_digest':'0'*64} for u in data]
+        if mutation=='truncated':data=[{**u,'truncated':True} for u in data]
+>       assert contexts(data)==[]
+
+tests/test_reader_reference_context.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-42988523cb00fa95', 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line': 7, 'column_start': 1}, ...}]
+limits = {}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+________ test_windows_obey_limit_and_deduplicate_exact_source_identity _________
+
+    def test_windows_obey_limit_and_deduplicate_exact_source_identity():
+        data=units()
+>       assert len(contexts(data+data,max_records=1))==1
+
+tests/test_reader_reference_context.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-19fbfa1cb575f587', 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line... 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line': 7, 'column_start': 1}, ...}]
+limits = {'max_records': 1}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+_ test_reference_role_becomes_a_source_prerequisite_even_when_not_a_json_field _
+
+    def test_reference_role_becomes_a_source_prerequisite_even_when_not_a_json_field():
+        rows=required_source_prerequisites(SimpleNamespace(candidates=units()))
+>       assert len(rows)==1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+tests/test_reader_reference_context.py:69: AssertionError
+__________ test_current_reader_write_changes_recompute_the_highlight ___________
+
+    def test_current_reader_write_changes_recompute_the_highlight():
+>       first=contexts(units());second=contexts(units(SOURCE.replace('makeEngine()','buildReplacement()')))
+
+tests/test_reader_reference_context.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+records = [{'id': 'CU-19fbfa1cb575f587', 'kind': 'FUNCTION_OR_TYPE', 'path': 'reader.go', 'locator': {'start_line': 2, 'end_line': 7, 'column_start': 1}, ...}]
+limits = {}
+
+    def contexts(records,**limits):
+>       from contractedge.diagnosis.evidence import reader_reference_contexts
+E       ImportError: cannot import name 'reader_reference_contexts' from 'contractedge.diagnosis.evidence' (/home/xhj/contractedge-publication-context-20261026/system/src/contractedge/diagnosis/evidence.py)
+
+tests/test_reader_reference_context.py:27: ImportError
+=========================== short test summary info ============================
+FAILED tests/test_reader_reference_context.py::test_exact_reader_and_later_write_are_highlighted_without_runtime_claim[active-view-Count]
+FAILED tests/test_reader_reference_context.py::test_exact_reader_and_later_write_are_highlighted_without_runtime_claim[selected-readState-Snapshot]
+FAILED tests/test_reader_reference_context.py::test_unsupported_or_unbound_relationship_is_not_a_reference_fact[comment]
+FAILED tests/test_reader_reference_context.py::test_unsupported_or_unbound_relationship_is_not_a_reference_fact[string]
+FAILED tests/test_reader_reference_context.py::test_unsupported_or_unbound_relationship_is_not_a_reference_fact[shadow]
+FAILED tests/test_reader_reference_context.py::test_unsupported_or_unbound_relationship_is_not_a_reference_fact[constant]
+FAILED tests/test_reader_reference_context.py::test_unsupported_or_unbound_relationship_is_not_a_reference_fact[non_go]
+FAILED tests/test_reader_reference_context.py::test_unsupported_or_unbound_relationship_is_not_a_reference_fact[stale_digest]
+FAILED tests/test_reader_reference_context.py::test_unsupported_or_unbound_relationship_is_not_a_reference_fact[truncated]
+FAILED tests/test_reader_reference_context.py::test_unsupported_or_unbound_relationship_is_not_a_reference_fact[parameter_shadow]
+FAILED tests/test_reader_reference_context.py::test_windows_obey_limit_and_deduplicate_exact_source_identity
+FAILED tests/test_reader_reference_context.py::test_reference_role_becomes_a_source_prerequisite_even_when_not_a_json_field
+FAILED tests/test_reader_reference_context.py::test_current_reader_write_changes_recompute_the_highlight
+13 failed in 0.31s

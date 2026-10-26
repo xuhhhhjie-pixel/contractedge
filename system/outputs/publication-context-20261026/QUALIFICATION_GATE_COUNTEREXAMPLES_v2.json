@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "cases": [
+    {
+      "case": "good",
+      "accepted": true
+    },
+    {
+      "case": "failed_exit",
+      "accepted": false
+    },
+    {
+      "case": "bool_exit",
+      "accepted": false
+    },
+    {
+      "case": "mixed_failed",
+      "accepted": false
+    },
+    {
+      "case": "stale_log",
+      "accepted": false
+    },
+    {
+      "case": "wrong_source",
+      "accepted": false
+    },
+    {
+      "case": "count_mismatch",
+      "accepted": false
+    }
+  ],
+  "new_model_calls": 0,
+  "formal_ready": false
+}

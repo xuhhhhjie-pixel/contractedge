@@ -1,0 +1,31 @@
+{
+  "status": "IMPORTANT_REQUIRES_ONE_FIX_PASS_BEFORE_DELIVERY",
+  "reviewer": "publication_context_review",
+  "scope": "Read-only engineering diff review; no provider calls or edits",
+  "important": [
+    {
+      "path": "src/contractedge/execution/topomen.py:273",
+      "issue": "Read-only SOURCE_SPAN reconstruction loses truncation provenance and can re-qualify a clipped callback span",
+      "reproduction": "parse_source_units max_chars160 -> truncatedTrue / producer highlight0 / reconstructed executor highlight1",
+      "current_confirmed_alert_span_affected": false
+    }
+  ],
+  "minor": [
+    {
+      "path": "src/contractedge/diagnosis/evidence.py:129",
+      "issue": "Tuple := and grouped var shadow declarations can evade lexical skipping",
+      "current_confirmed_alert_span_affected": false
+    }
+  ],
+  "positive": [
+    "No Critical issue or false-PASS/permission regression found",
+    "Necessary FAIL shortcut retains context gates/check identity/order; unresolved siblings stayUNKNOWN",
+    "Current producer role avoids adding new prerequisites retroactively to legacy Ready"
+  ],
+  "declined_to_judge": [
+    "Repair effectiveness/live outcome",
+    "Independent full qualification review",
+    "Formal readiness"
+  ],
+  "formal_ready": false
+}

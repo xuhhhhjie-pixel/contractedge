@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "stage": "initial",
+      "input_tokens": 92243,
+      "output_tokens": 16384,
+      "input_cap": 120000,
+      "total_model_cap": 262144,
+      "scope": "Offline current builder content with no transport schema overhead; actual provider must quote at dispatch"
+    },
+    {
+      "stage": "rediagnosis",
+      "input_tokens": 102613,
+      "output_tokens": 16384,
+      "input_cap": 220000,
+      "total_model_cap": 262144,
+      "scope": "Offline current builder content with no transport schema overhead; actual provider must quote at dispatch"
+    },
+    {
+      "stage": "planning",
+      "input_tokens": 133675,
+      "output_tokens": 16384,
+      "input_cap": 220000,
+      "total_model_cap": 262144,
+      "scope": "Offline current builder content with no transport schema overhead; actual provider must quote at dispatch"
+    },
+    {
+      "stage": "execution",
+      "input_tokens": 93727,
+      "output_tokens": 16384,
+      "input_cap": 220000,
+      "total_model_cap": 262144,
+      "scope": "Offline current builder content with no transport schema overhead; actual provider must quote at dispatch"
+    }
+  ],
+  "new_model_calls": 0,
+  "formal_ready": false
+}

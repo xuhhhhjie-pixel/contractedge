@@ -29,7 +29,13 @@ class ModelPublicReviewer:
         if not mechanical:
             return self._review_model(requirement,plan,observation)
         remaining={**plan,**{kind:[p for p in plan.get(kind,[]) if prefix+p['id'] not in mechanical] for kind,prefix in groups}}
-        if len(mechanical)==len(original):
+        if any(check['status']=='FAIL' for check in mechanical.values()):
+            # Another uncertain check cannot reverse this supported negative.
+            # Keep its UNKNOWN identity rather than require an optional model
+            # dispatch (which may be unavailable after the execution budget).
+            body={'checks':[],'failure_kind':'UNKNOWN','method':'BOUND_NEGATIVE_CHECK_AGGREGATION',
+                  'rationale':'A bound necessary predicate failed; remaining unreviewed checks stay UNKNOWN.'}
+        elif len(mechanical)==len(original):
             body={'checks':[],'failure_kind':'UNKNOWN','method':'BOUND_CHECK_AGGREGATION'}
         else:
             try:

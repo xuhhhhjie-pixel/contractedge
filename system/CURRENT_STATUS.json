@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-26T05:03:22.857298+00:00",
+  "as_of": "2026-10-26T06:06:03.329194+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -19,20 +19,20 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.53",
+  "implementation_version": "0.6.54",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
     "report": "outputs/benchmark150-adapter-v2-20261019/preparation.json"
   },
   "protocol_tests": {
-    "passed": 1982,
+    "passed": 2008,
     "subtests_passed": 91,
-    "implementation_version": "0.6.53",
-    "development_freeze": "preservation-feedback-v053-20261026-v1",
-    "report": "outputs/preservation-feedback-20261026/full-v053-v1.log",
+    "implementation_version": "0.6.54",
+    "development_freeze": "publication-context-v054-20261026-v2",
+    "report": "outputs/publication-context-20261026/full-v054-v2.log",
     "actual_process_exit_code": 0,
-    "process_receipt": "outputs/preservation-feedback-20261026/FULL_REGRESSION_COMPLETION_v053_v1.json"
+    "process_receipt": "outputs/publication-context-20261026/FULL_REGRESSION_COMPLETION_v054_v2.json"
   },
   "stage_implementations": {
     "0_1": "dataset/benchmark.py",
@@ -3296,21 +3296,19 @@
     }
   },
   "current_development": {
-    "status": "DIAGNOSTIC_CLOSED_IDENTITY_VALID_BEHAVIOR_FAIL",
-    "snapshot": "docs/development/preservation-feedback-v053-20261026-v1.snapshot.json",
-    "planned_version": "0.6.53",
-    "base_commit": "3cc3029",
+    "status": "V3_ENGINEERING_QUALIFIED_EFFECT_FAILED_TWO_NEXT_ROOTS_REPRODUCED",
+    "snapshot": "docs/development/publication-context-v054-20261026-v3.snapshot.json",
+    "planned_version": "0.6.54",
+    "base_commit": "34b7ce4",
     "formal_ready": false,
     "paid_dispatch_allowed": false,
-    "report": "outputs/preservation-feedback-20261026/COMPLETION_AUDIT.md",
-    "source_sha256": "c0399ed2a0e48574ef096024f40dcad5bfa30756440ca11c8060327653f90984",
-    "qualification": "outputs/preservation-feedback-20261026/ZERO_CALL_QUALIFICATION.json",
-    "effect_result": "outputs/preservation-feedback-20261026/V053_DIAGNOSTIC_RESULTS.json",
-    "repair_reliability_accepted": false
+    "report": "outputs/publication-context-20261026/COMPLETION_AUDIT.md",
+    "source_sha256": "9d434cc8cee3344db35efcd41d4f23281cf2c7e1a541d22e15d69901e0a3159f",
+    "qualification": "outputs/publication-context-20261026/ZERO_CALL_QUALIFICATION_v3.json"
   },
   "staged_implementation_version": "0.6.51",
   "runtime_implementation_version": "0.6.40",
-  "current_optimization_audit": "outputs/branch-target-binding-20261026/COMPLETION_AUDIT.md",
+  "current_optimization_audit": "outputs/publication-context-20261026/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {
     "status": "INTERRUPTED_PUBLIC_OBSERVATION_NO_FINAL_METHOD_RESULT",
     "model_calls_completed": 4,
@@ -3364,9 +3362,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Close source051 target/control audit; retain v1 failures and exact frozen v2 source",
-    "Resolve Alert bounded constructor-argument/field-receiver subscription evidence from saved public trace; replay before any new paid attempt",
-    "Only after known failure and recovery gates, run the original same-version fixed46 acceptance and G0-G6; no formal150 yet"
+    "Complete v3 review-fix qualification with zero new API calls",
+    "Align final v2 synchronous Init/blocking run failure with plan and actual edit; audit native EXECUTION_FAIL mapping without feeding independent score internals to method",
+    "Revalidate target repair and fixed cross-case gates before original frozen46 and G0-G6; formal150 stays closed"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",

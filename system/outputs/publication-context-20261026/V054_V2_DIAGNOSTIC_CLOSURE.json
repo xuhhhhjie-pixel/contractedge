@@ -1,0 +1,26 @@
+{
+  "status": "CLOSED_TARGET_NOT_PASSED_SCORING_STATUS_REQUIRES_PROTOCOL_AUDIT",
+  "source_sha256": "336c7c4c16dbac3b9401ce7afd9ba6213589c1c05fbefaa04147e2f5f06a4f47",
+  "model_calls": 9,
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "public_decision": "UNKNOWN",
+  "first_trial_public": "FAIL",
+  "final_probe": "PROBE_ERROR_SERVER_READINESS",
+  "independent_status": "SCORER_ERROR",
+  "native_score_status": "EXECUTION_FAIL",
+  "patch_bytes": 3011,
+  "patch_sha256": "1f50c02c4f148080edecc7b77e51b9c5d851c2b2ce12d4a8b5e8680c7d36123d",
+  "control": "NOT_RUN_TARGET_GATE_FAILED",
+  "automatic_retry": false,
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "source_archive_sha256": "78fbf65577b4ac24e9d7e22d9910b4af106f37a178b495da279d5fad073605dd",
+  "public_source_inference": "Synchronous Init calls persistent d.run before returning, while caller waits Init before publishing/startup; consistent with public readiness failure, not an independent semantic verdict",
+  "budget": {
+    "calls": 1190,
+    "occupied_cny": 121.865118,
+    "remaining_upper_bound_cny": 28.134882000000005,
+    "new_occupied_cny": 1.35573
+  },
+  "raw_driver_state_preserved": true
+}

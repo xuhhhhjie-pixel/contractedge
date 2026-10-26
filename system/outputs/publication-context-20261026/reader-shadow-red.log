@@ -1,0 +1,38 @@
+.............FF                                                          [100%]
+=================================== FAILURES ===================================
+_ test_nested_parameter_or_var_shadow_cannot_be_a_publication_write[    writer := func(active *Engine) {\n        active = makeEngine()\n    }\n] _
+
+shadow = '    writer := func(active *Engine) {\n        active = makeEngine()\n    }\n'
+
+    @pytest.mark.parametrize('shadow',[
+        '    writer := func(active *Engine) {\n        active = makeEngine()\n    }\n',
+        '    {\n        var active *Engine\n        active = makeEngine()\n    }\n',
+    ])
+    def test_nested_parameter_or_var_shadow_cannot_be_a_publication_write(shadow):
+>       assert contexts(units(SOURCE.replace('    active = makeEngine()\n',shadow)))==[]
+E       AssertionError: assert [{'source_evi...active', ...}] == []
+E         
+E         Left contains one more item: {'source_evidence_ref': 'SRC-CU-859528dbae3ef3ee', 'snapshot_id': 'S', 'source_content_digest': 'b5619afdd695dc73ded6963f280fcfd5735d76bfe3c63e8a8fcb1fc7330a35d1', 'variable': 'active', ...}
+E         Use -v to get more diff
+
+tests/test_reader_reference_context.py:85: AssertionError
+_ test_nested_parameter_or_var_shadow_cannot_be_a_publication_write[    {\n        var active *Engine\n        active = makeEngine()\n    }\n] _
+
+shadow = '    {\n        var active *Engine\n        active = makeEngine()\n    }\n'
+
+    @pytest.mark.parametrize('shadow',[
+        '    writer := func(active *Engine) {\n        active = makeEngine()\n    }\n',
+        '    {\n        var active *Engine\n        active = makeEngine()\n    }\n',
+    ])
+    def test_nested_parameter_or_var_shadow_cannot_be_a_publication_write(shadow):
+>       assert contexts(units(SOURCE.replace('    active = makeEngine()\n',shadow)))==[]
+E       AssertionError: assert [{'source_evi...active', ...}] == []
+E         
+E         Left contains one more item: {'source_evidence_ref': 'SRC-CU-715442e2ea18d49b', 'snapshot_id': 'S', 'source_content_digest': '1a027b72dd3691071f2d2fc8b12b81f56f8173065681a53b3fabb0a4054b6bd6', 'variable': 'active', ...}
+E         Use -v to get more diff
+
+tests/test_reader_reference_context.py:85: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_reader_reference_context.py::test_nested_parameter_or_var_shadow_cannot_be_a_publication_write[    writer := func(active *Engine) {\n        active = makeEngine()\n    }\n]
+FAILED tests/test_reader_reference_context.py::test_nested_parameter_or_var_shadow_cannot_be_a_publication_write[    {\n        var active *Engine\n        active = makeEngine()\n    }\n]
+2 failed, 13 passed in 0.27s

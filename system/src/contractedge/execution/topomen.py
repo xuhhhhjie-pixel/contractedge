@@ -159,6 +159,7 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
         sources.append({'path': path, 'content': content})
     context = dict(plan.get('coordination_context') or {})
     support, support_audit, used = [], [], 0
+    support_source_texts = {}
     targets = {s['path'] for s in sources}
     prerequisite_refs={r['source_evidence_ref'] for r in plan.get('precondition_review', [])
                        if r.get('disposition') != 'NOT_APPLICABLE'}
@@ -190,6 +191,7 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
                                 'end_line':start+len(excerpt.splitlines())-1},
                             'origin':'Fresh re-read of an exact unchanged prerequisite span; prior semantic intent remains historical, not re-proven'}
                     support.append(dict(evidence)); used += len(excerpt.encode())
+                    support_source_texts[path] = actual
             except (OSError, ValueError, TypeError):
                 reason = 'UNAVAILABLE_SOURCE'
         support_audit.append({'id': evidence.get('id'), 'path': path, 'result': reason or 'INCLUDED_READ_ONLY'})
@@ -259,6 +261,50 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
             'against fresh source contracts. Preserve the required state throughout the transition, not just before '
             'and after; a fixed sleep or moving Stop alone is not evidence of readiness. Unsupported readiness '
             'assumptions must remain unproven and be tested through the public boundary.')
+        from contractedge.diagnosis.evidence import reader_reference_contexts
+        from contractedge.source.parsers import parse_source_units
+        target_units=[];target_refs={}
+        for item in sources:
+            if not item['path'].endswith('.go') or not item['content']:continue
+            parsed=parse_source_units(item['path'],item['content'],acceptance['snapshot_id'],
+                                      max_lines=768,max_chars=32000)
+            target_units.extend(parsed)
+            target_refs.update({u['id']:dict(path=item['path'],snapshot_id=acceptance['snapshot_id'],
+                content_digest=hashlib.sha256(item['content'].encode()).hexdigest()) for u in parsed})
+        # EvidenceRecord does not preserve the parser's truncation flag. Never
+        # reconstruct an implicitly complete declaration from its excerpt.
+        # Reuse the full text already read for freshness, and accept only a
+        # complete declaration contained in the delivered canonical span.
+        support_units=[]; support_refs={}; parsed_support={}
+        for record in support:
+            path=record.get('locator',{}).get('path','')
+            if (record.get('kind')!='SOURCE_SPAN' or not record.get('id','').startswith('SRC-')
+                    or not path.endswith('.go') or path not in support_source_texts):
+                continue
+            if path not in parsed_support:
+                parsed_support[path]=parse_source_units(path,support_source_texts[path],
+                    acceptance['snapshot_id'],max_lines=768,max_chars=32000)
+            for unit in parsed_support[path]:
+                if (unit.get('truncated') or unit.get('kind')!='FUNCTION_OR_TYPE'
+                        or unit['locator']['start_line']<record['locator']['start_line']
+                        or unit['locator']['end_line']>record['locator']['end_line']
+                        or unit['text'] not in record['excerpt']):
+                    continue
+                support_units.append(unit)
+                support_refs[unit['id']]=record
+        readers=reader_reference_contexts([*target_units,*support_units])
+        for row in readers:
+            if row['candidate_id'] in target_refs:
+                row['source_target']=target_refs[row.pop('candidate_id')]
+                # This is a current_target_files quote, not an invented
+                # diagnosis EvidenceRecord or a new allowed evidence ID.
+                row.pop('source_evidence_ref')
+            elif row['candidate_id'] in support_refs:
+                parent=support_refs[row['candidate_id']]
+                row.update(candidate_id=parent['id'][4:],source_evidence_ref=parent['id'],
+                           source_content_digest=parent['content_digest'])
+        while len(json.dumps(readers,ensure_ascii=False).encode())>8000:readers.pop()
+        payload['source_reader_reference_contexts']=readers
     if config.get('writeback_context_enabled'):
         from contractedge.execution.writeback_context import writeback_context
         payload['collection_writeback_context']=writeback_context(sources,plan['operations'],acceptance['snapshot_id'])

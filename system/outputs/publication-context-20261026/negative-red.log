@@ -1,0 +1,100 @@
+FFF....                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_bound_necessary_fail_keeps_unknown_sibling_without_model_call[postconditions-] _
+
+group = 'postconditions', prefix = ''
+
+    @pytest.mark.parametrize('group,prefix',[('postconditions',''),('preserve_constraints','preserve:'),('open_obligations','open:')])
+    def test_bound_necessary_fail_keeps_unknown_sibling_without_model_call(group,prefix):
+        failed={**obligation(),'behavior_check_refs':['a'],'check_coverage':'NECESSARY_ONLY'}
+        unresolved=dict(id='UNOBSERVED',statement='Other runtime property',verification_kind='PUBLIC_BEHAVIOR')
+        plan={group:[failed], 'open_obligations':[unresolved] if group!='open_obligations' else [failed,unresolved]}
+>       result=ModelPublicReviewer(Exhausted(),len,dict(model='fixture',max_context_tokens=12000)).review('Public requirement',plan,observed([obs('a','FAIL')]))
+
+tests/test_decisive_public_failure.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/review.py:36: in review
+    body=self._review_model(requirement,remaining,observation)
+src/contractedge/execution/review.py:124: in _review_model
+    response = complete_quoted(self.provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_decisive_public_failure.Exhausted object at 0x7f895d3b8df0>
+request = ModelRequest(model='fixture', prompt_version='public-postcondition-review.v2', messages=({'role': 'system', 'content':...'properties': {'observation_id': {'type': 'string', 'enum': ['a']}, 'quote': {'type': 'string'}}}}}}}}}, thinking=None)
+
+    def complete_json(self, request):
+>       raise BudgetExceeded('No calls remain; known negative must not need a model')
+E       contractedge.model.budget.BudgetExceeded: No calls remain; known negative must not need a model
+
+tests/test_decisive_public_failure.py:12: BudgetExceeded
+_ test_bound_necessary_fail_keeps_unknown_sibling_without_model_call[preserve_constraints-preserve:] _
+
+group = 'preserve_constraints', prefix = 'preserve:'
+
+    @pytest.mark.parametrize('group,prefix',[('postconditions',''),('preserve_constraints','preserve:'),('open_obligations','open:')])
+    def test_bound_necessary_fail_keeps_unknown_sibling_without_model_call(group,prefix):
+        failed={**obligation(),'behavior_check_refs':['a'],'check_coverage':'NECESSARY_ONLY'}
+        unresolved=dict(id='UNOBSERVED',statement='Other runtime property',verification_kind='PUBLIC_BEHAVIOR')
+        plan={group:[failed], 'open_obligations':[unresolved] if group!='open_obligations' else [failed,unresolved]}
+>       result=ModelPublicReviewer(Exhausted(),len,dict(model='fixture',max_context_tokens=12000)).review('Public requirement',plan,observed([obs('a','FAIL')]))
+
+tests/test_decisive_public_failure.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/review.py:36: in review
+    body=self._review_model(requirement,remaining,observation)
+src/contractedge/execution/review.py:124: in _review_model
+    response = complete_quoted(self.provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_decisive_public_failure.Exhausted object at 0x7f895df4fee0>
+request = ModelRequest(model='fixture', prompt_version='public-postcondition-review.v2', messages=({'role': 'system', 'content':...'properties': {'observation_id': {'type': 'string', 'enum': ['a']}, 'quote': {'type': 'string'}}}}}}}}}, thinking=None)
+
+    def complete_json(self, request):
+>       raise BudgetExceeded('No calls remain; known negative must not need a model')
+E       contractedge.model.budget.BudgetExceeded: No calls remain; known negative must not need a model
+
+tests/test_decisive_public_failure.py:12: BudgetExceeded
+_ test_bound_necessary_fail_keeps_unknown_sibling_without_model_call[open_obligations-open:] _
+
+group = 'open_obligations', prefix = 'open:'
+
+    @pytest.mark.parametrize('group,prefix',[('postconditions',''),('preserve_constraints','preserve:'),('open_obligations','open:')])
+    def test_bound_necessary_fail_keeps_unknown_sibling_without_model_call(group,prefix):
+        failed={**obligation(),'behavior_check_refs':['a'],'check_coverage':'NECESSARY_ONLY'}
+        unresolved=dict(id='UNOBSERVED',statement='Other runtime property',verification_kind='PUBLIC_BEHAVIOR')
+        plan={group:[failed], 'open_obligations':[unresolved] if group!='open_obligations' else [failed,unresolved]}
+>       result=ModelPublicReviewer(Exhausted(),len,dict(model='fixture',max_context_tokens=12000)).review('Public requirement',plan,observed([obs('a','FAIL')]))
+
+tests/test_decisive_public_failure.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/review.py:36: in review
+    body=self._review_model(requirement,remaining,observation)
+src/contractedge/execution/review.py:124: in _review_model
+    response = complete_quoted(self.provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_decisive_public_failure.Exhausted object at 0x7f895d3e64a0>
+request = ModelRequest(model='fixture', prompt_version='public-postcondition-review.v2', messages=({'role': 'system', 'content':...'properties': {'observation_id': {'type': 'string', 'enum': ['a']}, 'quote': {'type': 'string'}}}}}}}}}, thinking=None)
+
+    def complete_json(self, request):
+>       raise BudgetExceeded('No calls remain; known negative must not need a model')
+E       contractedge.model.budget.BudgetExceeded: No calls remain; known negative must not need a model
+
+tests/test_decisive_public_failure.py:12: BudgetExceeded
+=========================== short test summary info ============================
+FAILED tests/test_decisive_public_failure.py::test_bound_necessary_fail_keeps_unknown_sibling_without_model_call[postconditions-]
+FAILED tests/test_decisive_public_failure.py::test_bound_necessary_fail_keeps_unknown_sibling_without_model_call[preserve_constraints-preserve:]
+FAILED tests/test_decisive_public_failure.py::test_bound_necessary_fail_keeps_unknown_sibling_without_model_call[open_obligations-open:]
+3 failed, 4 passed in 0.30s

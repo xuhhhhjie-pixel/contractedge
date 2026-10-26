@@ -1,0 +1,8 @@
+{
+  "reason": "Frozen v3 preparer retained existing v2 output root; first invocation stopped before any state, test or paid call",
+  "effective_output_root": "/home/xhj/contractedge-source054-v3-qualification-20261026",
+  "frozen_driver_sha256": "92d4d6b684c02431929fb8016837cbe198a025785418479d9a3957666f126b2b",
+  "wrapper_sha256": "649998333e94c5f4330bd7fd97f904f8a7e25ccc65ca646644747824a5da08b0",
+  "source_modified": false,
+  "paid_calls": 0
+}

@@ -1,0 +1,10 @@
+{
+  "as_of": "2026-10-26T06:06:32.059628+00:00",
+  "api_limit_cny": 150,
+  "before_model_calls": 1181,
+  "before_occupied_micro_cny": 120509388,
+  "remaining_upper_bound_cny": 29.490612,
+  "before_ledger_sha256": "794eac6b2a645e742e292a9de904786c1a298943683ae7333d95c923d1aa97a6",
+  "unknown_reservations_retained": true,
+  "formal_ready": false
+}

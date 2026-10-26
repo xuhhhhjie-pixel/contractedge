@@ -1,0 +1,11 @@
+{
+  "status": "REQUEST_CAPTURED_ONLY",
+  "original_calls_sha256": "dc13858524c0ebf7ad456245e55b3cb1a291c9eeb971c005ee0dda268f863a35",
+  "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "saved_responses": 0,
+  "model_calls": 0,
+  "grader_calls": 0,
+  "source_unchanged": true,
+  "formal_ready": false,
+  "scope": "Offline trace/request audit only; no new diagnosis, plan or repair effectiveness conclusion"
+}
