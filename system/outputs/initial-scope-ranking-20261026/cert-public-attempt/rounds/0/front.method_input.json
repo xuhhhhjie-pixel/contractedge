@@ -1,0 +1,23 @@
+{
+  "schema_version": "ce.method_input.v1_1",
+  "case_id": "RW-CERTMANAGER-9116",
+  "release_id": "ContractEdge-benchmark150-v1-20261019",
+  "original_broken_revision": "archive-sha256:884a0d04adbc61933d0f5f80af9b2870050f3ae7bedfa2e032a38419de28776e",
+  "archive_path": "R2/tasks/RW-CERTMANAGER-9116/source.tar.gz",
+  "archive_sha256": "884a0d04adbc61933d0f5f80af9b2870050f3ae7bedfa2e032a38419de28776e",
+  "source_root": "source",
+  "initial_snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "requirement_text": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+  "public_observable_text": "Check the stated controller decision only; no downstream cluster convergence is implied.",
+  "scope_hints": [
+    {
+      "kind": "concept",
+      "value": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+      "raw_text": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+      "origin_ref": "public.requirement"
+    }
+  ],
+  "public_evidence": [],
+  "declared_artifacts": [],
+  "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c"
+}

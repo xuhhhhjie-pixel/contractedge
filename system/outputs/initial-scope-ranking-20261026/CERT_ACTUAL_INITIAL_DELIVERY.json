@@ -1,0 +1,23 @@
+{
+  "status": "ACTUAL_INITIAL_REQUEST_HAS_PRODUCTION_SOURCE",
+  "request_digest": "fb08b3e9668d83e5b516577519c9cea947c4ed17c94b294b6002ef091aa3780e",
+  "prompt_version": "diagnosis.v1.1.26",
+  "evidence": [
+    {
+      "id": "SRC-CU-ddfb73f63384b82e",
+      "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+      "locator": {
+        "column_start": 1,
+        "end_line": 309,
+        "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+        "start_line": 230
+      },
+      "content_digest": "a9535587696a94d698ff8467a126f7edaf2c2029341a5171e8e45e805a5c89d0"
+    }
+  ],
+  "selected_count": 12,
+  "request_tokens": 87780,
+  "input_limit": 120000,
+  "formal_ready": false,
+  "scope": "First actual request delivery only; response and correctness pending"
+}

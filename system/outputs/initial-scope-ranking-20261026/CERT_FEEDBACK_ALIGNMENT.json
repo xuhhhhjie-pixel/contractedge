@@ -1,0 +1,13 @@
+{
+  "status": "PATCH_AND_FEEDBACK_USE_CURRENT_IDENTITIES",
+  "from_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "to_snapshot": "da155d856f99d504d8e61d2d271701087ab2bc5243acd01618ad6ccf61c13b88",
+  "patch_sha256": "7c211f1d803b3a1b9ac58daf233c00bf61d4a449d4afe06ec5a720c6d30ce120",
+  "build_state": "PASSED",
+  "semantic_outcome": "UNKNOWN",
+  "pending_count": 2,
+  "route": "STOP",
+  "trace_sha256": "87194714ae0d045a36bced33ff7bea1c51e9d2cfdc04387c82ece9c3b3a3e3c6",
+  "formal_ready": false,
+  "scope": "No re-diagnosis needed in this successful single-round attempt; re-diagnosis/stale-source regression remains separately tested"
+}

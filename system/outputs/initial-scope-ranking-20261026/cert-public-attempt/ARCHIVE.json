@@ -1,0 +1,25 @@
+{
+  "status": "PUBLIC_METHOD_ARCHIVE_ONLY",
+  "case_id": "RW-CERTMANAGER-9116",
+  "attempt_id": "diagnostic-source050-v2-20261026-rw-certmanager-9116",
+  "files": {
+    "method_input.json": "3f51ba7848f2d53f8d10b7bfb9206367726c6cc8f12572c7612a90eb1a3513c2",
+    "model_calls.json": "4f41bca46061b7e62b724b9a94d5672ba0e17919f7cfdb226cd36c7d5b970251",
+    "repair.trace.json": "87194714ae0d045a36bced33ff7bea1c51e9d2cfdc04387c82ece9c3b3a3e3c6",
+    "candidate.patch": "7c211f1d803b3a1b9ac58daf233c00bf61d4a449d4afe06ec5a720c6d30ce120",
+    "initial-public-observation.json": "896ab1e3b84784825329c293a97e9eb1675448511dbb850001f18f1c131b8d9b",
+    "rounds/0/front.method_input.json": "3f51ba7848f2d53f8d10b7bfb9206367726c6cc8f12572c7612a90eb1a3513c2",
+    "rounds/0/front.config.json": "084f4af32aaea4756a70db8be2b5256d73453e10731faad99b48bf1a423d4f89",
+    "rounds/0/front.public_observations.json": "47772f10c04d093e0af896ad9087acc8ca2aa557620b36480ac67fee80f06ecb",
+    "rounds/0/front.trace.json": "a3ec8cd6ca5ed68b10c29fdbeb5a558d3d675c9f748af57e79ca465bde5235a4",
+    "rounds/0/plan.json": "920bb4f9b650b0e21dc49170f68dbcec8d18d44fc2de398ff0c162fbf96437c4",
+    "rounds/0/execution.json": "7b2514888970b05a96970b73f3f41e72cf49307261c877392c1b059aa0b93713",
+    "rounds/0/feedback.json": "eae181dd48d20e9158a1c1709513ca8fdbf6d302a6fa3fcd376430005b6c25e5",
+    "rounds/0/public/observation.json": "151da17d543ed3d200209fea289066101679ed20411679d2dc589e37e97f7533",
+    "rounds/0/public-review.json": "3d1989b3e2d5865286909f569eb7096a965c23faaba890968bb2ff1989e90238",
+    "selected-candidate.json": "4eeb0e5c8cb33a31b6aafb97c777dfbef78d44d3c0fd47e7e8d32f708c841018"
+  },
+  "excluded": "All source workspaces/caches, credentials, private parent control, independent evaluator files and hidden tests/GT/Fixed",
+  "independent_result_reference": "../CERT_TARGET_RESULT.json",
+  "formal_ready": false
+}

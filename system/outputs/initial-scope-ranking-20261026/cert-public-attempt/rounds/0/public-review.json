@@ -1,0 +1,20 @@
+{
+  "decision": "UNKNOWN",
+  "checks": [
+    {
+      "id": "P1",
+      "status": "UNKNOWN",
+      "rationale": "Outside the declared public observation boundary",
+      "evidence": []
+    },
+    {
+      "id": "open:O1-R1",
+      "status": "UNKNOWN",
+      "rationale": "Outside the declared public observation boundary",
+      "evidence": []
+    }
+  ],
+  "failure_kind": "UNKNOWN",
+  "method": "PUBLIC_BOUNDARY_ONLY",
+  "rationale": "No additional model call can create unavailable public behavior evidence."
+}

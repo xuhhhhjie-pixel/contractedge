@@ -3298,10 +3298,10 @@
     "snapshot": "docs/development/initial-scope-ranking-v050-20261026-v2.snapshot.json",
     "snapshot_id": "initial-scope-ranking-v050-20261026-v2",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V050_ENGINEERING_QUALIFIED_TARGET_DIAGNOSTIC_RUNNING",
+    "status": "V050_CERT_TARGET_PASS_KPT_CONTROL_RUNNING",
     "source_sha256": "9c795e1eaa7e81cd34e707c4869db9aa536005674d6d227b651e3719f2532057",
     "verification_command": "python scripts/verify_development_snapshot.py",
-    "formal_effectiveness": "DIAGNOSTIC_RUNNING_NO_FIXED46_EFFECTIVENESS",
+    "formal_effectiveness": "ONE_DIAGNOSTIC_TARGET_PASS_NO_FIXED46_EFFECTIVENESS",
     "formal_ready": false,
     "report": "outputs/initial-scope-ranking-20261026/COMPLETION_AUDIT.md",
     "predecessor_worktree": "/home/xhj/contractedge-gap-query-20261026/system",
@@ -3309,7 +3309,9 @@
     "full_tests": 1939,
     "subtests": 91,
     "runtime_qualification": "outputs/initial-scope-ranking-20261026/RUNTIME_QUALIFICATION_v050_v2.json",
-    "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/registration.json"
+    "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/registration.json",
+    "target_independent_status": "PASS",
+    "target_public_decision": "UNKNOWN"
   },
   "staged_implementation_version": "0.6.50",
   "runtime_implementation_version": "0.6.40",

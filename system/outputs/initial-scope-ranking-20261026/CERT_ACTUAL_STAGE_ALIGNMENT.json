@@ -1,0 +1,46 @@
+{
+  "status": "SUPPORTED_EVIDENCE_CROSSES_ACTUAL_DIAGNOSIS_PLAN_EXECUTION",
+  "source_records": [
+    {
+      "evidence_id": "SRC-CU-ddfb73f63384b82e",
+      "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+      "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+      "content_digest": "a9535587696a94d698ff8467a126f7edaf2c2029341a5171e8e45e805a5c89d0",
+      "diagnosis_to_plan": "EXACT_RECORD",
+      "execution_delivery": "CURRENT_TARGET_BODY"
+    },
+    {
+      "evidence_id": "SRC-CU-ee8f57d972b8f937",
+      "path": "design/20200326.extensible-certificate-controller.md",
+      "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+      "content_digest": "48f593fdb42744f2340bbbc72d6c93a72fd12317f775891a8d13e8fc5e086b7f",
+      "diagnosis_to_plan": "EXACT_RECORD",
+      "execution_delivery": "EXACT_SUPPORT"
+    },
+    {
+      "evidence_id": "SRC-CU-6e3f4bd5c23d1cc7",
+      "path": "pkg/controller/certificates/requestmanager/requestmanager_controller.go",
+      "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+      "content_digest": "6e03068874fa8cf0cec0ccc50263c285cf1cb98be065e8db0e954ba7de205e28",
+      "diagnosis_to_plan": "EXACT_RECORD",
+      "execution_delivery": "EXACT_SUPPORT"
+    }
+  ],
+  "requests": [
+    {
+      "prompt_version": "diagnosis.v1.1.26",
+      "request_digest": "fb08b3e9668d83e5b516577519c9cea947c4ed17c94b294b6002ef091aa3780e"
+    },
+    {
+      "prompt_version": "changeset.v1.1.13",
+      "request_digest": "5479b0d5acc209ea0ba9a064f7d1942f91f5afb7a1356477ca14c91e89f83d2b"
+    },
+    {
+      "prompt_version": "topomen-source-execution.v1",
+      "request_digest": "2548e097a7a5d66cc2547caaf7b046e303b25bd9971c7945c9020fc0eb27fbf2"
+    }
+  ],
+  "unverified_behavior_preserved": true,
+  "formal_ready": false,
+  "scope": "Input continuity and explicit unknown behavior only; does not prove diagnosis causal correctness or patch success"
+}

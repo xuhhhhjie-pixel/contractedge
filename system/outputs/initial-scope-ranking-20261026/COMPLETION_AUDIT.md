@@ -31,3 +31,9 @@ v2完整回归1939项及91项子测试通过（484.70秒），实际隔离演示
 实际八格全部PASS（14会话、28候选/观察容器），公开沙箱PASS，准备与清理、源码完整性及资格后的冻结校验均PASS。资格新增模型调用0。记录ACTUAL8_v050_v2.json及RUNTIME_QUALIFICATION_v050_v2.json。
 
 已新登记唯一Cert目标和条件KPT控制，见V050_DIAGNOSTIC_REGISTRATION.json。Cert当前执行中，尚无本版效果结论；KPT仅在目标独立PASS/公开非FAIL后开放。源码、配置和工具在队列期间不再变更。
+
+## Cert目标独立通过
+
+唯一预登记Cert尝试3次真实调用、2226字节补丁，method PUBLIC_EXECUTION_COMPLETE、独立PASS、公开行为UNKNOWN。此前0.6.49该目标EVIDENCE_GAP/空候选/独立SEMANTIC_FAIL，本次能进入诊断—计划—真实编辑并独立通过。真实首轮请求送达与离线回放一致，诊断引用的3份源码均完整跨越计划与执行，见CERT_ACTUAL_INITIAL_DELIVERY.json、CERT_ACTUAL_STAGE_ALIGNMENT.json、CERT_TARGET_RESULT.json。
+
+这是单次诊断性改善证据，不是固定面板或稳定性成绩。公开仅支持构建，P1与未验证行为继续UNKNOWN。按原预登记条件已开放KPT控制，当前运行中；正式准入仍false。

@@ -1,0 +1,353 @@
+{
+  "schema_version": "contractedge.topomen_plan.v1",
+  "plan_id": "9dde115bc59581efa14b7e507265fa61b093652fe69bfa7d5028d9c2d54d7430:d2277d11-edb0-436f-ae50-c927fc1b7bd4",
+  "run_id": "d2277d11-edb0-436f-ae50-c927fc1b7bd4",
+  "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+  "goal": "Restore the issuing controller guard that compares a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states, so a stale replaced-key request cannot fail the current Certificate issuance.",
+  "planned_violation_ids": [
+    "V1"
+  ],
+  "operations": [
+    {
+      "change_id": "C1",
+      "target": {
+        "kind": "EXISTING",
+        "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+        "locator": {
+          "start_line": 230,
+          "end_line": 309
+        },
+        "unit_refs": [
+          "U1",
+          "U3",
+          "U4"
+        ],
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "33cfb3ab055a4a168ea6db02bd9ea93f7450ede34b02cc7e14be1189ac7b9233"
+      },
+      "operation": "MODIFY",
+      "semantic_action": "In the issuing controller decision loop, after retrieving the single CertificateRequest for nextRevision and before handling terminal request conditions, add a guard that compares the request CSR public key with pk.Public() from the current NextPrivateKey Secret. On mismatch, log and return nil without updating Certificate status. Leave existing PrivateKeyMatchesSpec and RequestMatchesSpec checks and terminal handling intact after the new guard.",
+      "intent": "Restore A1/A2: only a CertificateRequest whose CSR matches the current NextPrivateKey Secret may drive terminal issuance outcomes; a stale request built from a replaced key must not set Issuing=False or lastFailureTime.",
+      "violation_refs": [
+        "V1"
+      ],
+      "postcondition_refs": [
+        "P1"
+      ],
+      "depends_on": []
+    }
+  ],
+  "postconditions": [
+    {
+      "id": "P1",
+      "statement": "When a Certificate is in Issuing state and a CertificateRequest for the next revision exists, if the request CSR public key does not match the current NextPrivateKey Secret, the issuing controller does not process the request terminal conditions and returns without setting Issuing=False or lastFailureTime.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "relation_refs": [
+        "R1",
+        "R2",
+        "R3"
+      ],
+      "planned_check": "No public behavioral probe is available; the public runner only builds the issuing controller package (OBS1/OBS2). Source review must confirm the new guard precedes terminal handling, and the package build must pass.",
+      "check_scope": "pkg/controller/certificates/issuing/issuing_controller.go decision loop before terminal CertificateRequest condition handling; public observation limited to package build.",
+      "verification_kind": "NOT_PUBLICLY_OBSERVABLE",
+      "stable_obligation_keys": [
+        "OB-2ac55d40408c2e6df4a141ed",
+        "OB-af99a9da4582d6a340b9072d"
+      ]
+    }
+  ],
+  "preserve_constraints": [],
+  "open_obligations": [
+    {
+      "id": "O1-R1",
+      "outcome_id": "O1",
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "statement": "Behavioral verification that a stale CertificateRequest built from a replaced key is ignored by the issuing controller before terminal-state handling is not publicly observable.",
+      "reason": "Public execution capability is limited to building the issuing controller package. No controller decision or cluster convergence was executed, so the planned production relation remains unverified beyond source-level inference and build success.",
+      "verification_kind": "NOT_PUBLICLY_OBSERVABLE",
+      "stable_obligation_keys": [
+        "OB-2ac55d40408c2e6df4a141ed",
+        "OB-af99a9da4582d6a340b9072d"
+      ]
+    }
+  ],
+  "production_path_review": [],
+  "status": "READY_PARTIAL",
+  "consumer_acceptance": "UNVERIFIED",
+  "preservation_impact": [],
+  "obligation_lineage": {
+    "schema_version": "ce.obligation_lineage.v1",
+    "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+    "requirement_digest": "d4dd65c54bbcc64f5a7884e7ed19a2a3064ebbe07e98a3660520e2d84d40a10d",
+    "nodes": {
+      "OB-2ac55d40408c2e6df4a141ed": {
+        "id": "OB-2ac55d40408c2e6df4a141ed",
+        "definition": {
+          "id": "A1",
+          "outcome_id": "O1",
+          "statement": "Before acting on terminal CertificateRequest states, the issuing controller must compare the CertificateRequest's CSR with the current NextPrivateKey Secret.",
+          "source_refs": [
+            "requirement_text:0:231"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+          "stable_obligation_key": "OB-2ac55d40408c2e6df4a141ed"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-af99a9da4582d6a340b9072d": {
+        "id": "OB-af99a9da4582d6a340b9072d",
+        "definition": {
+          "id": "A2",
+          "outcome_id": "O1",
+          "statement": "A stale CertificateRequest built from a replaced key must not fail the current Certificate issuance.",
+          "source_refs": [
+            "requirement_text:0:231"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance.",
+          "stable_obligation_key": "OB-af99a9da4582d6a340b9072d"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance.",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      }
+    },
+    "events": [
+      {
+        "kind": "REGISTER",
+        "id": "LE-0635f097c83a7741a6723cd6",
+        "parent_ids": [],
+        "atom_refs": [
+          "A1"
+        ],
+        "resolved_ids": {
+          "A1": "OB-2ac55d40408c2e6df4a141ed"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-14be460b22d8a4277facd2f4",
+        "parent_ids": [],
+        "atom_refs": [
+          "A2"
+        ],
+        "resolved_ids": {
+          "A2": "OB-af99a9da4582d6a340b9072d"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      }
+    ],
+    "bindings": {
+      "A1": "OB-2ac55d40408c2e6df4a141ed",
+      "A2": "OB-af99a9da4582d6a340b9072d"
+    },
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba"
+  },
+  "coordination_context": {
+    "diagnosis_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+    "obligation_atoms": [
+      {
+        "id": "A1",
+        "outcome_id": "O1",
+        "statement": "Before acting on terminal CertificateRequest states, the issuing controller must compare the CertificateRequest's CSR with the current NextPrivateKey Secret.",
+        "source_refs": [
+          "requirement_text:0:231"
+        ],
+        "support": "EXPLICIT",
+        "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+        "stable_obligation_key": "OB-2ac55d40408c2e6df4a141ed"
+      },
+      {
+        "id": "A2",
+        "outcome_id": "O1",
+        "statement": "A stale CertificateRequest built from a replaced key must not fail the current Certificate issuance.",
+        "source_refs": [
+          "requirement_text:0:231"
+        ],
+        "support": "EXPLICIT",
+        "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance.",
+        "stable_obligation_key": "OB-af99a9da4582d6a340b9072d"
+      }
+    ],
+    "expected_relations": [
+      {
+        "id": "R1",
+        "source_unit_ids": [
+          "U2",
+          "U3"
+        ],
+        "target_unit_ids": [
+          "U1"
+        ],
+        "relation_form": "INDIVISIBLE_SHARED",
+        "shared_constraint_reason": "The contract constrains the correspondence of two inputs (the CertificateRequest CSR and the current NextPrivateKey Secret) and cannot be expressed as adjacent one-source/one-target edges.",
+        "mechanism": "The issuing controller lists the CertificateRequest for status.revision+1 and reads the current next private key, and must confirm the CSR was built from that key before handling terminal request states.",
+        "condition": "Certificate is in Issuing state and a CertificateRequest for the next revision is found",
+        "expected_contract": "On a mismatch between the CertificateRequest CSR and the current NextPrivateKey Secret, the controller must not act on the request's terminal state.",
+        "requirement_refs": [
+          "O1"
+        ],
+        "obligation_refs": [
+          "A1"
+        ],
+        "support_refs": [
+          "SRC-CU-ddfb73f63384b82e",
+          "SRC-CU-ee8f57d972b8f937"
+        ]
+      }
+    ],
+    "violations": [
+      {
+        "id": "V1",
+        "relation_id": "R1",
+        "broken_behavior": "The issuing controller does not compare the CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.",
+        "causal_explanation": "The pre-terminal guard matches the next private key only against crt.Spec (PrivateKeyMatchesSpec) and the request only against crt.Spec (RequestMatchesSpec); neither compares the request's CSR to the NextPrivateKey Secret, so a request built from a replaced key that still matches crt.Spec passes the guard and its terminal state is acted upon, failing the current issuance; key-mismatch handling is placed in the requestmanager instead.",
+        "evidence_refs": [
+          "SRC-CU-ddfb73f63384b82e",
+          "SRC-CU-ee8f57d972b8f937",
+          "SRC-CU-6e3f4bd5c23d1cc7"
+        ],
+        "support_basis": "STATIC_INFERENCE",
+        "causal_status": "SUPPORTED"
+      }
+    ],
+    "source_support": [
+      {
+        "id": "SRC-CU-ddfb73f63384b82e",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+          "start_line": 230,
+          "end_line": 309,
+          "column_start": 1
+        },
+        "content_digest": "a9535587696a94d698ff8467a126f7edaf2c2029341a5171e8e45e805a5c89d0",
+        "excerpt": "\t\t// If the private key cannot be parsed here, do nothing as the key manager will handle this.\n\t\tlogf.WithResource(log, nextPrivateKeySecret).Error(err, \"failed to parse next private key, waiting for keymanager controller\")\n\t\treturn nil\n\t}\n\tpkViolations := utilpki.PrivateKeyMatchesSpec(pk, crt.Spec)\n\tif len(pkViolations) > 0 {\n\t\tlogf.WithResource(log, nextPrivateKeySecret).Info(\"stored next private key does not match requirements on Certificate resource, waiting for keymanager controller\", \"violations\", pkViolations)\n\t\treturn nil\n\t}\n\n\t// CertificateRequest revisions begin from 1. If no revision is set on the\n\t// status then assume no revision yet set.\n\tnextRevision := 1\n\tif crt.Status.Revision != nil {\n\t\tnextRevision = *crt.Status.Revision + 1\n\t}\n\n\treqs, err := certificates.ListCertificateRequestsMatchingPredicates(\n\t\tc.certificateRequestLister.CertificateRequests(crt.Namespace),\n\t\tpredicate.CertificateRequestRevision(nextRevision),\n\t\tpredicate.ResourceOwnedBy[*cmapi.CertificateRequest](crt),\n\t)\n\tif err != nil || len(reqs) != 1 {\n\t\t// If error return.\n\t\t// if no error but none exist do nothing.\n\t\t// If no error but multiple exist, then leave to requestmanager controller\n\t\t// to clean up.\n\t\treturn err\n\t}\n\n\treq := reqs[0]\n\tlog = logf.WithResource(log, req)\n\n\t// Verify the CSR options match what is requested in certificate.spec.\n\t// If there are violations in the spec, then the requestmanager will handle this.\n\trequestViolations, err := utilpki.RequestMatchesSpec(req, crt.Spec)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif len(requestViolations) > 0 {\n\t\tlog.V(logf.DebugLevel).Info(\"CertificateRequest does not match Certificate, waiting for keymanager controller\")\n\t\treturn nil\n\t}\n\n\tcertIssuingCond := apiutil.GetCertificateCondition(crt, cmapi.CertificateConditionIssuing)\n\tcrReadyCond := apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady)\n\tif certIssuingCond == nil {\n\t\t// This should never happen\n\t\tlog.V(logf.ErrorLevel).Info(\"Certificate does not have an issuing condition\")\n\t\treturn nil\n\t}\n\t// If the CertificateRequest for this revision failed before the\n\t// Issuing condition was last updated on the Certificate, then it must be a\n\t// failed CertificateRequest from the previous issuance for the same\n\t// revision. Leave it to the certificate-requests controller to delete the\n\t// CertificateRequest and create a new one.\n\tif req.Status.FailureTime != nil &&\n\t\treq.Status.FailureTime.Before(certIssuingCond.LastTransitionTime) && crReadyCond.Reason == cmapi.CertificateRequestReasonFailed {\n\t\tlog.V(logf.InfoLevel).Info(\"Found a failed CertificateRequest from previous issuance, waiting for it to be deleted...\")\n\t\treturn nil\n\t}\n\n\t// Now check if CertificateRequest is in any of the final states so that\n\t// this issuance can be completed as either succeeded or failed. Failed\n\t// issuance will be retried with a delay (the logic for that lives in\n\t// certificates-trigger controller). Final states are: Denied condition\n\t// with status True => fail issuance InvalidRequest  condition with\n\t// status True => fail issuance Ready condition with reason Failed =>\n\t// fail issuance Ready condition with reason Issued => finalize issuance\n\t// as succeeded.\n\n\t// In case of a non-compliant issuer, a CertificateRequest can have both\n\t// Denied status True (set by an approver) and Ready condition with\n\t// reason Issued (set by the issuer). In this case, we prioritize the\n\t// Denied condition and fail the issuance. This is done for consistency\n\t// and also to avoid race conditions between the non-compliant issuer\n\t// and this control loop.\n\n\t// If the certificate request was denied, set the last failure time to\n\t// now, bump the issuance attempts and set the Issuing status condition\n",
+        "origin": "selected candidate CU-ddfb73f63384b82e"
+      },
+      {
+        "id": "SRC-CU-ee8f57d972b8f937",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "design/20200326.extensible-certificate-controller.md",
+          "start_line": 321,
+          "end_line": 388,
+          "column_start": 1
+        },
+        "content_digest": "48f593fdb42744f2340bbbc72d6c93a72fd12317f775891a8d13e8fc5e086b7f",
+        "excerpt": "\nIt is responsible for encoding the private key and certificate data into the\nappropriate format.\n\nOnce the key-pair has been written to `spec.secretName`, it will set the\n`status.revision` field to that of the CertificateRequest and remove the\n`Issuing` status condition (in the same Update call).\n\nIt will behave as follows:\n\n* If the 'Issuing' condition is `True`:\n    * If the `status.nextPrivateKeySecretName` field is not set:\n        * Do nothing\n    * Find the CertificateRequest for `status.revision` + 1\n        * If none exist, do nothing.\n        * If multiple exist, do nothing (`requestmanager` will handle this)\n    * If the CertificateRequest is not in a 'final' state, do nothing.\n    * If it is 'valid':\n        * Verify the public key of the certificate request matches the public key\n          of the stored `status.nextPrivateKeySecretName`\n            * If not, do nothing (`requestmanager` will handle this)\n        * Verify the CSR options match what is requested in `certificate.spec`\n            * If not, do nothing (`requestmanager` will handle this)\n        * Encode and issue the key-pair (store it in the Secret)\n        * Set `status.revision` to revision of the CertificateRequest\n        * Remove `Issuing` status condition\n        * Clear `status.lastFailureTime` (if set)\n        * Log an Event\n    * If not 'valid':\n        * Set `status.lastFailureTime` (if not equal to CertificateRequest)\n        * Set `Issuing` status condition to `False` with reason explaining when\n          the request will be retried\n* If the 'Issuing' condition is `False` or not set:\n    * Do nothing\n\n#### trigger\n\nThe trigger plugin is responsible for observing the state of the currently\nissued `spec.secretName` and the rest of the `certificate.spec` fields to\ndetermine whether a re-issuance is required.\nIt triggers re-issuance by adding the `Issuing` status condition when a new\ncertificate is required.\n\nThese conditions will cause a request to be triggered:\n\n* `spec.secretName` does not exist, or contains data that cannot be decoded.\n* Issuer name/kind annotations on Secret resource do not match current `spec.issuerRef`.\n* The public key of the `tls.key` and `tls.crt` do not match.\n* A CertificateRequest for the current `status.revision` exists and the\n  current requested `certificate.spec` does not match the options on the CSR.\n* If the stored x509 certificate's `NotAfter` is within `spec.renewBefore` of\n  the current time.\n\nAdditionally, the controller is responsible for implement a 'back-off' if\nCertificateRequest resources persistently fail to complete.\nFor now, this will be a continuation of the current behaviour of backing off\nby 1 hour after a request fails.\nEven if any of the above conditions are true, a request will not be triggered\nunless the current time is at least 1 hour after the `status.lastFailureTime`,\nif set.\nIn future we can extend this logic to back-off exponentially by storing a\nlonger history of CertificateRequest resource's failure times, but this is out\nof scope of this proposal.\n\nAnother actor may choose to manually trigger an issuance by setting the\n`Issuing` condition themselves (i.e. with a cert-manager CLI tool, or their own\ncontroller). The `trigger` controller will not interfere in this case and\nwill take no extra action.\n",
+        "origin": "selected candidate CU-ee8f57d972b8f937"
+      },
+      {
+        "id": "SRC-CU-6e3f4bd5c23d1cc7",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificates/requestmanager/requestmanager_controller.go",
+          "start_line": 186,
+          "end_line": 265,
+          "column_start": 1
+        },
+        "content_digest": "6e03068874fa8cf0cec0ccc50263c285cf1cb98be065e8db0e954ba7de205e28",
+        "excerpt": "\t// Discover all 'owned' CertificateRequests\n\trequests, err := certificates.ListCertificateRequestsMatchingPredicates(\n\t\tc.certificateRequestLister.CertificateRequests(crt.Namespace),\n\t\tpredicate.ResourceOwnedBy[*cmapi.CertificateRequest](crt),\n\t)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\t// delete any existing CertificateRequest resources that do not have a\n\t// revision annotation\n\tif requests, err = c.deleteRequestsWithoutRevision(ctx, requests...); err != nil {\n\t\treturn err\n\t}\n\n\tcurrentCertificateRevision := 0\n\tif crt.Status.Revision != nil {\n\t\tcurrentCertificateRevision = *crt.Status.Revision\n\t}\n\tnextRevision := currentCertificateRevision + 1\n\n\trequests, err = requestsWithRevision(requests, nextRevision)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\trequests, err = c.deleteRequestsNotMatchingSpec(ctx, crt, pk.Public(), requests...)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\trequests, err = c.deleteCurrentFailedRequests(ctx, crt, requests...)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tif len(requests) > 1 {\n\t\t// TODO: we should handle this case better, but for now do nothing to\n\t\t//  avoid getting into loops where we keep creating multiple requests\n\t\t//  and deleting them again.\n\t\tlog.V(logf.ErrorLevel).Info(\"Multiple matching CertificateRequest resources exist, delete one of them. This is likely an error and should be reported on the issue tracker!\")\n\t\treturn nil\n\t}\n\n\tif len(requests) == 1 {\n\t\t// Nothing to do as we've already verified that the CertificateRequest\n\t\t// is up to date above.\n\t\treturn nil\n\t}\n\n\treturn c.createNewCertificateRequest(ctx, crt, pk, nextRevision, nextPrivateKeySecret.Name)\n}\n\nfunc (c *controller) deleteCurrentFailedRequests(ctx context.Context, crt *cmapi.Certificate, reqs ...*cmapi.CertificateRequest) ([]*cmapi.CertificateRequest, error) {\n\tlog := logf.FromContext(ctx).WithValues(\"Certificate\", crt.Name)\n\tvar remaining []*cmapi.CertificateRequest\n\tfor _, req := range reqs {\n\t\tlog = logf.WithRelatedResource(log, req)\n\n\t\t// Check if there are any 'current' CertificateRequests that\n\t\t// failed during the previous issuance cycle. Those should be\n\t\t// deleted so that a new one gets created and the issuance is\n\t\t// re-tried. In practice no more than one CertificateRequest is\n\t\t// expected at this point.\n\t\tcrReadyCond := apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady)\n\t\tif crReadyCond == nil || crReadyCond.Status != cmmeta.ConditionFalse || crReadyCond.Reason != cmapi.CertificateRequestReasonFailed {\n\t\t\tremaining = append(remaining, req)\n\t\t\tcontinue\n\t\t}\n\n\t\tcertIssuingCond := apiutil.GetCertificateCondition(crt, cmapi.CertificateConditionIssuing)\n\t\tif certIssuingCond == nil {\n\t\t\t// This should never happen\n\t\t\tlog.V(logf.ErrorLevel).Info(\"Certificate does not have Issuing condition\")\n\t\t\treturn nil, nil\n\t\t}\n\t\t// If the Issuing condition on the Certificate is newer than the\n\t\t// failure time on CertificateRequest, it means that the\n\t\t// CertificateRequest failed during the previous issuance (for the\n\t\t// same revision). If it is a CertificateRequest that failed\n",
+        "origin": "selected candidate CU-6e3f4bd5c23d1cc7"
+      }
+    ],
+    "interpretation": "Validated diagnosis context; historical after source changes. Not a new edit permission."
+  },
+  "public_execution_capabilities": {
+    "schema_version": "ce.public_execution_capabilities.v1",
+    "source": {
+      "path": "environment.json",
+      "sha256": "377db8923c5a14d6732c45e9dc40860dac1cd915e7c006945fad363fdc948c15",
+      "task_observation_limit_source": "task.yaml:observation_limit"
+    },
+    "task_observation_limit": "Check the stated controller decision only; no downstream cluster convergence is implied.",
+    "environment_observation_limit": "Production issuing controller package build; private request/key fixtures and oracle are not exposed",
+    "observation_boundary": null,
+    "public_scope": null,
+    "native_input_boundary": null,
+    "candidate_command": null,
+    "build_entrypoint": null,
+    "public_runner": null,
+    "expected_artifact": null,
+    "scenarios": [
+      {
+        "name": "public-issuing-controller-build",
+        "argv": [
+          "sh",
+          "/work/.contractedge-deps/setup/build.sh"
+        ]
+      }
+    ],
+    "editable_policy": {
+      "allowed_paths": [
+        "pkg/*.go",
+        "internal/*.go"
+      ],
+      "forbidden_paths": [
+        "**/*test*",
+        "**/contractedge*",
+        "private/**",
+        "verifier/**",
+        "evaluator/**",
+        "oracle/**",
+        "go.mod",
+        "go.sum",
+        "**/go.mod",
+        "**/go.sum",
+        ".contractedge-deps/**"
+      ],
+      "policy_status": "DECLARED"
+    },
+    "network": "none",
+    "interpretation": "Declared public execution/observation only. Build success is not behavioral success; unavailable behavior stays UNKNOWN. No additional execution or edit permission.",
+    "consumer_id": "contractedge.topomen_source_consumer.v1",
+    "execution_backend": "topomen_agent",
+    "supported_operations": [
+      "MODIFY",
+      "CREATE"
+    ],
+    "method_behavior_probes": []
+  }
+}

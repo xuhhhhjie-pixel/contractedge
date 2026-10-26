@@ -1,0 +1,49 @@
+diff --git a/pkg/controller/certificates/issuing/issuing_controller.go b/pkg/controller/certificates/issuing/issuing_controller.go
+index d2e5bf8..74e9e91 100644
+--- a/pkg/controller/certificates/issuing/issuing_controller.go
++++ b/pkg/controller/certificates/issuing/issuing_controller.go
+@@ -271,6 +271,23 @@ func (c *controller) ProcessItem(ctx context.Context, key types.NamespacedName)
+ 		return nil
+ 	}
+ 
++	// Verify the CertificateRequest's CSR public key matches the current
++	// NextPrivateKey Secret before acting on any terminal request state. A
++	// stale request built from a replaced key must not fail the current
++	// Certificate issuance; the requestmanager will handle cleanup.
++	csr, err := utilpki.DecodeX509CertificateRequestBytes(req.Spec.Request)
++	if err != nil {
++		return err
++	}
++	publicKeyMatchesCSR, err := utilpki.PublicKeyMatchesCSR(pk.Public(), csr)
++	if err != nil {
++		return err
++	}
++	if !publicKeyMatchesCSR {
++		logf.WithResource(log, nextPrivateKeySecret).Info("next private key does not match CSR public key, waiting for requestmanager controller")
++		return nil
++	}
++
+ 	certIssuingCond := apiutil.GetCertificateCondition(crt, cmapi.CertificateConditionIssuing)
+ 	crReadyCond := apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady)
+ 	if certIssuingCond == nil {
+@@ -331,20 +348,6 @@ func (c *controller) ProcessItem(ctx context.Context, key types.NamespacedName)
+ 		return c.failIssueCertificate(ctx, log, crt, apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady))
+ 	}
+ 
+-	// If public key does not match, do nothing (requestmanager will handle this).
+-	csr, err := utilpki.DecodeX509CertificateRequestBytes(req.Spec.Request)
+-	if err != nil {
+-		return err
+-	}
+-	publicKeyMatchesCSR, err := utilpki.PublicKeyMatchesCSR(pk.Public(), csr)
+-	if err != nil {
+-		return err
+-	}
+-	if !publicKeyMatchesCSR {
+-		logf.WithResource(log, nextPrivateKeySecret).Info("next private key does not match CSR public key, waiting for requestmanager controller")
+-		return nil
+-	}
+-
+ 	// If the CertificateRequest is valid and ready, verify its status and issue
+ 	// accordingly.
+ 	if crReadyCond.Reason == cmapi.CertificateRequestReasonIssued {
