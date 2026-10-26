@@ -1,0 +1,100 @@
+F..FFFFF....F                                                            [100%]
+=================================== FAILURES ===================================
+_____ test_same_front_plan_uses_completed_recovery_without_a_second_retry ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-643/test_same_front_plan_uses_comp0')
+
+    def test_same_front_plan_uses_completed_recovery_without_a_second_retry(tmp_path):
+        provider = TwoStageStarvation()
+        trace = run(tmp_path, provider, planning_generation_recovery_scope='front_half')
+>       assert trace.status == 'READY', trace.errors
+E       AssertionError: ('ChangeSet output reached the configured generation token limit',)
+E       assert 'BUDGET_EXHAUSTED' == 'READY'
+E         
+E         - READY
+E         + BUDGET_EXHAUSTED
+
+tests/test_planning_generation_scope.py:27: AssertionError
+_________ test_invalid_scope_rejected_before_model_dispatch[all_cases] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-643/test_invalid_scope_rejected_be0')
+value = 'all_cases'
+
+    @pytest.mark.parametrize('value', ['all_cases', '', None, [], True])
+    def test_invalid_scope_rejected_before_model_dispatch(tmp_path, value):
+        provider = TwoStageStarvation()
+>       with pytest.raises(ValueError, match='planning_generation_recovery_scope'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_planning_generation_scope.py:50: Failed
+_____________ test_invalid_scope_rejected_before_model_dispatch[] ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-643/test_invalid_scope_rejected_be1')
+value = ''
+
+    @pytest.mark.parametrize('value', ['all_cases', '', None, [], True])
+    def test_invalid_scope_rejected_before_model_dispatch(tmp_path, value):
+        provider = TwoStageStarvation()
+>       with pytest.raises(ValueError, match='planning_generation_recovery_scope'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_planning_generation_scope.py:50: Failed
+___________ test_invalid_scope_rejected_before_model_dispatch[None] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-643/test_invalid_scope_rejected_be2')
+value = None
+
+    @pytest.mark.parametrize('value', ['all_cases', '', None, [], True])
+    def test_invalid_scope_rejected_before_model_dispatch(tmp_path, value):
+        provider = TwoStageStarvation()
+>       with pytest.raises(ValueError, match='planning_generation_recovery_scope'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_planning_generation_scope.py:50: Failed
+__________ test_invalid_scope_rejected_before_model_dispatch[value3] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-643/test_invalid_scope_rejected_be3')
+value = []
+
+    @pytest.mark.parametrize('value', ['all_cases', '', None, [], True])
+    def test_invalid_scope_rejected_before_model_dispatch(tmp_path, value):
+        provider = TwoStageStarvation()
+>       with pytest.raises(ValueError, match='planning_generation_recovery_scope'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_planning_generation_scope.py:50: Failed
+___________ test_invalid_scope_rejected_before_model_dispatch[True] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-643/test_invalid_scope_rejected_be4')
+value = True
+
+    @pytest.mark.parametrize('value', ['all_cases', '', None, [], True])
+    def test_invalid_scope_rejected_before_model_dispatch(tmp_path, value):
+        provider = TwoStageStarvation()
+>       with pytest.raises(ValueError, match='planning_generation_recovery_scope'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_planning_generation_scope.py:50: Failed
+_________ test_new_invocation_resets_recovery_even_with_same_provider __________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-643/test_new_invocation_resets_rec0')
+
+    def test_new_invocation_resets_recovery_even_with_same_provider(tmp_path):
+        provider = TwoStageStarvation()
+        first = tmp_path / 'first'; first.mkdir()
+>       assert run(first, provider, planning_generation_recovery_scope='front_half').status == 'READY'
+E       AssertionError: assert 'BUDGET_EXHAUSTED' == 'READY'
+E         
+E         - READY
+E         + BUDGET_EXHAUSTED
+
+tests/test_planning_generation_scope.py:79: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_planning_generation_scope.py::test_same_front_plan_uses_completed_recovery_without_a_second_retry
+FAILED tests/test_planning_generation_scope.py::test_invalid_scope_rejected_before_model_dispatch[all_cases]
+FAILED tests/test_planning_generation_scope.py::test_invalid_scope_rejected_before_model_dispatch[]
+FAILED tests/test_planning_generation_scope.py::test_invalid_scope_rejected_before_model_dispatch[None]
+FAILED tests/test_planning_generation_scope.py::test_invalid_scope_rejected_before_model_dispatch[value3]
+FAILED tests/test_planning_generation_scope.py::test_invalid_scope_rejected_before_model_dispatch[True]
+FAILED tests/test_planning_generation_scope.py::test_new_invocation_resets_recovery_even_with_same_provider
+7 failed, 6 passed in 0.59s

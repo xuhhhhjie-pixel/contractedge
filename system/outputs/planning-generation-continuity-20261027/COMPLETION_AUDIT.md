@@ -1,0 +1,23 @@
+# 0.6.58 前端生成模式连续性
+
+当前通用实现和104项相关回归通过；保存公开轨迹回放通过；新冻结完整工程正在执行，效果待验收。正式准入false。
+
+## 根因及最小修复
+
+source057完整KPT以3调用BUDGET_EXHAUSTED、空补丁、独立SEMANTIC_FAIL结束。诊断length后现有一次disabled恢复成功；ChangeSet是不同prompt_version，恢复原enabled生成并再次length，共享恢复额度耗尽。不是缺失公开输入或校验误拒绝；原策略仅按提示版本继承生成模式，适用范围过窄。
+
+新配置`planning_generation_recovery_scope=front_half`让一次已观察并完成的推理饥饿恢复延续到本次后续诊断和计划。默认`prompt_version`仍维持旧行为。局部映射在新的front调用重新创建；不会跨案例保存。继续只有一次截断恢复、原格式纠错及12总调用/2语义轮，未增加模块。
+
+|验收|当前证据|边界|
+|---|---|---|
+|通用测试|新15项；首次7失败+6旧行为通过，补充后相关104项通过|覆盖默认兼容、无usage、无恢复、失败恢复、总调用限额、新front复位、补证诊断及计划修订|
+|独立运行代码审查|无具体运行代码问题；22项定向测试通过|指出回放须核对真实适配器请求体，已纳入验收|
+|保存公开全链路回放|通过|原消息/schema精确一致；最终适配器body仅关闭thinking并移除reasoning_effort；零API|
+|完整工程与隔离|待执行|冻结后实际exit0、8格隔离和公开沙箱通过才能付费|
+|真实修复|未运行|KPT一次，成功后才进入预选Cert控制；失败不重启|
+
+回放脚本前置验证曾失败：记录排序使check枚举顺序变化，tuple/list表示不同，以及原适配器关闭thinking时还会删除reasoning_effort。均保留原日志；不涉及模型调用或生产规则放宽。只从原公开planner schema恢复声明顺序，schema/消息随后必须精确相等；请求体允许变化限定为thinking与对应reasoning_effort，明确核对值。
+
+当前总账126.189522/150元，1221调用，剩余上界23.810478元。source057全部公开失败和旧/新提示对照均保留，不能用后续成功覆盖。原46、B及正式150仍关闭。
+
+本版源码SHA256：`192571f444abc4a7b618cd7b0c213be6523035e7a9139f0bb33e182c62f54764`。冻结为`docs/development/planning-generation-continuity-v058-20261027-v1.snapshot.json`。

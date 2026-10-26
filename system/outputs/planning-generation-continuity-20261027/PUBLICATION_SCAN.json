@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "files": 28,
+  "credential_pattern_matches": 0,
+  "only_explicit_public_code_config_tests_replays": true
+}
