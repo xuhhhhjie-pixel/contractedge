@@ -1,0 +1,24 @@
+{
+  "status": "PUBLIC_METHOD_ARCHIVE_ONLY",
+  "case_id": "RW-CERTMANAGER-9116",
+  "files": {
+    "method_input.json": "3f51ba7848f2d53f8d10b7bfb9206367726c6cc8f12572c7612a90eb1a3513c2",
+    "model_calls.json": "677113148b88836bed081d7219cbfd21b8fddeb0dace6cfe91d7e8131777b925",
+    "repair.trace.json": "64781ad9a0f6c673a05c279f86999631521e6ef018ee1db60794459b128566b1",
+    "candidate.patch": "8ed6c1c7800f78da03ca916137d8fcc288a12affbd565f49bc62b5f5ed8333af",
+    "initial-public-observation.json": "42fdd515eb5cbe4fc1563472a1507cdf156ebbdd29028615231d48c517359568",
+    "rounds/0/front.method_input.json": "3f51ba7848f2d53f8d10b7bfb9206367726c6cc8f12572c7612a90eb1a3513c2",
+    "rounds/0/front.config.json": "6bb7b0e67acc90ab34afd985354d2380ed9769056cc12b148c1e942412ab3de2",
+    "rounds/0/front.public_observations.json": "b9152122838c1e276969e924ef5f75e695bbc4a756df8963d4d817752cfda8ac",
+    "rounds/0/front.trace.json": "ae458ccf6e238422cc77c2b45a040687e386eda1940c9cc1390544d07192aa1d",
+    "rounds/0/plan.json": "cc2708b3748a332b5ff3568582fe874e5e4f7022b9482911e74049690501707f",
+    "rounds/0/execution.json": "d09d98fec6f2c50decac83b625f9c9fcb79f471d5d8107363408e20c054e7344",
+    "rounds/0/feedback.json": "69f78e5022defae68f590fa3c6975f635670de4cfd9c25d664bf56a179f421b3",
+    "rounds/0/public/observation.json": "94ed6e342f2ce0ea94daef146f7e55dd6c2dbadfe0d4f1a2f0d3604cedd95d3b",
+    "rounds/0/public-review.json": "93cbac88278216a2fa182736487c2f1d7c3041087fdad6262ac4ec047ae2ce5d",
+    "selected-candidate.json": "d8cd6acbe05c04f0a1775efb22399ef7865dfe4913a10cd52a64732de55c36ea"
+  },
+  "independent_result_reference": "../CERT_CONTROL_RESULT.json",
+  "hidden_evaluator_files_included": false,
+  "formal_ready": false
+}

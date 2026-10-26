@@ -45,3 +45,18 @@ v2完整1955项、91子测试通过，实际进程退出码0、测试后冻结�
 KPT本次首轮形成runMutators→U3、runValidators→U4、runPipeline→U1绑定，3次真实调用、3820字节候选，公开PUBLIC_REVIEW_PASS（6项登记检查结果PASS），独立PASS。没有调用重新诊断兜底，因此本次效果不能归因于兜底真实触发；兜底的作用仍由公开旧轨迹与显式模拟反例证明。对照0.6.50的INVALID_PLAN/空候选，本次已产生实际正确修复，但单次对照不证明稳定泛化。证据KPT_ACTUAL_BINDING_WITNESS.json与KPT_TARGET_RESULT.json。
 
 按登记条件，Cert控制已开始，尚无本版控制结果；原46验收仍未开放。
+
+## 本轮最小真实验证关闭：2/2独立PASS
+
+| 成员 | 方法终态 | 真实调用 | 补丁 | 公开语义 | 独立评分 |
+|---|---|---:|---:|---|---|
+| KPT目标 | PUBLIC_REVIEW_COMPLETE | 3 | 3820字节 | PASS | PASS |
+| Cert控制 | PUBLIC_EXECUTION_COMPLETE | 4 | 2020字节 | UNKNOWN | PASS |
+
+证据V051_DIAGNOSTIC_RESULTS.json及两份public-attempt档案，仅含公开方法输入、请求、源码片段、补丁、公开反馈；不含隐藏评分器/测试/GT/Fixed或凭据。Cert公开仅能证明构建，仍有未验证行为，不提升为公开PASS。v1未派发；v2两条各一次，未重试槽位直到成功。累计费用及预留见BUDGET_CHECKPOINT.json。
+
+这是有限曝光开发成员上的本版最小目标和控制通过，不能称原46完成、稳定性/泛化证明或正式准入，也不能把0.6.45的五条旧PASS加到本版组成7/7。新重诊断兜底本次未触发，作用证据来自旧失败回放和明确模拟夹具；本次真实修复效果不能独占归因于该兜底。
+
+### 已确认的下一处通用根因
+
+Alert公开源已核实：Dispatcher.Run初始化空group map，Subscribe在锁内把当前列表装入缓冲通道后返回，后续run循环才逐条消费。启动调用不证明已消费完现有状态。该Subscribe实现未进入保存的最终12份初诊证据；已有局部查找能跟到Run/run，却缺少构造器实参与字段接收者的具体实现连接。事实依据ALERT_NEXT_PREREQUISITE_CHECKPOINT.json；并非完整修法或新效果结论。下一步沿既有局部查找补这一有界、精确的值来源，不扩大到全仓图，也不对未改变输入的Alert盲目新增调用。

@@ -3300,10 +3300,10 @@
     "snapshot": "docs/development/branch-target-binding-v051-20261026-v2.snapshot.json",
     "snapshot_id": "branch-target-binding-v051-20261026-v2",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V051_V2_KPT_TARGET_PASS_CERT_CONTROL_RUNNING",
+    "status": "V051_V2_MINIMAL_TARGET_AND_CONTROL_PASS_FORMAL_GATES_PENDING",
     "source_sha256": "827422caa8e1b7b0d331bd2fb6e23850581d5243751ea4e99d3806d466bce480",
     "verification_command": "python scripts/verify_development_snapshot.py",
-    "formal_effectiveness": "ONE_TARGET_PASS_CONTROL_RUNNING_NO_FIXED46_ACCEPTANCE",
+    "formal_effectiveness": "TWO_DIAGNOSTIC_PASSES_NOT_FIXED46_ACCEPTANCE",
     "formal_ready": false,
     "report": "outputs/branch-target-binding-20261026/COMPLETION_AUDIT.md",
     "predecessor_worktree": "/home/xhj/contractedge-scope-ranking-20261026/system",
@@ -3313,7 +3313,10 @@
     "runtime_qualification": "outputs/branch-target-binding-20261026/RUNTIME_QUALIFICATION_v051_v2.json",
     "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source051-v2-20261026/registration.json",
     "target_independent_status": "PASS",
-    "target_public_decision": "PASS"
+    "target_public_decision": "PASS",
+    "diagnostic_results": "outputs/branch-target-binding-20261026/V051_DIAGNOSTIC_RESULTS.json",
+    "control_independent_status": "PASS",
+    "control_public_decision": "UNKNOWN"
   },
   "staged_implementation_version": "0.6.51",
   "runtime_implementation_version": "0.6.40",
@@ -3371,9 +3374,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Saved KPT replay: determine if failed branch has any legal diagnosis unit target; improve exact binding feedback and existing re-diagnosis route without weakening coverage",
-    "Do not rerun Alert on unchanged initial evidence; isolate missing subscription/replay prerequisite mechanism offline",
-    "Qualify only new replay-backed source changes, then minimal real targets and original frozen46 gates"
+    "Close source051 target/control audit; retain v1 failures and exact frozen v2 source",
+    "Resolve Alert bounded constructor-argument/field-receiver subscription evidence from saved public trace; replay before any new paid attempt",
+    "Only after known failure and recovery gates, run the original same-version fixed46 acceptance and G0-G6; no formal150 yet"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",

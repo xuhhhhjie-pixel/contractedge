@@ -1,0 +1,23 @@
+{
+  "status": "MINIMAL_TARGET_AND_CONTROL_PASSED_FORMAL_GATES_PENDING",
+  "source_version": "0.6.51",
+  "source_sha256": "827422caa8e1b7b0d331bd2fb6e23850581d5243751ea4e99d3806d466bce480",
+  "freeze": "docs/development/branch-target-binding-v051-20261026-v2.snapshot.json",
+  "freeze_sha256": "c64f94ce6672f06aa44f44323a9781b4d59ddc10fe933fe60f1c3b873686a457",
+  "full_tests": 1955,
+  "subtests": 91,
+  "actual_process_exit_code": 0,
+  "actual8": "PASS_14_SESSIONS_28_CONTAINERS",
+  "public_sandbox": "PASS_ZERO_MODEL_CALLS",
+  "live_diagnostic_cases": 2,
+  "live_diagnostic_independent_passes": 2,
+  "live_diagnostic_model_calls": 7,
+  "fallback_real_triggered": false,
+  "fallback_scope": "Saved public failure and explicitly simulated contract fixture only",
+  "fixed46_counts_added": 0,
+  "formal150_started": false,
+  "B_opened": false,
+  "formal_ready": false,
+  "budget_report": "BUDGET_CHECKPOINT.json",
+  "next_root": "ALERT_BOUNDED_CONCRETE_FIELD_RECEIVER_SUBSCRIPTION_EVIDENCE"
+}

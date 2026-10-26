@@ -1,0 +1,62 @@
+{
+  "status": "PUBLIC_DEPENDENCY_FACT_FOUND_NOT_DELIVERED_IN_SAVED_INITIAL_REQUEST",
+  "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "records": [
+    {
+      "path": "cmd/alertmanager/main.go",
+      "start_line": 347,
+      "end_line": 361,
+      "content_digest": "092667e8b396a7e98352d7ec6da347fe4497b2fb97d9456eea279416ab2dde28",
+      "fact": "Concrete mem.NewAlerts value is initialized; the groups callback reads the current disp.Groups"
+    },
+    {
+      "path": "dispatch/dispatch.go",
+      "start_line": 145,
+      "end_line": 161,
+      "content_digest": "f2537bba1818879670e9a557fdb57cd85e17ed8c22ffb5b433d32376c3046ce7",
+      "fact": "Run initializes an empty group map then calls the subscription consumer"
+    },
+    {
+      "path": "dispatch/dispatch.go",
+      "start_line": 163,
+      "end_line": 211,
+      "content_digest": "4b00f68e0446e82e55e4939e3c756a49f8452e0707b81d60234d7ab9df5581a1",
+      "fact": "Consumer loop processes queued alerts separately from starting the asynchronous entry"
+    },
+    {
+      "path": "provider/mem/mem.go",
+      "start_line": 179,
+      "end_line": 196,
+      "content_digest": "113980c316d07d2e9dc3cfa43931970776ae67d7cb7a1c7d4093d0ec154ad638",
+      "fact": "Subscribe obtains a.alerts.List under lock, preloads that list into a buffered channel, registers listener, then returns"
+    },
+    {
+      "path": "provider/provider.go",
+      "start_line": 40,
+      "end_line": 82,
+      "content_digest": "0baf0a99e109db1445b65114330a119d04bb8fe56d2627b6bce1be1418175856",
+      "fact": "Interfaces declare subscription and pending-alert iterator access without declaring dispatcher readiness"
+    },
+    {
+      "path": "cmd/alertmanager/main.go",
+      "start_line": 499,
+      "end_line": 521,
+      "content_digest": "a63bf80dc0e1b7cbac0e748433aded33cbbe8bf5e5f1e2a3f804c72b95083782",
+      "fact": "NewDispatcher receives the concrete alerts value as its first argument"
+    },
+    {
+      "path": "dispatch/dispatch.go",
+      "start_line": 113,
+      "end_line": 142,
+      "content_digest": "62b5e84fb39809d475fd7b7adc028b4b37d373c9080dc41270a07994b1ea3a14",
+      "fact": "Constructor accepts provider.Alerts and assigns it to the returned Dispatcher alerts field"
+    }
+  ],
+  "subscribe_body_in_saved_final_top12": false,
+  "system_source_changed": false,
+  "real_model_calls_added": 0,
+  "grader_calls_added": 0,
+  "formal_ready": false,
+  "next_scope": "Bounded exact constructor-argument/field-receiver evidence in existing lookup; preserve Top12 and file/byte caps; no automatic readiness claim",
+  "interpretation": "Missing factual prerequisite evidence, not proof of a repair strategy. Invoking Run does not establish completion of queued alert consumption."
+}
