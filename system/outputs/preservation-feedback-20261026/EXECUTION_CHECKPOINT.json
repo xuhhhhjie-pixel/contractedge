@@ -1,0 +1,25 @@
+{
+  "status": "DIAGNOSTIC_CLOSED_BEHAVIOR_NOT_ACCEPTED",
+  "source_sha256": "c0399ed2a0e48574ef096024f40dcad5bfa30756440ca11c8060327653f90984",
+  "freeze": "docs/development/preservation-feedback-v053-20261026-v1.snapshot.json",
+  "targeted_tests": 105,
+  "saved_real_correction_boundary": "ALERT_CORRECTION_DELIVERY_CHECKPOINT.json",
+  "paid_calls_this_version": 12,
+  "formal_ready": false,
+  "semantic_strategy_success": false,
+  "original46_later_stages_opened": false,
+  "sessions": {
+    "full": 53337,
+    "qualification": 89107,
+    "diagnostic_wait_only": 44938
+  },
+  "next": "Saved public counterexample for readiness-before-publication; no extra attempts or formal46 dispatch",
+  "full_tests": 1982,
+  "subtests": 91,
+  "full_exit_code": 0,
+  "qualification": "ZERO_CALL_QUALIFICATION.json",
+  "registration": "/home/xhj/contractedge-diagnostic-source053-v1-20261026/registration.json",
+  "independent_status": "SEMANTIC_FAIL",
+  "public_decision": "FAIL",
+  "target_gate_passed": false
+}

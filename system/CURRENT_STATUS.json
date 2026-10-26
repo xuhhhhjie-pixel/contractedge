@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-26T04:35:27.937119+00:00",
+  "as_of": "2026-10-26T05:03:22.857298+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -19,20 +19,20 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.52",
+  "implementation_version": "0.6.53",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
     "report": "outputs/benchmark150-adapter-v2-20261019/preparation.json"
   },
   "protocol_tests": {
-    "passed": 1974,
+    "passed": 1982,
     "subtests_passed": 91,
-    "implementation_version": "0.6.52",
-    "development_freeze": "field-receiver-v052-20261026-v1",
-    "report": "outputs/field-receiver-20261026/full-v052-v1.log",
+    "implementation_version": "0.6.53",
+    "development_freeze": "preservation-feedback-v053-20261026-v1",
+    "report": "outputs/preservation-feedback-20261026/full-v053-v1.log",
     "actual_process_exit_code": 0,
-    "process_receipt": "outputs/field-receiver-20261026/FULL_REGRESSION_COMPLETION_v052_v1.json"
+    "process_receipt": "outputs/preservation-feedback-20261026/FULL_REGRESSION_COMPLETION_v053_v1.json"
   },
   "stage_implementations": {
     "0_1": "dataset/benchmark.py",
@@ -3296,17 +3296,17 @@
     }
   },
   "current_development": {
-    "status": "DIAGNOSTIC_CLOSED_ALERT_INVALID_PLAN_KPT_GATED",
-    "snapshot": "docs/development/field-receiver-v052-20261026-v1.snapshot.json",
-    "planned_version": "0.6.52",
-    "base_commit": "e57bd7c",
-    "predecessor_freeze": "docs/development/branch-target-binding-v051-20261026-v2.snapshot.json",
+    "status": "DIAGNOSTIC_CLOSED_IDENTITY_VALID_BEHAVIOR_FAIL",
+    "snapshot": "docs/development/preservation-feedback-v053-20261026-v1.snapshot.json",
+    "planned_version": "0.6.53",
+    "base_commit": "3cc3029",
     "formal_ready": false,
     "paid_dispatch_allowed": false,
-    "report": "outputs/field-receiver-20261026/COMPLETION_AUDIT.md",
-    "source_sha256": "560bf0bdf2456b774d2682720bbda24eb2e11b8dc1d61e88402df60ee2aba439",
-    "qualification": "outputs/field-receiver-20261026/ZERO_CALL_QUALIFICATION.json",
-    "effect_result": "outputs/field-receiver-20261026/V052_DIAGNOSTIC_RESULTS.json"
+    "report": "outputs/preservation-feedback-20261026/COMPLETION_AUDIT.md",
+    "source_sha256": "c0399ed2a0e48574ef096024f40dcad5bfa30756440ca11c8060327653f90984",
+    "qualification": "outputs/preservation-feedback-20261026/ZERO_CALL_QUALIFICATION.json",
+    "effect_result": "outputs/preservation-feedback-20261026/V053_DIAGNOSTIC_RESULTS.json",
+    "repair_reliability_accepted": false
   },
   "staged_implementation_version": "0.6.51",
   "runtime_implementation_version": "0.6.40",

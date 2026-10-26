@@ -1,0 +1,44 @@
+.......F                                                                 [100%]
+=================================== FAILURES ===================================
+_ test_single_existing_correction_receives_id_differences_and_exact_prior_draft _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-604/test_single_existing_correctio0')
+
+    def test_single_existing_correction_receives_id_differences_and_exact_prior_draft(tmp_path):
+        from contractedge.model.provider import ModelResponse
+        from tests.test_orchestration import PipelineFixtureProvider
+        from tests.test_run_budget import run_fixture
+    
+        class Provider(PipelineFixtureProvider):
+            rejected=None
+            corrections=0
+            def complete_json(self,request):
+                body=json.loads(request.messages[1]['content'])
+                response=super().complete_json(request)
+                if not request.prompt_version.startswith('changeset.'):
+                    return response
+                if body['validation_feedback']:
+                    self.corrections+=1
+                    assert request.messages[2]['content']==self.rejected
+                    issue=next(e for e in body['validation_feedback'] if e['code']=='PRESERVATION_IMPACT_INCOMPLETE')
+                    assert 'expected=[]' in issue['message'] and 'unexpected=["O1"]' in issue['message']
+                    fixed=json.loads(response.content);fixed['preservation_impact']=[]
+                    return ModelResponse(json.dumps(fixed),{})
+                draft=json.loads(response.content)
+                assert draft['preserve_constraints']==[]
+                draft['preservation_impact']=[impact('O1')]
+                self.rejected=json.dumps(draft)
+                return ModelResponse(self.rejected,{})
+        provider=Provider()
+        trace=run_fixture(tmp_path,provider,lambda text:len(text.split()),requirement_traceability_enabled=True)
+>       assert trace.status=='READY',trace.errors
+E       AssertionError: ("KeyError: 'diagnosis_packet'",)
+E       assert 'INFRASTRUCTURE_ERROR' == 'READY'
+E         
+E         - READY
+E         + INFRASTRUCTURE_ERROR
+
+tests/test_preservation_identity_feedback.py:104: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_preservation_identity_feedback.py::test_single_existing_correction_receives_id_differences_and_exact_prior_draft
+1 failed, 7 passed in 8.41s

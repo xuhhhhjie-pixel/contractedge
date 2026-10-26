@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from typing import Any, Mapping
 
 from contractedge.contracts.models import DiagnosisPacket, Snapshot, ValidationResult, ValidationIssue
@@ -148,8 +149,14 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
         expected = {p['id'] for p in payload['preserve_constraints']}
         supplied = [r['preserve_id'] for r in rows]
         if set(supplied) != expected or len(supplied) != len(set(supplied)):
+            differences = dict(expected=sorted(expected), missing=sorted(expected-set(supplied)),
+                unexpected=sorted(set(supplied)-expected),
+                duplicate=sorted({ref for ref in supplied if supplied.count(ref)>1}))
             issues.append(ValidationIssue('PRESERVATION_IMPACT_INCOMPLETE','preservation_impact',
-                'Every preservation constraint needs exactly one impact scope'))
+                'Every preservation constraint needs exactly one impact scope. '
+                'preserve_id references this plan\'s preserve_constraints[].id, not outcome_id. '
+                + '; '.join(key+'='+json.dumps(value,ensure_ascii=False) for key,value in differences.items())
+                + '. An empty expected set requires preservation_impact=[]; do not invent or drop preservation obligations.'))
         changes = {c['id'] for c in payload['changes']}
         for row in rows:
             if (not set(row['change_refs']) <= changes or
