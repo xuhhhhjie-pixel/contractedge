@@ -1,0 +1,311 @@
+{
+  "status": "IDENTITY_ERROR_ABSENT_BUT_BEHAVIOR_NOT_REPAIRED",
+  "new_model_calls": 12,
+  "calls": [
+    {
+      "index": 0,
+      "stage": "diagnosis.v1.1.26",
+      "finish_reason": "stop",
+      "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "stage": "changeset.v1.1.13",
+      "finish_reason": "stop",
+      "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          }
+        }
+      ],
+      "plan_status": "NEEDS_EVIDENCE",
+      "preserve_constraints": [],
+      "preservation_impact": [],
+      "changes_count": 0,
+      "schema_impact_max_items": 0
+    },
+    {
+      "index": 2,
+      "stage": "diagnosis.v1.1.26",
+      "finish_reason": "stop",
+      "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "stage": "changeset.v1.1.13",
+      "finish_reason": "length",
+      "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          }
+        }
+      ],
+      "plan_status": null,
+      "preserve_constraints": null,
+      "preservation_impact": null,
+      "changes_count": 0,
+      "schema_impact_max_items": 0
+    },
+    {
+      "index": 4,
+      "stage": "changeset.v1.1.13",
+      "finish_reason": "stop",
+      "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          }
+        }
+      ],
+      "plan_status": "READY_PARTIAL",
+      "preserve_constraints": [],
+      "preservation_impact": [],
+      "changes_count": 2,
+      "schema_impact_max_items": 0
+    },
+    {
+      "index": 5,
+      "stage": "topomen-source-execution.v1",
+      "finish_reason": "stop",
+      "snapshot_id": null,
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "locator": {
+            "path": "provider/mem/mem.go",
+            "start_line": 176,
+            "end_line": 196
+          }
+        }
+      ],
+      "literal_noop_edits": []
+    },
+    {
+      "index": 6,
+      "stage": "topomen-source-execution.v1",
+      "finish_reason": "stop",
+      "snapshot_id": null,
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+          "locator": {
+            "path": "provider/mem/mem.go",
+            "start_line": 176,
+            "end_line": 196
+          }
+        }
+      ],
+      "literal_noop_edits": [
+        {
+          "change_id": "CH2",
+          "path": "dispatch/dispatch.go"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "stage": "diagnosis.v1.1.26",
+      "finish_reason": "stop",
+      "snapshot_id": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          }
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "stage": "changeset.v1.1.13",
+      "finish_reason": "stop",
+      "snapshot_id": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          }
+        }
+      ],
+      "plan_status": "NEEDS_EVIDENCE",
+      "preserve_constraints": [],
+      "preservation_impact": [],
+      "changes_count": 0,
+      "schema_impact_max_items": 0
+    },
+    {
+      "index": 9,
+      "stage": "diagnosis.v1.1.26",
+      "finish_reason": "stop",
+      "snapshot_id": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          }
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "stage": "changeset.v1.1.13",
+      "finish_reason": "stop",
+      "snapshot_id": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          }
+        }
+      ],
+      "plan_status": "READY_PARTIAL",
+      "preserve_constraints": [],
+      "preservation_impact": [],
+      "changes_count": 2,
+      "schema_impact_max_items": 0
+    },
+    {
+      "index": 11,
+      "stage": "topomen-source-execution.v1",
+      "finish_reason": "stop",
+      "snapshot_id": null,
+      "field_sources": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "snapshot": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+          "locator": {
+            "path": "provider/mem/mem.go",
+            "start_line": 176,
+            "end_line": 196
+          }
+        }
+      ],
+      "literal_noop_edits": []
+    }
+  ],
+  "public_trials": [
+    {
+      "round_id": 0,
+      "status": "FAIL",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 9,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 52,
+        "non_unique_samples": 0,
+        "samples": 285,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      },
+      "snapshot_id": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+      "artifact": "/home/xhj/contractedge-diagnostic-source053-v1-20261026/methods/RW-ALERTMANAGER-4705/RW-ALERTMANAGER-4705/rounds/0/public/method-probes/alertmanager-reload-v4/check-000.json",
+      "sha256": "c47ae585866c9cc4be61126180022865ed0849e892457fcb1f3ee1e6214fbf1f",
+      "selected_candidate": true
+    },
+    {
+      "round_id": 1,
+      "status": "FAIL",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 0,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 20,
+        "non_unique_samples": 0,
+        "samples": 281,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      },
+      "snapshot_id": "9f22a7869e41ce3acde4d589451c3594e2c9e8e4fb8a7d0141c312cc07738534",
+      "artifact": "/home/xhj/contractedge-diagnostic-source053-v1-20261026/methods/RW-ALERTMANAGER-4705/RW-ALERTMANAGER-4705/rounds/1/public/method-probes/alertmanager-reload-v4/check-000.json",
+      "sha256": "30e03403786439bb87203b99829b045ef05aac1d0306a25d3f52e6bf9748beed",
+      "selected_candidate": false
+    }
+  ],
+  "candidate_selection": {
+    "rejected_trials": 1,
+    "decisions": [
+      {
+        "decision": "INCOMPLETE_TRIAL_REJECTED",
+        "from_snapshot": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+        "trial_snapshot": "9f22a7869e41ce3acde4d589451c3594e2c9e8e4fb8a7d0141c312cc07738534",
+        "reason": "Trial did not complete public review/promotion"
+      }
+    ]
+  },
+  "selected_patch_bytes": 782,
+  "independent_status": "SEMANTIC_FAIL",
+  "formal_ready": false,
+  "limits": [
+    "One stochastic method run cannot establish causal effect size or overall reliability",
+    "Incomplete trial never substituted for selected candidate",
+    "Readiness-before-retirement does not imply readiness-before-reader-publication"
+  ],
+  "next_root": "Public reader follows shared disp immediately; candidate publishes replacement before readiness wait. Distinguish build/init/replay/ready/publication/retirement in existing evidence/plan fields, not new modules."
+}

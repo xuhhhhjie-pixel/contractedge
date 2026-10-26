@@ -34,7 +34,7 @@ CHANGESET_SYSTEM_PROMPT += " " + JSON_POINTER_GUIDANCE
 
 COVERAGE_PROMPT = " For each behavior_check_refs binding explicitly set check_coverage: ALL_OF only if those checks together cover the complete concrete statement; NECESSARY_ONLY if failure of a required instance disproves it but success does not exhaust all inputs, branches or modes; SUPPORTING only if a failed result would not contradict the statement (for example an unrelated control). Incomplete mode coverage alone is NECESSARY_ONLY, not SUPPORTING. Bind the named necessary checks even when a public result was not selected; unobserved results stay UNKNOWN. Explain coverage_rationale using the public check descriptions. Narrow statements or leave UNKNOWN rather than claiming broad sufficiency."
 
-IMPACT_PROMPT = " When preservation_impact is requested, account for every preserve_id exactly once: CHANGES lists all concrete change_refs that may influence it with a rationale; GLOBAL has an empty list and explains why the constraint is global. These are possible impact associations, never proof of causality or permission to skip preservation checks."
+IMPACT_PROMPT = " When preservation_impact is requested, preserve_id refers to the id of an entry you declare in this plan's preserve_constraints, never its outcome_id or an outcome ID. Account for each such entry exactly once: CHANGES lists all concrete change_refs that may influence it with a rationale; GLOBAL has an empty list and explains why the constraint is global. If preserve_constraints is empty, preservation_impact must also be empty. These are possible impact associations, never proof of causality or permission to skip preservation checks."
 
 FRONTIER_PROMPT = " production_path_frontier is a bounded lexical sibling inventory, not a proven call graph or new edit permission. Review each supplied source_evidence_id exactly once in production_path_review: MODIFY with change_refs targeting that actual branch, PRESERVE with a concrete reason, OUT_OF_SCOPE with a concrete relevance explanation, or UNRESOLVED with real open_obligation_refs. Do not silently omit another owning-function branch or relabel it repaired because a neighbouring branch is changed. Inspect the exact source text; shared names alone do not prove relevance. Unrepresented or truncated source remains a coverage limit. MODIFY has nonempty real change_refs and empty open_obligation_refs; incomplete runtime verification belongs in the plan open_obligations, without erasing it. UNRESOLVED describes unplanned branch intent with real open_obligation_refs and empty change_refs. PRESERVE and OUT_OF_SCOPE have both reference arrays empty."
 
@@ -154,6 +154,8 @@ def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = Non
     properties["open_obligations"]["items"]["properties"]["obligation_refs"]["items"]["enum"] = obligation_ids
     if not preserve_ids:
         properties["preserve_constraints"]["maxItems"] = 0
+        if "preservation_impact" in properties:
+            properties["preservation_impact"]["maxItems"] = 0
     if not outcome_ids:
         properties["open_obligations"]["maxItems"] = 0
     coverage = properties["outcome_coverage"]["items"]["properties"]
