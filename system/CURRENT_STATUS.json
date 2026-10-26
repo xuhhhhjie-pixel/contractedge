@@ -3296,16 +3296,17 @@
     }
   },
   "current_development": {
-    "status": "V057_COMPONENT_PAIR_CLOSED_KPT_E2E_RUNNING",
+    "status": "V057_KPT_CLOSED_PLANNING_TRUNCATION_NO_PATCH",
     "snapshot": "docs/development/grounded-graph-correction-v057-20261026-v1.snapshot.json",
     "planned_version": "0.6.57",
     "base_commit": "18fd2313a93b75692d6b83e34bb450e4986303ab",
     "source_sha256": "e2f1b6a7aef6fdc47d1dd1cd011e4dfdc4f748d4ac02f3d8fe349c979a485f46",
     "formal_ready": false,
-    "paid_dispatch_allowed": "REGISTERED_KPT_THEN_GATED_CERT_ONLY",
+    "paid_dispatch_allowed": false,
     "report": "outputs/grounded-graph-correction-20261026/COMPLETION_AUDIT.md",
     "component_result": "outputs/grounded-graph-correction-20261026/COMPONENT_PAIR_RESULT.json",
-    "e2e_root": "/home/xhj/contractedge-e2e-source057-20261027"
+    "e2e_root": "/home/xhj/contractedge-e2e-source057-20261027",
+    "e2e_result": "outputs/grounded-graph-correction-20261026/KPT_E2E_RESULT_v057.json"
   },
   "staged_implementation_version": "0.6.57",
   "runtime_implementation_version": "0.6.40",
@@ -3363,9 +3364,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Exact full regression/isolation/sandbox for source057",
-    "Once-only locked public diagnosis correction pair after qualification; no original case retry",
-    "Only justified same-version end-to-end controls, then original46; formal150 remains closed"
+    "Saved full public pipeline replay of diagnosis and ChangeSet generation modes",
+    "Keep original recovery/call caps; prevent reentering reasoning-starved mode after successful same-front recovery",
+    "New source qualification before any paid validation; Cert/formal46/formal150 remain gated"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",

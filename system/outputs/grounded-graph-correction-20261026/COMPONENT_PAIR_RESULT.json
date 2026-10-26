@@ -36,7 +36,6 @@
   "audit": {
     "both_finish_reason": "stop",
     "original_five_atoms_exactly_preserved": true,
-    "new_source_only_consumers": false,
     "treatment_supported_source_consumers": [
       "U2",
       "U3"
@@ -47,6 +46,7 @@
     "remaining_upper_bound_after_pair_cny": 24.32362,
     "archive_sha256": "e968fa5142e70a48dbf2bd2b18a5fb0de338a83a18732f35c06d4ab9cd41a62a",
     "source_files_modified": false,
-    "interpretation": "One controlled public-text pair supports this correction mechanism in this saved input; no repair efficacy or general superiority conclusion."
+    "interpretation": "One controlled public-text pair supports this correction mechanism in this saved input; no repair efficacy or general superiority conclusion.",
+    "new_unanchored_production_consumers": false
   }
 }
