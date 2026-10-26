@@ -3296,13 +3296,13 @@
     }
   },
   "current_development": {
-    "status": "V057_GROUNDED_CORRECTION_FULL_QUALIFICATION_PENDING",
+    "status": "V057_QUALIFIED_LOCKED_CORRECTION_PAIR_RUNNING",
     "snapshot": "docs/development/grounded-graph-correction-v057-20261026-v1.snapshot.json",
     "planned_version": "0.6.57",
     "base_commit": "18fd2313a93b75692d6b83e34bb450e4986303ab",
     "source_sha256": "e2f1b6a7aef6fdc47d1dd1cd011e4dfdc4f748d4ac02f3d8fe349c979a485f46",
     "formal_ready": false,
-    "paid_dispatch_allowed": false,
+    "paid_dispatch_allowed": "REGISTERED_TWO_TEXT_CORRECTIONS_ONLY",
     "report": "outputs/grounded-graph-correction-20261026/COMPLETION_AUDIT.md"
   },
   "staged_implementation_version": "0.6.57",
