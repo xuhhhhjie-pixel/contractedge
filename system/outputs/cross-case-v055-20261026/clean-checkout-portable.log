@@ -1,0 +1,164 @@
+Historical fixture / native integration modules NOT RUN: test_ready_support_consistency.py, test_probe_profiles_v2.py, test_compact_render_inventory.py, test_diagnosis_error_aggregation.py, test_structured_observation_adapters.py, test_topomen_agent.py
+....................................................... [  2%]
+........................................................................ [  6%]
+........................................................................ [  9%]
+........................................................................ [ 13%]
+........................................................................ [ 17%]
+........................................................................ [ 20%]
+................................................... [ 23%]
+.................................................................. [ 26%]
+........................................................................ [ 30%]
+........................................................................ [ 33%]
+........................................................................ [ 37%]
+........................................................................ [ 41%]
+........................................................................ [ 44%]
+...................................................................... [ 48%]
+........................................................................ [ 51%]
+........................................................................ [ 55%]
+........................................................................ [ 58%]
+........................................................................ [ 62%]
+.............................................................. [ 65%]
+........................................................................ [ 69%]
+........................................................................ [ 72%]
+...............................ssss................................................................................. [ 78%]
+........................................................................ [ 82%]
+...................................................................... [ 85%]
+.............................................EEEEEEEEEEE................ [ 89%]
+........................................................................ [ 93%]
+........................................................................ [ 96%]
+...................................................................      [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_actual_kernel_limits_nonroot_privileges_and_readonly_mounts _
+
+    @pytest.fixture(scope='module')
+    def runtime_config():
+        image = os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+        endpoint = os.environ.get('DOCKER_HOST')
+>       assert image and '@sha256:' in image, 'A trusted cached digest-pinned test image is required'
+E       AssertionError: A trusted cached digest-pinned test image is required
+E       assert (None)
+
+tests/test_runtime_session_integration.py:43: AssertionError
+_ ERROR at setup of test_host_sentinel_control_environment_and_docker_socket_are_not_exposed _
+
+    @pytest.fixture(scope='module')
+    def runtime_config():
+        image = os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+        endpoint = os.environ.get('DOCKER_HOST')
+>       assert image and '@sha256:' in image, 'A trusted cached digest-pinned test image is required'
+E       AssertionError: A trusted cached digest-pinned test image is required
+E       assert (None)
+
+tests/test_runtime_session_integration.py:43: AssertionError
+__ ERROR at setup of test_source_symlink_escape_is_rejected_before_execution ___
+
+    @pytest.fixture(scope='module')
+    def runtime_config():
+        image = os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+        endpoint = os.environ.get('DOCKER_HOST')
+>       assert image and '@sha256:' in image, 'A trusted cached digest-pinned test image is required'
+E       AssertionError: A trusted cached digest-pinned test image is required
+E       assert (None)
+
+tests/test_runtime_session_integration.py:43: AssertionError
+_ ERROR at setup of test_candidate_cannot_connect_to_a_control_verified_host_listener _
+
+    @pytest.fixture(scope='module')
+    def runtime_config():
+        image = os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+        endpoint = os.environ.get('DOCKER_HOST')
+>       assert image and '@sha256:' in image, 'A trusted cached digest-pinned test image is required'
+E       AssertionError: A trusted cached digest-pinned test image is required
+E       assert (None)
+
+tests/test_runtime_session_integration.py:43: AssertionError
+_ ERROR at setup of test_tmpfs_fills_at_its_declared_bound_without_host_disk_writes _
+
+    @pytest.fixture(scope='module')
+    def runtime_config():
+        image = os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+        endpoint = os.environ.get('DOCKER_HOST')
+>       assert image and '@sha256:' in image, 'A trusted cached digest-pinned test image is required'
+E       AssertionError: A trusted cached digest-pinned test image is required
+E       assert (None)
+
+tests/test_runtime_session_integration.py:43: AssertionError
+_ ERROR at setup of test_fork_stops_at_actual_pid_limit_and_children_are_reaped _
+
+    @pytest.fixture(scope='module')
+    def runtime_config():
+        image = os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+        endpoint = os.environ.get('DOCKER_HOST')
+>       assert image and '@sha256:' in image, 'A trusted cached digest-pinned test image is required'
+E       AssertionError: A trusted cached digest-pinned test image is required
+E       assert (None)
+
+tests/test_runtime_session_integration.py:43: AssertionError
+_ ERROR at setup of test_memory_exhaustion_is_a_failed_execution_inside_the_effective_limit _
+
+    @pytest.fixture(scope='module')
+    def runtime_config():
+        image = os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+        endpoint = os.environ.get('DOCKER_HOST')
+>       assert image and '@sha256:' in image, 'A trusted cached digest-pinned test image is required'
+E       AssertionError: A trusted cached digest-pinned test image is required
+E       assert (None)
+
+tests/test_runtime_session_integration.py:43: AssertionError
+_ ERROR at setup of test_output_flood_is_terminated_and_durable_files_remain_bounded[stdout] _
+
+    @pytest.fixture(scope='module')
+    def runtime_config():
+        image = os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+        endpoint = os.environ.get('DOCKER_HOST')
+>       assert image and '@sha256:' in image, 'A trusted cached digest-pinned test image is required'
+E       AssertionError: A trusted cached digest-pinned test image is required
+E       assert (None)
+
+tests/test_runtime_session_integration.py:43: AssertionError
+_ ERROR at setup of test_output_flood_is_terminated_and_durable_files_remain_bounded[stderr] _
+
+    @pytest.fixture(scope='module')
+    def runtime_config():
+        image = os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+        endpoint = os.environ.get('DOCKER_HOST')
+>       assert image and '@sha256:' in image, 'A trusted cached digest-pinned test image is required'
+E       AssertionError: A trusted cached digest-pinned test image is required
+E       assert (None)
+
+tests/test_runtime_session_integration.py:43: AssertionError
+__ ERROR at setup of test_timeout_kills_a_term_ignoring_process_and_its_child __
+
+    @pytest.fixture(scope='module')
+    def runtime_config():
+        image = os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+        endpoint = os.environ.get('DOCKER_HOST')
+>       assert image and '@sha256:' in image, 'A trusted cached digest-pinned test image is required'
+E       AssertionError: A trusted cached digest-pinned test image is required
+E       assert (None)
+
+tests/test_runtime_session_integration.py:43: AssertionError
+_ ERROR at setup of test_cleanup_does_not_remove_an_unrelated_canary_mounting_the_session_directory _
+
+    @pytest.fixture(scope='module')
+    def runtime_config():
+        image = os.environ.get('CONTRACTEDGE_RUNTIME_IMAGE')
+        endpoint = os.environ.get('DOCKER_HOST')
+>       assert image and '@sha256:' in image, 'A trusted cached digest-pinned test image is required'
+E       AssertionError: A trusted cached digest-pinned test image is required
+E       assert (None)
+
+tests/test_runtime_session_integration.py:43: AssertionError
+=========================== short test summary info ============================
+ERROR tests/test_runtime_session_integration.py::test_actual_kernel_limits_nonroot_privileges_and_readonly_mounts
+ERROR tests/test_runtime_session_integration.py::test_host_sentinel_control_environment_and_docker_socket_are_not_exposed
+ERROR tests/test_runtime_session_integration.py::test_source_symlink_escape_is_rejected_before_execution
+ERROR tests/test_runtime_session_integration.py::test_candidate_cannot_connect_to_a_control_verified_host_listener
+ERROR tests/test_runtime_session_integration.py::test_tmpfs_fills_at_its_declared_bound_without_host_disk_writes
+ERROR tests/test_runtime_session_integration.py::test_fork_stops_at_actual_pid_limit_and_children_are_reaped
+ERROR tests/test_runtime_session_integration.py::test_memory_exhaustion_is_a_failed_execution_inside_the_effective_limit
+ERROR tests/test_runtime_session_integration.py::test_output_flood_is_terminated_and_durable_files_remain_bounded[stdout]
+ERROR tests/test_runtime_session_integration.py::test_output_flood_is_terminated_and_durable_files_remain_bounded[stderr]
+ERROR tests/test_runtime_session_integration.py::test_timeout_kills_a_term_ignoring_process_and_its_child
+ERROR tests/test_runtime_session_integration.py::test_cleanup_does_not_remove_an_unrelated_canary_mounting_the_session_directory
+1982 passed, 4 skipped, 11 errors, 86 subtests passed in 424.82s (0:07:04)

@@ -1,0 +1,68 @@
+{
+  "schema_version": "ce.fixed46_compatibility.v1",
+  "status": "PASS_INTERFACE_COMPATIBILITY",
+  "new_model_http_calls": 0,
+  "source_sha256": {
+    "baseline": "c9c5b75060549e0e22eb725b3082dee2e7994deecc0d653379c801b0a1f9fc6e",
+    "candidate": "94ebade3d59abd153d546a5e4b2b17ce325c7cbbee7daf64944e93eb335af0ea"
+  },
+  "sandbox_verified_variants": [
+    "baseline",
+    "candidate"
+  ],
+  "seeded_request_captures": [
+    {
+      "variant": "baseline",
+      "case_id": "R3-KPT-4673",
+      "source_unchanged": true,
+      "current_snapshot_bound": true,
+      "initial_identity_preserved": true,
+      "request_sha256": "9cf9b5812f931c75d44d356d6cfa791fceeac7c748cdac46550fa546230e15d5"
+    },
+    {
+      "variant": "baseline",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "source_unchanged": true,
+      "current_snapshot_bound": true,
+      "initial_identity_preserved": true,
+      "request_sha256": "7dcff4a1786576c66d4690581ce778d22c0834b81932820fa0e8e7e64a19ed5c"
+    },
+    {
+      "variant": "candidate",
+      "case_id": "R3-KPT-4673",
+      "source_unchanged": true,
+      "current_snapshot_bound": true,
+      "initial_identity_preserved": true,
+      "request_sha256": "a53c4b8580a03a210bc0fa2e0e000d3aec69e6abc99ec4285f75983496e609de"
+    },
+    {
+      "variant": "candidate",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "source_unchanged": true,
+      "current_snapshot_bound": true,
+      "initial_identity_preserved": true,
+      "request_sha256": "b42822db78c75e05dcd8ed58cc76a543d051cc00db4146479fdbd0b7fbd39283"
+    }
+  ],
+  "proof_files": {
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/baseline-R3-KPT-4673/compatibility.json": "0f72fcff9db3b2294a9bb60c17f32864e6c5467fc480b6da7af33cf940718db6",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/baseline-R3-KPT-4673/captured-request.json": "9cf9b5812f931c75d44d356d6cfa791fceeac7c748cdac46550fa546230e15d5",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/baseline-R3-KPT-4673/provenance.json": "25cb2c9063c9078d1957d428f9e2deba46330282553f781ff96bc6de63c4358f",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/baseline-R3-KPT-4673/seed-handoff-feedback.json": "0fcb10e87a240e23be4197ccfc10cdf419d095c23a2aa48be9bb8ccf8fe13339",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/baseline-RW-ALERTMANAGER-4705/compatibility.json": "7a55112c046cecfd5b1c0e80cfe3a252c9420bd42f2162cb815b1c6f8d1099f2",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/baseline-RW-ALERTMANAGER-4705/captured-request.json": "7dcff4a1786576c66d4690581ce778d22c0834b81932820fa0e8e7e64a19ed5c",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/baseline-RW-ALERTMANAGER-4705/provenance.json": "b1e832acfd6d0951fc4cc759f113903387742e075b70c4d9edda0f0cba95d891",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/baseline-RW-ALERTMANAGER-4705/seed-handoff-feedback.json": "125c7f90838da7fd4861e3f2ab1f2aa4b525d036d9e7f8ecb0b8c968a34b0738",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/candidate-R3-KPT-4673/compatibility.json": "847d26419d3906979b4743bed61b7cd51d7a6c6c18eb39ebece50835022d01eb",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/candidate-R3-KPT-4673/captured-request.json": "a53c4b8580a03a210bc0fa2e0e000d3aec69e6abc99ec4285f75983496e609de",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/candidate-R3-KPT-4673/provenance.json": "25cb2c9063c9078d1957d428f9e2deba46330282553f781ff96bc6de63c4358f",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/candidate-R3-KPT-4673/seed-handoff-feedback.json": "8588bc5a91c2c2f4f198567519308975750ba17afe6f0b26bad1fcc70d01330d",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/candidate-RW-ALERTMANAGER-4705/compatibility.json": "2d3409a0a917ed42a19143a6a319e3a41e8620d5383cf89bf8696f657d7a1cb0",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/candidate-RW-ALERTMANAGER-4705/captured-request.json": "b42822db78c75e05dcd8ed58cc76a543d051cc00db4146479fdbd0b7fbd39283",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/candidate-RW-ALERTMANAGER-4705/provenance.json": "b1e832acfd6d0951fc4cc759f113903387742e075b70c4d9edda0f0cba95d891",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-front/candidate-RW-ALERTMANAGER-4705/seed-handoff-feedback.json": "a8b17b353243dd7f64a967af5a93ad69eb6c1890a93e32e1615429cc9df70104",
+    "/home/xhj/contractedge-fixed46-v055-20261026/compatibility-sandbox/baseline/.isolated-e98cea5c780e4e348bd730638789708e/receipt.json": "34d3ce16d9d9e7c0f8d75cf6ebd82270f7dee4ceee182adfc0a1c346450bea87",
+    "/home/xhj/contractedge-publication-context-20261026/system/outputs/probe-completeness-20261026/PUBLIC_SANDBOX_RECEIPT_v1.json": "2a82f256486c3fbe0c062594c38f40b895a6606f4c0d2e5b4a1b46b28bbb347f"
+  },
+  "scope": "Actual public-only sandbox under same current harness plus four exact current-seed first-request captures with synthetic EXECUTION_ONLY fixture; not method effectiveness"
+}

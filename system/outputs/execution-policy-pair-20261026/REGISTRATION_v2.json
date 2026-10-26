@@ -1,0 +1,41 @@
+{
+  "schema_version": "ce.seeded_execution_policy_pair.v1",
+  "source_sha256": "94ebade3d59abd153d546a5e4b2b17ce325c7cbbee7daf64944e93eb335af0ea",
+  "freeze_sha256": "cf1ba0e52cea5a7831e4edc7457d1652a84facade73ab45539d424e4e08878d4",
+  "plan_sha256": "13286255f3a472b0fa2c62e5fb6abc29f7a606c4cd0136efe56a12e9a6535578",
+  "driver_sha256": "9eadf26ce26d53cb6759f1f6cc463d969d948c5306d35f541f6d133252afe183",
+  "qualification_sha256": "36398b1d2f2f8337074cfdc6427179fc70094ff23d29f18a064028454f885e12",
+  "seed_sha256": "63c23173318b7c40fad4dd33c387c3121b27cb2cdc122efb074edb5ff1e6954a",
+  "seed_snapshot": "630df027ac083203889f3ef602b2851b3fb95504879f48c7b59c863641032905",
+  "attempts": [
+    {
+      "arm": "control",
+      "output": "/home/xhj/contractedge-execution-policy-pair-v2-20261026/methods/control/RW-ALERTMANAGER-4705",
+      "registration": "/home/xhj/contractedge-execution-policy-pair-v2-20261026/registrations/control.json",
+      "registration_sha256": "a109e89b5530cfb3fd5b68a00c6d8d9b273073e7106ca58267f29bfed40af75d",
+      "config": "/home/xhj/contractedge-publication-context-20261026/system/configs/seed-execution-policy-v055-control.json",
+      "attempt_id": "execution-policy-v055-v2-control-20261026"
+    },
+    {
+      "arm": "reasoning",
+      "output": "/home/xhj/contractedge-execution-policy-pair-v2-20261026/methods/reasoning/RW-ALERTMANAGER-4705",
+      "registration": "/home/xhj/contractedge-execution-policy-pair-v2-20261026/registrations/reasoning.json",
+      "registration_sha256": "5320b30a5aed2e6d184947c84ff129cde1d2026052035d6d782f4b8ff650580e",
+      "config": "/home/xhj/contractedge-publication-context-20261026/system/configs/seed-execution-policy-v055-reasoning.json",
+      "attempt_id": "execution-policy-v055-v2-reasoning-20261026"
+    }
+  ],
+  "order": [
+    "control",
+    "reasoning"
+  ],
+  "once_per_arm": true,
+  "front_plans_regenerated": true,
+  "locked_plan_comparison": false,
+  "max_calls_per_arm": 12,
+  "max_rounds": 2,
+  "cumulative_cny_cap": 150,
+  "budget_before_micro_cny": 121865118,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}
