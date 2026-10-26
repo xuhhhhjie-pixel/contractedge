@@ -27,9 +27,10 @@
   },
   "protocol_tests": {
     "status": "PENDING_CURRENT_FULL_RUN",
-    "focused_passed": 58,
+    "focused_passed": 79,
     "implementation_version": "0.6.51",
-    "scope": "Focused engineering and explicit corrected-binding fixture; no autonomous repair result"
+    "scope": "Focused engineering and explicit corrected-binding fixture; no autonomous repair result",
+    "rejected_v1_full": "2 failed,1953 passed,91 subtests; no paid dispatch"
   },
   "stage_implementations": {
     "0_1": "dataset/benchmark.py",
@@ -3293,11 +3294,11 @@
     }
   },
   "current_development": {
-    "snapshot": "docs/development/branch-target-binding-v051-20261026-v1.snapshot.json",
-    "snapshot_id": "branch-target-binding-v051-20261026-v1",
+    "snapshot": "docs/development/branch-target-binding-v051-20261026-v2.snapshot.json",
+    "snapshot_id": "branch-target-binding-v051-20261026-v2",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V051_FROZEN_FULL_ENGINEERING_PENDING",
-    "source_sha256": "0af0aea93477232fc59f7ca11394b71eece9a10c236e298715889077fad17779",
+    "status": "V051_V2_FROZEN_FULL_ENGINEERING_PENDING",
+    "source_sha256": "827422caa8e1b7b0d331bd2fb6e23850581d5243751ea4e99d3806d466bce480",
     "verification_command": "python scripts/verify_development_snapshot.py",
     "formal_effectiveness": "NOT_RUN_CURRENT_SOURCE",
     "formal_ready": false,

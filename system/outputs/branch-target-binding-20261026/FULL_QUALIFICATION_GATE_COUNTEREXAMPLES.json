@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "cases": [
+    {
+      "case": "pass",
+      "accepted": true,
+      "expected": true
+    },
+    {
+      "case": "mixed_failed_passed",
+      "accepted": false,
+      "expected": false
+    },
+    {
+      "case": "exit_failure",
+      "accepted": false,
+      "expected": false
+    },
+    {
+      "case": "wrong_log_hash",
+      "accepted": false,
+      "expected": false
+    },
+    {
+      "case": "wrong_source_hash",
+      "accepted": false,
+      "expected": false
+    },
+    {
+      "case": "wrong_count",
+      "accepted": false,
+      "expected": false
+    }
+  ],
+  "model_calls": 0,
+  "formal_ready": false
+}

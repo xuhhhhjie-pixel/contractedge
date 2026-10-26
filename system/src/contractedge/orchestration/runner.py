@@ -805,10 +805,13 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             total_limit = min(int(config['max_context_tokens']),
                 int(config.get('model_context_tokens') or config['max_context_tokens']))
             initial_context = execution_feedback is None and not fitted.extension_used
+            # Legacy synthetic callers declare only an input cap. Preserve
+            # that admission contract; real profiles declare a model window.
+            reserve_output = execution_feedback is not None or config.get('model_context_tokens') is not None
             first_limit = (min(fitted.max_context_tokens,
                 int(config.get('initial_diagnosis_context_tokens', fitted.max_context_tokens)))
                 if initial_context else
-                min(fitted.max_context_tokens, total_limit - request.max_output_tokens))
+                min(fitted.max_context_tokens, total_limit - (request.max_output_tokens if reserve_output else 0)))
             if count <= first_limit:
                 if config.get('gap_role_delivery_enabled'):
                     from contractedge.retrieval.gap_delivery import audit_gap_delivery
