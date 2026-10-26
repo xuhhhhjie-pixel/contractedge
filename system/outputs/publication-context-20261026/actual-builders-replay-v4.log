@@ -1,0 +1,6 @@
+execution_reader_count 0
+main_support []
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-publication-context-20261026/system/.superpowers/sdd/2026-10-26-publication-context/replay-builders.py", line 21, in <module>
+    plan=json.loads((r/'rounds/1/plan.json').read_text());config=json.loads(Path('configs/fixed46-candidate-v053-budget150.json').read_text());req=build_execution_request(plan,source,context.retrieval_config['public_execution_capabilities']['editable_policy'],utf8_byte_token_bound,config,requirement=method.requirement_text);b=json.loads(req.messages[1]['content']);print('execution_reader_count',len(b['source_reader_reference_contexts']));print('main_support',[(e.get('id'),e.get('kind'),e.get('locator'),e.get('excerpt','')[:100]) for e in b['read_only_source_support'] if e.get('locator',{}).get('path')=='cmd/alertmanager/main.go']);assert any(x['variable']=='disp' for x in b['source_reader_reference_contexts']);(out/'execution.request.json').write_text(json.dumps(asdict(req),indent=2)+'\n');assert compute_snapshot(source).snapshot_id==snapshot.snapshot_id
+AssertionError

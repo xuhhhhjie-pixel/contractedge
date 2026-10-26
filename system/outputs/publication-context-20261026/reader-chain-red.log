@@ -1,0 +1,62 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_reader_reference_survives_diagnosis_plan_ready_and_execution_without_edit_grant[False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-611/test_reader_reference_survives0')
+extend = False
+
+    @pytest.mark.parametrize('extend',[False,True])
+    def test_reader_reference_survives_diagnosis_plan_ready_and_execution_without_edit_grant(tmp_path,extend):
+        from dataclasses import replace
+        from contractedge.changeset.topomen import translate_for_topomen
+        from contractedge.contracts.validation import canonical_digest,parse_method_input
+        from contractedge.execution.topomen import build_execution_request,PlanRejected
+        from contractedge.model.provider import ModelResponse
+        from contractedge.orchestration.runner import run_front_half
+        from contractedge.orchestration.repair import validate_ready_trace
+        from contractedge.source.snapshot import compute_snapshot
+        from tests.test_planning_evidence_extension import front_fixture,PlanningGapProvider
+        from tests.test_orchestration import PipelineFixtureProvider
+        value,template=front_fixture(tmp_path);(tmp_path/'reader.go').write_text(SOURCE)
+        value['scope_hints'].append(dict(kind='path',value='reader.go',origin_ref='public.scope',raw_text='reader.go'))
+        value['initial_snapshot_id']=compute_snapshot(tmp_path).snapshot_id
+        value['public_evidence'][0]['snapshot_id']=value['initial_snapshot_id']
+        value.pop('input_digest');value['input_digest']=canonical_digest(value)
+        class Provider(PlanningGapProvider if extend else PipelineFixtureProvider):
+            def complete_json(self,request):
+                body=json.loads(request.messages[1]['content'])
+                if request.prompt_version.startswith('diagnosis.'):
+                    rows=body['source_reader_reference_contexts']
+                    assert rows[0]['variable']=='active' and rows[0]['callback']=='view'
+                    body['evidence_catalog'].sort(key=lambda e:e.get('locator',{}).get('path')!='templates/serviceaccount.yaml')
+                    request=replace(request,messages=(request.messages[0],{**request.messages[1],'content':json.dumps(body)}))
+                response=super().complete_json(request)
+                if request.prompt_version.startswith('changeset.'):
+                    source=next(r for r in body['source_prerequisites'] if 'publication' in r['reason'])
+                    assert 'active' in source['reason'] and 'makeEngine' in source['reason']
+                    plan=json.loads(response.content)
+                    plan['precondition_review']=[dict(source_evidence_ref=r['source_evidence_ref'],
+                        condition='This unrelated Go reader is a read-only control, not consumed by the Helm render.',
+                        disposition='NOT_APPLICABLE',verification_refs=[],open_obligation_refs=[],
+                        rationale='No state handoff is changed by this Helm-only fixture.') for r in body['source_prerequisites']]
+                    return ModelResponse(json.dumps(plan),{})
+                return response
+        provider=Provider();provider._snapshot_digests={'templates/serviceaccount.yaml':hashlib.sha256(template.read_bytes()).hexdigest()}
+        trace=run_front_half(value,tmp_path,provider,dict(model={'model':'fixture'},gap_role_delivery_enabled=True,
+            max_context_tokens=50000,max_output_tokens=1024,max_total_tokens=200000),lambda s:len(s.split())).to_wire()
+        assert trace['status']=='READY',trace['errors']
+        assert trace['candidate_set']['extension_used']==extend
+        _,context=validate_ready_trace(trace,parse_method_input(value),tmp_path)
+        plan=translate_for_topomen(trace['changeset'],'contractedge.topomen_plan.v1',diagnosis=trace['diagnosis'],
+            source_support=context.retrieval_config['necessary_source_support'])
+        config=dict(model='fixture',helper_preconditions_enabled=True,max_context_tokens=50000,execution_max_output_tokens=1024)
+        request=build_execution_request(plan,tmp_path,{'allowed_paths':['templates/**']},lambda s:len(s.split()),config,requirement=value['requirement_text'])
+        body=json.loads(request.messages[1]['content'])
+>       assert body['source_reader_reference_contexts'], [(r.get('id'),r.get('kind'),r.get('locator'),r.get('excerpt','')[:80]) for r in body['read_only_source_support']]
+E       AssertionError: []
+E       assert []
+
+tests/test_reader_reference_context.py:135: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_reader_reference_context.py::test_reader_reference_survives_diagnosis_plan_ready_and_execution_without_edit_grant[False]
+1 failed, 1 passed, 15 deselected in 8.74s

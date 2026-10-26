@@ -1,0 +1,43 @@
+{
+  "status": "EXACT_READER_REFERENCE_WINDOWS_REACH_INITIAL_REDIAGNOSIS_PLAN_EXECUTION",
+  "initial_snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "patched_snapshot": "4d490224488759206d0180167db570ae78a81c68a8b0d38d3fc6729c16fe864a",
+  "initial_reader": {
+    "callback": "groupFn",
+    "candidate_id": "CU-647de303c8be8ecb",
+    "interpretation": "Exact selected-source read/reassignment windows; review shared-reference publication. Not verified invocation, same-scope alias proof, runtime readiness, causality or edit permission.",
+    "reader": {
+      "excerpt": "\tgroupFn := func(routeFilter func(*dispatch.Route) bool, alertFilter func(*types.Alert, time.Time) bool) (dispatch.AlertGroups, map[model.Fingerprint][]string) {\n\t\treturn disp.Groups(routeFilter, alertFilter)\n\t}\n",
+      "excerpt_digest": "0e238e0b779c22aa786670ba9ef4317f6f2a12784f0a4596e2f59f97a1ccb12d",
+      "locator": {
+        "end_line": 361,
+        "path": "cmd/alertmanager/main.go",
+        "start_line": 359
+      }
+    },
+    "receiver_method": "Groups",
+    "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+    "source_content_digest": "68be3801fe83736d649a895f1eac6618ee835235080fd0e9b5f20a89d35720fd",
+    "source_evidence_ref": "SRC-CU-647de303c8be8ecb",
+    "variable": "disp",
+    "writes": [
+      {
+        "excerpt": "\t\tdisp = dispatch.NewDispatcher(\n",
+        "excerpt_digest": "a057755ecb03ca80d0fec15ca48bd09f0edbcaeb464464beee456f8d58159d39",
+        "locator": {
+          "end_line": 499,
+          "path": "cmd/alertmanager/main.go",
+          "start_line": 499
+        }
+      }
+    ]
+  },
+  "actual_negative_replay": "ACTUAL_NEGATIVE_REVIEW_REPLAY.json",
+  "new_model_calls": 0,
+  "formal_ready": false,
+  "evidence_module_sha256": "7ae82f77d18cb40efc8874135456841e5d01f39b2ded47e8f70e9932fe91419f",
+  "review_module_sha256": "65f26951992e4262051919db6673725a317aa73c15619fb137a745f52d2f4f98",
+  "producer_runner_sha256": "5e0fede10d00af6a3feeefa255730bd1ccdce5d2ce33484b8ddafe6f721fb2ca",
+  "current_producer_reprojection": "actual-current-builder-replay-v6/summary.json",
+  "legacy_ready_policy": "Historical traces without SOURCE_READER producer role keep original prerequisite projection; current producer marks role before planning"
+}

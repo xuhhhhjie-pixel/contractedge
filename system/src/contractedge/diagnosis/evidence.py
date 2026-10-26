@@ -99,3 +99,54 @@ def field_contract_contexts(units, query, *, max_records=4, max_bytes=8000):
                 continue
             output.append(record);seen.add(identity)
     return output
+
+
+def reader_reference_contexts(units, *, max_records=4, max_bytes=8000):
+    """Highlight a simple local callback read and later variable assignments.
+
+    Uses only exact selected text. This is a lexical locator, never a proof of
+    callback invocation, alias identity, readiness, causality or edit authority.
+    Complex closures and known shadowing are deliberately not resolved.
+    """
+    from contractedge.retrieval.gap_delivery import _go_code
+    output, seen = [], set()
+    pattern = r'(?m)^[ \t]*(\w+)\s*:=\s*func\s*\(([^\n]*)\)[^\n{]*\{\s*return\s+(\w+)\.(\w+)\([^\n{}]*\)\s*\}'
+    for unit in units:
+        text=unit.get('text','')
+        if (not unit.get('path','').endswith('.go') or unit.get('truncated')
+                or not unit.get('id') or not unit.get('snapshot_id')
+                or hashlib.sha256(text.encode()).hexdigest()!=unit.get('content_digest')
+                or not re.match(r'\s*func\s+\w+\s*\(',text)):
+            continue
+        code=_go_code(text); lines=text.splitlines(keepends=True)
+        def window(start,end):
+            first=code.count('\n',0,start); last=code.count('\n',0,max(start,end-1))
+            excerpt=''.join(lines[first:last+1]); base=unit['locator']['start_line']
+            return dict(locator=dict(path=unit['path'],start_line=base+first,end_line=base+last),
+                        excerpt=excerpt,excerpt_digest=hashlib.sha256(excerpt.encode()).hexdigest())
+        for match in re.finditer(pattern,code):
+            callback, parameters, variable, method=match.groups()
+            if (re.search(r'\b'+re.escape(variable)+r'\b',parameters)
+                    or any(variable in re.findall(r'\w+', lhs) for lhs in
+                           re.findall(r'\b(\w+(?:\s*,\s*\w+)*)\s*:=', code))
+                    # Grouped declarations can introduce a different binding.
+                    # Skip conservatively; this locator does not resolve scope.
+                    or any(re.search(r'\b'+re.escape(variable)+r'\b', group)
+                           for group in re.findall(r'\bvar\s*\(([^)]*)', code))
+                    or re.search(r'\bfunc\s*\([^)]*\b'+re.escape(variable)+r'\b',code)
+                    or len(re.findall(r'(?m)^[ \t]*var\s+'+re.escape(variable)+r'\s+',code))!=1
+                    or not re.search(r'(?m)^[ \t]*var\s+'+re.escape(variable)+r'\s+[^\n]+',code[:match.start()])):
+                continue
+            writes=list(re.finditer(r'(?m)^[ \t]*'+re.escape(variable)+r'\s*=(?!=)[^\n]+',code[match.end():]))
+            if not writes:continue
+            identity=(unit['snapshot_id'],unit['path'],unit['locator']['start_line'],match.start())
+            if identity in seen:continue
+            row=dict(source_evidence_ref='SRC-'+unit['id'],candidate_id=unit['id'],snapshot_id=unit['snapshot_id'],
+                source_content_digest=unit['content_digest'],variable=variable,callback=callback,receiver_method=method,
+                reader=window(match.start(),match.end()),
+                writes=[window(match.end()+m.start(),match.end()+m.end()) for m in writes[:4]],
+                interpretation='Exact selected-source read/reassignment windows; review shared-reference publication. '
+                    'Not verified invocation, same-scope alias proof, runtime readiness, causality or edit permission.')
+            if len(output)>=max_records or len(json.dumps(output+[row],ensure_ascii=False).encode())>max_bytes:continue
+            output.append(row);seen.add(identity)
+    return output

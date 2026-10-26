@@ -1,0 +1,67 @@
+F.FF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_read_only_executor_requires_complete_declaration_after_catalog_projection[True] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-618/test_read_only_executor_requir0')
+clipped = True
+
+    @pytest.mark.parametrize('clipped',[True,False])
+    def test_read_only_executor_requires_complete_declaration_after_catalog_projection(tmp_path,clipped):
+        (tmp_path/'templates').mkdir();(tmp_path/'templates/serviceaccount.yaml').write_text('name: default\n')
+        (tmp_path/'reader.go').write_text(TEXT)
+        snapshot=compute_snapshot(tmp_path)
+        unit=next(u for u in parse_source_units('reader.go',TEXT,snapshot.snapshot_id,max_lines=4 if clipped else 80) if u.get('symbol')=='serve')
+        assert unit['truncated'] is clipped
+        candidates=CandidateSet((unit,),(unit['id'],),(),{},(),0,50000,12)
+        record=build_evidence_catalog(parse_method_input(valid_method_input()),candidates,snapshot.snapshot_id)[0]
+        plan=bound_plan(tmp_path);plan['coordination_context']={'source_support':[{**record,'delivery_required':True}]}
+        request=build_execution_request(plan,tmp_path,{'allowed_paths':['templates/**']},lambda s:len(s.split()),
+            dict(model='fixture',helper_preconditions_enabled=True,max_context_tokens=50000,execution_max_output_tokens=1024),requirement='Keep readers ready')
+        body=json.loads(request.messages[1]['content'])
+        assert any(r['id']==record['id'] for r in body['read_only_source_support'])
+>       assert bool(body['source_reader_reference_contexts']) is (not clipped)
+E       AssertionError: assert True is not True
+E        +  where True = bool([{'source_evidence_ref': 'SRC-CU-7d94849f1de50a19', 'candidate_id': 'CU-7d94849f1de50a19', 'snapshot_id': '8cfa484f769...4d59cc7d371590ad43', 'source_content_digest': '08d6a2de59bad618a5cce7fe0b1754092296ef0c30b01b5ebce9c69fecf913fa', ...}])
+
+.superpowers/sdd/2026-10-26-publication-context/test_review_reader_regression.py:37: AssertionError
+_ test_tuple_or_grouped_var_shadow_is_not_the_reader_reference_write[    {\n        active, err := makeEngine(), 0\n        active = otherEngine()\n        _, _ = active, err\n    }\n] _
+
+shadow = '    {\n        active, err := makeEngine(), 0\n        active = otherEngine()\n        _, _ = active, err\n    }\n'
+
+    @pytest.mark.parametrize('shadow',[
+        '    {\n        active, err := makeEngine(), 0\n        active = otherEngine()\n        _, _ = active, err\n    }\n',
+        '    {\n        var (\n            active *Engine\n        )\n        active = otherEngine()\n    }\n',
+    ])
+    def test_tuple_or_grouped_var_shadow_is_not_the_reader_reference_write(shadow):
+        text=TEXT.replace('    active = makeEngine()\n',shadow)
+        units=parse_source_units('reader.go',text,'S',max_lines=80)
+>       assert reader_reference_contexts(units)==[]
+E       AssertionError: assert [{'source_evi...4e9f77', ...}] == []
+E         
+E         Left contains one more item: {'source_evidence_ref': 'SRC-CU-fb4d8ccbbca7107f', 'candidate_id': 'CU-fb4d8ccbbca7107f', 'snapshot_id': 'S', 'source_content_digest': 'e0d797d30e4d844f28ae514f5d39c675a896cec83b2123b2f1d6171e8e4e9f77', ...}
+E         Use -v to get more diff
+
+.superpowers/sdd/2026-10-26-publication-context/test_review_reader_regression.py:46: AssertionError
+_ test_tuple_or_grouped_var_shadow_is_not_the_reader_reference_write[    {\n        var (\n            active *Engine\n        )\n        active = otherEngine()\n    }\n] _
+
+shadow = '    {\n        var (\n            active *Engine\n        )\n        active = otherEngine()\n    }\n'
+
+    @pytest.mark.parametrize('shadow',[
+        '    {\n        active, err := makeEngine(), 0\n        active = otherEngine()\n        _, _ = active, err\n    }\n',
+        '    {\n        var (\n            active *Engine\n        )\n        active = otherEngine()\n    }\n',
+    ])
+    def test_tuple_or_grouped_var_shadow_is_not_the_reader_reference_write(shadow):
+        text=TEXT.replace('    active = makeEngine()\n',shadow)
+        units=parse_source_units('reader.go',text,'S',max_lines=80)
+>       assert reader_reference_contexts(units)==[]
+E       AssertionError: assert [{'source_evi...672ba1', ...}] == []
+E         
+E         Left contains one more item: {'source_evidence_ref': 'SRC-CU-a6787a8424276b85', 'candidate_id': 'CU-a6787a8424276b85', 'snapshot_id': 'S', 'source_content_digest': 'a35903d3f9baa09c430e3a2cc6e8c6537ed57ced21580655e9f056cf34672ba1', ...}
+E         Use -v to get more diff
+
+.superpowers/sdd/2026-10-26-publication-context/test_review_reader_regression.py:46: AssertionError
+=========================== short test summary info ============================
+FAILED .superpowers/sdd/2026-10-26-publication-context/test_review_reader_regression.py::test_read_only_executor_requires_complete_declaration_after_catalog_projection[True]
+FAILED .superpowers/sdd/2026-10-26-publication-context/test_review_reader_regression.py::test_tuple_or_grouped_var_shadow_is_not_the_reader_reference_write[    {\n        active, err := makeEngine(), 0\n        active = otherEngine()\n        _, _ = active, err\n    }\n]
+FAILED .superpowers/sdd/2026-10-26-publication-context/test_review_reader_regression.py::test_tuple_or_grouped_var_shadow_is_not_the_reader_reference_write[    {\n        var (\n            active *Engine\n        )\n        active = otherEngine()\n    }\n]
+3 failed, 1 passed in 0.40s

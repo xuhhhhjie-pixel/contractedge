@@ -442,10 +442,17 @@ def required_source_prerequisites(candidate_set):
     The Ready boundary independently recomputes these entries rather than
     trusting a saved context or dropping its role-specific requirements.
     """
+    from contractedge.diagnosis.evidence import reader_reference_contexts
+    # READY binds what its producer actually declared. A historical trace did
+    # not request this new review: do not silently add obligations on resume.
+    # fit_diagnosis marks every current selected reader role before planning.
+    reader_rows = reader_reference_contexts([u for u in candidate_set.candidates
+        if 'SOURCE_READER:'+u['id'] in u.get('gap_role_keys',[])])
     rows = []
     for unit in candidate_set.candidates:
         contracts = field_contract_contexts([unit], ' '.join(unit.get('source_contract_fields', [])))
-        if not unit.get('precondition_review_required') and not contracts:
+        readers = [row for row in reader_rows if row['source_evidence_ref']=='SRC-'+unit['id']]
+        if not unit.get('precondition_review_required') and not contracts and not readers:
             continue
         reason = ('Review the source-supported exception-producing guard and caller prerequisites; literal match and local calls are locators, not causal proof'
             if any(role.startswith('PUBLIC_EXCEPTION:') for role in unit.get('gap_role_keys', [])) else
@@ -454,6 +461,11 @@ def required_source_prerequisites(candidate_set):
             if not unit.get('precondition_review_required'):
                 reason = 'Review the applicability of the supplied field/API source contract; this is source interpretation, not observed runtime readiness.'
             reason += ' Review these exact source-local field contracts before inferring consumer behavior; producing a value is not proof the consumer applies it: '+json.dumps(contracts,ensure_ascii=False,separators=(',',':'))
+        if readers:
+            reason += (' Review the actual reference publication to readers separately from starting or retiring an object. '
+                'A wait after assigning the reader-visible reference does not cover reads before that wait. '
+                'These are lexical windows, not an automatically supported causal relation: '
+                +json.dumps(readers,ensure_ascii=False,separators=(',',':')))
         rows.append(dict(source_evidence_ref='SRC-'+unit['id'],reason=reason))
     return rows
 
@@ -767,11 +779,16 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
         by_unit = {}
         for record in contracts:
             by_unit.setdefault(record['candidate_id'], []).append(record['field_name'])
+        from contractedge.diagnosis.evidence import reader_reference_contexts
+        reader_ids={row['candidate_id'] for row in reader_reference_contexts(fitted.candidates)}
+        contract_ids=set(by_unit)|reader_ids
         fitted = replace(fitted, candidates=tuple(
-            {**u, 'source_contract_fields': by_unit[u['id']],
-             'gap_role_keys': list(dict.fromkeys([*u.get('gap_role_keys', []), 'SOURCE_CONTRACT:'+u['id']]))}
-            if u['id'] in by_unit else u for u in fitted.candidates),
-            required_endpoint_ids=tuple(dict.fromkeys([*fitted.required_endpoint_ids, *by_unit])))
+            {**u, **({'source_contract_fields':by_unit[u['id']]} if u['id'] in by_unit else {}),
+             'gap_role_keys': list(dict.fromkeys([*u.get('gap_role_keys', []),
+                *(('SOURCE_CONTRACT:'+u['id'],) if u['id'] in by_unit else ()),
+                *(('SOURCE_READER:'+u['id'],) if u['id'] in reader_ids else ())]))}
+            if u['id'] in contract_ids else u for u in fitted.candidates),
+            required_endpoint_ids=tuple(dict.fromkeys([*fitted.required_endpoint_ids, *sorted(contract_ids)])))
         fitted = retain_supported_source(fitted, prior, context.snapshot_id, context.input_digest)
         required_endpoint_ids=list(dict.fromkeys([*fitted.required_endpoint_ids,
             *[c['id'] for c in fitted.candidates if requires_gap_delivery(c)]]))

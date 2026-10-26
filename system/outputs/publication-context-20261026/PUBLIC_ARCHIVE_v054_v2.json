@@ -1,0 +1,18 @@
+{
+  "files": 293,
+  "uncompressed_bytes": 38746841,
+  "archive_sha256": "ba5905b15048f2dc7020cd707f6a044cef1b1ed73919df9fc896c49b0ae2aa7c",
+  "excluded_components": [
+    ".cache",
+    ".git",
+    "__pycache__",
+    "dependencies",
+    "evaluation",
+    "hidden",
+    "workspace"
+  ],
+  "secret_pattern_scan_matches": 0,
+  "hidden_materials_included": false,
+  "api_credentials_included": false,
+  "formal_ready": false
+}

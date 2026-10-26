@@ -1,0 +1,18 @@
+{
+  "status": "V2_QUALIFIED_REGISTERED_ALERT_TARGET_RUNNING",
+  "version": "0.6.54",
+  "source_sha256": "336c7c4c16dbac3b9401ce7afd9ba6213589c1c05fbefaa04147e2f5f06a4f47",
+  "freeze": "docs/development/publication-context-v054-20261026-v2.snapshot.json",
+  "targeted_tests": 127,
+  "model_calls_added": 0,
+  "formal_ready": false,
+  "full_expected_tests": 2008,
+  "subtests": 91,
+  "sessions": {
+    "full": 53498
+  },
+  "full_tests": 2008,
+  "full_exit_code": 0,
+  "qualification": "ZERO_CALL_QUALIFICATION_v2.json",
+  "registration": "/home/xhj/contractedge-diagnostic-source054-v2-20261026/registration.json"
+}

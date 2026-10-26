@@ -1,0 +1,39 @@
+{
+  "protected_ids": [],
+  "old_probe_status": "COMPLETE",
+  "trial_probe_status": "PROBE_ERROR",
+  "old_behavior_checks": [
+    {
+      "id": "alertmanager-reload-v4:groups.visible_during_reload",
+      "status": "FAIL",
+      "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.visible_after_reload",
+      "status": "PASS",
+      "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.visible_at_reload_return",
+      "status": "FAIL",
+      "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.unique_for_declared_route",
+      "status": "PASS",
+      "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+    }
+  ],
+  "actual_decision": {
+    "schema_version": "ce.candidate_decision.v1",
+    "decision": "PROMOTE",
+    "from_snapshot": "630df027ac083203889f3ef602b2851b3fb95504879f48c7b59c863641032905",
+    "trial_snapshot": "e30cd927a9bb9abd5218100f7749c46a581913463ae83c6f5020b094f7f62fd7",
+    "regressions": [],
+    "uncomparable": [],
+    "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness"
+  },
+  "expected_policy": "UNCOMPARABLE when registered required measurement completes before but becomes unavailable after edit, without declaring semantic failure or cause",
+  "new_model_calls": 0,
+  "formal_ready": false
+}
