@@ -1,0 +1,25 @@
+Collecting setuptools==80.9.0
+  Downloading setuptools-80.9.0-py3-none-any.whl (1.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 1.8 MB/s eta 0:00:00
+Collecting wheel==0.45.1
+  Downloading wheel-0.45.1-py3-none-any.whl (72 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 72.5/72.5 KB 11.5 MB/s eta 0:00:00
+Installing collected packages: wheel, setuptools
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 59.6.0
+    Uninstalling setuptools-59.6.0:
+      Successfully uninstalled setuptools-59.6.0
+Successfully installed setuptools-80.9.0 wheel-0.45.1
+Obtaining file:///home/xhj/contractedge-cleancheck-v058-20261027/system
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: contractedge-system
+  Building editable for contractedge-system (pyproject.toml): started
+  Building editable for contractedge-system (pyproject.toml): finished with status 'done'
+  Created wheel for contractedge-system: filename=contractedge_system-0.6.56-0.editable-py3-none-any.whl size=1849 sha256=4ffa2825a1b971e77efd752a62a5739b613b73dadcd7d87561e9595538bd62ee
+  Stored in directory: /tmp/pip-ephem-wheel-cache-hkp_2zmt/wheels/d8/e5/25/584b18ddfc8891453917dad8dcbf87fb558ee027643d44e425
+Successfully built contractedge-system
+Installing collected packages: contractedge-system
+Successfully installed contractedge-system-0.6.56

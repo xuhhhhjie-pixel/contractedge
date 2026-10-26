@@ -1,0 +1,38 @@
+{
+  "status": "CLEAN_CHECKOUT_PORTABLE_PASS_WITH_RELEASE_METADATA_LIMITATION",
+  "commit": "fa7d885",
+  "source_sha256": "192571f444abc4a7b618cd7b0c213be6523035e7a9139f0bb33e182c62f54764",
+  "test_exit_code": 0,
+  "tests": 2067,
+  "subtests": 86,
+  "full_suite": false,
+  "excluded_modules": [
+    "test_ready_support_consistency.py",
+    "test_probe_profiles_v2.py",
+    "test_compact_render_inventory.py",
+    "test_diagnosis_error_aggregation.py",
+    "test_structured_observation_adapters.py",
+    "test_topomen_agent.py"
+  ],
+  "build_tools": {
+    "setuptools": "80.9.0",
+    "wheel": "0.45.1",
+    "pip": "22.0.2"
+  },
+  "package_metadata_version": "0.6.56",
+  "source_version": "0.6.58",
+  "pip_check": "PASS",
+  "cli_help": "PASS",
+  "freeze_before_after": "PASS",
+  "first_install": "RETAINED_SETUP_FAILURE_MISSING_WHEEL",
+  "new_model_calls": 0,
+  "formal_ready": false,
+  "evidence": {
+    "install.log": "f0347df092621511fa9a0bc52c3bdb5d8810c7a79ca8d8ea4a6773aee12d7b66",
+    "install-build-tools.log": "db8260bbbd3f9cd5da15f01fadce82f268a9c80801eb7a90f07c45882f3a9ccd",
+    "cli-help.log": "8f0c0a580e5b67aac937d248ff997c586b91be60f27446f03cfcc1dde27e0e96",
+    "freeze-verification.json": "01d676d6e3483853afee7cd11d29bb5b3a7636141ecd7c1672cd520f7109bbc2",
+    "post-portable-freeze.json": "01d676d6e3483853afee7cd11d29bb5b3a7636141ecd7c1672cd520f7109bbc2",
+    "portable-v058.log": "96a214cdcc7a419796a5e61e44227a261923c4a331e074f1c14ad79ec91e3653"
+  }
+}
