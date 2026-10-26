@@ -1,0 +1,17 @@
+Obtaining file:///home/xhj/contractedge-cleancheck-v055-20261026/system
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: contractedge-system
+  Building editable for contractedge-system (pyproject.toml): started
+  Building editable for contractedge-system (pyproject.toml): finished with status 'done'
+  Created wheel for contractedge-system: filename=contractedge_system-0.6.55-0.editable-py3-none-any.whl size=1850 sha256=ac73515e314c8b791290755ce43061a3e2cff2283081cbb8999646a8942e365f
+  Stored in directory: /tmp/pip-ephem-wheel-cache-e3vkwx8w/wheels/63/30/e4/1f5e599a18acac30dd711085a01298b82ebccdfebc2d9174cf
+Successfully built contractedge-system
+Installing collected packages: contractedge-system
+Successfully installed contractedge-system-0.6.55

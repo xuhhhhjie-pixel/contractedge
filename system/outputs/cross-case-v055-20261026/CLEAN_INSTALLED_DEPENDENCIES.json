@@ -1,0 +1,134 @@
+{
+  "locked_packages": [
+    {
+      "package": "annotated-types",
+      "expected": "0.8.0",
+      "actual": "0.8.0"
+    },
+    {
+      "package": "attrs",
+      "expected": "26.1.0",
+      "actual": "26.1.0"
+    },
+    {
+      "package": "exceptiongroup",
+      "expected": "1.3.1",
+      "actual": "1.3.1"
+    },
+    {
+      "package": "iniconfig",
+      "expected": "2.3.1",
+      "actual": "2.3.1"
+    },
+    {
+      "package": "Jinja2",
+      "expected": "3.1.6",
+      "actual": "3.1.6"
+    },
+    {
+      "package": "jsonschema",
+      "expected": "4.26.0",
+      "actual": "4.26.0"
+    },
+    {
+      "package": "jsonschema-specifications",
+      "expected": "2025.9.1",
+      "actual": "2025.9.1"
+    },
+    {
+      "package": "markdown-it-py",
+      "expected": "4.2.0",
+      "actual": "4.2.0"
+    },
+    {
+      "package": "MarkupSafe",
+      "expected": "3.0.4",
+      "actual": "3.0.4"
+    },
+    {
+      "package": "mdurl",
+      "expected": "0.1.2",
+      "actual": "0.1.2"
+    },
+    {
+      "package": "packaging",
+      "expected": "26.3",
+      "actual": "26.3"
+    },
+    {
+      "package": "platformdirs",
+      "expected": "4.12.4",
+      "actual": "4.12.4"
+    },
+    {
+      "package": "pluggy",
+      "expected": "1.7.0",
+      "actual": "1.7.0"
+    },
+    {
+      "package": "pydantic",
+      "expected": "2.14.1",
+      "actual": "2.14.1"
+    },
+    {
+      "package": "pydantic_core",
+      "expected": "2.50.1",
+      "actual": "2.50.1"
+    },
+    {
+      "package": "Pygments",
+      "expected": "2.21.0",
+      "actual": "2.21.0"
+    },
+    {
+      "package": "pytest",
+      "expected": "9.1.1",
+      "actual": "9.1.1"
+    },
+    {
+      "package": "python-dotenv",
+      "expected": "1.2.4",
+      "actual": "1.2.4"
+    },
+    {
+      "package": "PyYAML",
+      "expected": "6.0.3",
+      "actual": "6.0.3"
+    },
+    {
+      "package": "referencing",
+      "expected": "0.37.0",
+      "actual": "0.37.0"
+    },
+    {
+      "package": "rich",
+      "expected": "15.0.0",
+      "actual": "15.0.0"
+    },
+    {
+      "package": "rpds-py",
+      "expected": "0.30.0",
+      "actual": "0.30.0"
+    },
+    {
+      "package": "tomli",
+      "expected": "2.5.0",
+      "actual": "2.5.0"
+    },
+    {
+      "package": "typing_extensions",
+      "expected": "4.16.0",
+      "actual": "4.16.0"
+    },
+    {
+      "package": "typing-inspection",
+      "expected": "0.4.4",
+      "actual": "0.4.4"
+    }
+  ],
+  "all_exact": true,
+  "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "lock_sha256": "3404e692c17e766cf8ac35fef7b3b49f50fb27d30cdfbb76ec3354fb52e96b0d",
+  "checkout": "58677769327f9c2d7d81e9eb33a48eb398bc9730",
+  "scope": "Clean detached checkout, separately created venv and editable install; actual runtime tests need explicit Docker/image settings"
+}

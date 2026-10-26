@@ -1,0 +1,1 @@
+{"coverage": {"configuration": 43, "fixture": 199, "repository_files": 1, "source": 116, "tooling_files": 193}, "development_snapshot_id": "probe-completeness-v055-20261026-v1", "errors": [], "formal_ready": false, "schema_version": "ce.development_snapshot_verification.v1", "status": "PASS", "unbound_legacy_fixture_files": []}

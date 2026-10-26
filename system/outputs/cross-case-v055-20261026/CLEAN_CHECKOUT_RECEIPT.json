@@ -1,0 +1,30 @@
+{
+  "status": "CLEAN_CHECKOUT_LOCKED_ENV_PORTABLE_PASS",
+  "checkout": "58677769327f9c2d7d81e9eb33a48eb398bc9730",
+  "tests": 1997,
+  "subtests": 86,
+  "log_sha256": "386f9a8ad3f51ebc75c01cb82aa5cd176dad70d334dab2e801248cc34f071fdd",
+  "initial_failed_run": "1982 passed,4 skipped,11 Docker-setting setup errors retained",
+  "corrected_environment": "Explicit pinned runtime image and rootless Docker socket; isolated demos enabled",
+  "installed_from_lock": true,
+  "installed_package_source": "/home/xhj/contractedge-cleancheck-v055-20261026/system/src/contractedge",
+  "cli_help_exit": 0,
+  "snapshot_verification": {
+    "coverage": {
+      "configuration": 43,
+      "fixture": 199,
+      "repository_files": 1,
+      "source": 116,
+      "tooling_files": 193
+    },
+    "development_snapshot_id": "probe-completeness-v055-20261026-v1",
+    "errors": [],
+    "formal_ready": false,
+    "schema_version": "ce.development_snapshot_verification.v1",
+    "status": "PASS",
+    "unbound_legacy_fixture_files": []
+  },
+  "excluded_historical_native_modules": 6,
+  "full2030_clean_reproduction": false,
+  "formal_ready": false
+}

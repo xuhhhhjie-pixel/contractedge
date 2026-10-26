@@ -3296,13 +3296,13 @@
     }
   },
   "current_development": {
-    "status": "V055_ENGINEERING_QUALIFIED_SAVED_FAILURES_CLOSED_EFFECT_NOT_VALIDATED",
-    "snapshot": "docs/development/probe-completeness-v055-20261026-v1.snapshot.json",
+    "status": "V055_CLOSED_CROSS_CASE_GATE_FAILED_KPT_CERT_PASS",
+    "snapshot": "docs/development/cross-case-v055-20261026-v4.snapshot.json",
     "planned_version": "0.6.55",
     "base_commit": "f998820",
     "formal_ready": false,
     "paid_dispatch_allowed": false,
-    "report": "outputs/probe-completeness-20261026/COMPLETION_AUDIT.md",
+    "report": "outputs/cross-case-v055-20261026/COMPLETION_AUDIT.md",
     "source_sha256": "94ebade3d59abd153d546a5e4b2b17ce325c7cbbee7daf64944e93eb335af0ea",
     "qualification": "outputs/probe-completeness-20261026/ZERO_CALL_QUALIFICATION_v1.json"
   },
@@ -3362,9 +3362,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Finish v055 source-bound full/actual8/public-sandbox qualification with zero API calls",
-    "Use public S1/plan replay to isolate execution lifecycle mismatch; existing reasoning policies can be compared without changing prompt/source/limits, but past truncation risk remains",
-    "Only evidence-backed repair improvement and fixed cross-case checks permit original same-version46/G0-G6; formal150 remains closed"
+    "Fix saved KPT planning-branch concern lost across same-snapshot evidence rediagnosis in isolated source056 tree",
+    "Run full qualification and once-only target only after zero-call handoff proof; retain all source055 outcomes",
+    "No fixed46 paid dispatch while cross-case gate fails; original46/G0-G6 unchanged"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",
