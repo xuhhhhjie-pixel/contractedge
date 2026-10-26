@@ -3296,18 +3296,18 @@
     }
   },
   "current_development": {
-    "status": "V056_CLOSED_INVALID_INITIAL_DIAGNOSIS_HANDOFF_NOT_EXERCISED",
-    "snapshot": "docs/development/planning-branch-continuity-v056-20261026-v4.snapshot.json",
-    "planned_version": "0.6.56",
-    "base_commit": "4862de0cdf7d5a0811d7daa2fcf3bfc38db25785",
-    "source_sha256": "74e7a3f5fd9010cb7a9eb399410e851b7d205d8ec5d0e063799e5f8cd21d997a",
+    "status": "V057_GROUNDED_CORRECTION_FULL_QUALIFICATION_PENDING",
+    "snapshot": "docs/development/grounded-graph-correction-v057-20261026-v1.snapshot.json",
+    "planned_version": "0.6.57",
+    "base_commit": "18fd2313a93b75692d6b83e34bb450e4986303ab",
+    "source_sha256": "e2f1b6a7aef6fdc47d1dd1cd011e4dfdc4f748d4ac02f3d8fe349c979a485f46",
     "formal_ready": false,
     "paid_dispatch_allowed": false,
-    "report": "outputs/planning-branch-continuity-20261026/COMPLETION_AUDIT.md"
+    "report": "outputs/grounded-graph-correction-20261026/COMPLETION_AUDIT.md"
   },
-  "staged_implementation_version": "0.6.56",
+  "staged_implementation_version": "0.6.57",
   "runtime_implementation_version": "0.6.40",
-  "current_optimization_audit": "outputs/planning-branch-continuity-20261026/COMPLETION_AUDIT.md",
+  "current_optimization_audit": "outputs/grounded-graph-correction-20261026/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {
     "status": "INTERRUPTED_PUBLIC_OBSERVATION_NO_FINAL_METHOD_RESULT",
     "model_calls_completed": 4,
@@ -3361,9 +3361,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Improve grounded configuration-path correction feedback using rejected graph/canonical source inventory; no new roles/edges/evidence fabricated",
-    "Replay saved initial invalid draft before any paid diagnostic; no original attempt restart",
-    "Original46 and formal150 remain gated; no mixed-version scores"
+    "Exact full regression/isolation/sandbox for source057",
+    "Once-only locked public diagnosis correction pair after qualification; no original case retry",
+    "Only justified same-version end-to-end controls, then original46; formal150 remains closed"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",

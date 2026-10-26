@@ -1,0 +1,256 @@
+FFFFFFFFF......F.                                                        [100%]
+=================================== FAILURES ===================================
+_ test_existing_consumers_and_bypassing_endpoints_are_located_without_new_edges _
+
+    def test_existing_consumers_and_bypassing_endpoints_are_located_without_new_edges():
+        messages, draft = fixture(); original = deepcopy((messages, draft))
+>       turns = retry(messages, draft); result = inventory(turns)
+
+tests/test_grounded_graph_correction.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+turns = ({'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "..."], "requirement_refs": ["goal"]}]}'}, {'role': 'user', 'content': 'PRODUCTION_PATH_INCOMPLETE at expected_relations'})
+
+    def inventory(turns):
+        feedback = turns[-1]['content']
+>       assert 'Rejected graph inventory (not verified causality): ' in feedback
+E       AssertionError: assert 'Rejected graph inventory (not verified causality): ' in 'PRODUCTION_PATH_INCOMPLETE at expected_relations'
+
+tests/test_grounded_graph_correction.py:34: AssertionError
+__ test_only_unambiguous_current_canonical_source_can_anchor_consumer[stale] ___
+
+mutation = 'stale'
+
+    @pytest.mark.parametrize('mutation', ['stale', 'digest', 'observation', 'duplicate', 'missing_snapshot', 'fake_model_source'])
+    def test_only_unambiguous_current_canonical_source_can_anchor_consumer(mutation):
+        messages, draft = fixture(); request = json.loads(messages[1]['content']); source = request['evidence_catalog'][0]
+        if mutation == 'stale': source['snapshot_id'] = 'old'
+        if mutation == 'digest': source['excerpt'] += ' changed'
+        if mutation == 'observation': source['kind'] = 'PUBLIC_OBSERVATION'
+        if mutation == 'duplicate': request['evidence_catalog'].append(deepcopy(source))
+        if mutation == 'missing_snapshot': request['run_context'] = {}
+        if mutation == 'fake_model_source':
+            draft['evidence_refs'] = [deepcopy(source)]; request['evidence_catalog'] = []
+        messages[1]['content'] = json.dumps(request)
+>       result = inventory(retry(messages, draft))
+
+tests/test_grounded_graph_correction.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+turns = ({'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "..."], "requirement_refs": ["goal"]}]}'}, {'role': 'user', 'content': 'PRODUCTION_PATH_INCOMPLETE at expected_relations'})
+
+    def inventory(turns):
+        feedback = turns[-1]['content']
+>       assert 'Rejected graph inventory (not verified causality): ' in feedback
+E       AssertionError: assert 'Rejected graph inventory (not verified causality): ' in 'PRODUCTION_PATH_INCOMPLETE at expected_relations'
+
+tests/test_grounded_graph_correction.py:34: AssertionError
+__ test_only_unambiguous_current_canonical_source_can_anchor_consumer[digest] __
+
+mutation = 'digest'
+
+    @pytest.mark.parametrize('mutation', ['stale', 'digest', 'observation', 'duplicate', 'missing_snapshot', 'fake_model_source'])
+    def test_only_unambiguous_current_canonical_source_can_anchor_consumer(mutation):
+        messages, draft = fixture(); request = json.loads(messages[1]['content']); source = request['evidence_catalog'][0]
+        if mutation == 'stale': source['snapshot_id'] = 'old'
+        if mutation == 'digest': source['excerpt'] += ' changed'
+        if mutation == 'observation': source['kind'] = 'PUBLIC_OBSERVATION'
+        if mutation == 'duplicate': request['evidence_catalog'].append(deepcopy(source))
+        if mutation == 'missing_snapshot': request['run_context'] = {}
+        if mutation == 'fake_model_source':
+            draft['evidence_refs'] = [deepcopy(source)]; request['evidence_catalog'] = []
+        messages[1]['content'] = json.dumps(request)
+>       result = inventory(retry(messages, draft))
+
+tests/test_grounded_graph_correction.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+turns = ({'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "..."], "requirement_refs": ["goal"]}]}'}, {'role': 'user', 'content': 'PRODUCTION_PATH_INCOMPLETE at expected_relations'})
+
+    def inventory(turns):
+        feedback = turns[-1]['content']
+>       assert 'Rejected graph inventory (not verified causality): ' in feedback
+E       AssertionError: assert 'Rejected graph inventory (not verified causality): ' in 'PRODUCTION_PATH_INCOMPLETE at expected_relations'
+
+tests/test_grounded_graph_correction.py:34: AssertionError
+_ test_only_unambiguous_current_canonical_source_can_anchor_consumer[observation] _
+
+mutation = 'observation'
+
+    @pytest.mark.parametrize('mutation', ['stale', 'digest', 'observation', 'duplicate', 'missing_snapshot', 'fake_model_source'])
+    def test_only_unambiguous_current_canonical_source_can_anchor_consumer(mutation):
+        messages, draft = fixture(); request = json.loads(messages[1]['content']); source = request['evidence_catalog'][0]
+        if mutation == 'stale': source['snapshot_id'] = 'old'
+        if mutation == 'digest': source['excerpt'] += ' changed'
+        if mutation == 'observation': source['kind'] = 'PUBLIC_OBSERVATION'
+        if mutation == 'duplicate': request['evidence_catalog'].append(deepcopy(source))
+        if mutation == 'missing_snapshot': request['run_context'] = {}
+        if mutation == 'fake_model_source':
+            draft['evidence_refs'] = [deepcopy(source)]; request['evidence_catalog'] = []
+        messages[1]['content'] = json.dumps(request)
+>       result = inventory(retry(messages, draft))
+
+tests/test_grounded_graph_correction.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+turns = ({'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "..."], "requirement_refs": ["goal"]}]}'}, {'role': 'user', 'content': 'PRODUCTION_PATH_INCOMPLETE at expected_relations'})
+
+    def inventory(turns):
+        feedback = turns[-1]['content']
+>       assert 'Rejected graph inventory (not verified causality): ' in feedback
+E       AssertionError: assert 'Rejected graph inventory (not verified causality): ' in 'PRODUCTION_PATH_INCOMPLETE at expected_relations'
+
+tests/test_grounded_graph_correction.py:34: AssertionError
+_ test_only_unambiguous_current_canonical_source_can_anchor_consumer[duplicate] _
+
+mutation = 'duplicate'
+
+    @pytest.mark.parametrize('mutation', ['stale', 'digest', 'observation', 'duplicate', 'missing_snapshot', 'fake_model_source'])
+    def test_only_unambiguous_current_canonical_source_can_anchor_consumer(mutation):
+        messages, draft = fixture(); request = json.loads(messages[1]['content']); source = request['evidence_catalog'][0]
+        if mutation == 'stale': source['snapshot_id'] = 'old'
+        if mutation == 'digest': source['excerpt'] += ' changed'
+        if mutation == 'observation': source['kind'] = 'PUBLIC_OBSERVATION'
+        if mutation == 'duplicate': request['evidence_catalog'].append(deepcopy(source))
+        if mutation == 'missing_snapshot': request['run_context'] = {}
+        if mutation == 'fake_model_source':
+            draft['evidence_refs'] = [deepcopy(source)]; request['evidence_catalog'] = []
+        messages[1]['content'] = json.dumps(request)
+>       result = inventory(retry(messages, draft))
+
+tests/test_grounded_graph_correction.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+turns = ({'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "..."], "requirement_refs": ["goal"]}]}'}, {'role': 'user', 'content': 'PRODUCTION_PATH_INCOMPLETE at expected_relations'})
+
+    def inventory(turns):
+        feedback = turns[-1]['content']
+>       assert 'Rejected graph inventory (not verified causality): ' in feedback
+E       AssertionError: assert 'Rejected graph inventory (not verified causality): ' in 'PRODUCTION_PATH_INCOMPLETE at expected_relations'
+
+tests/test_grounded_graph_correction.py:34: AssertionError
+_ test_only_unambiguous_current_canonical_source_can_anchor_consumer[missing_snapshot] _
+
+mutation = 'missing_snapshot'
+
+    @pytest.mark.parametrize('mutation', ['stale', 'digest', 'observation', 'duplicate', 'missing_snapshot', 'fake_model_source'])
+    def test_only_unambiguous_current_canonical_source_can_anchor_consumer(mutation):
+        messages, draft = fixture(); request = json.loads(messages[1]['content']); source = request['evidence_catalog'][0]
+        if mutation == 'stale': source['snapshot_id'] = 'old'
+        if mutation == 'digest': source['excerpt'] += ' changed'
+        if mutation == 'observation': source['kind'] = 'PUBLIC_OBSERVATION'
+        if mutation == 'duplicate': request['evidence_catalog'].append(deepcopy(source))
+        if mutation == 'missing_snapshot': request['run_context'] = {}
+        if mutation == 'fake_model_source':
+            draft['evidence_refs'] = [deepcopy(source)]; request['evidence_catalog'] = []
+        messages[1]['content'] = json.dumps(request)
+>       result = inventory(retry(messages, draft))
+
+tests/test_grounded_graph_correction.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+turns = ({'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {}, "evidence_catalog": [{"id..."], "requirement_refs": ["goal"]}]}'}, {'role': 'user', 'content': 'PRODUCTION_PATH_INCOMPLETE at expected_relations'})
+
+    def inventory(turns):
+        feedback = turns[-1]['content']
+>       assert 'Rejected graph inventory (not verified causality): ' in feedback
+E       AssertionError: assert 'Rejected graph inventory (not verified causality): ' in 'PRODUCTION_PATH_INCOMPLETE at expected_relations'
+
+tests/test_grounded_graph_correction.py:34: AssertionError
+_ test_only_unambiguous_current_canonical_source_can_anchor_consumer[fake_model_source] _
+
+mutation = 'fake_model_source'
+
+    @pytest.mark.parametrize('mutation', ['stale', 'digest', 'observation', 'duplicate', 'missing_snapshot', 'fake_model_source'])
+    def test_only_unambiguous_current_canonical_source_can_anchor_consumer(mutation):
+        messages, draft = fixture(); request = json.loads(messages[1]['content']); source = request['evidence_catalog'][0]
+        if mutation == 'stale': source['snapshot_id'] = 'old'
+        if mutation == 'digest': source['excerpt'] += ' changed'
+        if mutation == 'observation': source['kind'] = 'PUBLIC_OBSERVATION'
+        if mutation == 'duplicate': request['evidence_catalog'].append(deepcopy(source))
+        if mutation == 'missing_snapshot': request['run_context'] = {}
+        if mutation == 'fake_model_source':
+            draft['evidence_refs'] = [deepcopy(source)]; request['evidence_catalog'] = []
+        messages[1]['content'] = json.dumps(request)
+>       result = inventory(retry(messages, draft))
+
+tests/test_grounded_graph_correction.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+turns = ({'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "...start_line": 20, "end_line": 20}}]}'}, {'role': 'user', 'content': 'PRODUCTION_PATH_INCOMPLETE at expected_relations'})
+
+    def inventory(turns):
+        feedback = turns[-1]['content']
+>       assert 'Rejected graph inventory (not verified causality): ' in feedback
+E       AssertionError: assert 'Rejected graph inventory (not verified causality): ' in 'PRODUCTION_PATH_INCOMPLETE at expected_relations'
+
+tests/test_grounded_graph_correction.py:34: AssertionError
+__ test_latest_request_wins_and_old_snapshot_is_not_revived_by_retry_history ___
+
+    def test_latest_request_wins_and_old_snapshot_is_not_revived_by_retry_history():
+        messages, draft = fixture()
+        request = json.loads(messages[1]['content']); request['run_context']['snapshot_id'] = 'new'
+        messages += [dict(role='assistant', content=json.dumps(draft)),
+                     dict(role='user', content=json.dumps(request)), dict(role='user', content='earlier correction')]
+>       assert not inventory(retry(messages, draft))['source_anchored_consumers']
+
+tests/test_grounded_graph_correction.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+turns = ({'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "... "bypass", "source_unit_ids": ["configuration"], "target_unit_ids": ["result"], "requirement_refs": ["goal"]}]}'}, ...)
+
+    def inventory(turns):
+        feedback = turns[-1]['content']
+>       assert 'Rejected graph inventory (not verified causality): ' in feedback
+E       AssertionError: assert 'Rejected graph inventory (not verified causality): ' in 'PRODUCTION_PATH_INCOMPLETE at expected_relations'
+
+tests/test_grounded_graph_correction.py:34: AssertionError
+________________ test_duplicate_units_are_not_silently_selected ________________
+
+    def test_duplicate_units_are_not_silently_selected():
+        messages, draft = fixture(); draft['units'].append(deepcopy(draft['units'][1]))
+>       result = inventory(retry(messages, draft))
+
+tests/test_grounded_graph_correction.py:80: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+turns = ({'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "..."], "requirement_refs": ["goal"]}]}'}, {'role': 'user', 'content': 'PRODUCTION_PATH_INCOMPLETE at expected_relations'})
+
+    def inventory(turns):
+        feedback = turns[-1]['content']
+>       assert 'Rejected graph inventory (not verified causality): ' in feedback
+E       AssertionError: assert 'Rejected graph inventory (not verified causality): ' in 'PRODUCTION_PATH_INCOMPLETE at expected_relations'
+
+tests/test_grounded_graph_correction.py:34: AssertionError
+_ test_unicode_inventory_is_bounded_with_complete_records_and_omission_counts __
+
+    def test_unicode_inventory_is_bounded_with_complete_records_and_omission_counts():
+        messages, draft = fixture()
+        draft['expected_relations'] *= 60
+        draft['units'] += [dict(id='長' * 2000, semantic_role_class='CONFIGURATION_INPUT', existence='PRESENT',
+                               requirement_refs=['goal'], locator_refs=[])]
+>       result = inventory(retry(messages, draft))
+
+tests/test_grounded_graph_correction.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+turns = ({'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "..."], "requirement_refs": ["goal"]}]}'}, {'role': 'user', 'content': 'PRODUCTION_PATH_INCOMPLETE at expected_relations'})
+
+    def inventory(turns):
+        feedback = turns[-1]['content']
+>       assert 'Rejected graph inventory (not verified causality): ' in feedback
+E       AssertionError: assert 'Rejected graph inventory (not verified causality): ' in 'PRODUCTION_PATH_INCOMPLETE at expected_relations'
+
+tests/test_grounded_graph_correction.py:34: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_grounded_graph_correction.py::test_existing_consumers_and_bypassing_endpoints_are_located_without_new_edges
+FAILED tests/test_grounded_graph_correction.py::test_only_unambiguous_current_canonical_source_can_anchor_consumer[stale]
+FAILED tests/test_grounded_graph_correction.py::test_only_unambiguous_current_canonical_source_can_anchor_consumer[digest]
+FAILED tests/test_grounded_graph_correction.py::test_only_unambiguous_current_canonical_source_can_anchor_consumer[observation]
+FAILED tests/test_grounded_graph_correction.py::test_only_unambiguous_current_canonical_source_can_anchor_consumer[duplicate]
+FAILED tests/test_grounded_graph_correction.py::test_only_unambiguous_current_canonical_source_can_anchor_consumer[missing_snapshot]
+FAILED tests/test_grounded_graph_correction.py::test_only_unambiguous_current_canonical_source_can_anchor_consumer[fake_model_source]
+FAILED tests/test_grounded_graph_correction.py::test_latest_request_wins_and_old_snapshot_is_not_revived_by_retry_history
+FAILED tests/test_grounded_graph_correction.py::test_duplicate_units_are_not_silently_selected
+FAILED tests/test_grounded_graph_correction.py::test_unicode_inventory_is_bounded_with_complete_records_and_omission_counts
+10 failed, 7 passed in 0.31s

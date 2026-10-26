@@ -173,6 +173,112 @@ def _changeset_retry_feedback(error: Exception) -> list[dict[str, str]]:
     return [{"code": code, "message": message[:1200]}]
 
 
+def _configuration_graph_feedback(messages, response_content: str) -> str:
+    """Inventory a rejected graph; canonical source anchors do not prove its edges."""
+    try:
+        draft = parse_diagnosis_response(response_content)
+    except (TypeError, ValueError):
+        return ''
+    if not isinstance(draft, Mapping):
+        return ''
+    request = {}
+    for message in reversed(messages):
+        if not isinstance(message, Mapping) or message.get('role') != 'user':
+            continue
+        try:
+            value = json.loads(message.get('content', ''))
+        except (TypeError, ValueError):
+            continue
+        if isinstance(value, Mapping) and 'run_context' in value and 'evidence_catalog' in value:
+            request = value
+            break
+    context = request.get('run_context')
+    snapshot = context.get('snapshot_id') if isinstance(context, Mapping) else None
+    catalog = request.get('evidence_catalog')
+    catalog = catalog if isinstance(catalog, list) else []
+    records = {}
+    for record in catalog:
+        if isinstance(record, Mapping) and isinstance(record.get('id'), str):
+            records.setdefault(record['id'], []).append(record)
+    sources = {}
+    for identity, matches in records.items():
+        if len(matches) != 1:
+            continue
+        record = matches[0]; excerpt = record.get('excerpt'); locator = record.get('locator')
+        try:
+            excerpt_digest = hashlib.sha256(excerpt.encode()).hexdigest() if isinstance(excerpt, str) else None
+        except UnicodeError:
+            continue
+        if (not isinstance(snapshot, str) or not snapshot or record.get('snapshot_id') != snapshot
+                or record.get('kind') != 'SOURCE_SPAN' or not isinstance(excerpt, str)
+                or excerpt_digest != record.get('content_digest')
+                or not isinstance(locator, Mapping) or not isinstance(locator.get('path'), str)):
+            continue
+        sources[identity] = dict(id=identity, locator=dict(locator), content_digest=record['content_digest'])
+    units = draft.get('units'); units = units if isinstance(units, list) else []
+    units_by_id = {}
+    for unit in units:
+        if isinstance(unit, Mapping) and isinstance(unit.get('id'), str):
+            units_by_id.setdefault(unit['id'], []).append(unit)
+    candidates = dict(configurations=[], source_anchored_consumers=[], unanchored_consumers=[],
+                      terminals=[], relations=[], current_source_spans=[], ambiguous_unit_ids=[])
+    cited_sources = set()
+    for identity, matches in units_by_id.items():
+        if len(matches) != 1:
+            candidates['ambiguous_unit_ids'].append(identity)
+            continue
+        unit = matches[0]; refs = unit.get('requirement_refs'); locators = unit.get('locator_refs')
+        if not isinstance(refs, list) or not all(isinstance(ref, str) for ref in refs):
+            continue
+        row = dict(unit_id=identity, requirement_refs=list(refs))
+        role = unit.get('semantic_role_class')
+        if not isinstance(role, str):
+            continue
+        if role == 'CONFIGURATION_INPUT':
+            candidates['configurations'].append(row)
+        elif role == 'PRODUCTION_CONSUMER' and unit.get('existence') == 'PRESENT':
+            source_refs = list(dict.fromkeys(ref for ref in locators if isinstance(ref, str) and ref in sources)) if isinstance(locators, list) else []
+            if source_refs:
+                row['source_refs'] = source_refs
+                cited_sources.update(source_refs)
+                candidates['source_anchored_consumers'].append(row)
+            else:
+                candidates['unanchored_consumers'].append(row)
+        elif role in {'GENERATED_STATE', 'RUNTIME_CONSUMER', 'OBSERVED_STATE'}:
+            candidates['terminals'].append(row)
+    relations = draft.get('expected_relations')
+    for relation in relations if isinstance(relations, list) else []:
+        if (not isinstance(relation, Mapping) or not isinstance(relation.get('id'), str)
+                or any(not isinstance(relation.get(key), list) or not all(isinstance(ref, str) for ref in relation[key])
+                       for key in ('source_unit_ids', 'target_unit_ids', 'requirement_refs'))):
+            continue
+        candidates['relations'].append({key: relation[key] for key in
+            ('id', 'source_unit_ids', 'target_unit_ids', 'requirement_refs')})
+    candidates['current_source_spans'] = [record for identity, record in sources.items() if identity in cited_sources]
+    prefix = ('\nNaming a function in mechanism text does not route an edge through its unit. '
+              'Inspect the existing units and actual directed endpoints against supplied excerpts. '
+              'Source anchoring proves availability, not the claimed role or causality. Do not invent '
+              'edges, new consumers or source citations to satisfy validation; retain unresolved gaps when needed. '
+              'Rejected graph inventory (not verified causality): ')
+    result = {key: [] for key in candidates}
+    result['omitted'] = {key: len(rows) for key, rows in candidates.items()}
+    def serialize():
+        return prefix + json.dumps(result, ensure_ascii=False, separators=(',', ':'))
+    # Round robin keeps one large category from starving all endpoint categories.
+    for index in range(max(map(len, candidates.values()), default=0)):
+        for key, rows in candidates.items():
+            if index >= len(rows) or len(result[key]) >= 8:
+                continue
+            result[key].append(rows[index]); result['omitted'][key] -= 1
+            try:
+                fits = len(serialize().encode()) <= 4096
+            except UnicodeError:
+                fits = False
+            if not fits:
+                result[key].pop(); result['omitted'][key] += 1
+    return serialize()
+
+
 def _append_diagnosis_retry_turn(messages, response_content: str, validation_feedback: str):
     """Retain rejected drafts and earlier corrections within the existing budget."""
     if 'CAUSAL_CLAIM_UNSUPPORTED' in validation_feedback:
@@ -188,6 +294,8 @@ def _append_diagnosis_retry_turn(messages, response_content: str, validation_fee
                 if not path.endswith(('.go','.py','.js','.ts','.tsx','.c','.h','.java')):continue
                 available.append(dict(id=record['id'],path=path,start_line=locator.get('start_line'),end_line=locator.get('end_line')))
         validation_feedback+=' Available source locations already supplied: '+json.dumps(available[:8])+'. Inspect their actual excerpts; availability alone is not causal support.'
+    if 'PRODUCTION_PATH_INCOMPLETE' in validation_feedback:
+        validation_feedback += _configuration_graph_feedback(messages, response_content)
     return tuple(messages) + (
         {"role": "assistant", "content": response_content},
         {"role": "user", "content": validation_feedback},

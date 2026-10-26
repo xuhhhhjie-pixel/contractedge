@@ -1,0 +1,28 @@
+{
+  "status": "PUBLIC_SAVED_CORRECTION_REPLAY_PASS",
+  "saved_calls_sha256": "3500eb373092429b72178bb1466946e555de5ec17004166efd30024cbd5f66a5",
+  "rejected_draft_sha256": "736b5f6641af32cb4217a1725044759bb13c179b2465fa3e9301e5c303898671",
+  "first_request_unchanged": true,
+  "rejected_draft_unchanged": true,
+  "canonical_source_inventory_only": true,
+  "source_consumers_visible": [
+    "U2",
+    "U3"
+  ],
+  "bypass_endpoints_visible": true,
+  "appended_bytes": 2113,
+  "inventory_omitted": {
+    "configurations": 0,
+    "source_anchored_consumers": 0,
+    "unanchored_consumers": 0,
+    "terminals": 0,
+    "relations": 0,
+    "current_source_spans": 0,
+    "ambiguous_unit_ids": 0
+  },
+  "original_failure_unchanged": true,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "formal_ready": false,
+  "limitation": "Counterfactual input delivery only; no new diagnosis, causal support or patch success inferred."
+}
