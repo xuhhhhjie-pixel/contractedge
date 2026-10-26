@@ -1,0 +1,25 @@
+{
+  "snapshot_id": "630df027ac083203889f3ef602b2851b3fb95504879f48c7b59c863641032905",
+  "rows": [
+    {
+      "policy": "failed_trial_only",
+      "thinking": "disabled",
+      "metadata": "EXPLICIT_STAGE_CONFIGURATION",
+      "max_output_tokens": 16384
+    },
+    {
+      "policy": "complex_plan",
+      "thinking": "enabled",
+      "metadata": "COMPLEX_PLAN_REASONING",
+      "max_output_tokens": 16384
+    }
+  ],
+  "prompt_messages_identical": true,
+  "actual_v054_reasoning_tokens": 0,
+  "actual_plan_operations": 2,
+  "new_model_calls": 0,
+  "reason": "failed_trial_only is intentionally limited to REJECT_REGRESSION context; current failed target was promoted, so re-diagnosis execution does not trigger it",
+  "historical_tradeoff": "complex_plan source031 exhausted output budget; no claim enabling it guarantees better patches",
+  "next_experiment": "If used, predeclare a matched execution-stage comparison from same saved public S1/plan, retain both outcomes/costs; label seeded execution diagnostic, never end-to-end score",
+  "formal_ready": false
+}

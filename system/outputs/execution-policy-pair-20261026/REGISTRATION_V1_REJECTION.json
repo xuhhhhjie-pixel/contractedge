@@ -1,0 +1,20 @@
+{
+  "status": "PRE_DISPATCH_REJECTION_ZERO_CALLS",
+  "cause": "Operator used a diagnostic scope label as registration role; interface requires ISOLATED_DEVELOPMENT_VALIDATION",
+  "original_state": {
+    "status": "STOP_NO_AUTOMATIC_REPEAT",
+    "rows": [],
+    "formal_ready": false,
+    "counts_in_46_slot_panel": false,
+    "automatic_retry": false,
+    "active_arm": "control",
+    "error": "RuntimeError: Completed command failed; no automatic repeat: method.log"
+  },
+  "method_session_created": false,
+  "ledger_rows_before": 1190,
+  "ledger_rows_after": 1190,
+  "old_attempts_retained": true,
+  "new_attempt_required": true,
+  "source_changed": false,
+  "qualification_reused": "Both config sandboxes completed before admission; exact code/config/harness unchanged"
+}

@@ -1,0 +1,79 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_first_trial_regression_can_revise_from_restored_source_within_two_rounds[unpreserved_probe-2-1] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-626/test_first_trial_regression_ca0')
+failure = 'unpreserved_probe', rounds = 2, expected_calls = 1
+
+    @pytest.mark.parametrize('failure,rounds,expected_calls',[('check',2,2),('startup_panic',2,2),('unclassified',2,1),('stale_panic',2,1),('startup_panic',1,1),('unpreserved_probe',2,1)])
+    def test_first_trial_regression_can_revise_from_restored_source_within_two_rounds(tmp_path,failure,rounds,expected_calls):
+        from contractedge.orchestration.repair import repair_case
+        from contractedge.model.provider import ModelResponse
+        from contractedge.execution.topomen import apply_edits
+        from tests.test_benchmark_current import make_public_fixture
+        from tests.test_orchestration import PipelineFixtureProvider
+        from tests.test_repair_execution import PublicLoopRunner, current_public_citation
+        from contractedge.dataset.benchmark import file_sha
+        public,_=make_public_fixture(tmp_path/'benchmark')
+        class Provider(PipelineFixtureProvider):
+            def complete_json(self,request):
+                self._snapshot_digests={'templates/serviceaccount.yaml':file_sha(tmp_path/'run/workspace/source/repo/templates/serviceaccount.yaml')}
+                response=super().complete_json(request)
+                if not request.prompt_version.startswith('changeset.'):return response
+                body=json.loads(response.content)
+                body['preserve_constraints']=[dict(id='S1',outcome_id='O1',obligation_refs=['A1'],
+                    statement='Metadata remains valid',current_satisfaction='OBSERVED',
+                    evidence_refs=[self.diagnosis['evidence_refs'][0]],behavior_check_refs=['retain'],
+                    check_coverage='ALL_OF',coverage_rationale='Checks valid metadata',verification_kind='PUBLIC_BEHAVIOR')]
+                if failure=='unpreserved_probe':body['preserve_constraints']=[]
+                return ModelResponse(json.dumps(body),{})
+        class Runner(PublicLoopRunner):
+            def observe(self,workspace,output):
+                result=super().observe(workspace,output)
+                state='FAIL' if 'regressed' in result['observations'][0]['excerpt'] else 'PASS'
+                if state=='FAIL' and failure!='check':
+                    result.update(status='EXECUTION_FAILED' if failure=='startup_panic' else 'EXECUTION_PASS',method_probe_status='PROBE_ERROR')
+                    if failure in {'startup_panic','stale_panic'}:
+                        result['status']='EXECUTION_FAILED'
+                        result['candidate_runtime_failures']=[dict(operation='PRODUCTION_PROCESS_START',status='FAILED',snapshot_id=result['snapshot_id'],source_locations=[dict(path='templates/serviceaccount.yaml',line=1)],stderr_excerpt='panic: source fixture startup failed',stderr_sha256='c'*64)]
+                        if failure=='stale_panic':result['candidate_runtime_failures'][0]['snapshot_id']='stale'
+                    return result
+                result['observations'].append(dict(result['observations'][0],id='OBS2',evidence_kind='PUBLIC_BEHAVIOR',
+                    behavior_check=dict(id='retain',status=state,probe_sha256='a'*64)))
+                return result
+        class Executor:
+            calls=0
+            def execute(self,plan,source,policy,**kw):
+                self.calls+=1
+                if self.calls==2:
+                    rejected=kw['previous_attempt']['rejected_trial']
+                    assert rejected['snapshot_id']!=plan['snapshot_id']
+                    if failure=='startup_panic':
+                        assert 'panic: source fixture' in rejected['feedback']['failure_tasks']['shared_execution_errors'][0]['actual_error']
+                    assert 'regressed' not in (source/'templates/serviceaccount.yaml').read_text()
+                return apply_edits(plan,source,policy,{'edits':[dict(change_id='C1',path='templates/serviceaccount.yaml',
+                    operation='MODIFY',old_text='name: default',new_text='name: regressed' if self.calls==1 else 'name: selected')]})
+        class Reviewer:
+            def review(self,requirement,plan,observation):
+                return dict(decision='UNKNOWN',checks=[])
+        executor=Executor()
+        report=repair_case(public,tmp_path,'CASE-1',tmp_path/'run',Provider(),lambda t:len(t.split()),
+            dict(model='fixture',max_context_tokens=12000,max_output_tokens=2048,max_rounds=rounds,candidate_guard_enabled=True),
+            public_runner=Runner(public,raw_only=True),executor=executor,reviewer=Reviewer())
+        assert executor.calls==expected_calls,report['errors']
+        patch=Path(report['candidate']['patch_path']).read_text()
+        if expected_calls==2:
+            assert '+  name: selected' in patch
+            assert report['last_feedback']['to_snapshot']==report['final_snapshot_id']
+        else:
+>           assert 'regressed' not in patch and 'selected' not in patch
+E           AssertionError: assert ('regressed' not in 'diff --git ... regressed\n'
+E             
+E             'regressed' is contained here:
+E               
+E               +  name: regressed)
+
+tests/test_candidate_regression_guard.py:172: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_candidate_regression_guard.py::test_first_trial_regression_can_revise_from_restored_source_within_two_rounds[unpreserved_probe-2-1]
+1 failed, 19 deselected in 1.94s

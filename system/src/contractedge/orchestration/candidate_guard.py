@@ -42,6 +42,10 @@ def compare_candidate_checks(incumbent: dict, trial: dict, preservation_ids: lis
     if has_candidate_execution_failure(trial):
         unknown.append(dict(check_id='production_execution',
             reason='Source-bound production execution failed; trial is not eligible for promotion'))
+    if trial.get('method_probe_status') == 'PROBE_ERROR':
+        unknown.append(dict(check_id='method_probe_execution',
+            reason='Registered public probe did not complete; retain the incumbent. '
+                   'This is an observation blocker, not a semantic failure or source-cause attribution.'))
     for key,state in old.items():
         if key[0] not in preservation_ids or state!='PASS':continue
         if not key[3] or not key[4]:

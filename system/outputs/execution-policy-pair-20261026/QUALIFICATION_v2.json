@@ -1,0 +1,12 @@
+{
+  "status": "CONFIGURATION_PAIR_QUALIFIED",
+  "source_sha256": "94ebade3d59abd153d546a5e4b2b17ce325c7cbbee7daf64944e93eb335af0ea",
+  "full_source_fixture_receipt_sha256": "c4b0ed83b7f2d0b1c2a93d9e510b2f981a7be41e1803e7a7a8bc52e3cc4c2455",
+  "source_and_all_existing_tests_tools_unchanged": true,
+  "sandbox_arms": [
+    "control",
+    "reasoning"
+  ],
+  "new_model_calls": 0,
+  "formal_ready": false
+}

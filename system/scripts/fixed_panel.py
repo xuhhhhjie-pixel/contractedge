@@ -11,7 +11,7 @@ import re
 ENVIRONMENT_KEYS = ('python_environment', 'dependency_files', 'public_tool_files',
                     'public_release_files', 'harness_files', 'coordinator_code_files')
 TERMINAL_OUTCOMES = frozenset({'PASS', 'SEMANTIC_FAIL', 'BUILD_FAIL', 'PATCH_APPLY_FAIL',
-                             'NO_CANDIDATE', 'METHOD_FAIL', 'FAIL'})
+                             'NO_CANDIDATE', 'METHOD_FAIL', 'EXECUTION_FAIL', 'FAIL'})
 
 
 def verify_environment(panel, identity):

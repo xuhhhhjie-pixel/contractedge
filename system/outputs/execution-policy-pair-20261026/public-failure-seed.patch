@@ -1,0 +1,31 @@
+diff --git a/cmd/alertmanager/main.go b/cmd/alertmanager/main.go
+index 567f856..4dba8f9 100644
+--- a/cmd/alertmanager/main.go
++++ b/cmd/alertmanager/main.go
+@@ -463,7 +463,6 @@ func run() int {
+ 		intervener := timeinterval.NewIntervener(timeIntervals)
+ 
+ 		inhibitor.Stop()
+-		disp.Stop()
+ 
+ 		inhibitor = inhibit.NewInhibitor(alerts, conf.InhibitRules, marker, logger, inhibitMetrics)
+ 		silencer := silence.NewSilencer(silences, marker, logger)
+@@ -496,7 +495,7 @@ func run() int {
+ 			silencer.Mutes(labels)
+ 		})
+ 
+-		disp = dispatch.NewDispatcher(
++		newDisp := dispatch.NewDispatcher(
+ 			alerts,
+ 			routes,
+ 			pipeline,
+@@ -533,7 +532,8 @@ func run() int {
+ 			}
+ 		})
+ 
+-		go disp.Run(startTime.Add(*DispatchStartDelay))
++		go newDisp.Run(startTime.Add(*DispatchStartDelay))
++		disp = newDisp
+ 		go inhibitor.Run()
+ 
+ 		return nil

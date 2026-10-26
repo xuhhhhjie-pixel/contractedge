@@ -1,0 +1,139 @@
+{
+  "status": "PAIR_CLOSED_AUDITED_BOTH_FRESH_REPAIRS_PASS",
+  "rows": [
+    {
+      "arm": "control",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "public_outcome": "UNKNOWN",
+      "patch_bytes": 3641,
+      "patch_sha256": "8e15636588f4134a7cb191968f5db174f3226ea65a374e059042f6ba599fac74",
+      "budget": {
+        "max_tokens": 2000000,
+        "reserved_tokens": 623160,
+        "max_seconds": 9000,
+        "elapsed_seconds": 1016.8595248535275,
+        "max_calls": 12,
+        "model_calls": 5,
+        "resumed_model_calls": 0
+      },
+      "output": "/home/xhj/contractedge-execution-policy-pair-v2-20261026/methods/control/RW-ALERTMANAGER-4705",
+      "receipt_sha256": "be20404a2a7f7631a973a012775e65abe1f2242b2bbc789b919a81f530842464",
+      "trace_sha256": "79b1663f82dbadcc9ba0d8155bbe0e5d03ad085825aa2bb114766e6c1ad3f837",
+      "archive_sha256": "7d5bc45100938525e6ba83df95f3b51610ae54e7229c0f6e41ab943c5fe34673",
+      "archive_files": 70,
+      "fresh_edit_rounds": 1,
+      "public_checks": [
+        {
+          "id": "alertmanager-reload-v4:groups.visible_during_reload",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.visible_after_reload",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.visible_at_reload_return",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.unique_for_declared_route",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        }
+      ],
+      "execution_calls": [
+        {
+          "thinking": "EXPLICIT_STAGE_CONFIGURATION",
+          "finish_reason": "stop",
+          "usage": {
+            "prompt_tokens": 34342,
+            "completion_tokens": 1250,
+            "total_tokens": 35592,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        }
+      ],
+      "plan_truncations": 1
+    },
+    {
+      "arm": "reasoning",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "public_outcome": "UNKNOWN",
+      "patch_bytes": 1728,
+      "patch_sha256": "f5cf71e66bb8cc8e9e264346691cd5a079ff7e49b4dcb659909353bc9d93a634",
+      "budget": {
+        "max_tokens": 2000000,
+        "reserved_tokens": 779745,
+        "max_seconds": 9000,
+        "elapsed_seconds": 1179.2136991098523,
+        "max_calls": 12,
+        "model_calls": 6,
+        "resumed_model_calls": 0
+      },
+      "output": "/home/xhj/contractedge-execution-policy-pair-v2-20261026/methods/reasoning/RW-ALERTMANAGER-4705",
+      "receipt_sha256": "7305d2c94cd1ff2cf2cfbd18c60d8978f994a68b58c7a3a4e7c25071f415c888",
+      "trace_sha256": "e44064cf8e0fd122bdee525a257694272bfa3dbbd0ee274722c2fdc9d28b7558",
+      "archive_sha256": "91c0b5bec6531ae30108eea85e31c87a69eedb0d7a09755a4a83197b3a36fa2c",
+      "archive_files": 70,
+      "fresh_edit_rounds": 1,
+      "public_checks": [
+        {
+          "id": "alertmanager-reload-v4:groups.visible_during_reload",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.visible_after_reload",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.visible_at_reload_return",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.unique_for_declared_route",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        }
+      ],
+      "execution_calls": [
+        {
+          "thinking": "COMPLEX_PLAN_REASONING",
+          "finish_reason": "stop",
+          "usage": {
+            "prompt_tokens": 36128,
+            "completion_tokens": 14734,
+            "total_tokens": 50862,
+            "completion_tokens_details": {
+              "reasoning_tokens": 14346
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        }
+      ],
+      "plan_truncations": 1
+    }
+  ],
+  "new_model_calls": 11,
+  "new_occupied_cny": 1.46708,
+  "total_occupied_cny": 123.332198,
+  "remaining_upper_bound_cny": 26.667801999999995,
+  "default_changed": false,
+  "policy_superiority_proven": false,
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false
+}
