@@ -1,0 +1,36 @@
+{
+  "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "links": [
+    {
+      "id": "HELPER-993996d987a4f64e",
+      "path": "provider/mem/mem.go",
+      "symbol": "Subscribe",
+      "result": "INCLUDED_READ_ONLY_HELPER",
+      "basis": "LOCAL_CONSTRUCTOR_FIELD_RECEIVER",
+      "lifecycle_role": "FIELD_INPUT",
+      "declaration_locator": {
+        "start_line": 179,
+        "end_line": 196,
+        "column_start": 1
+      },
+      "declaration_content_digest": "113980c316d07d2e9dc3cfa43931970776ae67d7cb7a1c7d4093d0ec154ad638",
+      "field_link": {
+        "caller_path": "cmd/alertmanager/main.go",
+        "constructor": "NewDispatcher",
+        "field": "alerts",
+        "argument": "alerts",
+        "factory": "NewAlerts",
+        "factory_return_slot": 0,
+        "receiver_type": "Alerts",
+        "method": "Subscribe"
+      }
+    }
+  ],
+  "scan_totals": {
+    "result": "HELPER_SCAN_TOTALS",
+    "indexed_files": 4,
+    "indexed_bytes": 37018
+  },
+  "new_model_calls": 0,
+  "formal_ready": false
+}

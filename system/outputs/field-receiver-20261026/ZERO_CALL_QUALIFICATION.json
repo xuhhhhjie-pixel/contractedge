@@ -1,0 +1,31 @@
+{
+  "status": "ZERO_CALL_QUALIFICATION_PASS_REQUIRES_NEW_DIAGNOSTIC_REGISTRATION",
+  "stages": [
+    {
+      "stage": "verify-after-full",
+      "exit": 0
+    },
+    {
+      "stage": "actual-eight",
+      "exit": 0
+    },
+    {
+      "stage": "public-sandbox",
+      "exit": 0
+    },
+    {
+      "stage": "verify-after-sandbox",
+      "exit": 0
+    }
+  ],
+  "model_calls_added": 0,
+  "formal_ready": false,
+  "B_opened": false,
+  "qualification_driver_sha256": "4530a620ec0fbc16cbac4bb9ca1fc6450ab8b7667bd67aa664b9405d70ed806c",
+  "full_tests": 1974,
+  "subtests": 91,
+  "full_process_receipt_sha256": "6680e2738fbcd3384fcf689b842232714f39643894f9405a901d459685524340",
+  "active_stage": null,
+  "actual8": "/home/xhj/contractedge-source052-v1-qualification-20261026/actual-eight/summary.json",
+  "sandbox_receipt": "/home/xhj/contractedge-source052-v1-qualification-20261026/candidate/.isolated-cbb68c6635dd412d981c7f8801614bef/receipt.json"
+}

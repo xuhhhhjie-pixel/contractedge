@@ -1,0 +1,29 @@
+{
+  "as_of": "2026-10-26T04:36:05.072748+00:00",
+  "status": "DIAGNOSTIC_CLOSED_DELIVERY_VERIFIED_PLAN_ID_DOMAIN_FAILURE",
+  "version": "0.6.52",
+  "source_sha256": "560bf0bdf2456b774d2682720bbda24eb2e11b8dc1d61e88402df60ee2aba439",
+  "freeze": "docs/development/field-receiver-v052-20261026-v1.snapshot.json",
+  "freeze_sha256": "08a4155b79b574b07144535270f1d5492a8d4a4a1bb4a14207f280576b218983",
+  "targeted_tests": 79,
+  "public_replay": "ALERT_FIELD_DELIVERY_CHECKPOINT.json",
+  "model_calls_added": 6,
+  "formal_ready": false,
+  "original46_later_stages_opened": false,
+  "next_order": [
+    "Replay exact preservation identity mismatch and correction boundary",
+    "Minimal schema/feedback identity fix with general counterexamples",
+    "New source freeze and qualifications before any new real attempt"
+  ],
+  "full_tests": 1974,
+  "subtests": 91,
+  "actual_process_exit_code": 0,
+  "full_receipt": "FULL_REGRESSION_COMPLETION_v052_v1.json",
+  "qualification": "ZERO_CALL_QUALIFICATION.json",
+  "actual8": "ACTUAL_EIGHT_SUMMARY.json",
+  "public_sandbox": "PUBLIC_SANDBOX_RECEIPT.json",
+  "registration": "/home/xhj/contractedge-diagnostic-source052-v1-20261026/registration.json",
+  "diagnostic_state": ".superpowers/sdd/2026-10-26-field-receiver/diagnostic-v052-v1-state.json",
+  "diagnostic_results": "V052_DIAGNOSTIC_RESULTS.json",
+  "target_gate_passed": false
+}

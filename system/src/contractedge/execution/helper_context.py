@@ -6,94 +6,259 @@ from pathlib import Path, PurePosixPath
 from contractedge.source.parsers import parse_source_units
 
 
+def _go_split(code):
+    """Split an already masked Go list; reject unbalanced syntax."""
+    stack, parts, start = [], [], 0
+    pairs = {')': '(', ']': '[', '}': '{'}
+    for i, char in enumerate(code):
+        if char in '([{': stack.append(char)
+        elif char in ')]}':
+            if not stack or stack.pop() != pairs[char]: return []
+        elif char == ',' and not stack:
+            parts.append(code[start:i].strip()); start = i + 1
+    return [] if stack else [p for p in [*parts, code[start:].strip()] if p]
+
+
+def _go_close(code, start):
+    depth = 0
+    for i in range(start, len(code)):
+        if code[i] == code[start]: depth += 1
+        elif code[i] == {'(': ')', '{': '}'}[code[start]]:
+            depth -= 1
+            if depth == 0: return i
+    return None
+
+
+def _go_signature(unit):
+    from contractedge.retrieval.gap_delivery import _go_code
+    code = _go_code(unit['text'])
+    match = re.match(r'\s*func\s+' + re.escape(unit.get('symbol', '')) + r'\s*\(', code)
+    if not match: return None
+    end = _go_close(code, match.end()-1)
+    if end is None: return None
+    parameters = _go_split(code[match.end():end]); names = []
+    for part in parameters:
+        name = re.match(r'^(\w+)\s+\S', part)
+        if not name: return None  # Grouped/unnamed parameters need explicit evidence.
+        names.append(name[1])
+    tail = code[end+1:].lstrip()
+    if tail.startswith('('):
+        close = _go_close(tail, 0)
+        if close is None: return None
+        returns = _go_split(tail[1:close])
+    else:
+        returns = [tail.split('{', 1)[0].strip()]
+    types = [re.fullmatch(r'\*?(\w+)', part) for part in returns]
+    opening = code.find('{', end + 1)
+    if opening < 0: return None
+    return names, [m[1] if m else None for m in types], code[opening + 1:]
+
+
+def _go_initializers(code, aliases, module):
+    writes, found = {}, {}
+    pattern = r'(?<![\w.])(\w+(?:\s*,\s*\w+)*)\s*(?::=|=(?!=))\s*'
+    for match in re.finditer(pattern, code):
+        variables = [v.strip() for v in match[1].split(',')]
+        for variable in variables: writes[variable] = writes.get(variable, 0) + 1
+        call = re.match(r'(\w+)\.(\w+)\s*\(', code[match.end():])
+        if not call or call[1] not in aliases: continue
+        opening = match.end() + call.end() - 1
+        end = _go_close(code, opening)
+        if end is None: continue
+        args = _go_split(code[opening+1:end])
+        for slot, variable in enumerate(variables):
+            found[variable] = dict(package=aliases[call[1]][len(module)+1:],
+                symbol=call[2], slot=slot, args=args, position=match.start())
+    shadowed = set()
+    for match in re.finditer(r'\bfunc\s*(?:\w+\s*)?\(', code):
+        end = _go_close(code, match.end()-1)
+        if end is not None:
+            for part in _go_split(code[match.end():end]):
+                parameter = re.match(r'^(\w+)\s+\S', part)
+                if parameter: shadowed.add(parameter[1])
+    return {v: record for v, record in found.items()
+            if writes[v] == 1 and v != '_' and v not in shadowed}
+
+
+def _go_async_complete(rows, entries):
+    """Stop reading package siblings once the explicit lifecycle is located."""
+    from contractedge.retrieval.gap_delivery import _go_code
+    for name, entry in entries.items():
+        constructors = [u for _,_,u in rows if u.get('symbol') == name and not u.get('truncated')]
+        sig = _go_signature(constructors[0]) if len(constructors) == 1 else None
+        if not sig or not sig[1] or not sig[1][0]: return False
+        owner = sig[1][0]; methods = {}
+        for _,_,u in rows:
+            match = re.match(r'\s*func\s*\(\s*(\w+)\s+\*?'+re.escape(owner)+r'\s*\)\s*(\w+)\s*\(',u['text'])
+            if match and not u.get('truncated'): methods[match[2]] = (match[1], u)
+        required = set(entry['methods'])
+        for method in entry['async_methods']:
+            if method not in methods: return False
+            receiver, unit = methods[method]
+            called = list(dict.fromkeys(re.findall(r'\b'+re.escape(receiver)+r'\.(\w+)\s*\(',_go_code(unit['text']))))
+            required.update(n for n in called[:2] if n != method)
+        if not required <= methods.keys(): return False
+    return True
+
+
+def _go_field_dependencies(scanned, bindings, audit):
+    """Literal argument -> constructor field -> concrete factory return.
+
+    Uses declarations already read under the existing shared scan budget. This
+    locates candidates only; build tags, dispatch, readiness and causality are
+    not inferred. Ambiguous/indirect assignments are deliberately unsupported.
+    """
+    from contractedge.retrieval.gap_delivery import _go_code
+    output = []
+    for binding in bindings:
+        rows = scanned.get(binding['package'], [])
+        constructors = [r for r in rows if r[2].get('symbol') == binding['symbol'] and not r[2].get('truncated')]
+        if len(constructors) != 1: continue
+        signature = _go_signature(constructors[0][2])
+        if not signature: continue
+        names, returns, code = signature
+        if binding['slot'] >= len(returns) or not returns[binding['slot']]: continue
+        owner = returns[binding['slot']]
+        literals = list(re.finditer(r'&?\b' + re.escape(owner) + r'\s*\{', code))
+        if len(literals) != 1: continue
+        literal = literals[0]; close = _go_close(code, literal.end()-1)
+        if close is None: continue
+        prefix = code[:literal.start()]
+        direct = bool(re.search(r'\breturn\s*$', prefix))
+        assigned = re.search(r'\b(\w+)\s*(?::=|=)\s*$', prefix)
+        if not direct and not (assigned and re.search(r'\breturn\s+'+re.escape(assigned[1])+r'\b',code[close+1:])):
+            continue
+        if len(re.findall(r'\breturn\b', code)) != 1: continue
+        if assigned and (len(re.findall(r'(?<![\w.])'+re.escape(assigned[1])+r'\s*(?::=|=(?!=))',code)) != 1
+                         or re.search(r'\b'+re.escape(assigned[1])+r'\.\w+\s*=(?!=)',code)):
+            continue
+        fields = {}
+        for part in _go_split(code[literal.end():close]):
+            pair = re.fullmatch(r'(\w+)\s*:\s*(\w+)', part)
+            if pair and pair[2] in names: fields[pair[1]] = names.index(pair[2])
+        requested = set()
+        for _, _, unit in rows:
+            receiver = re.match(r'\s*func\s*\(\s*(\w+)\s+\*?'+re.escape(owner)+r'\s*\)\s*(\w+)\s*\(',unit['text'])
+            if receiver and receiver[2] in binding['methods']:
+                requested.update(re.findall(r'\b'+re.escape(receiver[1])+r'\.(\w+)\.(\w+)\s*\(',_go_code(unit['text'])))
+        for field, method in sorted(requested):
+            index = fields.get(field)
+            if index is None or index >= len(binding['args']): continue
+            factory = binding['factories'].get(binding['args'][index])
+            if not factory or factory['position'] >= binding['position']:
+                audit.append(dict(result='FIELD_FACTORY_BINDING_UNRESOLVED', caller_path=binding['caller_path'],
+                    constructor=binding['symbol'], field=field, argument=binding['args'][index], method=method))
+                continue
+            candidates = scanned.get(factory['package'], [])
+            definitions = [r for r in candidates if r[2].get('symbol') == factory['symbol'] and not r[2].get('truncated')]
+            sig = _go_signature(definitions[0][2]) if len(definitions) == 1 else None
+            if not sig or factory['slot'] >= len(sig[1]):
+                audit.append(dict(result='FIELD_FACTORY_DECLARATION_UNRESOLVED', package=factory['package'],
+                    factory=factory['symbol'], field=field, method=method))
+                continue
+            concrete = sig[1][factory['slot']]
+            if not concrete or not any(re.match(r'\s*type\s+'+re.escape(concrete)+r'\s+struct\b',r[2]['text']) for r in candidates):
+                audit.append(dict(result='FIELD_RECEIVER_TYPE_UNRESOLVED', package=factory['package'],
+                    factory=factory['symbol'], field=field, method=method))
+                continue
+            matches = [r for r in candidates if not r[2].get('truncated') and re.match(
+                r'\s*func\s*\(\s*\w+\s+\*?'+re.escape(concrete)+r'\s*\)\s*'+re.escape(method)+r'\s*\(',r[2]['text'])]
+            if len(matches) != 1:
+                audit.append(dict(result='FIELD_RECEIVER_IMPLEMENTATION_UNRESOLVED',field=field,method=method,package=factory['package']));continue
+            link = dict(caller_path=binding['caller_path'], constructor=binding['symbol'],
+                field=field, argument=binding['args'][index], factory=factory['symbol'],
+                factory_return_slot=factory['slot'], receiver_type=concrete, method=method)
+            output.append((*matches[0], link))
+    return output
+
+
 def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
                             max_scan_files=128, max_scan_bytes=4*1024*1024):
     """Read-only implementation context, never a causal claim or edit grant."""
+    from contractedge.retrieval.gap_delivery import _go_code, _go_import_specs
     root = Path(snapshot.source_root)
-    if 'go.mod' not in snapshot.file_digests:
-        return [], []
-    module = re.search(r'(?m)^module\s+(\S+)', (root/'go.mod').read_text())
-    if not module:
-        return [], []
-    module = module[1]; queries = set(); audit = []; result = []; async_queries = {}
+    if 'go.mod' not in snapshot.file_digests: return [], []
+    module_path = root/'go.mod'
+    if module_path.is_symlink() or module_path.stat().st_size > 64000: return [], []
+    module_raw = module_path.read_bytes()
+    if hashlib.sha256(module_raw).hexdigest() != snapshot.file_digests['go.mod']: return [], []
+    module = re.search(r'(?m)^module\s+(\S+)', module_raw.decode(errors='replace'))
+    if not module: return [], []
+    module = module[1]; queries = set(); audit = []; result = []; async_queries = {}; bindings = []; input_packages = set()
     for target in targets:
-        if not target['path'].endswith('.go') or not target['content']:
-            continue
+        if not target['path'].endswith('.go') or not target['content']: continue
         text = target['content']
-        imports = []
-        for block in re.findall(r'(?ms)^import\s*\((.*?)\)', text):
-            imports.extend(re.findall(r'(?m)^\s*(?:(\w+)\s+)?"([^"\n]+)"', block))
-        imports.extend(re.findall(r'(?m)^import\s+(?:(\w+)\s+)?"([^"\n]+)"', text))
-        aliases = {(alias or path.rsplit('/', 1)[-1]):path for alias,path in imports
-                   if alias not in {'_', '.'} and path.startswith(module+'/')}
+        aliases = {alias:path for alias,path in _go_import_specs(text) if alias not in {'_', '.'} and path.startswith(module+'/')}
         for operation in operations:
             selected = operation['target']
-            if selected.get('path') != target['path']:
-                continue
-            loc = selected.get('locator', {})
-            start, end = loc.get('start_line'), loc.get('end_line')
-            if type(start) is not int or type(end) is not int:
-                continue
-            body = '\n'.join(text.splitlines()[max(0,start-1):end])
-            for alias,symbol in re.findall(r'\b([A-Za-z_]\w*)\.([A-Za-z_]\w*)\s*\(', body):
-                if alias in aliases:
-                    queries.add((aliases[alias][len(module)+1:], symbol))
-            # Follow only an explicit, unambiguous local construction used by
-            # an actual asynchronous receiver call. This is a source locator,
-            # never a proof of dispatch, readiness, aliasing or causality.
-            code=re.sub(r'//[^\n]*|/\*[\s\S]*?\*/|"(?:\\.|[^"\\])*"|`[^`]*`',
-                        lambda m:re.sub(r'[^\n]',' ',m[0]),body)
-            assignments={}
+            if selected.get('path') != target['path']: continue
+            loc = selected.get('locator', {}); start, end = loc.get('start_line'), loc.get('end_line')
+            if type(start) is not int or type(end) is not int: continue
+            body = '\n'.join(text.splitlines()[max(0,start-1):end]); code = _go_code(body)
+            for alias,symbol in re.findall(r'\b(\w+)\.(\w+)\s*\(',code):
+                if alias in aliases: queries.add((aliases[alias][len(module)+1:], symbol))
+            factories = _go_initializers(code, aliases, module)
+            # Retain the original explicit asynchronous-root policy; tuple
+            # factory returns are followed only as arguments of these roots.
+            assignments = {}
             for match in re.finditer(r'\b(\w+)\s*(?::=|=)\s*(\w+)\.(\w+)\s*\(',code):
                 variable,alias,constructor=match.groups()
-                if alias in aliases:assignments.setdefault(variable,set()).add((aliases[alias][len(module)+1:],constructor))
-            for variable,assignments_for_variable in assignments.items():
-                methods={m[1] for m in re.finditer(r'\bgo\s+'+re.escape(variable)+r'\.(\w+)\s*\(',code)}
-                if not methods:continue
-                if len(assignments_for_variable)!=1:
+                if alias in aliases: assignments.setdefault(variable,set()).add((aliases[alias][len(module)+1:],constructor))
+            for variable, choices in assignments.items():
+                methods = {m[1] for m in re.finditer(r'\bgo\s+'+re.escape(variable)+r'\.(\w+)\s*\(',code)}
+                if not methods: continue
+                if len(choices)!=1:
                     audit.append(dict(path=target['path'],receiver=variable,result='AMBIGUOUS_LOCAL_CONSTRUCTION'));continue
                 writes=re.findall(r'(?<![\w.])'+re.escape(variable)+r'\s*(?::=|=(?!=))',code)
                 constructions=re.findall(r'(?<![\w.])'+re.escape(variable)+r'\s*(?::=|=)\s*\w+\.\w+\s*\(',code)
                 if len(writes)!=len(constructions):
                     audit.append(dict(path=target['path'],receiver=variable,result='ASYNC_RECEIVER_REASSIGNMENT'));continue
-                package,constructor=next(iter(assignments_for_variable))
-                entry=async_queries.setdefault(package,{})
+                package,constructor=next(iter(choices));entry=async_queries.setdefault(package,{})
                 found=entry.setdefault(constructor,dict(async_methods=set(),methods=set()))
                 found['async_methods'].update(methods)
                 found['methods'].update(m[1] for m in re.finditer(r'\b'+re.escape(variable)+r'\.(\w+)\s*\(',code))
+                if (variable in factories and hashlib.sha256(text.encode()).hexdigest()==snapshot.file_digests.get(target['path'])):
+                    binding={**factories[variable], 'caller_path':target['path'],'factories':factories,'methods':set(methods)}
+                    if (factories[variable]['position'] >= min(m.start() for m in re.finditer(r'\bgo\s+'+re.escape(variable)+r'\.\w+\s*\(',code))
+                            or re.search(r'\b'+re.escape(variable)+r'\.\w+\s*=(?!=)',code)):
+                        continue
+                    bindings.append(binding)
+                    input_packages.update(factories[a]['package'] for a in binding['args'] if a in factories)
+    files, scanned_bytes = 0, 0; scanned = {}; queued = []
     target_paths = {t['path'] for t in targets}
-    files, scanned_bytes, included_bytes = 0, 0, 0
-    for package in sorted({p for p,_ in queries},key=lambda p:(p not in async_queries,p)):
-        symbols = {s for p,s in queries if p == package}
-        async_entry=async_queries.get(package,{})
-        paths = [p for p in sorted(snapshot.file_digests) if str(PurePosixPath(p).parent) == package
-                 and p.endswith('.go') and not p.endswith('_test.go') and p not in target_paths]
+    for package in sorted({p for p,_ in queries},key=lambda p:(p not in async_queries,p not in input_packages,p)):
+        symbols={s for p,s in queries if p==package};async_entry=async_queries.get(package,{})
+        paths=[p for p in sorted(snapshot.file_digests) if str(PurePosixPath(p).parent)==package and p.endswith('.go') and not p.endswith('_test.go') and p not in target_paths]
         candidates=[]
         for path in paths:
-            if files >= max_scan_files or scanned_bytes >= max_scan_bytes or len(result) >= 8:break
-            candidate = root/path
-            if candidate.is_symlink():continue
-            size = candidate.stat().st_size
-            if scanned_bytes + size > max_scan_bytes:
-                audit.append({'path':path,'result':'HELPER_SCAN_BYTE_LIMIT'}); continue
-            files += 1; scanned_bytes += size
-            raw = candidate.read_bytes()
-            if hashlib.sha256(raw).hexdigest() != snapshot.file_digests[path]:
-                audit.append(dict(path=path, result='SOURCE_CHANGED_AFTER_SNAPSHOT')); continue
-            text = raw.decode(errors='replace')
-            lines = text.splitlines(keepends=True)
-            for unit in parse_source_units(path,text,snapshot.snapshot_id,
-                    max_lines=768 if async_entry else 80,max_chars=32000 if async_entry else 16000):
+            if files>=max_scan_files or scanned_bytes>=max_scan_bytes: break
+            candidate=root/path
+            if candidate.is_symlink(): continue
+            size=candidate.stat().st_size
+            if scanned_bytes+size>max_scan_bytes:
+                audit.append(dict(path=path,result='HELPER_SCAN_BYTE_LIMIT'));continue
+            files+=1
+            with candidate.open('rb') as stream:
+                raw=stream.read(size)
+            scanned_bytes+=len(raw)
+            if len(raw)!=size or candidate.stat().st_size!=size or hashlib.sha256(raw).hexdigest()!=snapshot.file_digests[path]:
+                audit.append(dict(path=path,result='SOURCE_CHANGED_AFTER_SNAPSHOT'));continue
+            text=raw.decode(errors='replace');lines=text.splitlines(keepends=True)
+            for unit in parse_source_units(path,text,snapshot.snapshot_id,max_lines=768 if async_entry or package in input_packages else 80,max_chars=32000 if async_entry or package in input_packages else 16000):
                 candidates.append((path,lines,unit))
-        receiver_types={}
+            if async_entry and _go_async_complete(candidates, async_entry): break
+        scanned[package]=candidates;receiver_types={}
         for _,_,unit in candidates:
-            name=unit.get('symbol')
-            if name not in async_entry or unit.get('truncated'):continue
-            signature=re.search(r'\bfunc\s+'+re.escape(name)+r'\s*\([\s\S]*?\)\s*\*?(\w+)\s*\{',unit['text'])
-            if signature:receiver_types[name]=signature[1]
+            if unit.get('symbol') not in async_entry or unit.get('truncated'):continue
+            signature=_go_signature(unit)
+            if signature and signature[1] and signature[1][0]:receiver_types[unit['symbol']]=signature[1][0]
+            else:
+                # Preserve the old single-return lifecycle locator even when
+                # parameter positions cannot be bound by the stricter parser.
+                legacy=re.search(r'\bfunc\s+'+re.escape(unit['symbol'])+r'\s*\([\s\S]*?\)\s*\*?(\w+)\s*\{',unit['text'])
+                if legacy:receiver_types[unit['symbol']]=legacy[1]
         for constructor in async_entry:
-            if constructor not in receiver_types:
-                audit.append(dict(package=package,symbol=constructor,result='ASYNC_RETURN_TYPE_UNRESOLVED'))
+            if constructor not in receiver_types:audit.append(dict(package=package,symbol=constructor,result='ASYNC_RETURN_TYPE_UNRESOLVED'))
         inner_methods=set()
         def priority(unit):
             receiver=re.match(r'\s*func\s*\(\s*\w+\s+\*?(\w+)\s*\)\s*(\w+)\s*\(',unit['text'])
@@ -105,45 +270,40 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
                     if receiver[2] in entry['methods']:return 3
             if unit.get('symbol') in receiver_types:return 2
             return 4
-        # One additional same-receiver hop inside the async entry, restricted
-        # to declarations already scanned. No call graph or transitive scan.
-        async_roots=[unit for _,_,unit in candidates if priority(unit)==0]
-        for unit in async_roots:
+        for _,_,unit in candidates:
+            if priority(unit)!=0:continue
             receiver=re.match(r'\s*func\s*\(\s*(\w+)\s+\*?(\w+)\s*\)\s*(\w+)\s*\(',unit['text'])
-            if not receiver:continue
-            body=re.sub(r'//[^\n]*|/\*[\s\S]*?\*/|"(?:\\.|[^"\\])*"|`[^`]*`',
-                        lambda m:re.sub(r'[^\n]',' ',m[0]),unit['text'])
-            called=list(dict.fromkeys(re.findall(r'\b'+re.escape(receiver[1])+r'\.(\w+)\s*\(',body)))
+            called=list(dict.fromkeys(re.findall(r'\b'+re.escape(receiver[1])+r'\.(\w+)\s*\(',_go_code(unit['text']))))
             inner_methods.update((receiver[2],name) for name in called[:2] if name!=receiver[3])
-        candidates.sort(key=lambda row:(priority(row[2]),row[0],row[2]['locator']['start_line']))
+        for binding in bindings:
+            if binding['package']==package:binding['methods'].update(name for typ,name in inner_methods if typ==receiver_types.get(binding['symbol']))
         for path,lines,unit in candidates:
             rank=priority(unit)
-            if (rank==4 and unit.get('symbol') not in symbols) or unit.get('truncated'):
-                continue
-            # Full expansion is reserved for the explicit lifecycle path.
+            if (rank==4 and unit.get('symbol') not in symbols) or unit.get('truncated'):continue
             if rank==4 and unit['locator']['end_line']-unit['locator']['start_line']>=80:continue
-            loc = unit['locator']; start = loc['start_line']-1
-            # Include adjacent API comments: they often declare preconditions.
-            while start > max(0,loc['start_line']-13) and lines[start-1].lstrip().startswith('//'):
-                start -= 1
-            excerpt = ''.join(lines[start:loc['end_line']])
-            size = len(excerpt.encode())
-            if included_bytes + size > max_bytes or len(result) >= 8:
-                audit.append({'path':path,'symbol':unit['symbol'],'result':'READ_ONLY_SUPPORT_BUDGET'}); continue
-            included_bytes += size
-            digest = hashlib.sha256(excerpt.encode()).hexdigest()
-            record = {'id':'HELPER-'+digest[:16], 'kind':'SOURCE_SPAN', 'snapshot_id':snapshot.snapshot_id,
-                'locator':{'path':path,'start_line':start+1,'end_line':loc['end_line']},
-                'content_digest':digest, 'excerpt':excerpt,
-                'origin':('Explicit local construction and asynchronous receiver call; read-only lexical hint, not readiness or verified dispatch/causality/edit permission'
-                          if rank<4 else 'Direct qualified call in accepted target; local Go import lexical lookup; read-only, not a verified causal edge or edit permission')}
-            result.append(record)
-            audit.append({'id':record['id'],'path':path,'symbol':unit['symbol'],'result':'INCLUDED_READ_ONLY_HELPER',
-                          'basis':'LOCAL_CONSTRUCTOR_ASYNC_RECEIVER' if rank<4 else 'DIRECT_LOCAL_IMPORT',
-                          'lifecycle_role':('ASYNC_ENTRY' if rank==0 else 'ASYNC_SUPPORT') if rank<4 else None,
-                          'declaration_locator':dict(loc),
-                          'declaration_content_digest':hashlib.sha256(unit['text'].encode()).hexdigest()})
-    return result, audit
+            queued.append((rank,path,lines,unit,None))
+    queued.extend((1,path,lines,unit,link) for path,lines,unit,link in _go_field_dependencies(scanned,bindings,audit))
+    included_bytes=0;seen=set()
+    for rank,path,lines,unit,link in sorted(queued,key=lambda row:(row[0],row[1],row[3]['locator']['start_line'],row[4] is None)):
+        loc=unit['locator'];start=loc['start_line']-1
+        while start>max(0,loc['start_line']-13) and lines[start-1].lstrip().startswith('//'):start-=1
+        excerpt=''.join(lines[start:loc['end_line']]);digest=hashlib.sha256(excerpt.encode()).hexdigest()
+        if (path,digest) in seen:continue
+        size=len(excerpt.encode())
+        if included_bytes+size>max_bytes or len(result)>=8:
+            audit.append(dict(path=path,symbol=unit['symbol'],result='READ_ONLY_SUPPORT_BUDGET'));continue
+        included_bytes+=size;seen.add((path,digest))
+        basis='LOCAL_CONSTRUCTOR_FIELD_RECEIVER' if link else 'LOCAL_CONSTRUCTOR_ASYNC_RECEIVER' if rank<4 else 'DIRECT_LOCAL_IMPORT'
+        origin=('Explicit constructor argument/field/return link; read-only concrete-method candidate, not verified dispatch, readiness, causality or edit permission' if link else
+                'Explicit local construction and asynchronous receiver call; read-only lexical hint, not readiness or verified dispatch/causality/edit permission' if rank<4 else
+                'Direct qualified call in accepted target; local Go import lexical lookup; read-only, not a verified causal edge or edit permission')
+        record=dict(id='HELPER-'+digest[:16],kind='SOURCE_SPAN',snapshot_id=snapshot.snapshot_id,locator=dict(path=path,start_line=start+1,end_line=loc['end_line']),content_digest=digest,excerpt=excerpt,origin=origin)
+        result.append(record)
+        audit.append(dict(id=record['id'],path=path,symbol=unit['symbol'],result='INCLUDED_READ_ONLY_HELPER',basis=basis,
+            lifecycle_role='FIELD_INPUT' if link else ('ASYNC_ENTRY' if rank==0 else 'ASYNC_SUPPORT') if rank<4 else None,
+            declaration_locator=dict(loc),declaration_content_digest=hashlib.sha256(unit['text'].encode()).hexdigest(),**({'field_link':link} if link else {})))
+    audit.append(dict(result='HELPER_SCAN_TOTALS',indexed_files=files,indexed_bytes=scanned_bytes))
+    return result,audit
 
 
 def source_lifecycle_units(snapshot, selected, *, max_files=4, max_records=6):
@@ -185,8 +345,8 @@ def source_lifecycle_units(snapshot, selected, *, max_files=4, max_records=6):
     records, lookup = local_go_helper_support(snapshot, list(targets.values()), operations,
         max_scan_files=max_files, max_scan_bytes=4*1024*1024-used)
     audit.extend(lookup)
-    lifecycle_ids = {r['id'] for r in lookup if r.get('basis') == 'LOCAL_CONSTRUCTOR_ASYNC_RECEIVER'}
-    entry_ids = {r['id'] for r in lookup if r.get('lifecycle_role') == 'ASYNC_ENTRY'}
+    lifecycle_ids = {r['id'] for r in lookup if r.get('basis') in {'LOCAL_CONSTRUCTOR_ASYNC_RECEIVER', 'LOCAL_CONSTRUCTOR_FIELD_RECEIVER'}}
+    entry_ids = {r['id'] for r in lookup if r.get('lifecycle_role') in {'ASYNC_ENTRY', 'FIELD_INPUT'}}
     declarations = {r['id']:r for r in lookup if r.get('declaration_locator')}
     units = []
     for record in records:
