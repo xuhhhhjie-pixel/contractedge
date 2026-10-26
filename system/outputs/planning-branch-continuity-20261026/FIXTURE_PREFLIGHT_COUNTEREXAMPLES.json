@@ -1,0 +1,19 @@
+{
+  "valid_inventory": "PASS",
+  "negative_cases": [
+    {
+      "case": "missing",
+      "rejected": true
+    },
+    {
+      "case": "redirected",
+      "rejected": true
+    },
+    {
+      "case": "digest",
+      "rejected": true
+    }
+  ],
+  "source_unchanged": true,
+  "api_calls": 0
+}
