@@ -1,0 +1,49 @@
+FFF........                                                              [100%]
+=================================== FAILURES ===================================
+_ test_tuple_factory_and_renamed_parameter_locate_exact_field_implementation[queue-storage] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-591/test_tuple_factory_and_renamed0')
+name = 'queue', alias = 'storage'
+
+    @pytest.mark.parametrize('name,alias', [('queue','storage'), ('pending','cache')])
+    def test_tuple_factory_and_renamed_parameter_locate_exact_field_implementation(tmp_path,name,alias):
+        targets,ops=setup(tmp_path,name=name,alias=alias)
+        records,audit=local_go_helper_support(compute_snapshot(tmp_path),targets,ops,max_scan_files=2)
+        joined='\n'.join(r['excerpt'] for r in records)
+>       assert 'bufferedSnapshot()' in joined
+E       AssertionError: assert 'bufferedSnapshot()' in 'func (w *Worker) Start() { w.loop() }\n\nfunc (w *Worker) loop() { <-w.source.Replay() }\n\nfunc Create(input Source) *Worker { return &Worker{source: input} }\n\nfunc Make() (*Store, error) { return &Store{}, nil }\n'
+
+tests/test_field_receiver_context.py:38: AssertionError
+_ test_tuple_factory_and_renamed_parameter_locate_exact_field_implementation[pending-cache] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-591/test_tuple_factory_and_renamed1')
+name = 'pending', alias = 'cache'
+
+    @pytest.mark.parametrize('name,alias', [('queue','storage'), ('pending','cache')])
+    def test_tuple_factory_and_renamed_parameter_locate_exact_field_implementation(tmp_path,name,alias):
+        targets,ops=setup(tmp_path,name=name,alias=alias)
+        records,audit=local_go_helper_support(compute_snapshot(tmp_path),targets,ops,max_scan_files=2)
+        joined='\n'.join(r['excerpt'] for r in records)
+>       assert 'bufferedSnapshot()' in joined
+E       AssertionError: assert 'bufferedSnapshot()' in 'func (w *Worker) Start() { w.loop() }\n\nfunc (w *Worker) loop() { <-w.source.Replay() }\n\nfunc Create(input Source) *Worker { return &Worker{source: input} }\n\nfunc Make() (*Store, error) { return &Store{}, nil }\n'
+
+tests/test_field_receiver_context.py:38: AssertionError
+__________ test_field_dependency_enters_existing_preplan_source_slots __________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-591/test_field_dependency_enters_e0')
+
+    def test_field_dependency_enters_existing_preplan_source_slots(tmp_path):
+        setup(tmp_path)
+        snapshot=compute_snapshot(tmp_path)
+        seeds=parse_source_units('main.go',(tmp_path/'main.go').read_text(),snapshot.snapshot_id)
+        units,audit=source_lifecycle_units(snapshot,seeds,max_files=2,max_records=6)
+>       assert any('bufferedSnapshot()' in u['text'] for u in units)
+E       assert False
+E        +  where False = any(<generator object test_field_dependency_enters_existing_preplan_source_slots.<locals>.<genexpr> at 0x7f1c9a619690>)
+
+tests/test_field_receiver_context.py:49: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_field_receiver_context.py::test_tuple_factory_and_renamed_parameter_locate_exact_field_implementation[queue-storage]
+FAILED tests/test_field_receiver_context.py::test_tuple_factory_and_renamed_parameter_locate_exact_field_implementation[pending-cache]
+FAILED tests/test_field_receiver_context.py::test_field_dependency_enters_existing_preplan_source_slots
+3 failed, 8 passed in 8.10s

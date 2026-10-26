@@ -1,0 +1,33 @@
+...............F                                                         [100%]
+=================================== FAILURES ===================================
+_ test_local_value_changes_cannot_be_misread_as_a_unique_field_binding[shadow_parameter] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-595/test_local_value_changes_canno3')
+mutation = 'shadow_parameter'
+
+    @pytest.mark.parametrize('mutation',['owner_reassigned','field_overwritten','factory_after_use','shadow_parameter'])
+    def test_local_value_changes_cannot_be_misread_as_a_unique_field_binding(tmp_path,mutation):
+        targets,ops=setup(tmp_path)
+        if mutation in {'owner_reassigned','field_overwritten'}:
+            p=tmp_path/'engine/engine.go'
+            assignment='owner = anotherOwner' if mutation=='owner_reassigned' else 'owner.source = anotherSource'
+            p.write_text(p.read_text().replace('return &Worker{source: input}',
+                'owner := &Worker{source: input}; '+assignment+'; return owner'))
+        elif mutation=='factory_after_use':
+            text=targets[0]['content'].replace(' queue, err := storage.Make()\n _ = err\n worker := e.Create(queue)',
+                ' var queue e.Source\n worker := e.Create(queue)\n queue, err = storage.Make()\n _ = err')
+            targets[0]['content']=text
+        else:
+            text=targets[0]['content'].replace(' worker := e.Create(queue)\n go worker.Start()',
+                ' launch := func(queue e.Source) {\n worker := e.Create(queue)\n go worker.Start()\n }\n _ = launch')
+            targets[0]['content']=text
+        (tmp_path/'main.go').write_text(targets[0]['content'])
+        records,_=local_go_helper_support(compute_snapshot(tmp_path),targets,ops)
+>       assert not any('bufferedSnapshot()' in r['excerpt'] for r in records)
+E       assert not True
+E        +  where True = any(<generator object test_local_value_changes_cannot_be_misread_as_a_unique_field_binding.<locals>.<genexpr> at 0x7f2353169a80>)
+
+tests/test_field_receiver_context.py:112: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_field_receiver_context.py::test_local_value_changes_cannot_be_misread_as_a_unique_field_binding[shadow_parameter]
+1 failed, 15 passed in 0.23s

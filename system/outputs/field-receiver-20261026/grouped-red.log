@@ -1,0 +1,21 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_legacy_async_lookup_keeps_grouped_parameters_without_guessing_field_positions _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-598/test_legacy_async_lookup_keeps0')
+
+    def test_legacy_async_lookup_keeps_grouped_parameters_without_guessing_field_positions(tmp_path):
+        targets,ops=setup(tmp_path)
+        p=tmp_path/'engine/engine.go'
+        p.write_text(p.read_text().replace('Create(input Source)', 'Create(input, fallback Source)'))
+        targets[0]['content']=targets[0]['content'].replace('e.Create(queue)', 'e.Create(queue, queue)')
+        (tmp_path/'main.go').write_text(targets[0]['content'])
+        records,_=local_go_helper_support(compute_snapshot(tmp_path),targets,ops)
+>       assert any('w.loop()' in r['excerpt'] for r in records)
+E       assert False
+E        +  where False = any(<generator object test_legacy_async_lookup_keeps_grouped_parameters_without_guessing_field_positions.<locals>.<genexpr> at 0x7fd11ef7c900>)
+
+tests/test_field_receiver_context.py:174: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_field_receiver_context.py::test_legacy_async_lookup_keeps_grouped_parameters_without_guessing_field_positions
+1 failed, 17 deselected in 0.17s

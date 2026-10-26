@@ -1,0 +1,24 @@
+{
+  "status": "CONCRETE_SUBSCRIPTION_BODY_DELIVERED_IN_INITIAL_TOP12",
+  "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "evidence_id": "SRC-CU-HELPER-993996d987a4f64e",
+  "locator": {
+    "end_line": 196,
+    "path": "provider/mem/mem.go",
+    "start_line": 176
+  },
+  "content_digest": "993996d987a4f64e6a4994b829aff82d1615d383513f5340a5a51137db773f30",
+  "selected_count": 12,
+  "request_tokens": 90517,
+  "input_limit": 120000,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "formal_ready": false,
+  "scan_totals": {
+    "result": "HELPER_SCAN_TOTALS",
+    "indexed_files": 4,
+    "indexed_bytes": 37018
+  },
+  "engine_helper_sha256": "9d57fd1de06d727a775657923cc24569ddfe09c7d6ef06fce2775ce48c8f0286",
+  "scope": "Initial request delivery, no repair result"
+}
