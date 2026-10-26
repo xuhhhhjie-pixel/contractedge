@@ -3296,14 +3296,15 @@
     }
   },
   "current_development": {
-    "status": "V058_QUALIFIED_REGISTERED_KPT_THEN_GATED_CERT",
+    "status": "V058_CLOSED_KPT_INVALID_IMPLEMENTATION_NO_PATCH",
     "snapshot": "docs/development/planning-generation-continuity-v058-20261027-v1.snapshot.json",
     "planned_version": "0.6.58",
     "base_commit": "8a31007471cdc86097a01c8bb3f8e24ac9bc35cf",
     "source_sha256": "192571f444abc4a7b618cd7b0c213be6523035e7a9139f0bb33e182c62f54764",
     "formal_ready": false,
-    "paid_dispatch_allowed": "FROZEN_DIAGNOSTIC_V058_ONCE_PER_REGISTERED_CASE_ONLY",
-    "report": "outputs/planning-generation-continuity-20261027/COMPLETION_AUDIT.md"
+    "paid_dispatch_allowed": false,
+    "report": "outputs/planning-generation-continuity-20261027/COMPLETION_AUDIT.md",
+    "result": "outputs/planning-generation-continuity-20261027/KPT_E2E_RESULT_v058.json"
   },
   "staged_implementation_version": "0.6.58",
   "runtime_implementation_version": "0.6.40",
@@ -3361,9 +3362,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "New exact full2100+91 and isolation/public sandbox",
-    "Registered once-only KPT then gated Cert, exact frozen source058",
-    "Only after effect controls succeed, original46 same-version acceptance; formal150closed"
+    "Replay exact missing local helper input type contracts before further paid trials",
+    "Preserve completed source058 failure and unopened Cert control",
+    "Fix package version metadata before formal release; original46/150 remain gated"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",

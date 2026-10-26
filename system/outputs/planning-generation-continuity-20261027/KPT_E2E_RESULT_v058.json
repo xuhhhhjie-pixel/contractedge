@@ -1,0 +1,45 @@
+{
+  "status": "CLOSED_KPT_INVALID_IMPLEMENTATION_NO_PROMOTED_PATCH",
+  "rows": [
+    {
+      "case_id": "R3-KPT-4673",
+      "method_status": "CANDIDATE_COMPARISON_UNCERTAIN",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_outcome": "UNKNOWN",
+      "patch_bytes": 0,
+      "output": "/home/xhj/contractedge-e2e-source058-20261027/methods/R3-KPT-4673/R3-KPT-4673",
+      "model_calls": 7,
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-e2e-source058-20261027/methods/R3-KPT-4673/.isolated-6301f451184c48869cce23e78b73c34d/receipt.json",
+          "sha256": "6da7f40224018bc569cc26166762f51b0939666ab520437eaca6e27d033bcdb9"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-e2e-source058-20261027/methods/R3-KPT-4673/R3-KPT-4673/repair.trace.json",
+          "sha256": "bbb5a19234083267ef54289b453828df9caca93c70f28b5a07833ac888362794"
+        }
+      }
+    }
+  ],
+  "cert_status": "NOT_RUN_PREREQUISITE_FAILED",
+  "model_calls": 7,
+  "independent_status": "SEMANTIC_FAIL",
+  "patch_bytes": 0,
+  "actual_guard": [
+    "REJECT_REGRESSION",
+    "UNCOMPARABLE"
+  ],
+  "generation_scope_cross_schema_exercised": false,
+  "graph_correction_exercised": false,
+  "planning_handoff_exercised": false,
+  "api_cost_cny": 1.033546,
+  "total_occupied_cny": 127.223068,
+  "remaining_upper_bound_cny": 22.776932,
+  "public_first_failure": "Empty Selector excluded no resource but changed merge branch without matching initialization; seven protected current checks regressed.",
+  "public_second_failure": "Undefined removeResource introduced; public Go build failed. Trial remained uncomparable and was not selected.",
+  "evidence_gap": "Read-only execution support included SelectInput and merge/ID helpers, but no Selector declaration or IsEmpty method. Current helper lookup follows calls in edit targets, not local input type contracts and direct helper internals.",
+  "archive_files": 331,
+  "archive_sha256": "51e9d1cf736aa7226865a3391d35515d0775eeb2c24393a9a72b3c8ec7dc26f3",
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false
+}
