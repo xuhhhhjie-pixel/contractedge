@@ -14,7 +14,7 @@ import yaml
 
 from contractedge.changeset.prompt import build_changeset_request
 from contractedge.retrieval.frontier import production_frontier
-from contractedge.changeset.validate import validate_semantic_changeset
+from contractedge.changeset.validate import validate_semantic_changeset, production_branch_rebinding_gaps
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
 from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset_envelope
 from contractedge.contracts.models import ContractError, MethodInput, RunContext, ValidationResult, ValidationIssue
@@ -800,13 +800,14 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             request = planning_generation_mode(request)
             count = request_tokens(request)
             # The smaller initial allowance is not a second global context cap.
-            # Validated feedback adds obligation/history state on rediagnosis;
-            # fit that stage in the existing total context, reserving output.
+            # Evidence extensions and validated feedback add state on
+            # rediagnosis; fit both in the existing total, reserving output.
             total_limit = min(int(config['max_context_tokens']),
                 int(config.get('model_context_tokens') or config['max_context_tokens']))
+            initial_context = execution_feedback is None and not fitted.extension_used
             first_limit = (min(fitted.max_context_tokens,
                 int(config.get('initial_diagnosis_context_tokens', fitted.max_context_tokens)))
-                if execution_feedback is None else
+                if initial_context else
                 min(fitted.max_context_tokens, total_limit - request.max_output_tokens))
             if count <= first_limit:
                 if config.get('gap_role_delivery_enabled'):
@@ -819,7 +820,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                         return fitted,None,count
                 audit = {'request_tokens': count, 'input_limit': first_limit,
                          'reserved_output_tokens': request.max_output_tokens,
-                         'context_stage': 'INITIAL_DIAGNOSIS' if execution_feedback is None else 'FEEDBACK_REDIAGNOSIS',
+                         'context_stage': ('INITIAL_DIAGNOSIS' if initial_context else
+                             'FEEDBACK_REDIAGNOSIS' if execution_feedback is not None else 'EVIDENCE_REDIAGNOSIS'),
                          'total_context_limit': total_limit,
                          'selected_ids': list(fitted.selected_ids),
                          'surviving_reference_edges': len(fitted.edges),
@@ -1364,7 +1366,22 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             if feedback:
                 calls[-1]['validation_feedback'] = feedback
             planning_gaps = _safe_planning_gaps(changeset_payload)
-            if (changeset_payload.get('status') == 'NEEDS_EVIDENCE' and planning_gaps
+            extension_trigger = 'CHANGESET_NEEDS_EVIDENCE'
+            binding_errors = {'PRODUCTION_BRANCH_CHANGE_INVALID', 'PRODUCTION_BRANCH_TARGET_UNAVAILABLE'}
+            # A plan cannot create a missing diagnosis unit by rewriting its
+            # action text. Reuse the one existing acquisition/reassessment;
+            # never auto-create units or expand edit permissions here.
+            if (config.get('gap_role_delivery_enabled') and not planning_gaps
+                    and not planning_extension_attempted and not candidate_set.extension_used
+                    and feedback and {e['code'] for e in feedback} <= binding_errors
+                    and any(e['code'] == 'PRODUCTION_BRANCH_TARGET_UNAVAILABLE' for e in feedback)):
+                planning_gaps = production_branch_rebinding_gaps(changeset_payload, diagnosis,
+                    context.retrieval_config.get('production_path_frontier', []))
+                if planning_gaps:
+                    extension_trigger = 'CHANGESET_TARGET_BINDING_GAP'
+                    calls[-1]['target_binding_reassessment'] = planning_gaps
+            if ((changeset_payload.get('status') == 'NEEDS_EVIDENCE'
+                    or extension_trigger == 'CHANGESET_TARGET_BINDING_GAP') and planning_gaps
                     and not planning_extension_attempted and not candidate_set.extension_used):
                 planning_extension_attempted = True
                 gap_units, audit = extract_gap_extension_units(snapshot, scope.seed_paths, units,
@@ -1400,7 +1417,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     continue
                 candidate_set = replace(candidate_set, supplemental_evidence=absence)
                 retrieval_rounds.append({'round_id': 2, 'extension_used': True,
-                    'trigger': 'CHANGESET_NEEDS_EVIDENCE', 'selected_ids': list(candidate_set.selected_ids),
+                    'trigger': extension_trigger, 'selected_ids': list(candidate_set.selected_ids),
                     'gap_search': audit})
                 requirement = requirement_for_rediagnosis(requirement, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
                 candidate_set, request, count = fit_diagnosis(candidate_set, run_input, requirement, context, prior=diagnosis.raw, extension_gaps=planning_gaps)
@@ -1416,7 +1433,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     calls.append({'stage': 'DIAGNOSIS_EXTENSION' if history == tuple(request.messages) else 'DIAGNOSIS_FORMAT_RETRY',
                         'prompt_version': request.prompt_version, 'response_content': response.content,
                         'response_metadata': dict(response.metadata), 'request_metadata': dict(request.metadata),
-                        'extension_used': True, 'trigger': 'CHANGESET_NEEDS_EVIDENCE',
+                        'extension_used': True, 'trigger': extension_trigger,
                         'elapsed_seconds': time.monotonic() - started,
                         'prompt_tokens_reserved': count, 'output_tokens_reserved': request.max_output_tokens})
                     response = recover_truncated_planning(response, request, 'DIAGNOSIS_EXTENSION')

@@ -1,0 +1,32 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_evidence_extension_uses_total_context_and_preserves_initial_cap _____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-584/test_evidence_extension_uses_t0')
+
+    def test_evidence_extension_uses_total_context_and_preserves_initial_cap(tmp_path):
+        value, template = front_fixture(tmp_path)
+        config = dict(model={"model": "fixture"}, max_context_tokens=220000,
+            max_output_tokens=1024, max_total_tokens=4000000, gap_role_delivery_enabled=True)
+        control = CapturingGapProvider(template)
+        baseline = run_front_half(value, tmp_path, control, config, utf8_byte_token_bound)
+        assert baseline.status == "READY", baseline.errors
+        diag = [r for r in control.requests if str(r.prompt_version).startswith("diagnosis.")]
+        counts = [r.metadata["context_audit"][-1]["request_tokens"] for r in diag]
+        assert len(counts) == 2 and counts[1] > counts[0]
+        initial_cap = (counts[0] + counts[1]) // 2
+    
+        provider = CapturingGapProvider(template)
+        trace = run_front_half(value, tmp_path, provider,
+            {**config, "initial_diagnosis_context_tokens": initial_cap}, utf8_byte_token_bound)
+>       assert trace.status == "READY", trace.errors
+E       AssertionError: ('BudgetExceeded: Planning evidence extension exceeds the existing round budget',)
+E       assert 'BUDGET_EXHAUSTED' == 'READY'
+E         
+E         - READY
+E         + BUDGET_EXHAUSTED
+
+tests/test_evidence_rediagnosis_budget.py:35: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_evidence_rediagnosis_budget.py::test_evidence_extension_uses_total_context_and_preserves_initial_cap
+1 failed in 0.37s

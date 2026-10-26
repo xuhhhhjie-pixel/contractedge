@@ -1,3 +1,5 @@
+> **2026-10-26当前候选0.6.51：** 分支目标缺失绑定反馈、原有重新诊断路由和补证上下文修复已完成58项针对性回归及公开旧轨迹零调用闭环。本版尚待完整工程、隔离资格和真实效果验收；当前入口CURRENT_STATUS.json及outputs/branch-target-binding-20261026/COMPLETION_AUDIT.md。0.6.50 Cert通过/KPT控制失败保留，formal_ready=false。
+
 > **2026-10-26当前候选0.6.50：** 初始范围正文评分修复已通过72项针对性回归及公开旧轨迹零调用回放；本版完整工程、隔离资格和真实效果待验收。当前入口为CURRENT_STATUS.json及outputs/initial-scope-ranking-20261026/COMPLETION_AUDIT.md；下列旧版说明按历史范围解释。formal_ready=false。
 
 > 2026-10-26当前开发候选0.6.49，仍未正式准入。当前冻结由CURRENT_STATUS.json选择。0.6.48完整工程与实际隔离通过，但两条诊断均独立失败；0.6.49修复查询解释及候选池提前截断，正进入新资格。原0.6.45 A组14项已审计关闭，后32项未开放，不能继承历史效果。

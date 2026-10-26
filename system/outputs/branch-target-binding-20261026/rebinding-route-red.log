@@ -1,0 +1,89 @@
+.....FFFFFFFF                                                            [100%]
+=================================== FAILURES ===================================
+_____ test_only_exact_current_present_source_can_request_target_rebinding ______
+
+    def test_only_exact_current_present_source_can_request_target_rebinding():
+>       from contractedge.changeset.validate import production_branch_rebinding_gaps
+E       ImportError: cannot import name 'production_branch_rebinding_gaps' from 'contractedge.changeset.validate' (/home/xhj/contractedge-branch-binding-20261026/system/src/contractedge/changeset/validate.py)
+
+tests/test_production_branch_target_binding.py:65: ImportError
+_ test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[available_unit] _
+
+failure = 'available_unit'
+
+    @pytest.mark.parametrize("failure", ["available_unit", "stale", "digest", "range", "unknown_change", "wrong_path", "not_modify"])
+    def test_binding_reassessment_is_not_a_general_retry_or_permission_bypass(failure):
+>       from contractedge.changeset.validate import production_branch_rebinding_gaps
+E       ImportError: cannot import name 'production_branch_rebinding_gaps' from 'contractedge.changeset.validate' (/home/xhj/contractedge-branch-binding-20261026/system/src/contractedge/changeset/validate.py)
+
+tests/test_production_branch_target_binding.py:77: ImportError
+_ test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[stale] _
+
+failure = 'stale'
+
+    @pytest.mark.parametrize("failure", ["available_unit", "stale", "digest", "range", "unknown_change", "wrong_path", "not_modify"])
+    def test_binding_reassessment_is_not_a_general_retry_or_permission_bypass(failure):
+>       from contractedge.changeset.validate import production_branch_rebinding_gaps
+E       ImportError: cannot import name 'production_branch_rebinding_gaps' from 'contractedge.changeset.validate' (/home/xhj/contractedge-branch-binding-20261026/system/src/contractedge/changeset/validate.py)
+
+tests/test_production_branch_target_binding.py:77: ImportError
+_ test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[digest] _
+
+failure = 'digest'
+
+    @pytest.mark.parametrize("failure", ["available_unit", "stale", "digest", "range", "unknown_change", "wrong_path", "not_modify"])
+    def test_binding_reassessment_is_not_a_general_retry_or_permission_bypass(failure):
+>       from contractedge.changeset.validate import production_branch_rebinding_gaps
+E       ImportError: cannot import name 'production_branch_rebinding_gaps' from 'contractedge.changeset.validate' (/home/xhj/contractedge-branch-binding-20261026/system/src/contractedge/changeset/validate.py)
+
+tests/test_production_branch_target_binding.py:77: ImportError
+_ test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[range] _
+
+failure = 'range'
+
+    @pytest.mark.parametrize("failure", ["available_unit", "stale", "digest", "range", "unknown_change", "wrong_path", "not_modify"])
+    def test_binding_reassessment_is_not_a_general_retry_or_permission_bypass(failure):
+>       from contractedge.changeset.validate import production_branch_rebinding_gaps
+E       ImportError: cannot import name 'production_branch_rebinding_gaps' from 'contractedge.changeset.validate' (/home/xhj/contractedge-branch-binding-20261026/system/src/contractedge/changeset/validate.py)
+
+tests/test_production_branch_target_binding.py:77: ImportError
+_ test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[unknown_change] _
+
+failure = 'unknown_change'
+
+    @pytest.mark.parametrize("failure", ["available_unit", "stale", "digest", "range", "unknown_change", "wrong_path", "not_modify"])
+    def test_binding_reassessment_is_not_a_general_retry_or_permission_bypass(failure):
+>       from contractedge.changeset.validate import production_branch_rebinding_gaps
+E       ImportError: cannot import name 'production_branch_rebinding_gaps' from 'contractedge.changeset.validate' (/home/xhj/contractedge-branch-binding-20261026/system/src/contractedge/changeset/validate.py)
+
+tests/test_production_branch_target_binding.py:77: ImportError
+_ test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[wrong_path] _
+
+failure = 'wrong_path'
+
+    @pytest.mark.parametrize("failure", ["available_unit", "stale", "digest", "range", "unknown_change", "wrong_path", "not_modify"])
+    def test_binding_reassessment_is_not_a_general_retry_or_permission_bypass(failure):
+>       from contractedge.changeset.validate import production_branch_rebinding_gaps
+E       ImportError: cannot import name 'production_branch_rebinding_gaps' from 'contractedge.changeset.validate' (/home/xhj/contractedge-branch-binding-20261026/system/src/contractedge/changeset/validate.py)
+
+tests/test_production_branch_target_binding.py:77: ImportError
+_ test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[not_modify] _
+
+failure = 'not_modify'
+
+    @pytest.mark.parametrize("failure", ["available_unit", "stale", "digest", "range", "unknown_change", "wrong_path", "not_modify"])
+    def test_binding_reassessment_is_not_a_general_retry_or_permission_bypass(failure):
+>       from contractedge.changeset.validate import production_branch_rebinding_gaps
+E       ImportError: cannot import name 'production_branch_rebinding_gaps' from 'contractedge.changeset.validate' (/home/xhj/contractedge-branch-binding-20261026/system/src/contractedge/changeset/validate.py)
+
+tests/test_production_branch_target_binding.py:77: ImportError
+=========================== short test summary info ============================
+FAILED tests/test_production_branch_target_binding.py::test_only_exact_current_present_source_can_request_target_rebinding
+FAILED tests/test_production_branch_target_binding.py::test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[available_unit]
+FAILED tests/test_production_branch_target_binding.py::test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[stale]
+FAILED tests/test_production_branch_target_binding.py::test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[digest]
+FAILED tests/test_production_branch_target_binding.py::test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[range]
+FAILED tests/test_production_branch_target_binding.py::test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[unknown_change]
+FAILED tests/test_production_branch_target_binding.py::test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[wrong_path]
+FAILED tests/test_production_branch_target_binding.py::test_binding_reassessment_is_not_a_general_retry_or_permission_bypass[not_modify]
+8 failed, 5 passed in 0.19s

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 from typing import Any, Mapping
 
 from contractedge.contracts.models import DiagnosisPacket, Snapshot, ValidationResult, ValidationIssue
@@ -7,6 +8,70 @@ from contractedge.contracts.validation import validate_changeset
 from contractedge.contracts.permissions import target_permission_error
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
 from contractedge.contracts.public_checks import public_check_catalog
+
+
+def _production_branch_unit_ids(diagnosis: DiagnosisPacket, branch: Mapping) -> list[str]:
+    """Apply the existing same-path/span coverage rule, without inferring roles."""
+    evidence = {e['id']: e for e in diagnosis.raw['evidence_refs']}
+    eligible = []
+    for unit in diagnosis.raw['units']:
+        for eid in unit.get('locator_refs', []):
+            record = evidence.get(eid, {})
+            loc = record.get('locator', {})
+            if (record.get('kind') == 'SOURCE_SPAN' and loc.get('path') == branch['path']
+                    and type(loc.get('start_line')) is int and type(loc.get('end_line')) is int
+                    and loc['start_line'] <= branch['locator']['end_line']
+                    and loc['end_line'] >= branch['locator']['start_line']):
+                eligible.append(unit['id'])
+                break
+    return sorted(eligible)
+
+
+def production_branch_rebinding_gaps(payload: Mapping, diagnosis: DiagnosisPacket,
+                                    frontier: list) -> list[dict]:
+    """Request reassessment of an unrepresentable edit, never create its unit.
+
+    Only an exact, current source record already supplied to diagnosis qualifies.
+    Wrong selectors with an available unit remain ordinary plan corrections.
+    """
+    changes = {c['id']: c for c in payload.get('changes', [])}
+    evidence = {e['id']: e for e in diagnosis.raw['evidence_refs']}
+    rows = payload.get('production_path_review', [])
+    gaps = []
+    for item in frontier:
+        reviews = [r for r in rows if r.get('source_evidence_id') == item['source_evidence_id']]
+        if len(reviews) != 1 or reviews[0].get('disposition') != 'MODIFY':
+            continue
+        refs = reviews[0].get('change_refs', [])
+        if not refs or _production_branch_unit_ids(diagnosis, item):
+            continue
+        if any(c not in changes or changes[c].get('target', {}).get('kind') != 'EXISTING'
+               or changes[c]['target'].get('path') != item['path'] for c in refs):
+            continue
+        record = evidence.get(item['source_evidence_id'], {})
+        loc = record.get('locator', {})
+        text = record.get('excerpt')
+        if (record.get('kind') != 'SOURCE_SPAN' or not isinstance(text, str)
+                or record.get('snapshot_id') != diagnosis.snapshot_id
+                or item.get('snapshot_id') != diagnosis.snapshot_id
+                or record.get('content_digest') != item.get('content_digest')
+                or hashlib.sha256(text.encode('utf-8')).hexdigest() != record.get('content_digest')
+                or text != item.get('text') or loc.get('path') != item['path']
+                or any(loc.get(k) != item['locator'].get(k) for k in ('start_line', 'end_line'))):
+            continue
+        hint = {'path': item['path']}
+        if item.get('symbol'):
+            hint['symbol'] = item['symbol']
+        gaps.append({'id': f'TARGET-BINDING-{len(gaps) + 1}',
+            'summary': f"The plan requests modification of {item['source_evidence_id']} "
+                f"({item['path']}:{loc['start_line']}-{loc['end_line']}), but no current diagnosis unit "
+                'locates that branch. Reassess whether the branch is relevant to the supported repair. '
+                'Only if justified, bind an appropriate semantic unit to its exact current source; '
+                'do not relabel a different branch, invent causality, or discard unresolved obligations.',
+            'locator_hint': hint})
+        if len(gaps) == 4:
+            break
+    return gaps
 
 
 def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: DiagnosisPacket,
@@ -107,25 +172,24 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
             path = f'production_path_review[{i}]'
             if row['disposition'] == 'MODIFY':
                 refs = row['change_refs']
+                eligible = _production_branch_unit_ids(diagnosis, item)
                 def covers(cid):
                     target = changes.get(cid, {}).get('target', {})
-                    branch = item['locator']
                     if target.get('kind') != 'EXISTING' or target.get('path') != item['path']:
                         return False
-                    units = {u['id']: u for u in diagnosis.raw['units']}
-                    evidence = {e['id']: e for e in diagnosis.raw['evidence_refs']}
-                    for uid in target.get('unit_refs', []):
-                        for eid in units.get(uid, {}).get('locator_refs', []):
-                            record = evidence.get(eid, {})
-                            loc = record.get('locator', {})
-                            if (record.get('kind') == 'SOURCE_SPAN' and loc.get('path') == item['path']
-                                and type(loc.get('start_line')) is int and type(loc.get('end_line')) is int
-                                and loc['start_line'] <= branch['end_line'] and loc['end_line'] >= branch['start_line']):
-                                return True
-                    return False
+                    return bool(set(target.get('unit_refs', [])) & set(eligible))
                 if not refs or not all(covers(c) for c in refs):
+                    label = (f"{item['source_evidence_id']} {item['path']}:"
+                             f"{item['locator']['start_line']}-{item['locator']['end_line']}")
                     issues.append(ValidationIssue('PRODUCTION_BRANCH_CHANGE_INVALID', path,
-                        'MODIFY requires actual changes targeting this evidenced branch; file equality alone is insufficient'))
+                        'MODIFY requires actual changes targeting this evidenced branch; file equality alone is insufficient. '
+                        f'Branch {label}; eligible diagnosis unit_refs={eligible!r}; submitted change_refs={refs!r}.'))
+                    if not eligible:
+                        issues.append(ValidationIssue('PRODUCTION_BRANCH_TARGET_UNAVAILABLE', path,
+                            f'Branch {label} has no legal target unit in the current diagnosis. '
+                            'Request diagnosis reassessment before claiming this edit; changing semantic_action text or '
+                            'reusing a unit bound to another branch cannot repair this missing binding. '
+                            'Do not invent a unit, discard unresolved obligations or weaken branch coverage.'))
                 if row['open_obligation_refs']:
                     issues.append(ValidationIssue('PRODUCTION_BRANCH_MODIFY_OPEN_REFS',
                         path + '.open_obligation_refs',

@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-26T01:15:12.074776+00:00",
+  "as_of": "2026-10-26T02:20:17.894151+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -19,19 +19,17 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.50",
+  "implementation_version": "0.6.51",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
     "report": "outputs/benchmark150-adapter-v2-20261019/preparation.json"
   },
   "protocol_tests": {
-    "passed": 1939,
-    "subtests_passed": 91,
-    "implementation_version": "0.6.50",
-    "development_freeze": "initial-scope-ranking-v050-20261026-v2",
-    "scope": "Full current frozen tree including actual isolated demos; no repair effectiveness claim",
-    "report": "outputs/initial-scope-ranking-20261026/full-v050-v2.log"
+    "status": "PENDING_CURRENT_FULL_RUN",
+    "focused_passed": 58,
+    "implementation_version": "0.6.51",
+    "scope": "Focused engineering and explicit corrected-binding fixture; no autonomous repair result"
   },
   "stage_implementations": {
     "0_1": "dataset/benchmark.py",
@@ -3295,29 +3293,21 @@
     }
   },
   "current_development": {
-    "snapshot": "docs/development/initial-scope-ranking-v050-20261026-v2.snapshot.json",
-    "snapshot_id": "initial-scope-ranking-v050-20261026-v2",
+    "snapshot": "docs/development/branch-target-binding-v051-20261026-v1.snapshot.json",
+    "snapshot_id": "branch-target-binding-v051-20261026-v1",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V050_CERT_PASS_KPT_INVALID_PLAN_NOT_PROMOTED",
-    "source_sha256": "9c795e1eaa7e81cd34e707c4869db9aa536005674d6d227b651e3719f2532057",
+    "status": "V051_FROZEN_FULL_ENGINEERING_PENDING",
+    "source_sha256": "0af0aea93477232fc59f7ca11394b71eece9a10c236e298715889077fad17779",
     "verification_command": "python scripts/verify_development_snapshot.py",
-    "formal_effectiveness": "DIAGNOSTIC_TARGET_PASS_CONTROL_FAIL_NO_FIXED46_ACCEPTANCE",
+    "formal_effectiveness": "NOT_RUN_CURRENT_SOURCE",
     "formal_ready": false,
-    "report": "outputs/initial-scope-ranking-20261026/COMPLETION_AUDIT.md",
-    "predecessor_worktree": "/home/xhj/contractedge-gap-query-20261026/system",
-    "predecessor_effectiveness": "Cert SEMANTIC_FAIL; KPT not run",
-    "full_tests": 1939,
-    "subtests": 91,
-    "runtime_qualification": "outputs/initial-scope-ranking-20261026/RUNTIME_QUALIFICATION_v050_v2.json",
-    "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/registration.json",
-    "target_independent_status": "PASS",
-    "target_public_decision": "UNKNOWN",
-    "diagnostic_results": "outputs/initial-scope-ranking-20261026/V050_DIAGNOSTIC_RESULTS.json",
-    "repair_reliability_accepted": false
+    "report": "outputs/branch-target-binding-20261026/COMPLETION_AUDIT.md",
+    "predecessor_worktree": "/home/xhj/contractedge-scope-ranking-20261026/system",
+    "predecessor_effectiveness": "Cert PASS, KPT INVALID_PLAN/SEMANTIC_FAIL; not promoted"
   },
-  "staged_implementation_version": "0.6.50",
+  "staged_implementation_version": "0.6.51",
   "runtime_implementation_version": "0.6.40",
-  "current_optimization_audit": "outputs/initial-scope-ranking-20261026/COMPLETION_AUDIT.md",
+  "current_optimization_audit": "outputs/branch-target-binding-20261026/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {
     "status": "INTERRUPTED_PUBLIC_OBSERVATION_NO_FINAL_METHOD_RESULT",
     "model_calls_completed": 4,

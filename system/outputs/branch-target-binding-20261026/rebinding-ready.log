@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-branch-binding-20261026/system/outputs/branch-target-binding-20261026/replay_rebinding_ready.py", line 73, in <module>
+    assert trace['status'] == 'READY_PARTIAL', (trace['status'], trace['errors'])
+AssertionError: ('INFRASTRUCTURE_ERROR', ['AssertionError: Unexpected extra model request'])

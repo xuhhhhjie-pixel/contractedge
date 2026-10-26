@@ -57,23 +57,31 @@ def main():
             assert request.prompt_version == calls[index]['prompt_version']
             return ModelResponse(calls[index]['response_content'],
                                  {'provider': 'fixture', 'model': request.model,
-                                  'finish_reason': 'fixture'})
+                                  # Offline recovery must follow the saved
+                                  # truncation/usage branch, without real calls.
+                                  'finish_reason': calls[index].get('response_metadata', {}).get('finish_reason', 'fixture'),
+                                  'usage': calls[index].get('response_metadata', {}).get('usage', {})})
 
     provider = ReplayOnly()
     trace = run_front_half(inputs['METHOD_INPUT'], args.workspace, provider,
         inputs['FRONT_CONFIG'], utf8_byte_token_bound,
         execution_feedback=inputs['EXECUTION_FEEDBACK'],
         public_observations=tuple(inputs['PUBLIC_OBSERVATIONS']))
-    assert len(captured) == 1, f'Capture boundary not reached: {trace.status}, {trace.errors}'
     assert compute_snapshot(source).snapshot_id == before
+    status = 'REQUEST_CAPTURED_ONLY' if len(captured) == 1 else 'CAPTURE_BOUNDARY_NOT_REACHED'
     args.output.mkdir(parents=True)
-    for name, value in [('request.json', captured[0]), ('replay.trace.json', asdict(trace)),
-        ('summary.json', dict(status='REQUEST_CAPTURED_ONLY', original_calls_sha256=hashlib.sha256(calls_path.read_bytes()).hexdigest(),
+    values = [('replay.trace.json', asdict(trace)),
+        ('summary.json', dict(status=status, original_calls_sha256=hashlib.sha256(calls_path.read_bytes()).hexdigest(),
           snapshot_id=before, saved_responses=args.saved_responses, model_calls=0, grader_calls=0,
           source_unchanged=True, formal_ready=False,
-          scope='Intentional fixture stop; no new diagnosis, plan or repair effectiveness conclusion'))]:
+          scope='Offline trace/request audit only; no new diagnosis, plan or repair effectiveness conclusion'))]
+    if captured:
+        values.append(('request.json', captured[0]))
+    for name, value in values:
         (args.output / name).write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
-    print(json.dumps({'status': 'REQUEST_CAPTURED_ONLY', 'output': str(args.output), 'model_calls': 0}))
+    print(json.dumps({'status': status, 'output': str(args.output), 'model_calls': 0}))
+    if len(captured) != 1:
+        raise RuntimeError(f'Capture boundary not reached: {trace.status}, {trace.errors}')
 
 
 if __name__ == '__main__':
