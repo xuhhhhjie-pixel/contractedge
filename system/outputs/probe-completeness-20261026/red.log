@@ -1,0 +1,207 @@
+FFFF...FFFFF....F                                                        [100%]
+=================================== FAILURES ===================================
+____ test_probe_error_blocks_promotion_without_model_preservation_ids[None] ____
+
+old_probe = None
+
+    @pytest.mark.parametrize('old_probe',[None,'COMPLETE','PARTIAL','PROBE_ERROR'])
+    def test_probe_error_blocks_promotion_without_model_preservation_ids(old_probe):
+        old=run({'target':'FAIL'},'S0');trial=run({},'S1')
+        if old_probe:old['method_probe_status']=old_probe
+        trial['method_probe_status']='PROBE_ERROR'
+        result=compare_candidate_checks(old,trial,[])
+>       assert result['decision']=='UNCOMPARABLE'
+E       AssertionError: assert 'PROMOTE' == 'UNCOMPARABLE'
+E         
+E         - UNCOMPARABLE
+E         + PROMOTE
+
+tests/test_probe_completeness_selection.py:13: AssertionError
+__ test_probe_error_blocks_promotion_without_model_preservation_ids[COMPLETE] __
+
+old_probe = 'COMPLETE'
+
+    @pytest.mark.parametrize('old_probe',[None,'COMPLETE','PARTIAL','PROBE_ERROR'])
+    def test_probe_error_blocks_promotion_without_model_preservation_ids(old_probe):
+        old=run({'target':'FAIL'},'S0');trial=run({},'S1')
+        if old_probe:old['method_probe_status']=old_probe
+        trial['method_probe_status']='PROBE_ERROR'
+        result=compare_candidate_checks(old,trial,[])
+>       assert result['decision']=='UNCOMPARABLE'
+E       AssertionError: assert 'PROMOTE' == 'UNCOMPARABLE'
+E         
+E         - UNCOMPARABLE
+E         + PROMOTE
+
+tests/test_probe_completeness_selection.py:13: AssertionError
+__ test_probe_error_blocks_promotion_without_model_preservation_ids[PARTIAL] ___
+
+old_probe = 'PARTIAL'
+
+    @pytest.mark.parametrize('old_probe',[None,'COMPLETE','PARTIAL','PROBE_ERROR'])
+    def test_probe_error_blocks_promotion_without_model_preservation_ids(old_probe):
+        old=run({'target':'FAIL'},'S0');trial=run({},'S1')
+        if old_probe:old['method_probe_status']=old_probe
+        trial['method_probe_status']='PROBE_ERROR'
+        result=compare_candidate_checks(old,trial,[])
+>       assert result['decision']=='UNCOMPARABLE'
+E       AssertionError: assert 'PROMOTE' == 'UNCOMPARABLE'
+E         
+E         - UNCOMPARABLE
+E         + PROMOTE
+
+tests/test_probe_completeness_selection.py:13: AssertionError
+_ test_probe_error_blocks_promotion_without_model_preservation_ids[PROBE_ERROR] _
+
+old_probe = 'PROBE_ERROR'
+
+    @pytest.mark.parametrize('old_probe',[None,'COMPLETE','PARTIAL','PROBE_ERROR'])
+    def test_probe_error_blocks_promotion_without_model_preservation_ids(old_probe):
+        old=run({'target':'FAIL'},'S0');trial=run({},'S1')
+        if old_probe:old['method_probe_status']=old_probe
+        trial['method_probe_status']='PROBE_ERROR'
+        result=compare_candidate_checks(old,trial,[])
+>       assert result['decision']=='UNCOMPARABLE'
+E       AssertionError: assert 'PROMOTE' == 'UNCOMPARABLE'
+E         
+E         - UNCOMPARABLE
+E         + PROMOTE
+
+tests/test_probe_completeness_selection.py:13: AssertionError
+____ test_probe_error_does_not_claim_comparable_semantic_regression[input] _____
+
+change = 'input'
+
+    @pytest.mark.parametrize('change',['input','environment','scenario','snapshot'])
+    def test_probe_error_does_not_claim_comparable_semantic_regression(change):
+        old=run({'retain':'PASS'},'S0');trial=run({},'S1');trial['method_probe_status']='PROBE_ERROR'
+        if change=='input':trial['input_digest']='other'
+        if change=='environment':trial['environment_digest']='other'
+        if change=='scenario':old['observations'][0]['scenario']='other'
+        if change=='snapshot':old['observations'][0]['snapshot_id']='stale'
+        result=compare_candidate_checks(old,trial,[])
+>       assert result['decision']=='UNCOMPARABLE' and not result['regressions']
+E       AssertionError: assert ('PROMOTE' == 'UNCOMPARABLE'
+E         
+E         - UNCOMPARABLE
+E         + PROMOTE)
+
+tests/test_probe_completeness_selection.py:32: AssertionError
+_ test_probe_error_does_not_claim_comparable_semantic_regression[environment] __
+
+change = 'environment'
+
+    @pytest.mark.parametrize('change',['input','environment','scenario','snapshot'])
+    def test_probe_error_does_not_claim_comparable_semantic_regression(change):
+        old=run({'retain':'PASS'},'S0');trial=run({},'S1');trial['method_probe_status']='PROBE_ERROR'
+        if change=='input':trial['input_digest']='other'
+        if change=='environment':trial['environment_digest']='other'
+        if change=='scenario':old['observations'][0]['scenario']='other'
+        if change=='snapshot':old['observations'][0]['snapshot_id']='stale'
+        result=compare_candidate_checks(old,trial,[])
+>       assert result['decision']=='UNCOMPARABLE' and not result['regressions']
+E       AssertionError: assert ('PROMOTE' == 'UNCOMPARABLE'
+E         
+E         - UNCOMPARABLE
+E         + PROMOTE)
+
+tests/test_probe_completeness_selection.py:32: AssertionError
+___ test_probe_error_does_not_claim_comparable_semantic_regression[scenario] ___
+
+change = 'scenario'
+
+    @pytest.mark.parametrize('change',['input','environment','scenario','snapshot'])
+    def test_probe_error_does_not_claim_comparable_semantic_regression(change):
+        old=run({'retain':'PASS'},'S0');trial=run({},'S1');trial['method_probe_status']='PROBE_ERROR'
+        if change=='input':trial['input_digest']='other'
+        if change=='environment':trial['environment_digest']='other'
+        if change=='scenario':old['observations'][0]['scenario']='other'
+        if change=='snapshot':old['observations'][0]['snapshot_id']='stale'
+        result=compare_candidate_checks(old,trial,[])
+>       assert result['decision']=='UNCOMPARABLE' and not result['regressions']
+E       AssertionError: assert ('PROMOTE' == 'UNCOMPARABLE'
+E         
+E         - UNCOMPARABLE
+E         + PROMOTE)
+
+tests/test_probe_completeness_selection.py:32: AssertionError
+___ test_probe_error_does_not_claim_comparable_semantic_regression[snapshot] ___
+
+change = 'snapshot'
+
+    @pytest.mark.parametrize('change',['input','environment','scenario','snapshot'])
+    def test_probe_error_does_not_claim_comparable_semantic_regression(change):
+        old=run({'retain':'PASS'},'S0');trial=run({},'S1');trial['method_probe_status']='PROBE_ERROR'
+        if change=='input':trial['input_digest']='other'
+        if change=='environment':trial['environment_digest']='other'
+        if change=='scenario':old['observations'][0]['scenario']='other'
+        if change=='snapshot':old['observations'][0]['snapshot_id']='stale'
+        result=compare_candidate_checks(old,trial,[])
+>       assert result['decision']=='UNCOMPARABLE' and not result['regressions']
+E       AssertionError: assert ('PROMOTE' == 'UNCOMPARABLE'
+E         
+E         - UNCOMPARABLE
+E         + PROMOTE)
+
+tests/test_probe_completeness_selection.py:32: AssertionError
+______________ test_execution_fail_is_a_native_terminal_negative _______________
+
+    def test_execution_fail_is_a_native_terminal_negative():
+        receipt={'returncode':1,'timed_out':False}
+>       assert load().score_outcome(receipt,{'status':'EXECUTION_FAIL'})=='EXECUTION_FAIL'
+E       AssertionError: assert 'SCORER_ERROR' == 'EXECUTION_FAIL'
+E         
+E         - EXECUTION_FAIL
+E         + SCORER_ERROR
+
+tests/test_score_execution_terminal.py:10: AssertionError
+______ test_v054_execution_fail_reconciles_without_dispatch_or_overwrite _______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-622/test_v054_execution_fail_recon0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9201b59990>
+
+    def test_v054_execution_fail_reconciles_without_dispatch_or_overwrite(tmp_path,monkeypatch):
+        receipt,benchmark,out,_=fixture(tmp_path,exit_code=1)
+        tool=benchmark/'tools/score_case.py';tool.write_text(tool.read_text().replace("'status':'PASS'","'status':'EXECUTION_FAIL'"))
+        program=Path(__file__).parent/'fixtures/isolated_score_v054.py'
+        spec=importlib.util.spec_from_file_location('frozen_v054_score',program);legacy=importlib.util.module_from_spec(spec)
+        sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'));spec.loader.exec_module(legacy)
+        original=legacy.run(receipt,benchmark,out);assert original['status']=='SCORER_ERROR'
+        before={str(p):p.read_bytes() for p in out.rglob('*') if p.is_file()}
+        scoring=load();monkeypatch.setattr(scoring.subprocess,'run',lambda *a,**k:pytest.fail('Cannot dispatch completed grader'))
+        recorded={'path':str(program),'sha256':scoring.sha(program)}
+>       result=scoring.read_recorded_score(receipt,benchmark,out,recorded_program=recorded)
+
+tests/test_score_execution_terminal.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+receipt = PosixPath('/tmp/pytest-of-xhj/pytest-622/test_v054_execution_fail_recon0/state/receipt.json')
+benchmark = PosixPath('/tmp/pytest-of-xhj/pytest-622/test_v054_execution_fail_recon0/benchmark')
+output = PosixPath('/tmp/pytest-of-xhj/pytest-622/test_v054_execution_fail_recon0/independent')
+recorded_program = {'path': '/home/xhj/contractedge-publication-context-20261026/system/tests/fixtures/isolated_score_v054.py', 'sha256': 'd5b126d88f7cc976b8446806d4bc411be4fa6a4d7a10269752929a7f067a887e'}
+
+    def read_recorded_score(receipt, benchmark, output, *, recorded_program):
+        """Read-only normalization of the one known v1 exit-status wrapper.
+    
+        The legacy program, every input, completed checkpoint and raw result must
+        match. Its result file is retained, including its erroneous SCORER_ERROR.
+        """
+        program_hash = recorded_program.get('sha256')
+        if (program_hash not in {LEGACY_PROGRAM_SHA256, SCORING_R2_PROGRAM_SHA256}
+                or sha(recorded_program['path']) != program_hash):
+>           raise ValueError('Unrecognized immutable legacy scorer')
+E           ValueError: Unrecognized immutable legacy scorer
+
+scripts/score_isolated_method.py:121: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_probe_completeness_selection.py::test_probe_error_blocks_promotion_without_model_preservation_ids[None]
+FAILED tests/test_probe_completeness_selection.py::test_probe_error_blocks_promotion_without_model_preservation_ids[COMPLETE]
+FAILED tests/test_probe_completeness_selection.py::test_probe_error_blocks_promotion_without_model_preservation_ids[PARTIAL]
+FAILED tests/test_probe_completeness_selection.py::test_probe_error_blocks_promotion_without_model_preservation_ids[PROBE_ERROR]
+FAILED tests/test_probe_completeness_selection.py::test_probe_error_does_not_claim_comparable_semantic_regression[input]
+FAILED tests/test_probe_completeness_selection.py::test_probe_error_does_not_claim_comparable_semantic_regression[environment]
+FAILED tests/test_probe_completeness_selection.py::test_probe_error_does_not_claim_comparable_semantic_regression[scenario]
+FAILED tests/test_probe_completeness_selection.py::test_probe_error_does_not_claim_comparable_semantic_regression[snapshot]
+FAILED tests/test_score_execution_terminal.py::test_execution_fail_is_a_native_terminal_negative
+FAILED tests/test_score_execution_terminal.py::test_v054_execution_fail_reconciles_without_dispatch_or_overwrite
+10 failed, 7 passed in 0.43s

@@ -15,7 +15,9 @@ from run_isolated_method import write_json
 
 LEGACY_PROGRAM_SHA256 = 'f7c401b45845fe83adb329281cc79bd2a3db8971653f2babda455fc56f0e062a'
 SCORING_R2_PROGRAM_SHA256 = '8b95010ac65b1ec95d6a4a3c29fb97a270a9f1762b507da8473057dbb6843bed'
-NEGATIVE_RESULTS = frozenset({'SEMANTIC_FAIL', 'BUILD_FAIL', 'PATCH_APPLY_FAIL', 'METHOD_FAIL', 'FAIL'})
+SCORING_V054_PROGRAM_SHA256 = 'd5b126d88f7cc976b8446806d4bc411be4fa6a4d7a10269752929a7f067a887e'
+RECORDED_PROGRAMS = frozenset({LEGACY_PROGRAM_SHA256, SCORING_R2_PROGRAM_SHA256, SCORING_V054_PROGRAM_SHA256})
+NEGATIVE_RESULTS = frozenset({'SEMANTIC_FAIL', 'BUILD_FAIL', 'PATCH_APPLY_FAIL', 'METHOD_FAIL', 'EXECUTION_FAIL', 'FAIL'})
 
 
 def score_outcome(checkpoint, native):
@@ -36,7 +38,7 @@ def sha(path):
 
 
 def binding(receipt_path,benchmark,output,*,_recorded_program_sha256=None,_terminal_program=None):
-    if _recorded_program_sha256 not in {None, LEGACY_PROGRAM_SHA256, SCORING_R2_PROGRAM_SHA256}:
+    if _recorded_program_sha256 is not None and _recorded_program_sha256 not in RECORDED_PROGRAMS:
         raise ValueError('Unknown recorded scoring implementation')
     receipt_path=Path(receipt_path).resolve(strict=True);receipt=read(receipt_path)
     interpretation = None
@@ -110,20 +112,24 @@ def score_record(output, identity, value, digest, status):
 
 
 def read_recorded_score(receipt, benchmark, output, *, recorded_program):
-    """Read-only normalization of the one known v1 exit-status wrapper.
+    """Read-only normalization of exact known historical exit-status wrappers.
 
     The legacy program, every input, completed checkpoint and raw result must
     match. Its result file is retained, including its erroneous SCORER_ERROR.
     """
     program_hash = recorded_program.get('sha256')
-    if (program_hash not in {LEGACY_PROGRAM_SHA256, SCORING_R2_PROGRAM_SHA256}
+    if (program_hash not in RECORDED_PROGRAMS
             or sha(recorded_program['path']) != program_hash):
         raise ValueError('Unrecognized immutable legacy scorer')
     identity = binding(receipt, benchmark, output, _recorded_program_sha256=program_hash)
     saved, value, digest = finished_score(output, identity)
     legacy_status = (('SCORER_TIMEOUT' if saved['timed_out'] else 'SCORER_ERROR'
                      if saved['returncode'] != 0 else value.get('status', 'SCORER_ERROR'))
-                     if program_hash == LEGACY_PROGRAM_SHA256 else score_outcome(saved, value))
+                     if program_hash == LEGACY_PROGRAM_SHA256 else
+                     # These wrappers did not recognize EXECUTION_FAIL. Keep
+                     # their raw result contract separate from today's mapping.
+                     'SCORER_ERROR' if not saved['timed_out'] and value.get('status') == 'EXECUTION_FAIL'
+                     else score_outcome(saved, value))
     raw = read(Path(output)/'result.json')
     if raw != score_record(output, identity, value, digest, legacy_status):
         raise ValueError('Recorded legacy result differs from its completed proof')

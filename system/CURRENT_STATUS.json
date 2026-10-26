@@ -3296,19 +3296,19 @@
     }
   },
   "current_development": {
-    "status": "V3_ENGINEERING_QUALIFIED_EFFECT_FAILED_TWO_NEXT_ROOTS_REPRODUCED",
-    "snapshot": "docs/development/publication-context-v054-20261026-v3.snapshot.json",
-    "planned_version": "0.6.54",
-    "base_commit": "34b7ce4",
+    "status": "V055_ENGINEERING_QUALIFIED_SAVED_FAILURES_CLOSED_EFFECT_NOT_VALIDATED",
+    "snapshot": "docs/development/probe-completeness-v055-20261026-v1.snapshot.json",
+    "planned_version": "0.6.55",
+    "base_commit": "f998820",
     "formal_ready": false,
     "paid_dispatch_allowed": false,
-    "report": "outputs/publication-context-20261026/COMPLETION_AUDIT.md",
-    "source_sha256": "9d434cc8cee3344db35efcd41d4f23281cf2c7e1a541d22e15d69901e0a3159f",
-    "qualification": "outputs/publication-context-20261026/ZERO_CALL_QUALIFICATION_v3.json"
+    "report": "outputs/probe-completeness-20261026/COMPLETION_AUDIT.md",
+    "source_sha256": "94ebade3d59abd153d546a5e4b2b17ce325c7cbbee7daf64944e93eb335af0ea",
+    "qualification": "outputs/probe-completeness-20261026/ZERO_CALL_QUALIFICATION_v1.json"
   },
-  "staged_implementation_version": "0.6.51",
+  "staged_implementation_version": "0.6.55",
   "runtime_implementation_version": "0.6.40",
-  "current_optimization_audit": "outputs/publication-context-20261026/COMPLETION_AUDIT.md",
+  "current_optimization_audit": "outputs/probe-completeness-20261026/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {
     "status": "INTERRUPTED_PUBLIC_OBSERVATION_NO_FINAL_METHOD_RESULT",
     "model_calls_completed": 4,
@@ -3362,9 +3362,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Complete v3 review-fix qualification with zero new API calls",
-    "Align final v2 synchronous Init/blocking run failure with plan and actual edit; audit native EXECUTION_FAIL mapping without feeding independent score internals to method",
-    "Revalidate target repair and fixed cross-case gates before original frozen46 and G0-G6; formal150 stays closed"
+    "Finish v055 source-bound full/actual8/public-sandbox qualification with zero API calls",
+    "Use public S1/plan replay to isolate execution lifecycle mismatch; existing reasoning policies can be compared without changing prompt/source/limits, but past truncation risk remains",
+    "Only evidence-backed repair improvement and fixed cross-case checks permit original same-version46/G0-G6; formal150 remains closed"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",

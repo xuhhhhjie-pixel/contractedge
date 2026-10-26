@@ -1,0 +1,27 @@
+{
+  "status": "SAVED_BOUNDARIES_REPLAY_PASS",
+  "selection": {
+    "schema_version": "ce.candidate_decision.v1",
+    "decision": "UNCOMPARABLE",
+    "from_snapshot": "630df027ac083203889f3ef602b2851b3fb95504879f48c7b59c863641032905",
+    "trial_snapshot": "e30cd927a9bb9abd5218100f7749c46a581913463ae83c6f5020b094f7f62fd7",
+    "regressions": [],
+    "uncomparable": [
+      {
+        "check_id": "method_probe_execution",
+        "reason": "Registered public probe did not complete; retain the incumbent. This is an observation blocker, not a semantic failure or source-cause attribution."
+      }
+    ],
+    "interpretation": "Protected behavior could not be compared sufficiently; do not promote this trial."
+  },
+  "original_selection": "PROMOTE",
+  "protected_ids": [],
+  "raw_score_status": "SCORER_ERROR",
+  "interpreted_independent_status": "EXECUTION_FAIL",
+  "patch_sha256": "1f50c02c4f148080edecc7b77e51b9c5d851c2b2ce12d4a8b5e8680c7d36123d",
+  "score_files_unchanged": true,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "formal_ready": false,
+  "scope": "Counterfactual selection only: incumbent still publicly FAIL. Original v054 live result remains unchanged; not a new repair success."
+}

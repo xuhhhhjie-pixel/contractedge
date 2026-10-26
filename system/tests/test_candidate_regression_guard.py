@@ -108,7 +108,7 @@ def test_real_loop_exports_incumbent_and_its_feedback_after_regression(tmp_path,
     assert (tmp_path/'run/rounds/1/candidate.patch').read_text()!=patch
 
 
-@pytest.mark.parametrize('failure,rounds,expected_calls',[('check',2,2),('startup_panic',2,2),('unclassified',2,1),('stale_panic',2,1),('startup_panic',1,1)])
+@pytest.mark.parametrize('failure,rounds,expected_calls',[('check',2,2),('startup_panic',2,2),('unclassified',2,1),('stale_panic',2,1),('startup_panic',1,1),('unpreserved_probe',2,1)])
 def test_first_trial_regression_can_revise_from_restored_source_within_two_rounds(tmp_path,failure,rounds,expected_calls):
     from contractedge.orchestration.repair import repair_case
     from contractedge.model.provider import ModelResponse
@@ -128,6 +128,7 @@ def test_first_trial_regression_can_revise_from_restored_source_within_two_round
                 statement='Metadata remains valid',current_satisfaction='OBSERVED',
                 evidence_refs=[self.diagnosis['evidence_refs'][0]],behavior_check_refs=['retain'],
                 check_coverage='ALL_OF',coverage_rationale='Checks valid metadata',verification_kind='PUBLIC_BEHAVIOR')]
+            if failure=='unpreserved_probe':body['preserve_constraints']=[]
             return ModelResponse(json.dumps(body),{})
     class Runner(PublicLoopRunner):
         def observe(self,workspace,output):
