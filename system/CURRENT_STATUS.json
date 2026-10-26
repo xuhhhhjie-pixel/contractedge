@@ -3296,13 +3296,13 @@
     }
   },
   "current_development": {
-    "status": "V056_QUALIFIED_REGISTERED_SINGLE_KPT_RUNNING",
+    "status": "V056_CLOSED_INVALID_INITIAL_DIAGNOSIS_HANDOFF_NOT_EXERCISED",
     "snapshot": "docs/development/planning-branch-continuity-v056-20261026-v4.snapshot.json",
     "planned_version": "0.6.56",
     "base_commit": "4862de0cdf7d5a0811d7daa2fcf3bfc38db25785",
     "source_sha256": "74e7a3f5fd9010cb7a9eb399410e851b7d205d8ec5d0e063799e5f8cd21d997a",
     "formal_ready": false,
-    "paid_dispatch_allowed": "THIS_REGISTERED_DEVELOPMENT_ATTEMPT_ONLY",
+    "paid_dispatch_allowed": false,
     "report": "outputs/planning-branch-continuity-20261026/COMPLETION_AUDIT.md"
   },
   "staged_implementation_version": "0.6.56",
@@ -3361,9 +3361,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Fix saved KPT planning-branch concern lost across same-snapshot evidence rediagnosis in isolated source056 tree",
-    "Run full qualification and once-only target only after zero-call handoff proof; retain all source055 outcomes",
-    "No fixed46 paid dispatch while cross-case gate fails; original46/G0-G6 unchanged"
+    "Improve grounded configuration-path correction feedback using rejected graph/canonical source inventory; no new roles/edges/evidence fabricated",
+    "Replay saved initial invalid draft before any paid diagnostic; no original attempt restart",
+    "Original46 and formal150 remain gated; no mixed-version scores"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",
