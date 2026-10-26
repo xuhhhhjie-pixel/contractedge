@@ -1,0 +1,52 @@
+{
+  "status": "COMPONENT_PAIR_CLOSED",
+  "rows": [
+    {
+      "arm": "control",
+      "status": "CONTRACT_FAIL",
+      "error": "PRODUCTION_CONSUMER_UNEVIDENCED at units[7].locator_refs: a production consumer must cite a source span in the current snapshot"
+    },
+    {
+      "arm": "treatment",
+      "status": "CONTRACT_PASS",
+      "diagnosis_status": "READY",
+      "supported_violations": 2,
+      "unverified_outcomes": []
+    }
+  ],
+  "calls": 2,
+  "before_budget": {
+    "limit_micro_cny": 150000000,
+    "committed_micro_cny": 125429154,
+    "calls": 1216,
+    "reservation_rejected": false,
+    "pending_calls": 3
+  },
+  "after_budget": {
+    "limit_micro_cny": 150000000,
+    "committed_micro_cny": 125676380,
+    "calls": 1218,
+    "reservation_rejected": false,
+    "pending_calls": 3
+  },
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "patch_generated": false,
+  "limitation": "Two corrections of one saved public diagnosis, not original end-to-end repair or generalized effect evidence.",
+  "audit": {
+    "both_finish_reason": "stop",
+    "original_five_atoms_exactly_preserved": true,
+    "new_source_only_consumers": false,
+    "treatment_supported_source_consumers": [
+      "U2",
+      "U3"
+    ],
+    "new_calls": 2,
+    "new_occupied_cny": 0.247226,
+    "occupied_after_pair_cny": 125.67638,
+    "remaining_upper_bound_after_pair_cny": 24.32362,
+    "archive_sha256": "e968fa5142e70a48dbf2bd2b18a5fb0de338a83a18732f35c06d4ab9cd41a62a",
+    "source_files_modified": false,
+    "interpretation": "One controlled public-text pair supports this correction mechanism in this saved input; no repair efficacy or general superiority conclusion."
+  }
+}
