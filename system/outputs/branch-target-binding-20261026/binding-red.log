@@ -1,0 +1,64 @@
+FFFF.                                                                    [100%]
+=================================== FAILURES ===================================
+_ test_present_branch_without_semantic_target_has_specific_binding_feedback[go] _
+
+suffix = 'go'
+
+    @pytest.mark.parametrize("suffix", ["go", "py", "ts"])
+    def test_present_branch_without_semantic_target_has_specific_binding_feedback(suffix):
+        packet, plan, frontier = binding_fixture(suffix)
+        before = deepcopy(plan)
+        result = validate_semantic_changeset(plan, packet, None, frontier=frontier)
+        codes = {issue.code for issue in result.errors}
+        assert "PRODUCTION_BRANCH_CHANGE_INVALID" in codes
+>       assert "PRODUCTION_BRANCH_TARGET_UNAVAILABLE" in codes
+E       AssertionError: assert 'PRODUCTION_BRANCH_TARGET_UNAVAILABLE' in {'PRODUCTION_BRANCH_CHANGE_INVALID'}
+
+tests/test_production_branch_target_binding.py:42: AssertionError
+_ test_present_branch_without_semantic_target_has_specific_binding_feedback[py] _
+
+suffix = 'py'
+
+    @pytest.mark.parametrize("suffix", ["go", "py", "ts"])
+    def test_present_branch_without_semantic_target_has_specific_binding_feedback(suffix):
+        packet, plan, frontier = binding_fixture(suffix)
+        before = deepcopy(plan)
+        result = validate_semantic_changeset(plan, packet, None, frontier=frontier)
+        codes = {issue.code for issue in result.errors}
+        assert "PRODUCTION_BRANCH_CHANGE_INVALID" in codes
+>       assert "PRODUCTION_BRANCH_TARGET_UNAVAILABLE" in codes
+E       AssertionError: assert 'PRODUCTION_BRANCH_TARGET_UNAVAILABLE' in {'PRODUCTION_BRANCH_CHANGE_INVALID'}
+
+tests/test_production_branch_target_binding.py:42: AssertionError
+_ test_present_branch_without_semantic_target_has_specific_binding_feedback[ts] _
+
+suffix = 'ts'
+
+    @pytest.mark.parametrize("suffix", ["go", "py", "ts"])
+    def test_present_branch_without_semantic_target_has_specific_binding_feedback(suffix):
+        packet, plan, frontier = binding_fixture(suffix)
+        before = deepcopy(plan)
+        result = validate_semantic_changeset(plan, packet, None, frontier=frontier)
+        codes = {issue.code for issue in result.errors}
+        assert "PRODUCTION_BRANCH_CHANGE_INVALID" in codes
+>       assert "PRODUCTION_BRANCH_TARGET_UNAVAILABLE" in codes
+E       AssertionError: assert 'PRODUCTION_BRANCH_TARGET_UNAVAILABLE' in {'PRODUCTION_BRANCH_CHANGE_INVALID'}
+
+tests/test_production_branch_target_binding.py:42: AssertionError
+_ test_wrong_reference_reports_the_existing_eligible_unit_without_rediagnosis_claim _
+
+    def test_wrong_reference_reports_the_existing_eligible_unit_without_rediagnosis_claim():
+        packet, plan, frontier = binding_fixture(add_target=True)
+        result = validate_semantic_changeset(plan, packet, None, frontier=frontier)
+        assert "PRODUCTION_BRANCH_TARGET_UNAVAILABLE" not in {e.code for e in result.errors}
+        message = next(e.message for e in result.errors if e.code == "PRODUCTION_BRANCH_CHANGE_INVALID")
+>       assert "U3" in message and "EV3" in message
+E       AssertionError: assert ('U3' in 'MODIFY requires actual changes targeting this evidenced branch; file equality alone is insufficient')
+
+tests/test_production_branch_target_binding.py:54: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_production_branch_target_binding.py::test_present_branch_without_semantic_target_has_specific_binding_feedback[go]
+FAILED tests/test_production_branch_target_binding.py::test_present_branch_without_semantic_target_has_specific_binding_feedback[py]
+FAILED tests/test_production_branch_target_binding.py::test_present_branch_without_semantic_target_has_specific_binding_feedback[ts]
+FAILED tests/test_production_branch_target_binding.py::test_wrong_reference_reports_the_existing_eligible_unit_without_rediagnosis_claim
+4 failed, 1 passed in 0.15s

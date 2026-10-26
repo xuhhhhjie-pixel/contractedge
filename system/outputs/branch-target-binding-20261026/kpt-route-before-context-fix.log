@@ -1,0 +1,7 @@
+{"status": "CAPTURE_BOUNDARY_NOT_REACHED", "output": "outputs/branch-target-binding-20261026/kpt-route-before-context-fix", "model_calls": 0}
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-branch-binding-20261026/system/scripts/replay_saved_front_request.py", line 88, in <module>
+    main()
+  File "/home/xhj/contractedge-branch-binding-20261026/system/scripts/replay_saved_front_request.py", line 84, in main
+    raise RuntimeError(f'Capture boundary not reached: {trace.status}, {trace.errors}')
+RuntimeError: Capture boundary not reached: BUDGET_EXHAUSTED, ('BudgetExceeded: Planning evidence extension exceeds the existing round budget',)

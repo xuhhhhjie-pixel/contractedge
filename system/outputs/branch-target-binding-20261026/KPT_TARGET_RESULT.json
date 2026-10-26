@@ -1,0 +1,21 @@
+{
+  "case_id": "R3-KPT-4673",
+  "attempt_id": "diagnostic-source051-v2-20261026-r3-kpt-4673",
+  "method_status": "PUBLIC_REVIEW_COMPLETE",
+  "independent_status": "PASS",
+  "public_decision": "PASS",
+  "patch_bytes": 3820,
+  "patch_sha256": "caa1beb5d17b9b6e00365edcc296c64dd4150f879b3b19410225477d8fd76e4f",
+  "evidence_files": {
+    "receipt": {
+      "path": "/home/xhj/contractedge-diagnostic-source051-v2-20261026/methods/R3-KPT-4673/.isolated-2b7a4d83b23f4a54b58d99335b92f552/receipt.json",
+      "sha256": "47b4f773c0a77228811394b72b7ad8c56a3d1fe00eaaf71836d4340a86e8391c"
+    },
+    "trace": {
+      "path": "/home/xhj/contractedge-diagnostic-source051-v2-20261026/methods/R3-KPT-4673/R3-KPT-4673/repair.trace.json",
+      "sha256": "4a3c377f2be42816ab695db7f7bfec30ebaf5fdd5b6a03ac3ebcaf94fddb4683"
+    }
+  },
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

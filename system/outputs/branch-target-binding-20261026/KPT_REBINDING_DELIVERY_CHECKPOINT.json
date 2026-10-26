@@ -1,0 +1,25 @@
+{
+  "status": "MISSING_TARGET_ROUTED_TO_BOUNDED_REDIAGNOSIS",
+  "before_next_stage": "changeset.v1.1.13",
+  "after_next_stage": "diagnosis.v1.1.26",
+  "source_evidence_id": "SRC-CU-60d3496476d58093",
+  "source_digest": "e658aaddf9612cfb4f179848f7de7de817e70b1be372285a9e02d797098a111f",
+  "source_locator": {
+    "column_start": 1,
+    "end_line": 908,
+    "path": "pkg/lib/kptops/render_executor.go",
+    "start_line": 862
+  },
+  "selected_count": 12,
+  "budget": {
+    "request_tokens": 147323,
+    "input_limit": 203616,
+    "reserved_output_tokens": 16384,
+    "context_stage": "EVIDENCE_REDIAGNOSIS",
+    "total_context_limit": 220000
+  },
+  "real_model_calls": 0,
+  "grader_calls": 0,
+  "formal_ready": false,
+  "autonomous_repair_claim": false
+}

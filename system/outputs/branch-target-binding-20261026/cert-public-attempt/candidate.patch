@@ -1,0 +1,46 @@
+diff --git a/pkg/controller/certificates/issuing/issuing_controller.go b/pkg/controller/certificates/issuing/issuing_controller.go
+index d2e5bf8..b147c5b 100644
+--- a/pkg/controller/certificates/issuing/issuing_controller.go
++++ b/pkg/controller/certificates/issuing/issuing_controller.go
+@@ -289,6 +289,20 @@ func (c *controller) ProcessItem(ctx context.Context, key types.NamespacedName)
+ 		return nil
+ 	}
+ 
++	// If public key does not match, do nothing (requestmanager will handle this).
++	csr, err := utilpki.DecodeX509CertificateRequestBytes(req.Spec.Request)
++	if err != nil {
++		return err
++	}
++	publicKeyMatchesCSR, err := utilpki.PublicKeyMatchesCSR(pk.Public(), csr)
++	if err != nil {
++		return err
++	}
++	if !publicKeyMatchesCSR {
++		logf.WithResource(log, nextPrivateKeySecret).Info("next private key does not match CSR public key, waiting for requestmanager controller")
++		return nil
++	}
++
+ 	// Now check if CertificateRequest is in any of the final states so that
+ 	// this issuance can be completed as either succeeded or failed. Failed
+ 	// issuance will be retried with a delay (the logic for that lives in
+@@ -331,20 +345,6 @@ func (c *controller) ProcessItem(ctx context.Context, key types.NamespacedName)
+ 		return c.failIssueCertificate(ctx, log, crt, apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady))
+ 	}
+ 
+-	// If public key does not match, do nothing (requestmanager will handle this).
+-	csr, err := utilpki.DecodeX509CertificateRequestBytes(req.Spec.Request)
+-	if err != nil {
+-		return err
+-	}
+-	publicKeyMatchesCSR, err := utilpki.PublicKeyMatchesCSR(pk.Public(), csr)
+-	if err != nil {
+-		return err
+-	}
+-	if !publicKeyMatchesCSR {
+-		logf.WithResource(log, nextPrivateKeySecret).Info("next private key does not match CSR public key, waiting for requestmanager controller")
+-		return nil
+-	}
+-
+ 	// If the CertificateRequest is valid and ready, verify its status and issue
+ 	// accordingly.
+ 	if crReadyCond.Reason == cmapi.CertificateRequestReasonIssued {

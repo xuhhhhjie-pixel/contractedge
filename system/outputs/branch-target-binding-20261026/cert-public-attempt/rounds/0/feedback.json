@@ -1,0 +1,417 @@
+{
+  "schema_version": "ce.execution_feedback.v1",
+  "case_id": "RW-CERTMANAGER-9116",
+  "run_id": "3101dafe-e206-49d9-bb08-72adc8b3298b",
+  "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+  "round_id": 0,
+  "from_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "to_snapshot": "d6e7d3bd3c2fd4c053c4cd1c447a758053ecf9657d4772e97412033daa34ec35",
+  "patch_digest": "8ed6c1c7800f78da03ca916137d8fcc288a12affbd565f49bc62b5f5ed8333af",
+  "build_state": "PASSED",
+  "semantic_outcome": "UNKNOWN",
+  "public_observations": [
+    {
+      "id": "OBS1",
+      "snapshot_id": "d6e7d3bd3c2fd4c053c4cd1c447a758053ecf9657d4772e97412033daa34ec35",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "EXECUTION_ONLY",
+      "locator": {
+        "path": "launcher/tool.stdout",
+        "file_sha256": "4e647a6df452b08fa225b57579cd16b4df97d78ae922b627fd057b3188187be3",
+        "start_byte": 0,
+        "copied_bytes": 303,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "4e647a6df452b08fa225b57579cd16b4df97d78ae922b627fd057b3188187be3",
+      "excerpt": "{\"case_id\": \"RW-CERTMANAGER-9116\", \"status\": \"EXECUTION_PASS\", \"hidden_semantic_evaluation\": \"NOT_RUN\", \"private_materials_loaded\": false, \"scenarios\": [{\"scenario\": \"public-issuing-controller-build\", \"exit_code\": 0, \"elapsed_seconds\": 186.94990876317024, \"timed_out\": false, \"output_limited\": false}]}\n",
+      "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+    },
+    {
+      "id": "OBS2",
+      "snapshot_id": "d6e7d3bd3c2fd4c053c4cd1c447a758053ecf9657d4772e97412033daa34ec35",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "EXECUTION_ONLY",
+      "locator": {
+        "path": "raw/public_execution.json",
+        "file_sha256": "8f5b7368c06ade75e68026a30500ec3b39ec9d787a468026a8b68fdb860c9848",
+        "start_byte": 0,
+        "copied_bytes": 359,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "8f5b7368c06ade75e68026a30500ec3b39ec9d787a468026a8b68fdb860c9848",
+      "excerpt": "{\n  \"case_id\": \"RW-CERTMANAGER-9116\",\n  \"status\": \"EXECUTION_PASS\",\n  \"hidden_semantic_evaluation\": \"NOT_RUN\",\n  \"private_materials_loaded\": false,\n  \"scenarios\": [\n    {\n      \"scenario\": \"public-issuing-controller-build\",\n      \"exit_code\": 0,\n      \"elapsed_seconds\": 186.94990876317024,\n      \"timed_out\": false,\n      \"output_limited\": false\n    }\n  ]\n}\n",
+      "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+    }
+  ],
+  "public_check_results": [
+    {
+      "id": "P1",
+      "status": "UNKNOWN",
+      "rationale": "The only public evidence is a build execution pass. The check is a source-structure ordering check over ProcessItem, but no public observation shows the actual source content or ordering after edits. The execution_mapping literal_edits are explicitly scope-review material, not observed source evidence, and cannot substitute for a quoted public output. Build success alone does not prove that PublicKeyMatchesCSR occurs after loading pk and before the Denied, InvalidRequest, or Ready=Failed branches, nor that mismatch returns nil without failIssueCertificate. Therefore P1 is not established.",
+      "evidence": [
+        {
+          "observation_id": "OBS1",
+          "quote": "\"status\": \"EXECUTION_PASS\", \"hidden_semantic_evaluation\": \"NOT_RUN\", \"private_materials_loaded\": false"
+        },
+        {
+          "observation_id": "OBS1",
+          "quote": "\"scenario\": \"public-issuing-controller-build\", \"exit_code\": 0"
+        }
+      ]
+    },
+    {
+      "id": "open:OO-1",
+      "status": "UNKNOWN",
+      "rationale": "OO-1 is declared NOT_PUBLICLY_OBSERVABLE and requires controller runtime behavior with a stale CertificateRequest whose CSR public key does not match the current NextPrivateKey Secret. The public observation boundary exposes only the production issuing controller package build; private request/key fixtures and oracle are not exposed. The public output records hidden_semantic_evaluation as NOT_RUN and private_materials_loaded false, so it cannot show return before failIssueCertificate or absence of Issuing=False/FailedIssuanceAttempts changes. No public runtime observation is sufficient; OO-1 remains UNKNOWN.",
+      "evidence": [
+        {
+          "observation_id": "OBS1",
+          "quote": "\"status\": \"EXECUTION_PASS\", \"hidden_semantic_evaluation\": \"NOT_RUN\", \"private_materials_loaded\": false"
+        },
+        {
+          "observation_id": "OBS2",
+          "quote": "\"hidden_semantic_evaluation\": \"NOT_RUN\",\n  \"private_materials_loaded\": false"
+        }
+      ]
+    }
+  ],
+  "retained_constraints": [],
+  "pending_obligations": [
+    {
+      "kind": "POSTCONDITION",
+      "id": "P1",
+      "statement": "ProcessItem evaluates PublicKeyMatchesCSR(pk.Public(), csr) for the selected CertificateRequest after loading/passing pk from the current NextPrivateKey Secret and before evaluating Denied, InvalidRequest, or Ready=Failed terminal states; on mismatch it returns nil without calling failIssueCertificate.\nAND PRESERVE: The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "relation_refs": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "planned_check": "Inspect pkg/controller/certificates/issuing/issuing_controller.go ProcessItem: pk is parsed from NextPrivateKeySecret before request listing; the CSR decode and PublicKeyMatchesCSR call appear after csr is decoded and before the Denied/InvalidRequest/Ready=Failed failIssueCertificate branches; build scenario public-issuing-controller-build compiles.",
+      "check_scope": "pkg/controller/certificates/issuing/issuing_controller.go ProcessItem terminal-state decision path",
+      "verification_kind": "PUBLIC_STRUCTURE",
+      "check_coverage": "SUPPORTING",
+      "coverage_rationale": "A single source-structure check verifies the concrete ordering: the CSR/NextPrivateKey comparison precedes all listed terminal failure branches. Runtime issuance behavior remains covered by the open obligation.",
+      "stable_obligation_keys": [
+        "OB-2ac55d40408c2e6df4a141ed",
+        "OB-40e358dc5bf545ece78146b1"
+      ],
+      "semantic_statements": [
+        "ProcessItem evaluates PublicKeyMatchesCSR(pk.Public(), csr) for the selected CertificateRequest after loading/passing pk from the current NextPrivateKey Secret and before evaluating Denied, InvalidRequest, or Ready=Failed terminal states; on mismatch it returns nil without calling failIssueCertificate.",
+        "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states."
+      ],
+      "reason_category": "EVIDENCE_INSUFFICIENT",
+      "verification_gap": {
+        "predicate": "ProcessItem evaluates PublicKeyMatchesCSR(pk.Public(), csr) for the selected CertificateRequest after loading/passing pk from the current NextPrivateKey Secret and before evaluating Denied, InvalidRequest, or Ready=Failed terminal states; on mismatch it returns nil without calling failIssueCertificate.\nAND PRESERVE: The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.",
+        "scenario": null,
+        "required_check_refs": [],
+        "coverage": "SUPPORTING",
+        "remaining_scope": null,
+        "action": "OBTAIN_SUFFICIENT_PUBLIC_EVIDENCE"
+      }
+    },
+    {
+      "kind": "OPEN",
+      "id": "open:OO-1",
+      "outcome_id": "O1",
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "statement": "Under controller runtime with a stale CertificateRequest whose spec matches but whose CSR public key does not match the current NextPrivateKey Secret, ProcessItem returns before failIssueCertificate and does not set Issuing=False or increment FailedIssuanceAttempts.\nAND PRESERVE: The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.",
+      "reason": "Only the public build scenario is observed; no controller runtime request handling or issuance status outcome is publicly observable.",
+      "verification_kind": "NOT_PUBLICLY_OBSERVABLE",
+      "stable_obligation_keys": [
+        "OB-2ac55d40408c2e6df4a141ed",
+        "OB-40e358dc5bf545ece78146b1"
+      ],
+      "semantic_statements": [
+        "Under controller runtime with a stale CertificateRequest whose spec matches but whose CSR public key does not match the current NextPrivateKey Secret, ProcessItem returns before failIssueCertificate and does not set Issuing=False or increment FailedIssuanceAttempts.",
+        "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states."
+      ],
+      "check_coverage": "SUPPORTING",
+      "reason_category": "NOT_PUBLICLY_OBSERVABLE",
+      "verification_gap": {
+        "predicate": "Under controller runtime with a stale CertificateRequest whose spec matches but whose CSR public key does not match the current NextPrivateKey Secret, ProcessItem returns before failIssueCertificate and does not set Issuing=False or increment FailedIssuanceAttempts.\nAND PRESERVE: The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.",
+        "scenario": null,
+        "required_check_refs": [],
+        "coverage": "SUPPORTING",
+        "remaining_scope": null,
+        "action": "STOP_UNOBSERVABLE"
+      }
+    }
+  ],
+  "failure_kind": "UNKNOWN",
+  "route": "STOP",
+  "route_confidence": "LOW",
+  "rationale": "Public raw execution does not establish task correctness; retain open checks.",
+  "hidden_evaluation": "NOT_AVAILABLE_TO_METHOD",
+  "coordination_links": [
+    {
+      "check_id": "P1",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "historical_obligation_refs": [],
+      "relation_refs": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "violation_refs": [
+        "V1"
+      ],
+      "change_refs": [
+        "CH-1"
+      ],
+      "diagnosis_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+      "observation_snapshot": "d6e7d3bd3c2fd4c053c4cd1c447a758053ecf9657d4772e97412033daa34ec35",
+      "observation_refs": [
+        "OBS1",
+        "OBS1"
+      ],
+      "status": "UNKNOWN",
+      "interpretation": "Traceable association, not independent proof of causal attribution"
+    },
+    {
+      "check_id": "open:OO-1",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "historical_obligation_refs": [],
+      "relation_refs": [],
+      "violation_refs": [],
+      "change_refs": [],
+      "diagnosis_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+      "observation_snapshot": "d6e7d3bd3c2fd4c053c4cd1c447a758053ecf9657d4772e97412033daa34ec35",
+      "observation_refs": [
+        "OBS1",
+        "OBS2"
+      ],
+      "status": "UNKNOWN",
+      "interpretation": "Traceable association, not independent proof of causal attribution"
+    }
+  ],
+  "observation_diagnostics": [],
+  "next_action": "STOP_UNCERTAIN",
+  "public_execution_capabilities": {
+    "schema_version": "ce.public_execution_capabilities.v1",
+    "source": {
+      "path": "environment.json",
+      "sha256": "377db8923c5a14d6732c45e9dc40860dac1cd915e7c006945fad363fdc948c15",
+      "task_observation_limit_source": "task.yaml:observation_limit"
+    },
+    "task_observation_limit": "Check the stated controller decision only; no downstream cluster convergence is implied.",
+    "environment_observation_limit": "Production issuing controller package build; private request/key fixtures and oracle are not exposed",
+    "observation_boundary": null,
+    "public_scope": null,
+    "native_input_boundary": null,
+    "candidate_command": null,
+    "build_entrypoint": null,
+    "public_runner": null,
+    "expected_artifact": null,
+    "scenarios": [
+      {
+        "name": "public-issuing-controller-build",
+        "argv": [
+          "sh",
+          "/work/.contractedge-deps/setup/build.sh"
+        ]
+      }
+    ],
+    "editable_policy": {
+      "allowed_paths": [
+        "pkg/*.go",
+        "internal/*.go"
+      ],
+      "forbidden_paths": [
+        "**/*test*",
+        "**/contractedge*",
+        "private/**",
+        "verifier/**",
+        "evaluator/**",
+        "oracle/**",
+        "go.mod",
+        "go.sum",
+        "**/go.mod",
+        "**/go.sum",
+        ".contractedge-deps/**"
+      ],
+      "policy_status": "DECLARED"
+    },
+    "network": "none",
+    "interpretation": "Declared public execution/observation only. Build success is not behavioral success; unavailable behavior stays UNKNOWN. No additional execution or edit permission.",
+    "consumer_id": "contractedge.topomen_source_consumer.v1",
+    "execution_backend": "topomen_agent",
+    "supported_operations": [
+      "MODIFY",
+      "CREATE"
+    ],
+    "method_behavior_probes": []
+  },
+  "obligation_lineage": {
+    "schema_version": "ce.obligation_lineage.v1",
+    "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+    "requirement_digest": "d4dd65c54bbcc64f5a7884e7ed19a2a3064ebbe07e98a3660520e2d84d40a10d",
+    "nodes": {
+      "OB-2ac55d40408c2e6df4a141ed": {
+        "id": "OB-2ac55d40408c2e6df4a141ed",
+        "definition": {
+          "id": "A1",
+          "outcome_id": "O1",
+          "statement": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.",
+          "source_refs": [
+            "requirement_text:0:231"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+          "stable_obligation_key": "OB-2ac55d40408c2e6df4a141ed"
+        },
+        "aliases": [
+          "The issuing controller must compare a CertificateRequest CSR against the current NextPrivateKey Secret before acting on terminal request states."
+        ],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-40e358dc5bf545ece78146b1": {
+        "id": "OB-40e358dc5bf545ece78146b1",
+        "definition": {
+          "id": "A2",
+          "outcome_id": "O1",
+          "statement": "A stale request built from a replaced key must not fail the current Certificate issuance.",
+          "source_refs": [
+            "requirement_text:0:231"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance",
+          "stable_obligation_key": "OB-40e358dc5bf545ece78146b1"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      }
+    },
+    "events": [
+      {
+        "kind": "REGISTER",
+        "id": "LE-0635f097c83a7741a6723cd6",
+        "parent_ids": [],
+        "atom_refs": [
+          "A1"
+        ],
+        "resolved_ids": {
+          "A1": "OB-2ac55d40408c2e6df4a141ed"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-42d6f2ec9ecbc41ecbf01089",
+        "parent_ids": [],
+        "atom_refs": [
+          "A2"
+        ],
+        "resolved_ids": {
+          "A2": "OB-40e358dc5bf545ece78146b1"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "CONTINUE",
+        "id": "LE-ff099ea3540099da77ddec29",
+        "parent_ids": [
+          "OB-2ac55d40408c2e6df4a141ed"
+        ],
+        "atom_refs": [
+          "A1"
+        ],
+        "resolved_ids": {
+          "A1": "OB-2ac55d40408c2e6df4a141ed"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "CONTINUE",
+        "id": "LE-2c0fcc2faf5655135e7ff916",
+        "parent_ids": [
+          "OB-40e358dc5bf545ece78146b1"
+        ],
+        "atom_refs": [
+          "A2"
+        ],
+        "resolved_ids": {
+          "A2": "OB-40e358dc5bf545ece78146b1"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      }
+    ],
+    "bindings": {
+      "A1": "OB-2ac55d40408c2e6df4a141ed",
+      "A2": "OB-40e358dc5bf545ece78146b1"
+    },
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba"
+  },
+  "obligation_coverage": {
+    "OB-2ac55d40408c2e6df4a141ed": {
+      "status": "UNKNOWN",
+      "snapshot_id": "d6e7d3bd3c2fd4c053c4cd1c447a758053ecf9657d4772e97412033daa34ec35",
+      "residual": null,
+      "reason": "Missing sufficient current evidence"
+    },
+    "OB-40e358dc5bf545ece78146b1": {
+      "status": "UNKNOWN",
+      "snapshot_id": "d6e7d3bd3c2fd4c053c4cd1c447a758053ecf9657d4772e97412033daa34ec35",
+      "residual": null,
+      "reason": "Missing sufficient current evidence"
+    }
+  },
+  "helper_preconditions": {
+    "schema_version": "ce.helper_preconditions.v1",
+    "checks": [],
+    "interpretation": "Finite registered syntax relation only; behavior probes remain required, no general control-flow or alias proof"
+  }
+}

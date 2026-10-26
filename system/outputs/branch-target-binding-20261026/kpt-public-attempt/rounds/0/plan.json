@@ -1,0 +1,837 @@
+{
+  "schema_version": "contractedge.topomen_plan.v1",
+  "plan_id": "9686c936827fa209489f13d9b758b6fe147c523dfafb578b8054378c7d7a241b:10fd4f8e-4de0-426b-8a38-c35ce7def94d",
+  "run_id": "10fd4f8e-4de0-426b-8a38-c35ce7def94d",
+  "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "input_digest": "5e35ce63106f134d43e682afb42610724cf49f54661cae8d679fd4ffcd57b6a3",
+  "goal": "Restore the configPath exclusion contract for owning mutators and validators while preserving functionConfig binding, workload transformation, later-function visibility, and final resource presence.",
+  "planned_violation_ids": [
+    "V1",
+    "V2"
+  ],
+  "operations": [
+    {
+      "change_id": "CHG-1",
+      "target": {
+        "kind": "EXISTING",
+        "path": "pkg/lib/kptops/render_executor.go",
+        "locator": {
+          "start_line": 785,
+          "end_line": 856
+        },
+        "unit_refs": [
+          "U3"
+        ],
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "content_digest": "0e1991f557583bc2f12283a7317d5ba7e192aac79a2e91294bd1ad9daeb03d7d"
+      },
+      "operation": "MODIFY",
+      "semantic_action": "In runMutators, after refreshFnConfig and before SelectInput, when pl.Mutators[i].ConfigPath is set, resolve the designated config resource from the current input slice and build a filtered ordinaryInput excluding that node; pass ordinaryInput to SelectInput for mutator execution. After successful mutation, ensure the outer input slice still contains the config resource: when selectors/exclusions are absent, merge output.Nodes with the config resource instead of replacing input outright; when present, the existing MergeWithInput with original input already retains it. Preserve error handling, clearAnnotationsOnMutFailure, and DeleteResourceIDs.",
+      "intent": "Restore R2/V1: exclude the configPath-designated resource from the owning mutator's ordinary input while retaining it for later functions and final output.",
+      "violation_refs": [
+        "V1"
+      ],
+      "postcondition_refs": [
+        "PC-V1"
+      ],
+      "depends_on": []
+    },
+    {
+      "change_id": "CHG-2",
+      "target": {
+        "kind": "EXISTING",
+        "path": "pkg/lib/kptops/render_executor.go",
+        "locator": {
+          "start_line": 862,
+          "end_line": 908
+        },
+        "unit_refs": [
+          "U4"
+        ],
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "content_digest": "0e1991f557583bc2f12283a7317d5ba7e192aac79a2e91294bd1ad9daeb03d7d"
+      },
+      "operation": "MODIFY",
+      "semantic_action": "In runValidators, after refreshFnConfig and before SelectInput, when function.ConfigPath is set, resolve the designated config resource from input and filter it out of the list passed to SelectInput; pass the filtered list to validator.Filter. Do not modify the outer input slice. Preserve error handling and cloneResources behavior.",
+      "intent": "Restore R3/V2: exclude the configPath-designated resource from the owning validator's ordinary input without altering the overall validation resource list.",
+      "violation_refs": [
+        "V2"
+      ],
+      "postcondition_refs": [
+        "PC-V2"
+      ],
+      "depends_on": []
+    }
+  ],
+  "postconditions": [
+    {
+      "id": "PC-V1",
+      "statement": "The configPath-designated settings resource is excluded from the owning mutator's ordinary input list.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A2"
+      ],
+      "relation_refs": [
+        "R2"
+      ],
+      "planned_check": "Run public method scenario kpt-configpath-v4 and verify mutator.owner_excludes_config, mutator_selector.owner_excludes_config, and mutator_exclusion.owner_excludes_config report ordinary_inputs excluding settings and including workload, while owner_binding checks still PASS.",
+      "check_scope": "Method-owned public runtime probe scenario method-kpt-configpath-v4: default mutator, selector mutator, and exclusion mutator ordinary input exclusion checks.",
+      "check_coverage": "ALL_OF",
+      "coverage_rationale": "These three owner_excludes_config checks together cover the owning mutator ordinary input exclusion under default, selector, and exclusion configurations as required by R2/A2.",
+      "behavior_check_refs": [
+        "kpt-configpath-v4:mutator.owner_excludes_config",
+        "kpt-configpath-v4:mutator_selector.owner_excludes_config",
+        "kpt-configpath-v4:mutator_exclusion.owner_excludes_config"
+      ],
+      "verification_kind": "PUBLIC_BEHAVIOR",
+      "verification_scope": {
+        "scenario": "method-kpt-configpath-v4"
+      },
+      "stable_obligation_keys": [
+        "OB-6206e57e1a9204cf5886b0ff"
+      ]
+    },
+    {
+      "id": "PC-V2",
+      "statement": "The configPath-designated settings resource is excluded from the owning validator's ordinary input list.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A2"
+      ],
+      "relation_refs": [
+        "R3"
+      ],
+      "planned_check": "Run public method scenario kpt-configpath-v4 and verify validator.owner_excludes_config reports ordinary_inputs excluding settings and including workload, while validator.owner_binding still PASS.",
+      "check_scope": "Method-owned public runtime probe scenario method-kpt-configpath-v4: validator ordinary input exclusion check.",
+      "check_coverage": "ALL_OF",
+      "coverage_rationale": "The validator.owner_excludes_config check directly covers the owning validator ordinary input exclusion required by R3/A2.",
+      "behavior_check_refs": [
+        "kpt-configpath-v4:validator.owner_excludes_config"
+      ],
+      "verification_kind": "PUBLIC_BEHAVIOR",
+      "verification_scope": {
+        "scenario": "method-kpt-configpath-v4"
+      },
+      "stable_obligation_keys": [
+        "OB-6206e57e1a9204cf5886b0ff"
+      ]
+    }
+  ],
+  "preserve_constraints": [
+    {
+      "id": "PC-A1",
+      "outcome_id": "O1",
+      "obligation_refs": [
+        "A1"
+      ],
+      "statement": "The configPath-designated resource is supplied to its owning function as functionConfig.",
+      "current_satisfaction": "OBSERVED",
+      "evidence_refs": [
+        "OBS15",
+        "OBS18",
+        "OBS21",
+        "OBS24"
+      ],
+      "check_coverage": "ALL_OF",
+      "coverage_rationale": "The four owner_binding checks cover functionConfig binding for mutator, validator, selector, and exclusion scenarios.",
+      "behavior_check_refs": [
+        "kpt-configpath-v4:mutator.owner_binding",
+        "kpt-configpath-v4:validator.owner_binding",
+        "kpt-configpath-v4:mutator_selector.owner_binding",
+        "kpt-configpath-v4:mutator_exclusion.owner_binding"
+      ],
+      "verification_kind": "PUBLIC_BEHAVIOR",
+      "verification_scope": {
+        "scenario": "method-kpt-configpath-v4"
+      },
+      "stable_obligation_keys": [
+        "OB-6cea2a4d3f708303cbf13a11"
+      ]
+    },
+    {
+      "id": "PC-A3",
+      "outcome_id": "O1",
+      "obligation_refs": [
+        "A3"
+      ],
+      "statement": "The owning function still transforms the workload resources it is meant to process.",
+      "current_satisfaction": "OBSERVED",
+      "evidence_refs": [
+        "OBS16",
+        "OBS22",
+        "OBS25"
+      ],
+      "check_coverage": "ALL_OF",
+      "coverage_rationale": "The workload_transformed checks cover owning mutator transformation for default, selector, and exclusion scenarios.",
+      "behavior_check_refs": [
+        "kpt-configpath-v4:mutator.workload_transformed",
+        "kpt-configpath-v4:mutator_selector.workload_transformed",
+        "kpt-configpath-v4:mutator_exclusion.workload_transformed"
+      ],
+      "verification_kind": "PUBLIC_BEHAVIOR",
+      "verification_scope": {
+        "scenario": "method-kpt-configpath-v4"
+      },
+      "stable_obligation_keys": [
+        "OB-837a8889b4fd81b734576998"
+      ]
+    },
+    {
+      "id": "PC-A4",
+      "outcome_id": "O1",
+      "obligation_refs": [
+        "A4"
+      ],
+      "statement": "A later pipeline function may still see and transform the config resource.",
+      "current_satisfaction": "OBSERVED",
+      "evidence_refs": [
+        "OBS1",
+        "OBS2",
+        "OBS3",
+        "OBS10",
+        "OBS11",
+        "OBS12",
+        "OBS13"
+      ],
+      "check_coverage": "ALL_OF",
+      "coverage_rationale": "The later_sees_config and config_transformed checks cover visibility and retained transformation of the config resource for later mutator, validator, selector, and exclusion functions.",
+      "behavior_check_refs": [
+        "kpt-configpath-v4:mutator.later_sees_config",
+        "kpt-configpath-v4:mutator_selector.later_sees_config",
+        "kpt-configpath-v4:mutator_exclusion.later_sees_config",
+        "kpt-configpath-v4:mutator.config_transformed",
+        "kpt-configpath-v4:validator.config_transformed",
+        "kpt-configpath-v4:mutator_selector.config_transformed",
+        "kpt-configpath-v4:mutator_exclusion.config_transformed"
+      ],
+      "verification_kind": "PUBLIC_BEHAVIOR",
+      "verification_scope": {
+        "scenario": "method-kpt-configpath-v4"
+      },
+      "stable_obligation_keys": [
+        "OB-4decc8008ce258e9384bd7ba"
+      ]
+    },
+    {
+      "id": "PC-A5",
+      "outcome_id": "O1",
+      "obligation_refs": [
+        "A5"
+      ],
+      "statement": "Both the config resource and the workload resources appear correctly in the final rendered KRM package.",
+      "current_satisfaction": "OBSERVED",
+      "evidence_refs": [
+        "OBS14",
+        "OBS19",
+        "OBS27",
+        "OBS30",
+        "OBS31",
+        "OBS34",
+        "OBS35",
+        "OBS37",
+        "OBS38"
+      ],
+      "check_coverage": "ALL_OF",
+      "coverage_rationale": "The resource_inventory and retention checks cover presence and declared data retention of settings and workload resources across mutator, validator, control, selector, and exclusion scenarios.",
+      "behavior_check_refs": [
+        "kpt-configpath-v4:mutator.resource_inventory",
+        "kpt-configpath-v4:validator.resource_inventory",
+        "kpt-configpath-v4:control.resource_inventory",
+        "kpt-configpath-v4:mutator_selector.resource_inventory",
+        "kpt-configpath-v4:mutator_exclusion.resource_inventory",
+        "kpt-configpath-v4:mutator.config_retained",
+        "kpt-configpath-v4:mutator.workload_retained",
+        "kpt-configpath-v4:validator.config_retained",
+        "kpt-configpath-v4:validator.workload_retained",
+        "kpt-configpath-v4:mutator_selector.config_retained",
+        "kpt-configpath-v4:mutator_selector.workload_retained",
+        "kpt-configpath-v4:mutator_exclusion.config_retained",
+        "kpt-configpath-v4:mutator_exclusion.workload_retained"
+      ],
+      "verification_kind": "PUBLIC_BEHAVIOR",
+      "verification_scope": {
+        "scenario": "method-kpt-configpath-v4"
+      },
+      "stable_obligation_keys": [
+        "OB-dfe555dba36adae94ff9111b"
+      ]
+    }
+  ],
+  "open_obligations": [],
+  "production_path_review": [
+    {
+      "source_evidence_id": "SRC-CU-883e2cb2727d395a",
+      "disposition": "MODIFY",
+      "rationale": "runMutators is the production consumer for V1; the planned change modifies its ordinary input selection and merge behavior to exclude the configPath resource while retaining it in the outer list.",
+      "change_refs": [
+        "CHG-1"
+      ],
+      "open_obligation_refs": []
+    },
+    {
+      "source_evidence_id": "SRC-CU-60d3496476d58093",
+      "disposition": "MODIFY",
+      "rationale": "runValidators is the production consumer for V2; the planned change modifies its ordinary input selection to exclude the configPath resource for the owning validator without altering the outer list.",
+      "change_refs": [
+        "CHG-2"
+      ],
+      "open_obligation_refs": []
+    },
+    {
+      "source_evidence_id": "SRC-CU-b185a6639d1920f7",
+      "disposition": "PRESERVE",
+      "rationale": "runPipeline merely sequences runMutators and runValidators; the violation is in the callees. Its orchestration behavior remains correct and requires no change.",
+      "change_refs": [],
+      "open_obligation_refs": []
+    }
+  ],
+  "status": "READY",
+  "consumer_acceptance": "UNVERIFIED",
+  "preservation_impact": [
+    {
+      "preserve_id": "PC-A1",
+      "scope": "CHANGES",
+      "change_refs": [
+        "CHG-1",
+        "CHG-2"
+      ],
+      "rationale": "Both changes alter input filtering before function execution; they must not alter functionConfig binding, so impact is possible and must be verified by the owner_binding checks."
+    },
+    {
+      "preserve_id": "PC-A3",
+      "scope": "CHANGES",
+      "change_refs": [
+        "CHG-1",
+        "CHG-2"
+      ],
+      "rationale": "Filtering ordinary input must not remove workload resources; workload_transformed checks must still pass."
+    },
+    {
+      "preserve_id": "PC-A4",
+      "scope": "CHANGES",
+      "change_refs": [
+        "CHG-1",
+        "CHG-2"
+      ],
+      "rationale": "Retaining the config resource in the outer input and final merge is required for later functions; later_sees_config and config_transformed checks must still pass."
+    },
+    {
+      "preserve_id": "PC-A5",
+      "scope": "CHANGES",
+      "change_refs": [
+        "CHG-1",
+        "CHG-2"
+      ],
+      "rationale": "Final resource inventory and retention depend on correct merge of the config resource after mutating ordinary input; resource_inventory and retention checks must still pass."
+    }
+  ],
+  "obligation_lineage": {
+    "schema_version": "ce.obligation_lineage.v1",
+    "input_digest": "5e35ce63106f134d43e682afb42610724cf49f54661cae8d679fd4ffcd57b6a3",
+    "requirement_digest": "c89a27fcce4476eb5b6b47da0489defcca381e7f48dd2ada682f04862819ac86",
+    "nodes": {
+      "OB-6cea2a4d3f708303cbf13a11": {
+        "id": "OB-6cea2a4d3f708303cbf13a11",
+        "definition": {
+          "id": "A1",
+          "outcome_id": "O1",
+          "statement": "When a Kptfile pipeline uses configPath to designate a KRM resource in the same package, `kpt fn render` should provide that resource to its owning function as functionConfig.",
+          "source_refs": [
+            "requirement_text:15:247"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "`kpt fn render` should provide that resource to its owning function as `functionConfig`",
+          "stable_obligation_key": "OB-6cea2a4d3f708303cbf13a11"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:15:247"
+            ],
+            "source_quote": "`kpt fn render` should provide that resource to its owning function as `functionConfig`",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-6206e57e1a9204cf5886b0ff": {
+        "id": "OB-6206e57e1a9204cf5886b0ff",
+        "definition": {
+          "id": "A2",
+          "outcome_id": "O1",
+          "statement": "When a Kptfile pipeline uses configPath to designate a KRM resource in the same package, `kpt fn render` should not also treat that resource as an ordinary input item of the owning function.",
+          "source_refs": [
+            "requirement_text:15:247"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "without also treating it as an ordinary input item",
+          "stable_obligation_key": "OB-6206e57e1a9204cf5886b0ff"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:15:247"
+            ],
+            "source_quote": "without also treating it as an ordinary input item",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-837a8889b4fd81b734576998": {
+        "id": "OB-837a8889b4fd81b734576998",
+        "definition": {
+          "id": "A3",
+          "outcome_id": "O1",
+          "statement": "The owning function should still transform the workload resources it is meant to process.",
+          "source_refs": [
+            "requirement_text:248:330"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "The function should still transform the workload resources it is meant to process.",
+          "stable_obligation_key": "OB-837a8889b4fd81b734576998"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:248:330"
+            ],
+            "source_quote": "The function should still transform the workload resources it is meant to process.",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-4decc8008ce258e9384bd7ba": {
+        "id": "OB-4decc8008ce258e9384bd7ba",
+        "definition": {
+          "id": "A4",
+          "outcome_id": "O1",
+          "statement": "A later pipeline function may still see and transform the config resource.",
+          "source_refs": [
+            "requirement_text:331:483"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "A later pipeline function may still see and transform the config resource",
+          "stable_obligation_key": "OB-4decc8008ce258e9384bd7ba"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:331:483"
+            ],
+            "source_quote": "A later pipeline function may still see and transform the config resource",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-dfe555dba36adae94ff9111b": {
+        "id": "OB-dfe555dba36adae94ff9111b",
+        "definition": {
+          "id": "A5",
+          "outcome_id": "O1",
+          "statement": "Both the config resource and the workload resources should appear correctly in the final rendered KRM package.",
+          "source_refs": [
+            "requirement_text:331:483"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "both resources should appear correctly in the final rendered KRM package.",
+          "stable_obligation_key": "OB-dfe555dba36adae94ff9111b"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:331:483"
+            ],
+            "source_quote": "both resources should appear correctly in the final rendered KRM package.",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      }
+    },
+    "events": [
+      {
+        "kind": "REGISTER",
+        "id": "LE-a9afe365e33b9dcf1e8f1e39",
+        "parent_ids": [],
+        "atom_refs": [
+          "A1"
+        ],
+        "resolved_ids": {
+          "A1": "OB-6cea2a4d3f708303cbf13a11"
+        },
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-ff5027432de36231c42300f9",
+        "parent_ids": [],
+        "atom_refs": [
+          "A2"
+        ],
+        "resolved_ids": {
+          "A2": "OB-6206e57e1a9204cf5886b0ff"
+        },
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-fe665e23fb6dc448b6566baf",
+        "parent_ids": [],
+        "atom_refs": [
+          "A3"
+        ],
+        "resolved_ids": {
+          "A3": "OB-837a8889b4fd81b734576998"
+        },
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-f09b700c771725c74a17e2d3",
+        "parent_ids": [],
+        "atom_refs": [
+          "A4"
+        ],
+        "resolved_ids": {
+          "A4": "OB-4decc8008ce258e9384bd7ba"
+        },
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-39da8417a28c1a61abb60f42",
+        "parent_ids": [],
+        "atom_refs": [
+          "A5"
+        ],
+        "resolved_ids": {
+          "A5": "OB-dfe555dba36adae94ff9111b"
+        },
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      }
+    ],
+    "bindings": {
+      "A1": "OB-6cea2a4d3f708303cbf13a11",
+      "A2": "OB-6206e57e1a9204cf5886b0ff",
+      "A3": "OB-837a8889b4fd81b734576998",
+      "A4": "OB-4decc8008ce258e9384bd7ba",
+      "A5": "OB-dfe555dba36adae94ff9111b"
+    },
+    "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3"
+  },
+  "coordination_context": {
+    "diagnosis_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+    "obligation_atoms": [
+      {
+        "id": "A1",
+        "outcome_id": "O1",
+        "statement": "When a Kptfile pipeline uses configPath to designate a KRM resource in the same package, `kpt fn render` should provide that resource to its owning function as functionConfig.",
+        "source_refs": [
+          "requirement_text:15:247"
+        ],
+        "support": "EXPLICIT",
+        "source_quote": "`kpt fn render` should provide that resource to its owning function as `functionConfig`",
+        "stable_obligation_key": "OB-6cea2a4d3f708303cbf13a11"
+      },
+      {
+        "id": "A2",
+        "outcome_id": "O1",
+        "statement": "When a Kptfile pipeline uses configPath to designate a KRM resource in the same package, `kpt fn render` should not also treat that resource as an ordinary input item of the owning function.",
+        "source_refs": [
+          "requirement_text:15:247"
+        ],
+        "support": "EXPLICIT",
+        "source_quote": "without also treating it as an ordinary input item",
+        "stable_obligation_key": "OB-6206e57e1a9204cf5886b0ff"
+      },
+      {
+        "id": "A3",
+        "outcome_id": "O1",
+        "statement": "The owning function should still transform the workload resources it is meant to process.",
+        "source_refs": [
+          "requirement_text:248:330"
+        ],
+        "support": "EXPLICIT",
+        "source_quote": "The function should still transform the workload resources it is meant to process.",
+        "stable_obligation_key": "OB-837a8889b4fd81b734576998"
+      },
+      {
+        "id": "A4",
+        "outcome_id": "O1",
+        "statement": "A later pipeline function may still see and transform the config resource.",
+        "source_refs": [
+          "requirement_text:331:483"
+        ],
+        "support": "EXPLICIT",
+        "source_quote": "A later pipeline function may still see and transform the config resource",
+        "stable_obligation_key": "OB-4decc8008ce258e9384bd7ba"
+      },
+      {
+        "id": "A5",
+        "outcome_id": "O1",
+        "statement": "Both the config resource and the workload resources should appear correctly in the final rendered KRM package.",
+        "source_refs": [
+          "requirement_text:331:483"
+        ],
+        "support": "EXPLICIT",
+        "source_quote": "both resources should appear correctly in the final rendered KRM package.",
+        "stable_obligation_key": "OB-dfe555dba36adae94ff9111b"
+      }
+    ],
+    "expected_relations": [
+      {
+        "id": "R2",
+        "source_unit_ids": [
+          "U1"
+        ],
+        "target_unit_ids": [
+          "U3"
+        ],
+        "relation_form": "DIRECT_EDGE",
+        "shared_constraint_reason": null,
+        "mechanism": "runMutators selects the owning mutator's ordinary input from the pipeline input list.",
+        "condition": "Kptfile pipeline uses configPath to designate a same-package KRM resource and a mutator owns it.",
+        "expected_contract": "The configPath-designated resource is excluded from the owning mutator's ordinary input list.",
+        "requirement_refs": [
+          "O1"
+        ],
+        "obligation_refs": [
+          "A2"
+        ],
+        "support_refs": [
+          "OBS4",
+          "OBS8",
+          "SRC-CU-883e2cb2727d395a"
+        ]
+      },
+      {
+        "id": "R3",
+        "source_unit_ids": [
+          "U1"
+        ],
+        "target_unit_ids": [
+          "U4"
+        ],
+        "relation_form": "DIRECT_EDGE",
+        "shared_constraint_reason": null,
+        "mechanism": "runValidators selects the owning validator's ordinary input from the pipeline input list.",
+        "condition": "Kptfile pipeline uses configPath to designate a same-package KRM resource and a validator owns it.",
+        "expected_contract": "The configPath-designated resource is excluded from the owning validator's ordinary input list.",
+        "requirement_refs": [
+          "O1"
+        ],
+        "obligation_refs": [
+          "A2"
+        ],
+        "support_refs": [
+          "OBS5",
+          "SRC-CU-60d3496476d58093"
+        ]
+      }
+    ],
+    "violations": [
+      {
+        "id": "V1",
+        "relation_id": "R2",
+        "broken_behavior": "The configPath-designated settings resource remains in the owning mutator's ordinary input list.",
+        "causal_explanation": "runMutators passes the full pipeline input list to SelectInput without removing the configPath-designated resource; probes observe settings present in the originating mutator ordinary input.",
+        "evidence_refs": [
+          "OBS4",
+          "OBS8",
+          "SRC-CU-883e2cb2727d395a"
+        ],
+        "support_basis": "OBSERVED_AND_STATIC",
+        "causal_status": "SUPPORTED"
+      },
+      {
+        "id": "V2",
+        "relation_id": "R3",
+        "broken_behavior": "The configPath-designated settings resource remains in the owning validator's ordinary input list.",
+        "causal_explanation": "runValidators passes the full pipeline input list to SelectInput without removing the configPath-designated resource; probe observes settings present in the originating validator ordinary input.",
+        "evidence_refs": [
+          "OBS5",
+          "SRC-CU-60d3496476d58093"
+        ],
+        "support_basis": "OBSERVED_AND_STATIC",
+        "causal_status": "SUPPORTED"
+      }
+    ],
+    "source_support": [
+      {
+        "id": "SRC-CU-883e2cb2727d395a",
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/lib/kptops/render_executor.go",
+          "start_line": 785,
+          "end_line": 856,
+          "column_start": 1
+        },
+        "content_digest": "8a41e5a58014edaf87650f7d13fce06dab31aa410f5c47026e65b691672dccb3",
+        "excerpt": "func (pn *pkgNode) runMutators(ctx context.Context, hctx *hydrationContext, input []*yaml.RNode) ([]*yaml.RNode, error) {\n\tpl, err := pn.pkg.Pipeline()\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tif len(pl.Mutators) == 0 {\n\t\treturn input, nil\n\t}\n\n\tmutators, failIdx, err := fnChain(ctx, hctx, pn.pkg.UniquePath, pl.Mutators)\n\tif err != nil {\n\t\t// Capture execution error (e.g. missing exec, image resolution failure)\n\t\thctx.mutationSteps = append(hctx.mutationSteps, preExecFailureStep(pl.Mutators[failIdx], err))\n\t\treturn nil, err\n\t}\n\n\tfor i, mutator := range mutators {\n\t\tresultCountBeforeExec := len(hctx.fnResults.Items)\n\n\t\tselectors := pl.Mutators[i].Selectors\n\t\texclusions := pl.Mutators[i].Exclusions\n\n\t\tif len(selectors) > 0 || len(exclusions) > 0 {\n\t\t\t// set kpt-resource-id annotation on each resource before mutation\n\t\t\terr = fnruntime.SetResourceIDs(input)\n\t\t\tif err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t}\n\n\t\tif err := pn.refreshFnConfig(mutator, input, pl.Mutators[i].ConfigPath); err != nil {\n\t\t\treturn nil, err\n\t\t}\n\n\t\t// select the resources on which function should be applied\n\t\tselectedInput, err := fnruntime.SelectInput(input, selectors, exclusions, &fnruntime.SelectionContext{RootPackagePath: hctx.root.pkg.UniquePath})\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\toutput := &kio.PackageBuffer{}\n\t\t// create a kio pipeline from kyaml library to execute the function chains\n\t\tmutation := kio.Pipeline{\n\t\t\tInputs: []kio.Reader{\n\t\t\t\t&kio.PackageBuffer{Nodes: selectedInput},\n\t\t\t},\n\t\t\tFilters: []kio.Filter{mutator},\n\t\t\tOutputs: []kio.Writer{output},\n\t\t}\n\t\terr = mutation.Execute()\n\t\tif err != nil {\n\t\t\tclearAnnotationsOnMutFailure(input)\n\t\t\thctx.mutationSteps = append(hctx.mutationSteps, captureStepResult(pl.Mutators[i], hctx.fnResults, resultCountBeforeExec, err))\n\t\t\treturn input, err\n\t\t}\n\t\thctx.executedFunctionCnt++\n\t\thctx.mutationSteps = append(hctx.mutationSteps, captureStepResult(pl.Mutators[i], hctx.fnResults, resultCountBeforeExec, nil))\n\n\t\tif len(selectors) > 0 || len(exclusions) > 0 {\n\t\t\t// merge the output resources with input resources\n\t\t\tinput = fnruntime.MergeWithInput(output.Nodes, selectedInput, input)\n\t\t\t// delete the kpt-resource-id annotation on each resource\n\t\t\terr = fnruntime.DeleteResourceIDs(input)\n\t\t\tif err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t} else {\n\t\t\tinput = output.Nodes\n\t\t}\n\t}\n\treturn input, nil\n}\n",
+        "origin": "selected candidate CU-883e2cb2727d395a"
+      },
+      {
+        "id": "SRC-CU-60d3496476d58093",
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/lib/kptops/render_executor.go",
+          "start_line": 862,
+          "end_line": 908,
+          "column_start": 1
+        },
+        "content_digest": "e658aaddf9612cfb4f179848f7de7de817e70b1be372285a9e02d797098a111f",
+        "excerpt": "func (pn *pkgNode) runValidators(ctx context.Context, hctx *hydrationContext, input []*yaml.RNode) error {\n\tpl, err := pn.pkg.Pipeline()\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tif len(pl.Validators) == 0 {\n\t\treturn nil\n\t}\n\n\tfor i := range pl.Validators {\n\t\tfunction := pl.Validators[i]\n\t\tresultCountBeforeExec := len(hctx.fnResults.Items)\n\t\t// validators are run on a copy of mutated resources to ensure\n\t\t// resources are not mutated.\n\t\tselectedResources, err := fnruntime.SelectInput(input, function.Selectors, function.Exclusions, &fnruntime.SelectionContext{RootPackagePath: hctx.root.pkg.UniquePath})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tvar validator *fnruntime.FunctionRunner\n\t\tdisplayResourceCount := len(function.Selectors) > 0 || len(function.Exclusions) > 0\n\t\tif function.Exec != \"\" && !hctx.runnerOptions.AllowExec {\n\t\t\thctx.validationSteps = append(hctx.validationSteps, preExecFailureStep(function, errAllowedExecNotSpecified))\n\t\t\treturn errAllowedExecNotSpecified\n\t\t}\n\t\topts := hctx.runnerOptions\n\t\topts.SetPkgPathAnnotation = true\n\t\topts.DisplayResourceCount = displayResourceCount\n\t\tvalidator, err = fnruntime.NewRunner(ctx, hctx.fileSystem, &function, pn.pkg.UniquePath, hctx.fnResults, opts, hctx.runtime)\n\t\tif err != nil {\n\t\t\thctx.validationSteps = append(hctx.validationSteps, preExecFailureStep(function, err))\n\t\t\treturn err\n\t\t}\n\n\t\tif err := pn.refreshFnConfig(validator, input, function.ConfigPath); err != nil {\n\t\t\treturn err\n\t\t}\n\n\t\tif _, err = validator.Filter(cloneResources(selectedResources)); err != nil {\n\t\t\thctx.validationSteps = append(hctx.validationSteps, captureStepResult(function, hctx.fnResults, resultCountBeforeExec, err))\n\t\t\treturn err\n\t\t}\n\t\thctx.executedFunctionCnt++\n\t\thctx.validationSteps = append(hctx.validationSteps, captureStepResult(function, hctx.fnResults, resultCountBeforeExec, nil))\n\t}\n\treturn nil\n}\n",
+        "origin": "selected candidate CU-60d3496476d58093"
+      }
+    ],
+    "interpretation": "Validated diagnosis context; historical after source changes. Not a new edit permission."
+  },
+  "public_execution_capabilities": {
+    "schema_version": "ce.public_execution_capabilities.v1",
+    "source": {
+      "path": "environment.json",
+      "sha256": "d26753f2cbb2ba5a7aad33615229a0a9c1d0ce93a47730576999ec50b1dd9cda",
+      "task_observation_limit_source": "task.yaml:observation_limit"
+    },
+    "task_observation_limit": "Production transformation/generated artifact or schema contract only; no live convergence assertion.",
+    "environment_observation_limit": "Actual production Kpt Renderer package build; private function fixtures and oracle excluded",
+    "observation_boundary": null,
+    "public_scope": null,
+    "native_input_boundary": null,
+    "candidate_command": null,
+    "build_entrypoint": null,
+    "public_runner": null,
+    "expected_artifact": null,
+    "scenarios": [
+      {
+        "name": "public-kpt-render-production-package-build",
+        "argv": [
+          "sh",
+          "/work/.contractedge-deps/setup/build.sh"
+        ]
+      }
+    ],
+    "editable_policy": {
+      "allowed_paths": [
+        "internal/*.go",
+        "pkg/*.go",
+        "api/*.go",
+        "commands/*.go"
+      ],
+      "forbidden_paths": [
+        "**/*test*",
+        "**/contractedge*",
+        "private/**",
+        "verifier/**",
+        "evaluator/**",
+        "oracle/**",
+        "go.mod",
+        "go.sum",
+        "**/go.mod",
+        "**/go.sum",
+        ".contractedge-deps/**"
+      ],
+      "policy_status": "DECLARED"
+    },
+    "network": "none",
+    "interpretation": "Declared public execution/observation only. Build success is not behavioral success; unavailable behavior stays UNKNOWN. No additional execution or edit permission.",
+    "consumer_id": "contractedge.topomen_source_consumer.v1",
+    "execution_backend": "topomen_agent",
+    "supported_operations": [
+      "MODIFY",
+      "CREATE"
+    ],
+    "method_behavior_probes": [
+      {
+        "id": "kpt-configpath-v4",
+        "sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843",
+        "checks": {
+          "mutator.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "mutator.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "validator.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "validator.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "mutator.later_sees_config": "after the owning mutator, a later mutator still sees the config resource",
+          "control.ordinary_inputs": "without configPath both resources remain ordinary inputs",
+          "control.final_resources": "without configPath both resources keep their declared data",
+          "mutator.config_retained": "Final config settings resource retains the declared data.initial field",
+          "mutator.workload_retained": "Final workload resource retains the declared data.initial field",
+          "mutator.config_transformed": "A later function transformation of config is retained in final output",
+          "validator.config_retained": "Final config settings resource retains the declared data.initial field",
+          "validator.workload_retained": "Final workload resource retains the declared data.initial field",
+          "validator.config_transformed": "A later function transformation of config is retained in final output",
+          "mutator.workload_transformed": "Owning mutator transforms the intended workload",
+          "mutator_selector.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "mutator_selector.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "mutator_selector.later_sees_config": "after the owning mutator, a later mutator still sees the config resource",
+          "mutator_selector.config_retained": "Final config settings resource retains the declared data.initial field",
+          "mutator_selector.workload_retained": "Final workload resource retains the declared data.initial field",
+          "mutator_selector.config_transformed": "A later function transformation of config is retained in final output",
+          "mutator_selector.workload_transformed": "Owning mutator transforms the intended workload",
+          "mutator_exclusion.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "mutator_exclusion.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "mutator_exclusion.later_sees_config": "after the owning mutator, a later mutator still sees the config resource",
+          "mutator_exclusion.config_retained": "Final config settings resource retains the declared data.initial field",
+          "mutator_exclusion.workload_retained": "Final workload resource retains the declared data.initial field",
+          "mutator_exclusion.config_transformed": "A later function transformation of config is retained in final output",
+          "mutator_exclusion.workload_transformed": "Owning mutator transforms the intended workload",
+          "mutator.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "mutator.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "validator.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "validator.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "control.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "control.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "mutator_selector.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "mutator_selector.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "mutator_exclusion.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "mutator_exclusion.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource"
+        },
+        "scenario": "method-kpt-configpath-v4",
+        "api_entrypoints": [
+          {
+            "package": "pkg/lib/kptops",
+            "symbol": "Renderer"
+          },
+          {
+            "package": "pkg/fn",
+            "symbol": "FunctionRuntime"
+          }
+        ],
+        "boundary": "Local public Renderer API using function runtime stand-ins; candidate code and probe share a process, stdout is not tamper-proof; no external container/WASM or remote service guarantee"
+      }
+    ]
+  }
+}

@@ -1,0 +1,97 @@
+diff --git a/pkg/lib/kptops/render_executor.go b/pkg/lib/kptops/render_executor.go
+index 0c6fabc..021d905 100644
+--- a/pkg/lib/kptops/render_executor.go
++++ b/pkg/lib/kptops/render_executor.go
+@@ -817,8 +817,20 @@ func (pn *pkgNode) runMutators(ctx context.Context, hctx *hydrationContext, inpu
+ 			return nil, err
+ 		}
+ 
++		// exclude the configPath-designated resource from the owning mutator's
++		// ordinary input while retaining it in the outer input slice for later
++		// functions and the final rendered package.
++		ordinaryInput := input
++		var configResource *yaml.RNode
++		if pl.Mutators[i].ConfigPath != "" {
++			configResource = findConfigResource(pn, input, pl.Mutators[i].ConfigPath)
++			if configResource != nil {
++				ordinaryInput = excludeResource(input, configResource)
++			}
++		}
++
+ 		// select the resources on which function should be applied
+-		selectedInput, err := fnruntime.SelectInput(input, selectors, exclusions, &fnruntime.SelectionContext{RootPackagePath: hctx.root.pkg.UniquePath})
++		selectedInput, err := fnruntime.SelectInput(ordinaryInput, selectors, exclusions, &fnruntime.SelectionContext{RootPackagePath: hctx.root.pkg.UniquePath})
+ 		if err != nil {
+ 			return nil, err
+ 		}
+@@ -849,7 +861,11 @@ func (pn *pkgNode) runMutators(ctx context.Context, hctx *hydrationContext, inpu
+ 				return nil, err
+ 			}
+ 		} else {
+-			input = output.Nodes
++			if configResource != nil {
++				input = append(output.Nodes, configResource)
++			} else {
++				input = output.Nodes
++			}
+ 		}
+ 	}
+ 	return input, nil
+@@ -872,9 +888,18 @@ func (pn *pkgNode) runValidators(ctx context.Context, hctx *hydrationContext, in
+ 	for i := range pl.Validators {
+ 		function := pl.Validators[i]
+ 		resultCountBeforeExec := len(hctx.fnResults.Items)
++		// exclude the configPath-designated resource from the owning validator's
++		// ordinary input without altering the overall validation resource list.
++		ordinaryInput := input
++		if function.ConfigPath != "" {
++			if configResource := findConfigResource(pn, input, function.ConfigPath); configResource != nil {
++				ordinaryInput = excludeResource(input, configResource)
++			}
++		}
++
+ 		// validators are run on a copy of mutated resources to ensure
+ 		// resources are not mutated.
+-		selectedResources, err := fnruntime.SelectInput(input, function.Selectors, function.Exclusions, &fnruntime.SelectionContext{RootPackagePath: hctx.root.pkg.UniquePath})
++		selectedResources, err := fnruntime.SelectInput(ordinaryInput, function.Selectors, function.Exclusions, &fnruntime.SelectionContext{RootPackagePath: hctx.root.pkg.UniquePath})
+ 		if err != nil {
+ 			return err
+ 		}
+@@ -907,6 +932,37 @@ func (pn *pkgNode) runValidators(ctx context.Context, hctx *hydrationContext, in
+ 	return nil
+ }
+ 
++// findConfigResource returns the resource in input that belongs to pn's package
++// and whose file path matches configPath, or nil if no such resource exists.
++func findConfigResource(pn *pkgNode, input []*yaml.RNode, configPath string) *yaml.RNode {
++	for _, r := range input {
++		pkgPath, err := pkg.GetPkgPathAnnotation(r)
++		if err != nil {
++			continue
++		}
++		currPath, _, err := kioutil.GetFileAnnotations(r)
++		if err != nil {
++			continue
++		}
++		if pkgPath == pn.pkg.UniquePath.String() && currPath == configPath {
++			return r
++		}
++	}
++	return nil
++}
++
++// excludeResource returns a new slice containing all resources from input except
++// the given resource, preserving the original order.
++func excludeResource(input []*yaml.RNode, exclude *yaml.RNode) []*yaml.RNode {
++	var result []*yaml.RNode
++	for _, r := range input {
++		if r != exclude {
++			result = append(result, r)
++		}
++	}
++	return result
++}
++
+ func cloneResources(input []*yaml.RNode) (output []*yaml.RNode) {
+ 	for _, resource := range input {
+ 		output = append(output, resource.Copy())

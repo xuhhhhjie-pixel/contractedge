@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-branch-binding-20261026/system/outputs/branch-target-binding-20261026/replay_rebinding_ready.py", line 84, in <module>
+    packet, context = validate_ready_trace(trace, parse_method_input(inputs['METHOD_INPUT']), workspace)
+  File "/home/xhj/contractedge-branch-binding-20261026/system/src/contractedge/orchestration/repair.py", line 117, in validate_ready_trace
+    raise ValueError('Ready trace belongs to another case/input/source snapshot')
+ValueError: Ready trace belongs to another case/input/source snapshot
