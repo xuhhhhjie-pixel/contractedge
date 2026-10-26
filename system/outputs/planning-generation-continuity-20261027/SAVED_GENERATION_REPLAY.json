@@ -1,0 +1,27 @@
+{
+  "status": "SAVED_FULL_FRONT_MODE_REPLAY_PASS",
+  "source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "messages_exact_original": true,
+  "schema_exact_original": true,
+  "output_budget_unchanged": true,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "source_unchanged": true,
+  "original_output_and_failure_unchanged": true,
+  "old_mode": null,
+  "new_mode": "disabled",
+  "public_declaration_order_restored": true,
+  "adapter_wire_changed_fields": [
+    "reasoning_effort",
+    "thinking"
+  ],
+  "provenance": {
+    "mode": "disabled",
+    "reason": "COMPLETED_REASONING_STARVED_JSON_RECOVERY",
+    "origin_stage": "DIAGNOSIS",
+    "scope": "CURRENT_FRONT_HALF",
+    "origin_prompt_version": "diagnosis.v1.1.26"
+  },
+  "formal_ready": false,
+  "limitation": "Proves actual serialized transport policy, not that a new plan or patch succeeds."
+}

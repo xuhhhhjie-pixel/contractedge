@@ -793,6 +793,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
     separate_truncation_allowance = config.get("planning_truncation_separate_allowance", False)
     if type(separate_truncation_allowance) is not bool:
         raise ValueError("planning_truncation_separate_allowance must be boolean")
+    generation_recovery_scope = config.get('planning_generation_recovery_scope', 'prompt_version')
+    if generation_recovery_scope not in ('prompt_version', 'front_half'):
+        raise ValueError('planning_generation_recovery_scope must be prompt_version or front_half')
     engine = getattr(journal, "engine", None)
     policy = engine.policy if engine is not None else PolicyLedger(config)
     max_format_retries = policy.limit("format_correction")
@@ -815,18 +818,20 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 transition(RepairState(live_snapshot), result))
 
     def planning_generation_mode(request):
-        """Keep a completed truncation recovery for this prompt in this run only.
-
-        This changes transport, not evidence or validation. A different planning
-        schema and a fresh front half retain their original generation policy.
-        """
+        """Keep an observed recovery in its configured scope, never across runs."""
         origin = recovered_generation_modes.get(request.prompt_version)
+        origin_prompt = request.prompt_version
+        if origin is None and generation_recovery_scope == 'front_half' and recovered_generation_modes:
+            origin_prompt, origin = next(iter(recovered_generation_modes.items()))
         if origin is None:
             return request
+        provenance = ({'origin_prompt_version': origin_prompt} if generation_recovery_scope == 'front_half' else {})
         return replace(request, thinking='disabled', metadata={**request.metadata,
             'planning_generation_policy': {
                 'mode': 'disabled', 'reason': 'COMPLETED_REASONING_STARVED_JSON_RECOVERY',
-                'origin_stage': origin, 'scope': 'CURRENT_FRONT_HALF_PROMPT_VERSION'}})
+                'origin_stage': origin,
+                'scope': ('CURRENT_FRONT_HALF' if generation_recovery_scope == 'front_half'
+                          else 'CURRENT_FRONT_HALF_PROMPT_VERSION'), **provenance}})
 
     def complete_recorded(request, stage: str):
         ledger_start = journal.position() if journal is not None else 0

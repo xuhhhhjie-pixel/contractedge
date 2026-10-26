@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "condition": "Full engineering receipt missing",
+  "driver_exit": 1,
+  "attempt_root_created": false,
+  "ledger_unchanged": true,
+  "new_model_calls": 0,
+  "automatic_retry": false
+}
