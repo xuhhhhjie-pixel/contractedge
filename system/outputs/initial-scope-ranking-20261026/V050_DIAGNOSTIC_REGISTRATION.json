@@ -1,0 +1,35 @@
+{
+  "schema_version": "ce.minimal_root_cause_diagnostic.v1",
+  "source_sha256": "9c795e1eaa7e81cd34e707c4869db9aa536005674d6d227b651e3719f2532057",
+  "freeze_sha256": "250ab61b5fdb21fd4e55657a8e18186ea49ae7a70e4c2961c59803803136e4ee",
+  "qualification_sha256": "82c63044fcb456e8365bd97665d7fa951ed6dd4c982cbfd5dae16dbdafef3c7f",
+  "driver_sha256": "7cfe18a62be85dd7f76d3930d7d5ac0db8293c1ca40b0c00059905118cd38c8b",
+  "attempts": [
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "attempt_id": "diagnostic-source050-v2-20261026-rw-certmanager-9116",
+      "output": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116",
+      "registration": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/registrations/RW-CERTMANAGER-9116.json",
+      "registration_sha256": "4348c3cd6d0dd19f88c711e4c0035d6d1bab6b97dc182eef7ce4168517599a00"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "attempt_id": "diagnostic-source050-v2-20261026-r3-kpt-4673",
+      "output": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/methods/R3-KPT-4673/R3-KPT-4673",
+      "registration": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/registrations/R3-KPT-4673.json",
+      "registration_sha256": "d32d3be1fe13d223a6b8bbeea2a7276e90ab1ed7386cf2a4e08a4448eabb0ace"
+    }
+  ],
+  "once_per_case": true,
+  "rejected_v050_v1_freeze_was_never_dispatched": true,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "cumulative_api_limit_cny": 150,
+  "predecessor_v049_outcomes": "CERT_SEMANTIC_FAIL_KPT_NOT_RUN_PRESERVED",
+  "hypotheses": [
+    "Path-matched production receives content scoring and reaches initial actual context without guessed paths",
+    "Model uses current-source evidence and bounded extension to form a valid repair; conditional original KPT control remains intact"
+  ],
+  "success_gate": "Cert independent PASS/public not FAIL before KPT control; both required and no inheritance into fixed46",
+  "transient_workspace_policy": "RETIRE_CLOSED_SCORED_PUBLIC_WORKSPACE"
+}

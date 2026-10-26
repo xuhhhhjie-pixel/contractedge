@@ -26,10 +26,12 @@
     "report": "outputs/benchmark150-adapter-v2-20261019/preparation.json"
   },
   "protocol_tests": {
-    "status": "PENDING_CURRENT_FULL_RUN",
-    "focused_passed": 72,
+    "passed": 1939,
+    "subtests_passed": 91,
     "implementation_version": "0.6.50",
-    "scope": "Focused engineering only; no repair effectiveness"
+    "development_freeze": "initial-scope-ranking-v050-20261026-v2",
+    "scope": "Full current frozen tree including actual isolated demos; no repair effectiveness claim",
+    "report": "outputs/initial-scope-ranking-20261026/full-v050-v2.log"
   },
   "stage_implementations": {
     "0_1": "dataset/benchmark.py",
@@ -3296,18 +3298,22 @@
     "snapshot": "docs/development/initial-scope-ranking-v050-20261026-v2.snapshot.json",
     "snapshot_id": "initial-scope-ranking-v050-20261026-v2",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V050_FROZEN_FULL_ENGINEERING_PENDING",
+    "status": "V050_ENGINEERING_QUALIFIED_TARGET_DIAGNOSTIC_RUNNING",
     "source_sha256": "9c795e1eaa7e81cd34e707c4869db9aa536005674d6d227b651e3719f2532057",
     "verification_command": "python scripts/verify_development_snapshot.py",
-    "formal_effectiveness": "NOT_RUN_CURRENT_SOURCE",
+    "formal_effectiveness": "DIAGNOSTIC_RUNNING_NO_FIXED46_EFFECTIVENESS",
     "formal_ready": false,
     "report": "outputs/initial-scope-ranking-20261026/COMPLETION_AUDIT.md",
     "predecessor_worktree": "/home/xhj/contractedge-gap-query-20261026/system",
-    "predecessor_effectiveness": "Cert SEMANTIC_FAIL; KPT not run"
+    "predecessor_effectiveness": "Cert SEMANTIC_FAIL; KPT not run",
+    "full_tests": 1939,
+    "subtests": 91,
+    "runtime_qualification": "outputs/initial-scope-ranking-20261026/RUNTIME_QUALIFICATION_v050_v2.json",
+    "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/registration.json"
   },
-  "staged_implementation_version": "0.6.45",
+  "staged_implementation_version": "0.6.50",
   "runtime_implementation_version": "0.6.40",
-  "current_optimization_audit": "outputs/fixed46-isolated-panel-20261025/COMPLETION_AUDIT.md",
+  "current_optimization_audit": "outputs/initial-scope-ranking-20261026/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {
     "status": "INTERRUPTED_PUBLIC_OBSERVATION_NO_FINAL_METHOD_RESULT",
     "model_calls_completed": 4,
