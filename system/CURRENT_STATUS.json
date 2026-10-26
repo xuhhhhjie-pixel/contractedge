@@ -3300,10 +3300,10 @@
     "snapshot": "docs/development/branch-target-binding-v051-20261026-v2.snapshot.json",
     "snapshot_id": "branch-target-binding-v051-20261026-v2",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V051_V2_ENGINEERING_QUALIFIED_KPT_TARGET_RUNNING",
+    "status": "V051_V2_KPT_TARGET_PASS_CERT_CONTROL_RUNNING",
     "source_sha256": "827422caa8e1b7b0d331bd2fb6e23850581d5243751ea4e99d3806d466bce480",
     "verification_command": "python scripts/verify_development_snapshot.py",
-    "formal_effectiveness": "DIAGNOSTIC_RUNNING_NO_FIXED46_EFFECTIVENESS",
+    "formal_effectiveness": "ONE_TARGET_PASS_CONTROL_RUNNING_NO_FIXED46_ACCEPTANCE",
     "formal_ready": false,
     "report": "outputs/branch-target-binding-20261026/COMPLETION_AUDIT.md",
     "predecessor_worktree": "/home/xhj/contractedge-scope-ranking-20261026/system",
@@ -3311,7 +3311,9 @@
     "full_tests": 1955,
     "subtests": 91,
     "runtime_qualification": "outputs/branch-target-binding-20261026/RUNTIME_QUALIFICATION_v051_v2.json",
-    "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source051-v2-20261026/registration.json"
+    "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source051-v2-20261026/registration.json",
+    "target_independent_status": "PASS",
+    "target_public_decision": "PASS"
   },
   "staged_implementation_version": "0.6.51",
   "runtime_implementation_version": "0.6.40",

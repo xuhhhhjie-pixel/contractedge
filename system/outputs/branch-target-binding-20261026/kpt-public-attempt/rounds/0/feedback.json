@@ -1,0 +1,1896 @@
+{
+  "schema_version": "ce.execution_feedback.v1",
+  "case_id": "R3-KPT-4673",
+  "run_id": "10fd4f8e-4de0-426b-8a38-c35ce7def94d",
+  "input_digest": "5e35ce63106f134d43e682afb42610724cf49f54661cae8d679fd4ffcd57b6a3",
+  "round_id": 0,
+  "from_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "to_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+  "patch_digest": "caa1beb5d17b9b6e00365edcc296c64dd4150f879b3b19410225477d8fd76e4f",
+  "build_state": "PASSED",
+  "semantic_outcome": "PUBLIC_REVIEW_PASS",
+  "public_observations": [
+    {
+      "id": "OBS1",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator.later_sees_config",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-004.json",
+        "file_sha256": "dd2d62b98bb93ec3d15ce95a21faeeaa5aa0aa54925f421564d54f86157b018e",
+        "start_byte": 0,
+        "copied_bytes": 323,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "dd2d62b98bb93ec3d15ce95a21faeeaa5aa0aa54925f421564d54f86157b018e",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\",\"settings\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/4/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS2",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_selector.later_sees_config",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-024.json",
+        "file_sha256": "c46002c3228a6260763b181899f7b725837a3eb2bfd61b70d270e95bbcc4907d",
+        "start_byte": 0,
+        "copied_bytes": 333,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "c46002c3228a6260763b181899f7b725837a3eb2bfd61b70d270e95bbcc4907d",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"settings\",\"workload\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/24/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS3",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_exclusion.later_sees_config",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-033.json",
+        "file_sha256": "4002e01aebd8ca2c310c7df9baee4490751f07e50e43d215c37e02a959eea899",
+        "start_byte": 0,
+        "copied_bytes": 334,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "4002e01aebd8ca2c310c7df9baee4490751f07e50e43d215c37e02a959eea899",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"settings\",\"workload\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/33/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS4",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator.owner_excludes_config",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-003.json",
+        "file_sha256": "589c0b5562399da646a212b0df382b37aaf5ac255fb68c31166f978aea0a829c",
+        "start_byte": 0,
+        "copied_bytes": 321,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "589c0b5562399da646a212b0df382b37aaf5ac255fb68c31166f978aea0a829c",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/3/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS5",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:validator.owner_excludes_config",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-012.json",
+        "file_sha256": "65b3262c5ac8c0e640ff8340ebea865cd3ae5212aabedfd61ebcec16b0352b19",
+        "start_byte": 0,
+        "copied_bytes": 324,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "65b3262c5ac8c0e640ff8340ebea865cd3ae5212aabedfd61ebcec16b0352b19",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/12/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS6",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:control.ordinary_inputs",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-018.json",
+        "file_sha256": "779be7999df4ee945fdc14a7c90cd5e020272d47a1f36c96ae8103ce6e3af447",
+        "start_byte": 0,
+        "copied_bytes": 306,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "779be7999df4ee945fdc14a7c90cd5e020272d47a1f36c96ae8103ce6e3af447",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"control.ordinary_inputs\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"settings\",\"workload\"]},\"statement\":\"without configPath both resources remain ordinary inputs\",\"raw_observation_pointer\":\"/checks/18/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS7",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:control.final_resources",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-019.json",
+        "file_sha256": "e846bfbfd8ede31651925223eff39fbac55fe2dfdb9b4d7c0d5acc0eb7193e7e",
+        "start_byte": 0,
+        "copied_bytes": 492,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "e846bfbfd8ede31651925223eff39fbac55fe2dfdb9b4d7c0d5acc0eb7193e7e",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"control.final_resources\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"rendered\":{\"settings\":{\"apiVersion\":\"v1\",\"data\":{\"initial\":\"config\"},\"kind\":\"ConfigMap\",\"metadata\":{\"name\":\"settings\"}},\"workload\":{\"apiVersion\":\"v1\",\"data\":{\"initial\":\"workload\"},\"kind\":\"ConfigMap\",\"metadata\":{\"name\":\"workload\"}}}},\"statement\":\"without configPath both resources keep their declared data\",\"raw_observation_pointer\":\"/checks/19/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS8",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_selector.owner_excludes_config",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-023.json",
+        "file_sha256": "b52f35db2445aa6835029c04e312726a635d57ec63f887d6887b5ff8d09eec9e",
+        "start_byte": 0,
+        "copied_bytes": 324,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "b52f35db2445aa6835029c04e312726a635d57ec63f887d6887b5ff8d09eec9e",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/23/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS9",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_exclusion.owner_excludes_config",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-032.json",
+        "file_sha256": "7093c725fbd65c31d0981f5f99952777aeb3303bb8f9aa1f2c25effac1830b9b",
+        "start_byte": 0,
+        "copied_bytes": 332,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "7093c725fbd65c31d0981f5f99952777aeb3303bb8f9aa1f2c25effac1830b9b",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/32/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS10",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator.config_transformed",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-007.json",
+        "file_sha256": "be9af793537aa9a6dfc8b05948d9c81c9309223e34e11691a1ae036ed7995e2e",
+        "start_byte": 0,
+        "copied_bytes": 355,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "be9af793537aa9a6dfc8b05948d9c81c9309223e34e11691a1ae036ed7995e2e",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/7/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS11",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:validator.config_transformed",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-015.json",
+        "file_sha256": "bc63294224edf2474271cdcd36d6a6e053de7196e7c28acb966c778ebcde752e",
+        "start_byte": 0,
+        "copied_bytes": 358,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "bc63294224edf2474271cdcd36d6a6e053de7196e7c28acb966c778ebcde752e",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/15/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS12",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_selector.config_transformed",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-027.json",
+        "file_sha256": "3dcbc023dbb0e5bef3a36fbdabf5725883b801a671c42e2a7f19b280cc6fdd87",
+        "start_byte": 0,
+        "copied_bytes": 365,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "3dcbc023dbb0e5bef3a36fbdabf5725883b801a671c42e2a7f19b280cc6fdd87",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/27/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS13",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_exclusion.config_transformed",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-036.json",
+        "file_sha256": "55bf2cb53dcc7a89d1f1092a76b739f29c0e4b1b67cf90c91142df272511b4a2",
+        "start_byte": 0,
+        "copied_bytes": 366,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "55bf2cb53dcc7a89d1f1092a76b739f29c0e4b1b67cf90c91142df272511b4a2",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/36/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS14",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator.resource_inventory",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-000.json",
+        "file_sha256": "497e1092951b136e2e7d5249b3e2094aebf5a98f62ea7c35a494058fedee393e",
+        "start_byte": 0,
+        "copied_bytes": 489,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "497e1092951b136e2e7d5249b3e2094aebf5a98f62ea7c35a494058fedee393e",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/0/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS15",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator.owner_binding",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-002.json",
+        "file_sha256": "a513a3d51dd338ba3782f38980172d381fea8281de338cfb019ca134b8bed2b1",
+        "start_byte": 0,
+        "copied_bytes": 283,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "a513a3d51dd338ba3782f38980172d381fea8281de338cfb019ca134b8bed2b1",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/2/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS16",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator.workload_transformed",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-008.json",
+        "file_sha256": "7935e804ef9df61946493016eadfaab4d68548b5736dbd6f9d5e1dc899565cfd",
+        "start_byte": 0,
+        "copied_bytes": 337,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "7935e804ef9df61946493016eadfaab4d68548b5736dbd6f9d5e1dc899565cfd",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/8/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS17",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:validator.resource_inventory",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-009.json",
+        "file_sha256": "6310f1edd626d45dcaa4fe62841f90e6f739553c4bae9e1541e886279d46232b",
+        "start_byte": 0,
+        "copied_bytes": 491,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "6310f1edd626d45dcaa4fe62841f90e6f739553c4bae9e1541e886279d46232b",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/9/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS18",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:validator.owner_binding",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-011.json",
+        "file_sha256": "38ebc579df15489b0fa848aebc9cdcc369096b23b320ff449a3e62ca1aa4c536",
+        "start_byte": 0,
+        "copied_bytes": 286,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "38ebc579df15489b0fa848aebc9cdcc369096b23b320ff449a3e62ca1aa4c536",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/11/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS19",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:control.resource_inventory",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-016.json",
+        "file_sha256": "0216fe8cff385c27a2a5555bff2ea9ee2eb273aa5303c026be430f5e1176fa9b",
+        "start_byte": 0,
+        "copied_bytes": 490,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "0216fe8cff385c27a2a5555bff2ea9ee2eb273aa5303c026be430f5e1176fa9b",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"control.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/16/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS20",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_selector.resource_inventory",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-020.json",
+        "file_sha256": "c73f76793302b88712a0992b9a10a849355e013a95ace7d98d09eb4a6d20d129",
+        "start_byte": 0,
+        "copied_bytes": 499,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "c73f76793302b88712a0992b9a10a849355e013a95ace7d98d09eb4a6d20d129",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/20/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS21",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_selector.owner_binding",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-022.json",
+        "file_sha256": "de10139864d2a369d2253a47d1475f3f11df762163a7c998fdcf5c287e975154",
+        "start_byte": 0,
+        "copied_bytes": 293,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "de10139864d2a369d2253a47d1475f3f11df762163a7c998fdcf5c287e975154",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/22/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS22",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_selector.workload_transformed",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-028.json",
+        "file_sha256": "98bdb95e87517f3e3185a1bc0213d92554c299b73621e3df4777034351698131",
+        "start_byte": 0,
+        "copied_bytes": 347,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "98bdb95e87517f3e3185a1bc0213d92554c299b73621e3df4777034351698131",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/28/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS23",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_exclusion.resource_inventory",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-029.json",
+        "file_sha256": "75020dfc878bf993552efdb04ff73c832c31debf9d60c7addc7939dbe8c0502c",
+        "start_byte": 0,
+        "copied_bytes": 500,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "75020dfc878bf993552efdb04ff73c832c31debf9d60c7addc7939dbe8c0502c",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/29/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS24",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_exclusion.owner_binding",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-031.json",
+        "file_sha256": "b504b814cdac50a3a291434a7b6aa4fe5da607dec06001144d38a44edea41d39",
+        "start_byte": 0,
+        "copied_bytes": 294,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "b504b814cdac50a3a291434a7b6aa4fe5da607dec06001144d38a44edea41d39",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/31/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS25",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_exclusion.workload_transformed",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-037.json",
+        "file_sha256": "ef6565efe2ab9269929b469574569ff7b5835b295a991efa5c2a624f470769cd",
+        "start_byte": 0,
+        "copied_bytes": 348,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "ef6565efe2ab9269929b469574569ff7b5835b295a991efa5c2a624f470769cd",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/37/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS26",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator.identity_annotations_cleaned",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-001.json",
+        "file_sha256": "b5515a8a8d4409c7e3b0bb1bc97e0f3c87ef8b46ac1655b8c25d46cd99aa12a4",
+        "start_byte": 0,
+        "copied_bytes": 530,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "b5515a8a8d4409c7e3b0bb1bc97e0f3c87ef8b46ac1655b8c25d46cd99aa12a4",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.identity_annotations_cleaned\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"inventory\":{\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"annotations\":{\"settings\":{},\"workload\":{}}},\"statement\":\"Internal resource identity annotations are removed after production rendering\",\"raw_observation_pointer\":\"/checks/1/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS27",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator.config_retained",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-005.json",
+        "file_sha256": "9bf1402e802781f673352faa9c8fdfd83348cd6ca3f05aea70b170b3e03d1e29",
+        "start_byte": 0,
+        "copied_bytes": 353,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "9bf1402e802781f673352faa9c8fdfd83348cd6ca3f05aea70b170b3e03d1e29",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/5/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS28",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator.workload_retained",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-006.json",
+        "file_sha256": "b8d0be4492b0f8eb26c229084c7db99b78948c97a30b001e2cc3d656dc05600a",
+        "start_byte": 0,
+        "copied_bytes": 350,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "b8d0be4492b0f8eb26c229084c7db99b78948c97a30b001e2cc3d656dc05600a",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/6/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS29",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:validator.identity_annotations_cleaned",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-010.json",
+        "file_sha256": "3adcdc5b7aabe9428233f6792d32e1f5b0c11e43f068cdf5bd63a194aa16bde1",
+        "start_byte": 0,
+        "copied_bytes": 533,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "3adcdc5b7aabe9428233f6792d32e1f5b0c11e43f068cdf5bd63a194aa16bde1",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.identity_annotations_cleaned\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"inventory\":{\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"annotations\":{\"settings\":{},\"workload\":{}}},\"statement\":\"Internal resource identity annotations are removed after production rendering\",\"raw_observation_pointer\":\"/checks/10/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS30",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:validator.config_retained",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-013.json",
+        "file_sha256": "a97519c41d5cece9cc7e5c2448995a0f021f2ce3c080731fd5224aee1e188eb3",
+        "start_byte": 0,
+        "copied_bytes": 356,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "a97519c41d5cece9cc7e5c2448995a0f021f2ce3c080731fd5224aee1e188eb3",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/13/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS31",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:validator.workload_retained",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-014.json",
+        "file_sha256": "354fe42f9961829ddd466578133a8c0986ce197c68d9cd7d98f8af5d65cbb82e",
+        "start_byte": 0,
+        "copied_bytes": 334,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "354fe42f9961829ddd466578133a8c0986ce197c68d9cd7d98f8af5d65cbb82e",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/14/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS32",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:control.identity_annotations_cleaned",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-017.json",
+        "file_sha256": "a82563c24561b5182dca92c8b7059b89a9d51fe0af5aef964f75661115186672",
+        "start_byte": 0,
+        "copied_bytes": 531,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "a82563c24561b5182dca92c8b7059b89a9d51fe0af5aef964f75661115186672",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"control.identity_annotations_cleaned\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"inventory\":{\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"annotations\":{\"settings\":{},\"workload\":{}}},\"statement\":\"Internal resource identity annotations are removed after production rendering\",\"raw_observation_pointer\":\"/checks/17/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS33",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_selector.identity_annotations_cleaned",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-021.json",
+        "file_sha256": "e13d1a91de77e0e21451e7024e9c626b8c4ee72564ae817b370d2503ae63c886",
+        "start_byte": 0,
+        "copied_bytes": 540,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "e13d1a91de77e0e21451e7024e9c626b8c4ee72564ae817b370d2503ae63c886",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.identity_annotations_cleaned\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"inventory\":{\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"annotations\":{\"settings\":{},\"workload\":{}}},\"statement\":\"Internal resource identity annotations are removed after production rendering\",\"raw_observation_pointer\":\"/checks/21/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS34",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_selector.config_retained",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-025.json",
+        "file_sha256": "e0a55ba9d68d11c132477054d18c86f037ad51cea838de2f4dfa9f7e9e1294ef",
+        "start_byte": 0,
+        "copied_bytes": 363,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "e0a55ba9d68d11c132477054d18c86f037ad51cea838de2f4dfa9f7e9e1294ef",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/25/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS35",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_selector.workload_retained",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-026.json",
+        "file_sha256": "2ef3037b1137807c8663f7757860460f9f59fd768bcc861fbfe680b01c02dd38",
+        "start_byte": 0,
+        "copied_bytes": 360,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "2ef3037b1137807c8663f7757860460f9f59fd768bcc861fbfe680b01c02dd38",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/26/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS36",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_exclusion.identity_annotations_cleaned",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-030.json",
+        "file_sha256": "aa37388668821fe01c1c5e9c5203caf5148ba685966d678cc57ea943279be034",
+        "start_byte": 0,
+        "copied_bytes": 541,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "aa37388668821fe01c1c5e9c5203caf5148ba685966d678cc57ea943279be034",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.identity_annotations_cleaned\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"inventory\":{\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"annotations\":{\"settings\":{},\"workload\":{}}},\"statement\":\"Internal resource identity annotations are removed after production rendering\",\"raw_observation_pointer\":\"/checks/30/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS37",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_exclusion.config_retained",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-034.json",
+        "file_sha256": "f6d9dcaf8d4f4645695c6c50fbddfe3ff79d20575e26aa22c8517d5e87434586",
+        "start_byte": 0,
+        "copied_bytes": 364,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "f6d9dcaf8d4f4645695c6c50fbddfe3ff79d20575e26aa22c8517d5e87434586",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/34/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS38",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "PUBLIC_BEHAVIOR",
+      "scenario": "method-kpt-configpath-v4",
+      "behavior_check": {
+        "id": "kpt-configpath-v4:mutator_exclusion.workload_retained",
+        "status": "PASS",
+        "probe_sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843"
+      },
+      "origin": "Method-owned public requirement-derived runtime probe; candidate executes in the probe process, not tamper-proof or independent grading",
+      "locator": {
+        "path": "method-probes/kpt-configpath-v4/check-035.json",
+        "file_sha256": "5ae2659f6f529c5c083a7eb69e892e757f5ffab74f4d373c9c28ce323625f75c",
+        "start_byte": 0,
+        "copied_bytes": 361,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "5ae2659f6f529c5c083a7eb69e892e757f5ffab74f4d373c9c28ce323625f75c",
+      "excerpt": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/35/observed\",\"raw_source\":\"stdout\"}\n"
+    },
+    {
+      "id": "OBS39",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "EXECUTION_ONLY",
+      "locator": {
+        "path": "launcher/tool.stdout",
+        "file_sha256": "5059d4036dd0db10527eadd940c0f06da87aab78f7b4e9bfea63ddac6ce5993e",
+        "start_byte": 0,
+        "copied_bytes": 305,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "5059d4036dd0db10527eadd940c0f06da87aab78f7b4e9bfea63ddac6ce5993e",
+      "excerpt": "{\"case_id\": \"R3-KPT-4673\", \"status\": \"EXECUTION_PASS\", \"hidden_semantic_evaluation\": \"NOT_RUN\", \"private_materials_loaded\": false, \"scenarios\": [{\"scenario\": \"public-kpt-render-production-package-build\", \"exit_code\": 0, \"elapsed_seconds\": 64.57578493282199, \"timed_out\": false, \"output_limited\": false}]}\n",
+      "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+    },
+    {
+      "id": "OBS40",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "EXECUTION_ONLY",
+      "locator": {
+        "path": "raw/public_execution.json",
+        "file_sha256": "52ec972cf603363cff4a21a91a92768ecdf3e2eb327f843b8e40b1a2cbc464d2",
+        "start_byte": 0,
+        "copied_bytes": 361,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "52ec972cf603363cff4a21a91a92768ecdf3e2eb327f843b8e40b1a2cbc464d2",
+      "excerpt": "{\n  \"case_id\": \"R3-KPT-4673\",\n  \"status\": \"EXECUTION_PASS\",\n  \"hidden_semantic_evaluation\": \"NOT_RUN\",\n  \"private_materials_loaded\": false,\n  \"scenarios\": [\n    {\n      \"scenario\": \"public-kpt-render-production-package-build\",\n      \"exit_code\": 0,\n      \"elapsed_seconds\": 64.57578493282199,\n      \"timed_out\": false,\n      \"output_limited\": false\n    }\n  ]\n}\n",
+      "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+    }
+  ],
+  "public_check_results": [
+    {
+      "id": "PC-V1",
+      "status": "PASS",
+      "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+      "evidence": [
+        {
+          "observation_id": "OBS4",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/3/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS8",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/23/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS9",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/32/observed\",\"raw_source\":\"stdout\"}\n"
+        }
+      ],
+      "decision_method": "BOUND_CHECK_AGGREGATION"
+    },
+    {
+      "id": "PC-V2",
+      "status": "PASS",
+      "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+      "evidence": [
+        {
+          "observation_id": "OBS5",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/12/observed\",\"raw_source\":\"stdout\"}\n"
+        }
+      ],
+      "decision_method": "BOUND_CHECK_AGGREGATION"
+    },
+    {
+      "id": "preserve:PC-A1",
+      "status": "PASS",
+      "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+      "evidence": [
+        {
+          "observation_id": "OBS15",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/2/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS18",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/11/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS21",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/22/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS24",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/31/observed\",\"raw_source\":\"stdout\"}\n"
+        }
+      ],
+      "decision_method": "BOUND_CHECK_AGGREGATION"
+    },
+    {
+      "id": "preserve:PC-A3",
+      "status": "PASS",
+      "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+      "evidence": [
+        {
+          "observation_id": "OBS16",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/8/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS22",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/28/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS25",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/37/observed\",\"raw_source\":\"stdout\"}\n"
+        }
+      ],
+      "decision_method": "BOUND_CHECK_AGGREGATION"
+    },
+    {
+      "id": "preserve:PC-A4",
+      "status": "PASS",
+      "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+      "evidence": [
+        {
+          "observation_id": "OBS1",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\",\"settings\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/4/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS2",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"settings\",\"workload\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/24/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS3",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"settings\",\"workload\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/33/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS10",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/7/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS11",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/15/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS12",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/27/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS13",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/36/observed\",\"raw_source\":\"stdout\"}\n"
+        }
+      ],
+      "decision_method": "BOUND_CHECK_AGGREGATION"
+    },
+    {
+      "id": "preserve:PC-A5",
+      "status": "PASS",
+      "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+      "evidence": [
+        {
+          "observation_id": "OBS14",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/0/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS17",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/9/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS20",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/20/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS23",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/29/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS19",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"control.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/16/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS27",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/5/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS30",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/13/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS34",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/25/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS37",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/34/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS28",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/6/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS31",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/14/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS35",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/26/observed\",\"raw_source\":\"stdout\"}\n"
+        },
+        {
+          "observation_id": "OBS38",
+          "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/35/observed\",\"raw_source\":\"stdout\"}\n"
+        }
+      ],
+      "decision_method": "BOUND_CHECK_AGGREGATION"
+    }
+  ],
+  "retained_constraints": [
+    {
+      "retention_id": "retained-95d132ec3b12c8c9a979c029",
+      "postcondition_id": "PC-V1",
+      "statement": "The configPath-designated settings resource is excluded from the owning mutator's ordinary input list.\nAND PRESERVE: The configPath-designated settings resource is excluded from the owning validator's ordinary input list.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "historical_obligation_refs": [
+        "A2"
+      ],
+      "source_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "support_basis": "PUBLIC_MODEL_REVIEW",
+      "verification_kind": "PUBLIC_BEHAVIOR",
+      "verification_scope": {
+        "scenario": "method-kpt-configpath-v4"
+      },
+      "behavior_check_refs": [
+        "kpt-configpath-v4:mutator.owner_excludes_config",
+        "kpt-configpath-v4:mutator_selector.owner_excludes_config",
+        "kpt-configpath-v4:mutator_exclusion.owner_excludes_config",
+        "kpt-configpath-v4:validator.owner_excludes_config"
+      ],
+      "semantic_statements": [
+        "The configPath-designated settings resource is excluded from the owning mutator's ordinary input list.",
+        "The configPath-designated settings resource is excluded from the owning validator's ordinary input list."
+      ],
+      "stable_obligation_keys": [
+        "OB-6206e57e1a9204cf5886b0ff"
+      ],
+      "check_coverage": "ALL_OF",
+      "coverage_rationale": "These three owner_excludes_config checks together cover the owning mutator ordinary input exclusion under default, selector, and exclusion configurations as required by R2/A2.",
+      "comparison_requirements": [],
+      "planned_check": "Run public method scenario kpt-configpath-v4 and verify mutator.owner_excludes_config, mutator_selector.owner_excludes_config, and mutator_exclusion.owner_excludes_config report ordinary_inputs excluding settings and including workload, while owner_binding checks still PASS.",
+      "check_scope": "Method-owned public runtime probe scenario method-kpt-configpath-v4: default mutator, selector mutator, and exclusion mutator ordinary input exclusion checks.",
+      "interpretation": "Preserve candidate; requires fresh public review after later edits.",
+      "latest_public_status": "PASS",
+      "latest_review_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45"
+    },
+    {
+      "retention_id": "retained-16ef03d72291e88526168bad",
+      "postcondition_id": "preserve:PC-A1",
+      "statement": "The configPath-designated resource is supplied to its owning function as functionConfig.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "historical_obligation_refs": [
+        "A1"
+      ],
+      "source_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "support_basis": "PUBLIC_MODEL_REVIEW",
+      "verification_kind": "PUBLIC_BEHAVIOR",
+      "verification_scope": {
+        "scenario": "method-kpt-configpath-v4"
+      },
+      "behavior_check_refs": [
+        "kpt-configpath-v4:mutator.owner_binding",
+        "kpt-configpath-v4:validator.owner_binding",
+        "kpt-configpath-v4:mutator_selector.owner_binding",
+        "kpt-configpath-v4:mutator_exclusion.owner_binding"
+      ],
+      "semantic_statements": [
+        "The configPath-designated resource is supplied to its owning function as functionConfig."
+      ],
+      "stable_obligation_keys": [
+        "OB-6cea2a4d3f708303cbf13a11"
+      ],
+      "check_coverage": "ALL_OF",
+      "coverage_rationale": "The four owner_binding checks cover functionConfig binding for mutator, validator, selector, and exclusion scenarios.",
+      "comparison_requirements": [],
+      "planned_check": null,
+      "check_scope": null,
+      "interpretation": "Preserve candidate; requires fresh public review after later edits.",
+      "latest_public_status": "PASS",
+      "latest_review_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45"
+    },
+    {
+      "retention_id": "retained-960cd1d9adc1ebd134502721",
+      "postcondition_id": "preserve:PC-A3",
+      "statement": "The owning function still transforms the workload resources it is meant to process.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "historical_obligation_refs": [
+        "A3"
+      ],
+      "source_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "support_basis": "PUBLIC_MODEL_REVIEW",
+      "verification_kind": "PUBLIC_BEHAVIOR",
+      "verification_scope": {
+        "scenario": "method-kpt-configpath-v4"
+      },
+      "behavior_check_refs": [
+        "kpt-configpath-v4:mutator.workload_transformed",
+        "kpt-configpath-v4:mutator_selector.workload_transformed",
+        "kpt-configpath-v4:mutator_exclusion.workload_transformed"
+      ],
+      "semantic_statements": [
+        "The owning function still transforms the workload resources it is meant to process."
+      ],
+      "stable_obligation_keys": [
+        "OB-837a8889b4fd81b734576998"
+      ],
+      "check_coverage": "ALL_OF",
+      "coverage_rationale": "The workload_transformed checks cover owning mutator transformation for default, selector, and exclusion scenarios.",
+      "comparison_requirements": [],
+      "planned_check": null,
+      "check_scope": null,
+      "interpretation": "Preserve candidate; requires fresh public review after later edits.",
+      "latest_public_status": "PASS",
+      "latest_review_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45"
+    },
+    {
+      "retention_id": "retained-372458dc084581a231d725de",
+      "postcondition_id": "preserve:PC-A4",
+      "statement": "A later pipeline function may still see and transform the config resource.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "historical_obligation_refs": [
+        "A4"
+      ],
+      "source_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "support_basis": "PUBLIC_MODEL_REVIEW",
+      "verification_kind": "PUBLIC_BEHAVIOR",
+      "verification_scope": {
+        "scenario": "method-kpt-configpath-v4"
+      },
+      "behavior_check_refs": [
+        "kpt-configpath-v4:mutator.later_sees_config",
+        "kpt-configpath-v4:mutator_selector.later_sees_config",
+        "kpt-configpath-v4:mutator_exclusion.later_sees_config",
+        "kpt-configpath-v4:mutator.config_transformed",
+        "kpt-configpath-v4:validator.config_transformed",
+        "kpt-configpath-v4:mutator_selector.config_transformed",
+        "kpt-configpath-v4:mutator_exclusion.config_transformed"
+      ],
+      "semantic_statements": [
+        "A later pipeline function may still see and transform the config resource."
+      ],
+      "stable_obligation_keys": [
+        "OB-4decc8008ce258e9384bd7ba"
+      ],
+      "check_coverage": "ALL_OF",
+      "coverage_rationale": "The later_sees_config and config_transformed checks cover visibility and retained transformation of the config resource for later mutator, validator, selector, and exclusion functions.",
+      "comparison_requirements": [],
+      "planned_check": null,
+      "check_scope": null,
+      "interpretation": "Preserve candidate; requires fresh public review after later edits.",
+      "latest_public_status": "PASS",
+      "latest_review_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45"
+    },
+    {
+      "retention_id": "retained-cc393e84a02645ebbb6ba26e",
+      "postcondition_id": "preserve:PC-A5",
+      "statement": "Both the config resource and the workload resources appear correctly in the final rendered KRM package.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "historical_obligation_refs": [
+        "A5"
+      ],
+      "source_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "support_basis": "PUBLIC_MODEL_REVIEW",
+      "verification_kind": "PUBLIC_BEHAVIOR",
+      "verification_scope": {
+        "scenario": "method-kpt-configpath-v4"
+      },
+      "behavior_check_refs": [
+        "kpt-configpath-v4:mutator.resource_inventory",
+        "kpt-configpath-v4:validator.resource_inventory",
+        "kpt-configpath-v4:control.resource_inventory",
+        "kpt-configpath-v4:mutator_selector.resource_inventory",
+        "kpt-configpath-v4:mutator_exclusion.resource_inventory",
+        "kpt-configpath-v4:mutator.config_retained",
+        "kpt-configpath-v4:mutator.workload_retained",
+        "kpt-configpath-v4:validator.config_retained",
+        "kpt-configpath-v4:validator.workload_retained",
+        "kpt-configpath-v4:mutator_selector.config_retained",
+        "kpt-configpath-v4:mutator_selector.workload_retained",
+        "kpt-configpath-v4:mutator_exclusion.config_retained",
+        "kpt-configpath-v4:mutator_exclusion.workload_retained"
+      ],
+      "semantic_statements": [
+        "Both the config resource and the workload resources appear correctly in the final rendered KRM package."
+      ],
+      "stable_obligation_keys": [
+        "OB-dfe555dba36adae94ff9111b"
+      ],
+      "check_coverage": "ALL_OF",
+      "coverage_rationale": "The resource_inventory and retention checks cover presence and declared data retention of settings and workload resources across mutator, validator, control, selector, and exclusion scenarios.",
+      "comparison_requirements": [],
+      "planned_check": null,
+      "check_scope": null,
+      "interpretation": "Preserve candidate; requires fresh public review after later edits.",
+      "latest_public_status": "PASS",
+      "latest_review_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45"
+    }
+  ],
+  "pending_obligations": [],
+  "failure_kind": "NONE",
+  "route": "STOP",
+  "route_confidence": "MEDIUM",
+  "rationale": "All planned public checks accepted by evidence-bound model review; hidden evaluation remains independent.",
+  "hidden_evaluation": "NOT_AVAILABLE_TO_METHOD",
+  "coordination_links": [
+    {
+      "check_id": "PC-V1",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A2"
+      ],
+      "historical_obligation_refs": [],
+      "relation_refs": [
+        "R2"
+      ],
+      "violation_refs": [
+        "V1"
+      ],
+      "change_refs": [
+        "CHG-1"
+      ],
+      "diagnosis_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "observation_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "observation_refs": [
+        "OBS4",
+        "OBS8",
+        "OBS9"
+      ],
+      "status": "PASS",
+      "interpretation": "Traceable association, not independent proof of causal attribution"
+    },
+    {
+      "check_id": "PC-V2",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A2"
+      ],
+      "historical_obligation_refs": [],
+      "relation_refs": [
+        "R3"
+      ],
+      "violation_refs": [
+        "V2"
+      ],
+      "change_refs": [
+        "CHG-2"
+      ],
+      "diagnosis_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "observation_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "observation_refs": [
+        "OBS5"
+      ],
+      "status": "PASS",
+      "interpretation": "Traceable association, not independent proof of causal attribution"
+    },
+    {
+      "check_id": "preserve:PC-A1",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A1"
+      ],
+      "historical_obligation_refs": [],
+      "relation_refs": [
+        "R2",
+        "R3"
+      ],
+      "violation_refs": [
+        "V1",
+        "V2"
+      ],
+      "change_refs": [
+        "CHG-1",
+        "CHG-2"
+      ],
+      "diagnosis_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "observation_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "observation_refs": [
+        "OBS15",
+        "OBS18",
+        "OBS21",
+        "OBS24"
+      ],
+      "status": "PASS",
+      "interpretation": "Traceable association, not independent proof of causal attribution"
+    },
+    {
+      "check_id": "preserve:PC-A3",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A3"
+      ],
+      "historical_obligation_refs": [],
+      "relation_refs": [
+        "R2",
+        "R3"
+      ],
+      "violation_refs": [
+        "V1",
+        "V2"
+      ],
+      "change_refs": [
+        "CHG-1",
+        "CHG-2"
+      ],
+      "diagnosis_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "observation_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "observation_refs": [
+        "OBS16",
+        "OBS22",
+        "OBS25"
+      ],
+      "status": "PASS",
+      "interpretation": "Traceable association, not independent proof of causal attribution"
+    },
+    {
+      "check_id": "preserve:PC-A4",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A4"
+      ],
+      "historical_obligation_refs": [],
+      "relation_refs": [
+        "R2",
+        "R3"
+      ],
+      "violation_refs": [
+        "V1",
+        "V2"
+      ],
+      "change_refs": [
+        "CHG-1",
+        "CHG-2"
+      ],
+      "diagnosis_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "observation_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "observation_refs": [
+        "OBS1",
+        "OBS2",
+        "OBS3",
+        "OBS10",
+        "OBS11",
+        "OBS12",
+        "OBS13"
+      ],
+      "status": "PASS",
+      "interpretation": "Traceable association, not independent proof of causal attribution"
+    },
+    {
+      "check_id": "preserve:PC-A5",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A5"
+      ],
+      "historical_obligation_refs": [],
+      "relation_refs": [
+        "R2",
+        "R3"
+      ],
+      "violation_refs": [
+        "V1",
+        "V2"
+      ],
+      "change_refs": [
+        "CHG-1",
+        "CHG-2"
+      ],
+      "diagnosis_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "observation_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "observation_refs": [
+        "OBS14",
+        "OBS17",
+        "OBS20",
+        "OBS23",
+        "OBS19",
+        "OBS27",
+        "OBS30",
+        "OBS34",
+        "OBS37",
+        "OBS28",
+        "OBS31",
+        "OBS35",
+        "OBS38"
+      ],
+      "status": "PASS",
+      "interpretation": "Traceable association, not independent proof of causal attribution"
+    }
+  ],
+  "observation_diagnostics": [],
+  "next_action": "COMPLETE",
+  "public_execution_capabilities": {
+    "schema_version": "ce.public_execution_capabilities.v1",
+    "source": {
+      "path": "environment.json",
+      "sha256": "d26753f2cbb2ba5a7aad33615229a0a9c1d0ce93a47730576999ec50b1dd9cda",
+      "task_observation_limit_source": "task.yaml:observation_limit"
+    },
+    "task_observation_limit": "Production transformation/generated artifact or schema contract only; no live convergence assertion.",
+    "environment_observation_limit": "Actual production Kpt Renderer package build; private function fixtures and oracle excluded",
+    "observation_boundary": null,
+    "public_scope": null,
+    "native_input_boundary": null,
+    "candidate_command": null,
+    "build_entrypoint": null,
+    "public_runner": null,
+    "expected_artifact": null,
+    "scenarios": [
+      {
+        "name": "public-kpt-render-production-package-build",
+        "argv": [
+          "sh",
+          "/work/.contractedge-deps/setup/build.sh"
+        ]
+      }
+    ],
+    "editable_policy": {
+      "allowed_paths": [
+        "internal/*.go",
+        "pkg/*.go",
+        "api/*.go",
+        "commands/*.go"
+      ],
+      "forbidden_paths": [
+        "**/*test*",
+        "**/contractedge*",
+        "private/**",
+        "verifier/**",
+        "evaluator/**",
+        "oracle/**",
+        "go.mod",
+        "go.sum",
+        "**/go.mod",
+        "**/go.sum",
+        ".contractedge-deps/**"
+      ],
+      "policy_status": "DECLARED"
+    },
+    "network": "none",
+    "interpretation": "Declared public execution/observation only. Build success is not behavioral success; unavailable behavior stays UNKNOWN. No additional execution or edit permission.",
+    "consumer_id": "contractedge.topomen_source_consumer.v1",
+    "execution_backend": "topomen_agent",
+    "supported_operations": [
+      "MODIFY",
+      "CREATE"
+    ],
+    "method_behavior_probes": [
+      {
+        "id": "kpt-configpath-v4",
+        "sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843",
+        "checks": {
+          "mutator.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "mutator.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "validator.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "validator.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "mutator.later_sees_config": "after the owning mutator, a later mutator still sees the config resource",
+          "control.ordinary_inputs": "without configPath both resources remain ordinary inputs",
+          "control.final_resources": "without configPath both resources keep their declared data",
+          "mutator.config_retained": "Final config settings resource retains the declared data.initial field",
+          "mutator.workload_retained": "Final workload resource retains the declared data.initial field",
+          "mutator.config_transformed": "A later function transformation of config is retained in final output",
+          "validator.config_retained": "Final config settings resource retains the declared data.initial field",
+          "validator.workload_retained": "Final workload resource retains the declared data.initial field",
+          "validator.config_transformed": "A later function transformation of config is retained in final output",
+          "mutator.workload_transformed": "Owning mutator transforms the intended workload",
+          "mutator_selector.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "mutator_selector.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "mutator_selector.later_sees_config": "after the owning mutator, a later mutator still sees the config resource",
+          "mutator_selector.config_retained": "Final config settings resource retains the declared data.initial field",
+          "mutator_selector.workload_retained": "Final workload resource retains the declared data.initial field",
+          "mutator_selector.config_transformed": "A later function transformation of config is retained in final output",
+          "mutator_selector.workload_transformed": "Owning mutator transforms the intended workload",
+          "mutator_exclusion.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "mutator_exclusion.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "mutator_exclusion.later_sees_config": "after the owning mutator, a later mutator still sees the config resource",
+          "mutator_exclusion.config_retained": "Final config settings resource retains the declared data.initial field",
+          "mutator_exclusion.workload_retained": "Final workload resource retains the declared data.initial field",
+          "mutator_exclusion.config_transformed": "A later function transformation of config is retained in final output",
+          "mutator_exclusion.workload_transformed": "Owning mutator transforms the intended workload",
+          "mutator.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "mutator.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "validator.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "validator.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "control.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "control.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "mutator_selector.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "mutator_selector.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "mutator_exclusion.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "mutator_exclusion.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource"
+        },
+        "scenario": "method-kpt-configpath-v4",
+        "api_entrypoints": [
+          {
+            "package": "pkg/lib/kptops",
+            "symbol": "Renderer"
+          },
+          {
+            "package": "pkg/fn",
+            "symbol": "FunctionRuntime"
+          }
+        ],
+        "boundary": "Local public Renderer API using function runtime stand-ins; candidate code and probe share a process, stdout is not tamper-proof; no external container/WASM or remote service guarantee"
+      }
+    ]
+  },
+  "obligation_lineage": {
+    "schema_version": "ce.obligation_lineage.v1",
+    "input_digest": "5e35ce63106f134d43e682afb42610724cf49f54661cae8d679fd4ffcd57b6a3",
+    "requirement_digest": "c89a27fcce4476eb5b6b47da0489defcca381e7f48dd2ada682f04862819ac86",
+    "nodes": {
+      "OB-6cea2a4d3f708303cbf13a11": {
+        "id": "OB-6cea2a4d3f708303cbf13a11",
+        "definition": {
+          "id": "A1",
+          "outcome_id": "O1",
+          "statement": "When a Kptfile pipeline uses configPath to designate a KRM resource in the same package, `kpt fn render` should provide that resource to its owning function as functionConfig.",
+          "source_refs": [
+            "requirement_text:15:247"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "`kpt fn render` should provide that resource to its owning function as `functionConfig`",
+          "stable_obligation_key": "OB-6cea2a4d3f708303cbf13a11"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:15:247"
+            ],
+            "source_quote": "`kpt fn render` should provide that resource to its owning function as `functionConfig`",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-6206e57e1a9204cf5886b0ff": {
+        "id": "OB-6206e57e1a9204cf5886b0ff",
+        "definition": {
+          "id": "A2",
+          "outcome_id": "O1",
+          "statement": "When a Kptfile pipeline uses configPath to designate a KRM resource in the same package, `kpt fn render` should not also treat that resource as an ordinary input item of the owning function.",
+          "source_refs": [
+            "requirement_text:15:247"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "without also treating it as an ordinary input item",
+          "stable_obligation_key": "OB-6206e57e1a9204cf5886b0ff"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:15:247"
+            ],
+            "source_quote": "without also treating it as an ordinary input item",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-837a8889b4fd81b734576998": {
+        "id": "OB-837a8889b4fd81b734576998",
+        "definition": {
+          "id": "A3",
+          "outcome_id": "O1",
+          "statement": "The owning function should still transform the workload resources it is meant to process.",
+          "source_refs": [
+            "requirement_text:248:330"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "The function should still transform the workload resources it is meant to process.",
+          "stable_obligation_key": "OB-837a8889b4fd81b734576998"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:248:330"
+            ],
+            "source_quote": "The function should still transform the workload resources it is meant to process.",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-4decc8008ce258e9384bd7ba": {
+        "id": "OB-4decc8008ce258e9384bd7ba",
+        "definition": {
+          "id": "A4",
+          "outcome_id": "O1",
+          "statement": "A later pipeline function may still see and transform the config resource.",
+          "source_refs": [
+            "requirement_text:331:483"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "A later pipeline function may still see and transform the config resource",
+          "stable_obligation_key": "OB-4decc8008ce258e9384bd7ba"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:331:483"
+            ],
+            "source_quote": "A later pipeline function may still see and transform the config resource",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-dfe555dba36adae94ff9111b": {
+        "id": "OB-dfe555dba36adae94ff9111b",
+        "definition": {
+          "id": "A5",
+          "outcome_id": "O1",
+          "statement": "Both the config resource and the workload resources should appear correctly in the final rendered KRM package.",
+          "source_refs": [
+            "requirement_text:331:483"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "both resources should appear correctly in the final rendered KRM package.",
+          "stable_obligation_key": "OB-dfe555dba36adae94ff9111b"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:331:483"
+            ],
+            "source_quote": "both resources should appear correctly in the final rendered KRM package.",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      }
+    },
+    "events": [
+      {
+        "kind": "REGISTER",
+        "id": "LE-a9afe365e33b9dcf1e8f1e39",
+        "parent_ids": [],
+        "atom_refs": [
+          "A1"
+        ],
+        "resolved_ids": {
+          "A1": "OB-6cea2a4d3f708303cbf13a11"
+        },
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-ff5027432de36231c42300f9",
+        "parent_ids": [],
+        "atom_refs": [
+          "A2"
+        ],
+        "resolved_ids": {
+          "A2": "OB-6206e57e1a9204cf5886b0ff"
+        },
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-fe665e23fb6dc448b6566baf",
+        "parent_ids": [],
+        "atom_refs": [
+          "A3"
+        ],
+        "resolved_ids": {
+          "A3": "OB-837a8889b4fd81b734576998"
+        },
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-f09b700c771725c74a17e2d3",
+        "parent_ids": [],
+        "atom_refs": [
+          "A4"
+        ],
+        "resolved_ids": {
+          "A4": "OB-4decc8008ce258e9384bd7ba"
+        },
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-39da8417a28c1a61abb60f42",
+        "parent_ids": [],
+        "atom_refs": [
+          "A5"
+        ],
+        "resolved_ids": {
+          "A5": "OB-dfe555dba36adae94ff9111b"
+        },
+        "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      }
+    ],
+    "bindings": {
+      "A1": "OB-6cea2a4d3f708303cbf13a11",
+      "A2": "OB-6206e57e1a9204cf5886b0ff",
+      "A3": "OB-837a8889b4fd81b734576998",
+      "A4": "OB-4decc8008ce258e9384bd7ba",
+      "A5": "OB-dfe555dba36adae94ff9111b"
+    },
+    "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3"
+  },
+  "obligation_coverage": {
+    "OB-6cea2a4d3f708303cbf13a11": {
+      "status": "PASS",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "residual": null,
+      "reason": "Fresh direct checks"
+    },
+    "OB-6206e57e1a9204cf5886b0ff": {
+      "status": "PASS",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "residual": null,
+      "reason": "Fresh direct checks"
+    },
+    "OB-837a8889b4fd81b734576998": {
+      "status": "PASS",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "residual": null,
+      "reason": "Fresh direct checks"
+    },
+    "OB-4decc8008ce258e9384bd7ba": {
+      "status": "PASS",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "residual": null,
+      "reason": "Fresh direct checks"
+    },
+    "OB-dfe555dba36adae94ff9111b": {
+      "status": "PASS",
+      "snapshot_id": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+      "residual": null,
+      "reason": "Fresh direct checks"
+    }
+  },
+  "helper_preconditions": {
+    "schema_version": "ce.helper_preconditions.v1",
+    "checks": [
+      {
+        "path": "pkg/lib/kptops/render_executor.go",
+        "symbol": "runMutators",
+        "call": "MergeWithInput",
+        "resource": "input",
+        "helper_evidence_ref": "HELPER-b1458129855125de",
+        "call_line": 857,
+        "precondition": "RESOURCE_ID_INITIALIZATION",
+        "annotation_key": "ResourceIDAnnotation",
+        "status": "CHECKED_SYNTAX",
+        "reason": "Initializer/cleanup must cover every supported call guard; aliasing, loops and early exits are not proven"
+      },
+      {
+        "path": "pkg/lib/kptops/render_executor.go",
+        "symbol": "runMutators",
+        "call": "MergeWithInput",
+        "resource": "input",
+        "helper_evidence_ref": "HELPER-b1458129855125de",
+        "call_line": 857,
+        "precondition": "RESOURCE_ID_CLEANUP",
+        "annotation_key": "ResourceIDAnnotation",
+        "status": "CHECKED_SYNTAX",
+        "reason": "Initializer/cleanup must cover every supported call guard; aliasing, loops and early exits are not proven"
+      }
+    ],
+    "interpretation": "Finite registered syntax relation only; behavior probes remain required, no general control-flow or alias proof"
+  }
+}

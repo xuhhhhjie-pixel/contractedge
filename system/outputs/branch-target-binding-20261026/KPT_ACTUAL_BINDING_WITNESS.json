@@ -1,0 +1,37 @@
+{
+  "status": "FIRST_DIAGNOSIS_ALREADY_BINDS_CONSUMER_BRANCHES",
+  "branches": [
+    {
+      "symbol": "runValidators",
+      "source_evidence_id": "SRC-CU-60d3496476d58093",
+      "legal_diagnosis_unit_ids": [
+        "U4"
+      ]
+    },
+    {
+      "symbol": "runMutators",
+      "source_evidence_id": "SRC-CU-883e2cb2727d395a",
+      "legal_diagnosis_unit_ids": [
+        "U3"
+      ]
+    },
+    {
+      "symbol": "runPipeline",
+      "source_evidence_id": "SRC-CU-b185a6639d1920f7",
+      "legal_diagnosis_unit_ids": [
+        "U1"
+      ]
+    }
+  ],
+  "initial_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "final_snapshot": "e15b7435895709de2e8641fdd5de6d9ea7595ef0919fc696b573e35b158a6f45",
+  "patch_sha256": "caa1beb5d17b9b6e00365edcc296c64dd4150f879b3b19410225477d8fd76e4f",
+  "patch_bytes": 3820,
+  "real_model_calls": 3,
+  "binding_fallback_exercised": false,
+  "public_semantic_outcome": "PUBLIC_REVIEW_PASS",
+  "formal_ready": false,
+  "interpretation": "This attempt passes original branch coverage without fallback; no causal effect attribution to fallback from this one trial",
+  "independent_status_at_capture": "PENDING",
+  "independent_result_reference": "KPT_TARGET_RESULT.json"
+}

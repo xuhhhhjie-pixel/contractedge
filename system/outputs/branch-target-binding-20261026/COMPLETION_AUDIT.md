@@ -39,3 +39,9 @@ v2监督改为接收实际pytest进程退出码、精确完整摘要、冻结/�
 v2完整1955项、91子测试通过，实际进程退出码0、测试后冻结校验PASS，见FULL_REGRESSION_COMPLETION_v051_v2.json与full-v051-v2.log。实际八格PASS（14会话/28候选与观察容器），公开沙箱PASS且清理/源码完整性通过。严格监督回执链通过，资格新增模型调用0。
 
 已按新冻结预登记KPT唯一目标和条件Cert控制，当前KPT执行中；无新效果结论。v1未派发，原失败证据完整保留，不能合并旧成绩。正式准入仍false。
+
+## KPT目标实际通过，控制执行中
+
+KPT本次首轮形成runMutators→U3、runValidators→U4、runPipeline→U1绑定，3次真实调用、3820字节候选，公开PUBLIC_REVIEW_PASS（6项登记检查结果PASS），独立PASS。没有调用重新诊断兜底，因此本次效果不能归因于兜底真实触发；兜底的作用仍由公开旧轨迹与显式模拟反例证明。对照0.6.50的INVALID_PLAN/空候选，本次已产生实际正确修复，但单次对照不证明稳定泛化。证据KPT_ACTUAL_BINDING_WITNESS.json与KPT_TARGET_RESULT.json。
+
+按登记条件，Cert控制已开始，尚无本版控制结果；原46验收仍未开放。
