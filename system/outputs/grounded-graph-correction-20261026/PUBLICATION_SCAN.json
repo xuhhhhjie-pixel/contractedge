@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "files": 25,
+  "credential_pattern_matches": 0,
+  "scope": "Explicit code/config/test/public replay/report files only; excludes running qualification output and external fixture symlinks"
+}
