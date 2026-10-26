@@ -141,7 +141,12 @@ def resolve_scope(source_root: str | Path, snapshot: Snapshot,
                     path_hits = {term for term in query_terms if term in path.casefold()}
                     if len(path_hits) >= minimum_hits:
                         scored[path] = len(path_hits)
-                scan_paths = sorted(files - set(scored), key=_search_priority)
+                # A path match is a useful locator, not a ceiling on content
+                # relevance. Read those candidates too, under the same shared
+                # limits, before lower-priority paths consume the search cap.
+                scan_paths = sorted(files, key=lambda path: (
+                    _search_priority(path)[0], path not in scored,
+                    *_search_priority(path)[1:]))
                 for path in scan_paths:
                     if path not in searchable:
                         try:

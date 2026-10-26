@@ -1,3 +1,5 @@
+> **2026-10-26当前候选0.6.50：** 初始范围正文评分修复已通过72项针对性回归及公开旧轨迹零调用回放；本版完整工程、隔离资格和真实效果待验收。当前入口为CURRENT_STATUS.json及outputs/initial-scope-ranking-20261026/COMPLETION_AUDIT.md；下列旧版说明按历史范围解释。formal_ready=false。
+
 > **2026-10-26当前开发候选0.6.49：** 查询与候选池截断修复已零调用回放，尚待本版工程资格和真实验证；formal_ready=false。前版工程通过不等于本版效果通过。当前入口为 CURRENT_STATUS.json 及 outputs/gap-query-tokenization-20261026/COMPLETION_AUDIT.md。下列旧报告按原版本历史范围保留。
 
 > 本工作树为0.6.46离线优化候选，尚未进行同版真实模型验证。正在执行的原固定46槽仍使用0.6.45；不得承接其成绩。当前正式准入为false。

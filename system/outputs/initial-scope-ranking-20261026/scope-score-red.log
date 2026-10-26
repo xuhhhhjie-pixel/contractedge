@@ -1,0 +1,37 @@
+FF..                                                                     [100%]
+=================================== FAILURES ===================================
+_______ test_path_hit_file_is_scored_using_its_content_before_match_cap ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-579/test_path_hit_file_is_scored_u0')
+
+    def test_path_hit_file_is_scored_using_its_content_before_match_cap(tmp_path):
+        snapshot=fixture(tmp_path)
+        scope=resolve_scope(tmp_path,snapshot,[dict(kind='concept',value='controller issuer private key stale',origin_ref='requirement')],max_matches_per_hint=1)
+>       assert scope.seed_paths==('controller/issuer.go',)
+E       AssertionError: assert ('misc.go',) == ('controller/issuer.go',)
+E         
+E         At index 0 diff: 'misc.go' != 'controller/issuer.go'
+E         Use -v to get more diff
+
+tests/test_scope_content_ranking.py:17: AssertionError
+_ test_path_content_scoring_still_respects_existing_shared_read_budget[files] __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-579/test_path_content_scoring_stil0')
+budget = 'files'
+
+    @pytest.mark.parametrize('budget',['files','bytes'])
+    def test_path_content_scoring_still_respects_existing_shared_read_budget(tmp_path,budget):
+        snapshot=fixture(tmp_path)
+        limit=dict(max_search_files=1) if budget=='files' else dict(max_search_bytes=1)
+        scope=resolve_scope(tmp_path,snapshot,[dict(kind='concept',value='controller issuer private key stale')],**limit)
+        audit=scope.search_audit[0]
+        if budget=='files':assert audit['indexed_files_total']<=1
+        else:assert audit['indexed_bytes_total']<=1
+>       assert audit['truncated']
+E       assert False
+
+tests/test_scope_content_ranking.py:31: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_scope_content_ranking.py::test_path_hit_file_is_scored_using_its_content_before_match_cap
+FAILED tests/test_scope_content_ranking.py::test_path_content_scoring_still_respects_existing_shared_read_budget[files]
+2 failed, 2 passed in 0.15s

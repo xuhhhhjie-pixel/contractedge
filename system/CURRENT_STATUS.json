@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-25T19:38:01.590944+00:00",
+  "as_of": "2026-10-26T01:15:12.074776+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -19,19 +19,17 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.49",
+  "implementation_version": "0.6.50",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
     "report": "outputs/benchmark150-adapter-v2-20261019/preparation.json"
   },
   "protocol_tests": {
-    "passed": 1933,
-    "subtests_passed": 91,
-    "implementation_version": "0.6.49",
-    "development_freeze": "gap-query-tokenization-v049-20261026-v2",
-    "scope": "Full current tree with explicit historical public fixtures and actual isolated demos; not benchmark effectiveness",
-    "report": "outputs/gap-query-tokenization-20261026/full-v049-v2.log"
+    "status": "PENDING_CURRENT_FULL_RUN",
+    "focused_passed": 72,
+    "implementation_version": "0.6.50",
+    "scope": "Focused engineering only; no repair effectiveness"
   },
   "stage_implementations": {
     "0_1": "dataset/benchmark.py",
@@ -39,7 +37,7 @@
     "3": "source/ and retrieval/",
     "4": "diagnosis/",
     "5_6": "changeset/ and orchestration/runner.py",
-    "7": "execution/topomen_agent.py \u2192 actual topomen.collaboration.base_agent.DefaultAgent \u2192 scoped source transaction",
+    "7": "execution/topomen_agent.py → actual topomen.collaboration.base_agent.DefaultAgent → scoped source transaction",
     "8": "execution/public.py",
     "9": "orchestration/feedback.py and repair.py",
     "10": "evaluation/benchmark.py and frozen score_case.py"
@@ -135,7 +133,7 @@
     "independent_score": "PASS",
     "score": "outputs/benchmark150-independent-native-topomen-score-20261019/score.json",
     "autonomous_model_success_claim": false,
-    "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/\u6e90\u7801\u5ba1\u67e5\u4e0e\u63a5\u5165\u9a8c\u6536.md",
+    "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/源码审查与接入验收.md",
     "plan_format_owner": "ContractEdge, not native TopoMen",
     "docker_deployment_scheduler_used": false
   },
@@ -449,7 +447,7 @@
     ],
     "report": "outputs/final-optimization-20261020/final-validation.json"
   },
-  "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u5355\u6761\u771f\u5b9e\u5b9e\u9a8c\u9a8c\u6536\u4e0e\u7cfb\u7edf\u4f18\u5316-20261020.md",
+  "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/单条真实实验验收与系统优化-20261020.md",
   "release_integrity": {
     "report": "outputs/deepseek-method-preflight-v6-20261020/release150-verified.json",
     "cases": 150,
@@ -553,7 +551,7 @@
     "formal_case_count": 150,
     "remaining_money_upper_bound_cny": 67.596464,
     "all_experiment_model_calls": 167,
-    "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u9884\u7b97\u4e0a\u9650\u8c03\u6574\u81f380\u5143.md",
+    "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/预算上限调整至80元.md",
     "engineering_retry_regression": {
       "directory": "outputs/deepseek-empty-reasoning-live-regression-v1-20261020",
       "case_id": "RW-ALERTMANAGER-4705",
@@ -565,7 +563,7 @@
       "included_in_primary_cohort": false
     },
     "budget_amendment": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/budget-amendment-20-to-80.json",
-    "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u6b63\u5f0f150\u8fd0\u884c\u524d\u9a8c\u6536-20261020.md"
+    "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/正式150运行前验收-20261020.md"
   },
   "historical_protocol_tests_pre_acceptance_optimization": {
     "status": "PASS",
@@ -1254,7 +1252,7 @@
     }
   },
   "historical_independent_code_review_pre_final_optimization": "outputs/benchmark150-independent-code-review-20261019.json",
-  "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/\u7cfb\u7edf\u5ba1\u67e5\u4e0e\u9a8c\u6536.md",
+  "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/系统审查与验收.md",
   "reliability_closure": {
     "version": "0.6.38",
     "status": "SINGLE_GATE_PASS_FULL_DELIVERY_PENDING",
@@ -1772,7 +1770,7 @@
     "report": "docs/reports/2026-10-24-feedback-context-admission.md",
     "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.36.json",
     "public_calibration": "temporal-v2-calibration-corrected/summary.json",
-    "live_result": ".35 originalBroken SEMANTIC_FAIL; supplemental .34savedresponse\u2192.35 continuationPASS/8publicchecksPASS,3newcalls, not panel",
+    "live_result": ".35 originalBroken SEMANTIC_FAIL; supplemental .34savedresponse→.35 continuationPASS/8publicchecksPASS,3newcalls, not panel",
     "next_revision": "0.6.37 previous draft continuity; staged, not frozen/noAPI"
   },
   "execution_boundary": {
@@ -1950,7 +1948,7 @@
           "3": "source/ and retrieval/",
           "4": "diagnosis/",
           "5_6": "changeset/ and orchestration/runner.py",
-          "7": "execution/topomen_agent.py \u2192 actual topomen.collaboration.base_agent.DefaultAgent \u2192 scoped source transaction",
+          "7": "execution/topomen_agent.py → actual topomen.collaboration.base_agent.DefaultAgent → scoped source transaction",
           "8": "execution/public.py",
           "9": "orchestration/feedback.py and repair.py",
           "10": "evaluation/benchmark.py and frozen score_case.py"
@@ -2046,7 +2044,7 @@
           "independent_score": "PASS",
           "score": "outputs/benchmark150-independent-native-topomen-score-20261019/score.json",
           "autonomous_model_success_claim": false,
-          "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/\u6e90\u7801\u5ba1\u67e5\u4e0e\u63a5\u5165\u9a8c\u6536.md",
+          "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/源码审查与接入验收.md",
           "plan_format_owner": "ContractEdge, not native TopoMen",
           "docker_deployment_scheduler_used": false
         },
@@ -2360,7 +2358,7 @@
           ],
           "report": "outputs/final-optimization-20261020/final-validation.json"
         },
-        "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u5355\u6761\u771f\u5b9e\u5b9e\u9a8c\u9a8c\u6536\u4e0e\u7cfb\u7edf\u4f18\u5316-20261020.md",
+        "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/单条真实实验验收与系统优化-20261020.md",
         "release_integrity": {
           "report": "outputs/deepseek-method-preflight-v6-20261020/release150-verified.json",
           "cases": 150,
@@ -2464,7 +2462,7 @@
           "formal_case_count": 150,
           "remaining_money_upper_bound_cny": 67.596464,
           "all_experiment_model_calls": 167,
-          "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u9884\u7b97\u4e0a\u9650\u8c03\u6574\u81f380\u5143.md",
+          "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/预算上限调整至80元.md",
           "engineering_retry_regression": {
             "directory": "outputs/deepseek-empty-reasoning-live-regression-v1-20261020",
             "case_id": "RW-ALERTMANAGER-4705",
@@ -2476,7 +2474,7 @@
             "included_in_primary_cohort": false
           },
           "budget_amendment": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/budget-amendment-20-to-80.json",
-          "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u6b63\u5f0f150\u8fd0\u884c\u524d\u9a8c\u6536-20261020.md"
+          "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/正式150运行前验收-20261020.md"
         },
         "historical_protocol_tests_pre_acceptance_optimization": {
           "status": "PASS",
@@ -3165,7 +3163,7 @@
           }
         },
         "historical_independent_code_review_pre_final_optimization": "outputs/benchmark150-independent-code-review-20261019.json",
-        "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/\u7cfb\u7edf\u5ba1\u67e5\u4e0e\u9a8c\u6536.md",
+        "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/系统审查与验收.md",
         "reliability_closure": {
           "version": "0.6.19",
           "status": "G4_V0619_LIVE_SINGLE_RUNNING",
@@ -3295,23 +3293,17 @@
     }
   },
   "current_development": {
-    "snapshot": "docs/development/gap-query-tokenization-v049-20261026-v2.snapshot.json",
-    "snapshot_id": "bounded-source-delivery-v046-20261026-v6",
+    "snapshot": "docs/development/initial-scope-ranking-v050-20261026-v2.snapshot.json",
+    "snapshot_id": "initial-scope-ranking-v050-20261026-v2",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V049_V2_ENGINEERING_PASS_TARGET_EFFECT_GATE_FAILED",
+    "status": "V050_FROZEN_FULL_ENGINEERING_PENDING",
+    "source_sha256": "9c795e1eaa7e81cd34e707c4869db9aa536005674d6d227b651e3719f2532057",
     "verification_command": "python scripts/verify_development_snapshot.py",
-    "formal_effectiveness": "DIAGNOSTIC_IN_PROGRESS_NO_FIXED46_EFFECTIVENESS",
-    "source_sha256": "758eb3a563c18eac6ec456f6293647094d86d96ad9b750f0dce448e53bd97683",
-    "engineering": "1832_PASS_91_SUBTESTS_RUNTIME8_AND_PUBLIC_SANDBOX_PASS",
-    "promotion": "BLOCKED_BY_TWO_CONFIRMED_BOUNDARY_FINDINGS",
-    "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source-v046-v6-20261026/registration.json",
+    "formal_effectiveness": "NOT_RUN_CURRENT_SOURCE",
     "formal_ready": false,
-    "report": "outputs/gap-query-tokenization-20261026/COMPLETION_AUDIT.md",
-    "full_tests": 1933,
-    "subtests": 91,
-    "runtime_qualification": "outputs/branch-review-feedback-20261026/RUNTIME_QUALIFICATION_v048_v2.json",
-    "predecessor_worktree": "/home/xhj/contractedge-branch-review-20261026/system",
-    "diagnostic_results": "outputs/gap-query-tokenization-20261026/V049_DIAGNOSTIC_RESULTS.json"
+    "report": "outputs/initial-scope-ranking-20261026/COMPLETION_AUDIT.md",
+    "predecessor_worktree": "/home/xhj/contractedge-gap-query-20261026/system",
+    "predecessor_effectiveness": "Cert SEMANTIC_FAIL; KPT not run"
   },
   "staged_implementation_version": "0.6.45",
   "runtime_implementation_version": "0.6.40",
@@ -3369,29 +3361,31 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Migrate original fixed46 registration/dispatch to isolated protocol with exact baseline/candidate identities and once-only attempt claims",
-    "Zero-HTTP compatibility, schedule, corruption and recovery checks before paid panel",
-    "Freeze same-version A/repeat/recovery runs; open preselected B only after original gates; then G0-G6 final admission"
+    "Current freeze full engineering and actual zero-call isolation qualification",
+    "One predeclared Cert target; conditional KPT control only after target PASS/public not FAIL",
+    "Audit actual target requests and effect; original fixed46 and G0-G6 remain closed until requirements met"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",
     "baseline_source_version": "0.5.5",
     "planned_slots": 46,
-    "scored_slots": 0,
-    "status": "PREPARING_REGISTERED_A",
+    "scored_slots": 14,
+    "status": "CLOSED_A_EFFECT_GATE_FAILED",
     "B_opened": false,
     "counts_from_older_qualifications": 0,
     "formal_ready": false
   },
   "fixed46_execution": {
-    "status": "RUNNING",
+    "status": "CLOSED_A_EFFECT_GATE_FAILED",
     "registered_slots": 46,
-    "verified_completed_slots": 1,
+    "verified_completed_slots": 14,
     "checkpoint": "outputs/fixed46-isolated-panel-20261025/EXECUTION_CHECKPOINT.json",
     "audit": "outputs/fixed46-isolated-panel-20261025/COMPLETION_AUDIT.md",
     "formal_ready": false,
     "method_version": "0.6.45",
-    "scope": "External original worktree045; never counts as046 results"
+    "scope": "External original worktree045; never counts as046 results",
+    "remaining_slots": 32,
+    "remaining_status": "NOT_RUN_PREREQUISITE_FAILED"
   },
   "active_fixed46_execution_worktree": "/home/xhj/contractedge-latest-integration-20261024",
   "historical_ci_binding_verification": {

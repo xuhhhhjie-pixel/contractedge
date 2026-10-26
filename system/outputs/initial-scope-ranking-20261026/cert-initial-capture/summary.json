@@ -1,0 +1,11 @@
+{
+  "status": "REQUEST_CAPTURED_ONLY",
+  "original_calls_sha256": "9a82ab6138ee91d150da2462b2e4cf05ade40ffbd8ceadebf19c7fae8e84d60e",
+  "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "saved_responses": 0,
+  "model_calls": 0,
+  "grader_calls": 0,
+  "source_unchanged": true,
+  "formal_ready": false,
+  "scope": "Intentional fixture stop; no new diagnosis, plan or repair effectiveness conclusion"
+}
