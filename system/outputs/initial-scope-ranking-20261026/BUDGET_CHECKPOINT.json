@@ -1,0 +1,9 @@
+{
+  "limit_cny": 150,
+  "occupied_cny": 117.187366,
+  "remaining_upper_bound_cny": 32.812634,
+  "added_calls": 8,
+  "previous_occupied_cny": 116.189636,
+  "added_occupied_cny": 0.99773,
+  "historical_uncertainties_retained": true
+}

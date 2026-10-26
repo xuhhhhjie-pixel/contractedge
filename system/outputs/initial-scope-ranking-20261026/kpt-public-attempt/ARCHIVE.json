@@ -1,0 +1,17 @@
+{
+  "status": "FAILED_PUBLIC_METHOD_ARCHIVE_ONLY",
+  "files": {
+    "method_input.json": "2237eb2997a1ee565660379b0b7c826bf60fcb836b7dcf33c176c8eac6ed6251",
+    "model_calls.json": "4bdb01348e916ed9700ae847b2a6f47648c4f6ad15cb11c1b6ead89ec93c8ce1",
+    "repair.trace.json": "7b09dd8b926ee129ae7e44bc04555c6af3a1b1a547600dc9f6b11c8f91fdfc20",
+    "candidate.patch": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "initial-public-observation.json": "6024b51450545e28c7f42d6a5117573da28803b115554232f91a5bdc8ba25139",
+    "rounds/0/front.method_input.json": "2237eb2997a1ee565660379b0b7c826bf60fcb836b7dcf33c176c8eac6ed6251",
+    "rounds/0/front.config.json": "2689d666709df5ff05311f12842ef0a4650eba26562037c1d9c642e3b8c6816b",
+    "rounds/0/front.public_observations.json": "9d2902e259c0bb384fec58ccb0c4b080302096b9e81eb03487a0c6f704ce0700",
+    "rounds/0/front.trace.json": "964f61e23cb160fca3f2fc7d820d7678a45e149542cbb5130f6746132b23541f"
+  },
+  "independent_result_reference": "../V050_DIAGNOSTIC_RESULTS.json",
+  "hidden_evaluator_files_included": false,
+  "formal_ready": false
+}

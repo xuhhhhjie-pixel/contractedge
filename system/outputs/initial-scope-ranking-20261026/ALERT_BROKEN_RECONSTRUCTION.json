@@ -1,0 +1,9 @@
+{
+  "status": "RECONSTRUCTED_EXACT_PUBLIC_BROKEN",
+  "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "public_patch_sha256": "6ffbe1a8e21796b74faa9dc82ef1ecb112cc001807db9aed6f7d22feba251c6b",
+  "method_calls": 0,
+  "grader_calls": 0,
+  "original_workspace_modified": false,
+  "scope": "Separate scratch; reverse only selected own public candidate; verify exact original snapshot; no GT/Fixed"
+}

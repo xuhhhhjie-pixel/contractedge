@@ -1,0 +1,54 @@
+{
+  "schema_version": "ce.repair_trace.v1",
+  "case_id": "R3-KPT-4673",
+  "release_id": "ContractEdge-benchmark150-v1-20261019",
+  "run_id": "323c9db0-589a-43ea-ba58-8d55d420e7a2",
+  "input_digest": "5e35ce63106f134d43e682afb42610724cf49f54661cae8d679fd4ffcd57b6a3",
+  "requirement_digest": "63b3849c3ae3630e2f0469e1b3f9b960f31319f3c0d766964573d60da723cff4",
+  "initial_snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "final_snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "status": "INVALID_PLAN",
+  "candidate": {
+    "patch_path": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/methods/R3-KPT-4673/R3-KPT-4673/candidate.patch",
+    "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "patch_bytes": 0,
+    "tool": {
+      "argv": [
+        "/home/xhj/contractedge-latest-integration-20261024/.superpowers/sdd/2026-10-24-latest-main-integration/venv-v044/bin/python",
+        "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019/tools/collect_patch.py",
+        "--workspace",
+        "/home/xhj/contractedge-diagnostic-source050-v2-20261026/methods/R3-KPT-4673/.isolated-6ee285a5103d4ea4bf6819ec54c1ef33/producer/workspace",
+        "--output",
+        "/home/xhj/contractedge-diagnostic-source050-v2-20261026/methods/R3-KPT-4673/.isolated-6ee285a5103d4ea4bf6819ec54c1ef33/producer/7f2107f3b45c479d9628747964001dfb.patch"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "stdout_sha256": "6530de5fc753d472a20f15793759c7714a748a4eca44fe0d28d8119d9983df8a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "rounds": [],
+  "candidate_selection": {
+    "rejected_trials": 0,
+    "decisions": []
+  },
+  "last_feedback": null,
+  "budget": {
+    "max_tokens": 2000000,
+    "reserved_tokens": 686936,
+    "max_seconds": 9000.0,
+    "elapsed_seconds": 527.9234138429165,
+    "max_calls": 12,
+    "model_calls": 5,
+    "resumed_model_calls": 0
+  },
+  "errors": [
+    "PRODUCTION_BRANCH_CHANGE_INVALID:production_path_review[1]:MODIFY requires actual changes targeting this evidenced branch; file equality alone is insufficient"
+  ],
+  "exportable": true,
+  "public_semantic_status": "UNKNOWN",
+  "preservation_comparison": null,
+  "execution_format_corrections_used": 0,
+  "hidden_evaluation": "NOT_RUN; final patch must be scored in an independent evaluator process",
+  "scope": "Public repair execution. A public review is an uncertain method signal, not a benchmark PASS."
+}

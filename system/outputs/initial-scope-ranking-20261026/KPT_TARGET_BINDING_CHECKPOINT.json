@@ -1,0 +1,58 @@
+{
+  "status": "VALIDATOR_BRANCH_HAS_SOURCE_BUT_NO_LEGAL_DIAGNOSIS_TARGET",
+  "records": [
+    {
+      "source_evidence_id": "SRC-CU-60d3496476d58093",
+      "symbol": "runValidators",
+      "path": "pkg/lib/kptops/render_executor.go",
+      "locator": {
+        "column_start": 1,
+        "end_line": 908,
+        "start_line": 862
+      },
+      "source_evidence_in_diagnosis": true,
+      "legal_diagnosis_unit_ids": [],
+      "disposition": "MODIFY",
+      "change_refs": [
+        "C2"
+      ]
+    },
+    {
+      "source_evidence_id": "SRC-CU-883e2cb2727d395a",
+      "symbol": "runMutators",
+      "path": "pkg/lib/kptops/render_executor.go",
+      "locator": {
+        "column_start": 1,
+        "end_line": 856,
+        "start_line": 785
+      },
+      "source_evidence_in_diagnosis": true,
+      "legal_diagnosis_unit_ids": [
+        "U2",
+        "U5"
+      ],
+      "disposition": "MODIFY",
+      "change_refs": [
+        "C1"
+      ]
+    },
+    {
+      "source_evidence_id": "SRC-CU-b185a6639d1920f7",
+      "symbol": "runPipeline",
+      "path": "pkg/lib/kptops/render_executor.go",
+      "locator": {
+        "column_start": 1,
+        "end_line": 749,
+        "start_line": 704
+      },
+      "source_evidence_in_diagnosis": false,
+      "legal_diagnosis_unit_ids": [],
+      "disposition": "PRESERVE",
+      "change_refs": []
+    }
+  ],
+  "final_request_digest": "62e90da16496980e1d9a4ffde6fc8f98650f904b2bac4d7012d69c222a988883",
+  "model_calls_added": 0,
+  "formal_ready": false,
+  "scope": "Deterministic target representability; does not validate the proposed implementation or guarantee repair"
+}

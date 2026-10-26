@@ -3298,10 +3298,10 @@
     "snapshot": "docs/development/initial-scope-ranking-v050-20261026-v2.snapshot.json",
     "snapshot_id": "initial-scope-ranking-v050-20261026-v2",
     "snapshot_role": "CURRENT_FROZEN_OFFLINE_CANDIDATE",
-    "status": "V050_CERT_TARGET_PASS_KPT_CONTROL_RUNNING",
+    "status": "V050_CERT_PASS_KPT_INVALID_PLAN_NOT_PROMOTED",
     "source_sha256": "9c795e1eaa7e81cd34e707c4869db9aa536005674d6d227b651e3719f2532057",
     "verification_command": "python scripts/verify_development_snapshot.py",
-    "formal_effectiveness": "ONE_DIAGNOSTIC_TARGET_PASS_NO_FIXED46_EFFECTIVENESS",
+    "formal_effectiveness": "DIAGNOSTIC_TARGET_PASS_CONTROL_FAIL_NO_FIXED46_ACCEPTANCE",
     "formal_ready": false,
     "report": "outputs/initial-scope-ranking-20261026/COMPLETION_AUDIT.md",
     "predecessor_worktree": "/home/xhj/contractedge-gap-query-20261026/system",
@@ -3311,7 +3311,9 @@
     "runtime_qualification": "outputs/initial-scope-ranking-20261026/RUNTIME_QUALIFICATION_v050_v2.json",
     "diagnostic_registration": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/registration.json",
     "target_independent_status": "PASS",
-    "target_public_decision": "UNKNOWN"
+    "target_public_decision": "UNKNOWN",
+    "diagnostic_results": "outputs/initial-scope-ranking-20261026/V050_DIAGNOSTIC_RESULTS.json",
+    "repair_reliability_accepted": false
   },
   "staged_implementation_version": "0.6.50",
   "runtime_implementation_version": "0.6.40",
@@ -3369,9 +3371,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Current freeze full engineering and actual zero-call isolation qualification",
-    "One predeclared Cert target; conditional KPT control only after target PASS/public not FAIL",
-    "Audit actual target requests and effect; original fixed46 and G0-G6 remain closed until requirements met"
+    "Saved KPT replay: determine if failed branch has any legal diagnosis unit target; improve exact binding feedback and existing re-diagnosis route without weakening coverage",
+    "Do not rerun Alert on unchanged initial evidence; isolate missing subscription/replay prerequisite mechanism offline",
+    "Qualify only new replay-backed source changes, then minimal real targets and original frozen46 gates"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",

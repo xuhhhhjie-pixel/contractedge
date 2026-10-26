@@ -37,3 +37,20 @@ v2完整回归1939项及91项子测试通过（484.70秒），实际隔离演示
 唯一预登记Cert尝试3次真实调用、2226字节补丁，method PUBLIC_EXECUTION_COMPLETE、独立PASS、公开行为UNKNOWN。此前0.6.49该目标EVIDENCE_GAP/空候选/独立SEMANTIC_FAIL，本次能进入诊断—计划—真实编辑并独立通过。真实首轮请求送达与离线回放一致，诊断引用的3份源码均完整跨越计划与执行，见CERT_ACTUAL_INITIAL_DELIVERY.json、CERT_ACTUAL_STAGE_ALIGNMENT.json、CERT_TARGET_RESULT.json。
 
 这是单次诊断性改善证据，不是固定面板或稳定性成绩。公开仅支持构建，P1与未验证行为继续UNKNOWN。按原预登记条件已开放KPT控制，当前运行中；正式准入仍false。
+
+## 本版两条诊断性验证均已关闭
+
+| 案例 | 方法终态 | 独立结果 | 公开语义 | 调用/补丁 |
+|---|---|---|---|---|
+| Cert-manager | PUBLIC_EXECUTION_COMPLETE | PASS | UNKNOWN | 3次/2226字节 |
+| KPT控制 | INVALID_PLAN | SEMANTIC_FAIL | UNKNOWN | 5次/0字节 |
+
+控制失败，本版不晋级，不宣称无回退或正式可用，不重跑同版槽位。完整结果见V050_DIAGNOSTIC_RESULTS.json；累计费用见BUDGET_CHECKPOINT.json。正式150、原46后续阶段继续关闭。
+
+### KPT首个已定位断点
+
+诊断声明U2/U5都引用runMutators(785—856行)，没有任何可编辑诊断单元引用runValidators(862—908行)。然而计划宣称C2修改validator，却仍引用U5。两轮计划反馈只给出泛化PRODUCTION_BRANCH_CHANGE_INVALID，模型改变文本、拆分C1/C2后仍引用U5；计划阶段无权添加诊断单元，因此在现有目标集合中无法合法表达该修改。门正确拒绝，问题在诊断到计划的可表达性与纠错路由。不能以放宽成同文件即覆盖来修复。下一步零调用证明可绑定单元集合为空，已有单元可用时提供具体合法引用，确无单元时复用原有一次诊断扩展修正绑定，调用/取证预算不增。是否需要该路由以及可实现性仍须源码与反例验证，不先承诺效果。
+
+### Alert跨案例边界
+
+保存工作区是补丁态，首次回放被快照断言正确拒绝。已在独立scratch逆转本人公开候选、验证Broken摘要精确一致后回放；新版最终12份证据与旧失败版本逐记录完全一致，仍无Subscribe实现，见ALERT_BROKEN_RECONSTRUCTION.json及ALERT_CURRENT_INITIAL_COMPARISON.json。当前评分修复不能冒充Alert生命周期前提修复，不据此付费重跑。

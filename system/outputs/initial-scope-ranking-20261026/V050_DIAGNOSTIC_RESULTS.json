@@ -1,0 +1,54 @@
+{
+  "status": "DIAGNOSTIC_CLOSED_REQUIRES_EFFECT_AND_PUBLIC_TRACE_AUDIT",
+  "rows": [
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "attempt_id": "diagnostic-source050-v2-20261026-rw-certmanager-9116",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "public_decision": "UNKNOWN",
+      "patch_bytes": 2226,
+      "patch_sha256": "7c211f1d803b3a1b9ac58daf233c00bf61d4a449d4afe06ec5a720c6d30ce120",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/methods/RW-CERTMANAGER-9116/.isolated-e36284b217414a4bac8e2dcd66a22b49/receipt.json",
+          "sha256": "63f8735c9efa5e8f15d1114fcf0858083baae68a70131039c333329ae8bc85a8"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/repair.trace.json",
+          "sha256": "87194714ae0d045a36bced33ff7bea1c51e9d2cfdc04387c82ece9c3b3a3e3c6"
+        }
+      },
+      "counts_in_46_slot_panel": false,
+      "formal_ready": false
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "attempt_id": "diagnostic-source050-v2-20261026-r3-kpt-4673",
+      "method_status": "INVALID_PLAN",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "patch_bytes": 0,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/methods/R3-KPT-4673/.isolated-6ee285a5103d4ea4bf6819ec54c1ef33/receipt.json",
+          "sha256": "dfaade8da54c0882695a37bc391abe0cc0404e6f1f2137d43d7eb0f760eedc8e"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/methods/R3-KPT-4673/R3-KPT-4673/repair.trace.json",
+          "sha256": "7b09dd8b926ee129ae7e44bc04555c6af3a1b1a547600dc9f6b11c8f91fdfc20"
+        }
+      },
+      "counts_in_46_slot_panel": false,
+      "formal_ready": false
+    }
+  ],
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "automatic_retry": false,
+  "B_opened": false,
+  "registration": "/home/xhj/contractedge-diagnostic-source050-v2-20261026/registration.json",
+  "active_case": null,
+  "target_gate_passed": false
+}

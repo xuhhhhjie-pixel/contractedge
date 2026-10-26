@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-scope-ranking-20261026/system/scripts/replay_saved_front_request.py", line 80, in <module>
+    main()
+  File "/home/xhj/contractedge-scope-ranking-20261026/system/scripts/replay_saved_front_request.py", line 44, in main
+    assert before == inputs['METHOD_INPUT']['initial_snapshot_id']
+AssertionError

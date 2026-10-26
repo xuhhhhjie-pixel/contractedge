@@ -1,0 +1,141 @@
+{
+  "status": "INITIAL_SELECTED_EVIDENCE_UNCHANGED_FROM_FAILED_048",
+  "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "selected_count": 12,
+  "selected_evidence": [
+    {
+      "id": "SRC-CU-HELPER-bc10f713a675d94d",
+      "kind": "SOURCE_SPAN",
+      "locator": {
+        "end_line": 314,
+        "path": "dispatch/dispatch.go",
+        "start_line": 250
+      },
+      "content_digest": "bc10f713a675d94d79076c88b3742e2cc9856b107371eec5ccfd340655988ecd"
+    },
+    {
+      "id": "SRC-CU-HELPER-ed88ef18ac6f40dd",
+      "kind": "SOURCE_SPAN",
+      "locator": {
+        "end_line": 212,
+        "path": "dispatch/dispatch.go",
+        "start_line": 163
+      },
+      "content_digest": "ed88ef18ac6f40dd7cebfde50d4c340bcf2fdf1d0ccaefcef6c1425cbaa7ed1d"
+    },
+    {
+      "id": "SRC-CU-HELPER-2605c1d6fe69909a",
+      "kind": "SOURCE_SPAN",
+      "locator": {
+        "end_line": 141,
+        "path": "inhibit/inhibit.go",
+        "start_line": 115
+      },
+      "content_digest": "2605c1d6fe69909abbde65a0e1f80e0dd9bc1cf7e3533baa01ab50a34adfcde8"
+    },
+    {
+      "id": "SRC-CU-HELPER-c76cc3560e30e77d",
+      "kind": "SOURCE_SPAN",
+      "locator": {
+        "end_line": 161,
+        "path": "dispatch/dispatch.go",
+        "start_line": 144
+      },
+      "content_digest": "c76cc3560e30e77d5a52da462fbb9cef2b2e29a0397ebd9e6ae55bca62324799"
+    },
+    {
+      "id": "SRC-CU-HELPER-62b5e84fb39809d4",
+      "kind": "SOURCE_SPAN",
+      "locator": {
+        "end_line": 142,
+        "path": "dispatch/dispatch.go",
+        "start_line": 113
+      },
+      "content_digest": "62b5e84fb39809d475fd7b7adc028b4b37d373c9080dc41270a07994b1ea3a14"
+    },
+    {
+      "id": "SRC-CU-HELPER-528d2e002820be1b",
+      "kind": "SOURCE_SPAN",
+      "locator": {
+        "end_line": 331,
+        "path": "dispatch/dispatch.go",
+        "start_line": 316
+      },
+      "content_digest": "528d2e002820be1b075f7ebfa2fd43c425ecf45775ca68dca5ba331092feb66a"
+    },
+    {
+      "id": "SRC-CU-647de303c8be8ecb",
+      "kind": "SOURCE_SPAN",
+      "locator": {
+        "column_start": 1,
+        "end_line": 603,
+        "path": "cmd/alertmanager/main.go",
+        "start_line": 131
+      },
+      "content_digest": "68be3801fe83736d649a895f1eac6618ee835235080fd0e9b5f20a89d35720fd"
+    },
+    {
+      "id": "SRC-CU-INPUT-INPUT3-6b26bd83d3eaa9c3",
+      "kind": "DECLARED_ARTIFACT",
+      "locator": {
+        "artifact_content_digest": "a8949a2d3e6426731111e77598ecac3a25f9370a9f1990a4d7da3761cbe447ed",
+        "artifact_id": "INPUT3",
+        "end_char": 336,
+        "path": "cases/RW-ALERTMANAGER-4705/declared-artifacts/inputs/declared-artifacts/input.yaml",
+        "start_char": 0
+      },
+      "content_digest": "0ef2663c1f4ce11478a1bb2c41af1b46a6a5fa53f736c3f4629542464dcf2042"
+    },
+    {
+      "id": "SRC-CU-INPUT-INPUT1-fcab1da3b4a29df1",
+      "kind": "DECLARED_ARTIFACT",
+      "locator": {
+        "artifact_content_digest": "f68bf0ebd2818f33d243e34e93fe296ea0f53ba7626ab67045f4610568e041b5",
+        "artifact_id": "INPUT1",
+        "end_char": 163,
+        "path": "cases/RW-ALERTMANAGER-4705/declared-artifacts/inputs/alertmanager.initial.yml",
+        "start_char": 0
+      },
+      "content_digest": "f68bf0ebd2818f33d243e34e93fe296ea0f53ba7626ab67045f4610568e041b5"
+    },
+    {
+      "id": "SRC-CU-INPUT-INPUT2-f89cc20ef167de31",
+      "kind": "DECLARED_ARTIFACT",
+      "locator": {
+        "artifact_content_digest": "4d2caeb06718b1abb887a3c40784c1e345aa522bb29b4e489d77f59e244e0bd8",
+        "artifact_id": "INPUT2",
+        "end_char": 163,
+        "path": "cases/RW-ALERTMANAGER-4705/declared-artifacts/inputs/alertmanager.trigger.yml",
+        "start_char": 0
+      },
+      "content_digest": "4d2caeb06718b1abb887a3c40784c1e345aa522bb29b4e489d77f59e244e0bd8"
+    },
+    {
+      "id": "SRC-CU-0c26030a12effe18",
+      "kind": "SOURCE_SPAN",
+      "locator": {
+        "column_start": 1,
+        "end_line": 87,
+        "path": "api/api.go",
+        "start_line": 55
+      },
+      "content_digest": "e82b3e6d0f240a0768afafb33991674dcd63a67743ff8670f77ff1033818cd98"
+    },
+    {
+      "id": "SRC-CU-7d3cddd2a39d5de2",
+      "kind": "SOURCE_SPAN",
+      "locator": {
+        "column_start": 1,
+        "end_line": 311,
+        "path": "api/v2/api.go",
+        "start_line": 238
+      },
+      "content_digest": "6bab5c44ff00cd524501a0ba1b4aff262296a714a9ea28434089f1c5e0a74a6e"
+    }
+  ],
+  "subscribe_implementation_delivered": false,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "formal_ready": false,
+  "interpretation": "Scope fix recovers Cert initial production but does not supply Alert subscription/replay prerequisite. No paid Alert rerun without a separate replay-backed mechanism change."
+}
