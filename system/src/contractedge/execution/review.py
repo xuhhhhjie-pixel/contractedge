@@ -25,7 +25,7 @@ class ModelPublicReviewer:
             raise ValueError('Public obligation IDs must be unique across check kinds')
         mechanical={cid:{'id':cid,**r} for cid,p in original
             if observation.get('status')=='EXECUTION_PASS'
-            and (r:=deterministic_check_result(p,observation['observations'],snapshot_id=observation.get('snapshot_id')))}
+            and (r:=deterministic_check_result(p,observation['observations'],snapshot_id=observation.get('snapshot_id'), capabilities=observation.get('public_execution_capabilities') or plan.get('public_execution_capabilities')))}
         if not mechanical:
             return self._review_model(requirement,plan,observation)
         remaining={**plan,**{kind:[p for p in plan.get(kind,[]) if prefix+p['id'] not in mechanical] for kind,prefix in groups}}
@@ -82,7 +82,7 @@ class ModelPublicReviewer:
                 {'id': c['id'], 'status': 'UNKNOWN', 'rationale': 'Outside the declared public observation boundary', 'evidence': []}
                 for c in checks], 'failure_kind': 'UNKNOWN', 'method': 'PUBLIC_BOUNDARY_ONLY',
                 'rationale': 'No additional model call can create unavailable public behavior evidence.'}
-        mechanical = [deterministic_check_result(c, observation['observations'], snapshot_id=observation.get('snapshot_id')) for c in checks]
+        mechanical = [deterministic_check_result(c, observation['observations'], snapshot_id=observation.get('snapshot_id'), capabilities=observation.get('public_execution_capabilities') or plan.get('public_execution_capabilities')) for c in checks]
         if all(mechanical):
             resolved=[{'id':c['id'],**r} for c,r in zip(checks,mechanical)]
             return {'decision':'FAIL' if any(r['status']=='FAIL' for r in resolved) else
@@ -167,7 +167,8 @@ class ModelPublicReviewer:
                     if check['status'] in {'PASS', 'FAIL'}:
                         original = next(c for c in checks if c['id'] == check['id'])
                         error = support_error(original, check, observation['observations'],
-                                              observation.get('declared_artifacts', []))
+                                              observation.get('declared_artifacts', []), snapshot_id=observation.get('snapshot_id'),
+                                              capabilities=observation.get('public_execution_capabilities') or plan.get('public_execution_capabilities'))
                         if error:
                             check.update(submitted_status=check['status'], status='UNKNOWN',
                                          evidence_validation=error)
@@ -201,7 +202,7 @@ class ModelPublicReviewer:
                     metadata={**request.metadata, **retry_metadata, 'validation_retry': attempt + 1})
         for check in result:
             original = next(c for c in checks if c['id'] == check['id'])
-            resolved = deterministic_check_result(original, observation['observations'], snapshot_id=observation.get('snapshot_id'))
+            resolved = deterministic_check_result(original, observation['observations'], snapshot_id=observation.get('snapshot_id'), capabilities=observation.get('public_execution_capabilities') or plan.get('public_execution_capabilities'))
             if resolved:
                 check.update(resolved)
         decision = ('FAIL' if any(c['status'] == 'FAIL' for c in result) else

@@ -1,3 +1,5 @@
+> **2026-10-27 整合候选0.6.60：** 当前分支整合协作者 PR #19 和本地后续可靠性修复，统一公开检查目录及审核边界，保留规划阶段助手契约。整合验收与真实效果以 CURRENT_STATUS.json / outputs/planning-helper-contracts-20261027/COMPLETION_AUDIT.md 为准；formal_ready=false。
+
 > **2026-10-26 候选0.6.56：** 复用既有补证诊断入口，带回同快照规划已明确提出的分支疑点；31项新反例和71项相关回归通过，真实旧KPT请求零调用回放确认交接补齐。完整工程和真实效果待验收，formal_ready=false；当前入口CURRENT_STATUS.json。
 
 > **2026-10-26 候选0.6.55：** 修复无保持ID时公开探测错误仍晋级，以及独立EXECUTION_FAIL状态漏接；已完成真实旧轨迹零调用回放和76项相关回归，正在新冻结完整资格验证。旧候选仍为失败，formal_ready=false，当前状态以CURRENT_STATUS.json为准。

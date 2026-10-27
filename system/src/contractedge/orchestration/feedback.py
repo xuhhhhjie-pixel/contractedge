@@ -444,7 +444,8 @@ def make_feedback(*, case_id: str, run_id: str, input_digest: str, round_id: int
             verified = verified and bool(record and record.get('snapshot_id') == to_snapshot
                 and isinstance(quote, str) and quote and quote in record.get('excerpt', ''))
         capability_error = support_error(obligations.get(check.get('id'), {}), check, observations,
-                                         plan.get('declared_artifacts', [])) if verified else None
+                                         plan.get('declared_artifacts', []), snapshot_id=to_snapshot,
+                                         capabilities=plan.get('public_execution_capabilities')) if verified else None
         if not verified or capability_error:
             check.update(submitted_status=check['status'], status='UNKNOWN',
                          evidence_validation=capability_error or 'REJECTED_NO_FRESH_SUPPORT')

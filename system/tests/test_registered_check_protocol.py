@@ -46,7 +46,7 @@ def test_registered_only_checks_are_bindable_in_actual_planning_schema(kind):
 
 def test_both_check_sources_survive_the_same_request():
     caps = {'registered_public_checks': public_check_capabilities(),
-            'method_behavior_probes': [{'id': 'method-local', 'checks': ['ready'], 'scenario': 'method-ready'}]}
+            'method_behavior_probes': [{'id': 'method-local', 'sha256': 'a'*64, 'checks': {'ready': 'Finite method readiness'}, 'scenario': 'method-ready'}]}
     d, ctx, _ = planning(caps)
     fields = build_changeset_request(d, ctx).output_schema['properties']['postconditions']['items']['properties']
     assert set(fields['behavior_check_refs']['items']['enum']) == {
@@ -111,7 +111,7 @@ def test_correction_and_revision_preserve_bindings_in_the_serialized_schema(stat
 
 def test_method_only_and_no_check_requests_keep_their_existing_protocol():
     for caps, expected in [({}, None), ({'method_behavior_probes': [
-            {'id': 'legacy-method', 'scenario': 'method-legacy', 'checks': ['ready']}]}, ['legacy-method:ready'])]:
+            {'id': 'legacy-method', 'scenario': 'method-legacy', 'sha256': 'a'*64, 'checks': {'ready': 'Finite method readiness'}}]}, ['legacy-method:ready'])]:
         d, ctx, _ = planning(caps)
         request = build_changeset_request(d, ctx)
         assert request.prompt_version == 'changeset.v1.1.12'
@@ -122,7 +122,7 @@ def test_method_only_and_no_check_requests_keep_their_existing_protocol():
 
 def test_duplicate_ids_across_declaration_sources_are_not_silently_overwritten():
     caps = {'registered_public_checks': public_check_capabilities(), 'method_behavior_probes': [
-        {'id': 'contractedge-public-process-v1', 'checks': ['selected'], 'scenario': 'other'}]}
+        {'id': 'contractedge-public-process-v1', 'sha256': 'a'*64, 'checks': {'selected': 'Conflicting finite assertion'}, 'scenario': 'other'}]}
     d, ctx, _ = planning(caps)
     with pytest.raises(ValueError, match='unique'): build_changeset_request(d, ctx)
 

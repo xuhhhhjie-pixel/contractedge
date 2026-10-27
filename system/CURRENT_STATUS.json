@@ -3296,7 +3296,7 @@
     }
   },
   "current_development": {
-    "status": "V060_V1_INTERRUPTED_ZERO_API_NEW_V2_QUALIFICATION",
+    "status": "V060_UPSTREAM19_INTEGRATED_PREFLIGHT_PENDING",
     "planned_version": "0.6.60",
     "base_commit": "3bce75a",
     "planned_snapshot": "docs/development/planning-helper-contracts-v060-20261027-v1.snapshot.json",
@@ -3304,8 +3304,10 @@
     "paid_dispatch_allowed": false,
     "report": "outputs/planning-helper-contracts-20261027/COMPLETION_AUDIT.md",
     "prior_closed_results": "outputs/helper-input-contracts-20261027/COMPLETION_AUDIT.md",
-    "snapshot": "docs/development/planning-helper-contracts-v060-20261027-v2.snapshot.json",
-    "source_sha256": "988217f5f299e38fafab9307702f144eae4e765e8b25f25320fecfe851095bed"
+    "snapshot": "docs/development/planning-helper-contracts-v060-20261027-v3.snapshot.json",
+    "source_sha256": "988217f5f299e38fafab9307702f144eae4e765e8b25f25320fecfe851095bed",
+    "upstream_commit": "7a5100e4028e698a990479fae9e6ee21a4c920a6",
+    "integration_requires_new_qualification": true
   },
   "staged_implementation_version": "0.6.60",
   "runtime_implementation_version": "0.6.40",
@@ -3363,9 +3365,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Finish review-fix regression and actual saved planning request replay",
-    "New060 exact freeze and full qualification; no paid call before it passes",
-    "No retries or inherited effects from closed059 component; original46 and formal150 remain closed"
+    "Preflight exact formal v1 data/config/runtime before any long task",
+    "Qualify one unified source060 including PR19; retain v2 path failure",
+    "Validate new contract-aware plan and native execution once; then fixed same-version panel only if supported"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",

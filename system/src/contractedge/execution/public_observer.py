@@ -91,6 +91,8 @@ def public_check_capabilities():
         'observer_sha256': hashlib.sha256(_OBSERVER.encode()).hexdigest(),
         'checks': [{'id': _PROBE_ID + ':' + key, 'statement': value,
                     'scenario': _SCENARIO, 'scenario_members': list(_SCENARIO_MEMBERS[key]),
+                    'verification_scope': {'scenario': _SCENARIO},
+                    'covered_scenarios': list(_SCENARIO_MEMBERS[key]),
                     'scope': 'Published finite process-output scenarios only.'} for key, value in _STATEMENTS.items()]}
 
 

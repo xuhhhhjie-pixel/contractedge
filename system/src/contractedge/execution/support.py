@@ -7,6 +7,9 @@ from collections.abc import Mapping
 import hashlib
 import json
 from contractedge.execution.comparison import compare_declared_input
+from contractedge.contracts.execution_capabilities import behavior_binding_error, public_behavior_check_catalog
+
+_UNSPECIFIED_SNAPSHOT = object()
 
 
 def _inventory_covers(record, resource):
@@ -50,7 +53,8 @@ def _operation_in_resource_scope(record,resource):
         for k,v in resource.items())
 
 
-def support_error(obligation, claim, observations, artifacts=()):
+def support_error(obligation, claim, observations, artifacts=(), *,
+                  snapshot_id=_UNSPECIFIED_SNAPSHOT, capabilities=None):
     if obligation.get('interpretation_disputed'):
         return 'DISPUTED_REQUIREMENT_INTERPRETATION'
     required = obligation.get('verification_kind', 'UNKNOWN')
@@ -58,6 +62,8 @@ def support_error(obligation, claim, observations, artifacts=()):
         return 'NO_PUBLIC_SEMANTIC_EVIDENCE'
     allowed = {'PUBLIC_BEHAVIOR'} if required == 'PUBLIC_BEHAVIOR' else {'PUBLIC_STRUCTURE', 'PUBLIC_BEHAVIOR'}
     by_id = {o['id']: o for o in observations}
+    if len(by_id) != len(observations):
+        return 'OBSERVATION_ID_AMBIGUOUS'
     citations = claim.get('evidence', [])
     eligible = []
     scope_error = None
@@ -65,6 +71,10 @@ def support_error(obligation, claim, observations, artifacts=()):
     for citation in citations:
         record = by_id.get(citation.get('observation_id'))
         if not record or record.get('evidence_kind') not in allowed:
+            continue
+        if (snapshot_id is not _UNSPECIFIED_SNAPSHOT and snapshot_id is not None
+                and record.get('snapshot_id') != snapshot_id):
+            scope_error = 'OBSERVATION_SNAPSHOT_MISMATCH'
             continue
         if scope.get('scenario') and record.get('scenario') != scope['scenario']:
             scope_error = 'OBSERVATION_SCENARIO_MISMATCH'
@@ -88,10 +98,15 @@ def support_error(obligation, claim, observations, artifacts=()):
         if any(o['status']!='SUCCEEDED' for o in operation_facts(relevant)):
             return 'OPERATION_SUCCESS_CONFLICT'
     probe_records = [r for r in eligible if r.get('behavior_check')]
-    bound = set(obligation.get('behavior_check_refs', []))
+    refs = obligation.get('behavior_check_refs') or []
+    if not isinstance(refs, (list, tuple)) or any(not isinstance(ref, str) for ref in refs):
+        return 'METHOD_BEHAVIOR_BINDINGS_INVALID'
+    bound = set(refs)
     if probe_records and not bound:
         return 'METHOD_BEHAVIOR_BINDINGS_MISSING'
     if bound:
+        if len({r['behavior_check']['id'] for r in probe_records}) != len(probe_records):
+            return 'METHOD_BEHAVIOR_CHECK_AMBIGUOUS'
         available = {r['behavior_check']['id']: r['behavior_check']['status'] for r in probe_records}
         coverage = obligation.get('check_coverage')
         if coverage == 'SUPPORTING' or (coverage == 'NECESSARY_ONLY' and claim.get('status') == 'PASS'):
@@ -104,6 +119,16 @@ def support_error(obligation, claim, observations, artifacts=()):
         if ((claim.get('status')=='PASS' and any(v!='PASS' for v in statuses))
                 or (claim.get('status')=='FAIL' and 'FAIL' not in statuses)):
             return 'METHOD_BEHAVIOR_RESULT_UNSUPPORTED'
+        error = behavior_binding_error(obligation, capabilities)
+        if error:
+            return 'CHECK_COVERAGE_INSUFFICIENT' if error == 'CHECK_COVERAGE_REQUIRED' else error
+        if snapshot_id is not _UNSPECIFIED_SNAPSHOT and (not isinstance(snapshot_id, str) or not snapshot_id):
+            return 'OBSERVATION_SNAPSHOT_UNAVAILABLE'
+        if capabilities is not None:
+            catalog = {row['id']: row for row in public_behavior_check_catalog(capabilities)}
+            if any(record['behavior_check'].get('probe_sha256') != catalog[record['behavior_check']['id']]['producer_sha256']
+                   for record in probe_records if record['behavior_check']['id'] in bound):
+                return 'METHOD_BEHAVIOR_PRODUCER_MISMATCH'
     comparisons = claim.get('comparisons', [])
     required_bindings = obligation.get('comparison_requirements', [])
     def binding(value):
@@ -124,7 +149,7 @@ def support_error(obligation, claim, observations, artifacts=()):
     return None
 
 
-def deterministic_check_result(obligation, observations, *, snapshot_id):
+def deterministic_check_result(obligation, observations, *, snapshot_id, capabilities=None):
     """Aggregate only explicit all-of/necessary probe bindings on fresh records.
 
     Binding relevance/sufficiency remains a predeclared semantic claim. This
@@ -155,4 +180,5 @@ def deterministic_check_result(obligation, observations, *, snapshot_id):
     # The selected checks determine the finite predicate, but do not erase
     # uncited operation facts from the same scope and snapshot. In particular,
     # an otherwise positive check cannot hide a failed related operation.
-    return claim if support_error(obligation,claim,observations) is None else None
+    return claim if support_error(obligation,claim,observations,
+                                 snapshot_id=snapshot_id, capabilities=capabilities) is None else None

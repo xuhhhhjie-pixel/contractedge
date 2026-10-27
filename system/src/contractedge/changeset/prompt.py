@@ -12,7 +12,7 @@ from contractedge.contracts.validation import canonical_digest
 from contractedge.model.provider import ModelRequest
 from contractedge.model.schema import constrained_output_schema
 from contractedge.contracts.permissions import target_permission_error
-from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
+from contractedge.contracts.execution_capabilities import resolve_execution_capabilities, public_behavior_check_catalog
 from contractedge.contracts.public_checks import public_check_catalog
 
 
@@ -196,6 +196,7 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
                                    for path, unit_ids in sorted(editable_targets.items())],
         "diagnosis_digest": canonical_digest(diagnosis.raw),
         "public_execution_capabilities": capabilities,
+        "public_behavior_check_catalog": public_behavior_check_catalog(capabilities),
         "validation_feedback": list(validation_feedback or []),
         "output_contract": "Return only a SemanticChangeSet v1.1 JSON object; no markdown fences.",
     }
