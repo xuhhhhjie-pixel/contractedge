@@ -1,0 +1,517 @@
+......................................FFFFFFFFFFFFFFF                    [100%]
+=================================== FAILURES ===================================
+_ test_both_consumers_default_to_same_incumbent_source_patch_feedback[APPLIED-topomen] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to0')
+dialect = 'topomen', point = 'APPLIED'
+
+    @pytest.mark.parametrize('dialect',['topomen','modify'])
+    @pytest.mark.parametrize('point',['APPLIED','OBSERVED'])
+    def test_both_consumers_default_to_same_incumbent_source_patch_feedback(tmp_path,dialect,point):
+>       public,config=interrupt(tmp_path,dialect,point)
+
+tests/test_consumer_trial_recovery.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to0')
+dialect = 'topomen', point = 'APPLIED'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to0/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+_ test_both_consumers_default_to_same_incumbent_source_patch_feedback[APPLIED-modify] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to1')
+dialect = 'modify', point = 'APPLIED'
+
+    @pytest.mark.parametrize('dialect',['topomen','modify'])
+    @pytest.mark.parametrize('point',['APPLIED','OBSERVED'])
+    def test_both_consumers_default_to_same_incumbent_source_patch_feedback(tmp_path,dialect,point):
+>       public,config=interrupt(tmp_path,dialect,point)
+
+tests/test_consumer_trial_recovery.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to1')
+dialect = 'modify', point = 'APPLIED'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to1/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+_ test_both_consumers_default_to_same_incumbent_source_patch_feedback[OBSERVED-topomen] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to2')
+dialect = 'topomen', point = 'OBSERVED'
+
+    @pytest.mark.parametrize('dialect',['topomen','modify'])
+    @pytest.mark.parametrize('point',['APPLIED','OBSERVED'])
+    def test_both_consumers_default_to_same_incumbent_source_patch_feedback(tmp_path,dialect,point):
+>       public,config=interrupt(tmp_path,dialect,point)
+
+tests/test_consumer_trial_recovery.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to2')
+dialect = 'topomen', point = 'OBSERVED'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to2/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+_ test_both_consumers_default_to_same_incumbent_source_patch_feedback[OBSERVED-modify] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to3')
+dialect = 'modify', point = 'OBSERVED'
+
+    @pytest.mark.parametrize('dialect',['topomen','modify'])
+    @pytest.mark.parametrize('point',['APPLIED','OBSERVED'])
+    def test_both_consumers_default_to_same_incumbent_source_patch_feedback(tmp_path,dialect,point):
+>       public,config=interrupt(tmp_path,dialect,point)
+
+tests/test_consumer_trial_recovery.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to3')
+dialect = 'modify', point = 'OBSERVED'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_both_consumers_default_to3/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+_ test_received_response_reaccepts_original_authority_then_consumes_once[topomen] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_received_response_reaccep0')
+dialect = 'topomen'
+
+    @pytest.mark.parametrize('dialect',['topomen','modify'])
+    def test_received_response_reaccepts_original_authority_then_consumes_once(tmp_path,dialect):
+>       public,config=interrupt(tmp_path,dialect,'RESPONSE_DURABLE')
+
+tests/test_consumer_trial_recovery.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_received_response_reaccep0')
+dialect = 'topomen', point = 'RESPONSE_DURABLE'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_received_response_reaccep0/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+_ test_received_response_reaccepts_original_authority_then_consumes_once[modify] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_received_response_reaccep1')
+dialect = 'modify'
+
+    @pytest.mark.parametrize('dialect',['topomen','modify'])
+    def test_received_response_reaccepts_original_authority_then_consumes_once(tmp_path,dialect):
+>       public,config=interrupt(tmp_path,dialect,'RESPONSE_DURABLE')
+
+tests/test_consumer_trial_recovery.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_received_response_reaccep1')
+dialect = 'modify', point = 'RESPONSE_DURABLE'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_received_response_reaccep1/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+___ test_unknown_response_keeps_original_reservation_without_replay[topomen] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_unknown_response_keeps_or0')
+dialect = 'topomen'
+
+    @pytest.mark.parametrize('dialect',['topomen','modify'])
+    def test_unknown_response_keeps_original_reservation_without_replay(tmp_path,dialect):
+>       public,config=interrupt(tmp_path,dialect,'UNKNOWN')
+
+tests/test_consumer_trial_recovery.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_unknown_response_keeps_or0')
+dialect = 'topomen', point = 'UNKNOWN'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_unknown_response_keeps_or0/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+___ test_unknown_response_keeps_original_reservation_without_replay[modify] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_unknown_response_keeps_or1')
+dialect = 'modify'
+
+    @pytest.mark.parametrize('dialect',['topomen','modify'])
+    def test_unknown_response_keeps_original_reservation_without_replay(tmp_path,dialect):
+>       public,config=interrupt(tmp_path,dialect,'UNKNOWN')
+
+tests/test_consumer_trial_recovery.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_unknown_response_keeps_or1')
+dialect = 'modify', point = 'UNKNOWN'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_unknown_response_keeps_or1/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+_ test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[policy] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_0')
+mutation = 'policy'
+
+    @pytest.mark.parametrize('mutation',['policy','target','config','acceptance','requirement','missing-authority'])
+    def test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority(tmp_path,mutation):
+>       public,config=interrupt(tmp_path,'modify','RESPONSE_DURABLE')
+
+tests/test_consumer_trial_recovery.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_0')
+dialect = 'modify', point = 'RESPONSE_DURABLE'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_0/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+_ test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[target] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_1')
+mutation = 'target'
+
+    @pytest.mark.parametrize('mutation',['policy','target','config','acceptance','requirement','missing-authority'])
+    def test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority(tmp_path,mutation):
+>       public,config=interrupt(tmp_path,'modify','RESPONSE_DURABLE')
+
+tests/test_consumer_trial_recovery.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_1')
+dialect = 'modify', point = 'RESPONSE_DURABLE'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_1/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+_ test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[config] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_2')
+mutation = 'config'
+
+    @pytest.mark.parametrize('mutation',['policy','target','config','acceptance','requirement','missing-authority'])
+    def test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority(tmp_path,mutation):
+>       public,config=interrupt(tmp_path,'modify','RESPONSE_DURABLE')
+
+tests/test_consumer_trial_recovery.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_2')
+dialect = 'modify', point = 'RESPONSE_DURABLE'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_2/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+_ test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[acceptance] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_3')
+mutation = 'acceptance'
+
+    @pytest.mark.parametrize('mutation',['policy','target','config','acceptance','requirement','missing-authority'])
+    def test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority(tmp_path,mutation):
+>       public,config=interrupt(tmp_path,'modify','RESPONSE_DURABLE')
+
+tests/test_consumer_trial_recovery.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_3')
+dialect = 'modify', point = 'RESPONSE_DURABLE'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_3/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+_ test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[requirement] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_4')
+mutation = 'requirement'
+
+    @pytest.mark.parametrize('mutation',['policy','target','config','acceptance','requirement','missing-authority'])
+    def test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority(tmp_path,mutation):
+>       public,config=interrupt(tmp_path,'modify','RESPONSE_DURABLE')
+
+tests/test_consumer_trial_recovery.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_4')
+dialect = 'modify', point = 'RESPONSE_DURABLE'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_4/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+_ test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[missing-authority] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_5')
+mutation = 'missing-authority'
+
+    @pytest.mark.parametrize('mutation',['policy','target','config','acceptance','requirement','missing-authority'])
+    def test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority(tmp_path,mutation):
+>       public,config=interrupt(tmp_path,'modify','RESPONSE_DURABLE')
+
+tests/test_consumer_trial_recovery.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_5')
+dialect = 'modify', point = 'RESPONSE_DURABLE'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_recovery_never_turns_raw_5/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+____ test_standard_cli_reconstructs_saved_modify_consumer_without_provider _____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_standard_cli_reconstructs0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fde49a14af0>
+
+    def test_standard_cli_reconstructs_saved_modify_consumer_without_provider(tmp_path,monkeypatch):
+>       public,config=interrupt(tmp_path,'modify','APPLIED')
+
+tests/test_consumer_trial_recovery.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-695/test_standard_cli_reconstructs0')
+dialect = 'modify', point = 'APPLIED'
+
+    def interrupt(tmp_path,dialect,point):
+        public=freeze_example('config-binding',tmp_path)
+        config={**default_config('config-binding'),'execution_backend':'direct','max_rounds':1,
+            'run_id':'consumer-recovery-'+dialect}
+        config.pop('topomen_source_root',None);config.pop('topomen_source_sha256',None)
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        script=tmp_path/'consumer-child.py';script.write_text(CHILD)
+        result=subprocess.run([sys.executable,str(script),str(tmp_path),dialect,point,json.dumps(config)],capture_output=True,text=True)
+>       assert result.returncode==73,result.stderr+result.stdout
+E       AssertionError: Traceback (most recent call last):
+E           File "/tmp/pytest-of-xhj/pytest-695/test_standard_cli_reconstructs0/consumer-child.py", line 7, in <module>
+E             from scripts.run_consumer_host_fixture import ModifyFixtureProvider
+E         ModuleNotFoundError: No module named 'scripts'
+E         
+E       assert 1 == 73
+E        +  where 1 = CompletedProcess(args=['/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python', '/tmp/pytes...om scripts.run_consumer_host_fixture import ModifyFixtureProvider\nModuleNotFoundError: No module named \'scripts\'\n').returncode
+
+tests/test_consumer_trial_recovery.py:47: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_consumer_trial_recovery.py::test_both_consumers_default_to_same_incumbent_source_patch_feedback[APPLIED-topomen]
+FAILED tests/test_consumer_trial_recovery.py::test_both_consumers_default_to_same_incumbent_source_patch_feedback[APPLIED-modify]
+FAILED tests/test_consumer_trial_recovery.py::test_both_consumers_default_to_same_incumbent_source_patch_feedback[OBSERVED-topomen]
+FAILED tests/test_consumer_trial_recovery.py::test_both_consumers_default_to_same_incumbent_source_patch_feedback[OBSERVED-modify]
+FAILED tests/test_consumer_trial_recovery.py::test_received_response_reaccepts_original_authority_then_consumes_once[topomen]
+FAILED tests/test_consumer_trial_recovery.py::test_received_response_reaccepts_original_authority_then_consumes_once[modify]
+FAILED tests/test_consumer_trial_recovery.py::test_unknown_response_keeps_original_reservation_without_replay[topomen]
+FAILED tests/test_consumer_trial_recovery.py::test_unknown_response_keeps_original_reservation_without_replay[modify]
+FAILED tests/test_consumer_trial_recovery.py::test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[policy]
+FAILED tests/test_consumer_trial_recovery.py::test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[target]
+FAILED tests/test_consumer_trial_recovery.py::test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[config]
+FAILED tests/test_consumer_trial_recovery.py::test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[acceptance]
+FAILED tests/test_consumer_trial_recovery.py::test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[requirement]
+FAILED tests/test_consumer_trial_recovery.py::test_recovery_never_turns_raw_or_mutated_payload_into_edit_authority[missing-authority]
+FAILED tests/test_consumer_trial_recovery.py::test_standard_cli_reconstructs_saved_modify_consumer_without_provider
+15 failed, 38 passed in 6.32s

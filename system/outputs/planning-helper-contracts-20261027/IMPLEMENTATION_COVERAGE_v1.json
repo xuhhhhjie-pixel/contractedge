@@ -1,0 +1,612 @@
+{
+  "schema_version": "ce.implementation_evidence_map.v1",
+  "identity": {
+    "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+    "panel_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
+    "candidate_config_sha256": "be8a7dc2dc0e87d76e60fb84de688b93ef1ad4a839f3545530ad5e7e00209866",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "review_scope": "Author requirement-to-implementation/test mapping; two previously unbound fixture modules are separately pinned to published bytes and rerun. Not independent whole-branch review, arbitrary semantic proof or real repair acceptance",
+  "supplemental_test_log": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/.superpowers/sdd/2026-10-27-planning-helper-contracts/g1-supplemental-bindings.log",
+    "sha256": "2b08842771be10ee68145bad7f53738ca30674ad220475fe6fb63d54a1a2e1e4"
+  },
+  "original_design": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/docs/reports/2026-10-20-final-optimization-design.md",
+    "sha256": "51e13395837bd14f46b5a73689cf6199bfc339f7f4ecd6ec8447504a881dcef4"
+  },
+  "reliability_design": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/docs/reports/2026-10-20-reliability-closure-design.md",
+    "sha256": "91716e74956fbb71023cae42d7873acf2d4e0093e093027890d8ee61d21a44a4"
+  },
+  "qualification": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+    "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+  },
+  "mechanisms": {
+    "obligation_lineage": {
+      "requirements": "Original work B + explicit CONTINUE/REANCHOR/SPLIT/MERGE, immutable history/residual/disputed interpretation; not automatic natural-language equivalence",
+      "source": [
+        "requirement/normalize.py",
+        "requirement/lineage.py"
+      ],
+      "tests": [
+        "test_explicit_obligation_lineage.py",
+        "test_obligation_lineage.py",
+        "test_lineage_request_continuity.py"
+      ],
+      "flag": "obligation_lineage_enabled",
+      "source_evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/requirement/normalize.py",
+          "sha256": "61e6d40235514bf747e9f062187a4ed505abf43db1dd67cad893d355d534ca6d"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/requirement/lineage.py",
+          "sha256": "d18430c95072eb974c02f245daca68c0c779aa72066a5553cd548b1579060fc6"
+        }
+      ],
+      "test_evidence": [
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_explicit_obligation_lineage.py",
+            "sha256": "f1a9b73485892bcfe84116ef8f3ed684307ab4e4a07d1d769f8025f41a10ca8c"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_reanchor_keeps_identity_definition_and_prior_ledger_immutable",
+            "test_split_preserves_parent_residual_and_does_not_inherit_child_pass",
+            "test_merge_is_a_view_and_keeps_failed_parent",
+            "test_invalid_history_cannot_erase_or_cross_bind_requirements",
+            "test_stale_or_necessary_only_pass_cannot_close_current_obligation",
+            "test_unchanged_anchor_never_replaces_previous_semantics",
+            "test_lineage_is_carried_through_plan_topomen_and_feedback_schema",
+            "test_narrow_alias_pass_cannot_close_original_and_original_is_sent_to_review",
+            "test_new_requirement_context_flags_survive_real_strict_schema",
+            "test_disputed_derivation_retains_history_without_forcing_old_interpretation",
+            "test_dispute_does_not_lock_previous_interpretation_as_candidate_preservation",
+            "test_bound_original_statements_serialize_through_strict_changeset_contract"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_obligation_lineage.py",
+            "sha256": "e5004772d263e80d536063934f2cde29ec371b7738de973fce7737256d385f32"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_markdown_condition_and_clause_offsets_are_original",
+            "test_same_clause_different_predicates_have_distinct_stable_keys",
+            "test_paraphrase_cannot_erase_old_binding",
+            "test_distinct_lineage_cannot_be_merged_by_shared_outcome",
+            "test_shared_identity_retains_historical_semantics_not_only_checks",
+            "test_first_feedback_preserves_both_same_atom_postcondition_statements",
+            "test_paraphrase_of_necessary_predicate_keeps_failure_usable",
+            "test_shared_source_quote_can_distinguish_literal_object_scopes"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_lineage_request_continuity.py",
+            "sha256": "1b0f58b8c058ef92a06907831a58cc678a9d51d7cb3a82e86189c805f46fbb9a"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_initial_request_disallows_events_without_existing_parent_identities",
+            "test_same_snapshot_validated_lineage_is_carried_with_real_parent_enum",
+            "test_wrong_identity_prior_cannot_enter_rediagnosis"
+          ]
+        }
+      ]
+    },
+    "operation_fact_consistency": {
+      "requirements": "Original work A + fact/operation/outcome distinction, complete JSON/resource/scenario typing, registered public producer and expected exception scope",
+      "source": [
+        "execution/observations.py",
+        "execution/public.py",
+        "diagnosis/operation_consistency.py",
+        "execution/support.py"
+      ],
+      "tests": [
+        "test_structured_observation_adapters.py",
+        "test_operation_consistency.py",
+        "test_operation_failure_routing.py",
+        "test_observation_selection.py"
+      ],
+      "flag": "operation_consistency_enabled",
+      "source_evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/execution/observations.py",
+          "sha256": "292aa57be8fb3c920b2802ddeed9283114f62d341f3728f0fad440a631b878e5"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/execution/public.py",
+          "sha256": "d43fe6899e099b321bd2d75bc29ea752fa7b7cdbe4856af471a34f5f4e45fb6f"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/diagnosis/operation_consistency.py",
+          "sha256": "d6ff5675dfceeb654c43fbd4d1af2e244f5ce01fb3ef0b6cf9db6ea801f6a613"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/execution/support.py",
+          "sha256": "eecdaa44ed1755b902e3a9a4af74483d30e692a6821c981b6f9426c191a4fa4a"
+        }
+      ],
+      "test_evidence": [
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_structured_observation_adapters.py",
+            "sha256": "eb7484083d5e42fb1ec4c01ab13a9ee9c76f722c9aa4553288800baffe5a2765"
+          },
+          "validation_scope": "Additional unchanged published test with explicit current rerun",
+          "test_definitions": [
+            "test_real_kopf_objects_are_complete_resource_scoped_records",
+            "test_executed_local_adoption_exception_supports_failure_without_claiming_cluster_behavior",
+            "test_unknown_producer_never_gets_semantic_authority",
+            "test_public_invocation_context_preserves_explicit_owner_and_scope",
+            "test_output_limit_and_failed_scenario_reject_observation",
+            "test_provider_observations_are_behavior_not_deployment_claims",
+            "test_malformed_json_is_a_parse_error_not_behavior_fail"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_operation_consistency.py",
+            "sha256": "7dddb8c15789687ab8ce484a9f365f1d6a02444a0081f30cc76794a161a8186e"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_fields_cannot_prove_success_after_operation_exception",
+            "test_known_failures_cannot_be_ignored_in_satisfaction_diagnosis",
+            "test_expected_exception_requires_exact_public_contract_and_matching_type",
+            "test_incomplete_unknown_or_nonregistered_output_has_no_operation_authority",
+            "test_operation_fact_is_bound_to_source_and_snapshot",
+            "test_satisfied_unrelated_scope_is_not_blocked_by_other_resource_exception",
+            "test_unquoted_failure_same_object_and_snapshot_cannot_be_hidden_by_good_quote",
+            "test_global_satisfaction_cannot_ignore_a_fresh_registered_failed_predicate",
+            "test_unresolved_or_separate_outcome_is_not_forced_into_a_causal_repair",
+            "test_separate_failed_operation_does_not_block_preservation_of_another_outcome"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_operation_failure_routing.py",
+            "sha256": "1d327f9e9e9fd0e30772d35cb430505dc713e84fa95a23729124de6bacf8d4e4"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_identical_registered_error_reassesses_cause_instead_of_repeating_narrow_plan",
+            "test_operation_reassessment_does_not_append_superseded_execution_command",
+            "test_changed_unrelated_expected_or_uncomparable_failure_never_forces_rediagnosis"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_observation_selection.py",
+            "sha256": "639c065183004db47989ed3a92384c573cec64f852b5c765597ccdf1615ea5d9"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_registered_complete_objects_are_selected_before_untyped_repeated_logs",
+            "test_broken_target_jobs_are_not_crowded_out_by_a_verbose_working_deployment"
+          ]
+        }
+      ]
+    },
+    "helper_prerequisites": {
+      "requirements": "Original work C: actual planning/execution source prerequisites, review/open coverage, finite helper initialization/use/cleanup checks and limited public probes; unsupported syntax remains UNKNOWN",
+      "source": [
+        "execution/helper_context.py",
+        "execution/preconditions.py",
+        "changeset/validate.py",
+        "orchestration/runner.py"
+      ],
+      "tests": [
+        "test_helper_preconditions.py",
+        "test_plan_precondition_coverage.py",
+        "test_planning_helper_contracts.py",
+        "test_execution_helper_context.py"
+      ],
+      "flag": "helper_preconditions_enabled",
+      "source_evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/execution/helper_context.py",
+          "sha256": "926c73746ac2ee66808b20dcc7d90f56099e5f28456a727641543416dff1d2a1"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/execution/preconditions.py",
+          "sha256": "468ea76ed15358c95abcd1f41712b7ca3323f9015ff4c2f1cdbe012ae9d51d51"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/changeset/validate.py",
+          "sha256": "5f9c2e5ea847d5b8dcc696a59e46d32291f85befbfd8c66897f8878ad5792e3d"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/orchestration/runner.py",
+          "sha256": "c7f67ab3351dbc2d5d42ddb60d7a63dd082b99ad3c9a3219b84a2c14d6aa3286"
+        }
+      ],
+      "test_evidence": [
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_helper_preconditions.py",
+            "sha256": "f15f02827a119ee34e5a675f9ecaab22e4172a4b9b4d3ee793c3f9b416312363"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_new_merge_path_without_identity_initialization_is_a_concrete_conflict",
+            "test_joint_initialization_merge_cleanup_change_passes_supported_guard_check",
+            "test_missing_cleanup_is_reported_and_dynamic_guard_remains_unproven",
+            "test_unrelated_helper_is_not_subject_to_annotation_identity_rules",
+            "test_initializer_in_opposite_else_branch_is_never_syntactically_verified",
+            "test_same_loop_can_compare_local_guards_but_different_loops_cannot"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_plan_precondition_coverage.py",
+            "sha256": "678f765204d3358a7ce76d3e9ad09d7b1b7a021ec6f86fb511d588ffa2c39750"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_missing_prerequisite_review_is_not_an_executable_complete_plan",
+            "test_required_condition_needs_real_verification_not_just_prose",
+            "test_required_with_finite_behavior_check_is_coverage_not_proof",
+            "test_build_only_cannot_discharge_runtime_prerequisite_without_open_record",
+            "test_unresolved_requires_existing_open_obligation",
+            "test_unresolved_with_real_open_record_remains_explicitly_partial",
+            "test_nonapplicable_keeps_explicit_reason_without_fake_verification",
+            "test_duplicate_and_unexpected_review_cannot_replace_required_one",
+            "test_model_schema_requests_review_only_for_actual_supplied_prerequisites",
+            "test_regular_configuration_plan_remains_compatible_without_prerequisites",
+            "test_translation_retains_prerequisite_source_even_if_not_cited_by_diagnosis",
+            "test_translation_rejects_unbound_or_stale_prerequisite_source",
+            "test_execution_continuation_rereads_unchanged_prerequisite_on_new_snapshot",
+            "test_changed_prerequisite_requires_replanning_instead_of_false_freshness",
+            "test_required_source_is_not_silently_removed_for_budget"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_planning_helper_contracts.py",
+            "sha256": "771ad6f9ed34c0f7d1c6ed742c5c7c79f96ab2cf3fabc530802e67303c45c323"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_direct_merge_and_identity_contracts_are_available_before_a_plan",
+            "test_invalid_seed_cannot_authorize_planning_helper_reads",
+            "test_small_support_budget_retains_audit_instead_of_partial_helper",
+            "test_helper_directory_symlink_is_not_a_current_source_contract",
+            "test_seed_growth_between_stat_and_read_is_bounded_and_rejected",
+            "test_seed_file_and_size_budgets_are_finite",
+            "test_prerequisite_contract_limit_stops_instead_of_silently_omitting_records",
+            "test_planning_request_reviews_readonly_helper_without_granting_edit_permission",
+            "test_initial_replanned_ready_and_execution_keep_declared_helper_contracts"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_execution_helper_context.py",
+            "sha256": "0577f0ea754c055d4d088ec201d3004b6a3cf181b76363f02c8311ec63b8648b"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_local_import_helper_contract_is_fresh_read_only_and_budgeted",
+            "test_historical_boundary_conflict_stays_unobservable",
+            "test_python_local_import_helper_precondition_is_readonly_context",
+            "test_budget_keeps_helper_referenced_by_rejected_trial_conflict"
+          ]
+        }
+      ]
+    },
+    "bounded_gap_delivery": {
+      "requirements": "Original work C: public entry/config/producer/consumer evidence, bounded missing roles and actual serialized delivery/current snapshots; no complete call-graph claim",
+      "source": [
+        "source/entrypoints.py",
+        "source/units.py",
+        "retrieval/gap_delivery.py",
+        "orchestration/runner.py"
+      ],
+      "tests": [
+        "test_gap_delivery.py",
+        "test_probe_source_entrypoints.py",
+        "test_ready_support_consistency.py"
+      ],
+      "flag": "gap_role_delivery_enabled",
+      "source_evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/source/entrypoints.py",
+          "sha256": "1afbe6bfe03fd38853becb5b110a6bc39ee8f92ec56c5de223e15c0c7638ebec"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/source/units.py",
+          "sha256": "da19272c174339a30902bf5dab5e8e1c906f24b390b8d8c85f3220805dd09e92"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/retrieval/gap_delivery.py",
+          "sha256": "25bade998ab70b12683b501c94becdb7568a0941dea53367a93a715b699fa202"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/orchestration/runner.py",
+          "sha256": "c7f67ab3351dbc2d5d42ddb60d7a63dd082b99ad3c9a3219b84a2c14d6aa3286"
+        }
+      ],
+      "test_evidence": [
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_gap_delivery.py",
+            "sha256": "493b95e1b294f0c5d0799b6e80cfec25343d536a72ba5a2999d6bf9f9b0efa10"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_exact_missing_handler_reaches_context_among_many_matches",
+            "test_delivery_checks_decoded_catalog_and_detects_dropped_body",
+            "test_config_template_gap_does_not_require_an_api_or_writer",
+            "test_found_but_budget_dropped_endpoint_remains_required",
+            "test_exact_gap_in_long_declaration_preserves_late_state_replacement",
+            "test_gap_reader_receiver_reaches_local_package_without_generic_constructor_decoys",
+            "test_reload_gap_carries_named_read_endpoint_from_summary_and_existing_scope",
+            "test_declaration_index_preserves_scoped_handler_omitted_from_intermediate_pool",
+            "test_character_clipped_text_windows_have_distinct_evidence_identity",
+            "test_request_trimming_does_not_drop_both_production_branches_with_their_wrapper"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_probe_source_entrypoints.py",
+            "sha256": "c8fa5fde096434a8605b54193d8b8d19c1152ee280a47c6c1329ab26e932ccc3"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_unregistered_ordering_requirement_keeps_both_sides_of_long_go_handler",
+            "test_ordering_expansion_stays_bounded_and_skips_generated_and_test_code",
+            "test_focused_public_entry_keeps_relevant_sibling_bodies_in_pool",
+            "test_locator_uses_only_registered_package_api_and_reports_limits"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_ready_support_consistency.py",
+            "sha256": "cf0246b0968cb5661c5acad628cc013d2c9b41e21da4d01b180c1de0cafbce63"
+          },
+          "validation_scope": "Additional unchanged published test with explicit current rerun",
+          "test_definitions": [
+            "test_actual_ready_plan_with_required_delivery_metadata_reaches_consumer_preflight",
+            "test_actual_ready_plan_still_rejects_missing_or_forged_source_context",
+            "test_actual_exception_plan_passes_the_same_ready_consumer_contract",
+            "test_exception_prerequisite_projection_cannot_be_removed_or_forged",
+            "test_shared_prerequisite_projection_distinguishes_roles_without_adding_requirements"
+          ]
+        }
+      ]
+    },
+    "candidate_preservation": {
+      "requirements": "Original work C/D + influence links, trial promotion, protected necessary checks, verified snapshot rollback/export consistency, same-program public comparisons",
+      "source": [
+        "orchestration/candidate_guard.py",
+        "orchestration/trial.py",
+        "orchestration/repair.py",
+        "orchestration/feedback.py"
+      ],
+      "tests": [
+        "test_candidate_regression_guard.py",
+        "test_preservation_impact.py",
+        "test_pending_preservation_guard.py",
+        "test_preservation_identity_feedback.py"
+      ],
+      "flag": "candidate_guard_enabled",
+      "source_evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/orchestration/candidate_guard.py",
+          "sha256": "4b99a6fe5d50c8d6745796612e4476f986ae50a8afe7b44b9e27590f0662a503"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/orchestration/trial.py",
+          "sha256": "2dd4a016d3dbba9a43f130e36e8affc75bd7c0a04680429b0631d1e66face654"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/orchestration/repair.py",
+          "sha256": "e8022be418cdf930a808fba4aec76ec0ded57f9268d391b41f24c3c8d571c8f5"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/orchestration/feedback.py",
+          "sha256": "95517a192a689085e8f98d2d07390813792e95eb9a4b5e0200dcb4b6229de3b0"
+        }
+      ],
+      "test_evidence": [
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_candidate_regression_guard.py",
+            "sha256": "4a9bf103a6720e77d38242e25a9a7dd7c3bc3732c28d827a4a9451f880af7199"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_key_preservation_regression_cannot_be_offset_by_more_passes",
+            "test_intended_change_is_not_implicitly_locked_and_unknown_candidate_can_be_exported",
+            "test_noncomparable_observation_never_pretends_improvement",
+            "test_absent_input_and_environment_identity_is_not_a_comparable_match",
+            "test_checkpoint_restores_only_owned_files_and_survives_serialization",
+            "test_checkpoint_refuses_symlinks_and_tampered_backup",
+            "test_real_loop_exports_incumbent_and_its_feedback_after_regression",
+            "test_first_trial_regression_can_revise_from_restored_source_within_two_rounds",
+            "test_candidate_decision_explanation_agrees_with_actual_observation"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_preservation_impact.py",
+            "sha256": "b538b5841804ca78910bd21ae556a25d6fbb586f1ac2683593d82115db1da65f"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_unknown_change_and_omitted_preservation_are_rejected",
+            "test_preservation_feedback_links_possible_influencing_changes"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_pending_preservation_guard.py",
+            "sha256": "2078be8a36aed2bae30c2ad28ff130d7331d821ea9de22492e7b6b5ae5af68fd"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_previous_unresolved_preservation_keeps_passed_necessary_check_protected",
+            "test_pending_target_is_not_mistaken_for_a_preservation_lock",
+            "test_disputed_pending_preservation_does_not_lock_old_interpretation",
+            "test_pending_preservation_with_no_passed_observation_creates_no_false_pass",
+            "test_supporting_or_unclassified_pending_check_does_not_lock_intended_behavior"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_preservation_identity_feedback.py",
+            "sha256": "7387244a3866f999d06cca333012551673031c9f6beb13a0631aa3eaaf9b1c3d"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_identity_failure_feedback_names_the_actual_set_difference",
+            "test_no_allowed_preservations_schema_rejects_outcome_as_an_impact_id",
+            "test_real_preservation_remains_available_for_mixed_repaired_and_untouched_atoms",
+            "test_current_valid_impact_reaches_validation_unchanged",
+            "test_single_existing_correction_receives_id_differences_and_exact_prior_draft"
+          ]
+        }
+      ]
+    },
+    "feedback_unknown_reasons": {
+      "requirements": "Original work D/E: necessary vs sufficient/related checks, scoped UNKNOWN, actionable failure facts/current source vs rejected snapshot, finite calibrated KPT/Alert probes and bounded revision context",
+      "source": [
+        "execution/support.py",
+        "execution/review.py",
+        "orchestration/feedback.py",
+        "execution/probe_specs.py",
+        "execution/probes.py"
+      ],
+      "tests": [
+        "test_check_coverage.py",
+        "test_failure_tasks.py",
+        "test_method_behavior_probes.py",
+        "test_temporal_probe_dispatch.py",
+        "test_temporal_response_bounds.py",
+        "test_necessary_coverage_review.py"
+      ],
+      "flag": "requirement_traceability_enabled",
+      "source_evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/execution/support.py",
+          "sha256": "eecdaa44ed1755b902e3a9a4af74483d30e692a6821c981b6f9426c191a4fa4a"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/execution/review.py",
+          "sha256": "b0b957c61fb060d1e99e972eac00435ec0b2dd4372cf78daa0bdc8b13bc30f98"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/orchestration/feedback.py",
+          "sha256": "95517a192a689085e8f98d2d07390813792e95eb9a4b5e0200dcb4b6229de3b0"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/execution/probe_specs.py",
+          "sha256": "fd10e4949ff8d037211ed999c29d69b16e682a85a3088232aaf339cf822e5c7a"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/src/contractedge/execution/probes.py",
+          "sha256": "8bab854e8f55607c72dea4801f63b9723a35e4c7f3e86ff3d0314293080cd277"
+        }
+      ],
+      "test_evidence": [
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_check_coverage.py",
+            "sha256": "d4a3af6c9d1918600d14769d5f8e3ff479e0b77fb0e53875a6c82510da241694"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_one_necessary_failure_does_not_need_every_other_citation",
+            "test_necessary_only_cannot_establish_success",
+            "test_related_support_cannot_establish_failure",
+            "test_all_of_pass_needs_all_checks_and_failed_scope_is_not_usable",
+            "test_deterministic_results_are_from_bound_fresh_observations",
+            "test_all_bound_checks_resolve_without_model_call",
+            "test_new_traceability_plan_cannot_omit_probe_coverage",
+            "test_unobservable_sibling_cannot_hide_mechanical_failure_or_disable_retry"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_failure_tasks.py",
+            "sha256": "e402d77120bcb857d26f54e502a9ddde2a93f6e7a1cb6841f6d6ddb57c3356cd"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_shared_public_execution_error_and_helper_conflict_survive_compact_feedback",
+            "test_stale_success_or_unregistered_raw_error_never_becomes_execution_task",
+            "test_rejected_trial_projection_preserves_failures_helpers_and_unseen_obligation_without_duplicating_ledger",
+            "test_behavior_failure_without_exception_survives_live_and_rejected_feedback",
+            "test_invalid_or_inapplicable_records_never_become_concrete_failure_tasks",
+            "test_predicate_projection_budget_is_explicit_and_keeps_objects_parseable",
+            "test_supplied_observation_identity_is_referenced_once_without_losing_facts",
+            "test_ambiguous_or_different_observation_keeps_full_feedback_reference",
+            "test_actual_execution_request_uses_bound_observation_reference",
+            "test_execution_feedback_reuses_only_exact_accepted_context",
+            "test_distinct_context_and_boolean_numeric_difference_never_share_identity"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_method_behavior_probes.py",
+            "sha256": "dc9675cb3106b07edabed440d5488c2af385bc33d5a46e0243a18804eecd7a3e"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_failed_behavior_probe_cannot_be_cited_as_pass",
+            "test_required_probe_checks_cannot_be_replaced_with_an_unrelated_pass",
+            "test_method_probe_requires_explicit_bindings_and_all_bound_results",
+            "test_unregistered_probe_output_is_never_promoted",
+            "test_unknown_profile_is_rejected_and_nonmatching_requirement_is_not_enabled",
+            "test_only_registered_complete_checks_are_typed_and_snapshot_bound",
+            "test_binding_survives_retained_and_pending_feedback",
+            "test_real_failed_probe_is_not_accepted_as_pass_by_review_or_feedback"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_temporal_probe_dispatch.py",
+            "sha256": "4cf067e95aec9c5cf8de029b045cee3c0613a4c525d876d9decdc47c80433309"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_versioned_alertmanager_probe_retains_its_public_offline_environment"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_temporal_response_bounds.py",
+            "sha256": "5bca0737e8fc6f704636fb4b9216481bf7cb735c75c165c8c5833aeec79d9408"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_versioned_temporal_probe_decodes_complete_large_json_and_exposes_duplicates"
+          ]
+        },
+        {
+          "file": {
+            "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_necessary_coverage_review.py",
+            "sha256": "11c5a102da7d6e9edf7d185679004b5f6e9d955629eb625a98ceb0b1001b9888"
+          },
+          "validation_scope": "Exact full qualification fixture",
+          "test_definitions": [
+            "test_positive_necessary_coverage_is_local_unknown_for_every_obligation_kind",
+            "test_internal_mechanical_shortcut_never_promotes_unknown_to_pass",
+            "test_known_failure_keeps_priority_over_positive_necessary_sibling",
+            "test_ineligible_or_incomplete_evidence_is_not_locally_resolved",
+            "test_all_of_positive_predicate_still_passes",
+            "test_unresolved_semantic_sibling_still_reaches_model_with_only_its_own_check",
+            "test_local_unknown_stays_pending_in_feedback",
+            "test_mechanical_success_keeps_uncited_operation_context"
+          ]
+        }
+      ]
+    }
+  },
+  "formal_ready": false
+}

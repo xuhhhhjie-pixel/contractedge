@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-27T08:10:42.722727+00:00",
+  "as_of": "2026-10-27T09:01:54.432655+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3296,18 +3296,18 @@
     }
   },
   "current_development": {
-    "status": "EXACT_SOURCE_QUALIFIED_FIXED46_A_RUNNING",
+    "status": "EXACT_SOURCE_FIXED46_RUNNING_STATIC_AND_OPERATIONAL_EVIDENCE_ASSEMBLED",
     "planned_version": "0.6.60",
     "base_commit": "21b555b",
     "planned_snapshot": "docs/development/ordering-source-v060-20261027-delivery-v2.snapshot.json",
     "formal_ready": false,
-    "paid_dispatch_allowed": false,
+    "paid_dispatch_allowed": true,
     "report": "outputs/planning-helper-contracts-20261027/COMPLETION_AUDIT.md",
     "prior_closed_results": "outputs/helper-input-contracts-20261027/COMPLETION_AUDIT.md",
     "snapshot": "docs/development/ordering-source-v060-20261027-delivery-v2.snapshot.json",
     "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
     "upstream_commit": "7a5100e4028e698a990479fae9e6ee21a4c920a6",
-    "integration_requires_new_qualification": true,
+    "integration_requires_new_qualification": false,
     "upstream_integrated": true,
     "integration_commit": "d041ee4",
     "single_full_suite_pass": true,
@@ -3324,8 +3324,13 @@
     "clean_clone": "outputs/planning-helper-contracts-20261027/CLEAN_GITHUB_CLONE_VERIFICATION.json",
     "registered_method_snapshot": "docs/development/ordering-source-v060-20261027-v1.snapshot.json",
     "publication_binding_amendment": "outputs/planning-helper-contracts-20261027/PUBLICATION_BINDING_AMENDMENT.json",
-    "ci_status": "REMOTE_2142PASS_2_NAMESPACE_ENVIRONMENT_FAILURES; runner-only fix awaiting remote confirmation",
-    "ci_namespace_report": "outputs/planning-helper-contracts-20261027/CI_NAMESPACE_ENVIRONMENT_FIX.json"
+    "ci_status": "REMOTE_CI_SUCCESS_40471797969_AT_e50be76",
+    "ci_namespace_report": "outputs/planning-helper-contracts-20261027/CI_NAMESPACE_ENVIRONMENT_FIX.json",
+    "formal_admission_assessor": "scripts/assess_formal_readiness.py",
+    "formal_admission_report": "outputs/planning-helper-contracts-20261027/FINAL_ADMISSION_v2.json",
+    "operational_roundtrip": "outputs/planning-helper-contracts-20261027/CLEAN_CLONE_REAL_ROUNDTRIP.json",
+    "closure_report": "docs/reports/2026-10-27-formal-admission-closure.md",
+    "paid_dispatch_scope": "ONLY_ORIGINAL_CURRENT_FIXED46_AUTHORITY_AND_EXISTING150CNY_PAIR_ADMISSION"
   },
   "staged_implementation_version": "0.6.60",
   "runtime_implementation_version": "0.6.40",
@@ -3383,9 +3388,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Execute original current-source A/repeat/recovery with immutable slots and no replacement; B only after original gate",
-    "Read complete same-version outcomes and fix only an evidenced earliest failure, never add modules or pool past bests",
-    "Complete clean-clone/recovery before formal150; retain cumulative150CNY and uncertain reservations"
+    "Continue the same immutable A queue; guarded followthrough enters original repeat/recovery/B only after verified gates and150CNY admission",
+    "At cohort closure inspect earliest real failure only; preserve every failure/unknown/unrun and source identity",
+    "Refresh final gate evidence, complete final whole-branch review and publish one frozen admission decision before separately authorized formal150"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",
@@ -3442,10 +3447,28 @@
     "registration_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
     "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
     "slots": 46,
-    "scored_slots": 3,
-    "status": "A_RUNNING",
+    "scored_slots": 8,
+    "status": "RUNNING",
     "historical_scores_reused": false,
     "formal_ready": false,
     "progress": "outputs/planning-helper-contracts-20261027/FIXED46_CURRENT_PROGRESS.json"
+  },
+  "final_delivery_admission": {
+    "status": "NOT_READY_EFFECT_ACCEPTANCE_PENDING",
+    "formal_ready": false,
+    "report": "outputs/planning-helper-contracts-20261027/FINAL_ADMISSION_v2.json",
+    "as_of_records": 8,
+    "gates": {
+      "G0": "PASS_STATIC150",
+      "G1": "PASS_IMPLEMENTATION_MAPPING_NOT_INDEPENDENT_REVIEW",
+      "G2": "PASS_ENGINEERING",
+      "G3": "PASS_CURRENT_CLOSED_PROVENANCE",
+      "G4": "PENDING_REGISTERED_REPETITION_AND_RECOVERY",
+      "G5": "PENDING_FIXED_SAME_SOURCE_PANEL",
+      "G6": "PASS_SAME_SERVER_CLEAN_CLONE_OPERATIONAL_REPLAY"
+    },
+    "whole_branch_fresh_review": "REQUIRED_AT_FINAL_DELIVERY_NOT_CLAIMED",
+    "serial_only": true,
+    "no_new_model_calls_for_delivery": true
   }
 }

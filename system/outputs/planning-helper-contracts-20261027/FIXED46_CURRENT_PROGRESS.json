@@ -1,11 +1,11 @@
 {
   "schema_version": "ce.fixed46_current_public_progress.v1",
-  "as_of": "2026-10-27T08:02:00.184938+00:00",
+  "as_of": "2026-10-27T09:01:54.432655+00:00",
   "panel_id": "fixed46-v060-order-20261027",
   "panel_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
   "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
   "planned_slots": 46,
-  "closed_slots": 3,
+  "closed_slots": 8,
   "counts_in_fixed46": true,
   "rows": [
     {
@@ -34,15 +34,60 @@
       "status": "PASS",
       "public_decision": "UNKNOWN",
       "method_status": "PUBLIC_EXECUTION_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-v060-order-20261027-8963f561974092cbd6133317",
+      "group": "A",
+      "case_id": "R3-KPT-4673",
+      "variant": "baseline",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "method_status": "INVALID_OUTPUT"
+    },
+    {
+      "slot_id": "fixed46-v060-order-20261027-5c9e2b9fddc23e694bc91412",
+      "group": "A",
+      "case_id": "R3-KOPF-726",
+      "variant": "baseline",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-v060-order-20261027-a23cab1ffd94f2c287355ce8",
+      "group": "A",
+      "case_id": "R3-KOPF-726",
+      "variant": "candidate",
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-v060-order-20261027-109d1fbfb1987992a1ad4cea",
+      "group": "A",
+      "case_id": "R4-PROVIDER-HELM-408",
+      "variant": "baseline",
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-v060-order-20261027-613366258a101b1af27ecdab",
+      "group": "A",
+      "case_id": "R4-PROVIDER-HELM-408",
+      "variant": "candidate",
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE"
     }
   ],
   "controller_status": {
     "status": "RUNNING",
     "active_slot": {
-      "case_id": "R3-KPT-4673",
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
       "group": "A",
       "repeat": 0,
-      "slot_id": "fixed46-v060-order-20261027-8963f561974092cbd6133317",
+      "slot_id": "fixed46-v060-order-20261027-a62911320d2450c09640ca1c",
       "variant": "baseline"
     },
     "panel_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e"

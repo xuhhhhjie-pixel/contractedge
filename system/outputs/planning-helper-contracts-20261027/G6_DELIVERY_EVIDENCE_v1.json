@@ -1,0 +1,88 @@
+{
+  "schema_version": "ce.formal_gate_evidence.v1",
+  "gate": "G6",
+  "identity": {
+    "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+    "panel_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
+    "candidate_config_sha256": "be8a7dc2dc0e87d76e60fb84de688b93ef1ad4a839f3545530ad5e7e00209866",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "executed_at": "2026-10-27T08:43:25.406198+00:00",
+  "checker": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/.superpowers/sdd/2026-10-27-planning-helper-contracts/collect_delivery_evidence.py",
+    "sha256": "f0e804dace8ad842927f617f9e85f9597a54b20d1c8a9e3a8630547984729e47"
+  },
+  "inputs": [
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/CLEAN_CLONE_REAL_ROUNDTRIP.json",
+      "sha256": "d7c122ebbef1f33378cdd1d9e8c62edc9487a1887167f8a1c6c9975d3535d349"
+    },
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+      "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+    }
+  ],
+  "checks": [
+    {
+      "id": "clean_clone_real_roundtrip",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/CLEAN_CLONE_REAL_ROUNDTRIP.json",
+          "sha256": "d7c122ebbef1f33378cdd1d9e8c62edc9487a1887167f8a1c6c9975d3535d349"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/CLEAN_GITHUB_CLONE_VERIFICATION.json",
+          "sha256": "ff6e9f1b4241a1a4d7c77a5ae17a27be0c147b73db10bcc8004ba6c4c1cb9da0"
+        }
+      ]
+    },
+    {
+      "id": "durable_crash_recovery",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/CLEAN_CLONE_REAL_ROUNDTRIP.json",
+          "sha256": "d7c122ebbef1f33378cdd1d9e8c62edc9487a1887167f8a1c6c9975d3535d349"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/clean-clone-extra-initial-env-failure.log",
+          "sha256": "812425c81a8d9862e09e1e4fa3ed56d32a280b5e95fd8c766057bb02ca57b932"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/clean-clone-consumer-recovery-correct-env.log",
+          "sha256": "41c0df740e62a1f11446d372a4a02d36ed5a0f1649dbc23ae62008c3aaae66d6"
+        }
+      ]
+    },
+    {
+      "id": "resource_and_drift_checks",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+          "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/clean-clone-extra-initial-env-failure.log",
+          "sha256": "812425c81a8d9862e09e1e4fa3ed56d32a280b5e95fd8c766057bb02ca57b932"
+        }
+      ]
+    },
+    {
+      "id": "declared_serial_execution",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/scripts/run_fixed_panel.py",
+          "sha256": "2d4f20f2693f2c35247a311e99cc7a6467fa48d6b1f883f7e4b793217a0390a1"
+        },
+        {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/panel.json",
+          "sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e"
+        }
+      ]
+    }
+  ],
+  "scope": "Same-server clean GitHub checkout/fresh venv; real saved-candidate public execution/export/score and source/score recovery. 38 unaffected recovery/resource tests passed in initial command;15 dependent consumer tests passed after README env setup. Serial support only. No fresh model repair or other-host certification."
+}

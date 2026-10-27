@@ -1,0 +1,250 @@
+{
+  "identity": {
+    "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+    "panel_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
+    "candidate_config_sha256": "be8a7dc2dc0e87d76e60fb84de688b93ef1ad4a839f3545530ad5e7e00209866",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "terminal_records": [
+    {
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v060-order-20261027-f5dd18212d66edb1ba9b9990",
+      "variant": "baseline",
+      "independent_status": "PASS",
+      "public_decision": "PASS",
+      "status": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "ac5f4e95fb4a4451633144411875de6550285a00e79c44ccd8f7114b242933d8",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-f5dd18212d66edb1ba9b9990/.isolated-7623fb5bfbbf47609cd753e5f526160a/receipt.json",
+          "sha256": "1abdf61b19f5f5817078a9b1c2dc64b42c47baa3198a67eb1e88d3c48e8fb99f"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-f5dd18212d66edb1ba9b9990/RW-CAND-130/repair.trace.json",
+          "sha256": "9cc68d099d0b5913ed394c552ecda12aecbfca00f94f1fcbd8684df48d0803fd"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/independent/fixed46-v060-order-20261027-f5dd18212d66edb1ba9b9990/result.json",
+          "sha256": "49776b34c6475c2d33f62ce49a5cfde7c6acc694718cae08896cb40e9dea84bc"
+        }
+      },
+      "formal_ready": false
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v060-order-20261027-60944716e7069c9f5423fb67",
+      "variant": "candidate",
+      "independent_status": "PASS",
+      "public_decision": "PASS",
+      "status": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "954f94f000a1203de32ed0875d14769a1bb733d348cd82e7da8ab92d1a6703a5",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-60944716e7069c9f5423fb67/.isolated-64c1716123b0471c8e76d59603e01d51/receipt.json",
+          "sha256": "349dd82ebd6bc1305f5b74c046ad4cb24e8236ed2b05670ce9dcb51d8bb8c5e2"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-60944716e7069c9f5423fb67/RW-CAND-130/repair.trace.json",
+          "sha256": "fdcddb326e1d9790cda4080e976ddac1ec03f039e973703c5bf1a4dec18bb4c1"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/independent/fixed46-v060-order-20261027-60944716e7069c9f5423fb67/result.json",
+          "sha256": "1a8db73b9e203dfb096aeaaefad0ba9dd6ee9a5e9f2786a068d44b4e7e78dd9e"
+        }
+      },
+      "formal_ready": false
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v060-order-20261027-f30e0215f0d113880a6411c5",
+      "variant": "candidate",
+      "independent_status": "PASS",
+      "public_decision": "UNKNOWN",
+      "status": "PASS",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "d3b73cba2e14aafcd7dc285ee30892102ba969d00ac2feb3028238189f7050f7",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-f30e0215f0d113880a6411c5/.isolated-3cac15bcf4d24e97aefb8b8b2bad4a66/receipt.json",
+          "sha256": "eb6d2beebadf4577417354009df7c4a4abeafb0e94cf74828db6787299584408"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-f30e0215f0d113880a6411c5/R3-KPT-4673/repair.trace.json",
+          "sha256": "4428b61be6d6a99c6936c35eb737512531d39556cb408db1c05777cf86204e48"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/independent/fixed46-v060-order-20261027-f30e0215f0d113880a6411c5/result.json",
+          "sha256": "d7d3d149bdd38a1dfc717a1ab5ed39527acbd70cc3f1fccc25daaab195acb7af"
+        }
+      },
+      "formal_ready": false
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v060-order-20261027-8963f561974092cbd6133317",
+      "variant": "baseline",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "status": "SEMANTIC_FAIL",
+      "method_status": "INVALID_OUTPUT",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "34a49ba0c94274c603605f5207ce54fb2a5321f60fc4a604ebfd6c92b7da5a8a",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-8963f561974092cbd6133317/.isolated-672587e2ad2347edba803e304e010242/receipt.json",
+          "sha256": "e99f7d82d9601581d1d6408fb365bb8ed74fdb02c88eeda5e7920b1a4fb26dfa"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-8963f561974092cbd6133317/R3-KPT-4673/repair.trace.json",
+          "sha256": "409d996d28a555bd49ba0a37da97516db9236806065e97a06a703c7d0649b695"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/independent/fixed46-v060-order-20261027-8963f561974092cbd6133317/result.json",
+          "sha256": "6fc55d17d91d51b8f0d2870ee0b7171b811f86782d9af3eb2bd438570645e89a"
+        }
+      },
+      "formal_ready": false
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v060-order-20261027-5c9e2b9fddc23e694bc91412",
+      "variant": "baseline",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "status": "SEMANTIC_FAIL",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "9a3b96da3b274891c078a95771ad1a1a8a78d539749c8f474bb676302da12433",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-5c9e2b9fddc23e694bc91412/.isolated-3e20874df77248b7a04584d890b60bf9/receipt.json",
+          "sha256": "3c518c22fe21dde0d33bd098c63b77b18bfb0892a941c7723a32fc5ccdcf0cc8"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-5c9e2b9fddc23e694bc91412/R3-KOPF-726/repair.trace.json",
+          "sha256": "ba71246dfddb99cfff9bf50cf7c4aa56540401260dfa0155b2f88579bfe57780"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/independent/fixed46-v060-order-20261027-5c9e2b9fddc23e694bc91412/result.json",
+          "sha256": "1d902ce4709811b8807a82e664aff4a6b98f362dc0eb3af2536cb112729807e2"
+        }
+      },
+      "formal_ready": false
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v060-order-20261027-a23cab1ffd94f2c287355ce8",
+      "variant": "candidate",
+      "independent_status": "PASS",
+      "public_decision": "PASS",
+      "status": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "61ddd04630ce1f8ed2adba76a1a805061d4e42c18c3f8527ff59ffb9d711921f",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-a23cab1ffd94f2c287355ce8/.isolated-8ac472dd195b4f59b76e6833d34f6a12/receipt.json",
+          "sha256": "2e8c5c8e689d2c49f8f156026fe7d2b5bafde2b03883952ca13357d212cc55c1"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-a23cab1ffd94f2c287355ce8/R3-KOPF-726/repair.trace.json",
+          "sha256": "df718ccf07dc05597f4d544ae12e74a793f4e9961768787a76c82027d65b4605"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/independent/fixed46-v060-order-20261027-a23cab1ffd94f2c287355ce8/result.json",
+          "sha256": "7a1f86dca9a897352b223a4e75ca250ec17fdf2986f359531297f12ab0aaa40f"
+        }
+      },
+      "formal_ready": false
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v060-order-20261027-109d1fbfb1987992a1ad4cea",
+      "variant": "baseline",
+      "independent_status": "PASS",
+      "public_decision": "PASS",
+      "status": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "d8d7c18dcd072223b88874782b00f2f33b7a109ae8a0226e5e842db50a535aa7",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-109d1fbfb1987992a1ad4cea/.isolated-8232700beef042b3bf82e68d3ae6f72f/receipt.json",
+          "sha256": "a2c12ae42aa9ab301a4d7a144442cd2092e1a5cff4a8c3ea5a4e9381404bab34"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-109d1fbfb1987992a1ad4cea/R4-PROVIDER-HELM-408/repair.trace.json",
+          "sha256": "364e7373dc449f5c7c27e7da74a6ca4644077185971a6588743da1d5ca104a8b"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/independent/fixed46-v060-order-20261027-109d1fbfb1987992a1ad4cea/result.json",
+          "sha256": "c855658afa8597a29329231661ac8ca182e596363e2ae6f01fb0a801d7f00143"
+        }
+      },
+      "formal_ready": false
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v060-order-20261027-613366258a101b1af27ecdab",
+      "variant": "candidate",
+      "independent_status": "PASS",
+      "public_decision": "UNKNOWN",
+      "status": "PASS",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "7f79f9811411d450f17cd08bc6f7c91437417cfe3312bc02c475fa1b79c4a822",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-613366258a101b1af27ecdab/.isolated-37f0a2c084544704b9077f877c4c9d3e/receipt.json",
+          "sha256": "deaf195241ca8b024216d83e949d92e06cf285b19e714c4743b1291e35f521b6"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-613366258a101b1af27ecdab/R4-PROVIDER-HELM-408/repair.trace.json",
+          "sha256": "8491d28e0710fa96e1fbb7497dbca5f12e11b1c2a74665c94d893dc1c04400f1"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/independent/fixed46-v060-order-20261027-613366258a101b1af27ecdab/result.json",
+          "sha256": "f2152fab9ee298288d4fb75e2e1a57fdbcdcc59102dfbbac8e6b3506825caef0"
+        }
+      },
+      "formal_ready": false
+    }
+  ],
+  "recorded_slots": 8,
+  "status": "ALL_CLOSED_RECORDS_VERIFIED",
+  "full46_complete": false,
+  "verifier": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/scripts/fixed_panel.py",
+    "sha256": "2bf3bce16706a298d3d4c2706f41ab0428f99714b4b102e6da268505d6e83833"
+  },
+  "formal_ready": false
+}

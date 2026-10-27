@@ -1,3 +1,5 @@
+> **2026-10-27准入收尾：** 原计划要求的assess_formal_readiness.py已实现并通过27项针对性验收；静态150、精确工程、隔离来源及干净克隆真实封存候选往返/恢复证据已汇总。当前FINAL_ADMISSION_v2仍NOT_READY，规定重复/续修和完整同版效果未满足；原条件不变，见[当前准入收尾](../../reports/2026-10-27-formal-admission-closure.md)。
+
 > **2026-10-27当前交接：** PR19已真实整合；前一精确v7的KPT默认续修独立PASS、2174+91及actual8通过，但Cert控制独立失败。现已定位长函数关键顺序证据截断，并完成89相关回归、实际请求送达和KPT初诊等价回放；单次新Cert默认验证已4调用独立PASS、公开语义UNKNOWN，当前源码另行2177+91/actual8全部通过，安装包116文件一致，原46零调用兼容性已PASS且新登记0/46；未继承旧版。正式准入false，原46/G6未完成。当前实施状态以[统一优化交接](../../reports/2026-10-27-unified-optimization-handoff.md)和CURRENT_STATUS为准；原门槛不变。
 
 # ContractEdge 正式实验准入与最终优化实施计划
@@ -136,7 +138,7 @@ Task1明确最早断点后，按证据选择Task2/3最小改动；Task4验证作
 
 直接检查`scripts/assess_reliability_delivery.py`及`assess_reliability_delivery_v2.py`可见：它们核验登记槽位、重复、回归和通过计数，但不独立验证每条记录的源码/配置/数据/评分摘要，也不审计隔离或工程复现。当前`delivery_effect_gates_passed=true`只能作为以下G5的一项输入，**不得单独设置formal_ready=true**。
 
-Task5须新增最终准入聚合入口与反例测试，复用当前报告而非增加模型Agent。拟交付`scripts/assess_formal_readiness.py`，输入版本冻结单、来源核验报告、工程报告、固定面板报告、运行恢复报告；输出`formal-readiness.json`。缺失、未运行、摘要不一致或必要检查失败，一律拒绝准入。该入口尚未实现，不得据文档名称声称已具备。
+Task5须新增最终准入聚合入口与反例测试，复用当前报告而非增加模型Agent。拟交付`scripts/assess_formal_readiness.py`，输入版本冻结单、来源核验报告、工程报告、固定面板报告、运行恢复报告；输出`formal-readiness.json`。缺失、未运行、摘要不一致或必要检查失败，一律拒绝准入。该入口现已实现，当前证据见outputs/planning-helper-contracts-20261027/FINAL_ADMISSION_v2.json；G4/G5未满足，不能据程序实现就宣布准入。
 
 |门|必须提供的产物|通过要求|归属|
 |---|---|---|---|

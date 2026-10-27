@@ -1,0 +1,82 @@
+{
+  "schema_version": "ce.formal_gate_evidence.v1",
+  "gate": "G0",
+  "identity": {
+    "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+    "panel_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
+    "candidate_config_sha256": "be8a7dc2dc0e87d76e60fb84de688b93ef1ad4a839f3545530ad5e7e00209866",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "executed_at": "2026-10-27T08:55:18.094438+00:00",
+  "checker": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/finish_gate_evidence_complete.py",
+    "sha256": "d7264817b18d5e0a81d356d59efa0cca87291b0e34c7e8d4c6ceb493259f0033"
+  },
+  "inputs": [
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G0_STATIC_DATASET_ADMISSION.json",
+      "sha256": "17fa83255b3f8ff63576d5d6fa3d9bca5d02d0608217dc0a31b9bd8bdfee2c63"
+    },
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G0_LOCAL_IMAGE_PREFLIGHT.json",
+      "sha256": "456ab02dc3a96693a6acdb91b538762e7c80e3d82b075a1112bec73a742dd28d"
+    },
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G0_CURRENT_PUBLIC_ROUTES.json",
+      "sha256": "be2d435f05c5461e5f4891044e3e600bb79beec4d3c45d8811f4b60fcae5ccd2"
+    }
+  ],
+  "checks": [
+    {
+      "id": "membership150",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G0_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17fa83255b3f8ff63576d5d6fa3d9bca5d02d0608217dc0a31b9bd8bdfee2c63"
+        }
+      ]
+    },
+    {
+      "id": "public_evaluation_mapping",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G0_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17fa83255b3f8ff63576d5d6fa3d9bca5d02d0608217dc0a31b9bd8bdfee2c63"
+        }
+      ]
+    },
+    {
+      "id": "archive_grader_partition_integrity",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G0_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17fa83255b3f8ff63576d5d6fa3d9bca5d02d0608217dc0a31b9bd8bdfee2c63"
+        }
+      ]
+    },
+    {
+      "id": "release_layout_mapping",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G0_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17fa83255b3f8ff63576d5d6fa3d9bca5d02d0608217dc0a31b9bd8bdfee2c63"
+        }
+      ]
+    },
+    {
+      "id": "resource_preflight150",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G0_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17fa83255b3f8ff63576d5d6fa3d9bca5d02d0608217dc0a31b9bd8bdfee2c63"
+        }
+      ]
+    }
+  ],
+  "scope": "Zero-model static management preflight of the current150 unified release: actual public bytes, hash-only private entry pins, current public routes and local images/resources. No all-case build/runtime/repair-success claim. Recheck resources before formal launch."
+}

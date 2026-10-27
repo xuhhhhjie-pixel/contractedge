@@ -1,0 +1,67 @@
+{
+  "schema_version": "ce.clean_clone_operational_replay.v1",
+  "status": "PASS",
+  "executed_at": "2026-10-27T08:36:41.633198+00:00",
+  "clone_commit": "ac9b3f6700945ac216bcf26a2c0ae93994342638",
+  "installed_module": "/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/src/contractedge/__init__.py",
+  "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+  "case_id": "RW-CAND-130",
+  "sealed_input": {
+    "original_slot": "fixed46-v060-order-20261027-60944716e7069c9f5423fb67",
+    "original_trace_sha256": "fdcddb326e1d9790cda4080e976ddac1ec03f039e973703c5bf1a4dec18bb4c1",
+    "sealed_patch_path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-60944716e7069c9f5423fb67/RW-CAND-130/candidate.patch",
+    "sealed_patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+    "original_snapshot": "f44e75768af304334eff5fb7c49cc596b12218dbf83efdf95639691b167063f5",
+    "candidate_snapshot": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+    "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b"
+  },
+  "public_status": "EXECUTION_PASS",
+  "public_observation": "/home/xhj/contractedge-cleancheck-v060-ordering-20261027/operational-real-rw130/producer/observation-24d8867cc3c94f52993a7cb8676db846",
+  "export": {
+    "patch_path": "/home/xhj/contractedge-cleancheck-v060-ordering-20261027/operational-real-rw130/producer/06ed371aed2d498bb41a312bb321d690.patch",
+    "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+    "patch_bytes": 1474,
+    "tool": {
+      "argv": [
+        "/home/xhj/contractedge-cleancheck-v060-ordering-20261027/system/.venv/bin/python",
+        "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019/tools/collect_patch.py",
+        "--workspace",
+        "/home/xhj/contractedge-cleancheck-v060-ordering-20261027/operational-real-rw130/producer/workspace",
+        "--output",
+        "/home/xhj/contractedge-cleancheck-v060-ordering-20261027/operational-real-rw130/producer/06ed371aed2d498bb41a312bb321d690.patch"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "stdout_sha256": "1fad54ce177aebd7ed271c614191a60146598f1d71fcbdf3c6377921e71ca1c0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "independent_status": "PASS",
+  "source_swap_real_process_exit": 73,
+  "source_recovery": {
+    "status": "ROLLED_BACK",
+    "restored_snapshot": "f44e75768af304334eff5fb7c49cc596b12218dbf83efdf95639691b167063f5",
+    "automatic_method_resume": false,
+    "candidate_exported": false,
+    "budget_reset": false
+  },
+  "recovery_second_call": {
+    "status": "NO_PENDING_SOURCE_SWITCH",
+    "automatic_method_resume": false
+  },
+  "completed_score_finalize_twice": true,
+  "score_dispatches": 1,
+  "score_checkpoint_sha256": "7572a5a1ea795f40b3554df40bfbb3034205ae80e8934c5ad59265903f707579",
+  "new_model_http_calls": 0,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "ledger_before": {
+    "calls": 1286,
+    "limit_micro_cny": 150000000
+  },
+  "ledger_after": {
+    "calls": 1286,
+    "limit_micro_cny": 150000000
+  },
+  "scope": "Same-server clean GitHub clone and fresh venv, real public benchmark candidate reconstruction/execution/export/independent scoring plus source crash and score finalization recovery. Uses a sealed existing candidate; not a fresh model repair, another-host certification, or a fixed46 result."
+}

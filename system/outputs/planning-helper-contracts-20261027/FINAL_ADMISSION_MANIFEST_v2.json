@@ -1,0 +1,39 @@
+{
+  "schema_version": "ce.formal_admission_manifest.v1",
+  "system_root": "/home/xhj/contractedge-planning-branch-continuity-20261026/system",
+  "snapshot": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/docs/development/ordering-source-v060-20261027-delivery-v2.snapshot.json",
+    "sha256": "a037cc56a57691db4836321a271cdd78e829e055a176c0c0837066987201afb4"
+  },
+  "panel": {
+    "path": "/home/xhj/contractedge-fixed46-source060-20261027/panel.json",
+    "sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e"
+  },
+  "records": {
+    "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/records.json",
+    "sha256": "3133ae367199e638ca60d5068c2885bfec94df6c7117fe510dc80439ebba8f1f"
+  },
+  "gates": {
+    "G2": {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G2_DELIVERY_EVIDENCE_v1.json",
+      "sha256": "a06daa636508f190aa01adf382e675f841309a8a2541fdf7268fd6ee7173592e"
+    },
+    "G6": {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G6_DELIVERY_EVIDENCE_v1.json",
+      "sha256": "da5234ebcb6de8d32cacd9e7cc0845f82f6d0b6c2492504252cc49dd8106db13"
+    },
+    "G0": {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G0_DELIVERY_EVIDENCE_v2.json",
+      "sha256": "65e762848e48ca699d048325798c0276c94c8367cdf8ff48d2805030023fa950"
+    },
+    "G1": {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G1_DELIVERY_EVIDENCE_v1.json",
+      "sha256": "67384174fc81419bfac44774073cf2f707c48b00da3c3d843c792b400a190cf6"
+    },
+    "G3": {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G3_DELIVERY_EVIDENCE_v1.json",
+      "sha256": "c835697552fd446fd4287b7383cf65ffd2bef56b1fbdb13bbd435579d1e683ba"
+    }
+  },
+  "scope": "Engineering/static delivery evidence assembled; G4/G5 remain closed until original current-source effect acceptance."
+}
