@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-27T07:50:39.017251+00:00",
+  "as_of": "2026-10-27T08:10:42.722727+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3299,12 +3299,12 @@
     "status": "EXACT_SOURCE_QUALIFIED_FIXED46_A_RUNNING",
     "planned_version": "0.6.60",
     "base_commit": "21b555b",
-    "planned_snapshot": "docs/development/ordering-source-v060-20261027-delivery.snapshot.json",
+    "planned_snapshot": "docs/development/ordering-source-v060-20261027-delivery-v2.snapshot.json",
     "formal_ready": false,
     "paid_dispatch_allowed": false,
     "report": "outputs/planning-helper-contracts-20261027/COMPLETION_AUDIT.md",
     "prior_closed_results": "outputs/helper-input-contracts-20261027/COMPLETION_AUDIT.md",
-    "snapshot": "docs/development/ordering-source-v060-20261027-delivery.snapshot.json",
+    "snapshot": "docs/development/ordering-source-v060-20261027-delivery-v2.snapshot.json",
     "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
     "upstream_commit": "7a5100e4028e698a990479fae9e6ee21a4c920a6",
     "integration_requires_new_qualification": true,
@@ -3323,7 +3323,9 @@
     "github_draft_pr": "https://github.com/xuhhhhjie-pixel/contractedge/pull/32",
     "clean_clone": "outputs/planning-helper-contracts-20261027/CLEAN_GITHUB_CLONE_VERIFICATION.json",
     "registered_method_snapshot": "docs/development/ordering-source-v060-20261027-v1.snapshot.json",
-    "publication_binding_amendment": "outputs/planning-helper-contracts-20261027/PUBLICATION_BINDING_AMENDMENT.json"
+    "publication_binding_amendment": "outputs/planning-helper-contracts-20261027/PUBLICATION_BINDING_AMENDMENT.json",
+    "ci_status": "REMOTE_2142PASS_2_NAMESPACE_ENVIRONMENT_FAILURES; runner-only fix awaiting remote confirmation",
+    "ci_namespace_report": "outputs/planning-helper-contracts-20261027/CI_NAMESPACE_ENVIRONMENT_FIX.json"
   },
   "staged_implementation_version": "0.6.60",
   "runtime_implementation_version": "0.6.40",
@@ -3440,7 +3442,7 @@
     "registration_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
     "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
     "slots": 46,
-    "scored_slots": 2,
+    "scored_slots": 3,
     "status": "A_RUNNING",
     "historical_scores_reused": false,
     "formal_ready": false,

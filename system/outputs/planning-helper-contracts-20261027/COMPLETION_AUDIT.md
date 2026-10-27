@@ -13,7 +13,7 @@ PR19 已由 d041ee4 真实合并到同一工作分支；运行目录仍0.6.40，
 
 ## 本轮交付收尾
 
-统一GitHub草稿PR #32已推送。干净GitHub克隆、新venv按README安装、116源码冻结、CLI、150公开输入投影，以及35项/10子测试合成恢复检查通过。完整G6真实benchmark往返仍不据此宣布完成。当前原46已进入A组，RW130基线与候选各独立PASS；最新计数见FIXED46_CURRENT_PROGRESS.json。
+统一GitHub草稿PR #32已推送。干净GitHub克隆、新venv按README安装、116源码冻结、CLI、150公开输入投影，以及35项/10子测试合成恢复检查通过。完整G6真实benchmark往返仍不据此宣布完成。当前原46已进入A组，RW130基线与候选各独立PASS，当前固定KPT候选也已7调用/3483字节补丁独立PASS，首轮无已知保持回退、公开语义UNKNOWN；最新计数见FIXED46_CURRENT_PROGRESS.json。
 
 首轮GitHub Docker CI引用旧v046清单导致停止；一行引用已由实际命令RED→现有verify_source GREEN修复，远程新CI待确认。方法源码与固定登记不变。
 

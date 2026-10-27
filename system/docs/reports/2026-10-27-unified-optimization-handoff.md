@@ -8,7 +8,7 @@
 
 `e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b`
 
-原46登记与实际资格的精确方法记录为 `docs/development/ordering-source-v060-20261027-v1.snapshot.json`；发布校验入口为 `docs/development/ordering-source-v060-20261027-delivery.snapshot.json`，它仅补记CI清单引用修改，116源码、59配置绑定、205夹具和288工具绑定均逐项相同。旧记录不覆盖，不新计方法结果或重跑工程。后续补充交付清单只允许绑定相同源码、实际方法配置和测试，不把记录更新当作新方法效果。服务器默认运行目录仍0.6.40，未部署候选，formal_ready=false。
+原46登记与实际资格的精确方法记录为 `docs/development/ordering-source-v060-20261027-v1.snapshot.json`；当前发布校验入口为 `docs/development/ordering-source-v060-20261027-delivery-v2.snapshot.json`，它补记CI清单引用及runner环境设置，116源码、59配置绑定、205夹具和288工具绑定均逐项相同。旧记录不覆盖，不新计方法结果或重跑工程。后续补充交付清单只允许绑定相同源码、实际方法配置和测试，不把记录更新当作新方法效果。服务器默认运行目录仍0.6.40，未部署候选，formal_ready=false。
 
 前一精确源码v7（7b5d0748…）已完成2174项测试、91项子测试，以及该字节的8项真实隔离验证（14会话、28容器）。当前ordering-source另行完成单次2177项+91子测试和当前字节actual8（14会话/28容器）全部PASS；来源及日志摘要独立记录，未继承v7。外部公开回放夹具前后摘要一致，源码未变，资格阶段新增模型调用0。前一v7安装包0.6.60的116个源码文件与其冻结逐项一致；当前源码已另行构建并独立安装核对，116源码与e0f482…冻结一致；不是运行部署。完整测试依赖已记录的服务器公开历史夹具；此结果不能冒充新机器无夹具全量复现。
 
@@ -80,6 +80,10 @@
 
 从GitHub重新克隆到独立目录、创建新venv并按README安装成功；包0.6.60、116源码冻结校验、CLI通过。当前正式v1数据的150个公开MethodInput全部重新投影PASS（不解包源码树、不读评价材料、不是150条模型实验）。针对可迁移路径的35项测试+10子测试通过，包含三个真实公开合成CLI过程、跨进程READY、候选事务/篡改与恢复检查。这是同服务器干净克隆验证，不冒充另一台机器或G6全部真实benchmark恢复通过。
 
-固定A组已按原顺序启动；当前快照见FIXED46_CURRENT_PROGRESS.json。RW130基线与当前候选已各独立PASS，正在KPT候选；结果属于当前原46登记，资格Cert/KPT不回填。后续按原A/重复/续修门控推进，B尚未开放。
+固定A组已按原顺序启动；当前快照见FIXED46_CURRENT_PROGRESS.json。RW130基线与当前候选已各独立PASS，当前KPT候选也已独立PASS（7调用、3483字节补丁、首轮无已知保持回退、公开语义UNKNOWN），正在KPT基线；结果属于当前原46登记，资格Cert/KPT不回填。后续按原A/重复/续修门控推进，B尚未开放。
 
 GitHub首轮CI的普通合约/预算、原生TopoMen和公开恢复任务通过；实际Docker任务因workflow仍引用旧v046清单，在检查pyproject时停止。已直接读取实际CI命令复现RED，并仅将workflow引用改为本轮已actual8通过的v060-ordering清单，现有verify_source转GREEN；方法源码、配置和原46身份不变，未重跑本机全套或付费尝试。新CI结果仍需单独确认，不以本地配置检查冒充远程通过。
+
+当前固定KPT真实规划与执行消息都含MergeWithInput、SetResourceIDs、DeleteResourceIDs完整正文；计划说明保留原有身份合并分支，补丁在无选择器分支单独保留配置资源，不增加需另行初始化ID的合并调用。详见FIXED46_KPT_CANDIDATE_EVIDENCE.json；该当前来源证据与原v7的另一种成功修法分开记账，不将某一修法硬编码进系统。
+
+远端c424cbc的最后可移植套件实际为2142PASS、86子测试PASS、2项真实namespace失败，错误为bwrap初始化loopback权限不足；其余四个任务通过，实际Docker8/24步骤也已通过。这不是方法修复失败，也不能把该远端任务称为通过。已仅在CI配置中固定24.04平台，按发行版方案在必要时加载bwrap的AppArmor profile，并将现有两项原样的真实隔离测试提前到长验证之前；不关闭主机全局限制、不移除网络/PID/只读挂载或任何断言。服务器同两项2PASS，远端修复仍待实际确认。发布清单仅更新workflow身份，原116方法源码/59配置/205夹具/288工具和运行中的原46身份全部不变，不重跑付费尝试或服务器全套。Ubuntu官方说明与Docker主文档链接见CI_NAMESPACE_ENVIRONMENT_FIX.json。
