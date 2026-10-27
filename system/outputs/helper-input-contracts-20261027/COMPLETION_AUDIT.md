@@ -48,3 +48,13 @@ source059 KPT在2次诊断调用后INVALID_OUTPUT/0补丁，独立SEMANTIC_FAIL�
 该项是执行组件验证，不含新诊断/计划，不计原46槽或正式端到端成功。结果、模型实际请求、公开编译诊断与补丁保存在LOCKED_EXECUTION_RESULT_v059.json及LOCKED_EXECUTION_PUBLIC_v059.tar.gz；隐藏评分详情未发布。原一次调用登记已关闭，不追加重试。
 
 下一步只考虑独立登记的单次编译反馈续修：先确认现有反馈构造/历史快照/恢复源码在最终请求中一致，再进行真实调用。它验证已有反馈机制，不新增生产模块或扩大原尝试额度。累计127.617078元，1231调用，剩余22.382922元，正式准入仍false。
+
+## 公开编译反馈续修已关闭：编译修复，行为仍失败
+
+独立登记1次续修，不增加原尝试的调用额度。零调用捕获确认原生TopoMen实际请求只增加previous_execution_attempt：历史S1、恢复S0、完整编译错误/源码位置/stderr摘要一致，总输入186514/220000。公开Broken准备只运行一次；父侧初次断言误以为历史投影保留原diagnostics字段，实际原实现有意通过failure_tasks保留编译事实。修正断言并保留preparation-v1后，在任何claim/API前重新封存；没有修改生产输入或放宽判定。
+
+真实1调用后，未定义助手已移除，公开编译通过。但38公开检查为29PASS/9FAIL，8项原有PASS回退，资源合并产生重复Kptfile；候选REJECT_REGRESSION并恢复，固定试验独立SEMANTIC_FAIL。续修登记关闭，不继续重试。结果及公开输入见COMPILER_RECOVERY_RESULT_v059.json/COMPILER_RECOVERY_PUBLIC_v059.tar.gz。编译反馈已有效进入修订，不等于行为修复成功。
+
+进一步零调用核查source058实际三个规划请求：均无MergeWithInput正文、无source_prerequisites；执行请求才有该正文。计划要求新增exclusions并保持merge分支，但未表达新合并路径的ID初始化前提。最早可干预边界现在定位于规划契约输入，应复用现有有界助手检索及source_prerequisites通道提前取证，而非继续对同一计划重试。原源码语法检查也不证明对可变guard的控制流覆盖，不能把CHECKED_SYNTAX视为实现正确。
+
+另：source059初诊与纠错schema均已排除单一Outcome的PARTIAL_READY，模型仍输出被禁止值；不能重复声称缺少该规则。总账127.730234/150元，1232调用，剩余22.269766元。正式46/150仍未开放。
