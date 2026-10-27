@@ -1,0 +1,40 @@
+{
+  "status": "CLOSED_INITIAL_DIAGNOSIS_CORRECTION_FAILURE_HELPER_NOT_EXERCISED",
+  "rows": [
+    {
+      "case_id": "R3-KPT-4673",
+      "method_status": "INVALID_OUTPUT",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_outcome": "UNKNOWN",
+      "patch_bytes": 0,
+      "output": "/home/xhj/contractedge-e2e-source059-v3-20261027/methods/R3-KPT-4673/R3-KPT-4673",
+      "model_calls": 2,
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-e2e-source059-v3-20261027/methods/R3-KPT-4673/.isolated-52e4cdd7b3ee4471b364dc0e36325853/receipt.json",
+          "sha256": "4af1a8a8c0b07f41d0a9c92bf9f2d4bc09979a166b655680f053db2a169d3ccf"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-e2e-source059-v3-20261027/methods/R3-KPT-4673/R3-KPT-4673/repair.trace.json",
+          "sha256": "07f79f9b97898d5058385f8dad5a15d9f1ca507fb06ff3a88c79f7f8b7117077"
+        }
+      }
+    }
+  ],
+  "model_calls": 2,
+  "patch_bytes": 0,
+  "independent_status": "SEMANTIC_FAIL",
+  "helper_input_contracts_exercised": false,
+  "first_error": "PRODUCTION_CONSUMER_UNEVIDENCED",
+  "correction_new_error": "STATUS_INCONSISTENT: PARTIAL_READY requires unresolved outcome",
+  "initial_status": "READY",
+  "correction_status": "PARTIAL_READY",
+  "additional_independent_first_error": false,
+  "cert_status": "NOT_RUN_PREREQUISITE_FAILED",
+  "total_occupied_cny": 127.52046,
+  "new_occupied_cny": 0.297392,
+  "remaining_upper_bound_cny": 22.47954,
+  "archive_sha256": "f65fcac8147ce3fa333f7fbe5a420198b25a94275d3d7a243e3847a2ea8617c8",
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false
+}
