@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-27T07:47:36.861983+00:00",
+  "as_of": "2026-10-27T07:50:39.017251+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3299,12 +3299,12 @@
     "status": "EXACT_SOURCE_QUALIFIED_FIXED46_A_RUNNING",
     "planned_version": "0.6.60",
     "base_commit": "21b555b",
-    "planned_snapshot": "docs/development/ordering-source-v060-20261027-v1.snapshot.json",
+    "planned_snapshot": "docs/development/ordering-source-v060-20261027-delivery.snapshot.json",
     "formal_ready": false,
     "paid_dispatch_allowed": false,
     "report": "outputs/planning-helper-contracts-20261027/COMPLETION_AUDIT.md",
     "prior_closed_results": "outputs/helper-input-contracts-20261027/COMPLETION_AUDIT.md",
-    "snapshot": "docs/development/ordering-source-v060-20261027-v1.snapshot.json",
+    "snapshot": "docs/development/ordering-source-v060-20261027-delivery.snapshot.json",
     "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
     "upstream_commit": "7a5100e4028e698a990479fae9e6ee21a4c920a6",
     "integration_requires_new_qualification": true,
@@ -3321,7 +3321,9 @@
     "compatibility": "outputs/planning-helper-contracts-20261027/FIXED46_CURRENT_COMPATIBILITY.json",
     "fixed46_registration": "outputs/planning-helper-contracts-20261027/FIXED46_CURRENT_REGISTRATION.json",
     "github_draft_pr": "https://github.com/xuhhhhjie-pixel/contractedge/pull/32",
-    "clean_clone": "outputs/planning-helper-contracts-20261027/CLEAN_GITHUB_CLONE_VERIFICATION.json"
+    "clean_clone": "outputs/planning-helper-contracts-20261027/CLEAN_GITHUB_CLONE_VERIFICATION.json",
+    "registered_method_snapshot": "docs/development/ordering-source-v060-20261027-v1.snapshot.json",
+    "publication_binding_amendment": "outputs/planning-helper-contracts-20261027/PUBLICATION_BINDING_AMENDMENT.json"
   },
   "staged_implementation_version": "0.6.60",
   "runtime_implementation_version": "0.6.40",
