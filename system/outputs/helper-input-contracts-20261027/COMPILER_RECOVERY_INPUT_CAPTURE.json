@@ -1,0 +1,16 @@
+{
+  "status": "NATIVE_COMPILER_RECOVERY_INPUT_CAPTURE_PASS",
+  "api_calls": 0,
+  "source_unchanged": true,
+  "actual_native_request_equals_registered": true,
+  "adapter_body_equals_request": true,
+  "only_payload_change": "previous_execution_attempt",
+  "historical_trial_snapshot": "89edf76af63c7d2ee0b4ecc2288e19340127076d4c1dc8b84abea720b1003b83",
+  "restored_current_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "public_failure_kind": "CANDIDATE_BUILD_FAILURE",
+  "request_digest": "55c55ac7eee5fa3667aa3e4aaa1615867d526a4211f6b6de10b58790020a4bcc",
+  "total_token_bound": 186514,
+  "context_cap": 220000,
+  "thinking": "disabled",
+  "formal_ready": false
+}

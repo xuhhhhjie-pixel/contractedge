@@ -1,0 +1,18 @@
+{
+  "schema_version": "ce.development_snapshot_verification.v1",
+  "development_snapshot_id": "helper-input-contracts-v059-20261027-v5",
+  "status": "PASS",
+  "formal_ready": false,
+  "coverage": {
+    "source": 116,
+    "configuration": 53,
+    "fixture": 203,
+    "tooling_files": 249,
+    "repository_files": 1
+  },
+  "unbound_legacy_fixture_files": [],
+  "errors": [],
+  "production_maps_equal_v2_v4": true,
+  "old_tool_submap_unchanged": true,
+  "api_calls": 0
+}

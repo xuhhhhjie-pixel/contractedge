@@ -1,0 +1,24 @@
+{
+  "status": "LOCKED_EXECUTION_COMPONENT_CLOSED",
+  "independent_status": "BUILD_FAIL",
+  "grader_exit": 1,
+  "candidate_decision": "UNCOMPARABLE",
+  "public_checks": 0,
+  "public_pass": 0,
+  "public_fail": 0,
+  "patch_bytes": 1826,
+  "patch_sha256": "6a32e8863f4331c0bda8c10c9f6f81d6076ddb57715ee15f2727c3f847b3c1f4",
+  "actual_api_calls": 1,
+  "money_after": {
+    "limit_micro_cny": 150000000,
+    "committed_micro_cny": 127617078,
+    "calls": 1231,
+    "reservation_rejected": false,
+    "pending_calls": 3
+  },
+  "source_restored": true,
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "success": false,
+  "limitation": "One native execution on a historical validated plan; no end-to-end diagnosis/planning or formal-panel success claimed."
+}

@@ -1,0 +1,7 @@
+{
+  "status": "ACTUAL_NATIVE_INPUT_CAPTURE_PASS",
+  "model_calls": 0,
+  "source_unchanged": true,
+  "actual_request_equals_registered_builder": true,
+  "native_agent": "DefaultAgent"
+}

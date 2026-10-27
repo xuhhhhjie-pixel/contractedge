@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-26T06:06:03.329194+00:00",
+  "as_of": "2026-10-27T02:44:50.738809+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3296,15 +3296,18 @@
     }
   },
   "current_development": {
-    "status": "V059_CLOSED_INITIAL_DIAGNOSIS_HELPER_CHANGE_UNEXERCISED",
-    "snapshot": "docs/development/helper-input-contracts-v059-20261027-v3.snapshot.json",
+    "status": "V059_REGISTERED_COMPILER_FEEDBACK_RECOVERY_RUNNING",
+    "snapshot": "docs/development/helper-input-contracts-v059-20261027-v5.snapshot.json",
     "planned_version": "0.6.59",
     "base_commit": "894119f7ba688bd8764fa93c77decc6b1ad5a26a",
     "source_sha256": "1cbdce8740890e423e9be12bb7362ae571ff6e679fd0918154dbbe7e0f018a2a",
     "formal_ready": false,
-    "paid_dispatch_allowed": false,
+    "paid_dispatch_allowed": "ONE_SEPARATELY_REGISTERED_RECOVERY_CALL_ONLY",
     "report": "outputs/helper-input-contracts-20261027/COMPLETION_AUDIT.md",
-    "result": "outputs/helper-input-contracts-20261027/KPT_E2E_RESULT_v059.json"
+    "result": "outputs/helper-input-contracts-20261027/KPT_E2E_RESULT_v059.json",
+    "component_root": "/home/xhj/contractedge-locked-execution-v059-20261027",
+    "component_result": "outputs/helper-input-contracts-20261027/LOCKED_EXECUTION_RESULT_v059.json",
+    "recovery_root": "/home/xhj/contractedge-compiler-recovery-v059-20261027"
   },
   "staged_implementation_version": "0.6.59",
   "runtime_implementation_version": "0.6.40",
@@ -3362,9 +3365,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Lock saved accepted public plan/source/input to validate native execution component alone",
-    "No production-source churn or new correction allowance for one stochastic diagnosis failure",
-    "Full front reliability and original46 gates remain required; component scores never count as end-to-end"
+    "Replay exact source-bound public compiler failure through existing rejected-trial feedback on restored S0 before any separately registered recovery call",
+    "Keep initial component BUILD_FAIL immutable; no new end-to-end or46-slot success claimed",
+    "Original46 and G0–G6 remain formal-admission prerequisites"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",
