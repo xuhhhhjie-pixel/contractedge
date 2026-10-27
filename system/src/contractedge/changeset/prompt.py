@@ -30,6 +30,8 @@ CHANGESET_SYSTEM_PROMPT += " Review each atom against its original wording and t
 
 CHANGESET_SYSTEM_PROMPT += " Before proposing reuse or transfer of runtime objects, inspect their ownership, cancellation, timer/channel lifetime, route/input binding and synchronization contracts in the supplied source. Transferring a map of pointers does not establish that the pointed-to objects remain usable under the replacement owner. If this repair strategy depends on a missing lifecycle contract, use the existing NEEDS_EVIDENCE extension with exact symbols rather than treating a proposed helper API as evidence that the strategy is safe. Preserve all source-supported behavior and retain unverified parts explicitly."
 
+CHANGESET_SYSTEM_PROMPT += " When a change narrows a collection passed to a consumer, trace the complete collection through every relevant output/writeback branch. State how items excluded from that consumer remain available where preservation requires them. Preserving an existing assignment or helper sequence is not sufficient when its inputs or activation conditions change. Align initialization, helper use and cleanup with the same applicable conditions, or explain a supported alternative. Preserve required behavior rather than freezing a source statement that conflicts with the new selection."
+
 CHANGESET_SYSTEM_PROMPT += " " + JSON_POINTER_GUIDANCE
 
 COVERAGE_PROMPT = " For each behavior_check_refs binding explicitly set check_coverage: ALL_OF only if those checks together cover the complete concrete statement; NECESSARY_ONLY if failure of a required instance disproves it but success does not exhaust all inputs, branches or modes; SUPPORTING only if a failed result would not contradict the statement (for example an unrelated control). Incomplete mode coverage alone is NECESSARY_ONLY, not SUPPORTING. Bind the named necessary checks even when a public result was not selected; unobserved results stay UNKNOWN. Explain coverage_rationale using the public check descriptions. Narrow statements or leave UNKNOWN rather than claiming broad sufficiency."
@@ -196,7 +198,12 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
                                    for path, unit_ids in sorted(editable_targets.items())],
         "diagnosis_digest": canonical_digest(diagnosis.raw),
         "public_execution_capabilities": capabilities,
-        "public_behavior_check_catalog": public_behavior_check_catalog(capabilities),
+        "public_behavior_check_catalog": [
+            {key:value for key,value in row.items() if key not in {"statement", "boundary", "scope"}}
+            for row in public_behavior_check_catalog(capabilities)],
+        "public_behavior_check_catalog_description_source": (
+            "Identity and scope index only. Complete predicate statements and observation boundaries remain "
+            "in public_execution_capabilities under the same producer/check IDs; neither declaration is a result."),
         "validation_feedback": list(validation_feedback or []),
         "output_contract": "Return only a SemanticChangeSet v1.1 JSON object; no markdown fences.",
     }
@@ -260,17 +267,39 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
                 or not isinstance(previous_attempt.get('response_content'), str)
                 or not previous_attempt['response_content'].strip()):
             raise ValueError('Previous ChangeSet must bind the current run, input, snapshot and diagnosis, with revision feedback')
-        content = previous_attempt['response_content']
-        digest = hashlib.sha256(content.encode()).hexdigest()
+        original_content = previous_attempt['response_content']
+        digest = hashlib.sha256(original_content.encode()).hexdigest()
+        content = original_content
+        projection = None
+        if previous_attempt['state'] == 'CURRENT_PLAN_FOR_REVISION':
+            # A validated runner target uses a different dialect from the model
+            # selector schema. Project identities, never repair a rejected draft.
+            view = json.loads(original_content)
+            for change in view.get('changes', []):
+                target = change.get('target', {})
+                if target.get('kind') == 'EXISTING':
+                    if not isinstance(target.get('path'), str) or not target.get('unit_refs'):
+                        raise ValueError('Current plan target requires explicit path and unit identities')
+                    change['target'] = dict(target_kind='EXISTING', source_path=target['path'],
+                                            unit_refs=list(target['unit_refs']))
+                elif target.get('kind') == 'NEW':
+                    change['target'] = {key:value for key,value in target.items() if key!='kind'}
+                    change['target']['target_kind'] = 'NEW'
+            content = json.dumps(view, ensure_ascii=False, sort_keys=True, separators=(',', ':'))
+            projection = 'MODEL_TARGET_VIEW_OF_CURRENT_PLAN; semantic actions and obligations unchanged'
+        projected_digest = hashlib.sha256(content.encode()).hexdigest()
         messages += ({'role': 'assistant', 'content': content}, {'role': 'user', 'content': json.dumps(dict(
             previous_attempt_state=previous_attempt['state'], previous_attempt_sha256=digest,
+            previous_attempt_projection=projection, previous_attempt_message_sha256=projected_digest,
             binding=identity, validation_feedback=list(validation_feedback),
             instruction='Revise the preceding planning draft using the current schema, source and feedback. '
                 'It is prior planning state, never new evidence or proof of behavior. '
+                'A current-plan target view uses model selectors; the original canonical plan remains bound by its digest. '
                 'Preserve unaffected valid fields and all requirement obligations; correct the cited errors without inventing support. '
                 'Return one complete SemanticChangeSet with every required field. Do not emit this revision wrapper.'),
             ensure_ascii=False, sort_keys=True)})
-        draft_metadata = dict(previous_changeset_sha256=digest, previous_changeset_state=previous_attempt['state'])
+        draft_metadata = dict(previous_changeset_sha256=digest, previous_changeset_state=previous_attempt['state'],
+                              previous_changeset_message_sha256=projected_digest)
     return ModelRequest(model=model, prompt_version=("changeset.v1.1.14" if capabilities.get('registered_public_checks') else
                         "changeset.v1.1.13" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.12"),
                         messages=messages,

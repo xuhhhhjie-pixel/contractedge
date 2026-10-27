@@ -105,7 +105,12 @@ def test_correction_and_revision_preserve_bindings_in_the_serialized_schema(stat
     assert list(Draft202012Validator(schema).iter_errors(plan['postconditions'][0])) == []
     wrong = copy.deepcopy(plan['postconditions'][0]); wrong['behavior_check_refs'] = ['other:check']
     assert list(Draft202012Validator(schema).iter_errors(wrong))
-    assert request.messages[2]['content'] == json.dumps(plan)
+    if state == 'REJECTED_PLAN_DRAFT':
+        assert request.messages[2]['content'] == json.dumps(plan)
+    else:
+        view=json.loads(request.messages[2]['content'])
+        assert view['postconditions']==plan['postconditions']
+        assert view['changes'][0]['target']=={'target_kind':'EXISTING','source_path':plan['changes'][0]['target']['path'],'unit_refs':plan['changes'][0]['target']['unit_refs']}
     assert body['public_execution_capabilities']['registered_public_checks']['checks'][0]['scenario'] == 'selected-and-preservation'
 
 

@@ -34,7 +34,9 @@ def test_partial_negative_fact_reaches_necessary_failure_without_asserting_visib
     for path,meta in records.items():
         observations.append({'id':'PREFIX','snapshot_id':'current','excerpt':path.read_text(),**meta})
     obligation={'behavior_check_refs':[PID+':'+CHECK,PID+':groups.visible_after_reload'],
-                'check_coverage':'NECESSARY_ONLY','verification_kind':'PUBLIC_BEHAVIOR'}
+                'check_coverage':'NECESSARY_ONLY','verification_kind':'PUBLIC_BEHAVIOR',
+                'verification_scope':{'scenario':'method-'+PID},
+                'coverage_rationale':'A duplicate in the bounded prefix is a necessary counterexample, not proof of full visibility'}
     result=deterministic_check_result(obligation,observations,snapshot_id='current')
     assert result['status']=='FAIL'
     visible={**obligation,'behavior_check_refs':[PID+':groups.visible_after_reload']}

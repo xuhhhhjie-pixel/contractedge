@@ -60,7 +60,9 @@ def test_public_feedback_plan_revision_contains_current_plan_without_mutating_tr
     before=copy.deepcopy(context.trace)
     class Provider:
         def complete_json(self,request):
-            assert json.loads(request.messages[2]['content'])==before['changeset']
+            view=json.loads(request.messages[2]['content'])
+            assert view['postconditions']==before['changeset']['postconditions']
+            assert view['changes'][0]['target']=={'target_kind':'EXISTING','source_path':before['changeset']['changes'][0]['target']['path'],'unit_refs':before['changeset']['changes'][0]['target']['unit_refs']}
             assert json.loads(request.messages[3]['content'])['previous_attempt_state']=='CURRENT_PLAN_FOR_REVISION'
             raise Captured()
     with pytest.raises(Captured):
@@ -103,3 +105,21 @@ def test_new_evidence_context_does_not_reuse_old_rejected_plan(tmp_path):
             return super().complete_json(request)
     trace=run_fixture(tmp_path,Provider(),lambda s:len(s.split()))
     assert trace.status=='READY',trace.errors
+
+
+def test_current_plan_revision_uses_model_target_dialect_and_preserves_obligations(context):
+    from jsonschema import Draft202012Validator
+    packet, run = packet_context(context)
+    prior = attempt(context); prior['state'] = 'CURRENT_PLAN_FOR_REVISION'
+    original = json.loads(prior['response_content'])
+    request = build_changeset_request(packet, run, [{'code':'PUBLIC_FAILURE'}], previous_attempt=prior)
+    projected = json.loads(request.messages[2]['content'])
+    target_schema = request.output_schema['properties']['changes']['items']['properties']['target']
+    for change in projected['changes']:
+        assert not list(Draft202012Validator(target_schema).iter_errors(change['target']))
+    assert projected['postconditions'] == original['postconditions']
+    assert projected['preserve_constraints'] == original['preserve_constraints']
+    assert projected['open_obligations'] == original['open_obligations']
+    assert [{k:v for k,v in c.items() if k!='target'} for c in projected['changes']] == [
+        {k:v for k,v in c.items() if k!='target'} for c in original['changes']]
+    assert context.trace['changeset'] == original

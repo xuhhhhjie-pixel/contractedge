@@ -36,7 +36,9 @@ def test_registered_checks_reach_review_feedback_and_regression_guard(tmp_path):
         coverage_rationale='This predicate is limited to the fixed non-tag update scenario')
     plan = dict(status='READY', changes=[dict(id='C1', postcondition_refs=['P1'])],
         postconditions=[dict(id='P1', statement='Changed tag value is applied', verification_kind='PUBLIC_BEHAVIOR',
-            behavior_check_refs=['cloudwatch-tags-v1:value_change'], check_coverage='ALL_OF')],
+            behavior_check_refs=['cloudwatch-tags-v1:value_change'], check_coverage='ALL_OF',
+            verification_scope={'scenario':'method-cloudwatch-tags-v1'},
+            coverage_rationale='Only the fixed value-change predicate is claimed')],
         preserve_constraints=[preservation], open_obligations=[])
 
     class NoModel:
