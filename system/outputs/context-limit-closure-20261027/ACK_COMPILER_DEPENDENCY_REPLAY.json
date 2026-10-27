@@ -1,0 +1,36 @@
+{
+  "status": "PASS_ZERO_HTTP",
+  "source_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+  "failure_snapshot": "091ee8e3ea9002c93172eca50fefea8a2924bb6804881ace7a4855748ea20b37",
+  "historical_feedback_digest": "818570d10b041f31e07c7d9069e5dbfe3fe1c4d3abd38343f6f63b94d86872ce",
+  "restoration": "Digest-verified canonical saved feedback restores caller input before final historical projection",
+  "declarations": [
+    {
+      "id": "PUBLICDEP-c2986c7a91392366",
+      "kind": "PUBLIC_DEPENDENCY_DECLARATION",
+      "module": "github.com/aws-controllers-k8s/runtime",
+      "version": "v0.61.0",
+      "package": "compare",
+      "type_name": "Delta",
+      "current_source_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+      "failure_snapshot": "091ee8e3ea9002c93172eca50fefea8a2924bb6804881ace7a4855748ea20b37",
+      "archive_path": "gomod.tar.gz",
+      "archive_sha256": "8d76104a92730c5cf5a47e1320fd65bfff2599ad169baa2958d778a1f8bdc75e",
+      "member": "gomod/github.com/aws-controllers-k8s/runtime@v0.61.0/pkg/compare/delta.go",
+      "content_digest": "db2a420050ddbe04f12e42347d514f1eb2a043f6bc2128ca9869bcf54c7d1830",
+      "read_only": true,
+      "environment_sha256": "4b97f0c23ec7e805f48c16c14a02022a3ba36e16dca31dc6f40236e106a6b905",
+      "interpretation": "Exact hash-pinned public module declaration; not an editable target, verified replacement or causal proof"
+    }
+  ],
+  "input_bytes": 170034,
+  "readonly_bytes": 42944,
+  "support_budget": 48000,
+  "api_signature_delivered": true,
+  "slice_type_delivered": true,
+  "http_calls_added": 0,
+  "formal_ready": false,
+  "final_review_fixed_reader_rechecked": true,
+  "reader_seconds": 4.814,
+  "method_source_sha256": "5edf97368ec7c7546f295d84db550cb50e4a0767515fc997436558db9abd4738"
+}

@@ -1,0 +1,12 @@
+{
+  "status": "CLOSED_ONE_OFF_QUALIFICATION",
+  "case_id": "R4-ACK-CLOUDWATCH-2985",
+  "method_status": "CANDIDATE_COMPARISON_UNCERTAIN",
+  "independent_status": "SEMANTIC_FAIL",
+  "public_semantic_status": null,
+  "model_calls": 8,
+  "method_source_unchanged": true,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "automatic_retry": false
+}

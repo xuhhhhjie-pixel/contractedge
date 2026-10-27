@@ -1,0 +1,9 @@
+{
+  "status": "PASS_ZERO_HTTP",
+  "scope": "Actual saved ACK initial native request, before compiler failure",
+  "old_and_new_messages_identical": true,
+  "messages_sha256": "0a24b8b07f350bf9d674b820bf86b4a52c59ac3d9bd38cc4d18e9b78903b97b6",
+  "input_bytes": 149410,
+  "http_calls_added": 0,
+  "formal_ready": false
+}

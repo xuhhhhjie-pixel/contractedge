@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-27T15:28:29.285370+00:00",
+  "from_limit_micro_cny": 150000000,
+  "to_limit_micro_cny": 200000000,
+  "authorization": "Explicit user async approval: cumulative upper limit200CNY; apply after active150CNY qualification closed",
+  "committed_micro_cny": 136369166,
+  "calls_preserved": 1307,
+  "pending_reservations_preserved": 3,
+  "prior_ledger_sha256": "f6ff0585d6cb317d071458aa2861f86f8021913d3b3686f5ce60c6ba605bb337",
+  "current_ledger_sha256": "41a529794b05a0e5c94d9b76e45a6a9522503c37c64c5631b83f86915f8dc541",
+  "all_calls_unchanged": true,
+  "historical_configs_retained_at150": true,
+  "new_runs_require_registered200CNY_config": true
+}

@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "source_sha256": "5edf97368ec7c7546f295d84db550cb50e4a0767515fc997436558db9abd4738",
+  "summary_sha256": "ec32879147e7e1a6c57cca1ab3bb79acf37f602a37f3fe4728d694f124f83a26",
+  "summary_path": "/home/xhj/contractedge-v061-trial-isolation-20261028/summary.json",
+  "binding_sha256": "4056ebf2effeafce665c43a5e9f1501efe784d58feb15d05f597a13ae3e882c6",
+  "cells": 8,
+  "actual_runtime_sessions": 14,
+  "actual_containers": 28,
+  "model_http_calls_added": 0,
+  "formal_ready": false
+}

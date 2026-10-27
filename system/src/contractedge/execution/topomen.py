@@ -195,12 +195,22 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
             except (OSError, ValueError, TypeError):
                 reason = 'UNAVAILABLE_SOURCE'
         support_audit.append({'id': evidence.get('id'), 'path': path, 'result': reason or 'INCLUDED_READ_ONLY'})
+    compiler_api = []
     if config.get('execution_helper_support_enabled'):
-        from contractedge.execution.helper_context import local_helper_support
-        helpers, audit = local_helper_support(compute_snapshot(source), sources, plan['operations'],
-            max_bytes=max(0, int(config.get('max_execution_support_bytes', 24000))-used))
+        from contractedge.execution.helper_context import compiler_dependency_support, local_helper_support
+        snapshot = compute_snapshot(source)
+        remaining = max(0, int(config.get('max_execution_support_bytes', 24000))-used)
+        compiler_api, compiler_audit = compiler_dependency_support(snapshot, feedback, max_bytes=remaining)
+        if not compiler_api and previous_attempt:
+            historical = (previous_attempt.get('rejected_trial') or {}).get('feedback')
+            compiler_api, historical_audit = compiler_dependency_support(snapshot, historical, max_bytes=remaining)
+            compiler_audit.extend(historical_audit)
+        remaining -= sum(len(r['excerpt'].encode()) for r in compiler_api)
+        support_audit.extend(compiler_audit)
+        helpers, audit = local_helper_support(snapshot, sources, plan['operations'], max_bytes=remaining)
         existing = {(r['locator']['path'], r['content_digest']) for r in support}
-        support.extend(h for h in helpers if (h['locator']['path'], h['content_digest']) not in existing)
+        support.extend(h for h in helpers[:8-len(compiler_api)]
+                       if (h['locator']['path'], h['content_digest']) not in existing)
         support_audit.extend(audit)
     # Never duplicate full support excerpts inside both the plan and the bounded
     # support view. Stale diagnosis remains historical on EXECUTE continuation.
@@ -241,6 +251,12 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
                'execution_feedback_digest': canonical_digest(feedback) if feedback is not None else None,
                'previous_execution_attempt': previous_attempt,
                'edit_contract': 'Return one JSON object containing only edits, with each edit containing only change_id, path, operation, old_text and new_text. Transport settings such as type=json_object are not output fields. Encode source strings exactly once as JSON: after JSON decoding, old_text must equal a unique current substring, with actual line breaks and tabs rather than literal backslash-n or backslash-t substitutes. CREATE uses empty old_text and complete file content. Prefer short, unique literal anchors copied exactly from current_target_files, preserving whitespace. Split separate regions into separate edits; avoid whole-file rewrites. Correct previous_execution_attempt using the supplied validation error and the current file. Cover every accepted operation, preserve all conditions and unrelated behavior. Do not add tests, fabricate observations or edit task/runner/oracle.'}
+    if compiler_api:
+        payload['compiler_api_context'] = {'declarations': compiler_api, 'policy': (
+            'These declarations come from hash-pinned public dependencies selected by a recorded compiler failure. '
+            'Use the actual field types and method signatures to correct API usage in current_target_files. '
+            'A declaration is read-only interface evidence, not an editable target or proof of behavior. '
+            'The failure belongs to its recorded trial snapshot; the imported dependency is re-resolved from current source.')}
     payload['edit_batch_rules'] = {
         'multiple_edits_per_change_id': True,
         'allowed_edit_fields': ['change_id','path','operation','old_text','new_text'],

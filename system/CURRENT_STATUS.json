@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-27T14:58:44.704459+00:00",
+  "as_of": "2026-10-27T16:15:18.716529+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -19,20 +19,20 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.60",
+  "implementation_version": "0.6.61",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
     "report": "outputs/benchmark150-adapter-v2-20261019/preparation.json"
   },
   "protocol_tests": {
-    "passed": 2177,
+    "passed": 2248,
     "subtests_passed": 91,
-    "implementation_version": "0.6.60",
-    "development_freeze": "ordering-source-v060-20261027-v1",
-    "report": "outputs/planning-helper-contracts-20261027/full-ordering-source-final.log",
+    "implementation_version": "0.6.61",
+    "development_freeze": "compiler-public-dependency-v061-20261028",
+    "report": "outputs/context-limit-closure-20261027/full-v061.log",
     "actual_process_exit_code": 0,
-    "process_receipt": "outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json"
+    "process_receipt": "outputs/context-limit-closure-20261027/V061_FULL_REGRESSION.json"
   },
   "stage_implementations": {
     "0_1": "dataset/benchmark.py",
@@ -40,7 +40,7 @@
     "3": "source/ and retrieval/",
     "4": "diagnosis/",
     "5_6": "changeset/ and orchestration/runner.py",
-    "7": "execution/topomen_agent.py \u2192 actual topomen.collaboration.base_agent.DefaultAgent \u2192 scoped source transaction",
+    "7": "execution/topomen_agent.py → actual topomen.collaboration.base_agent.DefaultAgent → scoped source transaction",
     "8": "execution/public.py",
     "9": "orchestration/feedback.py and repair.py",
     "10": "evaluation/benchmark.py and frozen score_case.py"
@@ -136,7 +136,7 @@
     "independent_score": "PASS",
     "score": "outputs/benchmark150-independent-native-topomen-score-20261019/score.json",
     "autonomous_model_success_claim": false,
-    "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/\u6e90\u7801\u5ba1\u67e5\u4e0e\u63a5\u5165\u9a8c\u6536.md",
+    "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/源码审查与接入验收.md",
     "plan_format_owner": "ContractEdge, not native TopoMen",
     "docker_deployment_scheduler_used": false
   },
@@ -450,7 +450,7 @@
     ],
     "report": "outputs/final-optimization-20261020/final-validation.json"
   },
-  "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u5355\u6761\u771f\u5b9e\u5b9e\u9a8c\u9a8c\u6536\u4e0e\u7cfb\u7edf\u4f18\u5316-20261020.md",
+  "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/单条真实实验验收与系统优化-20261020.md",
   "release_integrity": {
     "report": "outputs/deepseek-method-preflight-v6-20261020/release150-verified.json",
     "cases": 150,
@@ -554,7 +554,7 @@
     "formal_case_count": 150,
     "remaining_money_upper_bound_cny": 67.596464,
     "all_experiment_model_calls": 167,
-    "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u9884\u7b97\u4e0a\u9650\u8c03\u6574\u81f380\u5143.md",
+    "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/预算上限调整至80元.md",
     "engineering_retry_regression": {
       "directory": "outputs/deepseek-empty-reasoning-live-regression-v1-20261020",
       "case_id": "RW-ALERTMANAGER-4705",
@@ -566,7 +566,7 @@
       "included_in_primary_cohort": false
     },
     "budget_amendment": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/budget-amendment-20-to-80.json",
-    "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u6b63\u5f0f150\u8fd0\u884c\u524d\u9a8c\u6536-20261020.md"
+    "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/正式150运行前验收-20261020.md"
   },
   "historical_protocol_tests_pre_acceptance_optimization": {
     "status": "PASS",
@@ -1255,7 +1255,7 @@
     }
   },
   "historical_independent_code_review_pre_final_optimization": "outputs/benchmark150-independent-code-review-20261019.json",
-  "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/\u7cfb\u7edf\u5ba1\u67e5\u4e0e\u9a8c\u6536.md",
+  "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/系统审查与验收.md",
   "reliability_closure": {
     "version": "0.6.38",
     "status": "SINGLE_GATE_PASS_FULL_DELIVERY_PENDING",
@@ -1773,7 +1773,7 @@
     "report": "docs/reports/2026-10-24-feedback-context-admission.md",
     "freeze": "/home/xhj/contractedge-system/outputs/reliability-closure-20261020/frozen-method-v0.6.36.json",
     "public_calibration": "temporal-v2-calibration-corrected/summary.json",
-    "live_result": ".35 originalBroken SEMANTIC_FAIL; supplemental .34savedresponse\u2192.35 continuationPASS/8publicchecksPASS,3newcalls, not panel",
+    "live_result": ".35 originalBroken SEMANTIC_FAIL; supplemental .34savedresponse→.35 continuationPASS/8publicchecksPASS,3newcalls, not panel",
     "next_revision": "0.6.37 previous draft continuity; staged, not frozen/noAPI"
   },
   "execution_boundary": {
@@ -1951,7 +1951,7 @@
           "3": "source/ and retrieval/",
           "4": "diagnosis/",
           "5_6": "changeset/ and orchestration/runner.py",
-          "7": "execution/topomen_agent.py \u2192 actual topomen.collaboration.base_agent.DefaultAgent \u2192 scoped source transaction",
+          "7": "execution/topomen_agent.py → actual topomen.collaboration.base_agent.DefaultAgent → scoped source transaction",
           "8": "execution/public.py",
           "9": "orchestration/feedback.py and repair.py",
           "10": "evaluation/benchmark.py and frozen score_case.py"
@@ -2047,7 +2047,7 @@
           "independent_score": "PASS",
           "score": "outputs/benchmark150-independent-native-topomen-score-20261019/score.json",
           "autonomous_model_success_claim": false,
-          "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/\u6e90\u7801\u5ba1\u67e5\u4e0e\u63a5\u5165\u9a8c\u6536.md",
+          "report": "/home/xhj/contractedge-reports/topomen-source-audit-20261019/源码审查与接入验收.md",
           "plan_format_owner": "ContractEdge, not native TopoMen",
           "docker_deployment_scheduler_used": false
         },
@@ -2361,7 +2361,7 @@
           ],
           "report": "outputs/final-optimization-20261020/final-validation.json"
         },
-        "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u5355\u6761\u771f\u5b9e\u5b9e\u9a8c\u9a8c\u6536\u4e0e\u7cfb\u7edf\u4f18\u5316-20261020.md",
+        "single_case_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/单条真实实验验收与系统优化-20261020.md",
         "release_integrity": {
           "report": "outputs/deepseek-method-preflight-v6-20261020/release150-verified.json",
           "cases": 150,
@@ -2465,7 +2465,7 @@
           "formal_case_count": 150,
           "remaining_money_upper_bound_cny": 67.596464,
           "all_experiment_model_calls": 167,
-          "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u9884\u7b97\u4e0a\u9650\u8c03\u6574\u81f380\u5143.md",
+          "readiness_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/预算上限调整至80元.md",
           "engineering_retry_regression": {
             "directory": "outputs/deepseek-empty-reasoning-live-regression-v1-20261020",
             "case_id": "RW-ALERTMANAGER-4705",
@@ -2477,7 +2477,7 @@
             "included_in_primary_cohort": false
           },
           "budget_amendment": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/budget-amendment-20-to-80.json",
-          "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/\u6b63\u5f0f150\u8fd0\u884c\u524d\u9a8c\u6536-20261020.md"
+          "engineering_acceptance_report": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/正式150运行前验收-20261020.md"
         },
         "historical_protocol_tests_pre_acceptance_optimization": {
           "status": "PASS",
@@ -3166,7 +3166,7 @@
           }
         },
         "historical_independent_code_review_pre_final_optimization": "outputs/benchmark150-independent-code-review-20261019.json",
-        "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/\u7cfb\u7edf\u5ba1\u67e5\u4e0e\u9a8c\u6536.md",
+        "historical_acceptance_report_pre_final_optimization": "/home/xhj/contractedge-reports/formal150-system-acceptance-20261019/系统审查与验收.md",
         "reliability_closure": {
           "version": "0.6.19",
           "status": "G4_V0619_LIVE_SINGLE_RUNNING",
@@ -3296,45 +3296,59 @@
     }
   },
   "current_development": {
-    "status": "PARENT_CONTEXT_GUARD_FIXED_REAL_ACK_QUALIFICATION_RUNNING_ORIGINAL_PANEL_STOPPED",
-    "planned_version": "0.6.60",
+    "status": "V061_ENGINEERING_QUALIFIED_ONE_OFF_ACK_REGISTERED_NEXT",
+    "planned_version": "0.6.61",
     "base_commit": "21b555b",
-    "planned_snapshot": "docs/development/ordering-source-v060-20261027-context-guard.snapshot.json",
+    "planned_snapshot": "docs/development/compiler-public-dependency-v061-20261028.snapshot.json",
     "formal_ready": false,
     "paid_dispatch_allowed": true,
     "report": "outputs/context-limit-closure-20261027/COMPLETION_AUDIT.md",
     "prior_closed_results": "outputs/helper-input-contracts-20261027/COMPLETION_AUDIT.md",
-    "snapshot": "docs/development/ordering-source-v060-20261027-context-guard.snapshot.json",
-    "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+    "snapshot": "docs/development/compiler-public-dependency-v061-20261028.snapshot.json",
+    "source_sha256": "5edf97368ec7c7546f295d84db550cb50e4a0767515fc997436558db9abd4738",
     "upstream_commit": "7a5100e4028e698a990479fae9e6ee21a4c920a6",
     "integration_requires_new_qualification": false,
     "upstream_integrated": true,
     "integration_commit": "d041ee4",
     "single_full_suite_pass": true,
     "full_new_source_qualification": true,
-    "active_experiment": "/home/xhj/contractedge-ack-context-guard-20261027/experiment.json",
-    "qualification": "outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+    "active_experiment": "/home/xhj/contractedge-compiler-api-v061-20261028/experiment.json",
+    "qualification": "outputs/context-limit-closure-20261027/V061_FULL_REGRESSION.json",
     "handoff": "docs/reports/2026-10-27-formal-admission-closure.md",
-    "qualification_scope": "Exact current e0f482 source: single2177+91 actual8/14sessions/28containers; model_calls_added0; 116installedfiles match",
+    "qualification_scope": "Exact new source2248tests+91subtests,8isolationcells/14sessions/28containers,116installedfiles match; not real repair success",
     "single_result": "outputs/planning-helper-contracts-20261027/ORDERING_CERT_RESULT.json",
-    "package": "outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_PACKAGE_VERIFICATION.json",
+    "package": "outputs/context-limit-closure-20261027/V061_PACKAGE_VERIFICATION.json",
     "compatibility": "outputs/planning-helper-contracts-20261027/FIXED46_CURRENT_COMPATIBILITY.json",
     "fixed46_registration": "outputs/planning-helper-contracts-20261027/FIXED46_CURRENT_REGISTRATION.json",
     "github_draft_pr": "https://github.com/xuhhhhjie-pixel/contractedge/pull/32",
     "clean_clone": "outputs/planning-helper-contracts-20261027/CLEAN_GITHUB_CLONE_VERIFICATION.json",
     "registered_method_snapshot": "docs/development/ordering-source-v060-20261027-v1.snapshot.json",
     "publication_binding_amendment": "outputs/planning-helper-contracts-20261027/PUBLICATION_BINDING_AMENDMENT.json",
-    "ci_status": "d8505a2_REMOTE_CI_SUCCESS_40478193577; CURRENT_PARENT_FIX_CI_NOT_YET_RUN",
+    "ci_status": "811de2b_REMOTE_ALL5_SUCCESS; NEW_V061_NOT_YET_PUBLISHED",
     "ci_namespace_report": "outputs/planning-helper-contracts-20261027/CI_NAMESPACE_ENVIRONMENT_FIX.json",
     "formal_admission_assessor": "scripts/assess_formal_readiness.py",
     "formal_admission_report": "outputs/planning-helper-contracts-20261027/FINAL_ADMISSION_v2.json",
     "operational_roundtrip": "outputs/planning-helper-contracts-20261027/CLEAN_CLONE_REAL_ROUNDTRIP.json",
     "closure_report": "docs/reports/2026-10-27-formal-admission-closure.md",
-    "paid_dispatch_scope": "ONLY_PRE_REGISTERED_ONE_OFF_ACK_PARENT_GUARD_QUALIFICATION_WITH_EXISTING150CNY_CAP",
-    "whole_branch_review": "STATIC_REVIEW_COMPLETED_NO_BLOCKING_FINDING_EFFECTS_NOT_ACCEPTED",
-    "review_report": "outputs/context-limit-closure-20261027/INDEPENDENT_STATIC_REVIEW.md"
+    "paid_dispatch_scope": "ONLY_ONE_PRE_REGISTERED_DEFAULT_ACK_V061_UNDER_CUMULATIVE200CNY; NO_ORIGINAL46_OR_FORMAL150_DISPATCH",
+    "whole_branch_review": "811_STATIC_REVIEW_PLUS_V061_FOCUSED_REVIEW_TWO_IMPORTANT_RED_GREEN_FIXED",
+    "review_report": "outputs/context-limit-closure-20261027/COMPILER_CONTEXT_REVIEW.md",
+    "closed_parent_guard_qualification": {
+      "status": "CLOSED_ONE_OFF_QUALIFICATION",
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "method_status": "CANDIDATE_COMPARISON_UNCERTAIN",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_semantic_status": null,
+      "model_calls": 8,
+      "method_source_unchanged": true,
+      "counts_in_46_slot_panel": false,
+      "formal_ready": false,
+      "automatic_retry": false
+    },
+    "budget_cny": 200,
+    "actual_isolation": "outputs/context-limit-closure-20261027/V061_ACTUAL_ISOLATION.json"
   },
-  "staged_implementation_version": "0.6.60",
+  "staged_implementation_version": "0.6.61",
   "runtime_implementation_version": "0.6.40",
   "current_optimization_audit": "outputs/planning-helper-contracts-20261027/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {

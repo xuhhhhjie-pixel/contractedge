@@ -6,6 +6,158 @@ from pathlib import Path, PurePosixPath
 from contractedge.source.parsers import parse_source_units
 
 
+def compiler_dependency_support(snapshot, feedback, *, max_bytes=24000, max_records=2):
+    """Read a compiler-named type from hash-pinned public module archives.
+
+    This is a bounded read-only API hint, never a production source locator,
+    causal claim or edit permission. Replaced modules, ambiguous package names
+    and incomplete scans remain unavailable. Nothing is extracted or fetched.
+    """
+    import json
+    import tarfile
+    import time
+    from contractedge.dataset.benchmark import confined, file_sha
+    from contractedge.execution.public import has_candidate_build_failure
+    from contractedge.retrieval.gap_delivery import _go_code, _go_import_specs
+
+    records, audit = [], []
+    if not isinstance(feedback, dict) or max_bytes <= 0 or max_records <= 0:
+        return records, audit
+    failures = [d for d in feedback.get('observation_diagnostics', [])
+        if d.get('kind') == 'CANDIDATE_BUILD_FAILURE' and has_candidate_build_failure(dict(
+            status='EXECUTION_FAILED', snapshot_id=feedback.get('to_snapshot'), candidate_build_failures=[d]))]
+    if not failures: return records, audit
+    root = Path(snapshot.source_root).resolve()
+
+    def current_text(name):
+        path = confined(root, name)
+        if (name not in snapshot.file_digests or path.stat().st_size > 512*1024
+                or file_sha(path) != snapshot.file_digests[name]):
+            raise ValueError('Current source unavailable or changed')
+        return path.read_text()
+
+    try:
+        module_text = current_text('go.mod')
+        if re.search(r'(?m)^\s*(?:replace|exclude)\b', module_text):
+            raise ValueError('Replaced or excluded Go modules require effective selection evidence')
+        versions = {}
+        requiring = False
+        for line in module_text.splitlines():
+            line = line.split('//', 1)[0].strip()
+            if line == 'require (': requiring = True; continue
+            if line == ')': requiring = False; continue
+            declaration = line if requiring else line.removeprefix('require ') if line.startswith('require ') else ''
+            match = re.fullmatch(r'([a-z0-9_.~/-]+)\s+(v[0-9][\w.+-]*)', declaration)
+            if match:
+                if match[1] in versions and versions[match[1]] != match[2]:
+                    raise ValueError('Conflicting module requirements')
+                versions[match[1]] = match[2]
+        if 'vendor/modules.txt' in snapshot.file_digests:
+            raise ValueError('Vendored dependency selection is unsupported')
+        workspace = None
+        for parent in list(root.parents)[:4]:
+            path = parent/'workspace.json'
+            if not path.is_file() or path.is_symlink() or path.stat().st_size > 65536: continue
+            value = json.loads(path.read_text())
+            if Path(value.get('source_root', '')).resolve() == root:
+                workspace = parent; record = value; break
+        if (workspace is None or record.get('private_materials_loaded') is not False
+                or record.get('case_id') != feedback.get('case_id')):
+            raise ValueError('No matching public workspace')
+        if any((parent/'go.work').exists() for parent in [root, *root.parents]
+               if parent == workspace or workspace in parent.parents):
+            raise ValueError('Go workspace dependency selection is unsupported')
+        inputs = Path(record['inputs_root'])
+        if inputs.is_symlink() or inputs.resolve().parent != workspace:
+            raise ValueError('Public inputs escape their workspace')
+        authority = feedback.get('public_execution_capabilities', {}).get('source', {})
+        environment_path = confined(inputs, authority.get('path'))
+        if environment_path.stat().st_size > 1024*1024 or file_sha(environment_path) != authority.get('sha256'):
+            raise ValueError('Public environment hash mismatch')
+        environment = json.loads(environment_path.read_text())
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        return [], [dict(result='DEPENDENCY_API_UNAVAILABLE', reason=str(exc))]
+
+    targets = []
+    for failure in failures[:4]:
+        matches = re.findall(r'\b\w+\.\w+ undefined \(type \*?(\w+)\.([A-Z]\w*) has no field or method \w+\)',
+                             failure['stderr_excerpt'])
+        for location in failure['source_locations'][:4]:
+            try: text = current_text(location['path'])
+            except (OSError, ValueError): continue
+            imports = _go_import_specs(text)
+            for package, typename in matches:
+                paths = {p for alias, p in imports if alias not in {'_', '.'} and p.rsplit('/', 1)[-1] == package}
+                if len(paths) != 1:
+                    audit.append(dict(result='DEPENDENCY_PACKAGE_AMBIGUOUS', package=package)); continue
+                imported = next(iter(paths))
+                modules = [m for m in versions if imported == m or imported.startswith(m+'/')]
+                if not modules: continue
+                module = max(modules, key=len)
+                target = (module, versions[module], imported[len(module):].strip('/'), package, typename)
+                if target not in targets: targets.append(target)
+    if not targets: return [], audit
+    used = 0
+    for module, version, package_path, package, typename in targets[:2]:
+        candidates = []; seen = set(); complete = True
+        for entry in environment.get('public_mounts', [])[:4]:
+            if 'archive' not in entry or 'sha256' not in entry: continue
+            try:
+                archive = confined(inputs, entry['archive'])
+                if archive.stat().st_size > 512*1024*1024 or file_sha(archive) != entry['sha256']:
+                    raise ValueError('Dependency archive size/hash mismatch')
+                needle = module+'@'+version+'/'+(package_path+'/' if package_path else '')
+                expanded = 0; scanned = 0; source_bytes = 0; source_files = 0; started = time.monotonic()
+                with tarfile.open(archive, 'r|*') as tar:
+                    for member in tar:
+                        scanned += 1; expanded += member.size
+                        if scanned > 100000 or expanded > 4*1024**3 or time.monotonic()-started > 12:
+                            complete = False; break
+                        path = PurePosixPath(member.name)
+                        if (path.is_absolute() or '..' in path.parts or '\\' in member.name
+                                or not member.isfile()): continue
+                        pos = member.name.find(needle)
+                        if pos < 0 or (pos and member.name[pos-1] != '/'): continue
+                        name = member.name[pos+len(needle):]
+                        if '/' in name or not name.endswith('.go') or name.endswith('_test.go'): continue
+                        source_files += 1; source_bytes += member.size
+                        if source_files > 128 or source_bytes > 4*1024*1024:
+                            complete = False; break
+                        if member.size > min(max_bytes-used, 65536):
+                            complete = False; break
+                        raw = tar.extractfile(member).read(member.size+1)
+                        if len(raw) != member.size: raise ValueError('Incomplete dependency declaration')
+                        text = raw.decode('utf-8'); code = _go_code(text)
+                        if ('//go:build' in text or '// +build' in text or re.search(
+                                r'_(?:aix|android|darwin|dragonfly|freebsd|illumos|ios|js|linux|netbsd|openbsd|plan9|solaris|wasip1|windows|386|amd64|arm|arm64|loong64|mips|mips64|mips64le|mipsle|ppc64|ppc64le|riscv64|s390x|wasm)\.go$', name)):
+                            complete = False; break
+                        if (not re.search(r'(?m)^\s*package\s+'+re.escape(package)+r'\b', code)
+                                or not re.search(r'\btype\s+'+re.escape(typename)+r'\s+(?:struct|interface)\b', code)):
+                            continue
+                        identity = (entry['sha256'], member.name)
+                        if identity in seen: raise ValueError('Duplicate dependency declaration')
+                        seen.add(identity)
+                        candidates.append(dict(id='PUBLICDEP-'+hashlib.sha256((entry['sha256']+member.name).encode()).hexdigest()[:16],
+                            kind='PUBLIC_DEPENDENCY_DECLARATION', module=module, version=version,
+                            package=package, type_name=typename, current_source_snapshot=snapshot.snapshot_id,
+                            failure_snapshot=feedback['to_snapshot'], archive_path=entry['archive'],
+                            archive_sha256=entry['sha256'], member=member.name,
+                            content_digest=hashlib.sha256(raw).hexdigest(), excerpt=text, read_only=True,
+                            environment_sha256=authority['sha256'],
+                            interpretation='Exact hash-pinned public module declaration; not an editable target, verified replacement or causal proof'))
+            except (OSError, ValueError, TypeError, KeyError, tarfile.TarError, UnicodeError) as exc:
+                complete = False
+                audit.append(dict(result='DEPENDENCY_API_UNAVAILABLE', reason=str(exc)))
+        if complete and len(candidates) == 1 and len(records) < max_records:
+            row = candidates[0]; size = len(row['excerpt'].encode())
+            if used+size <= max_bytes:
+                records.append(row); used += size
+                audit.append(dict(result='INCLUDED_PUBLIC_DEPENDENCY_API', id=row['id'], module=module, version=version, type_name=typename))
+        else:
+            audit.append(dict(result='DEPENDENCY_API_INCOMPLETE_OR_AMBIGUOUS', module=module, version=version, type_name=typename))
+    return records, audit
+
+
 def _go_split(code):
     """Split an already masked Go list; reject unbalanced syntax."""
     stack, parts, start = [], [], 0
