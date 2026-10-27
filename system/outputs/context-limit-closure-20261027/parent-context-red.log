@@ -1,0 +1,488 @@
+FFFFFFFFFF..FF                                                           [100%]
+=================================== FAILURES ===================================
+_ test_parent_accepts_exact_input_and_total_limits_for_every_stage[None-diagnosis.initial] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_parent_accepts_exact_inpu0')
+stage = 'diagnosis.initial', thinking = None
+
+    @pytest.mark.parametrize('stage', ['diagnosis.initial', 'diagnosis.rediagnosis',
+                                      'changeset.revision', 'topomen-source-execution.v1', 'review'])
+    @pytest.mark.parametrize('thinking', [None, 'disabled'])
+    def test_parent_accepts_exact_input_and_total_limits_for_every_stage(tmp_path, stage, thinking):
+        port = PublicPort()
+        request = ModelRequest('fixture', stage, ({'role': 'user', 'content': 'data'},), 8, thinking=thinking)
+        assert context_fits(quote_request(port, request, len), 10, 18)
+        broker = load('run_isolated_method').ModelBroker(port, len, config(), tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <run_isolated_method.ModelBroker object at 0x7fda723c3790>
+payload = {'request': {'model': 'fixture', 'prompt_version': 'diagnosis.initial', 'messages': ({'role': 'user', 'content': 'data'},), 'max_output_tokens': 8, ...}, 'timeout_seconds': 1}
+
+    def _complete(self, payload):
+        from contractedge.model.provider import ProviderResponseError
+        if set(payload) != {'request', 'timeout_seconds'}:
+            raise ValueError('Unexpected model parameters')
+        request = self._request(payload)
+        timeout = payload['timeout_seconds']
+        if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('Invalid model timeout')
+        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
+        overhead = self._overhead(request)
+        prompt_tokens += int(self.counter(overhead)) if overhead else 0
+        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+>           raise ValueError('Original context budget exceeded')
+E           ValueError: Original context budget exceeded
+
+scripts/run_isolated_method.py:213: ValueError
+_ test_parent_accepts_exact_input_and_total_limits_for_every_stage[None-diagnosis.rediagnosis] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_parent_accepts_exact_inpu1')
+stage = 'diagnosis.rediagnosis', thinking = None
+
+    @pytest.mark.parametrize('stage', ['diagnosis.initial', 'diagnosis.rediagnosis',
+                                      'changeset.revision', 'topomen-source-execution.v1', 'review'])
+    @pytest.mark.parametrize('thinking', [None, 'disabled'])
+    def test_parent_accepts_exact_input_and_total_limits_for_every_stage(tmp_path, stage, thinking):
+        port = PublicPort()
+        request = ModelRequest('fixture', stage, ({'role': 'user', 'content': 'data'},), 8, thinking=thinking)
+        assert context_fits(quote_request(port, request, len), 10, 18)
+        broker = load('run_isolated_method').ModelBroker(port, len, config(), tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <run_isolated_method.ModelBroker object at 0x7fda723c0070>
+payload = {'request': {'model': 'fixture', 'prompt_version': 'diagnosis.rediagnosis', 'messages': ({'role': 'user', 'content': 'data'},), 'max_output_tokens': 8, ...}, 'timeout_seconds': 1}
+
+    def _complete(self, payload):
+        from contractedge.model.provider import ProviderResponseError
+        if set(payload) != {'request', 'timeout_seconds'}:
+            raise ValueError('Unexpected model parameters')
+        request = self._request(payload)
+        timeout = payload['timeout_seconds']
+        if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('Invalid model timeout')
+        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
+        overhead = self._overhead(request)
+        prompt_tokens += int(self.counter(overhead)) if overhead else 0
+        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+>           raise ValueError('Original context budget exceeded')
+E           ValueError: Original context budget exceeded
+
+scripts/run_isolated_method.py:213: ValueError
+_ test_parent_accepts_exact_input_and_total_limits_for_every_stage[None-changeset.revision] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_parent_accepts_exact_inpu2')
+stage = 'changeset.revision', thinking = None
+
+    @pytest.mark.parametrize('stage', ['diagnosis.initial', 'diagnosis.rediagnosis',
+                                      'changeset.revision', 'topomen-source-execution.v1', 'review'])
+    @pytest.mark.parametrize('thinking', [None, 'disabled'])
+    def test_parent_accepts_exact_input_and_total_limits_for_every_stage(tmp_path, stage, thinking):
+        port = PublicPort()
+        request = ModelRequest('fixture', stage, ({'role': 'user', 'content': 'data'},), 8, thinking=thinking)
+        assert context_fits(quote_request(port, request, len), 10, 18)
+        broker = load('run_isolated_method').ModelBroker(port, len, config(), tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <run_isolated_method.ModelBroker object at 0x7fda72415cc0>
+payload = {'request': {'model': 'fixture', 'prompt_version': 'changeset.revision', 'messages': ({'role': 'user', 'content': 'data'},), 'max_output_tokens': 8, ...}, 'timeout_seconds': 1}
+
+    def _complete(self, payload):
+        from contractedge.model.provider import ProviderResponseError
+        if set(payload) != {'request', 'timeout_seconds'}:
+            raise ValueError('Unexpected model parameters')
+        request = self._request(payload)
+        timeout = payload['timeout_seconds']
+        if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('Invalid model timeout')
+        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
+        overhead = self._overhead(request)
+        prompt_tokens += int(self.counter(overhead)) if overhead else 0
+        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+>           raise ValueError('Original context budget exceeded')
+E           ValueError: Original context budget exceeded
+
+scripts/run_isolated_method.py:213: ValueError
+_ test_parent_accepts_exact_input_and_total_limits_for_every_stage[None-topomen-source-execution.v1] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_parent_accepts_exact_inpu3')
+stage = 'topomen-source-execution.v1', thinking = None
+
+    @pytest.mark.parametrize('stage', ['diagnosis.initial', 'diagnosis.rediagnosis',
+                                      'changeset.revision', 'topomen-source-execution.v1', 'review'])
+    @pytest.mark.parametrize('thinking', [None, 'disabled'])
+    def test_parent_accepts_exact_input_and_total_limits_for_every_stage(tmp_path, stage, thinking):
+        port = PublicPort()
+        request = ModelRequest('fixture', stage, ({'role': 'user', 'content': 'data'},), 8, thinking=thinking)
+        assert context_fits(quote_request(port, request, len), 10, 18)
+        broker = load('run_isolated_method').ModelBroker(port, len, config(), tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <run_isolated_method.ModelBroker object at 0x7fda7252b3a0>
+payload = {'request': {'model': 'fixture', 'prompt_version': 'topomen-source-execution.v1', 'messages': ({'role': 'user', 'content': 'data'},), 'max_output_tokens': 8, ...}, 'timeout_seconds': 1}
+
+    def _complete(self, payload):
+        from contractedge.model.provider import ProviderResponseError
+        if set(payload) != {'request', 'timeout_seconds'}:
+            raise ValueError('Unexpected model parameters')
+        request = self._request(payload)
+        timeout = payload['timeout_seconds']
+        if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('Invalid model timeout')
+        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
+        overhead = self._overhead(request)
+        prompt_tokens += int(self.counter(overhead)) if overhead else 0
+        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+>           raise ValueError('Original context budget exceeded')
+E           ValueError: Original context budget exceeded
+
+scripts/run_isolated_method.py:213: ValueError
+_ test_parent_accepts_exact_input_and_total_limits_for_every_stage[None-review] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_parent_accepts_exact_inpu4')
+stage = 'review', thinking = None
+
+    @pytest.mark.parametrize('stage', ['diagnosis.initial', 'diagnosis.rediagnosis',
+                                      'changeset.revision', 'topomen-source-execution.v1', 'review'])
+    @pytest.mark.parametrize('thinking', [None, 'disabled'])
+    def test_parent_accepts_exact_input_and_total_limits_for_every_stage(tmp_path, stage, thinking):
+        port = PublicPort()
+        request = ModelRequest('fixture', stage, ({'role': 'user', 'content': 'data'},), 8, thinking=thinking)
+        assert context_fits(quote_request(port, request, len), 10, 18)
+        broker = load('run_isolated_method').ModelBroker(port, len, config(), tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <run_isolated_method.ModelBroker object at 0x7fda721686d0>
+payload = {'request': {'model': 'fixture', 'prompt_version': 'review', 'messages': ({'role': 'user', 'content': 'data'},), 'max_output_tokens': 8, ...}, 'timeout_seconds': 1}
+
+    def _complete(self, payload):
+        from contractedge.model.provider import ProviderResponseError
+        if set(payload) != {'request', 'timeout_seconds'}:
+            raise ValueError('Unexpected model parameters')
+        request = self._request(payload)
+        timeout = payload['timeout_seconds']
+        if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('Invalid model timeout')
+        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
+        overhead = self._overhead(request)
+        prompt_tokens += int(self.counter(overhead)) if overhead else 0
+        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+>           raise ValueError('Original context budget exceeded')
+E           ValueError: Original context budget exceeded
+
+scripts/run_isolated_method.py:213: ValueError
+_ test_parent_accepts_exact_input_and_total_limits_for_every_stage[disabled-diagnosis.initial] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_parent_accepts_exact_inpu5')
+stage = 'diagnosis.initial', thinking = 'disabled'
+
+    @pytest.mark.parametrize('stage', ['diagnosis.initial', 'diagnosis.rediagnosis',
+                                      'changeset.revision', 'topomen-source-execution.v1', 'review'])
+    @pytest.mark.parametrize('thinking', [None, 'disabled'])
+    def test_parent_accepts_exact_input_and_total_limits_for_every_stage(tmp_path, stage, thinking):
+        port = PublicPort()
+        request = ModelRequest('fixture', stage, ({'role': 'user', 'content': 'data'},), 8, thinking=thinking)
+        assert context_fits(quote_request(port, request, len), 10, 18)
+        broker = load('run_isolated_method').ModelBroker(port, len, config(), tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <run_isolated_method.ModelBroker object at 0x7fda72fffc10>
+payload = {'request': {'model': 'fixture', 'prompt_version': 'diagnosis.initial', 'messages': ({'role': 'user', 'content': 'data'},), 'max_output_tokens': 8, ...}, 'timeout_seconds': 1}
+
+    def _complete(self, payload):
+        from contractedge.model.provider import ProviderResponseError
+        if set(payload) != {'request', 'timeout_seconds'}:
+            raise ValueError('Unexpected model parameters')
+        request = self._request(payload)
+        timeout = payload['timeout_seconds']
+        if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('Invalid model timeout')
+        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
+        overhead = self._overhead(request)
+        prompt_tokens += int(self.counter(overhead)) if overhead else 0
+        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+>           raise ValueError('Original context budget exceeded')
+E           ValueError: Original context budget exceeded
+
+scripts/run_isolated_method.py:213: ValueError
+_ test_parent_accepts_exact_input_and_total_limits_for_every_stage[disabled-diagnosis.rediagnosis] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_parent_accepts_exact_inpu6')
+stage = 'diagnosis.rediagnosis', thinking = 'disabled'
+
+    @pytest.mark.parametrize('stage', ['diagnosis.initial', 'diagnosis.rediagnosis',
+                                      'changeset.revision', 'topomen-source-execution.v1', 'review'])
+    @pytest.mark.parametrize('thinking', [None, 'disabled'])
+    def test_parent_accepts_exact_input_and_total_limits_for_every_stage(tmp_path, stage, thinking):
+        port = PublicPort()
+        request = ModelRequest('fixture', stage, ({'role': 'user', 'content': 'data'},), 8, thinking=thinking)
+        assert context_fits(quote_request(port, request, len), 10, 18)
+        broker = load('run_isolated_method').ModelBroker(port, len, config(), tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <run_isolated_method.ModelBroker object at 0x7fda72529930>
+payload = {'request': {'model': 'fixture', 'prompt_version': 'diagnosis.rediagnosis', 'messages': ({'role': 'user', 'content': 'data'},), 'max_output_tokens': 8, ...}, 'timeout_seconds': 1}
+
+    def _complete(self, payload):
+        from contractedge.model.provider import ProviderResponseError
+        if set(payload) != {'request', 'timeout_seconds'}:
+            raise ValueError('Unexpected model parameters')
+        request = self._request(payload)
+        timeout = payload['timeout_seconds']
+        if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('Invalid model timeout')
+        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
+        overhead = self._overhead(request)
+        prompt_tokens += int(self.counter(overhead)) if overhead else 0
+        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+>           raise ValueError('Original context budget exceeded')
+E           ValueError: Original context budget exceeded
+
+scripts/run_isolated_method.py:213: ValueError
+_ test_parent_accepts_exact_input_and_total_limits_for_every_stage[disabled-changeset.revision] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_parent_accepts_exact_inpu7')
+stage = 'changeset.revision', thinking = 'disabled'
+
+    @pytest.mark.parametrize('stage', ['diagnosis.initial', 'diagnosis.rediagnosis',
+                                      'changeset.revision', 'topomen-source-execution.v1', 'review'])
+    @pytest.mark.parametrize('thinking', [None, 'disabled'])
+    def test_parent_accepts_exact_input_and_total_limits_for_every_stage(tmp_path, stage, thinking):
+        port = PublicPort()
+        request = ModelRequest('fixture', stage, ({'role': 'user', 'content': 'data'},), 8, thinking=thinking)
+        assert context_fits(quote_request(port, request, len), 10, 18)
+        broker = load('run_isolated_method').ModelBroker(port, len, config(), tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <run_isolated_method.ModelBroker object at 0x7fda721ac0d0>
+payload = {'request': {'model': 'fixture', 'prompt_version': 'changeset.revision', 'messages': ({'role': 'user', 'content': 'data'},), 'max_output_tokens': 8, ...}, 'timeout_seconds': 1}
+
+    def _complete(self, payload):
+        from contractedge.model.provider import ProviderResponseError
+        if set(payload) != {'request', 'timeout_seconds'}:
+            raise ValueError('Unexpected model parameters')
+        request = self._request(payload)
+        timeout = payload['timeout_seconds']
+        if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('Invalid model timeout')
+        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
+        overhead = self._overhead(request)
+        prompt_tokens += int(self.counter(overhead)) if overhead else 0
+        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+>           raise ValueError('Original context budget exceeded')
+E           ValueError: Original context budget exceeded
+
+scripts/run_isolated_method.py:213: ValueError
+_ test_parent_accepts_exact_input_and_total_limits_for_every_stage[disabled-topomen-source-execution.v1] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_parent_accepts_exact_inpu8')
+stage = 'topomen-source-execution.v1', thinking = 'disabled'
+
+    @pytest.mark.parametrize('stage', ['diagnosis.initial', 'diagnosis.rediagnosis',
+                                      'changeset.revision', 'topomen-source-execution.v1', 'review'])
+    @pytest.mark.parametrize('thinking', [None, 'disabled'])
+    def test_parent_accepts_exact_input_and_total_limits_for_every_stage(tmp_path, stage, thinking):
+        port = PublicPort()
+        request = ModelRequest('fixture', stage, ({'role': 'user', 'content': 'data'},), 8, thinking=thinking)
+        assert context_fits(quote_request(port, request, len), 10, 18)
+        broker = load('run_isolated_method').ModelBroker(port, len, config(), tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <run_isolated_method.ModelBroker object at 0x7fda724487f0>
+payload = {'request': {'model': 'fixture', 'prompt_version': 'topomen-source-execution.v1', 'messages': ({'role': 'user', 'content': 'data'},), 'max_output_tokens': 8, ...}, 'timeout_seconds': 1}
+
+    def _complete(self, payload):
+        from contractedge.model.provider import ProviderResponseError
+        if set(payload) != {'request', 'timeout_seconds'}:
+            raise ValueError('Unexpected model parameters')
+        request = self._request(payload)
+        timeout = payload['timeout_seconds']
+        if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('Invalid model timeout')
+        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
+        overhead = self._overhead(request)
+        prompt_tokens += int(self.counter(overhead)) if overhead else 0
+        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+>           raise ValueError('Original context budget exceeded')
+E           ValueError: Original context budget exceeded
+
+scripts/run_isolated_method.py:213: ValueError
+_ test_parent_accepts_exact_input_and_total_limits_for_every_stage[disabled-review] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_parent_accepts_exact_inpu9')
+stage = 'review', thinking = 'disabled'
+
+    @pytest.mark.parametrize('stage', ['diagnosis.initial', 'diagnosis.rediagnosis',
+                                      'changeset.revision', 'topomen-source-execution.v1', 'review'])
+    @pytest.mark.parametrize('thinking', [None, 'disabled'])
+    def test_parent_accepts_exact_input_and_total_limits_for_every_stage(tmp_path, stage, thinking):
+        port = PublicPort()
+        request = ModelRequest('fixture', stage, ({'role': 'user', 'content': 'data'},), 8, thinking=thinking)
+        assert context_fits(quote_request(port, request, len), 10, 18)
+        broker = load('run_isolated_method').ModelBroker(port, len, config(), tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <run_isolated_method.ModelBroker object at 0x7fda72376d10>
+payload = {'request': {'model': 'fixture', 'prompt_version': 'review', 'messages': ({'role': 'user', 'content': 'data'},), 'max_output_tokens': 8, ...}, 'timeout_seconds': 1}
+
+    def _complete(self, payload):
+        from contractedge.model.provider import ProviderResponseError
+        if set(payload) != {'request', 'timeout_seconds'}:
+            raise ValueError('Unexpected model parameters')
+        request = self._request(payload)
+        timeout = payload['timeout_seconds']
+        if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('Invalid model timeout')
+        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
+        overhead = self._overhead(request)
+        prompt_tokens += int(self.counter(overhead)) if overhead else 0
+        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+>           raise ValueError('Original context budget exceeded')
+E           ValueError: Original context budget exceeded
+
+scripts/run_isolated_method.py:213: ValueError
+____ test_input_only_legacy_configuration_keeps_shared_admission_semantics _____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_input_only_legacy_configu0')
+
+    def test_input_only_legacy_configuration_keeps_shared_admission_semantics(tmp_path):
+        port = PublicPort(); values = config(); values.pop('model_context_tokens')
+        request = ModelRequest('fixture', 'legacy', ({'role': 'user', 'content': 'data'},), 8)
+        broker = load('run_isolated_method').ModelBroker(port, len, values, tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <run_isolated_method.ModelBroker object at 0x7fda730379a0>
+payload = {'request': {'model': 'fixture', 'prompt_version': 'legacy', 'messages': ({'role': 'user', 'content': 'data'},), 'max_output_tokens': 8, ...}, 'timeout_seconds': 1}
+
+    def _complete(self, payload):
+        from contractedge.model.provider import ProviderResponseError
+        if set(payload) != {'request', 'timeout_seconds'}:
+            raise ValueError('Unexpected model parameters')
+        request = self._request(payload)
+        timeout = payload['timeout_seconds']
+        if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('Invalid model timeout')
+        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
+        overhead = self._overhead(request)
+        prompt_tokens += int(self.counter(overhead)) if overhead else 0
+        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+>           raise ValueError('Original context budget exceeded')
+E           ValueError: Original context budget exceeded
+
+scripts/run_isolated_method.py:213: ValueError
+________ test_parent_admits_and_dispatches_the_same_once_prepared_bytes ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-700/test_parent_admits_and_dispatc0')
+
+    def test_parent_admits_and_dispatches_the_same_once_prepared_bytes(tmp_path):
+        class Prepared(PublicPort):
+            def __init__(self): super().__init__(); self.prepares = 0; self.prepared = None
+            def prepare_request(self, request):
+                self.prepares += 1
+                return SimpleNamespace(body=b'finite prepared bytes', overhead='schema',
+                    metadata={'scope': 'test'}, audit_record=lambda: {'body': 'finite fixture'})
+            def request_overhead(self, request): raise AssertionError('Already prepared overhead must not be recounted')
+            def complete_prepared_json(self, request, prepared):
+                self.dispatches += 1; self.prepared = prepared
+                return ModelResponse('{}', {})
+            def complete_json(self, request): raise AssertionError('Do not rebuild a committed request')
+        port = Prepared(); request = ModelRequest('fixture', 'diagnosis.rediagnosis', ({'role': 'user', 'content': 'data'},), 8)
+        broker = load('run_isolated_method').ModelBroker(port, len, config(), tmp_path/'calls.json')
+>       assert broker.complete({'request': asdict(request), 'timeout_seconds': 1})['content'] == '{}'
+
+tests/test_isolated_context_limits.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:195: in complete
+    return self._complete(payload)
+scripts/run_isolated_method.py:210: in _complete
+    overhead = self._overhead(request)
+scripts/run_isolated_method.py:180: in _overhead
+    value = hook(request) if callable(hook) else ''
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_isolated_context_limits.test_parent_admits_and_dispatches_the_same_once_prepared_bytes.<locals>.Prepared object at 0x7fda73074d00>
+request = ModelRequest(model='fixture', prompt_version='diagnosis.rediagnosis', messages=({'role': 'user', 'content': 'data'},), max_output_tokens=8, temperature=0.0, metadata={}, output_schema=None, thinking=None)
+
+>   def request_overhead(self, request): raise AssertionError('Already prepared overhead must not be recounted')
+E   AssertionError: Already prepared overhead must not be recounted
+
+tests/test_isolated_context_limits.py:69: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_isolated_context_limits.py::test_parent_accepts_exact_input_and_total_limits_for_every_stage[None-diagnosis.initial]
+FAILED tests/test_isolated_context_limits.py::test_parent_accepts_exact_input_and_total_limits_for_every_stage[None-diagnosis.rediagnosis]
+FAILED tests/test_isolated_context_limits.py::test_parent_accepts_exact_input_and_total_limits_for_every_stage[None-changeset.revision]
+FAILED tests/test_isolated_context_limits.py::test_parent_accepts_exact_input_and_total_limits_for_every_stage[None-topomen-source-execution.v1]
+FAILED tests/test_isolated_context_limits.py::test_parent_accepts_exact_input_and_total_limits_for_every_stage[None-review]
+FAILED tests/test_isolated_context_limits.py::test_parent_accepts_exact_input_and_total_limits_for_every_stage[disabled-diagnosis.initial]
+FAILED tests/test_isolated_context_limits.py::test_parent_accepts_exact_input_and_total_limits_for_every_stage[disabled-diagnosis.rediagnosis]
+FAILED tests/test_isolated_context_limits.py::test_parent_accepts_exact_input_and_total_limits_for_every_stage[disabled-changeset.revision]
+FAILED tests/test_isolated_context_limits.py::test_parent_accepts_exact_input_and_total_limits_for_every_stage[disabled-topomen-source-execution.v1]
+FAILED tests/test_isolated_context_limits.py::test_parent_accepts_exact_input_and_total_limits_for_every_stage[disabled-review]
+FAILED tests/test_isolated_context_limits.py::test_input_only_legacy_configuration_keeps_shared_admission_semantics
+FAILED tests/test_isolated_context_limits.py::test_parent_admits_and_dispatches_the_same_once_prepared_bytes
+12 failed, 2 passed in 0.91s

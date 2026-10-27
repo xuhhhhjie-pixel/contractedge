@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-27T09:01:54.432655+00:00",
+  "as_of": "2026-10-27T14:58:44.704459+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3296,15 +3296,15 @@
     }
   },
   "current_development": {
-    "status": "EXACT_SOURCE_FIXED46_RUNNING_STATIC_AND_OPERATIONAL_EVIDENCE_ASSEMBLED",
+    "status": "PARENT_CONTEXT_GUARD_FIXED_REAL_ACK_QUALIFICATION_RUNNING_ORIGINAL_PANEL_STOPPED",
     "planned_version": "0.6.60",
     "base_commit": "21b555b",
-    "planned_snapshot": "docs/development/ordering-source-v060-20261027-delivery-v2.snapshot.json",
+    "planned_snapshot": "docs/development/ordering-source-v060-20261027-context-guard.snapshot.json",
     "formal_ready": false,
     "paid_dispatch_allowed": true,
-    "report": "outputs/planning-helper-contracts-20261027/COMPLETION_AUDIT.md",
+    "report": "outputs/context-limit-closure-20261027/COMPLETION_AUDIT.md",
     "prior_closed_results": "outputs/helper-input-contracts-20261027/COMPLETION_AUDIT.md",
-    "snapshot": "docs/development/ordering-source-v060-20261027-delivery-v2.snapshot.json",
+    "snapshot": "docs/development/ordering-source-v060-20261027-context-guard.snapshot.json",
     "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
     "upstream_commit": "7a5100e4028e698a990479fae9e6ee21a4c920a6",
     "integration_requires_new_qualification": false,
@@ -3312,9 +3312,9 @@
     "integration_commit": "d041ee4",
     "single_full_suite_pass": true,
     "full_new_source_qualification": true,
-    "active_experiment": "/home/xhj/contractedge-ordering-source060-20261027/experiment.json",
+    "active_experiment": "/home/xhj/contractedge-ack-context-guard-20261027/experiment.json",
     "qualification": "outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
-    "handoff": "docs/reports/2026-10-27-unified-optimization-handoff.md",
+    "handoff": "docs/reports/2026-10-27-formal-admission-closure.md",
     "qualification_scope": "Exact current e0f482 source: single2177+91 actual8/14sessions/28containers; model_calls_added0; 116installedfiles match",
     "single_result": "outputs/planning-helper-contracts-20261027/ORDERING_CERT_RESULT.json",
     "package": "outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_PACKAGE_VERIFICATION.json",
@@ -3324,13 +3324,15 @@
     "clean_clone": "outputs/planning-helper-contracts-20261027/CLEAN_GITHUB_CLONE_VERIFICATION.json",
     "registered_method_snapshot": "docs/development/ordering-source-v060-20261027-v1.snapshot.json",
     "publication_binding_amendment": "outputs/planning-helper-contracts-20261027/PUBLICATION_BINDING_AMENDMENT.json",
-    "ci_status": "REMOTE_CI_SUCCESS_40471797969_AT_e50be76",
+    "ci_status": "d8505a2_REMOTE_CI_SUCCESS_40478193577; CURRENT_PARENT_FIX_CI_NOT_YET_RUN",
     "ci_namespace_report": "outputs/planning-helper-contracts-20261027/CI_NAMESPACE_ENVIRONMENT_FIX.json",
     "formal_admission_assessor": "scripts/assess_formal_readiness.py",
     "formal_admission_report": "outputs/planning-helper-contracts-20261027/FINAL_ADMISSION_v2.json",
     "operational_roundtrip": "outputs/planning-helper-contracts-20261027/CLEAN_CLONE_REAL_ROUNDTRIP.json",
     "closure_report": "docs/reports/2026-10-27-formal-admission-closure.md",
-    "paid_dispatch_scope": "ONLY_ORIGINAL_CURRENT_FIXED46_AUTHORITY_AND_EXISTING150CNY_PAIR_ADMISSION"
+    "paid_dispatch_scope": "ONLY_PRE_REGISTERED_ONE_OFF_ACK_PARENT_GUARD_QUALIFICATION_WITH_EXISTING150CNY_CAP",
+    "whole_branch_review": "STATIC_REVIEW_COMPLETED_NO_BLOCKING_FINDING_EFFECTS_NOT_ACCEPTED",
+    "review_report": "outputs/context-limit-closure-20261027/INDEPENDENT_STATIC_REVIEW.md"
   },
   "staged_implementation_version": "0.6.60",
   "runtime_implementation_version": "0.6.40",
@@ -3388,9 +3390,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Continue the same immutable A queue; guarded followthrough enters original repeat/recovery/B only after verified gates and150CNY admission",
-    "At cohort closure inspect earliest real failure only; preserve every failure/unknown/unrun and source identity",
-    "Refresh final gate evidence, complete final whole-branch review and publish one frozen admission decision before separately authorized formal150"
+    "Finish exactly one newly registered default ACK parent-guard qualification; no old-panel or primary effect count",
+    "Keep original9 valid records and stopped ACK prefix immutable; no automatic resend or mixing results after parent change",
+    "Complete reviewed acceptance continuation and original effects before any formal admission;150CNY cumulative cap and uncertain reservations remain"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",
@@ -3447,16 +3449,16 @@
     "registration_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
     "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
     "slots": 46,
-    "scored_slots": 8,
-    "status": "RUNNING",
+    "scored_slots": 9,
+    "status": "AUDIT_REQUIRED_ACK_CANDIDATE_INFRASTRUCTURE_STOP",
     "historical_scores_reused": false,
     "formal_ready": false,
     "progress": "outputs/planning-helper-contracts-20261027/FIXED46_CURRENT_PROGRESS.json"
   },
   "final_delivery_admission": {
-    "status": "NOT_READY_EFFECT_ACCEPTANCE_PENDING",
+    "status": "NOT_READY_ORIGINAL_PANEL_INFRASTRUCTURE_STOP_AND_EFFECT_PENDING",
     "formal_ready": false,
-    "report": "outputs/planning-helper-contracts-20261027/FINAL_ADMISSION_v2.json",
+    "report": "outputs/context-limit-closure-20261027/ORIGINAL_PANEL_STOP_AUDIT.json",
     "as_of_records": 8,
     "gates": {
       "G0": "PASS_STATIC150",
@@ -3467,8 +3469,9 @@
       "G5": "PENDING_FIXED_SAME_SOURCE_PANEL",
       "G6": "PASS_SAME_SERVER_CLEAN_CLONE_OPERATIONAL_REPLAY"
     },
-    "whole_branch_fresh_review": "REQUIRED_AT_FINAL_DELIVERY_NOT_CLAIMED",
+    "whole_branch_fresh_review": "COMPLETED_STATIC_NO_BLOCKING_FINDING_NOT_EFFECT_CERTIFICATION",
     "serial_only": true,
-    "no_new_model_calls_for_delivery": true
+    "no_new_model_calls_for_delivery": true,
+    "current_parent_qualification": "79tests+2subtests; saved211465input/16384output RPC oldUNKNOWN/newDONE with0HTTP; real ACK once-running"
   }
 }

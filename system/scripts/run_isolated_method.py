@@ -199,6 +199,7 @@ class ModelBroker:
             raise
 
     def _complete(self, payload):
+        from contractedge.model.admission import context_fits
         from contractedge.model.provider import ProviderResponseError
         if set(payload) != {'request', 'timeout_seconds'}:
             raise ValueError('Unexpected model parameters')
@@ -206,16 +207,18 @@ class ModelBroker:
         timeout = payload['timeout_seconds']
         if type(timeout) not in {int, float} or not math.isfinite(timeout) or timeout <= 0:
             raise ValueError('Invalid model timeout')
-        prompt_tokens = sum(int(self.counter(m['content'])) for m in request.messages)
-        overhead = self._overhead(request)
-        prompt_tokens += int(self.counter(overhead)) if overhead else 0
-        if prompt_tokens + request.max_output_tokens > self.config['max_context_tokens']:
+        # max_context_tokens limits input; model_context_tokens limits input
+        # plus reserved output. Use the method's shared admission contract and
+        # dispatch these same quoted/prepared bytes after the parent guard.
+        quote = self.budget.quote_request(request)
+        if not context_fits(quote, self.config['max_context_tokens'],
+                            self.config.get('model_context_tokens')):
             raise ValueError('Original context budget exceeded')
         old_timeout = getattr(self.provider, 'timeout_seconds', None)
         if old_timeout is not None:
             self.provider.timeout_seconds = min(old_timeout, timeout, self.config['timeout_seconds'])
         try:
-            response = self.budget.complete_json(request)
+            response = self.budget.complete_quoted(request, quote)
             return {'content': response.content, 'metadata': dict(response.metadata)}
         except ProviderResponseError as error:
             self.policy_failures.append({'category':'MODEL_POLICY','error_type':type(error).__name__})
