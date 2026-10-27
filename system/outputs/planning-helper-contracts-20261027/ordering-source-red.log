@@ -1,0 +1,14 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+__ test_unregistered_ordering_requirement_keeps_both_sides_of_long_go_handler __
+tests/test_probe_source_entrypoints.py:40: in test_unregistered_ordering_requirement_keeps_both_sides_of_long_go_handler
+    assert complete
+E   assert []
+___ test_ordering_expansion_stays_bounded_and_skips_generated_and_test_code ____
+tests/test_probe_source_entrypoints.py:56: in test_ordering_expansion_stays_bounded_and_skips_generated_and_test_code
+    assert grown
+E   assert []
+=========================== short test summary info ============================
+FAILED tests/test_probe_source_entrypoints.py::test_unregistered_ordering_requirement_keeps_both_sides_of_long_go_handler
+FAILED tests/test_probe_source_entrypoints.py::test_ordering_expansion_stays_bounded_and_skips_generated_and_test_code
+2 failed, 2 deselected in 1.48s

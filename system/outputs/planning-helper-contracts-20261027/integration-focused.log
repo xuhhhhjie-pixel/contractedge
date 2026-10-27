@@ -1,0 +1,68 @@
+.....................................F.......FF.FF...FF...F............. [ 49%]
+........................................................................ [ 99%]
+.                                                                        [100%]
+=================================== FAILURES ===================================
+_______________ test_both_check_sources_survive_the_same_request _______________
+tests/test_registered_check_protocol.py:51: in test_both_check_sources_survive_the_same_request
+    fields = build_changeset_request(d, ctx).output_schema['properties']['postconditions']['items']['properties']
+src/contractedge/changeset/prompt.py:180: in build_changeset_request
+    capabilities = resolve_execution_capabilities(getattr(run_context, 'retrieval_config', {}).get('public_execution_capabilities'))
+src/contractedge/contracts/execution_capabilities.py:148: in resolve_execution_capabilities
+    public_behavior_check_catalog(result)
+src/contractedge/contracts/execution_capabilities.py:46: in public_behavior_check_catalog
+    raise ValueError('Invalid method behavior probe description')
+E   ValueError: Invalid method behavior probe description
+_____ test_method_only_and_no_check_requests_keep_their_existing_protocol ______
+tests/test_registered_check_protocol.py:116: in test_method_only_and_no_check_requests_keep_their_existing_protocol
+    request = build_changeset_request(d, ctx)
+src/contractedge/changeset/prompt.py:180: in build_changeset_request
+    capabilities = resolve_execution_capabilities(getattr(run_context, 'retrieval_config', {}).get('public_execution_capabilities'))
+src/contractedge/contracts/execution_capabilities.py:148: in resolve_execution_capabilities
+    public_behavior_check_catalog(result)
+src/contractedge/contracts/execution_capabilities.py:46: in public_behavior_check_catalog
+    raise ValueError('Invalid method behavior probe description')
+E   ValueError: Invalid method behavior probe description
+__ test_duplicate_ids_across_declaration_sources_are_not_silently_overwritten __
+tests/test_registered_check_protocol.py:127: in test_duplicate_ids_across_declaration_sources_are_not_silently_overwritten
+    with pytest.raises(ValueError, match='unique'): build_changeset_request(d, ctx)
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'unique'
+E     Actual message: 'Invalid method behavior probe description'
+_ test_ready_and_revision_reject_current_check_contract_drift[ready-scenario] __
+tests/test_registered_check_protocol.py:160: in test_ready_and_revision_reject_current_check_contract_drift
+    with pytest.raises(ValueError, match='public check'):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'public check'
+E     Actual message: 'Registered check requires a consistent explicit scenario'
+__ test_ready_and_revision_reject_current_check_contract_drift[ready-members] __
+tests/test_registered_check_protocol.py:160: in test_ready_and_revision_reject_current_check_contract_drift
+    with pytest.raises(ValueError, match='public check'):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'public check'
+E     Actual message: 'Public scenario coverage must be explicit and unique'
+_ test_ready_and_revision_reject_current_check_contract_drift[revision-scenario] _
+tests/test_registered_check_protocol.py:160: in test_ready_and_revision_reject_current_check_contract_drift
+    with pytest.raises(ValueError, match='public check'):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'public check'
+E     Actual message: 'Registered check requires a consistent explicit scenario'
+_ test_ready_and_revision_reject_current_check_contract_drift[revision-members] _
+tests/test_registered_check_protocol.py:160: in test_ready_and_revision_reject_current_check_contract_drift
+    with pytest.raises(ValueError, match='public check'):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'public check'
+E     Actual message: 'Public scenario coverage must be explicit and unique'
+_________ test_malformed_registration_stops_planning[missing-scenario] _________
+tests/test_registered_check_protocol.py:177: in test_malformed_registration_stops_planning
+    with pytest.raises(ValueError): build_changeset_request(d, ctx)
+E   Failed: DID NOT RAISE ValueError
+=========================== short test summary info ============================
+FAILED tests/test_registered_check_protocol.py::test_both_check_sources_survive_the_same_request
+FAILED tests/test_registered_check_protocol.py::test_method_only_and_no_check_requests_keep_their_existing_protocol
+FAILED tests/test_registered_check_protocol.py::test_duplicate_ids_across_declaration_sources_are_not_silently_overwritten
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[ready-scenario]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[ready-members]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[revision-scenario]
+FAILED tests/test_registered_check_protocol.py::test_ready_and_revision_reject_current_check_contract_drift[revision-members]
+FAILED tests/test_registered_check_protocol.py::test_malformed_registration_stops_planning[missing-scenario]
+8 failed, 137 passed in 4.89s

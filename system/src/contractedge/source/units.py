@@ -22,6 +22,10 @@ def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: in
     output: list[dict[str, Any]] = []
     seen: set[tuple[str, int, int]] = set()
     seed_units: list[dict[str, Any]] = []
+    # A before/after obligation needs the containing production declaration,
+    # even when no task-specific probe registered that handler as an entry.
+    ordering_query = bool(query and re.search(r'\b(before|after|prior to)\b', query, re.I))
+    ordering_expanded_files: set[str] = set()
 
     def read_units(relative: str) -> list[dict[str, Any]]:
         if relative not in snapshot.file_digests:
@@ -39,9 +43,17 @@ def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: in
             return []
         parsed = parse_source_units(relative, text, snapshot.snapshot_id,
                                     max_lines=max_lines, max_chars=max_chars)
-        if relative in focused_paths and relative.endswith('.go') and query:
-            from contractedge.retrieval.candidates import _terms
+        explicit_focus = relative in focused_paths
+        ordering_focus = (ordering_query and relative in paths
+            and len(ordering_expanded_files) < 4
+            and not relative.endswith('_test.go')
+            and not (set(Path(relative.casefold()).parts) & {'generated', 'test', 'tests'})
+            and not Path(relative).name.casefold().startswith('zz_generated')
+            and not re.search(r'^//\s*Code generated\b.*DO NOT EDIT', text[:4096], re.M))
+        if (explicit_focus or ordering_focus) and relative.endswith('.go') and query:
+            from contractedge.retrieval.candidates import _terms, literal_identifiers
             terms=_terms(query)
+            identifiers=literal_identifiers(query)
             # The public entry file is already read. A relevant long callback
             # must not be represented only by its flag/header prefix until a
             # model happens to ask for an extension. Keep at most two bounded
@@ -51,13 +63,19 @@ def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: in
             for unit in complete:
                 prefixes=[p for p in parsed if p.get('symbol')==unit.get('symbol') and p.get('truncated')]
                 relevance=len(terms&_terms(unit['text']))
-                if prefixes and not unit.get('truncated') and unit.get('kind')=='FUNCTION_OR_TYPE' and relevance:
+                production_order = (len(identifiers) >= 2
+                    and sum(identifier in unit['text'].casefold() for identifier in identifiers) >= 2
+                    and bool(re.search(r'^func\s', unit['text'], re.M)))
+                if (prefixes and not unit.get('truncated') and unit.get('kind')=='FUNCTION_OR_TYPE'
+                        and relevance and (explicit_focus or production_order)):
                     options.append((relevance,unit,prefixes[0]['id']))
             options.sort(key=lambda row:(-row[0],row[1]['locator']['start_line']))
+            if options and not explicit_focus:
+                ordering_expanded_files.add(relative)
             for _,unit,prefix in options[:2]:
                 parsed=[p for p in parsed if not(p.get('symbol')==unit.get('symbol') and p.get('truncated'))]
                 parsed.append({**unit,'expanded_from_unit_id':prefix,'anchor_priority':2,
-                    'source_focus_basis':'BOUNDED_PUBLIC_ENTRY_DECLARATION_BODY; fresh source only, not a causal claim or edit permission'})
+                    'source_focus_basis':('BOUNDED_PUBLIC_ENTRY_DECLARATION_BODY' if explicit_focus else 'BOUNDED_REQUIREMENT_ORDER_DECLARATION_BODY')+'; fresh source only, not a causal claim or edit permission'})
         if query:
             from contractedge.retrieval.candidates import _terms, literal_identifiers
             identifiers, terms = literal_identifiers(query), _terms(query)

@@ -1,0 +1,30 @@
+{
+  "status": "REVIEWED_PUBLIC_DEVELOPMENT_HANDOFF",
+  "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+  "branch": "fix/planning-helper-contracts-20261027",
+  "upstream_integrated": "7a5100e4028e698a990479fae9e6ee21a4c920a6",
+  "integration_commit": "d041ee4",
+  "checks": {
+    "originalPR19_catalog_authority": "execution_capabilities is canonical; public_checks is projection; both published scenario dialects checked for consistency",
+    "planning_freshness": "planning helper source and source_prerequisites rebuilt from current snapshot in initial/correction/replan and READY",
+    "bounded_order_source": "only existing production Go seed declarations; public ordering words+2identifiers;4files/2declarations;768lines/32KB bound unchanged",
+    "revision_projection": "canonical target to model selector only for CURRENT_PLAN; invalid REJECTED_PLAN remains exact",
+    "terminal_status": "NO_SUPPORTED_VIOLATION completed method classified, pending/policy/unknown constraints retained",
+    "snapshot_isolation": "old failed candidates and current restored candidate remain distinct; no historicalPASS transfer",
+    "effect_scope": "C7KPTPASS and currentCertPASS not pooled into same-source panel; original46 pending"
+  },
+  "evidence": [
+    "ORDER_SOURCE_REPLAY.json",
+    "ORDERING_KPT_NONREGRESSION_REPLAY.json",
+    "ORDERING_CERT_EVIDENCE_ALIGNMENT.json",
+    "NO_SUPPORTED_TERMINAL_REPLAY.json",
+    "ORDERING_SOURCE_PACKAGE_VERIFICATION.json"
+  ],
+  "remaining": [
+    "current full/actual8 completion",
+    "current original46 zeroHTTP compatibility and fixed acceptance",
+    "clean-clone/recovery and formal admission"
+  ],
+  "formal_ready": false,
+  "review_scope": "Author integration check on current changed boundaries; not a fresh external whole-system correctness audit"
+}

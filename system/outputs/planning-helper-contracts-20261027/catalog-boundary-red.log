@@ -1,0 +1,10 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__ test_revision_keeps_failure_facts_without_repeating_large_check_boundaries __
+tests/test_public_check_protocol.py:425: in test_revision_keeps_failure_facts_without_repeating_large_check_boundaries
+    assert quote.total_tokens < 220000
+E   AssertionError: assert 346173 < 220000
+E    +  where 346173 = RequestQuote(input_tokens=329789, output_tokens=16384, overhead_tokens=0, total_tokens=346173, request_digest='a7dab5d89326eef2c56d8484e671ef8316e0189d3a3a184fc915a0bb244fd75e').total_tokens
+=========================== short test summary info ============================
+FAILED tests/test_public_check_protocol.py::test_revision_keeps_failure_facts_without_repeating_large_check_boundaries
+1 failed in 0.23s

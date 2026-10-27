@@ -1,0 +1,19 @@
+{
+  "status": "CLOSED_CONTROL_METHOD_FAILURE_PARENT_CLASSIFICATION_GAP",
+  "method_status": "NO_SUPPORTED_VIOLATION",
+  "raw_parent_status": "INFRASTRUCTURE_STOP",
+  "independent_status": "SEMANTIC_FAIL",
+  "grader_exit": 1,
+  "model_calls": 3,
+  "patch_bytes": 0,
+  "source_sha256": "7b5d07480e61e83d440250c6503af2dd48a6f2b3e7b9714460fbea0f893ef0d5",
+  "receipt_sha256": "f90babd967afb428c9f20ff3df9b26ed0dfb12e04f8d4cd3e72b633d74ed0264",
+  "trace_sha256": "2c0a1e0e495ff588ce74c9ea7995e4a433f674597c35cb75f02a86d004256285",
+  "unknown_requests": 0,
+  "source_unchanged": true,
+  "cleanup": "OWNED_CONTAINERS_CLOSED",
+  "new_model_calls_added": 0,
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "interpretation": "Known completed NO_SUPPORTED_VIOLATION with verified empty patch; preserve original INFRASTRUCTURE_STOP receipt. Independent sealed-patch review only; not a successful method or amended formal panel record."
+}

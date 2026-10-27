@@ -1,0 +1,26 @@
+{
+  "status": "ACTUAL_CERT_INITIAL_DIAGNOSIS_ORDER_SOURCE_DELIVERY_PASS",
+  "new_api_calls": 0,
+  "source_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "original_compare_present": false,
+  "compare_now_present": true,
+  "terminal_handlers_now_present": true,
+  "full_request_bound": 112733,
+  "initial_context_cap": 120000,
+  "selected_ids": [
+    "CU-aa41e29281734936",
+    "CU-4cdd1b980afffda8",
+    "CU-14647a333787b689",
+    "CU-ee8f57d972b8f937",
+    "CU-8142745e66f35f6a",
+    "CU-da8fb3ecf5de8318",
+    "CU-58129a427dd71f72",
+    "CU-d165f91108eb07af",
+    "CU-84f33394a20626dc",
+    "CU-81c6b5f1fa9872f7",
+    "CU-0200e62c77d0ae1f",
+    "CU-fa84b213eb681d13"
+  ],
+  "transport_body_verified": true,
+  "formal_ready": false
+}

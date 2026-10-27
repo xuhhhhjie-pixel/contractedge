@@ -1,0 +1,15 @@
+{
+  "status": "INTEGRATED_COMPONENT_REQUEST_ZERO_API_PASS",
+  "source_sha256": "542509c7002fa920759cb80a0ace9d6fbc8d69bd21d9d9c99f15f091990b51ad",
+  "request_digest": "a8f1ca4fc0252bca5c578e23766a62515a0a254ac206a1268abf9a73b7ccbbfd",
+  "total_token_bound": 174448,
+  "context_cap": 220000,
+  "helper_reviews": 8,
+  "thinking": "disabled",
+  "max_real_model_calls": 2,
+  "planned_calls": 1,
+  "native_execution_calls": 1,
+  "corrections": 0,
+  "qualification_pending": true,
+  "formal_ready": false
+}

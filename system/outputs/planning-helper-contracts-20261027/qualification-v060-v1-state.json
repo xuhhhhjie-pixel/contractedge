@@ -1,0 +1,8 @@
+{
+  "status": "WAITING_FULL_PROCESS_RECEIPT",
+  "stages": [],
+  "model_calls_added": 0,
+  "formal_ready": false,
+  "B_opened": false,
+  "qualification_driver_sha256": "339b3e81c766a9d814a331e05cdf4c6af776882405be3d0103cf0c4b9df1cded"
+}

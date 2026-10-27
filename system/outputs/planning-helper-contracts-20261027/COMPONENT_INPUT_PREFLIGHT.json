@@ -1,0 +1,13 @@
+{
+  "status": "COMPONENT_PLANNING_REQUEST_ZERO_API_PASS",
+  "source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "source_helper_records": 8,
+  "prerequisite_reviews": 8,
+  "request_digest": "e0a8f84c64c3dc739039dadbffe4ee118ff17a97ef0db2a557f811bede9a791b",
+  "total_token_bound": 152489,
+  "context_cap": 220000,
+  "thinking": "disabled",
+  "max_real_model_calls": 2,
+  "qualification_still_required": true,
+  "formal_ready": false
+}

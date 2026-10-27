@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+  "wheel_sha256": "62805750a200310c3f8fc77abc0050c42be7fa7130b04918a211426634100064",
+  "version": "0.6.60",
+  "installed_source_files": 116,
+  "runtime_deployed": false,
+  "scope": "Installed exact source bytes; no inherited full regression or benchmark effect"
+}

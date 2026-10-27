@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/final_source_qualification.py", line 12, in <module>
+    from external_fixture_inventory import verify_external_fixtures
+  File "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/external_fixture_inventory.py", line 4, in <module>
+    from contractedge.source.snapshot import compute_snapshot
+ModuleNotFoundError: No module named 'contractedge'

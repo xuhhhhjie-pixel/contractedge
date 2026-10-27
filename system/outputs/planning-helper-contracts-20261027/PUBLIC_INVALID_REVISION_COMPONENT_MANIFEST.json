@@ -1,0 +1,57 @@
+{
+  "scope": "Public invalid plan revision; no execution, hidden native logs or checkpoint",
+  "files": [
+    {
+      "path": "registration.json",
+      "sha256": "bc6e6ae92aeadb96de7be041e06fbfe5c2ce7df8d5626a4ee5a83608bc4fc0c3",
+      "bytes": 1853
+    },
+    {
+      "path": "expected-planning-request.json",
+      "sha256": "244eb28d57e8c1afa5044bb6515c4f4451bd49f06ee4df4ede9df902cea1038e",
+      "bytes": 250194
+    },
+    {
+      "path": "before.json",
+      "sha256": "6b710f73dbdf3b92e559a26bbc7c7584a3c1c26925c45eab93f875bf65bc59d6",
+      "bytes": 59923
+    },
+    {
+      "path": "model_calls.json",
+      "sha256": "8c773b9d04d234b435890923d6b2acbfac0bcbc7b0e096dfc19c73e8ad0ec61d",
+      "bytes": 794200
+    },
+    {
+      "path": "changeset.json",
+      "sha256": "b2b91d0ef12c6efedcee4d673d6b7e99a717f83a66d82cbba2c7e14638c1d01f",
+      "bytes": 41937
+    },
+    {
+      "path": "planning-validation.json",
+      "sha256": "8108790aa42e1596265948539978879d8084e8628e58915cb46f5426a80d023d",
+      "bytes": 775
+    },
+    {
+      "path": "after.json",
+      "sha256": "6b710f73dbdf3b92e559a26bbc7c7584a3c1c26925c45eab93f875bf65bc59d6",
+      "bytes": 59923
+    },
+    {
+      "path": "candidate-decision.json",
+      "sha256": "0815516f811cfdf9ea4f010f316c21bb68208ca1ab12c884044653e396d881c2",
+      "bytes": 398
+    },
+    {
+      "path": "candidate.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "result.json",
+      "sha256": "27849bdfceff375358a76a088c70558d9b6c390c8b810004c164eeddc690031c",
+      "bytes": 867
+    }
+  ],
+  "archive_sha256": "5782cf73c65e8414be19e59d8d72b0863ba68a7cac8509fdc23ba36b31be7864",
+  "formal_ready": false
+}

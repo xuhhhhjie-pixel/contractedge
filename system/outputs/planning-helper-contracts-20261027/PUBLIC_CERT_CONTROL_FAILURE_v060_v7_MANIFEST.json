@@ -1,0 +1,109 @@
+{
+  "scope": "Original immutable Cert control: NO_SUPPORTED_VIOLATION, empty patch, aggregate SEMANTIC_FAIL; parent classification error preserved, never reclassified as semantic success",
+  "files": [
+    {
+      "path": "closure.json",
+      "bytes": 941,
+      "sha256": "790f314dcead59d988ca8a02c3c0e926d593388cbf5bd4dd232b8de39cf0f4a7"
+    },
+    {
+      "path": "experiment.json",
+      "bytes": 1012,
+      "sha256": "b859655fc18207736ca3aee84587ebcb724c30ea11dc38a15a66aaa69e429cb4"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/.isolated-5c2d1c1a6c364fdb9a52fb73c2e24d0f/receipt.json",
+      "bytes": 586807,
+      "sha256": "f90babd967afb428c9f20ff3df9b26ed0dfb12e04f8d4cd3e72b633d74ed0264"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/candidate.patch",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/initial-public-observation.identity.json",
+      "bytes": 216,
+      "sha256": "f4c1900b2372ac347669f98fc7e49e222ac14a4a7685b673bd971b2052b9fc53"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/initial-public-observation.json",
+      "bytes": 4090,
+      "sha256": "7f916c111b9c84ab03ebf3142b5ca8b713816898006da0135d5d9030f2b0e4ac"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/isolated-method-integrity.json",
+      "bytes": 26347,
+      "sha256": "1245a417cbb8e9a62578a931659371921d54e59273740ce2b693fc593c4d56cc"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/method_input.json",
+      "bytes": 1646,
+      "sha256": "3f51ba7848f2d53f8d10b7bfb9206367726c6cc8f12572c7612a90eb1a3513c2"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/model_calls.json",
+      "bytes": 769367,
+      "sha256": "45943b36b29f2d99b9d9d6a1e607eb88a1e48ab0cc343bb58852e1e65a033f61"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/projection.json",
+      "bytes": 2586,
+      "sha256": "fe675c15d8e7773a33e37d247c7bb5f47572912ff8006557ec8c85a01402334f"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/repair.trace.json",
+      "bytes": 2474,
+      "sha256": "2c0a1e0e495ff588ce74c9ea7995e4a433f674597c35cb75f02a86d004256285"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/rounds/0/front.config.json",
+      "bytes": 4808,
+      "sha256": "b6151084c54aefd516c3eea7ee47754b67e3397d5b12d306f82e72a4fe2d9737"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/rounds/0/front.delivery.json",
+      "bytes": 1861,
+      "sha256": "386a51f930ec247da575345b20e1c6c1843428b99c16744f788ccde9466b5351"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/rounds/0/front.execution_feedback.json",
+      "bytes": 5,
+      "sha256": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/rounds/0/front.method_input.json",
+      "bytes": 1646,
+      "sha256": "3f51ba7848f2d53f8d10b7bfb9206367726c6cc8f12572c7612a90eb1a3513c2"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/rounds/0/front.public_observations.json",
+      "bytes": 2028,
+      "sha256": "baf9373014ea8a67df850aa1b92dafcff52ce6475f10db0a70acdda9aaf6ca71"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/rounds/0/front.replay.json",
+      "bytes": 166,
+      "sha256": "2ab5ec43661a47576d105175a1981087ee306a8b2777d890591cf998199b7f6a"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/rounds/0/front.trace.json",
+      "bytes": 204868,
+      "sha256": "e608863e6120e995dbbaf110c0b848983a3e295397920ecaf1656b674cc272c0"
+    },
+    {
+      "path": "methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/runtime-preflight.json",
+      "bytes": 1019,
+      "sha256": "151dfb2e2135dc1c8c24b2600a3a210c9c45e6b673b52ca6cb3b3063c2ceca08"
+    },
+    {
+      "path": "state.json",
+      "bytes": 101,
+      "sha256": "2752cd6ef18d6bf770b92922035d543bd1c8609251e4797ca3103448e84e4253"
+    }
+  ],
+  "archive": "PUBLIC_CERT_CONTROL_FAILURE_v060_v7.tar.gz",
+  "archive_sha256": "0b9d7c1255d117a86ecf791a8f4bfd032f29a88096cef6dd929b4603535560c5",
+  "hidden_outputs_included": false,
+  "credentials_included": false
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": "ce.fixed46_compatibility.v1",
+  "status": "PASS_INTERFACE_COMPATIBILITY",
+  "new_model_http_calls": 0,
+  "source_sha256": {
+    "baseline": "c9c5b75060549e0e22eb725b3082dee2e7994deecc0d653379c801b0a1f9fc6e",
+    "candidate": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b"
+  },
+  "sandbox_verified_variants": [
+    "baseline",
+    "candidate"
+  ],
+  "seeded_request_captures": [
+    {
+      "variant": "baseline",
+      "case_id": "R3-KPT-4673",
+      "source_unchanged": true,
+      "current_snapshot_bound": true,
+      "initial_identity_preserved": true,
+      "request_sha256": "91008f1400fd64a1a675fad535b963ada89395f0600a71ffabaf5ac6e3b5d3fe"
+    },
+    {
+      "variant": "baseline",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "source_unchanged": true,
+      "current_snapshot_bound": true,
+      "initial_identity_preserved": true,
+      "request_sha256": "d47b178dd0afad4fe2f26837aedea606a908c802d334300e6cb4ce384139f165"
+    },
+    {
+      "variant": "candidate",
+      "case_id": "R3-KPT-4673",
+      "source_unchanged": true,
+      "current_snapshot_bound": true,
+      "initial_identity_preserved": true,
+      "request_sha256": "fde2319baa165070b4676bc689fcfb0da785bec08aea20a7862202b71435a630"
+    },
+    {
+      "variant": "candidate",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "source_unchanged": true,
+      "current_snapshot_bound": true,
+      "initial_identity_preserved": true,
+      "request_sha256": "a9bb400ebbc6e51597b3efb6fac9330ac03c378a826c193522c1dd4c5070aeb0"
+    }
+  ],
+  "proof_files": {
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/baseline-R3-KPT-4673/compatibility.json": "b7e89e792fb4e2933de1fce0e251b427e2b5fcad14ffd5a0923eb464ac242d97",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/baseline-R3-KPT-4673/captured-request.json": "91008f1400fd64a1a675fad535b963ada89395f0600a71ffabaf5ac6e3b5d3fe",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/baseline-R3-KPT-4673/provenance.json": "25cb2c9063c9078d1957d428f9e2deba46330282553f781ff96bc6de63c4358f",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/baseline-R3-KPT-4673/seed-handoff-feedback.json": "4fad425a9c7666837daa9dcea2d17ce51d42234d516c572161e2b6789bad2eb4",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/baseline-RW-ALERTMANAGER-4705/compatibility.json": "3a38da155608bea56cdd6308dfd37b0a3b57d53ff8048558db0e54dd5adbad03",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/baseline-RW-ALERTMANAGER-4705/captured-request.json": "d47b178dd0afad4fe2f26837aedea606a908c802d334300e6cb4ce384139f165",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/baseline-RW-ALERTMANAGER-4705/provenance.json": "b1e832acfd6d0951fc4cc759f113903387742e075b70c4d9edda0f0cba95d891",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/baseline-RW-ALERTMANAGER-4705/seed-handoff-feedback.json": "366b020fa4fc7bd497f8fc11ba1bb8f362cca061f15490016a7e90c9ea2f89bb",
+    "/home/xhj/contractedge-fixed46-source060-20261027/sandbox/baseline/.isolated-11b55f0671c6491f967818c3145de90d/receipt.json": "c6c5f67780f0402f2a314853b77f8e3d92d4214804645c9d21b6a23c8d6c0d5c",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/candidate-R3-KPT-4673/compatibility.json": "c0ff0f76a5202a3d64a79053c8d51ac425861d0d7be406cf7a3dee3ca6dfdcde",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/candidate-R3-KPT-4673/captured-request.json": "fde2319baa165070b4676bc689fcfb0da785bec08aea20a7862202b71435a630",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/candidate-R3-KPT-4673/provenance.json": "25cb2c9063c9078d1957d428f9e2deba46330282553f781ff96bc6de63c4358f",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/candidate-R3-KPT-4673/seed-handoff-feedback.json": "409dd21704660a55690219a77f8ea7bc79aeaa0080a90e5f2c02808a524a3d9a",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/candidate-RW-ALERTMANAGER-4705/compatibility.json": "6adcd5078d62806b9b11eb0db56f6a9b5579d8babbb36b3fc36f0d9dca87d29a",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/candidate-RW-ALERTMANAGER-4705/captured-request.json": "a9bb400ebbc6e51597b3efb6fac9330ac03c378a826c193522c1dd4c5070aeb0",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/candidate-RW-ALERTMANAGER-4705/provenance.json": "b1e832acfd6d0951fc4cc759f113903387742e075b70c4d9edda0f0cba95d891",
+    "/home/xhj/contractedge-fixed46-source060-20261027/captures/candidate-RW-ALERTMANAGER-4705/seed-handoff-feedback.json": "0b877aade3f5c1624e03f6e1073be2c63c9736025f78487c80b5244a9920d562",
+    "/home/xhj/contractedge-fixed46-source060-20261027/sandbox/candidate/.isolated-37005d1c508e4ccaa10e4d468abe24e6/receipt.json": "c8eb9687a21e3208f8c25790092c2a4e10ee6139d83d9b87d1f94ef4458f324c"
+  },
+  "scope": "Original fixed46 methods/seeds/current-candidate protocol; actual sandbox + synthetic EXECUTION_ONLY front captures, no repair effectiveness"
+}

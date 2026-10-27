@@ -1,0 +1,12 @@
+{
+  "status": "INTERRUPTED_BEFORE_COMPLETION_RECEIPT",
+  "full_exec_session": 83287,
+  "qualifier_exec_session": 24299,
+  "full_receipt_present": false,
+  "last_progress_percent": 86,
+  "process_status": "Neither driver/pytest nor original exec session remains; interrupted user turn",
+  "log_sha256": "fe224d75e4ea8fd03a2d33205ca1b60b7e59b73b76db0868e9f6dd3911d68638",
+  "source_unchanged": true,
+  "api_calls": 0,
+  "formal_ready": false
+}

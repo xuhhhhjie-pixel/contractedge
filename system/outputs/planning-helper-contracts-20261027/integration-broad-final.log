@@ -1,0 +1,376 @@
+......................F.......FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.F. [ 49%]
+ssss.................................................................... [ 98%]
+..                                                                       [100%]
+=================================== FAILURES ===================================
+___ test_inherited_observe_broken_false_is_rejected_before_claim_or_dispatch ___
+tests/test_public_isolated_demo.py:168: in test_inherited_observe_broken_false_is_rejected_before_claim_or_dispatch
+    saved = make_mock_ready(tmp_path, monkeypatch)
+tests/test_public_isolated_demo.py:149: in make_mock_ready
+    result = public_demo.run_demo('config-binding', root / 'saved', save_ready=True,
+src/contractedge/development/public_demo.py:624: in run_demo
+    raise ValueError('Broken observation could not be completed; model dispatch is prohibited')
+E   ValueError: Broken observation could not be completed; model dispatch is prohibited
+______ test_every_isolated_observation_requires_its_profile_after_broken _______
+tests/test_public_isolated_demo.py:239: in test_every_isolated_observation_requires_its_profile_after_broken
+    assert first['status'] == 'EXECUTION_PASS', first
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-candidate.role] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-observer.role] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-candidate.snapshot_id] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-observer.snapshot_id] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-candidate.public_inputs_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-observer.public_inputs_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-observer.checks_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-candidate.invocation_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-observer.invocation_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-candidate_inputs_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-public_check_spec_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-candidate.role] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-observer.role] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-candidate.snapshot_id] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-observer.snapshot_id] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-candidate.public_inputs_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-observer.public_inputs_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-observer.checks_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-candidate.invocation_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-observer.invocation_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-candidate_inputs_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-public_check_spec_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-candidate.role] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-observer.role] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-candidate.snapshot_id] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-observer.snapshot_id] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-candidate.public_inputs_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-observer.public_inputs_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-observer.checks_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-candidate.invocation_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-observer.invocation_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-candidate_inputs_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+_ test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-public_check_spec_digest] _
+tests/test_public_isolated_demo.py:263: in test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution
+    assert report['status'] == 'EXECUTION_PASS', report
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+__ test_deleting_all_model_postconditions_cannot_remove_a_failed_public_check __
+tests/test_public_isolated_demo.py:310: in test_deleting_all_model_postconditions_cannot_remove_a_failed_public_check
+    assert result['decision'] == 'FAIL'
+E   AssertionError: assert 'UNKNOWN' == 'FAIL'
+E     
+E     - FAIL
+E     + UNKNOWN
+_ test_model_deleted_preservation_postconditions_cannot_hide_a_profile_failure_in_repair _
+tests/test_public_isolated_demo.py:338: in test_model_deleted_preservation_postconditions_cannot_hide_a_profile_failure_in_repair
+    plan = read(round_root / 'public-review-plan.json')
+tests/test_public_isolated_demo.py:32: in read
+    return json.loads(Path(path).read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+/usr/lib/python3.10/pathlib.py:1119: in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+E   FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-xhj/pytest-674/test_model_deleted_preservatio0/run/repair/rounds/0/public-review-plan.json'
+_____ test_candidate_cleanup_failure_skips_review_and_keeps_the_incumbent ______
+tests/test_public_isolated_demo.py:377: in test_candidate_cleanup_failure_skips_review_and_keeps_the_incumbent
+    candidate = read(tmp_path / 'run/repair/rounds/0/public/observation.json')
+tests/test_public_isolated_demo.py:32: in read
+    return json.loads(Path(path).read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+/usr/lib/python3.10/pathlib.py:1119: in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+E   FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-xhj/pytest-674/test_candidate_cleanup_failure0/run/repair/rounds/0/public/observation.json'
+_____ test_runtime_override_cannot_downgrade_an_isolated_ready_checkpoint ______
+tests/test_public_isolated_demo.py:391: in test_runtime_override_cannot_downgrade_an_isolated_ready_checkpoint
+    saved = make_mock_ready(tmp_path, monkeypatch)
+tests/test_public_isolated_demo.py:149: in make_mock_ready
+    result = public_demo.run_demo('config-binding', root / 'saved', save_ready=True,
+src/contractedge/development/public_demo.py:624: in run_demo
+    raise ValueError('Broken observation could not be completed; model dispatch is prohibited')
+E   ValueError: Broken observation could not be completed; model dispatch is prohibited
+_______ test_narrowed_runner_timeout_reaches_the_actual_session_deadline _______
+tests/test_public_isolated_demo.py:406: in test_narrowed_runner_timeout_reaches_the_actual_session_deadline
+    assert result['status'] == 'EXECUTION_PASS', result
+E   AssertionError: {'schema_version': 'ce.public_observation.v1', 'status': 'INVALID_OBSERVATION', 'snapshot_id': '65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15', 'observations': [], ...}
+E   assert 'INVALID_OBSERVATION' == 'EXECUTION_PASS'
+E     
+E     - EXECUTION_PASS
+E     + INVALID_OBSERVATION
+______ test_save_ready_passes_only_the_remaining_case_time_to_observation ______
+tests/test_public_isolated_demo.py:446: in test_save_ready_passes_only_the_remaining_case_time_to_observation
+    result = public_demo.run_demo('config-binding', tmp_path / 'saved', save_ready=True,
+src/contractedge/development/public_demo.py:624: in run_demo
+    raise ValueError('Broken observation could not be completed; model dispatch is prohibited')
+E   ValueError: Broken observation could not be completed; model dispatch is prohibited
+=========================== short test summary info ============================
+FAILED tests/test_public_isolated_demo.py::test_inherited_observe_broken_false_is_rejected_before_claim_or_dispatch
+FAILED tests/test_public_isolated_demo.py::test_every_isolated_observation_requires_its_profile_after_broken
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-candidate.role]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-observer.role]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-candidate.snapshot_id]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-observer.snapshot_id]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-candidate.public_inputs_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-observer.public_inputs_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-observer.checks_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-candidate.invocation_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-observer.invocation_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-candidate_inputs_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[missing-public_check_spec_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-candidate.role]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-observer.role]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-candidate.snapshot_id]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-observer.snapshot_id]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-candidate.public_inputs_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-observer.public_inputs_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-observer.checks_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-candidate.invocation_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-observer.invocation_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-candidate_inputs_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[null-public_check_spec_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-candidate.role]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-observer.role]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-candidate.snapshot_id]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-observer.snapshot_id]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-candidate.public_inputs_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-observer.public_inputs_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-observer.checks_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-candidate.invocation_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-observer.invocation_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-candidate_inputs_digest]
+FAILED tests/test_public_isolated_demo.py::test_isolated_observation_rejects_receipts_not_bound_to_frozen_execution[mismatch-public_check_spec_digest]
+FAILED tests/test_public_isolated_demo.py::test_deleting_all_model_postconditions_cannot_remove_a_failed_public_check
+FAILED tests/test_public_isolated_demo.py::test_model_deleted_preservation_postconditions_cannot_hide_a_profile_failure_in_repair
+FAILED tests/test_public_isolated_demo.py::test_candidate_cleanup_failure_skips_review_and_keeps_the_incumbent
+FAILED tests/test_public_isolated_demo.py::test_runtime_override_cannot_downgrade_an_isolated_ready_checkpoint
+FAILED tests/test_public_isolated_demo.py::test_narrowed_runner_timeout_reaches_the_actual_session_deadline
+FAILED tests/test_public_isolated_demo.py::test_save_ready_passes_only_the_remaining_case_time_to_observation
+41 failed, 101 passed, 4 skipped in 44.48s

@@ -1,0 +1,73 @@
+{
+  "scope": "Public failed component only; no hidden scorer outputs, grader logs, checkpoints or workspace",
+  "files": [
+    {
+      "path": "registration.json",
+      "bytes": 1510,
+      "sha256": "d64284c5ce88970c6bc067b35e48f6ebc214a443c7d32dfad7cf756688ce102b"
+    },
+    {
+      "path": "expected-planning-request.json",
+      "bytes": 207599,
+      "sha256": "bfb9b1cf001aec39620bb0dda443c49982d6e66a9e72247dbcd3547dc51d6973"
+    },
+    {
+      "path": "before.json",
+      "bytes": 59923,
+      "sha256": "6b710f73dbdf3b92e559a26bbc7c7584a3c1c26925c45eab93f875bf65bc59d6"
+    },
+    {
+      "path": "model_calls.json",
+      "bytes": 1209247,
+      "sha256": "26edbb2fa47176ac3409e6ee2ca538957a26a93beed9c274848841ee36022c58"
+    },
+    {
+      "path": "changeset.json",
+      "bytes": 41419,
+      "sha256": "5a4d494adcb25fbcd71bddc702727667e178f3fa9912b8259ee0076f7dcc64ab"
+    },
+    {
+      "path": "planning-validation.json",
+      "bytes": 36,
+      "sha256": "655823ac7f996b259837b1279f4757264aac1ab82808d9b562c06a9f640f36af"
+    },
+    {
+      "path": "plan.json",
+      "bytes": 63964,
+      "sha256": "f319aa233e8af965cb4c9358b219b370e64088bb32a1d1b88a921549ee734a9d"
+    },
+    {
+      "path": "execution.json",
+      "bytes": 195777,
+      "sha256": "63488a51b11fa262322efb01ffd4a36bfc8eea53577908123dd16f544ffd93f5"
+    },
+    {
+      "path": "after.json",
+      "bytes": 59700,
+      "sha256": "62aaa5aff0790fd921a15a6880b791102a9987d66d2d4be734fd96f96b622bce"
+    },
+    {
+      "path": "candidate-decision.json",
+      "bytes": 1452,
+      "sha256": "cc50037c1292004ce7f198a779da160eef0ddfc025d31c2290d47dc880b98e10"
+    },
+    {
+      "path": "candidate.patch",
+      "bytes": 3216,
+      "sha256": "509492e38986dcca30b08e822eaf9eb92d353809a27c18b56e6fc95fd5e3234e"
+    },
+    {
+      "path": "patch.json",
+      "bytes": 831,
+      "sha256": "c75647eb8a6fb3f38f00edc6e007a6b01d4b715297972aa089b523a618657f54"
+    },
+    {
+      "path": "result.json",
+      "bytes": 874,
+      "sha256": "074d0598f1a8d34ecf62311de7efff41a24ae1be6369ea9e8c566eae328833b4"
+    }
+  ],
+  "archive_sha256": "a3bf9064939b1cc5b9d12e2499585b33cd8afb79ccb1753ccae31ca5e1235e68",
+  "source_sha256": "542509c7002fa920759cb80a0ace9d6fbc8d69bd21d9d9c99f15f091990b51ad",
+  "formal_ready": false
+}
