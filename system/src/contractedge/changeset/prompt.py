@@ -199,6 +199,9 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
         "validation_feedback": list(validation_feedback or []),
         "output_contract": "Return only a SemanticChangeSet v1.1 JSON object; no markdown fences.",
     }
+    if retrieval.get('planning_helper_contracts') is True:
+        user_payload['run_context']['planning_helper_contracts']={
+            'enabled':True,'max_bytes':retrieval.get('planning_helper_max_bytes',24000)}
     if not run_context.model_config.get('schema_in_prompt', True):
         user_payload.pop('output_schema')
         user_payload['output_fields'] = list(_case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)['properties'])
@@ -275,5 +278,7 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
                                   "input_digest": run_context.input_digest,
                                   "execution_capabilities_digest": canonical_digest(capabilities),
                                   "system_prompt_sha256": hashlib.sha256(system_prompt.encode()).hexdigest(),
+                                  **({'planning_helper_contracts':user_payload['run_context']['planning_helper_contracts']}
+                                     if retrieval.get('planning_helper_contracts') is True else {}),
                                   **draft_metadata},
                         output_schema=output_schema)

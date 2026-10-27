@@ -176,7 +176,7 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
                             max_scan_files=128, max_scan_bytes=4*1024*1024):
     """Read-only implementation context, never a causal claim or edit grant."""
     from contractedge.retrieval.gap_delivery import _go_code, _go_import_specs
-    root = Path(snapshot.source_root)
+    root = Path(snapshot.source_root).resolve()
     if 'go.mod' not in snapshot.file_digests: return [], []
     module_path = root/'go.mod'
     if module_path.is_symlink() or module_path.stat().st_size > 64000: return [], []
@@ -236,7 +236,9 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
         for path in paths:
             if files>=max_scan_files or scanned_bytes>=max_scan_bytes: break
             candidate=root/path
-            if candidate.is_symlink(): continue
+            if (candidate.is_symlink() or not candidate.resolve().is_relative_to(root)
+                    or any(p.is_symlink() for p in candidate.parents if p!=root and p.is_relative_to(root))):
+                audit.append(dict(path=path,result='HELPER_SOURCE_UNAVAILABLE'));continue
             size=candidate.stat().st_size
             if scanned_bytes+size>max_scan_bytes:
                 audit.append(dict(path=path,result='HELPER_SCAN_BYTE_LIMIT'));continue
@@ -390,6 +392,56 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
             **({'input_contract_link':contract[1]} if contract else {}),**({'field_link':link} if link else {})))
     audit.append(dict(result='HELPER_SCAN_TOTALS',indexed_files=files,indexed_bytes=scanned_bytes))
     return result,audit
+
+
+def planning_helper_source_support(snapshot, selected, *, max_bytes=24000):
+    """Fresh selected caller contracts before a plan exists; read-only only.
+
+    Reuse the existing helper scanner and its ambiguity/type/record limits.
+    The caller seeds have an independent finite full-file read limit; no
+    generated plan, inferred causal edge or expanded edit scope is required.
+    """
+    from contractedge.retrieval.gap_delivery import _go_code,_go_import_specs
+    root=Path(snapshot.source_root).resolve()
+    targets={};operations=[];audit=[];used=0
+    for seed in selected:
+        path=seed.get('path','')
+        if (seed.get('kind')!='FUNCTION_OR_TYPE' or not path.endswith('.go')
+                or path.endswith('_test.go') or seed.get('truncated')):
+            continue
+        if seed.get('snapshot_id')!=snapshot.snapshot_id:
+            audit.append(dict(path=path,result='STALE_SOURCE_SEED'));continue
+        source=root/path
+        if (path not in snapshot.file_digests or source.is_symlink()
+                or not source.is_file() or not source.resolve().is_relative_to(root)
+                or any(p.is_symlink() for p in source.parents if p!=root and p.is_relative_to(root))):
+            audit.append(dict(path=path,result='SOURCE_SEED_UNAVAILABLE'));continue
+        if path not in targets:
+            size=source.stat().st_size
+            if len(targets)>=4 or size>512*1024 or used+size>2*1024*1024:
+                audit.append(dict(path=path,result='SOURCE_SEED_BUDGET'));continue
+            with source.open('rb') as stream:raw=stream.read(size)
+            used+=len(raw)
+            if (len(raw)!=size or source.stat().st_size!=size
+                    or hashlib.sha256(raw).hexdigest()!=snapshot.file_digests[path]):
+                audit.append(dict(path=path,result='SOURCE_CHANGED_AFTER_SNAPSHOT'));continue
+            targets[path]=dict(path=path,content=raw.decode(errors='replace'))
+        loc=seed.get('locator',{});start=loc.get('start_line');end=loc.get('end_line')
+        lines=targets[path]['content'].splitlines(keepends=True)
+        if type(start) is not int or type(end) is not int or not 1<=start<=end<=len(lines):
+            audit.append(dict(path=path,result='SOURCE_SEED_BODY_MISMATCH'));continue
+        exact=''.join(lines[start-1:end])
+        if (exact!=seed.get('text') or hashlib.sha256(exact.encode()).hexdigest()!=seed.get('content_digest')):
+            audit.append(dict(path=path,result='SOURCE_SEED_BODY_MISMATCH'));continue
+        aliases={a for a,_ in _go_import_specs(targets[path]['content']) if a not in {'_','.'}}
+        if not any(a in aliases for a,_ in re.findall(r'\b(\w+)\.(\w+)\s*\(',_go_code(exact))):
+            continue
+        operations.append(dict(target=dict(path=path,locator=dict(loc))))
+    if not operations:return [],audit
+    caller_paths={op['target']['path'] for op in operations}
+    records,lookup=local_go_helper_support(snapshot,[t for p,t in targets.items() if p in caller_paths],operations,
+        max_bytes=max(0,min(int(max_bytes),24000)))
+    return records,[*audit,*lookup]
 
 
 def source_lifecycle_units(snapshot, selected, *, max_files=4, max_records=6):

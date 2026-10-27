@@ -544,7 +544,7 @@ class RunTrace:
 
 
 
-def required_source_prerequisites(candidate_set):
+def required_source_prerequisites(candidate_set, *, helper_support=()):
     """One producer/consumer projection of current, already-validated source roles.
 
     The Ready boundary independently recomputes these entries rather than
@@ -575,6 +575,15 @@ def required_source_prerequisites(candidate_set):
                 'These are lexical windows, not an automatically supported causal relation: '
                 +json.dumps(readers,ensure_ascii=False,separators=(',',':')))
         rows.append(dict(source_evidence_ref='SRC-'+unit['id'],reason=reason))
+    for helper in helper_support:
+        rows.append(dict(source_evidence_ref=helper['id'],reason=(
+            'Review the exact local helper contract before choosing implementation: input/output identity, '
+            'selection semantics, mutation and initialization/cleanup requirements. A new call path or changed '
+            'guard can require changing earlier initialization as well as later cleanup. Link applicable '
+            'conditions to existing checks or open obligations; do not treat lexical context as causal proof '
+            'or an additional editable target.')))
+    if len(rows)>12:
+        raise BudgetExceeded('Planning prerequisite review exceeds the existing 12-record contract; no required contract was silently dropped')
     return rows
 
 
@@ -602,7 +611,7 @@ def retain_supported_source(candidate_set, prior, snapshot_id, input_digest):
             *(u['id'] for u in candidate_set.candidates if u['id'] in pinned)])))
 
 
-def required_planning_source_support(method_input, candidate_set, snapshot_id):
+def required_planning_source_support(method_input, candidate_set, snapshot_id, *, helper_support=()):
     # The extension is the last bounded acquisition. A diagnosis citation is a
     # claim's support, not a lossless projection of its input context: uncited
     # type/owner definitions can be essential to planning the actual change.
@@ -612,8 +621,10 @@ def required_planning_source_support(method_input, candidate_set, snapshot_id):
     support_ids={'SRC-'+u['id'] for u in candidate_set.candidates
                  if candidate_set.extension_used or u['id'] in required
                  or any(k.startswith('PUBLIC_LIFECYCLE:') for k in u.get('gap_role_keys',[]))}
-    return [{**r,'delivery_required':True} for r in build_evidence_catalog(method_input,candidate_set,snapshot_id)
+    records=[r for r in build_evidence_catalog(method_input,candidate_set,snapshot_id)
             if r['id'] in support_ids and r.get('kind')=='SOURCE_SPAN']
+    records.extend(helper_support)
+    return [{**r,'delivery_required':True} for r in records]
 
 
 def requirement_for_rediagnosis(requirement, prior, snapshot_id, input_digest):
@@ -790,6 +801,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
     format_retries_used = 0
     truncation_recoveries_used = 0
     recovered_generation_modes: dict[str, str] = {}
+    planning_helpers = []
     separate_truncation_allowance = config.get("planning_truncation_separate_allowance", False)
     if type(separate_truncation_allowance) is not bool:
         raise ValueError("planning_truncation_separate_allowance must be boolean")
@@ -849,9 +861,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             planning = stage.startswith(('SEMANTIC_CHANGESET', 'CHANGESET'))
             semantic = delivery_context(parsed, consumer=stage, snapshot_id=snapshot_id,
                 diagnosis=diagnosis_wire, changeset=changeset_payload, feedback=execution_feedback,
-                necessary_support=(required_planning_source_support(parsed, candidate_set, snapshot_id)
+                necessary_support=(required_planning_source_support(parsed, candidate_set, snapshot_id,helper_support=planning_helpers)
                                    if planning and candidate_set is not None else ()),
-                prerequisites=(required_source_prerequisites(candidate_set)
+                prerequisites=(required_source_prerequisites(candidate_set,helper_support=planning_helpers)
                                if planning and candidate_set is not None else ()),
                 evidence=public_observations, source_requirements=planning)
             with monitor.scope(semantic) if monitor is not None else nullcontext():
@@ -1506,9 +1518,19 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 context = replace(context, retrieval_config={**context.retrieval_config,
                     'production_path_frontier': production_frontier(candidate_set.candidates, parsed.requirement_text)})
                 run_context_wire = asdict(context)
+            helper_enabled=config.get('helper_preconditions_enabled',False)
+            helper_bytes=max(0,min(int(config.get('max_execution_support_bytes',24000)),24000))
+            planning_helpers=[];helper_audit=[]
+            if helper_enabled:
+                from contractedge.execution.helper_context import planning_helper_source_support
+                planning_helpers,helper_audit=planning_helper_source_support(snapshot,candidate_set.candidates,
+                    max_bytes=helper_bytes)
             context = replace(context, retrieval_config={**context.retrieval_config,
-                    'necessary_source_support': required_planning_source_support(run_input,candidate_set,snapshot.snapshot_id),
-                    'source_prerequisites': required_source_prerequisites(candidate_set)})
+                    'planning_helper_contracts':bool(helper_enabled),
+                    'planning_helper_max_bytes':helper_bytes,
+                    'planning_helper_audit':helper_audit,
+                    'necessary_source_support': required_planning_source_support(run_input,candidate_set,snapshot.snapshot_id,helper_support=planning_helpers),
+                    'source_prerequisites': required_source_prerequisites(candidate_set,helper_support=planning_helpers)})
             run_context_wire = asdict(context)
             changeset_request = build_changeset_request(diagnosis, context, feedback,
                 previous_attempt=previous_changeset_attempt if feedback else None)

@@ -147,8 +147,22 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
     # Runtime evidence lives in the trace, not a mutation of original MethodInput.
     public = tuple(e for e in trace['diagnosis']['evidence_refs'] if e['kind'] == 'PUBLIC_OBSERVATION')
     run_input = replace(method_input, public_evidence=public or method_input.public_evidence)
-    expected_support = required_planning_source_support(run_input,candidates,snapshot.snapshot_id)
-    expected_prerequisites = required_source_prerequisites(candidates)
+    declaration=None
+    for call in reversed(trace.get('model_calls',[])):
+        if str(call.get('prompt_version','')).startswith('changeset.'):
+            declaration=call.get('request_metadata',{}).get('planning_helper_contracts')
+            break
+    expected_declaration=({'enabled':True,'max_bytes':context.retrieval_config.get('planning_helper_max_bytes',24000)}
+        if context.retrieval_config.get('planning_helper_contracts') is True else None)
+    if canonical_digest(declaration)!=canonical_digest(expected_declaration):
+        raise ValueError('Ready trace helper context differs from its actual planning declaration')
+    helpers=[]
+    if context.retrieval_config.get('planning_helper_contracts') is True:
+        from contractedge.execution.helper_context import planning_helper_source_support
+        helpers,_=planning_helper_source_support(snapshot,candidates.candidates,
+            max_bytes=context.retrieval_config.get('planning_helper_max_bytes',24000))
+    expected_support = required_planning_source_support(run_input,candidates,snapshot.snapshot_id,helper_support=helpers)
+    expected_prerequisites = required_source_prerequisites(candidates,helper_support=helpers)
     if (context.retrieval_config.get('necessary_source_support', []) != expected_support
             or context.retrieval_config.get('source_prerequisites', []) != expected_prerequisites):
         raise ValueError('Ready trace prerequisite context differs from actually supplied current source')
