@@ -1,0 +1,43 @@
+{
+  "schema_version": "ce.fixed46_current_public_progress.v1",
+  "as_of": "2026-10-27T07:47:36.861983+00:00",
+  "panel_id": "fixed46-v060-order-20261027",
+  "panel_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
+  "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+  "planned_slots": 46,
+  "closed_slots": 2,
+  "counts_in_fixed46": true,
+  "rows": [
+    {
+      "slot_id": "fixed46-v060-order-20261027-f5dd18212d66edb1ba9b9990",
+      "group": "A",
+      "case_id": "RW-CAND-130",
+      "variant": "baseline",
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-v060-order-20261027-60944716e7069c9f5423fb67",
+      "group": "A",
+      "case_id": "RW-CAND-130",
+      "variant": "candidate",
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    }
+  ],
+  "controller_status": {
+    "status": "RUNNING",
+    "active_slot": {
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v060-order-20261027-f30e0215f0d113880a6411c5",
+      "variant": "candidate"
+    },
+    "panel_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e"
+  },
+  "historical_scores_reused": false,
+  "formal_ready": false
+}

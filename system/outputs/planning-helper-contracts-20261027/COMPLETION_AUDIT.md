@@ -11,6 +11,12 @@ PR19 已由 d041ee4 真实合并到同一工作分支；运行目录仍0.6.40，
 
 当前入口：[统一优化交接](../../docs/reports/2026-10-27-unified-optimization-handoff.md)。旧组件失败、完整默认成功和控制失败分开保留；不得跨版本拼接最好成绩。
 
+## 本轮交付收尾
+
+统一GitHub草稿PR #32已推送。干净GitHub克隆、新venv按README安装、116源码冻结、CLI、150公开输入投影，以及35项/10子测试合成恢复检查通过。完整G6真实benchmark往返仍不据此宣布完成。当前原46已进入A组，RW130基线与候选各独立PASS；最新计数见FIXED46_CURRENT_PROGRESS.json。
+
+首轮GitHub Docker CI引用旧v046清单导致停止；一行引用已由实际命令RED→现有verify_source GREEN修复，远程新CI待确认。方法源码与固定登记不变。
+
 ## 保留的实施过程（以下是原执行时状态）
 
 # 0.6.60 统一整合与规划契约修复验收
