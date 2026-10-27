@@ -1,0 +1,8 @@
+{
+  "status": "OPERATOR_ASSERTION_CORRECTED_ZERO_API",
+  "old_preparation_retained": true,
+  "public_broken_rerun": false,
+  "production_source_unchanged": true,
+  "actual_error_source_hash_and_snapshot_verified": true,
+  "registration_created_before_any_claim": true
+}

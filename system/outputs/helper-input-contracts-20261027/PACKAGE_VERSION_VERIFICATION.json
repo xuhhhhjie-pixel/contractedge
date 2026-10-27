@@ -1,0 +1,11 @@
+{
+  "status": "DYNAMIC_PACKAGE_VERSION_PASS",
+  "installed_metadata_version": "0.6.59",
+  "installed_source_version": "0.6.59",
+  "imported_from_installed_wheel": true,
+  "all_source_files_match_wheel": 116,
+  "source_files_sha256": "1cbdce8740890e423e9be12bb7362ae571ff6e679fd0918154dbbe7e0f018a2a",
+  "wheel_sha256": "86780f7e1085add82b92ae348edf07fa643c48aa26d7115e2a7bc8ab4bcb99ba",
+  "new_model_calls": 0,
+  "formal_ready": false
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-26T06:06:03.329194+00:00",
+  "as_of": "2026-10-27T02:50:09.083570+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3296,19 +3296,23 @@
     }
   },
   "current_development": {
-    "status": "V058_CLOSED_KPT_INVALID_IMPLEMENTATION_NO_PATCH",
-    "snapshot": "docs/development/planning-generation-continuity-v058-20261027-v1.snapshot.json",
-    "planned_version": "0.6.58",
-    "base_commit": "8a31007471cdc86097a01c8bb3f8e24ac9bc35cf",
-    "source_sha256": "192571f444abc4a7b618cd7b0c213be6523035e7a9139f0bb33e182c62f54764",
+    "status": "V059_COMPILER_RECOVERY_CLOSED_SEMANTIC_FAIL",
+    "snapshot": "docs/development/helper-input-contracts-v059-20261027-v5.snapshot.json",
+    "planned_version": "0.6.59",
+    "base_commit": "894119f7ba688bd8764fa93c77decc6b1ad5a26a",
+    "source_sha256": "1cbdce8740890e423e9be12bb7362ae571ff6e679fd0918154dbbe7e0f018a2a",
     "formal_ready": false,
     "paid_dispatch_allowed": false,
-    "report": "outputs/planning-generation-continuity-20261027/COMPLETION_AUDIT.md",
-    "result": "outputs/planning-generation-continuity-20261027/KPT_E2E_RESULT_v058.json"
+    "report": "outputs/helper-input-contracts-20261027/COMPLETION_AUDIT.md",
+    "result": "outputs/helper-input-contracts-20261027/KPT_E2E_RESULT_v059.json",
+    "component_root": "/home/xhj/contractedge-locked-execution-v059-20261027",
+    "component_result": "outputs/helper-input-contracts-20261027/LOCKED_EXECUTION_RESULT_v059.json",
+    "recovery_root": "/home/xhj/contractedge-compiler-recovery-v059-20261027",
+    "recovery_result": "outputs/helper-input-contracts-20261027/COMPILER_RECOVERY_RESULT_v059.json"
   },
-  "staged_implementation_version": "0.6.58",
+  "staged_implementation_version": "0.6.59",
   "runtime_implementation_version": "0.6.40",
-  "current_optimization_audit": "outputs/planning-generation-continuity-20261027/COMPLETION_AUDIT.md",
+  "current_optimization_audit": "outputs/helper-input-contracts-20261027/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {
     "status": "INTERRUPTED_PUBLIC_OBSERVATION_NO_FINAL_METHOD_RESULT",
     "model_calls_completed": 4,
@@ -3362,9 +3366,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Replay exact missing local helper input type contracts before further paid trials",
-    "Preserve completed source058 failure and unopened Cert control",
-    "Fix package version metadata before formal release; original46/150 remain gated"
+    "Replay helper contract delivery at earliest planning boundary; use existing bounded support and precondition-review path",
+    "Do not retry closed059 component or treat compile recovery as behavioral success",
+    "New runtime changes need new exact freeze/qualification before real calls; original46/G0–G6 still required"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",

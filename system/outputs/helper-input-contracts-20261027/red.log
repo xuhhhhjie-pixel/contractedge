@@ -1,0 +1,49 @@
+FFF.........                                                             [100%]
+=================================== FAILURES ===================================
+_ test_helper_input_type_and_mentioned_method_reach_bounded_records[policy-Rule-False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-649/test_helper_input_type_and_men0')
+alias = 'policy', name = 'Rule', same_package = False
+
+    @pytest.mark.parametrize('alias,name,same_package', [('policy','Rule',False),('spec','Choice',False),('','Filter',True)])
+    def test_helper_input_type_and_mentioned_method_reach_bounded_records(tmp_path,alias,name,same_package):
+        targets,ops=fixture(tmp_path,alias,name,same_package)
+        snapshot=compute_snapshot(tmp_path);records,audit=local_go_helper_support(snapshot,targets,ops)
+        text='\n'.join(r['excerpt'] for r in records)
+>       assert f'type {name} struct' in text
+E       AssertionError: assert 'type Rule struct' in 'func Apply(items []string, rules []policy.Rule) []string {\n for _, rule := range rules { if !rule.IsZero() { return keep(items, rule) } }\n return items\n}\n'
+
+tests/test_helper_input_contracts.py:41: AssertionError
+_ test_helper_input_type_and_mentioned_method_reach_bounded_records[spec-Choice-False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-649/test_helper_input_type_and_men1')
+alias = 'spec', name = 'Choice', same_package = False
+
+    @pytest.mark.parametrize('alias,name,same_package', [('policy','Rule',False),('spec','Choice',False),('','Filter',True)])
+    def test_helper_input_type_and_mentioned_method_reach_bounded_records(tmp_path,alias,name,same_package):
+        targets,ops=fixture(tmp_path,alias,name,same_package)
+        snapshot=compute_snapshot(tmp_path);records,audit=local_go_helper_support(snapshot,targets,ops)
+        text='\n'.join(r['excerpt'] for r in records)
+>       assert f'type {name} struct' in text
+E       AssertionError: assert 'type Choice struct' in 'func Apply(items []string, rules []spec.Choice) []string {\n for _, rule := range rules { if !rule.IsZero() { return keep(items, rule) } }\n return items\n}\n'
+
+tests/test_helper_input_contracts.py:41: AssertionError
+_ test_helper_input_type_and_mentioned_method_reach_bounded_records[-Filter-True] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-649/test_helper_input_type_and_men2')
+alias = '', name = 'Filter', same_package = True
+
+    @pytest.mark.parametrize('alias,name,same_package', [('policy','Rule',False),('spec','Choice',False),('','Filter',True)])
+    def test_helper_input_type_and_mentioned_method_reach_bounded_records(tmp_path,alias,name,same_package):
+        targets,ops=fixture(tmp_path,alias,name,same_package)
+        snapshot=compute_snapshot(tmp_path);records,audit=local_go_helper_support(snapshot,targets,ops)
+        text='\n'.join(r['excerpt'] for r in records)
+>       assert f'type {name} struct' in text
+E       AssertionError: assert 'type Filter struct' in 'func Apply(items []string, rules []Filter) []string {\n for _, rule := range rules { if !rule.IsZero() { return keep(items, rule) } }\n return items\n}\n'
+
+tests/test_helper_input_contracts.py:41: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_helper_input_contracts.py::test_helper_input_type_and_mentioned_method_reach_bounded_records[policy-Rule-False]
+FAILED tests/test_helper_input_contracts.py::test_helper_input_type_and_mentioned_method_reach_bounded_records[spec-Choice-False]
+FAILED tests/test_helper_input_contracts.py::test_helper_input_type_and_mentioned_method_reach_bounded_records[-Filter-True]
+3 failed, 9 passed in 0.23s

@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "missing_operator_freeze_rejected": true,
+  "no_claim": true,
+  "ledger_unchanged": true,
+  "new_model_calls": 0
+}
