@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-10-29T02:09:56.015629+08:00",
+  "checked_at": "2026-10-29T02:38:25.034051+08:00",
   "status": "A_REPEAT_RECOVERY_COMPLETE_B_RUNNING",
   "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
   "panel_root": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028",
   "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
   "registered_slots": 46,
-  "closed_slots": 30,
+  "closed_slots": 32,
   "A_pairs": 7,
   "candidate_A_pass": 7,
   "baseline_A_pass": 3,
@@ -19,20 +19,20 @@
     "status": "RUNNING",
     "group": "B",
     "active_slot": {
-      "case_id": "RW-HELM-CONTROLLER-1589",
+      "case_id": "RW-ARGO-CD-27136",
       "group": "B",
       "repeat": 0,
-      "slot_id": "fixed46-official-v068-20261028-fd56f4f5a51af6f4ac2e99fc",
+      "slot_id": "fixed46-official-v068-20261028-fc7c9a44ca1c4bb7edb04add",
       "variant": "baseline"
     },
     "owner_pid": 3661213,
-    "closed_slots": 30,
+    "closed_slots": 32,
     "completed_groups": [
       "A",
       "repeat",
       "recovery"
     ],
-    "at": "2026-10-29T02:08:53.818898+08:00",
+    "at": "2026-10-29T02:35:48.028720+08:00",
     "formal_ready": false
   },
   "formal_ready": false,
@@ -204,14 +204,55 @@
           "sha256": "24c4f3580054ec39bd79b8af81d46f7f032591ffa7ba7039c185b65c30758500"
         }
       }
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "variant": "baseline",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-fd56f4f5a51af6f4ac2e99fc/.isolated-2523b96917894a8980d95c0e880eaf2a/receipt.json",
+          "sha256": "ad1143440b0e2168aaabfed03c476637c212f0e093d28bc9636f31b4e3fc7042"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-fd56f4f5a51af6f4ac2e99fc/RW-HELM-CONTROLLER-1589/repair.trace.json",
+          "sha256": "6966677bfe7ac41cb3393b71daf3670af10b14f96248e2671773b525715d1e5c"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-fd56f4f5a51af6f4ac2e99fc/result.json",
+          "sha256": "c373b13a1901ea57a99b62738905ed9ac539c54f747291e6396d7e2a087addc8"
+        }
+      }
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "variant": "candidate",
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-519dfe95312a2ee83cc53b34/.isolated-f1be3ebc035444a59dfd93f47322eab7/receipt.json",
+          "sha256": "3910e819f2819929d147940dcc6cfd6c162de7f781055e24edc03f7daeb36a0a"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-519dfe95312a2ee83cc53b34/RW-HELM-CONTROLLER-1589/repair.trace.json",
+          "sha256": "7fa8d35732916b4a9306081007a1301effdfbca8f17ff6846f27a8da5217fa51"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-519dfe95312a2ee83cc53b34/result.json",
+          "sha256": "5c8f98aad31cf3a775c7d6869c312981ace7f2f3c8f3b9ff4867c42884b86b9b"
+        }
+      }
     }
   ],
   "B_as_of_summary": {
-    "closed_slots": 4,
-    "complete_pairs": 2,
+    "closed_slots": 6,
+    "complete_pairs": 3,
     "registered_pairs": 10,
-    "candidate_pass": 2,
+    "candidate_pass": 3,
     "baseline_pass": 2,
+    "paired_wins": 1,
     "paired_regressions": 0
   }
 }

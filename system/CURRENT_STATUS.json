@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-29T02:09:56.015629+08:00",
+  "as_of": "2026-10-29T02:38:25.034051+08:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3313,20 +3313,20 @@
       "status": "RUNNING",
       "group": "B",
       "active_slot": {
-        "case_id": "RW-HELM-CONTROLLER-1589",
+        "case_id": "RW-ARGO-CD-27136",
         "group": "B",
         "repeat": 0,
-        "slot_id": "fixed46-official-v068-20261028-fd56f4f5a51af6f4ac2e99fc",
+        "slot_id": "fixed46-official-v068-20261028-fc7c9a44ca1c4bb7edb04add",
         "variant": "baseline"
       },
       "owner_pid": 3661213,
-      "closed_slots": 30,
+      "closed_slots": 32,
       "completed_groups": [
         "A",
         "repeat",
         "recovery"
       ],
-      "at": "2026-10-29T02:08:53.818898+08:00",
+      "at": "2026-10-29T02:35:48.028720+08:00",
       "formal_ready": false
     },
     "prior_cohort": {
@@ -3337,11 +3337,11 @@
       "scores_inherited": false
     },
     "next_actions": [
-      "Run original same-source repeat4 and recovery8 under the pinned qualified parent; stop on a known original necessary gate failure",
-      "Open original B20 only after original prerequisites; no new members or thresholds",
-      "Rebind unchanged engineering/delivery reports to this explicit administrative panel and invoke existing final admission checker only after all46 are closed"
+      "Continue only remaining original B20 slots using the live qualified parent controller; A, repeat and recovery are complete. Do not restart closed slots or add cases.",
+      "After all46 terminals close, let the existing zero-dispatch follower collect registered effects, costs and G0-G6 admission evidence; retain all failures and UNKNOWN.",
+      "Audit final evidence and publish one current-version delivery handoff. Do not start formal150 or change the frozen method during this cohort."
     ],
-    "paid_dispatch_scope": "Original unclaimed A slots; then one separately registered ACK READY continuation only if A has no original gate failure. No later groups or formal150 until their gates pass.",
+    "paid_dispatch_scope": "Remaining originally registered B slots only, following verified A/repeat/recovery prerequisites. No replay of closed slots, additional cases or formal150 dispatch.",
     "full_regression": "outputs/alert-repeat-closure-20261028/V068_FULL_REGRESSION.json",
     "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V067_TARGETED_VALIDATION.json",
     "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/V064_TARGETED_VALIDATION.json",
@@ -3355,14 +3355,19 @@
       "root": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028",
       "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
       "registered_slots": 46,
-      "closed_slots": 30,
+      "closed_slots": 32,
       "scores_inherited": false,
       "status": "RUNNING",
       "runtime_state": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/acceptance-state.json",
-      "stopped_slot": "fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406",
       "method_source_unchanged": true,
       "same_original_slot_ids": true,
-      "uninterrupted_wall_claim": false
+      "uninterrupted_wall_claim": false,
+      "historical_http402_stop_slot": "fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406",
+      "completed_groups": [
+        "A",
+        "repeat",
+        "recovery"
+      ]
     },
     "uncommitted_quote_feedback_included_in_target": false,
     "latest_behavior_plan_continuation_result": "outputs/alert-repeat-closure-20261028/V067_BEHAVIOR_PLAN_CONTINUATION_RESULT.json",
@@ -3416,7 +3421,8 @@
       "report": "outputs/alert-repeat-closure-20261028/V068_ADMINISTRATIVE_RECOVERY.md"
     },
     "delivery_follower": "outputs/alert-repeat-closure-20261028/administrative-admission/delivery-follower.json",
-    "latest_pushed_head_ci": "outputs/alert-repeat-closure-20261028/V068_LATEST_GITHUB_HEAD_CI.json"
+    "latest_pushed_head_ci": "outputs/alert-repeat-closure-20261028/V068_LATEST_GITHUB_HEAD_CI.json",
+    "historical_formal_launcher_notice": "scripts/run_formal150.py and audit_formal150_readiness.py use historical budget80/intermediary profiles and receipts. They are not current supported dispatch commands. Current validation uses official configuration and isolated parent entrypoints only; no formal150 dispatch is authorized by this cohort."
   },
   "staged_implementation_version": "0.6.68",
   "runtime_implementation_version": "0.6.40",
@@ -3474,9 +3480,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Run original same-source repeat4 and recovery8 under the pinned qualified parent; stop on a known original necessary gate failure",
-    "Open original B20 only after original prerequisites; no new members or thresholds",
-    "Rebind unchanged engineering/delivery reports to this explicit administrative panel and invoke existing final admission checker only after all46 are closed"
+    "Continue only remaining original B20 slots using the live qualified parent controller; A, repeat and recovery are complete. Do not restart closed slots or add cases.",
+    "After all46 terminals close, let the existing zero-dispatch follower collect registered effects, costs and G0-G6 admission evidence; retain all failures and UNKNOWN.",
+    "Audit final evidence and publish one current-version delivery handoff. Do not start formal150 or change the frozen method during this cohort."
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",
@@ -3535,7 +3541,7 @@
     "original_registration_sha256": "e24f0320987a15c9ed2867ebb6f55efb104c4e7ce4b6a9bccd1565a5d34e099b",
     "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
     "registered_slots": 46,
-    "closed_slots": 30,
+    "closed_slots": 32,
     "scores_inherited": false,
     "extra_cases_added": 0,
     "early_gate_reuses_original_necessary_conditions": true,
@@ -3550,7 +3556,7 @@
     "formal_ready": false,
     "report": "outputs/alert-repeat-closure-20261028/administrative-admission",
     "current_progress_report": "outputs/alert-repeat-closure-20261028/V068_ADMINISTRATIVE_RECOVERY.md",
-    "as_of_records": 30,
+    "as_of_records": 32,
     "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
     "gates": {
       "G0": "PASS_STATIC150",
