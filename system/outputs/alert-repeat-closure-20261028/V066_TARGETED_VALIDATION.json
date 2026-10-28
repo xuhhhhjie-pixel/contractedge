@@ -1,0 +1,22 @@
+{
+  "status": "TARGETED_VALIDATION_FAILED",
+  "completed_at": "2026-10-28T14:46:54.839309+08:00",
+  "results": [
+    {
+      "attempt": "saved-public-failure",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "source_sha256": "57fbb6b65bdcdc3fbf6bc1ed869d6b138b27b5bdfde90baeddfdce77b16f069d",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "public_semantic_status": "PUBLIC_REVIEW_FAIL",
+      "model_calls": 6,
+      "patch_bytes": 3455,
+      "completed_at": "2026-10-28T14:46:54.683341+08:00",
+      "counts_in_original46": false,
+      "formal_ready": false
+    }
+  ],
+  "automatic_retry": false,
+  "counts_in_original46": false,
+  "formal_ready": false
+}

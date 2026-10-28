@@ -3297,14 +3297,14 @@
     }
   },
   "current_development": {
-    "status": "V066_ENGINEERING_QUALIFIED_TARGETED_VALIDATION_REGISTERED",
+    "status": "V066_TARGETED_PUBLIC_BEHAVIOR_FAILED_INDEPENDENT_PASS",
     "planned_version": "0.6.66",
     "base_commit": "8779d3e913e2002107ddf1b0760851d81d6b30e9",
     "snapshot": "docs/development/plan-failure-reassessment-v066-compat-20261028.snapshot.json",
     "planned_snapshot": "docs/development/plan-failure-reassessment-v066-compat-20261028.snapshot.json",
     "source_sha256": "57fbb6b65bdcdc3fbf6bc1ed869d6b138b27b5bdfde90baeddfdce77b16f069d",
     "formal_ready": false,
-    "paid_dispatch_allowed": true,
+    "paid_dispatch_allowed": false,
     "integration_requires_new_qualification": false,
     "full_new_source_qualification": true,
     "budget_cny": 200,
@@ -3324,7 +3324,7 @@
     ],
     "paid_dispatch_scope": "One saved-public-failure continuation, then fresh Broken only if passed; stop on first failure; original46 not opened",
     "full_regression": "outputs/alert-repeat-closure-20261028/V066_COMPAT_QUALIFICATION.json",
-    "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V064_TARGETED_VALIDATION.json",
+    "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V066_TARGETED_VALIDATION.json",
     "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/V064_TARGETED_VALIDATION.json"
   },
   "staged_implementation_version": "0.6.66",
