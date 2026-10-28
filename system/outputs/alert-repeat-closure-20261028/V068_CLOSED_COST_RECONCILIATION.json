@@ -1,0 +1,9 @@
+{
+  "status": "PASS_CLOSED_DISPATCH_COST_RECONCILIATION",
+  "closed_slots": 21,
+  "actual_dispatches_matched_one_to_one": 81,
+  "cost_upper_bound_micro_cny": 8272058,
+  "matching_policy": "Exact model, prompt version, actual wire-size reservation, output bound, complete usage and conservative cost multiset. No direct billing-ID linkage claimed; identical tuples have identical costs. Historical/qualification calls not added to cohort.",
+  "new_model_http_calls": 0,
+  "grade_dispatches": 0
+}
