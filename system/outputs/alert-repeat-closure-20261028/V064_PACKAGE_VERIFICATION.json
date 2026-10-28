@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "source_sha256": "6cbcfd6d3a9018d31a6ebc0c7e59854f1f3e2f073d3aee839be26eee8668000a",
+  "source_files": 116,
+  "wheel_sha256": "ed5c54505863ae2e6067cf8ab9a9a2c24b65078a940dec04db2f8b33054980ea",
+  "installed_file_map_matches_freeze": true,
+  "model_calls_added": 0,
+  "formal_ready": false
+}

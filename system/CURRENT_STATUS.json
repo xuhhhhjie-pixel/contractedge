@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-27T16:15:18.716529+00:00",
+  "as_of": "2026-10-28T05:09:02.238436+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -19,20 +19,20 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.63",
+  "implementation_version": "0.6.64",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
     "report": "outputs/benchmark150-adapter-v2-20261019/preparation.json"
   },
   "protocol_tests": {
-    "passed": 2248,
+    "passed": 2286,
     "subtests_passed": 91,
-    "implementation_version": "0.6.61",
-    "development_freeze": "compiler-public-dependency-v061-20261028",
-    "report": "outputs/context-limit-closure-20261027/full-v061.log",
+    "implementation_version": "0.6.64",
+    "development_freeze": "prerequisite-compaction-v064-handoff-20261028",
+    "report": "outputs/alert-repeat-closure-20261028/full-v064-handoff.log",
     "actual_process_exit_code": 0,
-    "process_receipt": "outputs/context-limit-closure-20261027/V061_FULL_REGRESSION.json"
+    "process_receipt": "outputs/alert-repeat-closure-20261028/V064_HANDOFF_FULL_REGRESSION.json"
   },
   "stage_implementations": {
     "0_1": "dataset/benchmark.py",
@@ -1273,8 +1273,8 @@
     "report": "outputs/final-optimization-20261020/readiness.json",
     "effect_acceptance_passed": false
   },
-  "version": "0.6.63",
-  "status": "READINESS_FEEDBACK_ENGINEERING_PENDING",
+  "version": "0.6.64",
+  "status": "TARGETED_RECOVERY_QUALIFICATION_REGISTERED",
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "formal_ready": false,
@@ -3296,19 +3296,19 @@
     }
   },
   "current_development": {
-    "status": "V063_TARGETED_VALIDATION_FAILED_DUPLICATE_PREREQUISITE_REVIEW",
-    "planned_version": "0.6.63",
-    "base_commit": "48dd790",
-    "snapshot": "docs/development/readiness-feedback-v063-20261028.snapshot.json",
-    "planned_snapshot": "docs/development/readiness-feedback-v063-20261028.snapshot.json",
-    "source_sha256": "b6e846213f344ecc1f0dc6b1e2b17b2d43d747b97cd62b626f7512e9a8945692",
+    "status": "V064_TARGETED_RECOVERY_FAILED",
+    "planned_version": "0.6.64",
+    "base_commit": "a05cdb805851713679273fee17766611d5acbbbc",
+    "snapshot": "docs/development/prerequisite-compaction-v064-handoff-20261028.snapshot.json",
+    "planned_snapshot": "docs/development/prerequisite-compaction-v064-handoff-20261028.snapshot.json",
+    "source_sha256": "6cbcfd6d3a9018d31a6ebc0c7e59854f1f3e2f073d3aee839be26eee8668000a",
     "formal_ready": false,
     "paid_dispatch_allowed": false,
     "integration_requires_new_qualification": true,
     "full_new_source_qualification": true,
     "budget_cny": 200,
     "report": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
-    "active_experiment": null,
+    "active_experiment": "/home/xhj/contractedge-prerequisite-v064-20261028",
     "prior_cohort": {
       "root": "/home/xhj/contractedge-fixed46-source061-20261028",
       "version": "0.6.61",
@@ -3317,18 +3317,18 @@
       "scores_inherited": false
     },
     "next_actions": [
-      "Preserve failed candidate and exact source",
-      "Expose registered bounded startup failure to the existing repair path without claiming causality",
-      "Verify empty/nonempty completion semantics and bounded feedback recovery"
+      "Connect existing failed-trial reasoning to verified runtime operation failures",
+      "Replay the actual second execution request, then qualify the exact changed source",
+      "Run only the bounded saved-failure qualification; preserve original46 gates"
     ],
-    "paid_dispatch_scope": "Fresh Alert then saved public startup-failure continuation; no original46 dispatch",
-    "full_regression": "outputs/alert-repeat-closure-20261028/V063_FULL_REGRESSION.json",
-    "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V063_TARGETED_VALIDATION.json",
-    "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/TARGETED_VALIDATION.json"
+    "paid_dispatch_scope": "Saved public startup-failure continuation, then fresh Broken only if passed; no original46 dispatch",
+    "full_regression": "outputs/alert-repeat-closure-20261028/V064_HANDOFF_FULL_REGRESSION.json",
+    "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V064_TARGETED_VALIDATION.json",
+    "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/V063_TARGETED_VALIDATION.json"
   },
-  "staged_implementation_version": "0.6.63",
+  "staged_implementation_version": "0.6.64",
   "runtime_implementation_version": "0.6.40",
-  "current_optimization_audit": "outputs/planning-helper-contracts-20261027/COMPLETION_AUDIT.md",
+  "current_optimization_audit": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {
     "status": "INTERRUPTED_PUBLIC_OBSERVATION_NO_FINAL_METHOD_RESULT",
     "model_calls_completed": 4,
@@ -3382,9 +3382,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Finish exactly one newly registered default ACK parent-guard qualification; no old-panel or primary effect count",
-    "Keep original9 valid records and stopped ACK prefix immutable; no automatic resend or mixing results after parent change",
-    "Complete reviewed acceptance continuation and original effects before any formal admission;150CNY cumulative cap and uncertain reservations remain"
+    "Connect existing failed-trial reasoning to verified runtime operation failures",
+    "Replay the actual second execution request, then qualify the exact changed source",
+    "Run only the bounded saved-failure qualification; preserve original46 gates"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",

@@ -115,7 +115,8 @@ def recover(case,directory,provider,tokenizer,config,benchmark,seed,*,public_run
                 round_id=0,from_snapshot=method.initial_snapshot_id,to_snapshot=seed_snapshot,
                 patch_digest=selected_patch['patch_sha256'],execution_status=observation['status'],
                 observations=observation['observations'],plan={},
-                review={'decision':'UNKNOWN','checks':[],'failure_kind':'UNKNOWN'})
+                review={'decision':'UNKNOWN','checks':[],'failure_kind':'UNKNOWN'},
+                **public_feedback_kwargs(make_feedback,observation))
             write(directory/'seed-handoff-feedback.json',handoff)
             observations=select_observations(observation['observations'],method.requirement_text,tokenizer,config['max_public_evidence_tokens'])
             front=run_front_half(method,source if method.source_root=='.' else source.parent,budget,

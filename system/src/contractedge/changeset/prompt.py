@@ -103,6 +103,7 @@ def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = Non
     if prerequisites:
         schema['required'].append('precondition_review')
         properties['precondition_review']['minItems'] = len(prerequisites)
+        properties['precondition_review']['maxItems'] = len(prerequisites)
         properties['precondition_review']['items']['properties']['source_evidence_ref']['enum'] = [r['source_evidence_ref'] for r in prerequisites]
         if any(r.get('establishment_required') is True for r in prerequisites):
             properties['precondition_review']['items']['required'].append('establishment')
@@ -237,6 +238,8 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
             'Unknown readiness remains unverified; do not propose a delay as proof of correctness.')
     if prerequisites:
         system_prompt += (' Review each source_prerequisites entry exactly once in precondition_review. '
+            'source_alias_refs name identical snapshot/span/content aliases, not extra review entries. '
+            'Consolidate multiple conditions and their check references for one canonical source into one row. '
             'Describe the actual requirement-relevant condition from the supplied source, not an assumed generic readiness rule. '
             'REQUIRED binds real postcondition/preservation IDs in verification_refs; finite checks retain their coverage limit. '
             'A runtime prerequisite with only BUILD_ONLY/UNKNOWN checks also needs a real open_obligation_ref. '
@@ -250,6 +253,8 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
                 'will establish the condition before its dependent use; source_quote locates the current limitation, '
                 'not nonexistent repair code. Use UNRESOLVED or NOT_APPLICABLE with matching disposition and no changes. '
                 'A test is a later observation, never an establishment mechanism. For asynchronous work distinguish '
+                'the actual requirement-relevant state from weaker proxies: being safe to read an empty collection '
+                'does not mean the collection already contains the required data, and eventual consumption is not completion before publication. '
                 'launch, empty-state initialization, data consumption/completion, publication to readers, and retirement. '
                 'State the actual completion boundary and ordering; starting a worker or receiving a buffered iterator '
                 'does not prove its data has been consumed. When the existing implementation lacks a completion primitive, '
@@ -315,7 +320,7 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
             ensure_ascii=False, sort_keys=True)})
         draft_metadata = dict(previous_changeset_sha256=digest, previous_changeset_state=previous_attempt['state'],
                               previous_changeset_message_sha256=projected_digest)
-    return ModelRequest(model=model, prompt_version=("changeset.v1.1.15" if any(r.get('establishment_required') is True for r in prerequisites) else
+    return ModelRequest(model=model, prompt_version=("changeset.v1.1.16" if any(r.get('establishment_required') is True for r in prerequisites) else
                         "changeset.v1.1.14" if capabilities.get('registered_public_checks') else
                         "changeset.v1.1.13" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.12"),
                         messages=messages,

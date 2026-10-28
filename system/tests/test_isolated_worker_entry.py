@@ -48,7 +48,7 @@ def test_unverified_parent_preflight_never_starts_method(receipt,tmp_path):
     assert not (tmp_path/'out').exists()
 
 
-def recovery_fixture(tmp_path, monkeypatch, *, front_error=None, mode=None, front_check=None):
+def recovery_fixture(tmp_path, monkeypatch, *, front_error=None, mode=None, front_check=None,observation_factory=None):
     """Only substitute public/model services; exercise actual git seed application."""
     from contractedge.contracts.validation import canonical_digest
     from contractedge.source.snapshot import compute_snapshot
@@ -75,7 +75,7 @@ def recovery_fixture(tmp_path, monkeypatch, *, front_error=None, mode=None, fron
     class Public:
         def prepare(self,case,workspace,log):
             workspace.mkdir();return {'source_root':str(source)}
-        def observe(self,*a):return {'observations':[],'status':'EXECUTION_PASS'}
+        def observe(self,*a):return observation_factory(source) if observation_factory else {'observations':[],'status':'EXECUTION_PASS'}
         def export(self,workspace,patch,log):
             data=subprocess.check_output(['git','diff'],cwd=source);Path(patch).write_bytes(data)
             return {'patch_path':str(patch),'patch_bytes':len(data),'patch_sha256':hashlib.sha256(data).hexdigest()}
@@ -113,6 +113,66 @@ def test_legacy_snapshot_protocol_remains_explicitly_original_broken(tmp_path,mo
         assert 'execution_feedback' not in kw
     result,_,_=recovery_fixture(tmp_path,monkeypatch,front_check=inspect_front)
     assert result['status']=='RECOVERY_PLAN_UNSUPPORTED'
+
+
+def readiness_observation(source):
+    from contractedge.execution.probe_specs import registered_programs
+    sid=compute_snapshot(source).snapshot_id;pid='alertmanager-reload-v4'
+    message='PROBE_ERROR: server readiness: \nexit status 2\n'
+    fact=dict(operation='PRODUCTION_PROCESS_READINESS',status='FAILED',snapshot_id=sid,
+        producer='REGISTERED_PUBLIC_READINESS_WINDOW_V1',probe_id=pid,scenario='method-'+pid,
+        probe_sha256=hashlib.sha256(registered_programs()[pid][0].encode()).hexdigest(),
+        source_locations=[],source_cause='UNKNOWN',observation_window_seconds=20,
+        build_passed=True,process_started=True,before_scenario_injection=True,
+        stderr_excerpt=message,stderr_sha256=hashlib.sha256(message.encode()).hexdigest(),stderr_truncated=False)
+    return dict(status='EXECUTION_FAILED',snapshot_id=sid,observations=[],method_probe_status='PROBE_ERROR',candidate_runtime_failures=[fact])
+
+
+def test_current_seed_bootstrap_keeps_registered_failure_before_rediagnosis(tmp_path,monkeypatch):
+    from contractedge.orchestration.feedback import feedback_prompt_view
+    seen=[]
+    def inspect_front(source,*args,**kwargs):
+        feedback=kwargs['execution_feedback']
+        assert feedback['to_snapshot']==compute_snapshot(source).snapshot_id
+        assert feedback['semantic_outcome']=='UNKNOWN'
+        assert feedback['observation_diagnostics'][0]['operation']=='PRODUCTION_PROCESS_READINESS'
+        task=feedback_prompt_view(feedback)['failure_tasks']['shared_execution_errors'][0]
+        assert task['error_field']=='production_readiness' and '20 seconds' in task['actual_error']
+        seen.append(feedback)
+    result,_,_=recovery_fixture(tmp_path,monkeypatch,mode='CURRENT_CANDIDATE',
+        observation_factory=readiness_observation,front_check=inspect_front)
+    assert seen and result['status']=='RECOVERY_PLAN_UNSUPPORTED',result['errors']
+
+
+def test_real_seed_rediagnosis_request_preserves_bounded_operation_fact(tmp_path):
+    from contractedge.contracts.validation import canonical_digest,parse_method_input
+    from contractedge.orchestration.feedback import make_feedback
+    from contractedge.orchestration.runner import run_front_half
+    from contractedge.execution.public import public_failure_diagnostics
+    from tests.test_contracts import valid_method_input
+    source=tmp_path/'source';source.mkdir();path=source/'main.go'
+    path.write_text('package main\nfunc main(){ enabled := false; _ = enabled }\n')
+    original=compute_snapshot(source).snapshot_id
+    path.write_text('package main\nfunc main(){ enabled := false; seedCurrentMarker := true; _ = enabled; _ = seedCurrentMarker }\n')
+    current=compute_snapshot(source).snapshot_id;value=valid_method_input();value.update(initial_snapshot_id=original,
+        requirement_text='When main runs, enabled must be true.',scope_hints=[dict(kind='path',value='main.go',raw_text='main.go',origin_ref='public fixture')])
+    value['input_digest']=canonical_digest({k:v for k,v in value.items() if k!='input_digest'});method=parse_method_input(value)
+    observation=readiness_observation(source)
+    handoff=make_feedback(case_id=method.case_id,run_id='seed-failure-capture',input_digest=method.input_digest,
+        round_id=0,from_snapshot=original,to_snapshot=current,patch_digest='c'*64,
+        execution_status='EXECUTION_FAILED',observations=[],plan={},
+        review=dict(decision='UNKNOWN',checks=[],failure_kind='UNKNOWN'),observation_diagnostics=public_failure_diagnostics(observation))
+    requests=[]
+    class Capture:
+        def complete_json(self,request):
+            requests.append(request);raise RuntimeError('No HTTP provider; capture boundary')
+    run_front_half(method,source,Capture(),dict(run_id='seed-failure-capture',model={'model':'fixture'},
+        max_context_tokens=220000,initial_diagnosis_context_tokens=120000,max_total_tokens=2000000,
+        max_output_tokens=1000,max_model_calls=12,max_elapsed_seconds=30,max_format_retries=0),len,execution_feedback=handoff)
+    assert len(requests)==1
+    body=json.dumps(requests[0].messages)
+    assert 'PRODUCTION_PROCESS_READINESS' in body and '20 seconds' in body
+    assert json.loads(requests[0].messages[1]['content'])['run_context']['snapshot_id']==current
 
 
 def test_real_front_serializes_current_seed_source_without_relabeling_initial_snapshot(tmp_path):

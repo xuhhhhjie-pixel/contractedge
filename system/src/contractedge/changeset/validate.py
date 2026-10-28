@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections import Counter
 from typing import Any, Mapping
 
 from contractedge.contracts.models import DiagnosisPacket, Snapshot, ValidationResult, ValidationIssue
@@ -75,15 +76,59 @@ def production_branch_rebinding_gaps(payload: Mapping, diagnosis: DiagnosisPacke
     return gaps
 
 
+def _prerequisite_input_issues(payload, diagnosis, prerequisites, source_support):
+    """Independent source identities/citations remain safe after a count error.
+
+    Cross-reference/edit/behavior semantics still wait for valid full shape.
+    Do not spend a correction fixing count only to expose an already-bad quote.
+    """
+    if prerequisites is None or not isinstance(payload,Mapping):return []
+    rows=payload.get('precondition_review',[])
+    if not isinstance(rows,list):return []
+    issues=[]
+    if all(isinstance(r,Mapping) and isinstance(r.get('source_evidence_ref'),str) for r in rows):
+        expected={r['source_evidence_ref'] for r in prerequisites};supplied=[r['source_evidence_ref'] for r in rows]
+        if set(supplied)!=expected or len(supplied)!=len(set(supplied)):
+            issues.append(ValidationIssue('PRECONDITION_REVIEW_INCOMPLETE','precondition_review',
+                'Review each source exactly once. Missing: '+', '.join(sorted(expected-set(supplied)))
+                +'; unexpected: '+', '.join(r[:100] for r in sorted(set(supplied)-expected))
+                +'; duplicate: '+', '.join(r[:100] for r,n in Counter(supplied).items() if n>1)
+                +'. Consolidate all conditions and check references for each canonical source into one review.'))
+    records={}
+    for record in source_support or []:records.setdefault(record.get('id'),[]).append(record)
+    seen=set()
+    for index,row in enumerate(rows):
+        if not isinstance(row,Mapping) or not isinstance(row.get('source_evidence_ref'),str):continue
+        entry=row.get('establishment')
+        if (not isinstance(entry,Mapping) or not isinstance(entry.get('mode'),str)
+                or entry['mode'] not in {'CURRENT_SOURCE','PLANNED_CHANGE'}):continue
+        quote=entry.get('source_quote')
+        if not isinstance(quote,str):continue  # Shape checker owns this error.
+        eid=row['source_evidence_ref'];sources=records.get(eid,[])
+        valid=bool(quote.strip()) and bool(sources)
+        for record in sources:
+            text=record.get('excerpt')
+            valid=valid and record.get('kind')=='SOURCE_SPAN' and record.get('snapshot_id')==diagnosis.snapshot_id and (
+                isinstance(text,str) and quote in text and hashlib.sha256(text.encode()).hexdigest()==record.get('content_digest'))
+        if not valid and (eid,quote) not in seen:
+            seen.add((eid,quote))
+            issues.append(ValidationIssue('PRECONDITION_ESTABLISHMENT_INVALID',
+                f'precondition_review[{index}].establishment.source_quote',
+                f'Quote for {eid} does not bind the delivered current source. Copy one short exact source line; '
+                'do not paraphrase code or double-escape newlines/tabs. A source quote is not proof of the asserted semantic guarantee.'))
+    return issues
+
+
 def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: DiagnosisPacket,
                                 snapshot: Snapshot | None, *, policy: Mapping | None = None,
                                 frontier: list | None = None,
                                 prerequisites: list | None = None, capabilities: Mapping | None = None,
                                 source_support: list | None = None) -> ValidationResult:
     result = validate_changeset(payload, diagnosis, snapshot)
+    independent = _prerequisite_input_issues(payload,diagnosis,prerequisites,source_support)
     if result.value is None:
-        return result
-    issues = list(result.errors)
+        return ValidationResult(False,tuple([*result.errors,*independent]),None)
+    issues = [*result.errors,*independent]
     try:
         consumer = resolve_execution_capabilities(capabilities)
         check_catalog = public_check_catalog(consumer)
@@ -95,20 +140,10 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
             issues.append(ValidationIssue('UNSUPPORTED_EXECUTION_OPERATION', f'changes[{index}].operation',
                 'Execution consumer supports only ' + ', '.join(consumer['supported_operations'])))
     if prerequisites is not None:
-        expected = {r['source_evidence_ref'] for r in prerequisites}
         rows = payload.get('precondition_review', [])
-        supplied = [r['source_evidence_ref'] for r in rows]
-        if set(supplied) != expected or len(supplied) != len(set(supplied)):
-            issues.append(ValidationIssue('PRECONDITION_REVIEW_INCOMPLETE', 'precondition_review',
-                'Review every supplied prerequisite source exactly once: '+', '.join(sorted(expected))))
         checks = {r['id']:r for kind in ('postconditions', 'preserve_constraints') for r in payload.get(kind, [])}
         opened = {r['id'] for r in payload.get('open_obligations', [])}
         required_establishment = {r['source_evidence_ref'] for r in prerequisites if r.get('establishment_required') is True}
-        # Support must have been delivered in the current planning request.
-        # A quote/reference is accountability, not automatic semantic entailment.
-        support = {}
-        for record in source_support or []:
-            support.setdefault(record.get('id'), []).append(record)
         change_ids = {c['id'] for c in payload['changes']}
         for i, row in enumerate(rows):
             refs, unresolved = row['verification_refs'], row['open_obligation_refs']
@@ -139,16 +174,6 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
             valid_establishment = mode in modes[disposition]
             valid_establishment = valid_establishment and set(edits) <= change_ids
             valid_establishment = valid_establishment and (bool(edits) if mode == 'PLANNED_CHANGE' else not edits)
-            if mode in {'CURRENT_SOURCE', 'PLANNED_CHANGE'}:
-                quote = establishment['source_quote']
-                records = support.get(row['source_evidence_ref'], [])
-                valid_establishment = valid_establishment and bool(quote.strip()) and bool(records)
-                for record in records:
-                    excerpt = record.get('excerpt')
-                    valid_establishment = valid_establishment and (
-                        record.get('kind') == 'SOURCE_SPAN' and record.get('snapshot_id') == diagnosis.snapshot_id
-                        and isinstance(excerpt, str) and quote in excerpt
-                        and hashlib.sha256(excerpt.encode()).hexdigest() == record.get('content_digest'))
             if not valid_establishment:
                 issues.append(ValidationIssue('PRECONDITION_ESTABLISHMENT_INVALID', f'precondition_review[{i}].establishment',
                     'Match establishment mode to disposition; PLANNED_CHANGE binds nonempty existing change IDs, other modes have none. '

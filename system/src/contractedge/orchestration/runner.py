@@ -582,11 +582,44 @@ def required_source_prerequisites(candidate_set, *, helper_support=(), establish
             'guard can require changing earlier initialization as well as later cleanup. Link applicable '
             'conditions to existing checks or open obligations; do not treat lexical context as causal proof '
             'or an additional editable target.')))
-    if len(rows)>12:
-        raise BudgetExceeded('Planning prerequisite review exceeds the existing 12-record contract; no required contract was silently dropped')
     if establishment_required:
+        def source_key(snapshot_id,path,loc,text,digest):
+            if (not isinstance(snapshot_id,str) or not snapshot_id or not isinstance(path,str) or not path
+                    or not isinstance(text,str) or not isinstance(loc,Mapping) or hashlib.sha256(text.encode()).hexdigest()!=digest
+                    or type(loc.get('start_line')) is not int or type(loc.get('end_line')) is not int
+                    or not 1<=loc['start_line']<=loc['end_line']):
+                return None
+            return (snapshot_id,path,loc['start_line'],loc['end_line'],digest)
+        bindings={}
+        def bind(eid,key):
+            if eid in bindings and (key is None or bindings[eid] is None or bindings[eid]!=key):
+                raise ValueError('Prerequisite source ID is ambiguous across physical source records: '+eid)
+            bindings[eid]=key
+        for unit in candidate_set.candidates:
+            bind('SRC-'+unit['id'],source_key(unit.get('snapshot_id'),unit.get('path'),unit.get('locator',{}),
+                unit.get('text'),unit.get('content_digest')))
+        for helper in helper_support:
+            loc=helper.get('locator',{})
+            if not isinstance(loc,Mapping):loc={}
+            bind(helper['id'],source_key(helper.get('snapshot_id'),loc.get('path'),loc,
+                helper.get('excerpt'),helper.get('content_digest')))
+        # Physical equality only. Keep every role rationale and all original
+        # source evidence; this is neither semantic equivalence nor permission.
+        unique={};combined=[]
+        for index,row in enumerate(rows):
+            eid=row['source_evidence_ref'];key=bindings.get(eid) or ('UNBOUND',index)
+            if key not in unique:
+                row=dict(row);unique[key]=row;combined.append(row)
+            else:
+                canonical=unique[key]
+                if row['reason'] not in canonical['reason']:canonical['reason']+=' '+row['reason']
+                if eid!=canonical['source_evidence_ref'] and eid not in canonical.get('source_alias_refs',[]):
+                    canonical.setdefault('source_alias_refs',[]).append(eid)
+        rows=combined
         for row in rows:
             row['establishment_required'] = True
+    if len(rows)>12:
+        raise BudgetExceeded('Planning prerequisite review exceeds the existing 12-record contract; no required contract was silently dropped')
     return rows
 
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections import Counter
 from pathlib import PurePosixPath
 from pathlib import Path
 from typing import Any, Mapping
@@ -47,18 +48,36 @@ def _load_schema(version: str) -> dict[str, Any]:
         raise ContractError("SCHEMA_UNAVAILABLE", filename, str(exc)) from exc
 
 
+def _schema_error_message(error) -> str:
+    """Report the violated constraint without echoing a potentially huge value."""
+    if error.validator in {'maxItems','minItems'} and isinstance(error.instance,list):
+        direction='maximum' if error.validator=='maxItems' else 'minimum'
+        message=f'Array has {len(error.instance)} items; {direction} is {error.validator_value}.'
+        if list(error.absolute_path)[-1:]==['precondition_review']:
+            refs=[r.get('source_evidence_ref') for r in error.instance if isinstance(r,Mapping)
+                and isinstance(r.get('source_evidence_ref'),str)]
+            repeated=[f'{ref[:100]} ({count})' for ref,count in Counter(refs).items() if count>1]
+            if repeated:
+                message+=' Duplicate source_evidence_ref: '+', '.join(repeated[:8])+'.'
+                message+=' Consolidate all conditions for each source into one review, preserving every condition and check reference.'
+        return message
+    if error.validator in {'maxLength','minLength'} and isinstance(error.instance,str):
+        return f'String length is {len(error.instance)}; {error.validator} is {error.validator_value}.'
+    return error.message if len(error.message)<=600 else error.message[:600]+' [value echo omitted; consult the supplied schema]'
+
+
 def _check_schema(payload: Any, version: str) -> None:
     schema = _load_schema(version)
     errors = sorted(Draft202012Validator(schema).iter_errors(payload), key=lambda e: tuple(str(x) for x in e.absolute_path))
     if errors:
         error = errors[0]
         path = ".".join(str(part) for part in error.absolute_path)
-        additional = ["SCHEMA_INVALID at " + '.'.join(map(str, e.absolute_path)) + ': ' + e.message[:220]
+        additional = ["SCHEMA_INVALID at " + '.'.join(map(str, e.absolute_path)) + ': ' + _schema_error_message(e)[:220]
                       for e in errors[1:12]]
         pointer_hint = ('; ' + JSON_POINTER_GUIDANCE if any(
             e.validator == 'pattern' and list(e.absolute_path)[-1:] in [['input_pointer'], ['output_pointer']]
             for e in errors) else '')
-        raise ContractError("SCHEMA_INVALID", path, error.message + pointer_hint +
+        raise ContractError("SCHEMA_INVALID", path, _schema_error_message(error) + pointer_hint +
                             ('; additional independent errors: ' + '; '.join(additional) if additional else ''))
 
 

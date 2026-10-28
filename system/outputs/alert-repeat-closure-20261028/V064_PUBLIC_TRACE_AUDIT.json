@@ -1,0 +1,33 @@
+{
+  "status": "PUBLIC_FAILURE_BOUNDARY_IDENTIFIED",
+  "source_sha256": "6cbcfd6d3a9018d31a6ebc0c7e59854f1f3e2f073d3aee839be26eee8668000a",
+  "qualification": {
+    "attempt": "saved-public-failure",
+    "case_id": "RW-ALERTMANAGER-4705",
+    "source_sha256": "6cbcfd6d3a9018d31a6ebc0c7e59854f1f3e2f073d3aee839be26eee8668000a",
+    "method_status": "RECOVERY_REGRESSION_REJECTED",
+    "independent_status": "EXECUTION_FAIL",
+    "public_semantic_status": "UNKNOWN",
+    "model_calls": 6,
+    "patch_bytes": 3287,
+    "completed_at": "2026-10-28T13:07:13.604637+08:00",
+    "counts_in_original46": false,
+    "formal_ready": false
+  },
+  "public_model_calls": {
+    "path": "/home/xhj/contractedge-prerequisite-v064-20261028/saved-public-failure/case/.isolated-c79ae04f3c8343cf9ce09f558c0d0f71/parent-model-calls.json",
+    "sha256": "0f9483534383edca6336d4b821b09573e776f5374c929f7d33443801a1c7d128"
+  },
+  "prerequisite_review_count": 9,
+  "earliest_unsupported_plan_assumption": "Empty initial backlog makes the iterator Next channel close; supplied Subscribe code registers it for future updates without closing it.",
+  "planning_source_delivered": true,
+  "diagnosis_received_seed_failure": true,
+  "first_and_second_edit_responses_identical": true,
+  "failed_trial_snapshot": "a662c172cc9db0ce9ac6642118f6677fb9a91d890d22ca28806e73611e19f133",
+  "failed_trial_feedback_delivered": true,
+  "retry_effective_thinking": "disabled",
+  "current_reasoning_policy": "failed_trial_only recognizes REJECT_REGRESSION with bound predicates, but not UNCOMPARABLE with a verified runtime operation failure",
+  "causal_limit": "Disabled reasoning is a policy gap, not proof that enabling it will repair the implementation.",
+  "independent_details_used": false,
+  "formal_ready": false
+}
