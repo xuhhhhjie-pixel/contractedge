@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-10-29T01:54:41.802239+08:00",
-  "status": "A_REPEAT_AND_CANDIDATE_RECOVERY_PASSED_LAST_BASELINE_RUNNING",
+  "checked_at": "2026-10-29T02:09:56.015629+08:00",
+  "status": "A_REPEAT_RECOVERY_COMPLETE_B_RUNNING",
   "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
   "panel_root": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028",
   "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
   "registered_slots": 46,
-  "closed_slots": 25,
+  "closed_slots": 30,
   "A_pairs": 7,
   "candidate_A_pass": 7,
   "baseline_A_pass": 3,
@@ -17,21 +17,22 @@
   "scores_from_other_method_versions_inherited": false,
   "current_state": {
     "status": "RUNNING",
-    "group": "recovery",
+    "group": "B",
     "active_slot": {
-      "case_id": "RW-ALERTMANAGER-4705",
-      "group": "recovery",
-      "repeat": 1,
-      "slot_id": "fixed46-official-v068-20261028-0688f115ed8fa72b524b54cd",
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-official-v068-20261028-fd56f4f5a51af6f4ac2e99fc",
       "variant": "baseline"
     },
     "owner_pid": 3661213,
-    "closed_slots": 25,
+    "closed_slots": 30,
     "completed_groups": [
       "A",
-      "repeat"
+      "repeat",
+      "recovery"
     ],
-    "at": "2026-10-29T01:49:24.997422+08:00",
+    "at": "2026-10-29T02:08:53.818898+08:00",
     "formal_ready": false
   },
   "formal_ready": false,
@@ -117,5 +118,100 @@
         }
       }
     }
-  ]
+  ],
+  "B_prerequisite": {
+    "open": true,
+    "missing": [],
+    "errors": []
+  },
+  "B_closed_results": [
+    {
+      "case_id": "RW-CAND-114",
+      "variant": "candidate",
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-a59cbd0380209008b953b050/.isolated-d0b8e3b7b2094dfb8b0fe9264b25f9ae/receipt.json",
+          "sha256": "d59a15311aacef5154d0c3196515acdc32d1829648b90470e32fb748a5c65bc8"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-a59cbd0380209008b953b050/RW-CAND-114/repair.trace.json",
+          "sha256": "80e4bd2021529872d5be763b56dbd5320eb8c1394bbc3ef9f49b948a0f1ace6d"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-a59cbd0380209008b953b050/result.json",
+          "sha256": "48c8e09930fcf0665e92ef088f94f9f79343cf0615ebb3e5029d2b57df8008e1"
+        }
+      }
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "variant": "baseline",
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-620390e2891096c1ce2941a2/.isolated-5d8d01e4c845466d8ba9de104ec4b5b7/receipt.json",
+          "sha256": "461c3a445e14f518ea368961c83a1a0a2f7d84a81e92b68aea597cfee36e7acf"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-620390e2891096c1ce2941a2/RW-CAND-114/repair.trace.json",
+          "sha256": "a21512a11853b04435efd5dd22cf8dcf4d54f95689416309d722720a9fd3b140"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-620390e2891096c1ce2941a2/result.json",
+          "sha256": "17edd22d0a372695ed807f3dd04ce723e7fd43f00a9a7a44cccbd4fb9b1419de"
+        }
+      }
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "variant": "baseline",
+      "status": "PASS",
+      "public_decision": "PASS",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-b3b20f10c04f6a0bb9714c0b/.isolated-4b1bf6d697824e559917fd8b8bc58306/receipt.json",
+          "sha256": "a3979c1e2c5fd349db594419839e1c85f5ba487f81b4a1c4e835fab44a5263b3"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-b3b20f10c04f6a0bb9714c0b/RW-CAND-134/repair.trace.json",
+          "sha256": "88be2a68f9d5e15658bfc69880cd9cae887ce3eb43b67a592bb365b71f4df780"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-b3b20f10c04f6a0bb9714c0b/result.json",
+          "sha256": "40b9f7030b6d53f04a91b83ce76fc5b0604026bddc4443415fa9fcc6c38ec8e3"
+        }
+      }
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "variant": "candidate",
+      "status": "PASS",
+      "public_decision": "PASS",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-a4651652e0f25e417ab23767/.isolated-61940fd2a7fa4c63b00229199e984340/receipt.json",
+          "sha256": "0ec876b693198e10bf7b43fb4f320dcf2675feb28c1b45152b53b1875fbfc55b"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-a4651652e0f25e417ab23767/RW-CAND-134/repair.trace.json",
+          "sha256": "675c47738e443c413545472f5001156b9fcfcc9e8d240364c35c1452e94edcd0"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-a4651652e0f25e417ab23767/result.json",
+          "sha256": "24c4f3580054ec39bd79b8af81d46f7f032591ffa7ba7039c185b65c30758500"
+        }
+      }
+    }
+  ],
+  "B_as_of_summary": {
+    "closed_slots": 4,
+    "complete_pairs": 2,
+    "registered_pairs": 10,
+    "candidate_pass": 2,
+    "baseline_pass": 2,
+    "paired_regressions": 0
+  }
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-29T01:54:41.802239+08:00",
+  "as_of": "2026-10-29T02:09:56.015629+08:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3297,7 +3297,7 @@
     }
   },
   "current_development": {
-    "status": "V068_A_AND_REPEAT_COMPLETE_SAVED_FAILURE_RECOVERY_RUNNING",
+    "status": "V068_A_REPEAT_RECOVERY_COMPLETE_B_RUNNING",
     "planned_version": "0.6.68",
     "base_commit": "b2308e297b524932729ef058982adf7e2c34874f",
     "snapshot": "docs/development/quote-binding-v068-20261028.snapshot.json",
@@ -3311,21 +3311,22 @@
     "report": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
     "active_experiment": {
       "status": "RUNNING",
-      "group": "recovery",
+      "group": "B",
       "active_slot": {
-        "case_id": "RW-ALERTMANAGER-4705",
-        "group": "recovery",
-        "repeat": 1,
-        "slot_id": "fixed46-official-v068-20261028-0688f115ed8fa72b524b54cd",
+        "case_id": "RW-HELM-CONTROLLER-1589",
+        "group": "B",
+        "repeat": 0,
+        "slot_id": "fixed46-official-v068-20261028-fd56f4f5a51af6f4ac2e99fc",
         "variant": "baseline"
       },
       "owner_pid": 3661213,
-      "closed_slots": 25,
+      "closed_slots": 30,
       "completed_groups": [
         "A",
-        "repeat"
+        "repeat",
+        "recovery"
       ],
-      "at": "2026-10-29T01:49:24.997422+08:00",
+      "at": "2026-10-29T02:08:53.818898+08:00",
       "formal_ready": false
     },
     "prior_cohort": {
@@ -3354,7 +3355,7 @@
       "root": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028",
       "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
       "registered_slots": 46,
-      "closed_slots": 25,
+      "closed_slots": 30,
       "scores_inherited": false,
       "status": "RUNNING",
       "runtime_state": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/acceptance-state.json",
@@ -3534,7 +3535,7 @@
     "original_registration_sha256": "e24f0320987a15c9ed2867ebb6f55efb104c4e7ce4b6a9bccd1565a5d34e099b",
     "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
     "registered_slots": 46,
-    "closed_slots": 25,
+    "closed_slots": 30,
     "scores_inherited": false,
     "extra_cases_added": 0,
     "early_gate_reuses_original_necessary_conditions": true,
@@ -3549,7 +3550,7 @@
     "formal_ready": false,
     "report": "outputs/alert-repeat-closure-20261028/administrative-admission",
     "current_progress_report": "outputs/alert-repeat-closure-20261028/V068_ADMINISTRATIVE_RECOVERY.md",
-    "as_of_records": 25,
+    "as_of_records": 30,
     "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
     "gates": {
       "G0": "PASS_STATIC150",
