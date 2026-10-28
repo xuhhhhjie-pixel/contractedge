@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-28T16:25:40.165221+08:00",
+  "as_of": "2026-10-28T16:45:06.622844+08:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3297,19 +3297,19 @@
     }
   },
   "current_development": {
-    "status": "V067_OFFICIAL_ORIGINAL46_REGISTERED_READY_TO_RUN_A",
+    "status": "V067_OFFICIAL_CROSS_CASE_KPT_QUOTE_BINDING_FAILED",
     "planned_version": "0.6.67",
     "base_commit": "d4101bfb507cb71cd39ac30f88ca46a1b3b31262",
     "snapshot": "docs/development/behavior-plan-closure-v067-20261028.snapshot.json",
     "planned_snapshot": "docs/development/behavior-plan-closure-v067-20261028.snapshot.json",
     "source_sha256": "5e1758b0ac0a306f089f9a1e2aacb58aff12739a803ac5544b44d95392bf3387",
     "formal_ready": false,
-    "paid_dispatch_allowed": true,
+    "paid_dispatch_allowed": false,
     "integration_requires_new_qualification": false,
     "full_new_source_qualification": true,
     "budget_cny": 200,
     "report": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
-    "active_experiment": "/home/xhj/contractedge-fixed46-official-v067-20261028",
+    "active_experiment": null,
     "prior_cohort": {
       "root": "/home/xhj/contractedge-fixed46-source061-20261028",
       "version": "0.6.61",
@@ -3318,9 +3318,9 @@
       "scores_inherited": false
     },
     "next_actions": [
-      "Finish original46 official-provider zero-call preflight and registration",
-      "Run same frozen version A then repeat/recovery, B only after gates",
-      "Bind final delivery and formal readiness evidence; do not start formal150 before READY"
+      "Improve existing prerequisite quote error localization without relaxing source identity checks",
+      "Replay saved KPT rejected output and current-source correction before any new paid full case",
+      "Qualify exact next source and resume original same-version acceptance only after targeted evidence"
     ],
     "paid_dispatch_scope": "Original fixed46 A then repeat/recovery; B only after existing gates; official profile/key and shared200CNY ledger; no auto retry",
     "full_regression": "outputs/alert-repeat-closure-20261028/V067_FULL_REGRESSION.json",
@@ -3337,7 +3337,9 @@
       "panel_sha256": "b5ee91a96ff1808141fd6249af0f5ad3c790e2792cf7537dd818a133bcb50ce0",
       "registered_slots": 46,
       "closed_slots_at_registration": 0,
-      "scores_inherited": false
+      "scores_inherited": false,
+      "closed_slots": 3,
+      "status": "STOPPED_EFFECT_PREREQUISITE"
     }
   },
   "staged_implementation_version": "0.6.67",
