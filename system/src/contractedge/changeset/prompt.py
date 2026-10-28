@@ -104,6 +104,8 @@ def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = Non
         schema['required'].append('precondition_review')
         properties['precondition_review']['minItems'] = len(prerequisites)
         properties['precondition_review']['items']['properties']['source_evidence_ref']['enum'] = [r['source_evidence_ref'] for r in prerequisites]
+        if any(r.get('establishment_required') is True for r in prerequisites):
+            properties['precondition_review']['items']['required'].append('establishment')
     else:
         properties.pop('precondition_review', None)
     properties.pop("obligation_lineage",None)
@@ -241,6 +243,19 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
             'UNRESOLVED binds existing open_obligation_refs and does not claim the condition satisfied. '
             'NOT_APPLICABLE has empty reference arrays and a source-grounded relevance rationale. '
             'This is prerequisite accountability, not a static proof that the proposed code or synchronization is correct.')
+        if any(r.get('establishment_required') is True for r in prerequisites):
+            system_prompt += (' For each precondition_review provide establishment independently of verification_refs: '
+                'CURRENT_SOURCE identifies the existing establishment mechanism with a verbatim source_quote from that '
+                'source_evidence_ref and no change_refs. PLANNED_CHANGE identifies real change_refs and how those edits '
+                'will establish the condition before its dependent use; source_quote locates the current limitation, '
+                'not nonexistent repair code. Use UNRESOLVED or NOT_APPLICABLE with matching disposition and no changes. '
+                'A test is a later observation, never an establishment mechanism. For asynchronous work distinguish '
+                'launch, empty-state initialization, data consumption/completion, publication to readers, and retirement. '
+                'State the actual completion boundary and ordering; starting a worker or receiving a buffered iterator '
+                'does not prove its data has been consumed. When the existing implementation lacks a completion primitive, '
+                'plan one within authorized existing targets and caller dependencies if its input/ownership contracts are '
+                'evidenced. Its absence alone is a repair task, not missing evidence. Leave genuinely unknown contracts open. '
+                'These records constrain intent and source identity; execution and finite behavior checks still decide the outcome.')
     if probe_ids:
         system_prompt += " Registered method_behavior_probes are additional public method-owned observations, not frozen independent scorers. For obligations actually covered by these probe assertions choose PUBLIC_BEHAVIOR, set verification_scope.scenario to the registered method scenario and predeclare all necessary behavior_check_refs. Missing, failed or unrelated check results cannot establish PASS. Respect each probe boundary; do not infer external runtime coverage from local stand-ins."
     if capabilities.get('registered_public_checks'):
@@ -300,7 +315,8 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
             ensure_ascii=False, sort_keys=True)})
         draft_metadata = dict(previous_changeset_sha256=digest, previous_changeset_state=previous_attempt['state'],
                               previous_changeset_message_sha256=projected_digest)
-    return ModelRequest(model=model, prompt_version=("changeset.v1.1.14" if capabilities.get('registered_public_checks') else
+    return ModelRequest(model=model, prompt_version=("changeset.v1.1.15" if any(r.get('establishment_required') is True for r in prerequisites) else
+                        "changeset.v1.1.14" if capabilities.get('registered_public_checks') else
                         "changeset.v1.1.13" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.12"),
                         messages=messages,
                         max_output_tokens=max_tokens, temperature=0.0,
@@ -308,6 +324,8 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
                                   "input_digest": run_context.input_digest,
                                   "execution_capabilities_digest": canonical_digest(capabilities),
                                   "system_prompt_sha256": hashlib.sha256(system_prompt.encode()).hexdigest(),
+                                  **({'precondition_establishment_required':True}
+                                     if retrieval.get('precondition_establishment_required') is True else {}),
                                   **({'planning_helper_contracts':user_payload['run_context']['planning_helper_contracts']}
                                      if retrieval.get('planning_helper_contracts') is True else {}),
                                   **draft_metadata},

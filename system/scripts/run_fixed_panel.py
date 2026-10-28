@@ -225,12 +225,40 @@ def run_panel(panel_path, group, key):
     return 0
 
 
+def inspect_panel(panel_path):
+    """Read-only progress: durable RUNNING alone is never liveness evidence.
+
+    All dispatch and grading happen under this lock. A free lock and RUNNING
+    require operator audit; this observation never retries a method or grader.
+    """
+    panel = verify_panel(panel_path)
+    root = Path(panel['output_root'])
+    state = read(root/'state.json') if (root/'state.json').exists() else {'status':'NOT_STARTED'}
+    held = False
+    try:
+        lock = os.open(root/'controller.lock', os.O_RDONLY | os.O_NOFOLLOW)
+    except FileNotFoundError:
+        pass
+    else:
+        try:
+            try: fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError: held = True
+        finally: os.close(lock)
+    return {'recorded_state':state, 'controller_lock_held':held,
+            'observed_status':('INTERRUPTED_AUDIT_REQUIRED' if state.get('status') == 'RUNNING' and not held else state.get('status')),
+            'closed_slots':len(verified_records(panel_path,panel)), 'registered_slots':len(panel['slots']),
+            'model_calls_added':0, 'automatic_method_retry':False, 'formal_ready':False}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--panel', required=True, type=Path)
     parser.add_argument('--group', choices=['A', 'repeat', 'recovery', 'B', 'all'], default='A')
     parser.add_argument('--dry-run', action='store_true'); parser.add_argument('--api-key-file', type=Path)
+    parser.add_argument('--inspect', action='store_true', help='Read verified progress and detect an abandoned RUNNING state; no credentials or dispatch')
     args = parser.parse_args(); panel = verify_panel(args.panel)
+    if args.inspect:
+        print(json.dumps(inspect_panel(args.panel), sort_keys=True)); return 0
     if args.dry_run:
         print(json.dumps({'slots': panel['slots'], 'count': len(panel['slots']), 'dispatches': 0,
                           'formal_ready': False}, sort_keys=True)); return 0

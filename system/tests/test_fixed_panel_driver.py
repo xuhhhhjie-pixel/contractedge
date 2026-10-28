@@ -19,6 +19,31 @@ import pytest
 from tests.test_fixed_panel import fixture, slot_identity
 
 
+def test_inspect_detects_abandoned_running_state_without_dispatch(tmp_path):
+    module = load(); panel, path, _ = fixture(tmp_path)
+    root = Path(panel['output_root']); root.mkdir()
+    state = root/'state.json'; state.write_text(json.dumps({'status':'RUNNING','active_slot':panel['slots'][0]}))
+    before = state.read_bytes()
+    result = module.inspect_panel(path)
+    assert result['observed_status'] == 'INTERRUPTED_AUDIT_REQUIRED'
+    assert result['controller_lock_held'] is False
+    assert result['model_calls_added'] == 0
+    assert state.read_bytes() == before
+    assert not (root/'controller.lock').exists()
+
+
+def test_inspect_keeps_live_controller_distinct_from_abandoned_state(tmp_path):
+    import fcntl
+    module = load(); panel, path, _ = fixture(tmp_path)
+    root = Path(panel['output_root']); root.mkdir()
+    (root/'state.json').write_text(json.dumps({'status':'RUNNING'}))
+    with (root/'controller.lock').open('a') as lock:
+        fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        result = module.inspect_panel(path)
+    assert result['observed_status'] == 'RUNNING'
+    assert result['controller_lock_held'] is True
+
+
 def load():
     scripts=Path(__file__).resolve().parents[1]/'scripts';path=scripts/'run_fixed_panel.py'
     assert path.is_file(), 'Durable isolated panel driver is not implemented'

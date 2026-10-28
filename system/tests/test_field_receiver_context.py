@@ -143,6 +143,7 @@ def test_field_context_crosses_diagnosis_plan_ready_and_execution_without_edit_g
                 plan['precondition_review']=[dict(source_evidence_ref=r['source_evidence_ref'],
                     condition='Worker is an unrelated read-only control in this rendering fixture.',
                     disposition='NOT_APPLICABLE',verification_refs=[],open_obligation_refs=[],
+                    establishment=dict(mode='NOT_APPLICABLE',source_quote='',change_refs=[],mechanism='No worker state is changed by the rendering edit.'),
                     rationale='The fixture changes only ServiceAccount rendering, not worker state.')
                     for r in body['source_prerequisites']]
                 return ModelResponse(json.dumps(plan),{})

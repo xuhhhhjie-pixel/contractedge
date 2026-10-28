@@ -148,21 +148,26 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
     public = tuple(e for e in trace['diagnosis']['evidence_refs'] if e['kind'] == 'PUBLIC_OBSERVATION')
     run_input = replace(method_input, public_evidence=public or method_input.public_evidence)
     declaration=None
+    establishment_declaration=False
     for call in reversed(trace.get('model_calls',[])):
         if str(call.get('prompt_version','')).startswith('changeset.'):
             declaration=call.get('request_metadata',{}).get('planning_helper_contracts')
+            establishment_declaration=call.get('request_metadata',{}).get('precondition_establishment_required',False)
             break
     expected_declaration=({'enabled':True,'max_bytes':context.retrieval_config.get('planning_helper_max_bytes',24000)}
         if context.retrieval_config.get('planning_helper_contracts') is True else None)
     if canonical_digest(declaration)!=canonical_digest(expected_declaration):
         raise ValueError('Ready trace helper context differs from its actual planning declaration')
+    if establishment_declaration != context.retrieval_config.get('precondition_establishment_required',False):
+        raise ValueError('Ready trace establishment requirements differ from actual planning declaration')
     helpers=[]
     if context.retrieval_config.get('planning_helper_contracts') is True:
         from contractedge.execution.helper_context import planning_helper_source_support
         helpers,_=planning_helper_source_support(snapshot,candidates.candidates,
             max_bytes=context.retrieval_config.get('planning_helper_max_bytes',24000))
     expected_support = required_planning_source_support(run_input,candidates,snapshot.snapshot_id,helper_support=helpers)
-    expected_prerequisites = required_source_prerequisites(candidates,helper_support=helpers)
+    expected_prerequisites = required_source_prerequisites(candidates,helper_support=helpers,
+        establishment_required=context.retrieval_config.get('precondition_establishment_required') is True)
     if (context.retrieval_config.get('necessary_source_support', []) != expected_support
             or context.retrieval_config.get('source_prerequisites', []) != expected_prerequisites):
         raise ValueError('Ready trace prerequisite context differs from actually supplied current source')
@@ -176,6 +181,7 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
         policy=(context.retrieval_config.get('public_execution_capabilities') or {}).get('editable_policy'),
         frontier=context.retrieval_config.get('production_path_frontier'),
         prerequisites=context.retrieval_config.get('source_prerequisites'),
+        source_support=context.retrieval_config.get('necessary_source_support'),
         capabilities=context.retrieval_config.get('public_execution_capabilities'))
     if not validation.valid:
         raise ValueError('Ready trace plan failed consumer preflight: ' + str(validation.errors))
@@ -213,6 +219,7 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
         policy=(config.get('public_execution_capabilities') or {}).get('editable_policy'),
         frontier=context.retrieval_config.get('production_path_frontier'),
         prerequisites=context.retrieval_config.get('source_prerequisites'),
+        source_support=context.retrieval_config.get('necessary_source_support'),
         capabilities=context.retrieval_config.get('public_execution_capabilities'))
     if not validation.valid:
         raise PlanRejected('Feedback plan revision failed: ' + str(validation.errors))

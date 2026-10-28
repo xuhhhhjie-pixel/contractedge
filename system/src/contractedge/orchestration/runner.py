@@ -544,7 +544,7 @@ class RunTrace:
 
 
 
-def required_source_prerequisites(candidate_set, *, helper_support=()):
+def required_source_prerequisites(candidate_set, *, helper_support=(), establishment_required=False):
     """One producer/consumer projection of current, already-validated source roles.
 
     The Ready boundary independently recomputes these entries rather than
@@ -584,6 +584,9 @@ def required_source_prerequisites(candidate_set, *, helper_support=()):
             'or an additional editable target.')))
     if len(rows)>12:
         raise BudgetExceeded('Planning prerequisite review exceeds the existing 12-record contract; no required contract was silently dropped')
+    if establishment_required:
+        for row in rows:
+            row['establishment_required'] = True
     return rows
 
 
@@ -863,7 +866,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 diagnosis=diagnosis_wire, changeset=changeset_payload, feedback=execution_feedback,
                 necessary_support=(required_planning_source_support(parsed, candidate_set, snapshot_id,helper_support=planning_helpers)
                                    if planning and candidate_set is not None else ()),
-                prerequisites=(required_source_prerequisites(candidate_set,helper_support=planning_helpers)
+                prerequisites=(required_source_prerequisites(candidate_set,helper_support=planning_helpers,establishment_required=True)
                                if planning and candidate_set is not None else ()),
                 evidence=public_observations, source_requirements=planning)
             with monitor.scope(semantic) if monitor is not None else nullcontext():
@@ -1529,8 +1532,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     'planning_helper_contracts':bool(helper_enabled),
                     'planning_helper_max_bytes':helper_bytes,
                     'planning_helper_audit':helper_audit,
+                    'precondition_establishment_required':True,
                     'necessary_source_support': required_planning_source_support(run_input,candidate_set,snapshot.snapshot_id,helper_support=planning_helpers),
-                    'source_prerequisites': required_source_prerequisites(candidate_set,helper_support=planning_helpers)})
+                    'source_prerequisites': required_source_prerequisites(candidate_set,helper_support=planning_helpers,establishment_required=True)})
             run_context_wire = asdict(context)
             changeset_request = build_changeset_request(diagnosis, context, feedback,
                 previous_attempt=previous_changeset_attempt if feedback else None)
@@ -1587,7 +1591,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 validation = validate_semantic_changeset(changeset_payload, diagnosis, snapshot,
                 policy=(config.get('public_execution_capabilities') or {}).get('editable_policy'),
                     frontier=context.retrieval_config.get('production_path_frontier'),
-                    prerequisites=context.retrieval_config.get('source_prerequisites'), capabilities=consumer_capabilities)
+                    prerequisites=context.retrieval_config.get('source_prerequisites'), capabilities=consumer_capabilities,
+                    source_support=context.retrieval_config.get('necessary_source_support'))
             feedback = [{"code": issue.code, "path": issue.path, "message": issue.message}
                         for issue in validation.errors]
             if feedback:

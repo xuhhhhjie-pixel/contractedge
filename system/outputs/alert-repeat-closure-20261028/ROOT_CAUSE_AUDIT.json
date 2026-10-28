@@ -1,0 +1,74 @@
+{
+  "schema_version": "ce.targeted_root_cause_audit.v1",
+  "checked_at": "2026-10-28T10:55:15.449207+08:00",
+  "old_method_version": "0.6.61",
+  "old_panel": {
+    "path": "/home/xhj/contractedge-fixed46-source061-20261028/panel.json",
+    "sha256": "c046621926ae15e68a6824ea2be52b85ad1f75fd83b476499736950a01e9f642"
+  },
+  "closed_slots": 18,
+  "A_candidate_pass": 7,
+  "A_baseline_pass": 2,
+  "repeat_candidate_results": [
+    {
+      "case_id": "R3-KOPF-726",
+      "status": "PASS",
+      "public_decision": "PASS"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "FAIL"
+    }
+  ],
+  "interruption": {
+    "audit_path": "/home/xhj/contractedge-fixed46-source061-20261028/SCORER_INTERRUPTION_AUDIT.json",
+    "audit_sha256": "d611fada1af75ca718146f2a338a274d32f5343d7b074e053924b7c44416a3d7",
+    "cause": "Unknown external process termination; no live scorer/controller and no completed grader result; not enough evidence to identify the killer",
+    "recovery": "Operator-audited once-only scoring of the identical sealed patch; original empty incomplete directory retained",
+    "model_calls_added": 0
+  },
+  "earliest_verified_break": "PLANNING: an initialization/launch contract was treated as readiness; a later test binding substituted for an establishment mechanism",
+  "supporting_source": {
+    "public": true,
+    "source_path": "dispatch/dispatch.go",
+    "symbol": "Dispatcher.Run",
+    "fact": "Run initializes an empty aggregation map and enters subscription consumption; an asynchronous caller has no completion guarantee from launch alone"
+  },
+  "failure_plan_claim": "Run's initialization is the evidenced readiness contract for the new dispatcher.",
+  "failure_patch": {
+    "bytes": 653,
+    "behavior": "Publishes the replacement and launches it before stopping the old object; no readiness barrier"
+  },
+  "public_failure": {
+    "during_missing_samples": 49,
+    "during_samples": 293,
+    "missing_at_reload_return": 9,
+    "reload_return_samples": 20
+  },
+  "later_failure": "Re-diagnosis identifies empty-state/replay correctly, but planning stops with NEEDS_EVIDENCE because no existing readiness primitive is shown; adding a justified local primitive must remain an allowed repair strategy",
+  "remedy": {
+    "existing_record": "precondition_review.establishment",
+    "modes": [
+      "CURRENT_SOURCE",
+      "PLANNED_CHANGE",
+      "UNRESOLVED",
+      "NOT_APPLICABLE"
+    ],
+    "checks": [
+      "Source quote binds delivered same-snapshot hash-checked excerpt",
+      "Planned establishment cites actual change IDs",
+      "Disposition and establishment modes agree",
+      "Requirement persists through correction/READY and execution",
+      "Read-only queue inspection distinguishes abandoned RUNNING"
+    ],
+    "not_proven": [
+      "A source quote alone does not prove the asserted semantics",
+      "A valid plan does not prove the patch implements it",
+      "One real success does not establish stability"
+    ]
+  },
+  "hidden_grader_details_read": false,
+  "method_calls_added_by_audit": 0,
+  "formal_ready": false
+}

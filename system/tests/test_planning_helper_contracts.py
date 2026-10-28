@@ -183,6 +183,7 @@ def test_initial_replanned_ready_and_execution_keep_declared_helper_contracts(tm
                 answer=json.loads(response.content)
                 answer['precondition_review']=[dict(source_evidence_ref=r['source_evidence_ref'],condition='Local Go helper contract',
                     disposition='NOT_APPLICABLE',verification_refs=[],open_obligation_refs=[],
+                    establishment=dict(mode='NOT_APPLICABLE',source_quote='',change_refs=[],mechanism='Unchanged Go helpers are not used by the YAML edit.'),
                     rationale='The accepted edit is only the YAML template; the supplied Go caller and helpers remain unchanged.')
                     for r in body['source_prerequisites']]
                 return ModelResponse(json.dumps(answer),{})
@@ -203,6 +204,15 @@ def test_initial_replanned_ready_and_execution_keep_declared_helper_contracts(tm
     assert any('func Merge(' in r['excerpt'] for r in body['read_only_source_support'])
     assert {r['path'] for r in body['current_target_files']}=={'templates/serviceaccount.yaml'}
     import copy
+    assert context.retrieval_config['precondition_establishment_required'] is True
+    assert all('establishment' in r for r in plan['precondition_review'])
+    assert body['accepted_plan']['precondition_review'] == plan['precondition_review']
+    downgraded = copy.deepcopy(trace)
+    downgraded['run_context']['retrieval_config']['precondition_establishment_required'] = False
+    for row in downgraded['run_context']['retrieval_config']['source_prerequisites']:
+        row.pop('establishment_required', None)
+    with pytest.raises(ValueError, match='establishment requirements'):
+        validate_ready_trace(downgraded,parse_method_input(value),tmp_path)
     altered=copy.deepcopy(trace)
     altered['run_context']['retrieval_config']['necessary_source_support']=[r for r in records if not r['id'].startswith('HELPER-')]
     with pytest.raises(ValueError,match='prerequisite context'):

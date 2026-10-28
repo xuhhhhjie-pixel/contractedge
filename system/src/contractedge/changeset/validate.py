@@ -78,7 +78,8 @@ def production_branch_rebinding_gaps(payload: Mapping, diagnosis: DiagnosisPacke
 def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: DiagnosisPacket,
                                 snapshot: Snapshot | None, *, policy: Mapping | None = None,
                                 frontier: list | None = None,
-                                prerequisites: list | None = None, capabilities: Mapping | None = None) -> ValidationResult:
+                                prerequisites: list | None = None, capabilities: Mapping | None = None,
+                                source_support: list | None = None) -> ValidationResult:
     result = validate_changeset(payload, diagnosis, snapshot)
     if result.value is None:
         return result
@@ -102,6 +103,13 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
                 'Review every supplied prerequisite source exactly once: '+', '.join(sorted(expected))))
         checks = {r['id']:r for kind in ('postconditions', 'preserve_constraints') for r in payload.get(kind, [])}
         opened = {r['id'] for r in payload.get('open_obligations', [])}
+        required_establishment = {r['source_evidence_ref'] for r in prerequisites if r.get('establishment_required') is True}
+        # Support must have been delivered in the current planning request.
+        # A quote/reference is accountability, not automatic semantic entailment.
+        support = {}
+        for record in source_support or []:
+            support.setdefault(record.get('id'), []).append(record)
+        change_ids = {c['id'] for c in payload['changes']}
         for i, row in enumerate(rows):
             refs, unresolved = row['verification_refs'], row['open_obligation_refs']
             disposition = row['disposition']
@@ -116,6 +124,36 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
                     checks[r].get('verification_kind') in {'PUBLIC_BEHAVIOR', 'PUBLIC_STRUCTURE', 'DECLARED_INPUT_EQUALITY'} for r in refs):
                 issues.append(ValidationIssue('PRECONDITION_UNVERIFIED', f'precondition_review[{i}]',
                     'Build-only or unknown checks cannot verify runtime prerequisites; retain an open obligation'))
+            establishment = row.get('establishment')
+            if establishment is None:
+                if row['source_evidence_ref'] in required_establishment:
+                    issues.append(ValidationIssue('PRECONDITION_ESTABLISHMENT_MISSING', f'precondition_review[{i}]',
+                        'A future check does not establish its prerequisite. Identify CURRENT_SOURCE with an exact source quote, '
+                        'PLANNED_CHANGE with real change_refs and a concrete establishment mechanism, or keep it UNRESOLVED. '
+                        'Launching asynchronous work is not completion/readiness.'))
+                continue
+            mode = establishment['mode']
+            edits = establishment['change_refs']
+            modes = {'REQUIRED': {'CURRENT_SOURCE', 'PLANNED_CHANGE'},
+                     'UNRESOLVED': {'UNRESOLVED'}, 'NOT_APPLICABLE': {'NOT_APPLICABLE'}}
+            valid_establishment = mode in modes[disposition]
+            valid_establishment = valid_establishment and set(edits) <= change_ids
+            valid_establishment = valid_establishment and (bool(edits) if mode == 'PLANNED_CHANGE' else not edits)
+            if mode in {'CURRENT_SOURCE', 'PLANNED_CHANGE'}:
+                quote = establishment['source_quote']
+                records = support.get(row['source_evidence_ref'], [])
+                valid_establishment = valid_establishment and bool(quote.strip()) and bool(records)
+                for record in records:
+                    excerpt = record.get('excerpt')
+                    valid_establishment = valid_establishment and (
+                        record.get('kind') == 'SOURCE_SPAN' and record.get('snapshot_id') == diagnosis.snapshot_id
+                        and isinstance(excerpt, str) and quote in excerpt
+                        and hashlib.sha256(excerpt.encode()).hexdigest() == record.get('content_digest'))
+            if not valid_establishment:
+                issues.append(ValidationIssue('PRECONDITION_ESTABLISHMENT_INVALID', f'precondition_review[{i}].establishment',
+                    'Match establishment mode to disposition; PLANNED_CHANGE binds nonempty existing change IDs, other modes have none. '
+                    'CURRENT_SOURCE and PLANNED_CHANGE cite a nonempty verbatim quote from the same delivered current source. '
+                    'Describe completion/initialization before dependent use, rather than substituting launch or a future test for that mechanism.'))
     for index, change in enumerate(payload['changes']):
         target = change['target']
         path = target['path'] if target['kind'] == 'EXISTING' else target['proposed_path']

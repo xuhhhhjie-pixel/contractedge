@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "source_files": 116,
+  "source_sha256": "061bd828681deed7330f6bfb849e851fc9c1dcb2db52c9e88f772d1983cbe93f",
+  "wheel": {
+    "path": ".superpowers/sdd/2026-10-28-alert-repeat-closure/wheels/contractedge_system-0.6.62-py3-none-any.whl",
+    "sha256": "c3f1c916e89cc58d097f159b52cd1aaf6dc2ef19671228f264e2e819706d8775"
+  },
+  "installed_file_map_matches_freeze": true,
+  "model_calls_added": 0,
+  "formal_ready": false
+}

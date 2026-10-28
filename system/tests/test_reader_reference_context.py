@@ -119,6 +119,7 @@ def test_reader_reference_survives_diagnosis_plan_ready_and_execution_without_ed
                 plan['precondition_review']=[dict(source_evidence_ref=r['source_evidence_ref'],
                     condition='This unrelated Go reader is a read-only control, not consumed by the Helm render.',
                     disposition='NOT_APPLICABLE',verification_refs=[],open_obligation_refs=[],
+                    establishment=dict(mode='NOT_APPLICABLE',source_quote='',change_refs=[],mechanism='No state handoff is changed by the Helm edit.'),
                     rationale='No state handoff is changed by this Helm-only fixture.') for r in body['source_prerequisites']]
                 return ModelResponse(json.dumps(plan),{})
             return response

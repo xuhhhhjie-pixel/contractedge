@@ -306,6 +306,17 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 1600
+          },
+          "establishment": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["mode", "source_quote", "change_refs", "mechanism"],
+            "properties": {
+              "mode": {"type": "string", "enum": ["CURRENT_SOURCE", "PLANNED_CHANGE", "UNRESOLVED", "NOT_APPLICABLE"]},
+              "source_quote": {"type": "string", "maxLength": 1200},
+              "change_refs": {"type": "array", "uniqueItems": true, "maxItems": 32, "items": {"type": "string", "minLength": 1}},
+              "mechanism": {"type": "string", "minLength": 1, "maxLength": 1600}
+            }
           }
         }
       }

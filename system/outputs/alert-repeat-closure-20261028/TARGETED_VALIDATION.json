@@ -1,0 +1,22 @@
+{
+  "status": "TARGETED_VALIDATION_FAILED",
+  "completed_at": "2026-10-28T11:17:27.166952+08:00",
+  "results": [
+    {
+      "attempt": "fresh-broken",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "source_sha256": "061bd828681deed7330f6bfb849e851fc9c1dcb2db52c9e88f772d1983cbe93f",
+      "method_status": "CANDIDATE_COMPARISON_UNCERTAIN",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_semantic_status": null,
+      "model_calls": 5,
+      "patch_bytes": 0,
+      "completed_at": "2026-10-28T11:17:26.809604+08:00",
+      "counts_in_original46": false,
+      "formal_ready": false
+    }
+  ],
+  "automatic_retry": false,
+  "counts_in_original46": false,
+  "formal_ready": false
+}
