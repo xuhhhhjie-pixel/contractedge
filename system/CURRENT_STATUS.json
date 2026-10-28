@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-28T07:50:40.936316+00:00",
+  "as_of": "2026-10-28T16:25:40.165221+08:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3297,7 +3297,7 @@
     }
   },
   "current_development": {
-    "status": "V067_OFFICIAL_ENGINEERING_QUALIFIED_TARGETED_VALIDATION_REGISTERED",
+    "status": "V067_OFFICIAL_ORIGINAL46_REGISTERED_READY_TO_RUN_A",
     "planned_version": "0.6.67",
     "base_commit": "d4101bfb507cb71cd39ac30f88ca46a1b3b31262",
     "snapshot": "docs/development/behavior-plan-closure-v067-20261028.snapshot.json",
@@ -3309,7 +3309,7 @@
     "full_new_source_qualification": true,
     "budget_cny": 200,
     "report": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
-    "active_experiment": "/home/xhj/contractedge-behavior-plan-official-v067-20261028",
+    "active_experiment": "/home/xhj/contractedge-fixed46-official-v067-20261028",
     "prior_cohort": {
       "root": "/home/xhj/contractedge-fixed46-source061-20261028",
       "version": "0.6.61",
@@ -3318,20 +3318,27 @@
       "scores_inherited": false
     },
     "next_actions": [
-      "Verify exact source engineering once",
-      "Run bounded saved public failure recovery; fresh Broken only if passed",
-      "Continue same-version cross-case acceptance only after targeted success"
+      "Finish original46 official-provider zero-call preflight and registration",
+      "Run same frozen version A then repeat/recovery, B only after gates",
+      "Bind final delivery and formal readiness evidence; do not start formal150 before READY"
     ],
-    "paid_dispatch_scope": "One saved public failure, then fresh Broken only after independent PASS with no public FAIL; stop at first failure; official model only",
+    "paid_dispatch_scope": "Original fixed46 A then repeat/recovery; B only after existing gates; official profile/key and shared200CNY ledger; no auto retry",
     "full_regression": "outputs/alert-repeat-closure-20261028/V067_FULL_REGRESSION.json",
-    "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V066_TARGETED_VALIDATION.json",
+    "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V067_TARGETED_VALIDATION.json",
     "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/V064_TARGETED_VALIDATION.json",
     "status_before_user_pause": "V066_TARGETED_PUBLIC_BEHAVIOR_FAILED_INDEPENDENT_PASS",
     "user_paused": false,
     "paused_at": "2026-10-28T07:00:52.192898+00:00",
     "pause_boundary": "v066 targeted validation closed; behavior-failure routing and Go-comment guard edits remain uncommitted/unqualified; no v067 paid attempt started",
     "provider_config_requires_new_binding": true,
-    "resumed_at": "2026-10-28T07:41:00.531721+00:00"
+    "resumed_at": "2026-10-28T07:41:00.531721+00:00",
+    "current_cohort": {
+      "root": "/home/xhj/contractedge-fixed46-official-v067-20261028",
+      "panel_sha256": "b5ee91a96ff1808141fd6249af0f5ad3c790e2792cf7537dd818a133bcb50ce0",
+      "registered_slots": 46,
+      "closed_slots_at_registration": 0,
+      "scores_inherited": false
+    }
   },
   "staged_implementation_version": "0.6.67",
   "runtime_implementation_version": "0.6.40",
@@ -3486,7 +3493,7 @@
     "reported_model": "deepseek-flash",
     "config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
     "model_identity_policy": "require_match",
-    "new_registration_required": true,
+    "new_registration_required": false,
     "official_results_inherit_intermediary_scores": false,
     "scope": "Explicit provider selection for subsequent authorized runs; historical frozen configs are unchanged. Existing CLI requires explicit config and api-key-file arguments."
   }
