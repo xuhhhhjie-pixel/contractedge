@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-10-29T02:38:25.034051+08:00",
+  "checked_at": "2026-10-29T03:08:07.611019+08:00",
   "status": "A_REPEAT_RECOVERY_COMPLETE_B_RUNNING",
   "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
   "panel_root": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028",
   "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
   "registered_slots": 46,
-  "closed_slots": 32,
+  "closed_slots": 34,
   "A_pairs": 7,
   "candidate_A_pass": 7,
   "baseline_A_pass": 3,
@@ -19,20 +19,20 @@
     "status": "RUNNING",
     "group": "B",
     "active_slot": {
-      "case_id": "RW-ARGO-CD-27136",
+      "case_id": "R3-KUBEBUILDER-5119",
       "group": "B",
       "repeat": 0,
-      "slot_id": "fixed46-official-v068-20261028-fc7c9a44ca1c4bb7edb04add",
+      "slot_id": "fixed46-official-v068-20261028-ec66d873adb0dfa95b02688d",
       "variant": "baseline"
     },
     "owner_pid": 3661213,
-    "closed_slots": 32,
+    "closed_slots": 34,
     "completed_groups": [
       "A",
       "repeat",
       "recovery"
     ],
-    "at": "2026-10-29T02:35:48.028720+08:00",
+    "at": "2026-10-29T03:03:36.285096+08:00",
     "formal_ready": false
   },
   "formal_ready": false,
@@ -244,15 +244,101 @@
           "sha256": "5c8f98aad31cf3a775c7d6869c312981ace7f2f3c8f3b9ff4867c42884b86b9b"
         }
       }
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "variant": "baseline",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-fc7c9a44ca1c4bb7edb04add/.isolated-bb9fe30b59e64fd893a06b51bc759518/receipt.json",
+          "sha256": "e5216388d463eb8ebb16b516c5a7eadbef17627a1718211257a2118be012f24f"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-fc7c9a44ca1c4bb7edb04add/RW-ARGO-CD-27136/repair.trace.json",
+          "sha256": "25b02a137a37f12a984919e8bf920b1dc94da8c3c64a1d7958dd4dae85a8630d"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-fc7c9a44ca1c4bb7edb04add/result.json",
+          "sha256": "61bee58547d8e6479a906d1af9bffc98fa33689464fee6fd8cbc22903d1d9388"
+        }
+      }
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "variant": "candidate",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/.isolated-395d46b2d44447e0adcb45722f924af7/receipt.json",
+          "sha256": "daa8abc2bcfb7e26d8bafd1ba09dcac6ed270044cb22b3326136fc62bf966e32"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/RW-ARGO-CD-27136/repair.trace.json",
+          "sha256": "5c5a5c0838a4b843edccff76e344bd4f4b1caa9c692b61b999cf85997c27588d"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/result.json",
+          "sha256": "0ce3ce68f858cd01b5e1c6876a5ae5d5c5b78e24a7992cc440c63a0381853d5a"
+        }
+      }
     }
   ],
   "B_as_of_summary": {
-    "closed_slots": 6,
-    "complete_pairs": 3,
+    "closed_slots": 8,
+    "complete_pairs": 4,
     "registered_pairs": 10,
     "candidate_pass": 3,
     "baseline_pass": 2,
     "paired_wins": 1,
-    "paired_regressions": 0
-  }
+    "paired_regressions": 0,
+    "both_failed_pairs": 1
+  },
+  "B_failure_analysis": [
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "variant": "candidate",
+      "independent_status": "SEMANTIC_FAIL",
+      "method_status": "EVIDENCE_GAP",
+      "public_decision": "UNKNOWN",
+      "actual_request_checks": [
+        {
+          "call_index": 0,
+          "request_digest": "809976755fe0212bb4ab40a3b2687383d066b1b8937a8c4c84221adefc4c50e5",
+          "characters": 85804,
+          "symbol_mentions": 0,
+          "definition_header_present": false
+        },
+        {
+          "call_index": 1,
+          "request_digest": "e55f60c67aa09e8399c17ba2f12682dc3a7e0ab0f339dd9b00c7c31aa8a5eb3f",
+          "characters": 102546,
+          "symbol_mentions": 2,
+          "definition_header_present": false
+        }
+      ],
+      "model_calls_reference": {
+        "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/RW-ARGO-CD-27136/model_calls.json",
+        "sha256": "0b8abb5b41a1ff7417781e234f2432fb42338ee14fd6c1b0ab3b187c2118b8b9"
+      },
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/.isolated-395d46b2d44447e0adcb45722f924af7/receipt.json",
+          "sha256": "daa8abc2bcfb7e26d8bafd1ba09dcac6ed270044cb22b3326136fc62bf966e32"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/RW-ARGO-CD-27136/repair.trace.json",
+          "sha256": "5c5a5c0838a4b843edccff76e344bd4f4b1caa9c692b61b999cf85997c27588d"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/result.json",
+          "sha256": "0ce3ce68f858cd01b5e1c6876a5ae5d5c5b78e24a7992cc440c63a0381853d5a"
+        }
+      },
+      "finding": "Neither diagnosis request contains the normalizeTargetResources definition; the expanded request only includes its invocation and symbol entry.",
+      "scope": "Request-delivery evidence only. Whole-repository availability and the exact selection/extraction cause are not established. No hidden scoring content was inspected or used for tuning; frozen method unchanged."
+    }
+  ]
 }
