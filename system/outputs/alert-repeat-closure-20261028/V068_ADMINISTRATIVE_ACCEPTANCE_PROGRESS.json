@@ -1,0 +1,38 @@
+{
+  "checked_at": "2026-10-29T00:27:25.893370+08:00",
+  "status": "A_COMPLETE_SAME_SOURCE_ADMINISTRATIVE_RECOVERY_DECLARED",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "panel_root": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028",
+  "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
+  "registered_slots": 46,
+  "closed_slots": 17,
+  "A_pairs": 7,
+  "candidate_A_pass": 7,
+  "baseline_A_pass": 3,
+  "A_paired_wins": 4,
+  "A_paired_losses": 0,
+  "administratively_recovered_slots": 1,
+  "original_source_receipt_reclassified": false,
+  "new_case_members_added": 0,
+  "scores_from_other_method_versions_inherited": false,
+  "current_state": {
+    "status": "RUNNING",
+    "group": "repeat",
+    "active_slot": {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "repeat",
+      "repeat": 1,
+      "slot_id": "fixed46-official-v068-20261028-c389d4dfccac51c96e7ee10f",
+      "variant": "baseline"
+    },
+    "owner_pid": 3661213,
+    "closed_slots": 17,
+    "completed_groups": [
+      "A"
+    ],
+    "at": "2026-10-29T00:18:09.670961+08:00",
+    "formal_ready": false
+  },
+  "formal_ready": false,
+  "scope": "Development acceptance only. Original13 raw records retained; one same assigned ACK slot bound by explicit known-rejection administrative recovery. Original uninterrupted wall scope not claimed. Repeat/recovery/B requirements remain."
+}

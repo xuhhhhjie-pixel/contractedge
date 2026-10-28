@@ -1,0 +1,18 @@
+{
+  "method_source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "original_fixed_panel_sha256": "2bf3bce16706a298d3d4c2706f41ab0428f99714b4b102e6da268505d6e83833",
+  "qualified_fixed_panel_sha256": "c5d5ab3a115e96b1b9df4a079315d045bd53647cdf74e986a38b16a15c959a53",
+  "files": {
+    "financial_continuation.py": "ddcb8763eff0f8ac4e965dabfa24827aa55e469f55310c95897cb5716fdb16c2",
+    "PARENT_QUALIFICATION.json": "7385997adf075a0602c4466cf5710fba523d9a082878b517a42fc55e37575c07",
+    "test_financial_continuation.py": "880ac62ea031552a8ad81c6332ed696d8714e0a07e1d4b46ad215ce1d197786e",
+    "README.md": "e47a4d63bef485f0b6bc061eed667eb996cf0215f7d6e64a33ea8c67a947d4e4",
+    "PARENT_QUALIFICATION_PROCESS.json": "11a335189a82236e67e390ae5ca471ee820d5f9ad3f3d2d8815a62071758075e",
+    "prepare_financial_panel.py": "1980ce659e9a09fac28bd1053e14719df27a904197c333a7ba470f0407742886",
+    "parent-qualification.log": "c55bcefeae87dc1a3392a98a02e6fdae776632e7380d4d3d450452fba6a7440f",
+    "run_financial_panel.py": "2bf4238e13413201b0ac44c8a263e657f8e0ac4359f1ccb7734fbaa3facdc990",
+    "fixed_panel.patch": "803ba4699ca17097b439036761e3882a9ead80f38674a03cee46b6814c4e4cfe",
+    "reconstruct_parent.py": "432c0e5e03f2981748443dc8c4e385b6ab88411ade1974520996c2a16ac5247a"
+  },
+  "formal_ready": false
+}

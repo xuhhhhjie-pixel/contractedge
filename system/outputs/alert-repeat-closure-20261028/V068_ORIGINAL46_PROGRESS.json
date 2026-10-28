@@ -1,17 +1,17 @@
 {
   "status": "RUNNING_REMAINING_A_WITH_ACK_UNRESOLVED",
-  "checked_at": "2026-10-28T22:49:16.585024+08:00",
+  "checked_at": "2026-10-28T22:51:02.214240+08:00",
   "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
   "panel_root": "/home/xhj/contractedge-fixed46-official-v068-20261028",
   "runtime_state": "/home/xhj/contractedge-fixed46-official-v068-20261028/acceptance-state.json",
   "registered_slots": 46,
-  "closed_slots": 11,
+  "closed_slots": 12,
   "active_slot": {
     "case_id": "RW-CERTMANAGER-9116",
     "group": "A",
     "repeat": 0,
-    "slot_id": "fixed46-official-v068-20261028-5b4e270cd9beb190997cb43f",
-    "variant": "candidate"
+    "slot_id": "fixed46-official-v068-20261028-f836a8138f6b34ea264edf20",
+    "variant": "baseline"
   },
   "records": [
     {
@@ -123,6 +123,16 @@
       "status": "SEMANTIC_FAIL",
       "public_decision": "UNKNOWN",
       "method_status": "INVALID_OUTPUT"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-5b4e270cd9beb190997cb43f",
+      "case_id": "RW-CERTMANAGER-9116",
+      "group": "A",
+      "variant": "candidate",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE"
     }
   ],
   "effect_scores_inherited": false,

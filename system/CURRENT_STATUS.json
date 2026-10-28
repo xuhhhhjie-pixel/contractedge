@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-28T22:49:16.585024+08:00",
+  "as_of": "2026-10-29T00:27:25.893370+08:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3297,7 +3297,7 @@
     }
   },
   "current_development": {
-    "status": "V068_A_ALERT_INDEPENDENT_PASS_ACK_CORRECTION_READY",
+    "status": "V068_A_COMPLETE_REPETITION_CANDIDATES_PASS_REMAINING_RUNNING",
     "planned_version": "0.6.68",
     "base_commit": "b2308e297b524932729ef058982adf7e2c34874f",
     "snapshot": "docs/development/quote-binding-v068-20261028.snapshot.json",
@@ -3310,18 +3310,21 @@
     "budget_cny": 200,
     "report": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
     "active_experiment": {
-      "status": "RUNNING_REMAINING_A_WITH_ACK_UNRESOLVED",
+      "status": "RUNNING",
+      "group": "repeat",
       "active_slot": {
-        "case_id": "RW-CERTMANAGER-9116",
-        "group": "A",
-        "repeat": 0,
-        "slot_id": "fixed46-official-v068-20261028-5b4e270cd9beb190997cb43f",
-        "variant": "candidate"
+        "case_id": "RW-ALERTMANAGER-4705",
+        "group": "repeat",
+        "repeat": 1,
+        "slot_id": "fixed46-official-v068-20261028-c389d4dfccac51c96e7ee10f",
+        "variant": "baseline"
       },
-      "unresolved_slot": "fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406",
-      "closed_slots": 11,
-      "owner_pid": 3420805,
-      "at": "2026-10-28T22:36:00.227894+08:00",
+      "owner_pid": 3661213,
+      "closed_slots": 17,
+      "completed_groups": [
+        "A"
+      ],
+      "at": "2026-10-29T00:18:09.670961+08:00",
       "formal_ready": false
     },
     "prior_cohort": {
@@ -3332,9 +3335,9 @@
       "scores_inherited": false
     },
     "next_actions": [
-      "Run only the other four originally registered and unclaimed A slots under unchanged method/configuration/budget",
-      "Audit exact ACK 402 correction continuation; preserve both completed responses, failed reservation and old receipt",
-      "Keep repeat/recovery/B and formal150 closed until original prerequisites are satisfied"
+      "Run original same-source repeat4 and recovery8 under the pinned qualified parent; stop on a known original necessary gate failure",
+      "Open original B20 only after original prerequisites; no new members or thresholds",
+      "Rebind unchanged engineering/delivery reports to this explicit administrative panel and invoke existing final admission checker only after all46 are closed"
     ],
     "paid_dispatch_scope": "Original unclaimed A slots; then one separately registered ACK READY continuation only if A has no original gate failure. No later groups or formal150 until their gates pass.",
     "full_regression": "outputs/alert-repeat-closure-20261028/V068_FULL_REGRESSION.json",
@@ -3347,14 +3350,17 @@
     "provider_config_requires_new_binding": false,
     "resumed_at": "2026-10-28T07:41:00.531721+00:00",
     "current_cohort": {
-      "root": "/home/xhj/contractedge-fixed46-official-v068-20261028",
-      "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
+      "root": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028",
+      "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
       "registered_slots": 46,
-      "closed_slots": 11,
+      "closed_slots": 17,
       "scores_inherited": false,
-      "status": "RUNNING_REMAINING_A_WITH_ACK_UNRESOLVED",
+      "status": "RUNNING",
       "runtime_state": "/home/xhj/contractedge-fixed46-official-v068-20261028/acceptance-state.json",
-      "stopped_slot": "fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406"
+      "stopped_slot": "fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406",
+      "method_source_unchanged": true,
+      "same_original_slot_ids": true,
+      "uninterrupted_wall_claim": false
     },
     "uncommitted_quote_feedback_included_in_target": false,
     "latest_behavior_plan_continuation_result": "outputs/alert-repeat-closure-20261028/V067_BEHAVIOR_PLAN_CONTINUATION_RESULT.json",
@@ -3371,11 +3377,24 @@
     "delivery_static_evidence": "outputs/alert-repeat-closure-20261028/V068_STATIC_GATES_VERIFICATION.json",
     "clean_clone_verification": "outputs/alert-repeat-closure-20261028/V068_CLEAN_CLONE_REAL_ROUNDTRIP.json",
     "remote_ci": "outputs/alert-repeat-closure-20261028/V068_GITHUB_CI.json",
-    "final_admission_collector": "outputs/alert-repeat-closure-20261028/finalize_admission_v068.py",
+    "final_admission_collector": "outputs/alert-repeat-closure-20261028/finalize_admission_v068_resumed.py",
     "provider_stop_audit": "outputs/alert-repeat-closure-20261028/V068_ACK_PROVIDER_STOP_AUDIT.json",
     "latest_ack_plan_continuation": "outputs/alert-repeat-closure-20261028/V068_ACK_402_PLAN_CONTINUATION.json",
     "topup_progress": "outputs/alert-repeat-closure-20261028/V068_TOPUP_PROGRESS.md",
-    "controlled_ack_continuation": {
+    "resumed_after_topup_at": "2026-10-28T22:17:15+08:00",
+    "pre_administrative_cohort": {
+      "root": "/home/xhj/contractedge-fixed46-official-v068-20261028",
+      "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
+      "registered_slots": 46,
+      "closed_slots": 13,
+      "scores_inherited": false,
+      "status": "CLOSED_WITH_ACK_INFRASTRUCTURE_STOP_ORIGINAL_RECEIPT_RETAINED",
+      "runtime_state": "/home/xhj/contractedge-fixed46-official-v068-20261028/acceptance-state.json",
+      "stopped_slot": "fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406"
+    },
+    "parent_authority": "/home/xhj/contractedge-parent402-v068-20261028/system",
+    "parent_qualification": "/home/xhj/contractedge-parent402-v068-20261028/qualification.json",
+    "historical_controlled_ack_continuation": {
       "root": "/home/xhj/contractedge-ack402-continuation-v068-20261028",
       "plan_status": "READY",
       "counts_in_original46": false,
@@ -3383,7 +3402,17 @@
       "serial_follower": "WAITING_EXISTING_A_CONTROLLER",
       "ready_preflight": "outputs/alert-repeat-closure-20261028/V068_ACK_READY_PREFLIGHT.json"
     },
-    "resumed_after_topup_at": "2026-10-28T22:17:15+08:00"
+    "ack_administrative_recovery": {
+      "original_attempt_status": "INFRASTRUCTURE_STOP",
+      "first_ready_adapter_status": "INFRASTRUCTURE_STOP",
+      "final_recovery_status": "PASS",
+      "counts_as_assigned_slot_in_amended_panel": true,
+      "fresh_uninterrupted_trial": false,
+      "actual_model_dispatch_attempts_including402": 5,
+      "received_model_responses": 4,
+      "new_model_http_on_deterministic_recovery": 0,
+      "report": "outputs/alert-repeat-closure-20261028/V068_ADMINISTRATIVE_RECOVERY.md"
+    }
   },
   "staged_implementation_version": "0.6.68",
   "runtime_implementation_version": "0.6.40",
@@ -3441,9 +3470,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Run only the other four originally registered and unclaimed A slots under unchanged method/configuration/budget",
-    "Audit exact ACK 402 correction continuation; preserve both completed responses, failed reservation and old receipt",
-    "Keep repeat/recovery/B and formal150 closed until original prerequisites are satisfied"
+    "Run original same-source repeat4 and recovery8 under the pinned qualified parent; stop on a known original necessary gate failure",
+    "Open original B20 only after original prerequisites; no new members or thresholds",
+    "Rebind unchanged engineering/delivery reports to this explicit administrative panel and invoke existing final admission checker only after all46 are closed"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",
@@ -3496,26 +3525,28 @@
     "scope": "Offline only; no046 effectiveness or formal admission"
   },
   "current_fixed46_registration": {
-    "status": "RUNNING_REMAINING_A_WITH_ACK_UNRESOLVED",
-    "panel": "/home/xhj/contractedge-fixed46-official-v068-20261028/panel.json",
-    "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
+    "status": "RUNNING",
+    "panel": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/panel.json",
+    "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
     "original_registration_sha256": "e24f0320987a15c9ed2867ebb6f55efb104c4e7ce4b6a9bccd1565a5d34e099b",
     "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
     "registered_slots": 46,
-    "closed_slots": 11,
+    "closed_slots": 17,
     "scores_inherited": false,
     "extra_cases_added": 0,
     "early_gate_reuses_original_necessary_conditions": true,
     "controller_necessary_failure_checks": 5,
     "formal_ready": false,
-    "method_version": "0.6.68"
+    "method_version": "0.6.68",
+    "administrative_amendment": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/amendment.json",
+    "original_slot_ids_preserved": true
   },
   "final_delivery_admission": {
-    "status": "NOT_READY_V068_FIXED_PANEL_INCOMPLETE",
+    "status": "NOT_READY_V068_REPETITION_RECOVERY_B_PENDING",
     "formal_ready": false,
-    "report": "outputs/alert-repeat-closure-20261028/V068_STATIC_GATES_VERIFICATION.json",
-    "current_progress_report": "outputs/alert-repeat-closure-20261028/V068_TOPUP_PROGRESS.md",
-    "as_of_records": 11,
+    "report": "outputs/alert-repeat-closure-20261028/administrative-admission",
+    "current_progress_report": "outputs/alert-repeat-closure-20261028/V068_ADMINISTRATIVE_RECOVERY.md",
+    "as_of_records": 17,
     "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
     "gates": {
       "G0": "PASS_STATIC150",
@@ -3568,5 +3599,6 @@
     "no_new_model_calls_for_delivery": true,
     "current_parent_qualification": "79tests+2subtests; saved211465input/16384output RPC oldUNKNOWN/newDONE with0HTTP; real ACK once-running",
     "scope": "Prior aggregate is historical evidence only; current v068 effect/admission aggregation not yet complete"
-  }
+  },
+  "active_fixed46_parent_root": "/home/xhj/contractedge-parent402-v068-20261028/system"
 }

@@ -1,0 +1,34 @@
+--- a/scripts/fixed_panel.py
++++ b/scripts/fixed_panel.py
+@@ -181,6 +181,9 @@
+     """
+     amendment = panel.get('predecessor')
+     if amendment is None: return []
++    if amendment.get('schema_version') == 'ce.fixed_panel_provider_stop_amendment.v1':
++        from financial_continuation import financial_predecessor_rows
++        return financial_predecessor_rows(panel)
+     if amendment.get('schema_version') == 'ce.fixed_panel_method_terminal_amendment.v1':
+         return terminal_predecessor_rows(panel)
+     if (amendment.get('schema_version') != 'ce.fixed_panel_score_parent_amendment.v1'
+@@ -442,7 +445,20 @@
+         raise ValueError('Duplicate/malformed terminal records')
+     if not {r['slot_id'] for r in inherited} <= {r['slot_id'] for r in rows}:
+         raise ValueError('A predecessor result was dropped')
+-    return [verify_record(panel_path, panel, row) for row in rows]
++    # A single fresh predecessor verification covers the whole immutable prefix.
++    # Do not re-read/revalidate that entire prefix once per inherited row. This
++    # is a per-call proof, never a cross-call cached PASS or a drift waiver.
++    inherited_by_id = {r['slot_id']: r for r in inherited}
++    checked = []
++    for row in rows:
++        expected = inherited_by_id.get(row['slot_id'])
++        if expected is not None:
++            if row != expected:
++                raise ValueError('Inherited row differs from its freshly verified original proof')
++            checked.append(row)
++        else:
++            checked.append(verify_record(panel_path, panel, row))
++    return checked
+
+
+ def b_gate(panel, records):
