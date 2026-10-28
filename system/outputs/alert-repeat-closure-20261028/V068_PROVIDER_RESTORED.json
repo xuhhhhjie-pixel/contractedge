@@ -1,0 +1,11 @@
+{
+  "status": "OFFICIAL_ACCOUNT_AVAILABLE",
+  "checked_at": "2026-10-28T22:17:14.744602+08:00",
+  "proof_sha256": "b5c0123b5a71dc5d522e7acc7b7b59271bd7d2883b4f72a562b75c9aa1c1abe5",
+  "financial_details": "Protected local audit only",
+  "model_calls": 0,
+  "original_interruption_preserved": true,
+  "ACK_continuation": "PENDING_AUDITED_PROTOCOL_NOT_AUTOMATIC_RETRY",
+  "authorized_dispatch": "Only original unclaimed remaining A slots; all later groups remain closed",
+  "formal_ready": false
+}

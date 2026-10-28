@@ -1,0 +1,24 @@
+{
+  "status": "PASS_EXACT_PREFIX_AND_CORRECTION_REPLAY",
+  "comparisons": [
+    {
+      "index": 0,
+      "identical": true,
+      "different_fields": []
+    },
+    {
+      "index": 1,
+      "identical": true,
+      "different_fields": []
+    },
+    {
+      "index": 2,
+      "identical": true,
+      "different_fields": []
+    }
+  ],
+  "front_status_after_capture": "INFRASTRUCTURE_ERROR",
+  "new_model_calls": 0,
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "original_prefix_unchanged": true
+}

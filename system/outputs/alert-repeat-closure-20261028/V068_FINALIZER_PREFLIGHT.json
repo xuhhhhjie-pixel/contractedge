@@ -1,0 +1,18 @@
+{
+  "status": "PASS_REJECTS_INCOMPLETE_REAL_PANEL",
+  "checker_sha256": "fb698cfcad1e03ae98966b39a38b28b5b256f46b7a20e39fb266ecc73d9eb43a",
+  "actual_result": {
+    "status": "NOT_READY_PANEL_UNFINISHED_OR_STOPPED",
+    "controller_status": "RUNNING",
+    "closed_slots": 6,
+    "expected_slots": 46,
+    "new_model_calls": 0,
+    "score_dispatches": 0,
+    "formal_ready": false
+  },
+  "exit_code": 3,
+  "model_calls_added": 0,
+  "scorer_dispatches": 0,
+  "full_finalization_not_yet_exercised": true,
+  "formal_ready": false
+}

@@ -1,0 +1,43 @@
+{
+  "automatic_retry": false,
+  "combined_budget": {
+    "elapsed_seconds": 568.9161146879196,
+    "max_calls": 12,
+    "max_seconds": 9000,
+    "max_tokens": 2000000,
+    "model_calls": 4,
+    "reserved_tokens": 526654,
+    "resumed_model_calls": 3
+  },
+  "correction_elapsed_seconds": 11.963915776461363,
+  "counts_in_original46": false,
+  "driver_sha256": "b8d04b5ada1e8f3a3bcd6b7cd0a6442d94c174002c99e8394361a4c4b983ebed",
+  "formal_ready": false,
+  "front_status": "READY",
+  "inherited_budget": {
+    "elapsed_seconds": 556.9492228962481,
+    "max_calls": 12,
+    "max_seconds": 9000,
+    "max_tokens": 2000000,
+    "model_calls": 3,
+    "reserved_tokens": 384512,
+    "resumed_model_calls": 0
+  },
+  "new_calls_limit": 1,
+  "new_model_calls": 1,
+  "original_calls_sha256": "f492c3dc8e266d97d135760fde5de96393ae3058aa1274b8e709f050d8ff6316",
+  "original_receipt_sha256": "a587d1e565bbe6cec9ee59a364ad864d9a16e909a666215575a1fc5fdf37794a",
+  "prefix_unchanged": true,
+  "replay_response_count": 2,
+  "scope": "Controlled saved-prefix correction after account top-up. Account waiting excluded from this separate continuation active-time budget, not silently removed from the expired original attempt.",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "status": "PASS_CORRECTED_PLAN_READY",
+  "registration_sha256": "3991e442b7fb3bd4a5118667047a7079c487e3816caa6e124443fa7f96159a9d",
+  "combined_calls_sha256": "d92995c7552c4b0a145ff6faab9a9ae85537199bfd44873f12bf15af95a1b4b0",
+  "ready_trace_sha256": "f852ea4023894244f7fa1e36b110d1c0f1055618d680da64dcc9fcc5130f21c1",
+  "original_records_archive": {
+    "path": "/home/xhj/contractedge-fixed46-official-v068-20261028/provider402-original-records.json",
+    "sha256": "cd83883b2e2df3d234ec3514b1f5d07b9535b60a73e8e0319fdc69a2ac8f6379"
+  },
+  "behavior_repair_proven": false
+}

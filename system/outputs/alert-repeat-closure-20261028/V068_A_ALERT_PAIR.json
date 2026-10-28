@@ -1,0 +1,65 @@
+{
+  "status": "PAIR_CLOSED_CANDIDATE_PASS_BASELINE_SEMANTIC_FAIL",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
+  "candidate": {
+    "case_id": "RW-ALERTMANAGER-4705",
+    "group": "A",
+    "repeat": 0,
+    "slot_id": "fixed46-official-v068-20261028-7e110f10f2707f003c394c2c",
+    "variant": "candidate",
+    "independent_status": "PASS",
+    "public_decision": "UNKNOWN",
+    "status": "PASS",
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "terminal_verified": true,
+    "counts_in_46_slot_panel": true,
+    "identity_sha256": "498be7c3acf26f6d990058a024502b08e0952c245455984d78b237b67151cc9d",
+    "evidence_files": {
+      "receipt": {
+        "path": "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-7e110f10f2707f003c394c2c/.isolated-543f1e2bbfdc45cd8f6dd8ae385d378f/receipt.json",
+        "sha256": "61c46983a78fe28debc78ef04d34c1d261f068cc68b9a46f40ca902d92646530"
+      },
+      "trace": {
+        "path": "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-7e110f10f2707f003c394c2c/RW-ALERTMANAGER-4705/repair.trace.json",
+        "sha256": "b041c325da5b21fdb275314e084634f9ae2e01beaf5e760a85f336f1fad44233"
+      },
+      "score": {
+        "path": "/home/xhj/contractedge-fixed46-official-v068-20261028/independent/fixed46-official-v068-20261028-7e110f10f2707f003c394c2c/result.json",
+        "sha256": "98e74bacccce226372a478c3903182a6a127707e4ac28ad39051d9764450108b"
+      }
+    },
+    "formal_ready": false
+  },
+  "baseline": {
+    "case_id": "RW-ALERTMANAGER-4705",
+    "group": "A",
+    "repeat": 0,
+    "slot_id": "fixed46-official-v068-20261028-5ece967e93e69ab025d7d758",
+    "variant": "baseline",
+    "independent_status": "SEMANTIC_FAIL",
+    "public_decision": "UNKNOWN",
+    "status": "SEMANTIC_FAIL",
+    "method_status": "INVALID_OUTPUT",
+    "terminal_verified": true,
+    "counts_in_46_slot_panel": true,
+    "identity_sha256": "0ada2cfca601e7c9f2f81768fb9640dd6eb9652409d7dfafd5495c3dc798ec05",
+    "evidence_files": {
+      "receipt": {
+        "path": "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-5ece967e93e69ab025d7d758/.isolated-837565f59f8e4dc48e0393ea747fe5d9/receipt.json",
+        "sha256": "831eb5ad4dadf08bac208b47e21e667bda680e6d49094b9114b7b0e021e9e49d"
+      },
+      "trace": {
+        "path": "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-5ece967e93e69ab025d7d758/RW-ALERTMANAGER-4705/repair.trace.json",
+        "sha256": "45e6f654f041e5ecbe7c9b5a4b5bcd4e1449809d86aefbec89ec6a00d973cb69"
+      },
+      "score": {
+        "path": "/home/xhj/contractedge-fixed46-official-v068-20261028/independent/fixed46-official-v068-20261028-5ece967e93e69ab025d7d758/result.json",
+        "sha256": "24726ea0c83402b95ee9e3a088705fdbeb475e9c1fea479d8cb3bdaf31f86b12"
+      }
+    },
+    "formal_ready": false
+  },
+  "scope": "Original v068 A slots; not inherited qualification or natural cross-round recovery proof. Candidate public behavior four PASS, public overall UNKNOWN retained.",
+  "formal_ready": false
+}

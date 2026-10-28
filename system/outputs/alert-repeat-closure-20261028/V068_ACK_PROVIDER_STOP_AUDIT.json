@@ -1,0 +1,82 @@
+{
+  "status": "STOPPED_OFFICIAL_PROVIDER_ACCOUNT_UNAVAILABLE",
+  "checked_at": "2026-10-28T20:10:24.659821+08:00",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
+  "closed_slots": 9,
+  "registered_slots": 46,
+  "stopped_slot": "fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406",
+  "case_id": "R4-ACK-CLOUDWATCH-2985",
+  "variant": "candidate",
+  "completed_responses": 2,
+  "third_request": "HTTP402_PAYMENT_REQUIRED_NO_MODEL_RESPONSE_RECORDED",
+  "method_stage": "changeset.v1.1.16 correction",
+  "plan_correction_errors": [
+    {
+      "code": "PRECONDITION_ESTABLISHMENT_INVALID",
+      "message": "Quote for SRC-CU-99686d29bed27b32 does not bind the delivered current source. Copy one short exact source line; do not paraphrase code or double-escape newlines/tabs. The quote must belong to this source_evidence_ref, including for PLANNED_CHANGE; a caller quote cannot stand in for the referenced helper. Describe caller changes in mechanism/change_refs. A source quote is not proof of the asserted semantic guarantee. Current-source binding hints (identity only): {\"referenced_source\": {\"id\": \"SRC-CU-99686d29bed27b32\", \"locator\": {\"path\": \"apis/v1alpha1/metric_alarm.go\", \"start_line\": 26, \"end_line\": 385, \"column_start\": 1}, \"exact_quote_example\": \"type MetricAlarmSpec struct {\"}}",
+      "path": "precondition_review[0].establishment.source_quote"
+    },
+    {
+      "code": "BEHAVIOR_CHECK_SCENARIO_MISMATCH",
+      "message": "Binding cloudwatch-tags-v2:addition requires declared scenario method-cloudwatch-tags-v2",
+      "path": "postconditions[0]"
+    },
+    {
+      "code": "BEHAVIOR_CHECK_SCENARIO_MISMATCH",
+      "message": "Binding cloudwatch-tags-v2:value_change requires declared scenario method-cloudwatch-tags-v2",
+      "path": "postconditions[0]"
+    },
+    {
+      "code": "BEHAVIOR_CHECK_SCENARIO_MISMATCH",
+      "message": "Binding cloudwatch-tags-v2:removal requires declared scenario method-cloudwatch-tags-v2",
+      "path": "postconditions[0]"
+    },
+    {
+      "code": "BEHAVIOR_CHECK_SCENARIO_MISMATCH",
+      "message": "Binding cloudwatch-tags-v2:remove_all requires declared scenario method-cloudwatch-tags-v2",
+      "path": "postconditions[0]"
+    },
+    {
+      "code": "BEHAVIOR_CHECK_SCENARIO_MISMATCH",
+      "message": "Binding cloudwatch-tags-v2:tag_error requires declared scenario method-cloudwatch-tags-v2",
+      "path": "postconditions[1]"
+    }
+  ],
+  "model_calls_reserved": 3,
+  "remaining_call_allowance_upper_bound": 9,
+  "reserved_tokens": 384512,
+  "remaining_token_allowance_upper_bound": 1615488,
+  "source_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+  "source_unchanged_from_original_broken": true,
+  "candidate_generated": false,
+  "independent_scoring_dispatched": false,
+  "method_effect_result": "NOT_ADJUDICATED_INFRASTRUCTURE_STOP",
+  "cleanup": {
+    "status": "OWNED_CONTAINERS_CLOSED",
+    "removed": []
+  },
+  "controller_live": false,
+  "official_account_available": false,
+  "official_balance_proof_sha256": "0aebf31ad4a25e8256e919c5213f8b741b8677fbc68acf108769444867b247fc",
+  "official_balance_proof_location": "Protected local audit; account financial detail not published",
+  "official_error_reference": "https://api-docs.deepseek.com/quick_start/error_codes/",
+  "local_budget": {
+    "limit_cny": 200,
+    "committed_upper_bound_cny": 156.800004,
+    "unreserved_cny": 43.199996,
+    "pending_reservations": 4
+  },
+  "proof": {
+    "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406/.isolated-8a5d7540cf044247972edd5c2d29833f/receipt.json": "a587d1e565bbe6cec9ee59a364ad864d9a16e909a666215575a1fc5fdf37794a",
+    "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406/.isolated-8a5d7540cf044247972edd5c2d29833f/parent-model-calls.json": "f492c3dc8e266d97d135760fde5de96393ae3058aa1274b8e709f050d8ff6316",
+    "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406/R4-ACK-CLOUDWATCH-2985/repair.trace.json": "974c1c2251427c71bdc90aa9ef19cf6777ec53fab90137a2a557a741b011aa12",
+    "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406/R4-ACK-CLOUDWATCH-2985/rounds/0/front.trace.json": "6f1bd038d985011625a02c239640686f3fbd405ad350d95fe7b4ff3b5e0de69d",
+    "/home/xhj/contractedge-fixed46-official-v068-20261028/records.json": "cd83883b2e2df3d234ec3514b1f5d07b9535b60a73e8e0319fdc69a2ac8f6379"
+  },
+  "automatic_retry": false,
+  "original_attempt_and_reservations_preserved": true,
+  "user_answer": "TOP_UP_LATER",
+  "resume_protocol": "Requires an audited bounded continuation; existing isolated CLI does not automatically resume this stopped attempt. Do not replace the slot, reset its budgets or replay all closed rows.",
+  "formal_ready": false
+}

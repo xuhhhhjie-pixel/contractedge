@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-28T19:12:49.555775+08:00",
+  "as_of": "2026-10-28T22:49:16.585024+08:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3297,7 +3297,7 @@
     }
   },
   "current_development": {
-    "status": "V068_SAME_SOURCE_ACCEPTANCE_RUNNING",
+    "status": "V068_A_ALERT_INDEPENDENT_PASS_ACK_CORRECTION_READY",
     "planned_version": "0.6.68",
     "base_commit": "b2308e297b524932729ef058982adf7e2c34874f",
     "snapshot": "docs/development/quote-binding-v068-20261028.snapshot.json",
@@ -3309,7 +3309,21 @@
     "full_new_source_qualification": true,
     "budget_cny": 200,
     "report": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
-    "active_experiment": "/home/xhj/contractedge-fixed46-official-v068-20261028",
+    "active_experiment": {
+      "status": "RUNNING_REMAINING_A_WITH_ACK_UNRESOLVED",
+      "active_slot": {
+        "case_id": "RW-CERTMANAGER-9116",
+        "group": "A",
+        "repeat": 0,
+        "slot_id": "fixed46-official-v068-20261028-5b4e270cd9beb190997cb43f",
+        "variant": "candidate"
+      },
+      "unresolved_slot": "fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406",
+      "closed_slots": 11,
+      "owner_pid": 3420805,
+      "at": "2026-10-28T22:36:00.227894+08:00",
+      "formal_ready": false
+    },
     "prior_cohort": {
       "root": "/home/xhj/contractedge-fixed46-source061-20261028",
       "version": "0.6.61",
@@ -3318,11 +3332,11 @@
       "scores_inherited": false
     },
     "next_actions": [
-      "Execute original same-source A, repeated and saved-failure recovery; only open B after original prerequisite gates",
-      "Stop immediately on a verified necessary effect failure, preserve attempt and identify its first error",
-      "Complete exact-source delivery/admission aggregation after existing effect gates pass"
+      "Run only the other four originally registered and unclaimed A slots under unchanged method/configuration/budget",
+      "Audit exact ACK 402 correction continuation; preserve both completed responses, failed reservation and old receipt",
+      "Keep repeat/recovery/B and formal150 closed until original prerequisites are satisfied"
     ],
-    "paid_dispatch_scope": "Original fixed46 only, A then repeat/recovery then gated B; stop before next dispatch on a known original necessary gate failure; official provider only",
+    "paid_dispatch_scope": "Original unclaimed A slots; then one separately registered ACK READY continuation only if A has no original gate failure. No later groups or formal150 until their gates pass.",
     "full_regression": "outputs/alert-repeat-closure-20261028/V068_FULL_REGRESSION.json",
     "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V067_TARGETED_VALIDATION.json",
     "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/V064_TARGETED_VALIDATION.json",
@@ -3330,16 +3344,17 @@
     "user_paused": false,
     "paused_at": "2026-10-28T07:00:52.192898+00:00",
     "pause_boundary": "v066 targeted validation closed; behavior-failure routing and Go-comment guard edits remain uncommitted/unqualified; no v067 paid attempt started",
-    "provider_config_requires_new_binding": true,
+    "provider_config_requires_new_binding": false,
     "resumed_at": "2026-10-28T07:41:00.531721+00:00",
     "current_cohort": {
       "root": "/home/xhj/contractedge-fixed46-official-v068-20261028",
       "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
       "registered_slots": 46,
-      "closed_slots": 5,
+      "closed_slots": 11,
       "scores_inherited": false,
-      "status": "RUNNING",
-      "runtime_state": "/home/xhj/contractedge-fixed46-official-v068-20261028/acceptance-state.json"
+      "status": "RUNNING_REMAINING_A_WITH_ACK_UNRESOLVED",
+      "runtime_state": "/home/xhj/contractedge-fixed46-official-v068-20261028/acceptance-state.json",
+      "stopped_slot": "fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406"
     },
     "uncommitted_quote_feedback_included_in_target": false,
     "latest_behavior_plan_continuation_result": "outputs/alert-repeat-closure-20261028/V067_BEHAVIOR_PLAN_CONTINUATION_RESULT.json",
@@ -3355,7 +3370,20 @@
     },
     "delivery_static_evidence": "outputs/alert-repeat-closure-20261028/V068_STATIC_GATES_VERIFICATION.json",
     "clean_clone_verification": "outputs/alert-repeat-closure-20261028/V068_CLEAN_CLONE_REAL_ROUNDTRIP.json",
-    "remote_ci": "outputs/alert-repeat-closure-20261028/V068_GITHUB_CI.json"
+    "remote_ci": "outputs/alert-repeat-closure-20261028/V068_GITHUB_CI.json",
+    "final_admission_collector": "outputs/alert-repeat-closure-20261028/finalize_admission_v068.py",
+    "provider_stop_audit": "outputs/alert-repeat-closure-20261028/V068_ACK_PROVIDER_STOP_AUDIT.json",
+    "latest_ack_plan_continuation": "outputs/alert-repeat-closure-20261028/V068_ACK_402_PLAN_CONTINUATION.json",
+    "topup_progress": "outputs/alert-repeat-closure-20261028/V068_TOPUP_PROGRESS.md",
+    "controlled_ack_continuation": {
+      "root": "/home/xhj/contractedge-ack402-continuation-v068-20261028",
+      "plan_status": "READY",
+      "counts_in_original46": false,
+      "remaining_calls": 8,
+      "serial_follower": "WAITING_EXISTING_A_CONTROLLER",
+      "ready_preflight": "outputs/alert-repeat-closure-20261028/V068_ACK_READY_PREFLIGHT.json"
+    },
+    "resumed_after_topup_at": "2026-10-28T22:17:15+08:00"
   },
   "staged_implementation_version": "0.6.68",
   "runtime_implementation_version": "0.6.40",
@@ -3413,9 +3441,9 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Verify exact source engineering once",
-    "Run bounded saved public failure recovery; fresh Broken only if passed",
-    "Continue same-version cross-case acceptance only after targeted success"
+    "Run only the other four originally registered and unclaimed A slots under unchanged method/configuration/budget",
+    "Audit exact ACK 402 correction continuation; preserve both completed responses, failed reservation and old receipt",
+    "Keep repeat/recovery/B and formal150 closed until original prerequisites are satisfied"
   ],
   "fixed46_development": {
     "method_source_version": "0.6.45",
@@ -3468,13 +3496,13 @@
     "scope": "Offline only; no046 effectiveness or formal admission"
   },
   "current_fixed46_registration": {
-    "status": "RUNNING",
+    "status": "RUNNING_REMAINING_A_WITH_ACK_UNRESOLVED",
     "panel": "/home/xhj/contractedge-fixed46-official-v068-20261028/panel.json",
     "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
     "original_registration_sha256": "e24f0320987a15c9ed2867ebb6f55efb104c4e7ce4b6a9bccd1565a5d34e099b",
     "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
     "registered_slots": 46,
-    "closed_slots": 5,
+    "closed_slots": 11,
     "scores_inherited": false,
     "extra_cases_added": 0,
     "early_gate_reuses_original_necessary_conditions": true,
@@ -3483,6 +3511,45 @@
     "method_version": "0.6.68"
   },
   "final_delivery_admission": {
+    "status": "NOT_READY_V068_FIXED_PANEL_INCOMPLETE",
+    "formal_ready": false,
+    "report": "outputs/alert-repeat-closure-20261028/V068_STATIC_GATES_VERIFICATION.json",
+    "current_progress_report": "outputs/alert-repeat-closure-20261028/V068_TOPUP_PROGRESS.md",
+    "as_of_records": 11,
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "gates": {
+      "G0": "PASS_STATIC150",
+      "G1": "PASS_IMPLEMENTATION_MAPPING_NOT_INDEPENDENT_EFFECT_CERTIFICATION",
+      "G2": "PASS_EXACT_SOURCE_ENGINEERING",
+      "G3": "PENDING_COMPLETE_COHORT_PROVENANCE",
+      "G4": "PENDING_REGISTERED_REPETITION_AND_RECOVERY",
+      "G5": "PENDING_FIXED_SAME_SOURCE_PANEL",
+      "G6": "PASS_SAME_SERVER_CLEAN_CLONE_OPERATIONAL_REPLAY"
+    },
+    "serial_only": true,
+    "controlled_ack_continuation_counts_in_original46": false,
+    "formal150_started": false,
+    "scope": "Current v068 evidence only; all original thresholds retained. Historical aggregates moved to an explicitly historical field."
+  },
+  "active_provider": {
+    "provider_config": "/home/xhj/contractedge-alert-closure-20261028/system/configs/development-deepseek-official-budget200.json",
+    "api_key_file": "/home/xhj/.config/contractedge/deepseek-official-20261028.key",
+    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-flash",
+    "previous_provider_retired_for_new_runs": true,
+    "benchmark_dispatch_paused": false,
+    "connection_status": "PASS",
+    "connection_report": "outputs/alert-repeat-closure-20261028/DEEPSEEK_OFFICIAL_CONNECTION.json",
+    "documented_serving_version": "DeepSeek-V4.1-Flash-1017",
+    "reported_model": "deepseek-flash",
+    "config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+    "model_identity_policy": "require_match",
+    "new_registration_required": false,
+    "official_results_inherit_intermediary_scores": false,
+    "scope": "Explicit provider selection for subsequent authorized runs; historical frozen configs are unchanged. Existing CLI requires explicit config and api-key-file arguments.",
+    "account_available": true
+  },
+  "historical_v061_final_delivery_admission": {
     "status": "NOT_READY_ORIGINAL_PANEL_INFRASTRUCTURE_STOP_AND_EFFECT_PENDING",
     "formal_ready": false,
     "report": "outputs/context-limit-closure-20261027/ORIGINAL_PANEL_STOP_AUDIT.json",
@@ -3501,22 +3568,5 @@
     "no_new_model_calls_for_delivery": true,
     "current_parent_qualification": "79tests+2subtests; saved211465input/16384output RPC oldUNKNOWN/newDONE with0HTTP; real ACK once-running",
     "scope": "Prior aggregate is historical evidence only; current v068 effect/admission aggregation not yet complete"
-  },
-  "active_provider": {
-    "provider_config": "/home/xhj/contractedge-alert-closure-20261028/system/configs/development-deepseek-official-budget200.json",
-    "api_key_file": "/home/xhj/.config/contractedge/deepseek-official-20261028.key",
-    "base_url": "https://api.deepseek.com",
-    "model": "deepseek-flash",
-    "previous_provider_retired_for_new_runs": true,
-    "benchmark_dispatch_paused": false,
-    "connection_status": "PASS",
-    "connection_report": "outputs/alert-repeat-closure-20261028/DEEPSEEK_OFFICIAL_CONNECTION.json",
-    "documented_serving_version": "DeepSeek-V4.1-Flash-1017",
-    "reported_model": "deepseek-flash",
-    "config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
-    "model_identity_policy": "require_match",
-    "new_registration_required": false,
-    "official_results_inherit_intermediary_scores": false,
-    "scope": "Explicit provider selection for subsequent authorized runs; historical frozen configs are unchanged. Existing CLI requires explicit config and api-key-file arguments."
   }
 }
