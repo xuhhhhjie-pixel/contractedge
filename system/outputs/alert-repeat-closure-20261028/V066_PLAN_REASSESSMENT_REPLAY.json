@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "source_sha256": "57fbb6b65bdcdc3fbf6bc1ed869d6b138b27b5bdfde90baeddfdce77b16f069d",
+  "model_http_calls_added": 0,
+  "actual_saved_calls_sha256": "0f9483534383edca6336d4b821b09573e776f5374c929f7d33443801a1c7d128",
+  "current_snapshot": "38430dfa9c0344b66e7bff5f667a94f44aa096259fbfcbc1f33c9fa80d424f36",
+  "failed_trial_snapshot": "a662c172cc9db0ce9ac6642118f6677fb9a91d890d22ca28806e73611e19f133",
+  "existing_entry": "run_reliability_worker_v10.reassess_seed_plan -> orchestration.repair.revise_plan",
+  "historical_plan_delivered": true,
+  "current_subscribe_source_delivered": true,
+  "historical_runtime_failure_delivered": true,
+  "old_assumption_delivered_for_revision": true,
+  "revised_trace_revalidated": true,
+  "semantic_outcome": "UNKNOWN",
+  "source_unchanged": true,
+  "request_sha256": "5e8c9942f4c68e4c29771935d3dba0c5240b6863185aba5d5f266e0c8b23849f",
+  "scope": "Actual public failed planning boundary and exact current-source request; model plan correction not yet established",
+  "formal_ready": false
+}

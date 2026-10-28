@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "scope": "Exact unchanged core2326+91 full-suite process plus affected shared-worker compatibility regression; not a second full-suite run",
+  "source_sha256": "57fbb6b65bdcdc3fbf6bc1ed869d6b138b27b5bdfde90baeddfdce77b16f069d",
+  "freeze_sha256": "e873b728bc7bc8f5e2e28518454bd3276cd00cedd6838d5149c13181ad4db22a",
+  "core_full_receipt": "outputs/alert-repeat-closure-20261028/V066_FULL_REGRESSION.json",
+  "core_full_receipt_sha256": "3157b9fa80e8821d5dc8b6cd0d26da524efcc8ff15aeb3c105a36b3edaa8e340",
+  "core_test_log_sha256": "0daec9eb40b8777f09ff3d158883d34a0c733488247b00387842c17ec768abf1",
+  "core_tests": 2326,
+  "core_subtests": 91,
+  "core_process_exit_code": 0,
+  "affected_test_summary": "71 passed in 1.85s",
+  "affected_test_log_sha256": "f3ffd90f357226318d09baec506ef665d6b151d3713d4f764c33edb51eabac37",
+  "changed_execution_file": "scripts/run_reliability_worker_v10.py",
+  "core_source_files_unchanged": true,
+  "verification": {
+    "schema_version": "ce.development_snapshot_verification.v1",
+    "development_snapshot_id": "plan-failure-reassessment-v066-compat-20261028",
+    "status": "PASS",
+    "formal_ready": false,
+    "coverage": {
+      "source": 116,
+      "configuration": 74,
+      "fixture": 214,
+      "tooling_files": 289,
+      "repository_files": 1
+    },
+    "unbound_legacy_fixture_files": [],
+    "errors": []
+  },
+  "model_http_calls_added": 0,
+  "formal_ready": false,
+  "actual_isolation": "outputs/alert-repeat-closure-20261028/V066_COMPAT_ACTUAL_ISOLATION.json",
+  "actual_isolation_sha256": "11ac34704bc6959ac5db85c88602b355c93a8273b22acb66da95c3adf7d2b828",
+  "affected_test_log": "outputs/alert-repeat-closure-20261028/v066-shared-worker-regression.log",
+  "package": "outputs/alert-repeat-closure-20261028/V066_PACKAGE_VERIFICATION.json"
+}

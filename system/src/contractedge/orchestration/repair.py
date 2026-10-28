@@ -193,11 +193,58 @@ def canonical_text_digest(text):
     return hashlib.sha256(text.encode()).hexdigest()
 
 
+def plan_reassessment_required(plan: Mapping, current_snapshot: str, previous: Mapping | None) -> bool:
+    """Request a prerequisite review, without attributing the runtime failure.
+
+    Compiler errors and unrelated/unknown probe errors keep the existing edit
+    route. A verified readiness failure questions whether a required runtime
+    prerequisite was established; the planner may retain or revise its intent.
+    """
+    if not any(p.get('disposition') == 'REQUIRED' for p in plan.get('precondition_review', [])):
+        return False
+    previous = previous or {}
+    trial = previous.get('rejected_trial') or {}
+    decision = trial.get('decision') or trial.get('candidate_decision') or {}
+    if trial.get('decision') and trial.get('candidate_decision') and trial['decision'] != trial['candidate_decision']:
+        return False
+    historical = trial.get('feedback') or {}
+    if not (previous.get('source_snapshot') == current_snapshot
+            and decision.get('decision') == 'UNCOMPARABLE'
+            and decision.get('from_snapshot') == current_snapshot
+            and trial.get('snapshot_id') and trial['snapshot_id'] != current_snapshot
+            and decision.get('trial_snapshot') == trial['snapshot_id'] == historical.get('to_snapshot')
+            and historical.get('build_state') == 'FAILED'):
+        return False
+    from contractedge.execution.public import is_registered_readiness_failure
+    return any(isinstance(f, Mapping) and f.get('kind') == 'CANDIDATE_RUNTIME_FAILURE'
+        and f.get('snapshot_id') == trial['snapshot_id'] and is_registered_readiness_failure(f)
+        for f in historical.get('observation_diagnostics', []))
+
+
 def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
-                provider, token_counter, config: Mapping) -> dict:
+                provider, token_counter, config: Mapping, *, rejected_trial=None) -> dict:
     packet, context = validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
-    request = build_changeset_request(packet, context, [{'code': 'PUBLIC_EXECUTION_PLAN_FEEDBACK',
-            'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}],
+    validation_feedback = [{'code': 'PUBLIC_EXECUTION_PLAN_FEEDBACK',
+        'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}]
+    if rejected_trial is not None:
+        decision = rejected_trial.get('decision') or rejected_trial.get('candidate_decision') or {}
+        if (decision.get('from_snapshot') != context.snapshot_id
+                or decision.get('trial_snapshot') != rejected_trial.get('snapshot_id')
+                or rejected_trial.get('snapshot_id') == context.snapshot_id
+                or (rejected_trial.get('feedback') or {}).get('to_snapshot') != rejected_trial.get('snapshot_id')):
+            raise ValueError('Rejected trial snapshot does not bind this current plan revision')
+        validation_feedback.append({'code': 'REJECTED_TRIAL_PREREQUISITE_REASSESSMENT',
+            'message': json.dumps(dict(current_snapshot=context.snapshot_id, rejected_trial=rejected_trial,
+                instruction='The recorded failure is not proof of a plan defect or source cause. Reassess required '
+                'preconditions against the delivered current source and the historical failed edits. Distinguish '
+                'a false plan assumption from an implementation that did not fulfill valid intent. Preserve valid '
+                'intent when implementation alone failed; revise unsupported mechanisms instead of requiring the '
+                'executor to obey them. A source comment, empty collection, worker launch or first received item '
+                'does not prove completion. State the producer-backed completion condition, including zero initial '
+                'work and continued updates, or leave it unresolved. Historical observations retain their own '
+                'snapshot and cannot prove current satisfaction. Preserve every requirement and protected condition.'),
+                ensure_ascii=False)})
+    request = build_changeset_request(packet, context, validation_feedback,
         previous_attempt=dict(run_id=context.run_id, snapshot_id=context.snapshot_id,
             input_digest=context.input_digest, diagnosis_digest=canonical_digest(packet.raw),
             response_content=json.dumps(trace['changeset'], ensure_ascii=False, sort_keys=True),
@@ -225,6 +272,7 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
         raise PlanRejected('Feedback plan revision failed: ' + str(validation.errors))
     call = {'stage': 'EXECUTION_PLAN_REVISION', 'prompt_version': request.prompt_version,
             'response_content': response.content, 'response_metadata': dict(response.metadata), 'runner_binding': binding,
+            'request_metadata': dict(request.metadata),
             'prompt_tokens_reserved': quote.input_tokens,
             'output_tokens_reserved': request.max_output_tokens,
             'elapsed_seconds': provider.summary()['elapsed_seconds'] if isinstance(provider, BudgetedProvider) else 0}
@@ -562,6 +610,22 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                                   'errors': delivery.receipt['errors']}, ensure_ascii=False))
                 break
             observations = delivery.records
+            if (mode == 'full' and trace is not None and retry_restored_candidate
+                    and plan_reassessment_required(trace.get('changeset') or {},compute_snapshot(source).snapshot_id,
+                                                   last_execution_attempt)):
+                revision_call_start=journal.position()
+                trace=revise_plan(trace,method_input,source,feedback,budget,token_counter,config,
+                    rejected_trial=last_execution_attempt['rejected_trial'])
+                write_json(directory/'plan-reassessment.trace.json',trace)
+                revision_value=journal.recorder.capture_value(trace['changeset'],'FINAL_SEMANTIC_PLAN',
+                    snapshot_id=trace['snapshot_id'])
+                journal.record('planning',attempt_id='round-'+str(round_id)+'.prerequisite-reassessment',
+                    snapshot_id=trace['snapshot_id'],status=trace['status'],call_start=revision_call_start,
+                    input_refs=tuple(journal.latest[k] for k in ('planning','feedback') if k in journal.latest),
+                    output_refs=(revision_value,))
+                # Re-prepare the consumer with the revised intent. Rebinding the
+                # previous AcceptedInput would silently discard the new plan.
+                execution_input=None;last_applied_execution=None;plan=None
             if trace is not None and engine.state.diagnosis_snapshot is None and trace.get('diagnosis'):
                 imported = (journal.capture('initial-front.trace.json', 'IMPORTED_FRONT_TRACE',
                                            snapshot_id=trace['snapshot_id']) if initial_trace else journal.latest.get('front'))

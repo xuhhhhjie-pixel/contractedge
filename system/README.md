@@ -1,8 +1,8 @@
-> **2026-10-28 当前候选0.6.65：** 已核实的启动失败接入现有失败修订推理策略，真实旧请求零调用回放和108项相关回归通过；完整同版工程资格与真实效果尚待关闭。0.6.64续修失败保留，原0.6.61面板18/46关闭且门禁失败，正式150未启动。当前身份以[CURRENT_STATUS.json](CURRENT_STATUS.json)为准，进度见[单一审计入口](outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md)。`formal_ready=false`。
+> **2026-10-28 当前候选0.6.66：** 已核验的就绪失败涉及必要前提时，复用现有规划修订入口，携带历史失败与当前源码重新审查计划；普通执行错误保持原路由。旧轨迹零调用回放通过，当前同版资格和真实效果以 CURRENT_STATUS.json 与单一审计为准。0.6.64续修失败保留，0.6.65仅完成工程资格，正式150未启动。`formal_ready=false`。
 
 # ContractEdge developer entry
 
-当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准；待冻结变更见同一对象的 `status` 与 `planned_snapshot`。上游冻结包版本为 `0.6.27`；本工作树开发候选包版本为 `0.6.65`，方法身份由同版源码、配置和测试面板摘要确定，不能沿用历史版本效果。`formal_ready=false`，未启动正式150；开发候选的独立评分由父侧隔离执行，评分内容不进入修复输入。阶段 B 的范围与验证登记见[隔离运行与可信公开观察说明](docs/development/2026-10-23-architecture-b-runtime-observer.md)。 跨阶段引用、调用账本封存及 READY 原阶段继承见[阶段 A2 说明](docs/development/2026-10-23-architecture-a2-stage-references.md)；该阶段的通过范围以同版验证报告为准。 状态转换及标准CLI持久记录见[阶段C1说明](docs/development/2026-10-24-architecture-c1-state-cli.md)。 持久候选事务、恢复与可替换消费者见[阶段C2/D1说明](docs/development/2026-10-24-architecture-c2-transactions-consumers.md)。
+当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准；待冻结变更见同一对象的 `status` 与 `planned_snapshot`。上游冻结包版本为 `0.6.27`；本工作树开发候选包版本为 `0.6.66`，方法身份由同版源码、配置和测试面板摘要确定，不能沿用历史版本效果。`formal_ready=false`，未启动正式150；开发候选的独立评分由父侧隔离执行，评分内容不进入修复输入。阶段 B 的范围与验证登记见[隔离运行与可信公开观察说明](docs/development/2026-10-23-architecture-b-runtime-observer.md)。 跨阶段引用、调用账本封存及 READY 原阶段继承见[阶段 A2 说明](docs/development/2026-10-23-architecture-a2-stage-references.md)；该阶段的通过范围以同版验证报告为准。 状态转换及标准CLI持久记录见[阶段C1说明](docs/development/2026-10-24-architecture-c1-state-cli.md)。 持久候选事务、恢复与可替换消费者见[阶段C2/D1说明](docs/development/2026-10-24-architecture-c2-transactions-consumers.md)。
 
 ## 安装与冻结校验
 

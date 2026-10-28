@@ -45,6 +45,36 @@ def classify_recovery_continuation(result,rejection,source):
     return result
 
 
+def reassess_seed_plan(front,method,source,feedback,previous,provider,tokenizer,config,paths):
+    """Reuse current-source planning revision after a verified prerequisite failure.
+
+    The enclosing seed transaction checkpoints only its declared paths. A
+    revised plan may not escape that rollback boundary. Unknown plans stop
+    before another edit; no old plan is executed as a fallback.
+    """
+    from contractedge.orchestration import repair as repair_api
+    plan_reassessment_required=getattr(repair_api,'plan_reassessment_required',None)
+    if plan_reassessment_required is None:
+        return front,None  # Frozen older methods keep their existing protocol.
+    revise_plan=repair_api.revise_plan
+    from contractedge.source.snapshot import compute_snapshot
+    from contractedge.changeset.topomen import translate_for_topomen
+    from contractedge.execution.topomen import operation_path,PlanRejected
+    if not plan_reassessment_required(front['changeset'],compute_snapshot(source).snapshot_id,previous):
+        return front,None
+    revised=revise_plan(front,method,source,feedback,provider,tokenizer,config,
+        rejected_trial=previous['rejected_trial'])
+    if revised['status'] not in {'READY','READY_PARTIAL'}:
+        raise PlanRejected('Runtime prerequisite reassessment remains unresolved; do not execute the old plan')
+    translated=translate_for_topomen(revised['changeset'],'contractedge.topomen_plan.v1',
+        diagnosis=revised['diagnosis'],public_capabilities=config['public_execution_capabilities'],
+        **({'source_support':revised['run_context']['retrieval_config']['necessary_source_support']}
+           if revised['run_context']['retrieval_config'].get('necessary_source_support') else {}))
+    if not {operation_path(op) for op in translated['operations']}<=set(paths):
+        raise PlanRejected('Revised seed plan exceeds the existing checkpoint path boundary')
+    return revised,translated
+
+
 def recover(case,directory,provider,tokenizer,config,benchmark,seed,*,public_runner=None,runtime_started=None):
     from contractedge.contracts.validation import parse_method_input
     from contractedge.dataset.benchmark import method_input_from_task,file_sha
@@ -149,9 +179,17 @@ def recover(case,directory,provider,tokenizer,config,benchmark,seed,*,public_run
                 from contractedge.execution.topomen import operation_path
                 format_corrections_used=0
                 last_bound_plan=None;last_applied_execution=None;method_rejection=None
+                checkpoint_paths=[operation_path(op) for op in plan['operations']]
                 def attempt(index,current_feedback,current_observation,previous):
-                    nonlocal format_corrections_used,last_bound_plan,last_applied_execution,method_rejection
+                    nonlocal format_corrections_used,last_bound_plan,last_applied_execution,method_rejection,front,semantic_plan,plan
                     rd=directory/'rounds'/str(index);rd.mkdir(parents=True,exist_ok=True)
+                    if planning_mode=='CURRENT_CANDIDATE' and previous:
+                        revised,new_plan=reassess_seed_plan(front,method,source,current_feedback,previous,
+                            budget,tokenizer,config,checkpoint_paths)
+                        if new_plan is not None:
+                            front,semantic_plan,plan=revised,revised['changeset'],new_plan
+                            last_bound_plan=None;last_applied_execution=None
+                            write(rd/'plan-reassessment.trace.json',front)
                     current_plan=bind_seed_retry(rebind_execution_plan,plan,source,current_feedback,
                         last_bound_plan,last_applied_execution);write(rd/'continuation-plan.json',current_plan)
                     executor=TopoMenAgentExecutor(budget,tokenizer,config,on_trace=lambda x:write(rd/'native-trace.json',x))
@@ -182,7 +220,7 @@ def recover(case,directory,provider,tokenizer,config,benchmark,seed,*,public_run
                 def protected(current_feedback):
                     from contractedge.orchestration.candidate_guard import preservation_check_ids
                     return preservation_check_ids(seeded_review_envelope(semantic_plan,method,config,current_feedback),current_feedback)
-                continuation=continue_seeded_repair(source,[operation_path(op) for op in plan['operations']],feedback,observation,
+                continuation=continue_seeded_repair(source,checkpoint_paths,feedback,observation,
                     max_rounds=int(config.get('max_rounds',2)),guard_enabled=bool(config.get('candidate_guard_enabled')),
                     output=directory/'rounds',attempt=attempt,preservation_ids=protected)
                 continuation=classify_recovery_continuation(continuation,method_rejection,source)
