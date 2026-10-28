@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-10-29T03:08:07.611019+08:00",
+  "checked_at": "2026-10-29T03:19:31.226717+08:00",
   "status": "A_REPEAT_RECOVERY_COMPLETE_B_RUNNING",
   "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
   "panel_root": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028",
   "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
   "registered_slots": 46,
-  "closed_slots": 34,
+  "closed_slots": 36,
   "A_pairs": 7,
   "candidate_A_pass": 7,
   "baseline_A_pass": 3,
@@ -19,20 +19,20 @@
     "status": "RUNNING",
     "group": "B",
     "active_slot": {
-      "case_id": "R3-KUBEBUILDER-5119",
+      "case_id": "R3-SKAFFOLD-9732",
       "group": "B",
       "repeat": 0,
-      "slot_id": "fixed46-official-v068-20261028-ec66d873adb0dfa95b02688d",
+      "slot_id": "fixed46-official-v068-20261028-dd301a3401b0a414fdc5a6aa",
       "variant": "baseline"
     },
     "owner_pid": 3661213,
-    "closed_slots": 34,
+    "closed_slots": 36,
     "completed_groups": [
       "A",
       "repeat",
       "recovery"
     ],
-    "at": "2026-10-29T03:03:36.285096+08:00",
+    "at": "2026-10-29T03:14:25.828456+08:00",
     "formal_ready": false
   },
   "formal_ready": false,
@@ -284,17 +284,57 @@
           "sha256": "0ce3ce68f858cd01b5e1c6876a5ae5d5c5b78e24a7992cc440c63a0381853d5a"
         }
       }
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "variant": "baseline",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-ec66d873adb0dfa95b02688d/.isolated-282c7106047f4c6ab96fbe5fdca91834/receipt.json",
+          "sha256": "84cebe4d5dbfc360346798b6ce6be34f23cd0c38614dd48a3b2aea19452cf83a"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-ec66d873adb0dfa95b02688d/R3-KUBEBUILDER-5119/repair.trace.json",
+          "sha256": "256c6b4c049d961c95f22a65788a95828658b085b0a2a56b6e71bb993f6e9f01"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-ec66d873adb0dfa95b02688d/result.json",
+          "sha256": "8b5be04fe36d8b8eab3fe68e8e8eab0f631826823fe3884f5ef5cfec02420a2c"
+        }
+      }
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "variant": "candidate",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/.isolated-3b771e8f7eb4436bbbdbda6d6ff18796/receipt.json",
+          "sha256": "99d589296ea9011069aa93adc568f117336243d179597331ae234ed49b13994e"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/R3-KUBEBUILDER-5119/repair.trace.json",
+          "sha256": "e30bc854a4b7c8954432029ae68d7dc89456e4425d237c0bd2b60939744bc317"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/result.json",
+          "sha256": "bb83ef0649226da6a5319a4148ab824cb119873dacb39ccf15ed7c1589788a78"
+        }
+      }
     }
   ],
   "B_as_of_summary": {
-    "closed_slots": 8,
-    "complete_pairs": 4,
+    "closed_slots": 10,
+    "complete_pairs": 5,
     "registered_pairs": 10,
     "candidate_pass": 3,
     "baseline_pass": 2,
     "paired_wins": 1,
     "paired_regressions": 0,
-    "both_failed_pairs": 1
+    "both_failed_pairs": 2
   },
   "B_failure_analysis": [
     {
@@ -339,6 +379,64 @@
       },
       "finding": "Neither diagnosis request contains the normalizeTargetResources definition; the expanded request only includes its invocation and symbol entry.",
       "scope": "Request-delivery evidence only. Whole-repository availability and the exact selection/extraction cause are not established. No hidden scoring content was inspected or used for tuning; frozen method unchanged."
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "variant": "candidate",
+      "independent_status": "SEMANTIC_FAIL",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "build_state": "PASSED",
+      "public_decision": "UNKNOWN",
+      "rounds": 1,
+      "public_checks": [
+        {
+          "id": "P1-SM-NAME-PREFIX",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        },
+        {
+          "id": "P2-METRICS-SERVERNAME-PREFIX",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        },
+        {
+          "id": "preserve:PC1-DEFAULT-PREFIX-NAMES",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        },
+        {
+          "id": "preserve:PC2-PROM-DISABLED-OMIT-SM",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        },
+        {
+          "id": "open:OBL1-RENDERED-SM-NAME",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        },
+        {
+          "id": "open:OBL2-RENDERED-SM-SERVERNAME",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        }
+      ],
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/.isolated-3b771e8f7eb4436bbbdbda6d6ff18796/receipt.json",
+          "sha256": "99d589296ea9011069aa93adc568f117336243d179597331ae234ed49b13994e"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/R3-KUBEBUILDER-5119/repair.trace.json",
+          "sha256": "e30bc854a4b7c8954432029ae68d7dc89456e4425d237c0bd2b60939744bc317"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/result.json",
+          "sha256": "bb83ef0649226da6a5319a4148ab824cb119873dacb39ccf15ed7c1589788a78"
+        }
+      },
+      "finding": "Public compilation passed, while the six registered plan/preservation/open checks remained UNKNOWN outside this version's declared public observation boundary. Independent scoring failed; no root-cause attribution from hidden assertions.",
+      "root_cause_status": "UNDETERMINED",
+      "scope": "Current registered public capabilities do not verify generated ServiceMonitor naming and TLS serverName. This does not claim those properties are intrinsically unobservable. No hidden grading content inspected; no method tuning or retry."
     }
   ]
 }
