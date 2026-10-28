@@ -35,7 +35,7 @@ GitHub Release单个附件必须小于2GiB，本项目较大的包会分卷。�
 
 完整修复实验链为：公开任务 → 方法修改Broken → 导出patch → 独立隐藏评分 → 指标汇总。Agentless、SWE-agent、OpenHands等比较方法需要适配该任务/patch接口，可保留自身检索与编辑流程。完整包交给实验管理者；模型进程仅可访问public白名单和允许的源码工作区，不能读取evaluation/、GT、Fixed或历史修复。
 
-公开EXECUTION_PASS只是观察程序完成，不等于隐藏语义PASS。不同案例的终点可为渲染对象、控制决策、转换工件、外部API映射或运行消费行为，不一律声称真实集群/云最终收敛。当前没有模型baseline结果。沿用精确身份绑定历史证据，不重复全量3+3。
+公开EXECUTION_PASS只是观察程序完成，不等于隐藏语义PASS。不同案例的终点可为渲染对象、控制决策、转换工件、外部API映射或运行消费行为，不一律声称真实集群/云最终收敛。当前尚无150条正式模型对比结果；系统开发验收的配对结果单独记录。沿用精确身份绑定历史证据，不重复全量3+3。
 
 ## 版本、分区与来源
 
@@ -45,4 +45,6 @@ GitHub Release单个附件必须小于2GiB，本项目较大的包会分卷。�
 
 ## ContractEdge 修复系统（开发交接版）
 
-当前系统源码、测试、TopoMen运行源码、配置和设计文档见 [system/](system/README.md)。请先读 [正式实验准入与最终优化实施计划](system/docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md)。系统0.6.27尚未通过正式实验准入；历史开发成绩不代表150条正式结果。Benchmark冻结资源与系统开发状态分别管理。
+当前系统源码、测试、TopoMen运行源码、配置和设计文档见 [system/](system/README.md)。请先读 [当前验收与恢复报告](system/outputs/alert-repeat-closure-20261028/V068_ADMINISTRATIVE_RECOVERY.md) 和 [正式实验准入与最终优化实施计划](system/docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md)。当前候选为 **0.6.68**，精确源码摘要以 [CURRENT_STATUS.json](system/CURRENT_STATUS.json) 和冻结单为准；它尚未通过正式实验准入，现有运行目录仍保留0.6.40。正在完成原登记的同版开发验收，正式150条尚未启动；开发成绩不代表150条正式结果。Benchmark冻结资源与系统开发状态分别管理。
+
+系统目录中冻结的README、AGENTS及历史报告保留各自记录时的状态；当前验收进度请以上述报告和CURRENT_STATUS为准。账户中断的行政恢复已单独标注，不能作为自然连续运行成绩。源码、运行方式、已验证环境和恢复范围均须按交付证据理解，不能仅凭下载仓库就假定所有外部数据、镜像和凭据已经配置。
