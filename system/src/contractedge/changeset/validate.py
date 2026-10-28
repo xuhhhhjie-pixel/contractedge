@@ -112,10 +112,31 @@ def _prerequisite_input_issues(payload, diagnosis, prerequisites, source_support
                 isinstance(text,str) and quote in text and hashlib.sha256(text.encode()).hexdigest()==record.get('content_digest'))
         if not valid and (eid,quote) not in seen:
             seen.add((eid,quote))
+            def current_source(record):
+                text=record.get('excerpt')
+                return (record.get('kind')=='SOURCE_SPAN'
+                    and record.get('snapshot_id')==diagnosis.snapshot_id and isinstance(text,str)
+                    and hashlib.sha256(text.encode()).hexdigest()==record.get('content_digest'))
+            hint={}
+            if (sources and all(current_source(r) for r in sources)
+                    and len({r['excerpt'] for r in sources})==1):
+                text=sources[0]['excerpt']
+                example=next((line.strip()[:200] for line in text.splitlines()
+                    if line.strip() and not line.strip().startswith(('//','/*','*'))),None)
+                hint['referenced_source']={'id':eid,'locator':sources[0].get('locator'),
+                    'exact_quote_example':example}
+            matches=[{'id':other,'locator':record.get('locator')} for other,items in records.items()
+                if other!=eid for record in items
+                if quote.strip() and current_source(record) and quote in record['excerpt']][:2]
+            if matches:hint['quote_found_in_different_delivered_source']=matches
             issues.append(ValidationIssue('PRECONDITION_ESTABLISHMENT_INVALID',
                 f'precondition_review[{index}].establishment.source_quote',
                 f'Quote for {eid} does not bind the delivered current source. Copy one short exact source line; '
-                'do not paraphrase code or double-escape newlines/tabs. A source quote is not proof of the asserted semantic guarantee.'))
+                'do not paraphrase code or double-escape newlines/tabs. The quote must belong to this '
+                'source_evidence_ref, including for PLANNED_CHANGE; a caller quote cannot stand in for '
+                'the referenced helper. Describe caller changes in mechanism/change_refs. '
+                'A source quote is not proof of the asserted semantic guarantee. '
+                'Current-source binding hints (identity only): '+json.dumps(hint,ensure_ascii=False)))
     return issues
 
 
