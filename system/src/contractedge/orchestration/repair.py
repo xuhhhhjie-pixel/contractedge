@@ -221,6 +221,33 @@ def plan_reassessment_required(plan: Mapping, current_snapshot: str, previous: M
         for f in historical.get('observation_diagnostics', []))
 
 
+def behavior_plan_reassessment_required(plan: Mapping, current_snapshot: str, feedback: Mapping | None) -> bool:
+    """A bound necessary failure can question intent even when startup succeeds."""
+    if (not feedback or feedback.get('to_snapshot') != current_snapshot
+            or feedback.get('semantic_outcome') != 'PUBLIC_REVIEW_FAIL'
+            or not any(p.get('disposition') == 'REQUIRED' for p in plan.get('precondition_review', []))):
+        return False
+    from contractedge.execution.support import deterministic_check_result
+    return any((result := deterministic_check_result(condition, feedback.get('public_observations', []),
+        snapshot_id=current_snapshot, capabilities=feedback.get('public_execution_capabilities')))
+        and result['status'] == 'FAIL'
+        for kind in ('postconditions', 'preserve_constraints', 'open_obligations')
+        for condition in plan.get(kind, []))
+
+
+def prerequisite_review_feedback(feedback: Mapping) -> dict:
+    """Use the existing uncertain diagnosis-stage route, not a causal verdict."""
+    result = {**feedback, 'route': 'DIAGNOSIS', 'next_action': 'DIAGNOSIS',
+        'failure_kind': 'DIAGNOSIS', 'route_confidence': 'LOW',
+        'rationale': 'A current necessary behavior failed under prerequisite-dependent intent. Reassess current '
+        'source and accepted assumptions before another edit; this route is not proof that the plan caused it. '
+        'DIAGNOSIS selects the work stage at LOW confidence, not proven source blame. This review instruction '
+        'supersedes the old execution-first instruction. The unchanged original feedback retains its attribution '
+        'and rationale; do not treat that historical instruction as the current action.'}
+    result.pop('routing_policy', None)
+    return result
+
+
 def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
                 provider, token_counter, config: Mapping, *, rejected_trial=None) -> dict:
     packet, context = validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
@@ -631,7 +658,11 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                                            snapshot_id=trace['snapshot_id']) if initial_trace else journal.latest.get('front'))
                 engine.step(StageResult('diagnosis', front_status(trace['diagnosis']['status']), imported,
                     snapshot_id=trace['snapshot_id']))
-            next_route = ('EXECUTE' if retry_restored_candidate else feedback['route'] if feedback else
+            behavior_reassessment = (mode == 'full' and trace is not None and
+                behavior_plan_reassessment_required(trace.get('changeset') or {},
+                    compute_snapshot(source).snapshot_id, feedback))
+            next_route = ('DIAGNOSIS' if behavior_reassessment else
+                          'EXECUTE' if retry_restored_candidate else feedback['route'] if feedback else
                           'EXECUTE' if trace is not None else 'DIAGNOSIS')
             round_decision = engine.start_round(StageResult('round_start', 'READY',
                 journal.latest.get('feedback') or journal.latest.get('front_import'),
@@ -652,10 +683,14 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     'model': {'model': config['model'], 'provider': config.get('provider', 'configured'),
                               'schema_in_prompt': config.get('schema_in_prompt', True)}}
                 trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
-                    budget, round_config, token_counter, execution_feedback=feedback if mode == 'full' else public_feedback(feedback),
+                    budget, round_config, token_counter,
+                    execution_feedback=(prerequisite_review_feedback(feedback) if behavior_reassessment else feedback)
+                        if mode == 'full' else public_feedback(feedback),
                     public_observations=observations, directory=directory, evidence_delivery=delivery.receipt,
                     journal=journal, attempt_id='round-' + str(round_id)).to_wire()
                 plan = None
+                execution_input = None
+                last_applied_execution = None
             if trace['status'] not in {'READY', 'READY_PARTIAL'}:
                 unknown = bool(budget.calls and budget.calls[-1].get('error')
                     and 'response_content' not in budget.calls[-1] and trace['status'] != 'BUDGET_EXHAUSTED')
@@ -680,8 +715,9 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     plan = None
                 else:
                     # Old source evidence cannot be relabelled as current solely to reuse a diagnosis.
-                    feedback = {**feedback, 'route': 'DIAGNOSIS', 'failure_kind': 'DIAGNOSIS',
-                                'rationale': 'Plan feedback requires rediagnosis because source evidence is stale.'}
+                    feedback = (prerequisite_review_feedback(feedback) if behavior_reassessment else
+                        {**feedback, 'route': 'DIAGNOSIS', 'failure_kind': 'DIAGNOSIS',
+                         'rationale': 'Plan feedback requires rediagnosis because source evidence is stale.'})
                     trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
                         budget, {**dict(config), 'run_id': run_id, 'model': {'model': config['model'],
                             'schema_in_prompt': config.get('schema_in_prompt', True)}},

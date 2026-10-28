@@ -11,13 +11,19 @@ def _fingerprint(path,text):
         except (SyntaxError,ValueError):return None
     if path.endswith('.go'):
         # Go directives/cgo can give comments and separation runtime meaning.
-        if re.search(r'(?m)^\s*//(?:go:|line\b|export\b|\s*\+build\b)',text) or '"C"' in text:return None
-        # Keep literal and comment contents exactly, including their blank lines.
-        # Inline whitespace and statement newlines remain significant. Only
-        # empty source lines outside those tokens are ignored.
+        if (re.search(r'(?m)^\s*//(?:go:|line\b|export\b|\s*\+build\b)',text)
+                or re.search(r'/\*\s*line\s',text) or '"C"' in text):return None
+        # Ordinary comments are whitespace, but a block comment's newline can
+        # insert a Go semicolon. Preserve that boundary and every literal token;
+        # directives/cgo remain deliberately unclassified above.
+        def token(match):
+            value=match[0]
+            if value.startswith('//'):return ''
+            if value.startswith('/*'):return '\n' if '\n' in value else ' '
+            return '\x00'+hashlib.sha256(value.encode()).hexdigest()+'\x00'
         masked=re.sub(r'//[^\n]*|/\*[\s\S]*?\*/|`[^`]*`|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'',
-            lambda m:'\x00'+hashlib.sha256(m[0].encode()).hexdigest()+'\x00',text)
-        return ('GO_BLANK_LINES',re.sub(r'(?m)^[ \t\r]*\n','',masked))
+            token,text)
+        return ('GO_COMMENTS_AND_BLANK_LINES',re.sub(r'(?m)^[ \t\r]*\n','',masked))
     return None
 
 

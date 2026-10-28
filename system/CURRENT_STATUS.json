@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-28T06:23:27.113342+00:00",
+  "as_of": "2026-10-28T07:50:40.936316+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -19,21 +19,21 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.66",
+  "implementation_version": "0.6.67",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
     "report": "outputs/benchmark150-adapter-v2-20261019/preparation.json"
   },
   "protocol_tests": {
-    "passed": 2326,
+    "passed": 2349,
     "subtests_passed": 91,
-    "implementation_version": "0.6.66",
-    "development_freeze": "plan-failure-reassessment-v066-compat-20261028",
-    "report": "outputs/alert-repeat-closure-20261028/full-v066.log",
+    "implementation_version": "0.6.67",
+    "development_freeze": "behavior-plan-closure-v067-20261028",
+    "report": "outputs/alert-repeat-closure-20261028/full-v067.log",
     "actual_process_exit_code": 0,
-    "process_receipt": "outputs/alert-repeat-closure-20261028/V066_COMPAT_QUALIFICATION.json",
-    "scope": "Exact core full suite plus71 affected shared-worker compatibility checks; no claim of a second full-suite run"
+    "process_receipt": "outputs/alert-repeat-closure-20261028/V067_FULL_REGRESSION.json",
+    "scope": "Exact frozen official-profile source full-suite process; source/fixtures unchanged; no model repair effectiveness inferred"
   },
   "stage_implementations": {
     "0_1": "dataset/benchmark.py",
@@ -3297,19 +3297,19 @@
     }
   },
   "current_development": {
-    "status": "V066_TARGETED_PUBLIC_BEHAVIOR_FAILED_INDEPENDENT_PASS",
-    "planned_version": "0.6.66",
-    "base_commit": "8779d3e913e2002107ddf1b0760851d81d6b30e9",
-    "snapshot": "docs/development/plan-failure-reassessment-v066-compat-20261028.snapshot.json",
-    "planned_snapshot": "docs/development/plan-failure-reassessment-v066-compat-20261028.snapshot.json",
-    "source_sha256": "57fbb6b65bdcdc3fbf6bc1ed869d6b138b27b5bdfde90baeddfdce77b16f069d",
+    "status": "V067_OFFICIAL_ENGINEERING_QUALIFIED_TARGETED_VALIDATION_REGISTERED",
+    "planned_version": "0.6.67",
+    "base_commit": "d4101bfb507cb71cd39ac30f88ca46a1b3b31262",
+    "snapshot": "docs/development/behavior-plan-closure-v067-20261028.snapshot.json",
+    "planned_snapshot": "docs/development/behavior-plan-closure-v067-20261028.snapshot.json",
+    "source_sha256": "5e1758b0ac0a306f089f9a1e2aacb58aff12739a803ac5544b44d95392bf3387",
     "formal_ready": false,
-    "paid_dispatch_allowed": false,
+    "paid_dispatch_allowed": true,
     "integration_requires_new_qualification": false,
     "full_new_source_qualification": true,
     "budget_cny": 200,
     "report": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
-    "active_experiment": "/home/xhj/contractedge-plan-reassessment-v066-20261028",
+    "active_experiment": "/home/xhj/contractedge-behavior-plan-official-v067-20261028",
     "prior_cohort": {
       "root": "/home/xhj/contractedge-fixed46-source061-20261028",
       "version": "0.6.61",
@@ -3322,12 +3322,18 @@
       "Run bounded saved public failure recovery; fresh Broken only if passed",
       "Continue same-version cross-case acceptance only after targeted success"
     ],
-    "paid_dispatch_scope": "One saved-public-failure continuation, then fresh Broken only if passed; stop on first failure; original46 not opened",
-    "full_regression": "outputs/alert-repeat-closure-20261028/V066_COMPAT_QUALIFICATION.json",
+    "paid_dispatch_scope": "One saved public failure, then fresh Broken only after independent PASS with no public FAIL; stop at first failure; official model only",
+    "full_regression": "outputs/alert-repeat-closure-20261028/V067_FULL_REGRESSION.json",
     "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V066_TARGETED_VALIDATION.json",
-    "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/V064_TARGETED_VALIDATION.json"
+    "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/V064_TARGETED_VALIDATION.json",
+    "status_before_user_pause": "V066_TARGETED_PUBLIC_BEHAVIOR_FAILED_INDEPENDENT_PASS",
+    "user_paused": false,
+    "paused_at": "2026-10-28T07:00:52.192898+00:00",
+    "pause_boundary": "v066 targeted validation closed; behavior-failure routing and Go-comment guard edits remain uncommitted/unqualified; no v067 paid attempt started",
+    "provider_config_requires_new_binding": true,
+    "resumed_at": "2026-10-28T07:41:00.531721+00:00"
   },
-  "staged_implementation_version": "0.6.66",
+  "staged_implementation_version": "0.6.67",
   "runtime_implementation_version": "0.6.40",
   "current_optimization_audit": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {
@@ -3466,5 +3472,22 @@
     "serial_only": true,
     "no_new_model_calls_for_delivery": true,
     "current_parent_qualification": "79tests+2subtests; saved211465input/16384output RPC oldUNKNOWN/newDONE with0HTTP; real ACK once-running"
+  },
+  "active_provider": {
+    "provider_config": "/home/xhj/contractedge-alert-closure-20261028/system/configs/development-deepseek-official-budget200.json",
+    "api_key_file": "/home/xhj/.config/contractedge/deepseek-official-20261028.key",
+    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-flash",
+    "previous_provider_retired_for_new_runs": true,
+    "benchmark_dispatch_paused": false,
+    "connection_status": "PASS",
+    "connection_report": "outputs/alert-repeat-closure-20261028/DEEPSEEK_OFFICIAL_CONNECTION.json",
+    "documented_serving_version": "DeepSeek-V4.1-Flash-1017",
+    "reported_model": "deepseek-flash",
+    "config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+    "model_identity_policy": "require_match",
+    "new_registration_required": true,
+    "official_results_inherit_intermediary_scores": false,
+    "scope": "Explicit provider selection for subsequent authorized runs; historical frozen configs are unchanged. Existing CLI requires explicit config and api-key-file arguments."
   }
 }

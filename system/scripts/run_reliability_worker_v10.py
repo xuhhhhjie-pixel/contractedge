@@ -60,10 +60,25 @@ def reassess_seed_plan(front,method,source,feedback,previous,provider,tokenizer,
     from contractedge.source.snapshot import compute_snapshot
     from contractedge.changeset.topomen import translate_for_topomen
     from contractedge.execution.topomen import operation_path,PlanRejected
-    if not plan_reassessment_required(front['changeset'],compute_snapshot(source).snapshot_id,previous):
+    current=compute_snapshot(source).snapshot_id
+    behavior_review=getattr(repair_api,'behavior_plan_reassessment_required',lambda *a:False)
+    if behavior_review(front['changeset'],current,feedback):
+        from contractedge.orchestration.runner import run_front_half
+        front_config={**config,'run_id':front['run_id'],'model':{'model':config['model'],
+            'provider':config['provider'],'schema_in_prompt':config['schema_in_prompt']}}
+        delivery=repair_api.select_observations_delivery(feedback.get('public_observations',[]),
+            method.requirement_text,tokenizer,config['max_public_evidence_tokens'],snapshot_id=current)
+        if delivery.receipt['status']!='COMPLETE':
+            raise PlanRejected('Necessary failure delivery is incomplete; do not replan without its public facts')
+        observations=delivery.records
+        revised=run_front_half(method,source if method.source_root=='.' else source.parent,provider,
+            front_config,tokenizer,public_observations=observations,
+            execution_feedback=repair_api.prerequisite_review_feedback(feedback)).to_wire()
+    elif plan_reassessment_required(front['changeset'],current,previous):
+        revised=revise_plan(front,method,source,feedback,provider,tokenizer,config,
+            rejected_trial=previous['rejected_trial'])
+    else:
         return front,None
-    revised=revise_plan(front,method,source,feedback,provider,tokenizer,config,
-        rejected_trial=previous['rejected_trial'])
     if revised['status'] not in {'READY','READY_PARTIAL'}:
         raise PlanRejected('Runtime prerequisite reassessment remains unresolved; do not execute the old plan')
     translated=translate_for_topomen(revised['changeset'],'contractedge.topomen_plan.v1',
@@ -179,11 +194,14 @@ def recover(case,directory,provider,tokenizer,config,benchmark,seed,*,public_run
                 from contractedge.execution.topomen import operation_path
                 format_corrections_used=0
                 last_bound_plan=None;last_applied_execution=None;method_rejection=None
-                checkpoint_paths=[operation_path(op) for op in plan['operations']]
+                # A corrected plan may repair another file already modified by
+                # the authorized seed. Protect all seed-owned paths before any
+                # new edit, rather than silently excluding those known targets.
+                checkpoint_paths=sorted(set(changed)|{operation_path(op) for op in plan['operations']})
                 def attempt(index,current_feedback,current_observation,previous):
                     nonlocal format_corrections_used,last_bound_plan,last_applied_execution,method_rejection,front,semantic_plan,plan
                     rd=directory/'rounds'/str(index);rd.mkdir(parents=True,exist_ok=True)
-                    if planning_mode=='CURRENT_CANDIDATE' and previous:
+                    if planning_mode=='CURRENT_CANDIDATE' and index>0:
                         revised,new_plan=reassess_seed_plan(front,method,source,current_feedback,previous,
                             budget,tokenizer,config,checkpoint_paths)
                         if new_plan is not None:

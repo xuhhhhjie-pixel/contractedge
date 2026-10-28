@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "source_sha256": "5e1758b0ac0a306f089f9a1e2aacb58aff12739a803ac5544b44d95392bf3387",
+  "model_http_calls_added": 0,
+  "actual_calls_sha256": "9727bdf1759781fdc2c670aa0d5c025f2128b10ad0f806247c29d6f44a73c2d8",
+  "previous_planning_snapshot": "38430dfa9c0344b66e7bff5f667a94f44aa096259fbfcbc1f33c9fa80d424f36",
+  "current_snapshot": "17f1bdc5e533668d9d524c5121560e8e5c10778d6a1b3f5fbe5b49f34ae9c93d",
+  "fresh_diagnosis_request": true,
+  "actual_current_async_handoff_delivered": true,
+  "current_failed_observations_delivered": true,
+  "previous_plan_not_rebound_as_current": true,
+  "comment_only_actual_retry_now_recognized": true,
+  "request_sha256": "d07823237ab9eabb0762b0e4929b330a4b09f40822d192b6508c09970f5a0b34",
+  "formal_ready": false,
+  "scope": "Current-source planning route and actual cosmetic-retry recognition; no model repair success inferred"
+}

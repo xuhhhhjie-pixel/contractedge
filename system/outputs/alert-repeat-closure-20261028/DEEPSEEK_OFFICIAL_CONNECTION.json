@@ -1,0 +1,104 @@
+{
+  "checked_at": "2026-10-28T15:34:21.976615+08:00",
+  "status": "PASS",
+  "endpoint": "https://api.deepseek.com",
+  "requested_model": "deepseek-flash",
+  "official_documented_version": "DeepSeek-V4.1-Flash-1017",
+  "config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+  "models_endpoint": "PASS",
+  "benchmark_cases_run": 0,
+  "formal_ready": false,
+  "checks": [
+    {
+      "thinking": "disabled",
+      "status": "PASS",
+      "elapsed_seconds": 0.874,
+      "metadata": {
+        "output_mode_requested": "json_object",
+        "output_mode_effective": "json_object",
+        "output_fallback_reason": null,
+        "application_validation_required": true,
+        "endpoint_schema_support": "UNKNOWN",
+        "model_identity_policy": "require_match",
+        "requested_output_schema_sha256": null,
+        "wire_output_schema_sha256": null,
+        "provider": "openai-compatible",
+        "prompt_version": "deepseek-official-connection-20261028-disabled",
+        "adapter_class": "contractedge.model.provider.OpenAICompatibleProvider",
+        "strict_schema": false,
+        "effective_thinking": "disabled",
+        "effective_reasoning_effort": null,
+        "requested_model": "deepseek-flash",
+        "reported_model": "deepseek-flash",
+        "model": "deepseek-flash",
+        "model_identity_status": "MATCH",
+        "model_identity_verified": true,
+        "usage": {
+          "prompt_tokens": 40,
+          "completion_tokens": 5,
+          "total_tokens": 45,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 40
+        },
+        "request_id": "e977bd29-2ef8-4043-98b5-56570ce32e83",
+        "finish_reason": "stop",
+        "money_usage_identity_verified": true
+      },
+      "valid_expected_json": true
+    },
+    {
+      "thinking": "enabled",
+      "status": "PASS",
+      "elapsed_seconds": 0.803,
+      "metadata": {
+        "output_mode_requested": "json_object",
+        "output_mode_effective": "json_object",
+        "output_fallback_reason": null,
+        "application_validation_required": true,
+        "endpoint_schema_support": "UNKNOWN",
+        "model_identity_policy": "require_match",
+        "requested_output_schema_sha256": null,
+        "wire_output_schema_sha256": null,
+        "provider": "openai-compatible",
+        "prompt_version": "deepseek-official-connection-20261028-enabled",
+        "adapter_class": "contractedge.model.provider.OpenAICompatibleProvider",
+        "strict_schema": false,
+        "effective_thinking": "enabled",
+        "effective_reasoning_effort": "low",
+        "requested_model": "deepseek-flash",
+        "reported_model": "deepseek-flash",
+        "model": "deepseek-flash",
+        "model_identity_status": "MATCH",
+        "model_identity_verified": true,
+        "usage": {
+          "prompt_tokens": 65,
+          "completion_tokens": 20,
+          "total_tokens": 85,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 14
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 65
+        },
+        "request_id": "c261d7a2-c303-4ddc-83c6-f73e46cbb6ec",
+        "finish_reason": "stop",
+        "money_usage_identity_verified": true
+      },
+      "valid_expected_json": true
+    }
+  ],
+  "model_calls_added": 2,
+  "money": {
+    "limit_micro_cny": 200000000,
+    "committed_micro_cny": 149093596,
+    "calls": 1421,
+    "reservation_rejected": false,
+    "pending_calls": 3
+  }
+}
