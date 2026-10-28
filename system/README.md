@@ -1,32 +1,8 @@
-> **2026-10-27 整合候选0.6.60：** 当前分支整合协作者 PR #19 和本地后续可靠性修复，统一公开检查目录及审核边界，保留规划阶段助手契约。整合验收与真实效果以 CURRENT_STATUS.json / outputs/planning-helper-contracts-20261027/COMPLETION_AUDIT.md 为准；formal_ready=false。
-
-> **2026-10-26 候选0.6.56：** 复用既有补证诊断入口，带回同快照规划已明确提出的分支疑点；31项新反例和71项相关回归通过，真实旧KPT请求零调用回放确认交接补齐。完整工程和真实效果待验收，formal_ready=false；当前入口CURRENT_STATUS.json。
-
-> **2026-10-26 候选0.6.55：** 修复无保持ID时公开探测错误仍晋级，以及独立EXECUTION_FAIL状态漏接；已完成真实旧轨迹零调用回放和76项相关回归，正在新冻结完整资格验证。旧候选仍为失败，formal_ready=false，当前状态以CURRENT_STATUS.json为准。
-
-> **2026-10-26 当前候选0.6.54：** 以0.6.53实际失败为依据，补齐读者共享引用的精确源码窗口、跨阶段必需来源，以及确定性负结果收束；117相关回归和公开旧轨迹零调用回放通过。尚待本版完整工程、隔离与目标效果验收，CURRENT_STATUS.json为当前入口，formal_ready=false。
-
-> **2026-10-26 当前候选0.6.53：** 在已验证字段取证上补齐保持条件ID域、空集合模式与具体纠错反馈，105项相关回归及真实旧输出零调用回放通过；尚待本版完整工程、隔离及唯一目标效果验证。当前身份以CURRENT_STATUS.json为准；formal_ready=false。
-
-> **2026-10-26 当前候选0.6.52：** 有界构造器实参、字段与具体接收者源码取证已完成79项针对性回归；实际Alert公开Broken初诊Top12已送达完整订阅实现，仍待本版完整工程、隔离资格及唯一目标验证。CURRENT_STATUS.json为当前身份入口，下列旧版本记载仅作历史。formal_ready=false。
-
-> **0.6.51 v2准备（2026-10-26）** v1全回归2项旧input-only兼容性失败，已阻断付费；现79项相关回归通过。新完整资格必须绑定实际进程退出码和冻结/日志摘要，6个正反例通过。当前正式准入仍false，状态以CURRENT_STATUS.json为准。
-
-> **2026-10-26当前候选0.6.51：** 分支目标缺失绑定反馈、原有重新诊断路由和补证上下文修复已完成58项针对性回归及公开旧轨迹零调用闭环。本版尚待完整工程、隔离资格和真实效果验收；当前入口CURRENT_STATUS.json及outputs/branch-target-binding-20261026/COMPLETION_AUDIT.md。0.6.50 Cert通过/KPT控制失败保留，formal_ready=false。
-
-> **2026-10-26当前候选0.6.50：** 初始范围正文评分修复已通过72项针对性回归及公开旧轨迹零调用回放；本版完整工程、隔离资格和真实效果待验收。当前入口为CURRENT_STATUS.json及outputs/initial-scope-ranking-20261026/COMPLETION_AUDIT.md；下列旧版说明按历史范围解释。formal_ready=false。
-
-> **2026-10-26当前开发候选0.6.49：** 查询与候选池截断修复已零调用回放，尚待本版工程资格和真实验证；formal_ready=false。前版工程通过不等于本版效果通过。当前入口为 CURRENT_STATUS.json 及 outputs/gap-query-tokenization-20261026/COMPLETION_AUDIT.md。下列旧报告按原版本历史范围保留。
-
-> 本工作树为0.6.46离线优化候选，尚未进行同版真实模型验证。正在执行的原固定46槽仍使用0.6.45；不得承接其成绩。当前正式准入为false。
-
-> 当前协议修复进度见[0.6.45审计](outputs/public-check-protocol-20261025/COMPLETION_AUDIT.md)；0.6.44历史成绩保留原口径。
-
-> 已完成前轮验证的候选0.6.45，公开检查绑定与场景协议结果见最新审计；运行目录仍保留0.6.40。当前进度见[续轮审计](outputs/source-build-recovery-20261025/COMPLETION_AUDIT.md)。formal_ready=false。
+> **2026-10-28 当前候选0.6.65：** 已核实的启动失败接入现有失败修订推理策略，真实旧请求零调用回放和108项相关回归通过；完整同版工程资格与真实效果尚待关闭。0.6.64续修失败保留，原0.6.61面板18/46关闭且门禁失败，正式150未启动。当前身份以[CURRENT_STATUS.json](CURRENT_STATUS.json)为准，进度见[单一审计入口](outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md)。`formal_ready=false`。
 
 # ContractEdge developer entry
 
-当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准；待冻结变更见同一对象的 `status` 与 `planned_snapshot`。上游冻结包版本为 `0.6.27`；本工作树离线候选包版本为 `0.6.46`，方法身份由同版源码、配置和测试面板摘要确定，不能沿用历史版本效果。`formal_ready=false`，未启动正式150；开发候选的独立评分由父侧隔离执行，评分内容不进入修复输入。阶段 B 的范围与验证登记见[隔离运行与可信公开观察说明](docs/development/2026-10-23-architecture-b-runtime-observer.md)。 跨阶段引用、调用账本封存及 READY 原阶段继承见[阶段 A2 说明](docs/development/2026-10-23-architecture-a2-stage-references.md)；该阶段的通过范围以同版验证报告为准。 状态转换及标准CLI持久记录见[阶段C1说明](docs/development/2026-10-24-architecture-c1-state-cli.md)。 持久候选事务、恢复与可替换消费者见[阶段C2/D1说明](docs/development/2026-10-24-architecture-c2-transactions-consumers.md)。
+当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准；待冻结变更见同一对象的 `status` 与 `planned_snapshot`。上游冻结包版本为 `0.6.27`；本工作树开发候选包版本为 `0.6.65`，方法身份由同版源码、配置和测试面板摘要确定，不能沿用历史版本效果。`formal_ready=false`，未启动正式150；开发候选的独立评分由父侧隔离执行，评分内容不进入修复输入。阶段 B 的范围与验证登记见[隔离运行与可信公开观察说明](docs/development/2026-10-23-architecture-b-runtime-observer.md)。 跨阶段引用、调用账本封存及 READY 原阶段继承见[阶段 A2 说明](docs/development/2026-10-23-architecture-a2-stage-references.md)；该阶段的通过范围以同版验证报告为准。 状态转换及标准CLI持久记录见[阶段C1说明](docs/development/2026-10-24-architecture-c1-state-cli.md)。 持久候选事务、恢复与可替换消费者见[阶段C2/D1说明](docs/development/2026-10-24-architecture-c2-transactions-consumers.md)。
 
 ## 安装与冻结校验
 

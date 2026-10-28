@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-28T05:09:02.238436+00:00",
+  "as_of": "2026-10-28T05:11:33.682864+00:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -19,7 +19,7 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.64",
+  "implementation_version": "0.6.65",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
@@ -3296,19 +3296,19 @@
     }
   },
   "current_development": {
-    "status": "V064_TARGETED_RECOVERY_FAILED",
-    "planned_version": "0.6.64",
-    "base_commit": "a05cdb805851713679273fee17766611d5acbbbc",
-    "snapshot": "docs/development/prerequisite-compaction-v064-handoff-20261028.snapshot.json",
-    "planned_snapshot": "docs/development/prerequisite-compaction-v064-handoff-20261028.snapshot.json",
-    "source_sha256": "6cbcfd6d3a9018d31a6ebc0c7e59854f1f3e2f073d3aee839be26eee8668000a",
+    "status": "V065_ENGINEERING_DOC_BINDING_CLOSED_NO_PAID_VALIDATION",
+    "planned_version": "0.6.65",
+    "base_commit": "0eb62189ac3522004867247770c8a8fa89571f37",
+    "snapshot": "docs/development/runtime-repair-reasoning-v065-docs-20261028.snapshot.json",
+    "planned_snapshot": "docs/development/runtime-repair-reasoning-v065-docs-20261028.snapshot.json",
+    "source_sha256": "b4a6e47cf5c7404b7eb05cb7d7eb6b1aea6fdd08717f57ef9c11b748153dd256",
     "formal_ready": false,
     "paid_dispatch_allowed": false,
-    "integration_requires_new_qualification": true,
+    "integration_requires_new_qualification": false,
     "full_new_source_qualification": true,
     "budget_cny": 200,
     "report": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
-    "active_experiment": "/home/xhj/contractedge-prerequisite-v064-20261028",
+    "active_experiment": null,
     "prior_cohort": {
       "root": "/home/xhj/contractedge-fixed46-source061-20261028",
       "version": "0.6.61",
@@ -3322,11 +3322,11 @@
       "Run only the bounded saved-failure qualification; preserve original46 gates"
     ],
     "paid_dispatch_scope": "Saved public startup-failure continuation, then fresh Broken only if passed; no original46 dispatch",
-    "full_regression": "outputs/alert-repeat-closure-20261028/V064_HANDOFF_FULL_REGRESSION.json",
+    "full_regression": "outputs/alert-repeat-closure-20261028/V065_DOC_BINDING_CLOSURE.json",
     "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V064_TARGETED_VALIDATION.json",
-    "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/V063_TARGETED_VALIDATION.json"
+    "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/V064_TARGETED_VALIDATION.json"
   },
-  "staged_implementation_version": "0.6.64",
+  "staged_implementation_version": "0.6.65",
   "runtime_implementation_version": "0.6.40",
   "current_optimization_audit": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {

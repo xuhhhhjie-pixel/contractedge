@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "scope": "Documentation-only binding closure; original2308/91 successful process reused with full hash verification; original FAIL retained",
+  "original_receipt_path": "outputs/alert-repeat-closure-20261028/V065_FULL_REGRESSION.json",
+  "original_receipt_sha256": "c5ebcc1452ec438d612c2cf532ecb83da223b420956e1ff682af6378db10ee1b",
+  "original_freeze_sha256": "d250fa6c9ccda05d34402f3016ec7c28abdb14dd5a3fc5ea0c449688c19aa162",
+  "amended_freeze": "docs/development/runtime-repair-reasoning-v065-docs-20261028.snapshot.json",
+  "amended_freeze_sha256": "44b8ab9122b60ccb3f4e1089a9ccb02ee8b9e37012c838b71c3b4d247c34f00a",
+  "source_sha256": "b4a6e47cf5c7404b7eb05cb7d7eb6b1aea6fdd08717f57ef9c11b748153dd256",
+  "changed_tooling_files": [
+    "AGENTS.md",
+    "README.md"
+  ],
+  "execution_files_changed": false,
+  "tests": 2308,
+  "subtests": 91,
+  "test_process_exit_code": 0,
+  "full_test_log_sha256": "8803fffd312acabc31477cf2a9386bb2e18f5aad782c915a49e6eb36f353c0ed",
+  "verification": {
+    "schema_version": "ce.development_snapshot_verification.v1",
+    "development_snapshot_id": "runtime-repair-reasoning-v065-docs-20261028",
+    "status": "PASS",
+    "formal_ready": false,
+    "coverage": {
+      "source": 116,
+      "configuration": 71,
+      "fixture": 213,
+      "tooling_files": 289,
+      "repository_files": 1
+    },
+    "unbound_legacy_fixture_files": [],
+    "errors": []
+  },
+  "model_http_calls_added": 0,
+  "formal_ready": false
+}

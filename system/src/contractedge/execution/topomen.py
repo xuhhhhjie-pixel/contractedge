@@ -233,6 +233,10 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
             feedback_view['shared_context_reference_policy']=(
                 'Each *_record_ref resolves to the complete identical object at that JSON Pointer in this request. '
                 'The accepted plan and original validated feedback remain unchanged; no obligation or capability was removed.')
+    # Runtime facts in the original validated feedback may be compacted into
+    # shared error tasks for delivery. Decide policy from their bound records,
+    # never infer provenance from the task's human-readable description.
+    reasoning_previous = previous_attempt
     if previous_attempt and isinstance(previous_attempt.get('rejected_trial'),Mapping):
         historical=previous_attempt['rejected_trial'].get('feedback')
         if isinstance(historical,Mapping):
@@ -358,26 +362,34 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
         raise PlanRejected('Unknown execution reasoning policy')
     complex_plan=(len(plan['operations'])>1 or any(
         r.get('disposition')=='REQUIRED' for r in plan.get('precondition_review',[])))
-    previous=previous_attempt or {}
+    previous=reasoning_previous or {}
     trial=previous.get('rejected_trial') or {}
     decision=trial.get('decision') or trial.get('candidate_decision') or {}
     if (trial.get('decision') and trial.get('candidate_decision')
             and trial['decision']!=trial['candidate_decision']):decision={}
     history=trial.get('feedback') or {}
     failed_predicates=(history.get('failure_tasks') or {}).get('failed_predicates',[])
-    failed_trial=(previous.get('source_snapshot')==acceptance['snapshot_id']
-        and decision.get('decision')=='REJECT_REGRESSION'
+    bound_trial=(previous.get('source_snapshot')==acceptance['snapshot_id']
         and decision.get('from_snapshot')==acceptance['snapshot_id']
         and bool(trial.get('snapshot_id')) and trial['snapshot_id']!=acceptance['snapshot_id']
-        and decision.get('trial_snapshot')==trial['snapshot_id']==history.get('to_snapshot')
+        and decision.get('trial_snapshot')==trial['snapshot_id']==history.get('to_snapshot'))
+    failed_behavior=(bound_trial and decision.get('decision')=='REJECT_REGRESSION'
         and any(p.get('snapshot_id')==trial['snapshot_id'] and p.get('status')=='FAIL'
                 and p.get('probe_sha256') and p.get('content_digest') for p in failed_predicates))
+    failed_runtime=False
+    if bound_trial and decision.get('decision')=='UNCOMPARABLE' and history.get('build_state')=='FAILED':
+        from contractedge.execution.public import has_candidate_runtime_failure
+        failed_runtime=has_candidate_runtime_failure(dict(status='EXECUTION_FAILED',snapshot_id=trial['snapshot_id'],
+            candidate_runtime_failures=[f for f in history.get('observation_diagnostics',[])
+                if isinstance(f,Mapping) and f.get('kind')=='CANDIDATE_RUNTIME_FAILURE']))
+    failed_trial=bound_trial and (failed_behavior or failed_runtime)
     if (reasoning_policy in {'complex_plan','failed_trial_only'}
             and (failed_trial or reasoning_policy=='complex_plan' and complex_plan)):
         if config.get('provider')!='openai_compatible':
             raise PlanRejected('Complex execution reasoning policy requires compatible transport')
         thinking='enabled'
         metadata['execution_thinking_policy']='FAILED_TRIAL_REASONING' if failed_trial else 'COMPLEX_PLAN_REASONING'
+        if failed_runtime:metadata['execution_reasoning_trigger']='VERIFIED_RUNTIME_FAILURE'
     previous = previous_attempt or {}
     previous_metadata = previous.get('response_metadata') or {}
     usage = previous_metadata.get('usage') or {}

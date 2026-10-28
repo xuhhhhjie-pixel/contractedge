@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "source_sha256": "b4a6e47cf5c7404b7eb05cb7d7eb6b1aea6fdd08717f57ef9c11b748153dd256",
+  "freeze_sha256": "d250fa6c9ccda05d34402f3016ec7c28abdb14dd5a3fc5ea0c449688c19aa162",
+  "wheel_sha256": "edc206716a1e6d102c80f23c6c95e8e7a4fca47ab2346ea406737cb9e49517db",
+  "installed_source_files": 116,
+  "installed_source_set_exact": true,
+  "initial_nonisolated_build": "FAILED_MISSING_BDIST_WHEEL; no source edits; preserved package-build.log",
+  "final_build": "PASS_PEP517_ISOLATED_BUILD",
+  "model_http_calls_added": 0,
+  "formal_ready": false
+}
