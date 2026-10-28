@@ -1,0 +1,52 @@
+{
+  "status": "RUNNING_NOT_ACCEPTED",
+  "root": "/home/xhj/contractedge-public-failure-continuation-v067-20261028",
+  "plan": {
+    "created_at": "2026-10-28T18:11:20.538635+08:00",
+    "source_sha256": "5e1758b0ac0a306f089f9a1e2aacb58aff12739a803ac5544b44d95392bf3387",
+    "config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+    "supplementary_harness": {
+      "driver_sha256": "7f0ce62e2cf5731f44050134351b43daf9cb68ee038acb95d2700172b9d2f160",
+      "child_sha256": "75325a1bfe3c557cbcf7ed2c2e6fe86739016c4fd31040111209f6387d2a2312",
+      "inputs": {
+        "candidate.patch": "241832e03f37405f1b26d82f9c56d6a3ddb1f8508c0f5f1aeb2e55f9f0272d46",
+        "prior-budget.json": "5a315ac4d63da128d503d7dddecb6e02556e21a197b354127795720ee8aaad46",
+        "front.json": "d14621ca6ee79a54dc369608816c5818c3aeec4f2366a39b4cc1bfc20b254148"
+      },
+      "scope": "Controlled continuation of archived v066 public failure using exact v067 route, official future responses, one remaining edit. Not original46, not fresh full-run repeat."
+    },
+    "inherited_prefix_calls": 5,
+    "remaining_fresh_edits": 1,
+    "cumulative_budget_cny": 200,
+    "automatic_retry": false,
+    "formal_ready": false
+  },
+  "criteria": {
+    "recorded_at": "2026-10-28T18:12:30.153786+08:00",
+    "scope": "Controlled saved public failure continuation; not natural same-run first failure or cross-case score",
+    "must_reproduce_current_snapshot_public_failure": true,
+    "must_dispatch_existing_reassess_seed_plan_with_fresh_failure": true,
+    "must_deliver_actual_current_failure_and_source_to_diagnosis_and_plan": true,
+    "must_change_unsupported_completion_assumption": "First received alert / launched worker cannot establish complete initialization; readiness must account for empty initial input and all declared initial state before publication",
+    "must_have_real_official_model_patch": true,
+    "must_preserve_all_previously_passed_registered_controls": true,
+    "required_public_checks": [
+      "alertmanager-reload-v4:groups.visible_during_reload",
+      "alertmanager-reload-v4:groups.visible_after_reload",
+      "alertmanager-reload-v4:groups.visible_at_reload_return",
+      "alertmanager-reload-v4:groups.unique_for_declared_route"
+    ],
+    "must_independently_score": "PASS",
+    "public_overall_unknown_allowed_only_without_explicit_failure": true,
+    "max_remaining_fresh_edits": 1,
+    "automatic_retry": false,
+    "formal_ready": false
+  },
+  "qualification": {
+    "targeted_tests": 45,
+    "test_status": "PASS",
+    "preflight": "PASS",
+    "full_regression_reused_for_exact_frozen_source_only": true
+  },
+  "formal_ready": false
+}
