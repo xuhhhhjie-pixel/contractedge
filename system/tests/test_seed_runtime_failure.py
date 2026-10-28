@@ -13,7 +13,7 @@ def harness():
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
 
 
-@pytest.mark.parametrize('kind,rounds,expected',[('confirmed',2,2),('unclassified',2,1),('stale',2,1),('confirmed',1,1)])
+@pytest.mark.parametrize('kind,rounds,expected',[('confirmed',2,2),('readiness',2,2),('unclassified',2,1),('stale',2,1),('confirmed',1,1)])
 def test_seed_runtime_failure_retries_only_existing_round_after_restore(tmp_path,kind,rounds,expected):
     source=tmp_path/'source';source.mkdir();target=source/'a.go';target.write_text('seed')
     sid=compute_snapshot(source).snapshot_id
@@ -25,7 +25,7 @@ def test_seed_runtime_failure_retries_only_existing_round_after_restore(tmp_path
             assert target.read_text()=='seed'
             assert previous['source_snapshot']==sid
             task=previous['rejected_trial']['feedback']['failure_tasks']['shared_execution_errors'][0]
-            assert task['actual_error']=='panic: nil receiver at public startup'
+            assert ('20 seconds' in task['actual_error'] if kind=='readiness' else task['actual_error']=='panic: nil receiver at public startup')
             assert task['snapshot_id']!=sid
         target.write_text('crashed' if not index else 'fixed')
         snap=compute_snapshot(source).snapshot_id
@@ -37,6 +37,16 @@ def test_seed_runtime_failure_retries_only_existing_round_after_restore(tmp_path
                 fact=dict(snapshot_id='old' if kind=='stale' else snap,operation='PRODUCTION_PROCESS_START',
                     status='FAILED',source_locations=[dict(path='a.go',line=1)],
                     stderr_excerpt='panic: nil receiver at public startup',stderr_sha256='a'*64)
+                if kind=='readiness':
+                    import hashlib
+                    from contractedge.execution.probe_specs import registered_programs
+                    message='PROBE_ERROR: server readiness: \nexit status 2\n'
+                    fact.update(operation='PRODUCTION_PROCESS_READINESS',producer='REGISTERED_PUBLIC_READINESS_WINDOW_V1',
+                        probe_id='alertmanager-reload-v3',scenario='method-alertmanager-reload-v3',
+                        probe_sha256=hashlib.sha256(registered_programs()['alertmanager-reload-v3'][0].encode()).hexdigest(),
+                        source_locations=[],source_cause='UNKNOWN',observation_window_seconds=20,
+                        build_passed=True,process_started=True,before_scenario_injection=True,
+                        stderr_excerpt=message,stderr_sha256=hashlib.sha256(message.encode()).hexdigest(),stderr_truncated=False)
                 trial['candidate_runtime_failures']=[fact]
                 diagnostics=[dict(kind='CANDIDATE_RUNTIME_FAILURE',**fact)]
         return dict(observation=trial,feedback=dict(route='EXECUTE' if not index else 'STOP',

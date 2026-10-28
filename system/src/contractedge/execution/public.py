@@ -56,9 +56,30 @@ def _link_or_copy(source, destination):
 def has_candidate_runtime_failure(report):
     """Consume only current failures produced by this public runtime wrapper."""
     return bool(report.get('status')=='EXECUTION_FAILED' and report.get('snapshot_id') and any(
-        f.get('snapshot_id')==report['snapshot_id'] and f.get('operation')=='PRODUCTION_PROCESS_START'
-        and f.get('status')=='FAILED' and f.get('source_locations')
+        f.get('snapshot_id')==report['snapshot_id'] and f.get('status')=='FAILED' and (
+            f.get('operation')=='PRODUCTION_PROCESS_START' and f.get('source_locations')
+            or is_registered_readiness_failure(f))
         for f in report.get('candidate_runtime_failures',[])))
+
+
+def is_registered_readiness_failure(failure):
+    """Validate a finite public operation result without asserting code blame."""
+    from contractedge.execution.probe_specs import registered_programs
+    pid=failure.get('probe_id')
+    if pid not in {'alertmanager-reload-v1','alertmanager-reload-v2','alertmanager-reload-v3','alertmanager-reload-v4'}:
+        return False
+    message='PROBE_ERROR: server readiness: \nexit status 2\n'
+    return (failure.get('operation')=='PRODUCTION_PROCESS_READINESS'
+        and failure.get('status')=='FAILED'
+        and failure.get('producer')=='REGISTERED_PUBLIC_READINESS_WINDOW_V1'
+        and failure.get('probe_sha256')==hashlib.sha256(registered_programs()[pid][0].encode()).hexdigest()
+        and failure.get('scenario')=='method-'+pid
+        and type(failure.get('observation_window_seconds')) is int and failure['observation_window_seconds']==20
+        and failure.get('build_passed') is True and failure.get('process_started') is True
+        and failure.get('before_scenario_injection') is True and failure.get('source_cause')=='UNKNOWN'
+        and failure.get('source_locations')==[] and failure.get('stderr_truncated') is False
+        and failure.get('stderr_excerpt')==message
+        and failure.get('stderr_sha256')==hashlib.sha256(message.encode()).hexdigest())
 
 
 def classify_candidate_build_failures(raw_root, snapshot):

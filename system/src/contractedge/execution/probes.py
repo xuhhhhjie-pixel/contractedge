@@ -24,7 +24,7 @@ def _valid_partial_checks(probe_id, checks):
 
 
 def candidate_runtime_failures(report, output, source):
-    """Recognize the registered wrapper's production startup panic boundary.
+    """Recognize registered startup panic or bounded readiness failure.
 
     This is an execution failure, not a semantic check result or a proven
     source cause. Unclassified errors, partial logs and foreign tool frames
@@ -58,6 +58,19 @@ def candidate_runtime_failures(report, output, source):
             if path.is_symlink() or not path.is_file() or path.stat().st_size>65536:continue
             raw=path.read_bytes();message=raw.decode('utf-8')
         except (OSError,UnicodeError):continue
+        # This exact empty-child-log boundary is emitted only after build and
+        # process.Start succeeded and the registered readiness polling expired.
+        # It establishes no source cause, and supplies no semantic check PASS/FAIL.
+        if message == 'PROBE_ERROR: server readiness: \nexit status 2\n':
+            failures.append(dict(operation='PRODUCTION_PROCESS_READINESS',status='FAILED',
+                producer='REGISTERED_PUBLIC_READINESS_WINDOW_V1',
+                snapshot_id=report['snapshot_id'],probe_id=pid,probe_sha256=probe['probe_sha256'],
+                scenario=probe['scenario'],source_locations=[],source_cause='UNKNOWN',
+                observation_window_seconds=20,build_passed=True,process_started=True,
+                before_scenario_injection=True,
+                stderr_sha256=hashlib.sha256(raw).hexdigest(),stderr_excerpt=message,stderr_truncated=False,
+                interpretation='Registered wrapper built and started the process but did not observe readiness in its finite window before injecting scenario alerts; environment versus implementation cause is unknown'))
+            continue
         if not message.startswith('PROBE_ERROR: server readiness: panic:'):continue
         locations=[]
         for match in re.finditer(r'^\s*'+re.escape(module[1])+r'/([^\s:]+\.go):(\d+)\b',message,re.M):

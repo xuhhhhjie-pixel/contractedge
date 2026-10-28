@@ -109,6 +109,8 @@ def summarize_failure_tasks(value):
     runtime=[]
     for failure in value.get('observation_diagnostics',[]):
         compile_failure = failure.get('kind') == 'CANDIDATE_BUILD_FAILURE'
+        from contractedge.execution.public import is_registered_readiness_failure
+        readiness_failure = failure.get('kind')=='CANDIDATE_RUNTIME_FAILURE' and is_registered_readiness_failure(failure)
         if compile_failure:
             from contractedge.execution.public import has_candidate_build_failure
             if not has_candidate_build_failure(dict(status='EXECUTION_FAILED',
@@ -116,15 +118,23 @@ def summarize_failure_tasks(value):
                 continue
         if (failure.get('kind') not in {'CANDIDATE_RUNTIME_FAILURE','CANDIDATE_BUILD_FAILURE'}
                 or failure.get('snapshot_id')!=value.get('to_snapshot')
-                or failure.get('operation')!=('PRODUCTION_COMPILE' if compile_failure else 'PRODUCTION_PROCESS_START')
-                or failure.get('status')!='FAILED' or not failure.get('source_locations')
+                or failure.get('operation')!=('PRODUCTION_COMPILE' if compile_failure else
+                    'PRODUCTION_PROCESS_READINESS' if readiness_failure else 'PRODUCTION_PROCESS_START')
+                or failure.get('status')!='FAILED' or not readiness_failure and not failure.get('source_locations')
                 or not isinstance(failure.get('stderr_excerpt'),str)):continue
         message=failure['stderr_excerpt']
-        runtime.append(dict(scenario=failure.get('scenario'),error_field='production_compile' if compile_failure else 'production_startup',
+        if readiness_failure:
+            message=('The registered wrapper built and started the process, but readiness was not observed '
+                'within 20 seconds before scenario alerts were injected. Implementation versus environment cause is unknown. '
+                'Inspect initialization with zero work, the first item and a full initial backlog; signal completion only after the required state exists. '
+                'Raw registered wrapper: '+message)
+        runtime.append(dict(scenario=failure.get('scenario'),error_field='production_compile' if compile_failure else
+            'production_readiness' if readiness_failure else 'production_startup',
             actual_error=message[:1500],error_truncated=len(message)>1500 or failure.get('stderr_truncated',False),
             source_locations=failure['source_locations'],stderr_sha256=failure.get('stderr_sha256'),
             affected_checks=[],observation_refs=[],snapshot_id=value['to_snapshot'],
-            interpretation=('Registered source compilation failed' if compile_failure else 'Registered production startup failed')
+            interpretation=('Registered source compilation failed' if compile_failure else
+                'Registered public readiness was not observed in its finite window' if readiness_failure else 'Registered production startup failed')
                 +' at this recorded snapshot; root cause remains unproven; compare its snapshot with current source before use'))
     errors=(runtime+list(groups.values()))[:4]
     conflicts=[c for c in (value.get('helper_preconditions') or {}).get('checks',[]) if c.get('status')=='CONFLICT'][:8]

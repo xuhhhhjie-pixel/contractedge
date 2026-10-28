@@ -276,7 +276,9 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
             'establish data readiness. Trace initialization, reader selection, publication and old-instance shutdown '
             'against fresh source contracts. Preserve the required state throughout the transition, not just before '
             'and after; a fixed sleep or moving Stop alone is not evidence of readiness. Unsupported readiness '
-            'assumptions must remain unproven and be tested through the public boundary.')
+            'assumptions must remain unproven and be tested through the public boundary. '
+            'When implementing a completion signal, account for zero initial work, the first item, and the full backlog. '
+            'Signal after the required work is complete, not on receipt of the first item; an empty workload must not wait for an item that cannot arrive before readiness.')
         from contractedge.diagnosis.evidence import reader_reference_contexts
         from contractedge.source.parsers import parse_source_units
         target_units=[];target_refs={}

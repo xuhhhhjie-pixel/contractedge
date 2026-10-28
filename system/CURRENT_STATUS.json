@@ -19,7 +19,7 @@
     "historical_results": "REFERENCE_ONLY; do not import legacy117 or147 into current experimental denominators"
   },
   "historical_results": "REFERENCE_ONLY",
-  "implementation_version": "0.6.62",
+  "implementation_version": "0.6.63",
   "public_projection": {
     "prepared": 150,
     "status": "PASS",
@@ -1273,8 +1273,8 @@
     "report": "outputs/final-optimization-20261020/readiness.json",
     "effect_acceptance_passed": false
   },
-  "version": "0.6.62",
-  "status": "TARGETED_ROOT_CAUSE_QUALIFICATION_PENDING",
+  "version": "0.6.63",
+  "status": "READINESS_FEEDBACK_ENGINEERING_PENDING",
   "repair_reliability_accepted": false,
   "implementation_completed_claim": false,
   "formal_ready": false,
@@ -3296,12 +3296,12 @@
     }
   },
   "current_development": {
-    "status": "V062_TARGETED_VALIDATION_FAILED_STARTUP_NOT_READY",
-    "planned_version": "0.6.62",
-    "base_commit": "395681e0f9d1c07f9e9d59388a3ad643436e2de3",
-    "snapshot": "docs/development/precondition-establishment-v062-20261028.snapshot.json",
-    "planned_snapshot": "docs/development/precondition-establishment-v062-20261028.snapshot.json",
-    "source_sha256": "061bd828681deed7330f6bfb849e851fc9c1dcb2db52c9e88f772d1983cbe93f",
+    "status": "V063_TARGETED_VALIDATION_FAILED_DUPLICATE_PREREQUISITE_REVIEW",
+    "planned_version": "0.6.63",
+    "base_commit": "48dd790",
+    "snapshot": "docs/development/readiness-feedback-v063-20261028.snapshot.json",
+    "planned_snapshot": "docs/development/readiness-feedback-v063-20261028.snapshot.json",
+    "source_sha256": "b6e846213f344ecc1f0dc6b1e2b17b2d43d747b97cd62b626f7512e9a8945692",
     "formal_ready": false,
     "paid_dispatch_allowed": false,
     "integration_requires_new_qualification": true,
@@ -3321,11 +3321,12 @@
       "Expose registered bounded startup failure to the existing repair path without claiming causality",
       "Verify empty/nonempty completion semantics and bounded feedback recovery"
     ],
-    "paid_dispatch_scope": "Only predeclared fresh Alert and saved-public-failure continuation; original46 stays stopped",
-    "full_regression": "outputs/alert-repeat-closure-20261028/V062_FULL_REGRESSION.json",
-    "latest_targeted_result": "outputs/alert-repeat-closure-20261028/TARGETED_VALIDATION.json"
+    "paid_dispatch_scope": "Fresh Alert then saved public startup-failure continuation; no original46 dispatch",
+    "full_regression": "outputs/alert-repeat-closure-20261028/V063_FULL_REGRESSION.json",
+    "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V063_TARGETED_VALIDATION.json",
+    "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/TARGETED_VALIDATION.json"
   },
-  "staged_implementation_version": "0.6.62",
+  "staged_implementation_version": "0.6.63",
   "runtime_implementation_version": "0.6.40",
   "current_optimization_audit": "outputs/planning-helper-contracts-20261027/COMPLETION_AUDIT.md",
   "interrupted_v044_continuation": {

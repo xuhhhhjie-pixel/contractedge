@@ -933,7 +933,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                         last_execution_attempt={**(last_execution_attempt or {}),'source_snapshot':before,
                             'validation_error':('Candidate rejected: a protected current behavior regressed. '
                                 if decision['decision']=='REJECT_REGRESSION' else
-                                'Candidate rejected: source-bound production compilation or startup failed and protected behavior could not be verified. ')
+                                'Candidate rejected: public production compilation, startup or readiness failed and protected behavior could not be verified; source cause remains unproven. ')
                                 +'Revise the accepted intent on the restored source using historical trial evidence; preserve every current condition.',
                             'rejected_trial':rejected_context}
                     rounds.append(dict(round_id=round_id,from_snapshot=before,
