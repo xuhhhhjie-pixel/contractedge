@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-28T18:43:58.999108+08:00",
+  "as_of": "2026-10-28T19:12:49.555775+08:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -3297,7 +3297,7 @@
     }
   },
   "current_development": {
-    "status": "V068_QUALIFIED_REGISTERED_SAME_SOURCE_ACCEPTANCE",
+    "status": "V068_SAME_SOURCE_ACCEPTANCE_RUNNING",
     "planned_version": "0.6.68",
     "base_commit": "b2308e297b524932729ef058982adf7e2c34874f",
     "snapshot": "docs/development/quote-binding-v068-20261028.snapshot.json",
@@ -3336,9 +3336,10 @@
       "root": "/home/xhj/contractedge-fixed46-official-v068-20261028",
       "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
       "registered_slots": 46,
-      "closed_slots": 0,
+      "closed_slots": 5,
       "scores_inherited": false,
-      "status": "REGISTERED_NOT_DISPATCHED"
+      "status": "RUNNING",
+      "runtime_state": "/home/xhj/contractedge-fixed46-official-v068-20261028/acceptance-state.json"
     },
     "uncommitted_quote_feedback_included_in_target": false,
     "latest_behavior_plan_continuation_result": "outputs/alert-repeat-closure-20261028/V067_BEHAVIOR_PLAN_CONTINUATION_RESULT.json",
@@ -3351,7 +3352,10 @@
       "scores_inherited": false,
       "closed_slots": 3,
       "status": "STOPPED_EFFECT_PREREQUISITE"
-    }
+    },
+    "delivery_static_evidence": "outputs/alert-repeat-closure-20261028/V068_STATIC_GATES_VERIFICATION.json",
+    "clean_clone_verification": "outputs/alert-repeat-closure-20261028/V068_CLEAN_CLONE_REAL_ROUNDTRIP.json",
+    "remote_ci": "outputs/alert-repeat-closure-20261028/V068_GITHUB_CI.json"
   },
   "staged_implementation_version": "0.6.68",
   "runtime_implementation_version": "0.6.40",
@@ -3464,13 +3468,13 @@
     "scope": "Offline only; no046 effectiveness or formal admission"
   },
   "current_fixed46_registration": {
-    "status": "REGISTERED_NOT_DISPATCHED",
+    "status": "RUNNING",
     "panel": "/home/xhj/contractedge-fixed46-official-v068-20261028/panel.json",
     "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
     "original_registration_sha256": "e24f0320987a15c9ed2867ebb6f55efb104c4e7ce4b6a9bccd1565a5d34e099b",
     "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
     "registered_slots": 46,
-    "closed_slots": 0,
+    "closed_slots": 5,
     "scores_inherited": false,
     "extra_cases_added": 0,
     "early_gate_reuses_original_necessary_conditions": true,

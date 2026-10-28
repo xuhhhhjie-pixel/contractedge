@@ -1,0 +1,169 @@
+{
+  "image_count": 20,
+  "available": 20,
+  "images": [
+    {
+      "image": "alpine/helm@sha256:76c375eed56144c68d6197c55bc5a4552fb42002190b796729901cbab3ae6e51",
+      "available": true,
+      "id": "sha256:76c375eed56144c68d6197c55bc5a4552fb42002190b796729901cbab3ae6e51",
+      "repo_digests": [
+        "alpine/helm@sha256:76c375eed56144c68d6197c55bc5a4552fb42002190b796729901cbab3ae6e51"
+      ]
+    },
+    {
+      "image": "alpine/helm@sha256:c6d8088ddb279625a2e1ca3b08b22c18c946d1f65c8b810f28f1597435a1134c",
+      "available": true,
+      "id": "sha256:c6d8088ddb279625a2e1ca3b08b22c18c946d1f65c8b810f28f1597435a1134c",
+      "repo_digests": [
+        "alpine/helm@sha256:c6d8088ddb279625a2e1ca3b08b22c18c946d1f65c8b810f28f1597435a1134c"
+      ]
+    },
+    {
+      "image": "contractedge/flb10720-builder@sha256:72500537a4c18b14ae0cc61f39e7c800c8bd7aa68039e8d843ff427e40a7aefe",
+      "available": true,
+      "id": "sha256:72500537a4c18b14ae0cc61f39e7c800c8bd7aa68039e8d843ff427e40a7aefe",
+      "repo_digests": [
+        "contractedge/flb10720-builder@sha256:72500537a4c18b14ae0cc61f39e7c800c8bd7aa68039e8d843ff427e40a7aefe"
+      ]
+    },
+    {
+      "image": "contractedge/r1-helm-cli:pilot-20261008@sha256:280008a67a8ad92f613e06954e76ec6ccd63f00ff344d01119591375d6f9af45",
+      "available": true,
+      "id": "sha256:280008a67a8ad92f613e06954e76ec6ccd63f00ff344d01119591375d6f9af45",
+      "repo_digests": [
+        "contractedge/r1-helm-cli@sha256:280008a67a8ad92f613e06954e76ec6ccd63f00ff344d01119591375d6f9af45"
+      ]
+    },
+    {
+      "image": "contractedge/r1-helm-cli@sha256:280008a67a8ad92f613e06954e76ec6ccd63f00ff344d01119591375d6f9af45",
+      "available": true,
+      "id": "sha256:280008a67a8ad92f613e06954e76ec6ccd63f00ff344d01119591375d6f9af45",
+      "repo_digests": [
+        "contractedge/r1-helm-cli@sha256:280008a67a8ad92f613e06954e76ec6ccd63f00ff344d01119591375d6f9af45"
+      ]
+    },
+    {
+      "image": "golang:1.23.4-bookworm@sha256:9820aca42262f58451f006de3213055974b36f24b31508c1baa73c967fcecb99",
+      "available": true,
+      "id": "sha256:9820aca42262f58451f006de3213055974b36f24b31508c1baa73c967fcecb99",
+      "repo_digests": [
+        "golang@sha256:9820aca42262f58451f006de3213055974b36f24b31508c1baa73c967fcecb99"
+      ]
+    },
+    {
+      "image": "golang:1.25.3@sha256:4f43b271f9673eb7bd0cb3a49cc17b08d8d6ee110277e26dbacc93c43a5a7793",
+      "available": true,
+      "id": "sha256:4f43b271f9673eb7bd0cb3a49cc17b08d8d6ee110277e26dbacc93c43a5a7793",
+      "repo_digests": [
+        "golang@sha256:4f43b271f9673eb7bd0cb3a49cc17b08d8d6ee110277e26dbacc93c43a5a7793"
+      ]
+    },
+    {
+      "image": "golang:1.26.6-bookworm@sha256:116d58cbd88c1297624acc6e967a060012422bacf9930927e23fb719189c6f36",
+      "available": true,
+      "id": "sha256:116d58cbd88c1297624acc6e967a060012422bacf9930927e23fb719189c6f36",
+      "repo_digests": [
+        "golang@sha256:116d58cbd88c1297624acc6e967a060012422bacf9930927e23fb719189c6f36"
+      ]
+    },
+    {
+      "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "available": true,
+      "id": "sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "repo_digests": [
+        "golang@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d"
+      ]
+    },
+    {
+      "image": "golang@sha256:116d58cbd88c1297624acc6e967a060012422bacf9930927e23fb719189c6f36",
+      "available": true,
+      "id": "sha256:116d58cbd88c1297624acc6e967a060012422bacf9930927e23fb719189c6f36",
+      "repo_digests": [
+        "golang@sha256:116d58cbd88c1297624acc6e967a060012422bacf9930927e23fb719189c6f36"
+      ]
+    },
+    {
+      "image": "golang@sha256:3d699e4d15d0f8f13c9195c0632a16702b8cbdece2955af1c23b37ae5d55a253",
+      "available": true,
+      "id": "sha256:3d699e4d15d0f8f13c9195c0632a16702b8cbdece2955af1c23b37ae5d55a253",
+      "repo_digests": [
+        "golang@sha256:3d699e4d15d0f8f13c9195c0632a16702b8cbdece2955af1c23b37ae5d55a253"
+      ]
+    },
+    {
+      "image": "golang@sha256:53eeac89074db483fdf0ab3be1df32bf6e47562263d2d0d6baa7f26acb4957dd",
+      "available": true,
+      "id": "sha256:53eeac89074db483fdf0ab3be1df32bf6e47562263d2d0d6baa7f26acb4957dd",
+      "repo_digests": [
+        "golang@sha256:53eeac89074db483fdf0ab3be1df32bf6e47562263d2d0d6baa7f26acb4957dd"
+      ]
+    },
+    {
+      "image": "golang@sha256:9fa9101141c01e9440216d32eb2b380b3c3079bea07aeab3546020cc91b3662c",
+      "available": true,
+      "id": "sha256:9fa9101141c01e9440216d32eb2b380b3c3079bea07aeab3546020cc91b3662c",
+      "repo_digests": [
+        "golang@sha256:9fa9101141c01e9440216d32eb2b380b3c3079bea07aeab3546020cc91b3662c"
+      ]
+    },
+    {
+      "image": "golang@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "available": true,
+      "id": "sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "repo_digests": [
+        "golang@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d"
+      ]
+    },
+    {
+      "image": "maven@sha256:e4a7ace3dc0d645ed97f8d9ad0b0d3f0b14fa8d150138f27f116d7105a639b82",
+      "available": true,
+      "id": "sha256:e4a7ace3dc0d645ed97f8d9ad0b0d3f0b14fa8d150138f27f116d7105a639b82",
+      "repo_digests": [
+        "maven@sha256:e4a7ace3dc0d645ed97f8d9ad0b0d3f0b14fa8d150138f27f116d7105a639b82"
+      ]
+    },
+    {
+      "image": "node:20-bookworm@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5",
+      "available": true,
+      "id": "sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5",
+      "repo_digests": [
+        "node@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5"
+      ]
+    },
+    {
+      "image": "node:20@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5",
+      "available": true,
+      "id": "sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5",
+      "repo_digests": [
+        "node@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5"
+      ]
+    },
+    {
+      "image": "python:3.11-slim-bookworm@sha256:2d97f6910b16bd338d3060f261f53f144965f755599aab1acda1e13cf1731b1b",
+      "available": true,
+      "id": "sha256:2d97f6910b16bd338d3060f261f53f144965f755599aab1acda1e13cf1731b1b",
+      "repo_digests": [
+        "python@sha256:2d97f6910b16bd338d3060f261f53f144965f755599aab1acda1e13cf1731b1b"
+      ]
+    },
+    {
+      "image": "python@sha256:2d97f6910b16bd338d3060f261f53f144965f755599aab1acda1e13cf1731b1b",
+      "available": true,
+      "id": "sha256:2d97f6910b16bd338d3060f261f53f144965f755599aab1acda1e13cf1731b1b",
+      "repo_digests": [
+        "python@sha256:2d97f6910b16bd338d3060f261f53f144965f755599aab1acda1e13cf1731b1b"
+      ]
+    },
+    {
+      "image": "python@sha256:2e32f7d302adc1c37428355c1e646897c0c53f4fd60b6a551245fb90ee129f91",
+      "available": true,
+      "id": "sha256:2e32f7d302adc1c37428355c1e646897c0c53f4fd60b6a551245fb90ee129f91",
+      "repo_digests": [
+        "python@sha256:2e32f7d302adc1c37428355c1e646897c0c53f4fd60b6a551245fb90ee129f91"
+      ]
+    }
+  ],
+  "docker_host": "unix:///run/user/1008/docker.sock",
+  "checked_at": "2026-10-28T10:52:41.286745+00:00",
+  "new_model_calls": 0
+}

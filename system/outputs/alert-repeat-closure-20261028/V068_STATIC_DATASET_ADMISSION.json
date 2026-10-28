@@ -1,0 +1,1267 @@
+{
+  "schema_version": "ce.parent_static_dataset_admission.v1",
+  "status": "PASS",
+  "checked_at": "2026-10-28T10:54:10.000556+00:00",
+  "checker": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/dataset_static_admission_v068.py",
+    "sha256": "489334c0e454708aa2d2479e37e0ac9b34876200cc4fe8a1d07ef177f9993899"
+  },
+  "dataset": {
+    "release_id": "ContractEdge-benchmark150-v1-20261019",
+    "release_entry_sha256": "6f0d200363dbe14595f2cb3c4cbbaab324b0cc62eb760acc4393d3fbe02a66ef",
+    "public_manifest_sha256": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+    "selected_cases": 150,
+    "by_class": {
+      "R1": 30,
+      "R2": 30,
+      "R3": 30,
+      "R4": 30,
+      "R5": 30
+    }
+  },
+  "public_evaluator_partition_members": 150,
+  "partition_counts": {
+    "development": 115,
+    "validation": 18,
+    "blind_test": 17
+  },
+  "verified_cases": 150,
+  "distinct_asset_contents_checked": 1423,
+  "errors": [],
+  "proof": [
+    {
+      "path": "/home/xhj/contractedge-clean-delivery-official-v068-20261028-public150/preparation.json",
+      "sha256": "5782dd446994aff7191e1c4e33706e1b4806d582fe6b71db5b88e275ac183df9"
+    },
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+      "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+    },
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+      "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+    }
+  ],
+  "environment": {
+    "cpus": 112,
+    "available_memory_bytes": 30184951808,
+    "work_disk_free_bytes": 48425648128,
+    "user_runtime_free_bytes": 5357658112,
+    "platform": "Linux/x86_64"
+  },
+  "resource_requirements": {
+    "max_container_cpus": 2,
+    "max_container_memory_bytes": 6442450944,
+    "minimum_work_disk_bytes": 25769803776,
+    "minimum_available_host_memory_bytes": 21474836480,
+    "minimum_user_runtime_free_bytes": 4294967296
+  },
+  "records": [
+    {
+      "case_id": "RW-CAND-067",
+      "task_manifest_sha256": "8a003923911bc697c4f812769f40f8a65c06d048bca7ca2cd420567977f5c21f",
+      "source_sha256": "d15b19cedef67f778bb3c10ade425e7b0a68ceaf26c7d1a6e0bafd105a199e1f",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-068",
+      "task_manifest_sha256": "73b0c0bf1a4f2b0506cec7fe0982d46d87df2b201517d8299a0c01d391da0a01",
+      "source_sha256": "7a2a983e06a257c9b731fd9e12e5f3eedec19d0a73f37547a3e8fb3f8f33deb4",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-070",
+      "task_manifest_sha256": "5bda5c774887ebb72467bcb78e113101d03491d62d911405f4dc5b7c43364572",
+      "source_sha256": "cdadec81607765800fd2e67ee048647b8fe9d6c215ad0905315b85018d3e7945",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-071",
+      "task_manifest_sha256": "da6a190a0c9c990efba590d4ca156b8f09b208755a24dfff7bb0fabc56964c5f",
+      "source_sha256": "9f2ec86b4655ff7070293c7b77fc85370429e104465aaa405a507f00578601df",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-072",
+      "task_manifest_sha256": "3b9ab09459895abbcaacc996cdcac6af38c38929596ec5930f43aeb96f2edae1",
+      "source_sha256": "be0d975808b93bdc6b36abb2755ca622bc0754576551adc03563fa98d106cacd",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-073",
+      "task_manifest_sha256": "2bbb491f00038369865c310bbbc51170553e576dca28ad35cf9b789ed061a6c4",
+      "source_sha256": "2b7ad90c864a2208c672ca3d95c29f2c5007067215b30c6bc27f16204789b2a2",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-076-AGGREGATE-VERIFIER-001",
+      "task_manifest_sha256": "13e69ba7cf0745e42bb4a01e5a6b3d7f7c19a0943811bf3f1c5ac94cabfe595c",
+      "source_sha256": "942d79c62a654c8fbd9a3faedf733a41ca3d39f69db0627e157f097388972223",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-077",
+      "task_manifest_sha256": "f9c45620be46c4b035d3a2b972ba61f52fb9a4682f64c73714f0a8a6e4c03646",
+      "source_sha256": "2c6fd1918d0568eeeae7e043031f9c6e87f81592c2917648663ee35580a64f4d",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-081",
+      "task_manifest_sha256": "8a4b91ba9c094f68450fb45a9e48fa4e691a52bb977a0d931ad874c6a4ebed1e",
+      "source_sha256": "ef7a0fbefc1299186b4089548e6cd49c1718a55bd8d5731586c5cbc23175f1a5",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-086",
+      "task_manifest_sha256": "c9faf3dc63acec1da749fe9da4965ccf727e5bbff261124ccf0f542e0454ac05",
+      "source_sha256": "91bf63697b17e70566f44a2a3fc7bcd2bbc3ec2160429523032706268beb61c2",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-091",
+      "task_manifest_sha256": "96d7b7986425bbb6eaa8b1197335baa8fb2c3e62b40d6b614765987489602593",
+      "source_sha256": "a5710ec45d44553307e36fba6217d82aa2856342e00fb3da8aeab811cf3a2b66",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-094",
+      "task_manifest_sha256": "7bfe887b6ae8ded13e38512a24e66e339e6f236682901865e37d9266779d74ad",
+      "source_sha256": "8b060e8995eb3874084f0dda1fcb7859754c83390444725f6a8190dcb9fcad49",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-095-AGGREGATE-VERIFIER-001",
+      "task_manifest_sha256": "593253c3075a697056c10188582b84432dcd948d50f29cde4bd321ac9b700c59",
+      "source_sha256": "02c56302733aa3f6fbfeb60e24088dc9f858dcddb34717282e60eae4ac18e091",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-102",
+      "task_manifest_sha256": "83800403e453a741b24e5d9a517889e8abf4652ebefbc722d7c487792908f43f",
+      "source_sha256": "b63ccdcbb1e70500fdd5878de3643abb15a8f69ec00f7f0cc74887829e6a6bc7",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-103",
+      "task_manifest_sha256": "dcfe41dc6335e059fc2493ba0e75e4053d9bca07b8b1df0a65df4981bf00ca01",
+      "source_sha256": "62a63e39a6c54465a0b72fad026024da452e78838149587beefdd70269cb2065",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-104",
+      "task_manifest_sha256": "f566e7eaf99166f0da6ae9953ea0d44fd1a049ea266b56e12d49ef9a6944ac82",
+      "source_sha256": "8686514ff3b0c93898c55297aa76b9f722e27eab4d14d23db08aa2b1d518c5b5",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-106",
+      "task_manifest_sha256": "fa879ea9a77c622af58eb425c4fca679889b0938ab8245411ed70a40ae62b9e1",
+      "source_sha256": "2549385e651f966478376df528637f1526062b0791d72b92987e971071af9b65",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-109",
+      "task_manifest_sha256": "1a0305c39fff72aeb6df17a3a48cc0197098b3f8f406e2fa706dd40d7ce05eb4",
+      "source_sha256": "ab2828201d4bbd6d9e2fdd7829e96a52cf736e510f5ecc992e7aac0d327794cf",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "task_manifest_sha256": "adc1f50be2738aa0f590faca61ae74ed261533a888ab5af6bc31136fe1bbb002",
+      "source_sha256": "3568f7d916d2dae1d5b2c3fb68a76fd2958f67dfa65a2e053566c6baa218d051",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-118",
+      "task_manifest_sha256": "2ff62dad82561273c9890e726a7a9c4aafc710ec4ebe43b872351bf9caf126ee",
+      "source_sha256": "f841c81fcb866185d1f8b96c5d64a38c371e52e0057184bfc474819a80eeba87",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-120",
+      "task_manifest_sha256": "72dae54b77c6c5036f1f34972dcb35a9fb2d1208dd3c2588f60d7d963ba22d06",
+      "source_sha256": "acc330d3b03be84bff7c92e27f07ea3b776b4f6082a599099f7e05ce22336439",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-127",
+      "task_manifest_sha256": "96564de3120a5d55311578260f834a0304fbc17a1f48fe6e0aad3ae66361d4c9",
+      "source_sha256": "99204e9a0346dfc392c8698a51cc09e63f44af978f7f0e6594ae377afba38eb1",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-128",
+      "task_manifest_sha256": "b32985749c837b2349df88451a41c589fb37768447cb99e3e8ed30956ade7ad3",
+      "source_sha256": "71456afa00e7d82f57dd86adb1b46ad638ddc56e27ff552e8c79941132bc23b9",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "task_manifest_sha256": "65b35c865e56c72b6d7ece3309d3b6fe89255109d986325c3769c31d678fa2c8",
+      "source_sha256": "4eb10ef4b81b9ddf338bde5bc983c64ab7f873003f40da31c04a14f54e369675",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "task_manifest_sha256": "7e9453097c61d61ffd0342110aa9f99956240c463c87c006b81ca0c20e066bff",
+      "source_sha256": "d271dd8d7fd5abe60d585fd98b2a9a91409c9aa19100f66813164d94aa160239",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-137",
+      "task_manifest_sha256": "07996200d5a767e192800508709c1fcc83a13f2139dea9005dc699f8adbf2d1f",
+      "source_sha256": "968299e9a930c1084812fa74229ef139a04c898e5021bcede47b12420c335db8",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CAND-171",
+      "task_manifest_sha256": "930a0fa00ff152e203cc8532ea71220c67ff7f55869a2b1a0941853aebe90a7d",
+      "source_sha256": "2d79db2b4f6413253d813f278ed13557659b1dba17fc7ca0881341319397e442",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-HTTP-LOGGING-001",
+      "task_manifest_sha256": "63adaa1054ba67819723898697a96108fc80e60a083cb0bdc676532c9b001bc4",
+      "source_sha256": "f4db9f91e45f2433f1caec3197ad424b397f8c0051f6cd53264cef88c0b52eff",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-RBAC-DISABLED-001",
+      "task_manifest_sha256": "0aceaa56b8703cbdde4ee444a09405430f7e5745b9d02e1b49839a581cf10307",
+      "source_sha256": "6776460164ea300eaf98dea32471c9794dca95f50ae1231c5f1e0b801a228319",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-HELM-PROM-KSM-EMPTY-HEADERS-001",
+      "task_manifest_sha256": "dcf66c08aa6d2d50b75d590e7efb862f3490bceadaea58331844a583078bd019",
+      "source_sha256": "76ad50ff66d11403c2ad062238ad846ef2aa4b4a8b3d3a9d8913e3622945b13d",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "task_manifest_sha256": "617060121f039332a0af17a953de7ba0d171071da59610845ca73e035cc7b864",
+      "source_sha256": "32577cbb42230eb54736cd7158c59c0eef23e220e6165ce59e0806fc93937bf5",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-KEDA-8033",
+      "task_manifest_sha256": "2ba1f1448ff1d35e33efcf4f05418dbe5cb9bc1f03152edc86f0e3747c028aef",
+      "source_sha256": "76411b3120642bab7bcb8fb3f76138e76fbef9088fd79a213d33e642602368fc",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-KEDA-8227",
+      "task_manifest_sha256": "803aa17d5ed279f9412b8058982e47df627e88f91c4bef818c45b14a100cc7d0",
+      "source_sha256": "e43dec8a84a1590a1d4b70c18f00ca77918fd52c53fcc371b62ef0298021cc14",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "task_manifest_sha256": "82fb0dfafe4c2b20a7cbb0eeaf53d10ea33e06184ff163e8b08efbf852e88010",
+      "source_sha256": "a6ca9e6a0ac9664a45c27290da3f0f5f02f3e9c8dd0071461a7d7b557575b4c9",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-ARGO-CD-23823",
+      "task_manifest_sha256": "7ca4346853f4b4bf0ff6888440e65b2aa726ceb32ba61c409fa6f3471df81a1e",
+      "source_sha256": "279585c75849ec3f1fd28efeae8a57bb7d099f70b1ecbe459476f4b332157f9e",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "task_manifest_sha256": "b2c6f1c638d7b7282492af397bbd589cb1820d5eb54f8ab771766aa909589d0e",
+      "source_sha256": "804895d7bd54db581614bd48cea73b5430ddb2d542d42f565aca319faefd4356",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-ARGO-CD-29827",
+      "task_manifest_sha256": "f0b77ec657f40dca1d5e3d09e0d7bf2494bcda5b94616c30442f174767c78d7b",
+      "source_sha256": "59c9d4f01ddba913b211aeea06da888b03c43f1a9008d8ecc476f29a01cbfb87",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "task_manifest_sha256": "641890f408e29eb490899dd38bef0c2a8f6edaf6d35595d181e38e0f5d1c716f",
+      "source_sha256": "884a0d04adbc61933d0f5f80af9b2870050f3ae7bedfa2e032a38419de28776e",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9118",
+      "task_manifest_sha256": "f2413b98e27c859be2926818ffa5a48ebb6c2d687c665476c6ce3a24ff776483",
+      "source_sha256": "c8d21ff62412cf2fdd3dedc84a6d4790d22a65a11099474252391b2330ef9126",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9128",
+      "task_manifest_sha256": "9b66a725443a9da3c7e6a31bdb1556853f46ae8b8731b054f68abf2d307d7c5f",
+      "source_sha256": "46b3258401a6eee782c4becb7d079c9231567491977ad7c67f3554493978f5f8",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CLUSTER-API-12341",
+      "task_manifest_sha256": "52627834c2e1fc62c4917a51aadf5e658908c385125d7f56d1d790b41527d500",
+      "source_sha256": "ef209a31029ce7e39a5a3b8bd4674563199c36c6c95961320ba99af2f1bb2422",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CLUSTER-API-13937",
+      "task_manifest_sha256": "af4ea8c93237ad825b8b47190254e3af06fba4ce94f8d4cc5f2dfd3022443354",
+      "source_sha256": "0ec24e12ea921919668ab7a7e5229e9170fcac41fdb098beb5f9e82a1c5098a6",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7733",
+      "task_manifest_sha256": "7470056d69b77f791bf1462736a761a2ee9c0292ff09b3d6c105ff577cd33657",
+      "source_sha256": "77166a5740ad55db0731bed8d76cc2603d2b532c237f8ffe779bf7b1a84bfd94",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7789",
+      "task_manifest_sha256": "6e7f874e7af9fb01f1c714a77627dca2bf8cb616b231a786554aa6b0bf49b692",
+      "source_sha256": "c591be534197cc1120bda2e6659007c2cd63b2a7bf948bc19725787cceba224e",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7860",
+      "task_manifest_sha256": "dda58e61723ad46bd0a38aa3ab536f11a2b923406c8e0b6220fb0f2b0a499c7b",
+      "source_sha256": "ecf3671e961bfbc5d2d6291f912894a7e20861d292c512e36f64fc1c0776a343",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-RUNTIME-1088",
+      "task_manifest_sha256": "91ef8d5fc9d80f1d45843815fc4d21b0fe5d9eb4dbf6d68e089f39559363f88e",
+      "source_sha256": "15dbeaa9adc952411bd1252c96ade5f9e504baa20fd03b16d3336090d92fdbd0",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-DAPR-10132",
+      "task_manifest_sha256": "e716e353b88a2148f45fbfa122361390548c4b2d398b40a656340fa2234298d0",
+      "source_sha256": "07afcbf8ed9b9c9732b9f861a8e8b2defcb4831d1311d3d58c7b676abdcccb35",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1411",
+      "task_manifest_sha256": "10c0b36ce028317e375d7ac0b86db9eaef90bfff8df0273f5e21dd5b98391c53",
+      "source_sha256": "d4e63b257089db64430e7c7233b192301248fc2984d36ea4806c543ca2dce2b1",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1412",
+      "task_manifest_sha256": "015066cdfa174de7b4b27545f18c10ede1fd9968d22eb27fc92467fbea1f9b89",
+      "source_sha256": "3354f9b6008737c6da68ed4346a7cdf9369a18d3ee0b6918a51fb0d34553ae17",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "task_manifest_sha256": "bd9afa66b53653af466b5448acf2fc562961a52a587f733231b306bcf98c8240",
+      "source_sha256": "40d9431438baa508ff92afde33e99ab575592d6ca88dd25c2a41cb8fe1316910",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-IMAGE-REFLECTOR-824",
+      "task_manifest_sha256": "fbbb1ac0269e033b27a6372fcf96c295cbf509b2d6750a350f3a6be876ab30d6",
+      "source_sha256": "5aa854f47df37366ccdebf3055458317b2d9bb3826263c2e6e5fa502b8622d81",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-KEDA-7777",
+      "task_manifest_sha256": "77913f19e2cf3634a8cf0c8811d4e33de9a34ab2d771e53a617d224d056c24c2",
+      "source_sha256": "71a9664ec33bac1535b7fcb2315b5055f9461a47ed30ccd0c845a5a8ce601214",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-KEDA-8125",
+      "task_manifest_sha256": "e4a743917575630d600fe94fd469a6f5623a1410cda56fd4cc824a9ac684fa98",
+      "source_sha256": "2e5df908f958af0f91b88d0fcd14d4bfe3d2e512db9b853dbc03921f91733f83",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-KUSTOMIZE-CONTROLLER-1614",
+      "task_manifest_sha256": "a7c587de04067e5c24f246ec61fce8480190f657dae7b74cfd069c29afdffb6b",
+      "source_sha256": "d8e054cd5031f56b4c82cffad3e9a9e1317f8236a761d2dc09159fab195ccda3",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-KYVERNO-17395",
+      "task_manifest_sha256": "71017bed262a6626a34b7ab3df196b253e1759d58c96cbe65630b838b34ebe8d",
+      "source_sha256": "c31e4969018a76c78cafbfd2d42bbd86b104421d59dfb3c9e0387441e3651b86",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8727",
+      "task_manifest_sha256": "d0511bf49de416e5ac02d930ddc519e53bb854aec0dfeaf08845c9876ae940c0",
+      "source_sha256": "93d51659944da9c6a9d27c7e70fea1b2189ce468e46393d769e490709b83059f",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8739",
+      "task_manifest_sha256": "9f5e3bd8ef32dd795285e94cfb422f22a513c1528096aba4c09c9f3f228c6b4f",
+      "source_sha256": "a98fc07cefbfafb0ae46f1323ed4a56f7367ee7e390faf5ad4d6b991926c9e5e",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-SOURCE-CONTROLLER-1904",
+      "task_manifest_sha256": "888f8678ee17a59db2073ae1f85aa6663d4c4cf61ead17722b2e3045f7554c07",
+      "source_sha256": "5ba712973a002ce9c04089c4235ab968cd487bf30f9be088e8ee162885002922",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7523",
+      "task_manifest_sha256": "a714f5b1642ee60d2c16beb4b9aec8c368a249208c58d3b06bc6ac47ef04d1f3",
+      "source_sha256": "8432237b084414098654d98a36ce3e4c56a7e257ac430db1b70326215df692ab",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KUSTOMIZE-5940",
+      "task_manifest_sha256": "cbe5f1f82f63c93c15ab5abecf505d0a8d0a23b7e72ec4b41ddbbafed96988d0",
+      "source_sha256": "df9f866cda99dfeca76bdc7592f22691b0e2f3b8d5d092b78b3425b681c33c7d",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KUSTOMIZE-6237",
+      "task_manifest_sha256": "ab619b2d82a7d9fa4c689c322a62885401a54ddcb84b865dd5853537a1023b54",
+      "source_sha256": "7ded39d1ad22d95dc30d50540c621905c01ff02f5e71e2e624f8da187d926ed0",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "task_manifest_sha256": "d969ab8ed02c089b089c13471e28a168ff943c5e33b06c7a2d0000b55efb2741",
+      "source_sha256": "2a5e761ae5f266f234ff9e3fe68ac1456017aa8e726ecfaef9560cdede645606",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KOMPOSE-1887",
+      "task_manifest_sha256": "44b6b6a8fd5a13ead0c5b66c40b472fc87b55b76e2757211f76f45a386844c63",
+      "source_sha256": "1111b2b938a6b87ef6f425a881748de1e00d9537bbba3bbde6c348264ed6854c",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-HELM-9175",
+      "task_manifest_sha256": "e9e39bc5fa259db89ee411581555d87af5a74c9ab99acb8642d567ede12de6dc",
+      "source_sha256": "0d99fdd86fecb3ab343377003b69566dcedc4338120499ef98291031619e217f",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KUBESPAWNER-654",
+      "task_manifest_sha256": "831a711c1b467d88f9ab8ff612758b89645eeffeed232dd071ac2bfb198b872a",
+      "source_sha256": "8b4a0a6b769c7d7939e0ed6ced2f8a8e7fe3bd5248535cc8bd58e85b735c5f76",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-PREFECT-7244",
+      "task_manifest_sha256": "7559e9d03916e94f2b448fc5db3264d27ad98a87fdded59943409f1e192daeca",
+      "source_sha256": "0bc29e5f95a6e3c1cc8f84ad1ac6022b63fe38c20275ed37b0a0245bae6e3010",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-YTT-550",
+      "task_manifest_sha256": "919bddf48d5b31c3f0a7f7d4f048162c1360021518a6034c4af158604a99ef8f",
+      "source_sha256": "ac795f12c26e30c25a7c9b2dfb7ba66d969061c6b3aec243311c168badd36380",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-CONTROLLER-TOOLS-1270",
+      "task_manifest_sha256": "ad1aa419e29566e0d3a27009ce452dedf82bb0f8d8baee207aadb9bd77d0e03d",
+      "source_sha256": "8c614168824c58848f222ec0d720d6bafaeb2d4acf83671d09c492dfe3b4396b",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5708",
+      "task_manifest_sha256": "9e0d4e8c109410ebba1131528c75df37a57d8ac8036d18010d7d37ba73713948",
+      "source_sha256": "a3ccef62432705eb9fb86980b0b120c26fb9da00d9f0f08bc1ffe2ef645ed225",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "task_manifest_sha256": "89cfec48901a5466ef1df68fd59ec4427ae43fee3622b08005ac81ac8d9e46ca",
+      "source_sha256": "ef69a8f3a7256074085c02ecfb4a2d8b5b86eb73992d3fb91d649baf72b47906",
+      "public_assets_verified": 18,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-FLUX-KUSTOMIZE-1693",
+      "task_manifest_sha256": "50a1e21898a9eed1327d7e1a5bdbf3cd7d22d01bcfcc1a62302361b1ecfa8504",
+      "source_sha256": "b122253104a42f53885dd2a5f9d43c01acf8d6a117bf1a6650283880499f29b0",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-HELM-31979",
+      "task_manifest_sha256": "76165ff2334364fe8da74e45819eb7b290bbfc845a044079b2d2b2a996247b54",
+      "source_sha256": "16d55b226ad0609afe924c93bd8788aa07b461f92f91b5e383c471445d56ca20",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9892",
+      "task_manifest_sha256": "d85ae1080ab8a0f4c038af3fffd604df95f5120ae48a300384be6847163b89e0",
+      "source_sha256": "f71916322bd968c2317d98e92c07f09360f2d8312da93655d434efd258d8da64",
+      "public_assets_verified": 22,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-UPJET-593",
+      "task_manifest_sha256": "4a9a10433222190fc1d570aefddc9f006220327e6351b2d0f94341a32cc6eb1a",
+      "source_sha256": "248cb9d030a5df25c23ac603323a862ff2c3538cbb0dda671099cc0e59328cc8",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-YTT-1000",
+      "task_manifest_sha256": "7b32b37024515447700d13926c5a30120d52d046b5c1db03296b32309f9ca0c5",
+      "source_sha256": "9e9167b3eee5e4f251831a1554606ed9e82f1e6f89edd47078b6594f54284cfc",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-CDK8S-327",
+      "task_manifest_sha256": "b6cbe7e4b4315ff1a8ec4401e2429027bfbf42843a898969e715ab3a25f4f125",
+      "source_sha256": "f0e10420154c75fd353956604032b254978dc45aeac7722baf3eba666614ff7e",
+      "public_assets_verified": 9,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-PULUMI-KUBERNETES-4426",
+      "task_manifest_sha256": "58e416ea37c45cdbcb378a6a5a1da2edb41936b474c508bac555b117ce2e0b98",
+      "source_sha256": "a2f8bb2fce1ae51f5b6549e4caf8c9c85de3b31898b32f2bb7fff3ece32a1b7a",
+      "public_assets_verified": 15,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KPT-4746",
+      "task_manifest_sha256": "044c7236fa1e01b67eadc978ff5f181caa54d27b65a2dcc64cd13b1ff62bf83a",
+      "source_sha256": "9db137c9d22965c48af8f975cbe4e37dd27827d3f893b2306e6e3e45fe02823b",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-GARDEN-6713",
+      "task_manifest_sha256": "938194450e05408f8098fa6a094e4394b8e6a737ed407e2fd507bc5a4da21f65",
+      "source_sha256": "dd0a3cea64f4231eb30bdff5da8d7856de6fd26fee4046614f9a5fe4ef06da76",
+      "public_assets_verified": 15,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KUBEVELA-7041",
+      "task_manifest_sha256": "475d590ae7f7a17131ea410ad77a429b8855ed1f5ded477cb9d0257f4a8f2261",
+      "source_sha256": "303eb70c299cc12f7b4a622955d2c4b5ece6bd7c69fc611f07378cff26a9bfa3",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KOMPOSE-2124",
+      "task_manifest_sha256": "6127e2e36a05725e7d274a2de7684f154c831c808258a6aad4e4492c472b2ccd",
+      "source_sha256": "bfcc101e64a0597688f6c7400b71d41bba6d8b0f1a4a01dcabc08d2e0dd2d405",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-PULUMI-KUBERNETES-4293",
+      "task_manifest_sha256": "273af8f742d557adaa1a47b0e2821d08ba7588b3168d690527416eae5840c926",
+      "source_sha256": "d4c88d84ca5a9519a289915da95d2927511e88406f1e0869309be90e18847d9b",
+      "public_assets_verified": 13,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KUBESPAWNER-451",
+      "task_manifest_sha256": "3ba167779b9b59f1e16827b815efc207186cdacb9fd5f42ea50df9cf343009a9",
+      "source_sha256": "51be0d9057a257a34b833c05e185c943fd545c3ad5aaf7416b71e408e2045846",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-FLINK-OPERATOR-1152",
+      "task_manifest_sha256": "def0cea499c5712dcc8c434e894559503fd2d0ac3740b3b9f1e3022c60c392b7",
+      "source_sha256": "4c1d204f6b9e2609b3a0c3c877918634a62e6a69a87aea03d0d5a5897ddd1d15",
+      "public_assets_verified": 14,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "task_manifest_sha256": "655e9f1d2564bee5c98b876443832d042672d8090a88b1c5133ba413452da27c",
+      "source_sha256": "af9392e0682d280a6d169074fb9b7b58d6615a310b3c0b134019947cf27ad87d",
+      "public_assets_verified": 10,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-HELMFILE-2531",
+      "task_manifest_sha256": "72aeafa4292b7f0f5cd872d22e7d96323c2b9b02a0a7c83b87e625b196a1484a",
+      "source_sha256": "7e2fa14736d5ce8b7943e0538db6b1df3579f877bdcc9d55c8f7a49074de3940",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R3-KUBEVELA-7383",
+      "task_manifest_sha256": "c649daf32e7c035390f131a63bf42aeab4c2946dc844df3891273c14d3de7758",
+      "source_sha256": "dd4dd70d9a4de4250327ec8e550deeb0710586917ad2980295274691b5961fbf",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-CLUSTER-API-OPENSTACK-3393",
+      "task_manifest_sha256": "7a07f3af84322b3ddb937cad8c1e759d8c687f12faa467b528ab5d8942c68d36",
+      "source_sha256": "ee7464bde03e167a8a1c3b74423119879834e1f482f8039629b88a3e8697af6a",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-OTEL-5594",
+      "task_manifest_sha256": "b19f2fc631408572bd20c0c41634f06e3624d7fff2824f6819584c61fcb873b2",
+      "source_sha256": "cf3a461c2783e984f31a02ba31bd86d3d02f3e283a2967244dfd9a9578451794",
+      "public_assets_verified": 5,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "task_manifest_sha256": "8e6a473dd35ef3d3b7b7be6b97387f9e4e1cb872e45e53064de3ec5577abe258",
+      "source_sha256": "50c36cd5d3b15c87e0ab22591306ab9e9ce29bd9fb4dde7207bc061897529182",
+      "public_assets_verified": 9,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-5040",
+      "task_manifest_sha256": "d57a416efa6e16dedcb09db3216c0f5a798427fe7a031a4510d179f7427d201c",
+      "source_sha256": "6484787e39e61458f3179fb1be8a75c7487c9d2c5dd2239f3ae8eecf096f7577",
+      "public_assets_verified": 9,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-ALLOY-6818",
+      "task_manifest_sha256": "05890086617d54d178997333d137039072aea8ec7af533dcf42b1dc81879b16f",
+      "source_sha256": "36a79ad9bedd16b87003882fff8d18d4c533420f11db6f2fa634dc8aa3e159db",
+      "public_assets_verified": 10,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "CRI-O-7954",
+      "task_manifest_sha256": "eacbc54eb7ab0f37454627225d000df0af12d5e7aa273cbb621ad0ef9394c2be",
+      "source_sha256": "9de91356a94433aa5d9930b2fbbe5dc20a42c6fb2316432536a5338185d45ec2",
+      "public_assets_verified": 9,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-COREDNS-7562",
+      "task_manifest_sha256": "bc79bb4d708cf9955f5c08c6c09122ad92a9d8a270b3b0a193c5ab566decd8b1",
+      "source_sha256": "449a0fd519135e8b96075332eabb0cb6a75f893f5adb5ab601113d209cc424f3",
+      "public_assets_verified": 13,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-DAPR-10220",
+      "task_manifest_sha256": "333747c9115d0ffecaa136bca440e9ebb4a52a682e555c67d1bc4a4ffc4bd8c8",
+      "source_sha256": "bd09fde66e4a5b90fab7374787e9b0e48682642f2a9f9e43b53c7ba174902ce8",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-DAPR-9173",
+      "task_manifest_sha256": "067c4c90577fd2c90dfe7bb181bb2f9e530cf35c743eeb934da4c008574e6538",
+      "source_sha256": "5dd04505e82e1280c0ce3f22a98ab339b4e7271dc5b09ea6ed0ca506cfc83031",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-DAPR-9612",
+      "task_manifest_sha256": "795f17631771c68e9b9f313a782a8b8fcadec45efb0b708454bc9624f7ea1fb3",
+      "source_sha256": "11be644a31018627ef8fd1da9ca72678106ff3030b462dd6f9faebaab9f6dca4",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-10720",
+      "task_manifest_sha256": "1da55edc89e6c88d9cacad402a9ea95d7bfc4a5827ca19c8b86560373ac2fa4b",
+      "source_sha256": "da06e4b30edadef939d4d90333e36a69f9f25c606c411b5065f62ff48ba6ad9e",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-12495",
+      "task_manifest_sha256": "0d45d53f2ed0f7f3e0da823afaf45fb81da6bcb374d5aa245cf751549526af29",
+      "source_sha256": "f410ab1b6b2bdeabbe875554ff062d921468d2044fa69103562d2fb7c459dcaf",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-ISTIO-2944",
+      "task_manifest_sha256": "2b46df20b48d4db98981fcddcf0e88db2ca0ea9e2bb91be8dd1a9920de1e29df",
+      "source_sha256": "87e3ebd5c963b97e7e7957f91db0e1184825e5e6c5c09e8c0ae882b7d202f9e8",
+      "public_assets_verified": 14,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2918",
+      "task_manifest_sha256": "6e2032e53eb9f004d21406426b23883952e056569aaf4a2eb4e23c84fc76099f",
+      "source_sha256": "440ed08c894935175f68a078023ba4bff506a2fd652c4f238e596fac33c63a77",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2955",
+      "task_manifest_sha256": "38a96bb60df9a9f769e34b578e2ee5292b26ffa1bba1a32c9f0e298c4c0e1c32",
+      "source_sha256": "102ffbced6316e3666d6743c50932e01b79c3bb5ccf5070b9d12089e07f9d145",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-KYVERNO-17310",
+      "task_manifest_sha256": "f20671480b7ee2299b74091ce0de367158b49ed984b54e255932518aa82ee87a",
+      "source_sha256": "1661e96ac6436ff23ffeb139a8b25efc5160e5bdf06ad356bad97e0ffc59e8f0",
+      "public_assets_verified": 15,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "task_manifest_sha256": "0c7d5e863fd9b8e64ed306c5d01d206e45b8dd57a3b2bc58422cd9b4053d2414",
+      "source_sha256": "0a2f4775a91e1860f170d9384b28cd35fb4f936c02b440cd45a0fe72407c89df",
+      "public_assets_verified": 11,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-OPENCLAW-111511",
+      "task_manifest_sha256": "07e10a7becf32a9a1cba76caae78667152726084a4141472270d871b2c1c8e89",
+      "source_sha256": "de126a583b7fcab0ceea84f6db390373696b1316602c1b4c8c8b960b5704dd85",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-10795",
+      "task_manifest_sha256": "b88ee111e73e86a562042a56ae97396bb3eff778b5ebf0c6eb15968e4b09a802",
+      "source_sha256": "0e5f9217d338e1631aefa1eb00ae799fb98f90a36de0acffc5ab3d68ff4fffe4",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15572",
+      "task_manifest_sha256": "14beb3bef6470454883b2afeceaf666a6511975f35a677be50c1ba5dd16f689f",
+      "source_sha256": "d0a78385d15893f06ed6c17978d924087832d6f791f3405e45fea9077584851a",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15868",
+      "task_manifest_sha256": "f17897f46d2beee93cb00e1d38d2c46c8352f75a303edf11243f8bf6999e6911",
+      "source_sha256": "72fea4fe8adf56bbf2bdcc7f2108a42bf029f728c75648a4dd5d4b389d5dc622",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-OTEL-OPERATOR-2171",
+      "task_manifest_sha256": "40bc83c6672b25dae94f249fac7ddc2397c94083918b1d2ddadecf6622c40b50",
+      "source_sha256": "227d14ae17a9f2d2f110d1a9e4e2095817913bde7e434f84d596597a865ca99f",
+      "public_assets_verified": 11,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-16340",
+      "task_manifest_sha256": "455fff8d641a084dad7a3c863531af89eff16b31dfc1005cd049d5bd3104f766",
+      "source_sha256": "469a670da936c065abd5d0f592b6818d4fbdb25d89f30c916fd5d8b7f3f936f3",
+      "public_assets_verified": 9,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-17807",
+      "task_manifest_sha256": "288e8691d62f59261a144bbd3a9df1264d1f8d2b793e6c4448fbbf5bcb7ad0ab",
+      "source_sha256": "e44bcc1868d28d8159097b10cf177496847e49bd713ec7fb4b4ad6a77757b2fd",
+      "public_assets_verified": 9,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "task_manifest_sha256": "1c0abd65e872318af30bc7e9c1ac490604304fcc60d93f75bb32dd7216997bec",
+      "source_sha256": "80bafc81ab3d65d3e77165410e584cae7f11677dc2b9bd25f5a666d352ada2fc",
+      "public_assets_verified": 12,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-TEMPO-6435",
+      "task_manifest_sha256": "657f89079f4b0ee38fa58d9764db0101b53d484ba4a9fb3326dc8b831294027f",
+      "source_sha256": "d0846283536f6e288a7d70df340029bfd2fa1d1d306ee0be11f0346474b98bb9",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-TEMPO-6481",
+      "task_manifest_sha256": "fb88e2e4f8df2e50bec8cf20a5f42358b7eac75db201aa50c77fcabba61d9a08",
+      "source_sha256": "158daa98aa27c34d8f96ee048e7ec1c62bbd4b1b1f9265880c430ab6fda46f62",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-TEMPO-6509",
+      "task_manifest_sha256": "180f14867f91efc185db778ca43d937d3e2321d525fae231004d6ab7555157c5",
+      "source_sha256": "7e965d75752d6bb8f057f29fe00b0414f679648457637b9bd7c2c2581e604bbb",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-THANOS-6503",
+      "task_manifest_sha256": "4f17eaf11623d604cbc1e9868f0aadb2524b2a9fc989b1c769f9b432f70910f6",
+      "source_sha256": "a9d87679785b4ead97513c862abebdb50f119aea583735ee019b802f67bac2ff",
+      "public_assets_verified": 17,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "task_manifest_sha256": "0335444f98fbd473b5862fd293982ca81637132cffc2d8cff46918da1daa9951",
+      "source_sha256": "4099dc909bea05ad42142b4b927529bd968933d2120b5c966ff99e556527627a",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-ACK-S3-2965",
+      "task_manifest_sha256": "a60fe94eb7dffd7abf45dea393c48c4ecb855ddf5c8872df4fb3212372987af1",
+      "source_sha256": "dd12956b24ac0cae00bea00c54fdb5147ddabfc301d100e0c0d3abdb001bd35c",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-AWS-LBC-4847",
+      "task_manifest_sha256": "1da6b04283354307555bb16cee9ac548af11c2dfd496e3d7aadbdfa4b153d764",
+      "source_sha256": "9d6eddbd497e6a8635236047ee08d628417ba052a3651e05f7250661cb88050b",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-AWS-LBC-4876",
+      "task_manifest_sha256": "55079ea16292b67c2f41ee7332e071b6ee1cd3bb92ce87b77791ef9a39143643",
+      "source_sha256": "4c59f7854ae06fdeaef27546a80e2c8dfe86020549ab24d806e0c1ed5328e0c5",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-CAPA-5111",
+      "task_manifest_sha256": "9fe02219160e5c0823e0dd2e4dce7efa138d44d76835bb6691f16ce9af8c6527",
+      "source_sha256": "659b2f40dbb87d22a936ddfaa31abefeb4413e9dc7aac2bdf59615a2d42be290",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-CERTMANAGER-9204",
+      "task_manifest_sha256": "de03f4fb44f50b9564a645540be70e2d1a6b5808f4d70c8d5662885c40a2ffa9",
+      "source_sha256": "e9d5aed7e14654baead1c3e199eb19a346bf31b65688d8a127664f4d1cfc40a7",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-CLUSTER-API-OPENSTACK-3319",
+      "task_manifest_sha256": "6239baf1db9c898768e1d8143451ab2de418b4ba5f67e9d48d86cec6d051cf9d",
+      "source_sha256": "cff94aa7c5349f0253148c96b027a175e30b1fbe3262cf0d4b9e95b47e59412a",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-EXTERNAL-DNS-6082",
+      "task_manifest_sha256": "fe0e7a63739e91faa7094037e0f03f8dbe1b33a498bd9438d5e02e23a8bd21a2",
+      "source_sha256": "2e125cea7c47e48032a818c00827f69afde6456cbd5b3e6b91759378bbd5c2f1",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-EXTERNAL-DNS-6661",
+      "task_manifest_sha256": "08d2e775044dd9c19c3cd9dc038cbe631ccd06f63bfdd6579d96b7b3bd44ad76",
+      "source_sha256": "3a99a75a6797533fe709da41088c502e8a9c8eddbd974f36041574e3eb7aa557",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-EXTERNAL-SECRETS-6821",
+      "task_manifest_sha256": "0495c271ab86fca13e699118945adf7b8c217faa8434ef769d8001d349c344b0",
+      "source_sha256": "4f1f3c57a3537164fa09d389ba87c799b030f8dcb944e63d15433a475f613585",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-EXTERNAL-SECRETS-6933",
+      "task_manifest_sha256": "686f5339443c28c78260d4bc526d057dac635ac73266b555665876b4e70f2474",
+      "source_sha256": "12e5845f453b2996004faac206c09e6e6975b4f8c3db2ffe3e2dff45016888b8",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-FLINK-OPERATOR-1168",
+      "task_manifest_sha256": "c9946802b619eb59c0a2fd612b35f07463f5215fbd125950d77f671c818eb678",
+      "source_sha256": "77fa7e15085f6acb97b2c267e40e3a1020cf138da157a38008c744ca51f2e3c0",
+      "public_assets_verified": 14,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2214",
+      "task_manifest_sha256": "26101d3ca0ba674ba72d9c8d5cd7d0e38349c6153d51c0495de9d1be3ee9571d",
+      "source_sha256": "c7b3a18919a45a9add967a7abe2756bc68704e13f8ca48027fdedab751d2ea18",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2339",
+      "task_manifest_sha256": "0667038baa42b11bd4453e425e28339d7a099db775fde8918e87b17a966bd6f7",
+      "source_sha256": "78118551cd2567d86b908a206069ad67b74d8f8b9ac5c07e5367fc50fe75e19c",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-138",
+      "task_manifest_sha256": "7b3a867344ff16ba50f6d3d3bd06d720dddfb5e98545b4fe7dc735ec40279779",
+      "source_sha256": "cbc00996b4235cc7dd72dec27e580424362c3f7e34fb2ae3dbb9211a30def143",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-HTTP-153",
+      "task_manifest_sha256": "24207adced9d9f669d553ee850e2fa088711a0b2ecc61c87fe09d48e8962cbf7",
+      "source_sha256": "1235a35ab011098d657be5a6455fd24d2c8b257aa7d29998e06a17478b5d4c24",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-SQL-240-421",
+      "task_manifest_sha256": "3036d7245a307495cb3d8df703dcbfd0effcf2561a1fbf7086f4d8e20c17c7aa",
+      "source_sha256": "8b64a8affe570deb9b9e2fba05826f37f747fc7cc71d4d5ae47c503901fe314e",
+      "public_assets_verified": 9,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-SQL-459",
+      "task_manifest_sha256": "3abcfbee02cd854e8e2018254d90ad768d29f1a71bde0988dff622fe0b50104c",
+      "source_sha256": "773b4ec2e42ed2854557423387de180185cead55c187cc0ffc54cd950aa82ca9",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AWS-2117",
+      "task_manifest_sha256": "038c3d6707cdb508507a4d33205e19af36aae0817f89c5a1e4a4995d6a4915ed",
+      "source_sha256": "5052f655f7d589f09728a8932a7807a48855af3d73b27a5cd0f76feede80aed2",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AWS-2182",
+      "task_manifest_sha256": "95d42c023d8c7060347a3ff00236c90e672eb913ae76247c75ce71924d160a5f",
+      "source_sha256": "927d36cd26de20a12b7b9cf2d6df5066aaad9c93940098ace173284419da9ebb",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AZURE-1247",
+      "task_manifest_sha256": "55787051b1362102b5d88f0742356c18016e45dfa097bd041780126afe0c90cb",
+      "source_sha256": "069639ae51ba7e2457032da23bb244e37c3f26af281a4cf94e23880d095fd8fb",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AZURE-1260",
+      "task_manifest_sha256": "71de3b396d62227e060d898039ec2e01d2b67bf7dc6766f5eb804a81b1844178",
+      "source_sha256": "e7fd2b11eec3a9220b4ea5ceaf67063ec675ed7cd25f67a5b030b320ec89d8db",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-GCP-1015",
+      "task_manifest_sha256": "29656fad7f80463f71e8d45c416b47ee627c54e7ebe77345094ceadda4cd9788",
+      "source_sha256": "a65947fa357d998c2d01a1e159c35bed695e8372e1bf3ebdb543762babfe6051",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-GCP-875",
+      "task_manifest_sha256": "5e52512fde575bd0021076ac7a9a93369482e2df646b885e0aba08e7a8eac3e7",
+      "source_sha256": "7b4c6fb867811ce71c03f81885d55809e5ef29f21fd9597052be854cf5d658b1",
+      "public_assets_verified": 7,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-UPJET-564",
+      "task_manifest_sha256": "60cb9914611fc6b36a7262fa996b37b8a3ebeb7f88cf9efca1fe745a911f655f",
+      "source_sha256": "33dc462c57e253b23e77a32106898e8be7727e73c2ea8d03ba8f39c24c24f563",
+      "public_assets_verified": 9,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-UPJET-640",
+      "task_manifest_sha256": "544569ae9ed514b7e9ea623c6db8a15ac2a954e8d064a20435cf7bf01ce7bb9d",
+      "source_sha256": "d0a19da58ee5d5825249f88065bfd734dfcf81f14b1fd18d4d7517058373f231",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-PROVIDER-AWS-2256",
+      "task_manifest_sha256": "a6eaf6c3d0bf77feeb0351cb6e20dc037825a3c946fe072bd2f667957068643e",
+      "source_sha256": "f2cbc65807d821b21ad091b18635cf385af6e7278b336db6fe966315ba303045",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-PROVIDER-AWS-2343",
+      "task_manifest_sha256": "e862374f86f270b7cfdbe1bf451c6f55634f647b4c6831bf3477d4601072d932",
+      "source_sha256": "fdd56a867399eed3cf5a31ade3453b9c9c8690c35f866b5845ec7cf4b329c768",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-UPJET-AWS-2137",
+      "task_manifest_sha256": "12a3df4597b51d5defc436d4bbd2ccd49e58f5a52d726a1198b8fdfa6e02f1a3",
+      "source_sha256": "55f0c8a78a75d732446dfd505b507889a052c2d03276b99b03393e8a81b304f0",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "R4-UPJET-GCP-1027",
+      "task_manifest_sha256": "4b5b773cdab88bda2a07ab120f0523cdd457374ae6ddee5ce1c0e4ea4eda96d3",
+      "source_sha256": "60af4f8fc38f2996e346966c829f22c4bf437dd0c9f6e7618bab973e089db880",
+      "public_assets_verified": 6,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-HAPROXY-0D540394",
+      "task_manifest_sha256": "0acf43b53fe1e331e466589a5dee52155cef64e53ce0236ffa7cc5f53e72314a",
+      "source_sha256": "9653e4e0bab83f57e46c33bb711b66f86fcb0fc4b6fd915d4ad28f4b3ac22142",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-ARGO-ROLLOUTS-4604",
+      "task_manifest_sha256": "ae5cc499864ec01bd3cd632de0fa12e74a6330d8937b3782e13b5758cd5a85cf",
+      "source_sha256": "7a92a4650a7c1dfcbbca51cd0b9c2153757a503b0de141b0c7b6747cbbf552c9",
+      "public_assets_verified": 12,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-HAPROXY-REDIRECT-QS-001",
+      "task_manifest_sha256": "a8700cc469fd1d058257825c6feed5044c4a9075e96d62916702e453c07527ba",
+      "source_sha256": "03c2f39ca9ec92bcfe0408990a0ae1b995fe92fd94213533b6482a2794201dc5",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    },
+    {
+      "case_id": "RW-HAPROXY-HASH-NUMERIC-001",
+      "task_manifest_sha256": "7bdc424ddd608fcbb0ca9a127f1de2ac6cfba83e9a662b2db3c709d033ebe857",
+      "source_sha256": "b36ce7c52a86ce534ee8832c0622dec19700cdd7fa03b1fc3d3278743e34d3f4",
+      "public_assets_verified": 8,
+      "private_registry_hashes_verified": true,
+      "route": "FROZEN_PUBLIC_LAUNCHER"
+    }
+  ],
+  "new_model_http_calls": 0,
+  "candidate_executions": 0,
+  "hidden_behavior_scores_run": 0,
+  "private_bodies_parsed": false,
+  "formal_ready": false,
+  "scope": "Zero-model static management preflight of the current150 unified release: actual public bytes, hash-only private entry pins, current public routes and local images/resources. No all-case build/runtime/repair-success claim. Recheck resources before formal launch."
+}

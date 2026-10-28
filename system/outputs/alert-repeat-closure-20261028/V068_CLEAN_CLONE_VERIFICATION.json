@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "clone": "/home/xhj/contractedge-clean-delivery-official-v068-20261028",
+  "clone_commit": "edba55f336cf393106a0de7654c0df54ba4f3daf",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "freeze_sha256": "fda82e2cbd90dea3bc1be3a03379fbfd452a06748a01fa88aea4e7bf782d998c",
+  "verification": {
+    "schema_version": "ce.development_snapshot_verification.v1",
+    "development_snapshot_id": "quote-binding-v068-20261028",
+    "status": "PASS",
+    "formal_ready": false,
+    "coverage": {
+      "source": 116,
+      "configuration": 77,
+      "fixture": 217,
+      "tooling_files": 289,
+      "repository_files": 1
+    },
+    "unbound_legacy_fixture_files": [],
+    "errors": []
+  },
+  "fresh_venv": "/home/xhj/contractedge-clean-delivery-official-v068-20261028-venv",
+  "installed_module": "/home/xhj/contractedge-clean-delivery-official-v068-20261028/system/src/contractedge/__init__.py",
+  "new_model_http_calls": 0,
+  "formal_ready": false
+}

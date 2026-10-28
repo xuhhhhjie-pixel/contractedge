@@ -1,0 +1,179 @@
+{
+  "status": "PASS",
+  "identity": {
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
+    "candidate_config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "stages": [
+    {
+      "prompt_version": "diagnosis.v1.1.26",
+      "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "current_source_records": [
+        {
+          "id": "SRC-CU-60d3496476d58093",
+          "path": "pkg/lib/kptops/render_executor.go",
+          "content_digest": "e658aaddf9612cfb4f179848f7de7de817e70b1be372285a9e02d797098a111f"
+        },
+        {
+          "id": "SRC-CU-883e2cb2727d395a",
+          "path": "pkg/lib/kptops/render_executor.go",
+          "content_digest": "8a41e5a58014edaf87650f7d13fce06dab31aa410f5c47026e65b691672dccb3"
+        },
+        {
+          "id": "SRC-CU-b185a6639d1920f7",
+          "path": "pkg/lib/kptops/render_executor.go",
+          "content_digest": "6047ccaad7c2dcd0545fd7e992cc1fa15d37da71eb38010751508c7611e46b4b"
+        }
+      ],
+      "confirmed_source_terms": [
+        "runMutators",
+        "runValidators",
+        "runPipeline"
+      ],
+      "request_digest": "aa8a6a03ead6335d7344da700d11cc11531112d99ea3c45023dfc5abb3fed267",
+      "scope": "Diagnosis gets production entry bodies; planning and execution get prerequisite helper bodies. Not every helper is required in diagnosis."
+    },
+    {
+      "prompt_version": "changeset.v1.1.16",
+      "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "current_source_records": [
+        {
+          "id": "HELPER-b5d0b3260f63e3c7",
+          "path": "api/kptfile/v1/validation.go",
+          "content_digest": "b5d0b3260f63e3c7d58ee185455c8db57d6b73baa7ea3236a9d6066b9d81a95b"
+        },
+        {
+          "id": "HELPER-b1458129855125de",
+          "path": "pkg/fn/runtime/utils.go",
+          "content_digest": "b1458129855125de6c7a2d828127ca423865fed7a65a733d3f231d448a00100e"
+        },
+        {
+          "id": "HELPER-bf52db689d494726",
+          "path": "pkg/fn/runtime/utils.go",
+          "content_digest": "bf52db689d49472623f970e7bab3580bdbeedb5c432353eb1b5ce7f332971a62"
+        },
+        {
+          "id": "HELPER-222efe5087442853",
+          "path": "pkg/fn/runtime/utils.go",
+          "content_digest": "222efe5087442853b63e2c2c20ec515284f3eed0a20258d17e207770d39b1321"
+        },
+        {
+          "id": "HELPER-a6f6c10ee69b1968",
+          "path": "pkg/fn/runtime/utils.go",
+          "content_digest": "a6f6c10ee69b196857e32b9522eb53c6031e081031d964749afafa82222de7d9"
+        },
+        {
+          "id": "HELPER-d7ef1feaad1e24dd",
+          "path": "pkg/lib/errors/errors.go",
+          "content_digest": "d7ef1feaad1e24dd22a98bf94ec2c848b1a5da8b14899255dc9a827eaf00ab34"
+        },
+        {
+          "id": "HELPER-db4df3998fec9e0b",
+          "path": "pkg/lib/pkg/pkg.go",
+          "content_digest": "db4df3998fec9e0bc91028d6c04ead863cc2ef7b44a4450375ebc72e5024ed3e"
+        },
+        {
+          "id": "HELPER-3ed56f200d966206",
+          "path": "pkg/lib/pkg/pkg.go",
+          "content_digest": "3ed56f200d9662068fb5f8fe4f8d2a655351ade687b398fd1ec7715325b455fb"
+        }
+      ],
+      "confirmed_source_terms": [
+        "func SetResourceIDs",
+        "func DeleteResourceIDs",
+        "func MergeWithInput"
+      ],
+      "request_digest": "1b7329864680767c713ef8c7447893ac7453aefdfc68dbc62d08f16dfcd5d440",
+      "scope": "Diagnosis gets production entry bodies; planning and execution get prerequisite helper bodies. Not every helper is required in diagnosis."
+    },
+    {
+      "prompt_version": "topomen-source-execution.v1",
+      "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "current_source_records": [
+        {
+          "id": "HELPER-b5d0b3260f63e3c7",
+          "path": "api/kptfile/v1/validation.go",
+          "content_digest": "b5d0b3260f63e3c7d58ee185455c8db57d6b73baa7ea3236a9d6066b9d81a95b"
+        },
+        {
+          "id": "HELPER-b1458129855125de",
+          "path": "pkg/fn/runtime/utils.go",
+          "content_digest": "b1458129855125de6c7a2d828127ca423865fed7a65a733d3f231d448a00100e"
+        },
+        {
+          "id": "HELPER-bf52db689d494726",
+          "path": "pkg/fn/runtime/utils.go",
+          "content_digest": "bf52db689d49472623f970e7bab3580bdbeedb5c432353eb1b5ce7f332971a62"
+        },
+        {
+          "id": "HELPER-222efe5087442853",
+          "path": "pkg/fn/runtime/utils.go",
+          "content_digest": "222efe5087442853b63e2c2c20ec515284f3eed0a20258d17e207770d39b1321"
+        },
+        {
+          "id": "HELPER-a6f6c10ee69b1968",
+          "path": "pkg/fn/runtime/utils.go",
+          "content_digest": "a6f6c10ee69b196857e32b9522eb53c6031e081031d964749afafa82222de7d9"
+        },
+        {
+          "id": "HELPER-d7ef1feaad1e24dd",
+          "path": "pkg/lib/errors/errors.go",
+          "content_digest": "d7ef1feaad1e24dd22a98bf94ec2c848b1a5da8b14899255dc9a827eaf00ab34"
+        },
+        {
+          "id": "HELPER-db4df3998fec9e0b",
+          "path": "pkg/lib/pkg/pkg.go",
+          "content_digest": "db4df3998fec9e0bc91028d6c04ead863cc2ef7b44a4450375ebc72e5024ed3e"
+        },
+        {
+          "id": "HELPER-3ed56f200d966206",
+          "path": "pkg/lib/pkg/pkg.go",
+          "content_digest": "3ed56f200d9662068fb5f8fe4f8d2a655351ade687b398fd1ec7715325b455fb"
+        },
+        {
+          "id": "HELPER-1f02e1208331d668",
+          "path": "api/kptfile/v1/types.go",
+          "content_digest": "1f02e1208331d6687ffc5c9c60c98588925e5b2fb7635eb30d065d917d121d7f"
+        },
+        {
+          "id": "HELPER-b38d0ebde3d0b2ff",
+          "path": "api/kptfile/v1/types.go",
+          "content_digest": "b38d0ebde3d0b2ff536fd19e8da17312abcb307c93bb3dbd7600b041f7c81bfb"
+        },
+        {
+          "id": "HELPER-953ba007c8b75b7f",
+          "path": "pkg/fn/runtime/utils.go",
+          "content_digest": "953ba007c8b75b7fac20ae972d626968b53eefc5fb26841072fa8dcd71b1b7df"
+        }
+      ],
+      "confirmed_source_terms": [
+        "func SetResourceIDs",
+        "func DeleteResourceIDs",
+        "func MergeWithInput"
+      ],
+      "request_digest": "871f3c2f461b548070fe8e45f8ea8f7c0545f7e89910f245d4a9142e25e861e6",
+      "scope": "Diagnosis gets production entry bodies; planning and execution get prerequisite helper bodies. Not every helper is required in diagnosis."
+    }
+  ],
+  "receipt": {
+    "path": "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-f30e0215f0d113880a6411c5/.isolated-9f3170a5a24a42be923f3ffcafe353a9/receipt.json",
+    "sha256": "e887638d85f35191c967b36c14a57aa4ae269e5e2382580fb121f278fb372d1e"
+  },
+  "parent_calls": {
+    "path": "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-f30e0215f0d113880a6411c5/.isolated-9f3170a5a24a42be923f3ffcafe353a9/parent-model-calls.json",
+    "sha256": "a134fd8407dd2389f03fabc4b0c495a05178865f2d2cf83d97d41472e99c1683"
+  },
+  "trace": {
+    "path": "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-f30e0215f0d113880a6411c5/R3-KPT-4673/repair.trace.json",
+    "sha256": "311175b7a4b3d8d17bb1ee3020952c2241b5f06feb0a48507d4627279e80a8a2"
+  },
+  "saved_failure_current_replanning": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_FAILURE_REPLAY.json",
+    "sha256": "f1000639adefc4c9d342e835ad07688f08a001109d32a796aa26e7a202cec1d6"
+  },
+  "new_model_calls": 0,
+  "scope": "Actual final diagnosis/planning/execution requests for current KPT plus current-code saved-failure rediagnosis replay. Finite relevant source delivery, not universal diagnosis correctness.",
+  "formal_ready": false
+}
