@@ -1,0 +1,475 @@
+{
+  "schema_version": "ce.fixed46_execution_checkpoint.v1",
+  "as_of_utc": "2026-10-25T04:29:36.870207+00:00",
+  "scope": "Documentary checkpoint; live registered records and receipt verification remain authoritative",
+  "panel_sha256": "399760d9a7230f1143179fb12d470137d388ef6583665db45b98b5555ea5f25b",
+  "panel_id": "fixed46-v045-isolated-20261025-v1",
+  "source_sha256": {
+    "baseline": "c9c5b75060549e0e22eb725b3082dee2e7994deecc0d653379c801b0a1f9fc6e",
+    "candidate": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df"
+  },
+  "registered_slots": 46,
+  "verified_completed_slots": 1,
+  "controller": {
+    "status": "RUNNING",
+    "active_slot": {
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-60944716e7069c9f5423fb67",
+      "variant": "candidate"
+    },
+    "panel_sha256": "399760d9a7230f1143179fb12d470137d388ef6583665db45b98b5555ea5f25b"
+  },
+  "B_opened": false,
+  "formal_ready": false,
+  "money_micro_cny_including_reservations": 106357942,
+  "money_limit_micro_cny": 150000000,
+  "records": [
+    {
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f5dd18212d66edb1ba9b9990",
+      "variant": "baseline",
+      "independent_status": "PASS",
+      "public_decision": "PASS",
+      "status": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE",
+      "terminal_verified": true,
+      "counts_in_46_slot_panel": true,
+      "identity_sha256": "d8157a87182e6654bb32526b3991b321d613b26bebe3b200a738eadbf6ecdc38",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-f5dd18212d66edb1ba9b9990/.isolated-9f2bc287488f4ec78ed6dc74f1b3018d/receipt.json",
+          "sha256": "96771540ebcc206ab628fef25e4032e59fa4bed231d702d0be5699891f7bc60d"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-f5dd18212d66edb1ba9b9990/RW-CAND-130/repair.trace.json",
+          "sha256": "e679794e783cabc621fa35e33f4eeb7729fe6e4e318f17d2146ebe8f26c607b5"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-20261025/runs-v045/independent/fixed46-v045-isolated-20261025-v1-f5dd18212d66edb1ba9b9990/result.json",
+          "sha256": "5422274a9ad5fd32f37a742baec80d89e7907cf3f9c370160302782f428867cd"
+        }
+      },
+      "formal_ready": false
+    }
+  ],
+  "slot_status": [
+    {
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f5dd18212d66edb1ba9b9990",
+      "variant": "baseline",
+      "execution_status": "PASS",
+      "public_decision": "PASS"
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-60944716e7069c9f5423fb67",
+      "variant": "candidate",
+      "execution_status": "RUNNING",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f30e0215f0d113880a6411c5",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-8963f561974092cbd6133317",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-5c9e2b9fddc23e694bc91412",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-a23cab1ffd94f2c287355ce8",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-109d1fbfb1987992a1ad4cea",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-613366258a101b1af27ecdab",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-a62911320d2450c09640ca1c",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-bcd9a8d56a4e00f2f902f406",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-7e110f10f2707f003c394c2c",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-5ece967e93e69ab025d7d758",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-5b4e270cd9beb190997cb43f",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "group": "A",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f836a8138f6b34ea264edf20",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "repeat",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-4ada1358a8a7db96b35bcd8e",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "repeat",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-92201d988b606f41830e70a5",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "repeat",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-c1cec2a408efc5e10c83fb8e",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "repeat",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-c389d4dfccac51c96e7ee10f",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "recovery",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-b014df76f3113bdb25b07e03",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "recovery",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-44d1f6c59760035709127588",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "recovery",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f2c810d86ae1d3f2c49a963f",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "recovery",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-1bf2d595d501802118c43695",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "recovery",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-7cf96bc3f16296239e7fb685",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "recovery",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-833d9fec72fc75d823c9c702",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "recovery",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-3c876390d002229b412fc40b",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "recovery",
+      "repeat": 1,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-0688f115ed8fa72b524b54cd",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-a59cbd0380209008b953b050",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-620390e2891096c1ce2941a2",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-b3b20f10c04f6a0bb9714c0b",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-a4651652e0f25e417ab23767",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-fd56f4f5a51af6f4ac2e99fc",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-519dfe95312a2ee83cc53b34",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-fc7c9a44ca1c4bb7edb04add",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-9bba89f391b684557d228cb6",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-ec66d873adb0dfa95b02688d",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-698d843579dfc385f54e3d69",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-dd301a3401b0a414fdc5a6aa",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-6b3527ac23155cd49933f306",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R4-CAPA-5111",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-d10fede6895c0f6a4b6ea977",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R4-CAPA-5111",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-71c9d960e70ca9aa62560f98",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2339",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-f5f2f8178d40fabc3643bd3c",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2339",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-fb4acf66fdeb7fa6ae1fd93d",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-88f579d384b1d05255fc162b",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-02ba2eab146eaa41acb06696",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-53fe08b7488b0cb79a08b6b8",
+      "variant": "candidate",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "group": "B",
+      "repeat": 0,
+      "slot_id": "fixed46-v045-isolated-20261025-v1-15c8e59b7b314d407202a5ed",
+      "variant": "baseline",
+      "execution_status": "NOT_RUN",
+      "public_decision": null
+    }
+  ]
+}

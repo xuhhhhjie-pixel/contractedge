@@ -1,0 +1,49 @@
+{
+  "status": "PASS_ACTUAL_REJECTED_OUTPUT_REPLAY",
+  "model_http_calls_added": 0,
+  "original_calls_sha256": "6c2677a65766e8b498e463624f5f977b1e3f77919c0cf2f821d726c402ea8d4c",
+  "validator_sha256": "1cae9f284b9332c09800f8c48a5f0a573aa0b01bab66854af3ef340004285913",
+  "results": [
+    {
+      "call_index": 3,
+      "rejected_source_identity_errors": 2,
+      "errors": [
+        {
+          "code": "PRECONDITION_ESTABLISHMENT_INVALID",
+          "path": "precondition_review[2].establishment.source_quote",
+          "message": "Quote for HELPER-bf52db689d494726 does not bind the delivered current source. Copy one short exact source line; do not paraphrase code or double-escape newlines/tabs. The quote must belong to this source_evidence_ref, including for PLANNED_CHANGE; a caller quote cannot stand in for the referenced helper. Describe caller changes in mechanism/change_refs. A source quote is not proof of the asserted semantic guarantee. Current-source binding hints (identity only): {\"referenced_source\": {\"id\": \"HELPER-bf52db689d494726\", \"locator\": {\"end_line\": 124, \"path\": \"pkg/fn/runtime/utils.go\", \"start_line\": 112}, \"exact_quote_example\": \"func SetResourceIDs(input []*yaml.RNode) error {\"}}"
+        },
+        {
+          "code": "PRECONDITION_ESTABLISHMENT_INVALID",
+          "path": "precondition_review[3].establishment.source_quote",
+          "message": "Quote for HELPER-222efe5087442853 does not bind the delivered current source. Copy one short exact source line; do not paraphrase code or double-escape newlines/tabs. The quote must belong to this source_evidence_ref, including for PLANNED_CHANGE; a caller quote cannot stand in for the referenced helper. Describe caller changes in mechanism/change_refs. A source quote is not proof of the asserted semantic guarantee. Current-source binding hints (identity only): {\"referenced_source\": {\"id\": \"HELPER-222efe5087442853\", \"locator\": {\"end_line\": 135, \"path\": \"pkg/fn/runtime/utils.go\", \"start_line\": 126}, \"exact_quote_example\": \"func DeleteResourceIDs(input []*yaml.RNode) error {\"}}"
+        }
+      ],
+      "feedback_characters": 1365,
+      "automatic_payload_rewrite": false,
+      "other_source_match_optional": true
+    },
+    {
+      "call_index": 4,
+      "rejected_source_identity_errors": 2,
+      "errors": [
+        {
+          "code": "PRECONDITION_ESTABLISHMENT_INVALID",
+          "path": "precondition_review[2].establishment.source_quote",
+          "message": "Quote for HELPER-bf52db689d494726 does not bind the delivered current source. Copy one short exact source line; do not paraphrase code or double-escape newlines/tabs. The quote must belong to this source_evidence_ref, including for PLANNED_CHANGE; a caller quote cannot stand in for the referenced helper. Describe caller changes in mechanism/change_refs. A source quote is not proof of the asserted semantic guarantee. Current-source binding hints (identity only): {\"referenced_source\": {\"id\": \"HELPER-bf52db689d494726\", \"locator\": {\"end_line\": 124, \"path\": \"pkg/fn/runtime/utils.go\", \"start_line\": 112}, \"exact_quote_example\": \"func SetResourceIDs(input []*yaml.RNode) error {\"}}"
+        },
+        {
+          "code": "PRECONDITION_ESTABLISHMENT_INVALID",
+          "path": "precondition_review[3].establishment.source_quote",
+          "message": "Quote for HELPER-222efe5087442853 does not bind the delivered current source. Copy one short exact source line; do not paraphrase code or double-escape newlines/tabs. The quote must belong to this source_evidence_ref, including for PLANNED_CHANGE; a caller quote cannot stand in for the referenced helper. Describe caller changes in mechanism/change_refs. A source quote is not proof of the asserted semantic guarantee. Current-source binding hints (identity only): {\"referenced_source\": {\"id\": \"HELPER-222efe5087442853\", \"locator\": {\"end_line\": 135, \"path\": \"pkg/fn/runtime/utils.go\", \"start_line\": 126}, \"exact_quote_example\": \"func DeleteResourceIDs(input []*yaml.RNode) error {\"}}"
+        }
+      ],
+      "feedback_characters": 1365,
+      "automatic_payload_rewrite": false,
+      "other_source_match_optional": true
+    }
+  ],
+  "scope": "Both actual wrong plans remain rejected; feedback identifies the expected helper path/declaration. Optional wrong-source matching is available only inside delivered prerequisite support; these actual outputs have no such match in that support list.",
+  "effect_proven": false,
+  "formal_ready": false
+}

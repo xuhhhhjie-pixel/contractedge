@@ -1,0 +1,38 @@
+{
+  "status": "DIAGNOSTIC_CLOSED_REQUIRES_EFFECT_AND_PUBLIC_TRACE_AUDIT",
+  "rows": [
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "attempt_id": "diagnostic-source053-v1-20261026-rw-alertmanager-4705",
+      "method_status": "BUDGET_EXHAUSTED",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_decision": "FAIL",
+      "patch_bytes": 782,
+      "patch_sha256": "899eb1618aeac13ed58d82a0e57123c89b3a40a13528f01891fbb0719cbf6de1",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-diagnostic-source053-v1-20261026/methods/RW-ALERTMANAGER-4705/.isolated-ec26b3b0189f4ef2b0f6c8178331d36a/receipt.json",
+          "sha256": "2e5566391abbe64ade0f42b4f45149d5b7a8f2c2eacd3668dc957b1694ac59f3"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-diagnostic-source053-v1-20261026/methods/RW-ALERTMANAGER-4705/RW-ALERTMANAGER-4705/repair.trace.json",
+          "sha256": "73e48a7950703003bf8246d1d67d6436dc9e79cb49e18448e7736c9008ea900f"
+        }
+      },
+      "counts_in_46_slot_panel": false,
+      "formal_ready": false
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "status": "NOT_RUN_TARGET_GATE_FAILED",
+      "counts_in_46_slot_panel": false
+    }
+  ],
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "automatic_retry": false,
+  "B_opened": false,
+  "registration": "/home/xhj/contractedge-diagnostic-source053-v1-20261026/registration.json",
+  "active_case": null,
+  "target_gate_passed": false
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": "ce.public_inventory_scope_gap.v1",
+  "method_version": "0.6.38",
+  "new_model_calls": 0,
+  "case_id": "RW-CAND-130",
+  "independent_status_reference_only": "PASS",
+  "earliest_rejection_boundary": "ModelPublicReviewer -> support_error resource scope validation",
+  "scenario_requested": "control",
+  "scenario_delivered": "control",
+  "resource_requested": {
+    "kind": "Job",
+    "name": null,
+    "namespace": "contractedge"
+  },
+  "resource_identity_delivered": null,
+  "observation_id": "OBS4",
+  "snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+  "evidence_kind": "PUBLIC_STRUCTURE",
+  "locator": {
+    "path": "raw/control.render-kind-Job.json",
+    "file_sha256": "10e0a172e465ca474875fa34dd6b7bd26741368d587b746f5894d65ab7cbcedd",
+    "start_byte": 0,
+    "copied_bytes": 484,
+    "truncated": false,
+    "whole_file_read": true
+  },
+  "excerpt_sha256": "10e0a172e465ca474875fa34dd6b7bd26741368d587b746f5894d65ab7cbcedd",
+  "parsed_observation_type": "PARSED_PUBLIC_RESOURCE_INVENTORY",
+  "complete_inventory": true,
+  "resources": [
+    {
+      "kind": "Job",
+      "name": "ct-vela-core-admission-create",
+      "namespace": "contractedge"
+    },
+    {
+      "kind": "Job",
+      "name": "ct-vela-core-admission-patch",
+      "namespace": "contractedge"
+    }
+  ],
+  "submitted_status": "PASS",
+  "accepted_status": "UNKNOWN",
+  "replayed_error": "OBSERVATION_RESOURCE_MISMATCH",
+  "already_fixed": false,
+  "required_fix": "Producer-registered complete inventory scope must be distinguished from one-object identity; collection evidence may cover a scoped predicate without pretending the collection is that object. Do not infer automatic semantic PASS.",
+  "required_counterexamples": [
+    "partial/truncated or unparsed inventory",
+    "wrong scenario",
+    "wrong resource kind",
+    "unregistered raw JSON pretending completeness",
+    "runtime claim using render-only evidence",
+    "conflicting relevant operation failure"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "ce.formal_admission_manifest.v1",
+  "system_root": "/home/xhj/contractedge-alert-closure-20261028/system",
+  "snapshot": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/docs/development/quote-binding-v068-20261028.snapshot.json",
+    "sha256": "fda82e2cbd90dea3bc1be3a03379fbfd452a06748a01fa88aea4e7bf782d998c"
+  },
+  "panel": {
+    "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/panel.json",
+    "sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d"
+  },
+  "records": {
+    "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/records.json",
+    "sha256": "c0d99709cff730da145de5b0f21a7083c6a46d452944bf237df9f03c4ec1ce36"
+  },
+  "gates": {
+    "G0": {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G0_EVIDENCE.json",
+      "sha256": "0448778ecc8d933c0bfef4d3f89f6ce7be2a793054edd17a80dbe752f492478a"
+    },
+    "G1": {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G1_EVIDENCE.json",
+      "sha256": "78a9379180d4629f3e9e26544412c63ddf51af46c329a5c52f59725bd44c80c4"
+    },
+    "G2": {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G2_EVIDENCE.json",
+      "sha256": "a413c727325682ae0f6c3ea7cf0015d16fb1fc5cb6c61306d4c69a97179b8d88"
+    },
+    "G6": {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G6_EVIDENCE.json",
+      "sha256": "b9ab881a695e0ddf5cd8c9c13bb5dab9df02c1689b6e4ab0b3376feb744784ee"
+    },
+    "G3": {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G3_FINAL_EVIDENCE.json",
+      "sha256": "8c8382a497b73d9071b4da36173e51398256b5a83d9f08664307e5c2c97474d8"
+    },
+    "G4": {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G4_FINAL_EVIDENCE.json",
+      "sha256": "a57cfc250e42a3860f361950dfc263f8cd0c7a1736608f25ae7eff0cefea95fe"
+    },
+    "G5": {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G5_FINAL_EVIDENCE.json",
+      "sha256": "b9ffed47866aa163f4a0922ddb26d842c2ad4f15eb157769e3a4519f9f137e75"
+    }
+  },
+  "scope": "Exact frozen candidate; no formal150 dispatch or new expenditure authorized by this aggregation."
+}

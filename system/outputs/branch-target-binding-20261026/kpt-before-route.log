@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-branch-binding-20261026/system/scripts/replay_saved_front_request.py", line 80, in <module>
+    main()
+  File "/home/xhj/contractedge-branch-binding-20261026/system/scripts/replay_saved_front_request.py", line 67, in main
+    assert len(captured) == 1, f'Capture boundary not reached: {trace.status}, {trace.errors}'
+AssertionError: Capture boundary not reached: INVALID_PLAN, ("PRODUCTION_BRANCH_CHANGE_INVALID:production_path_review[1]:MODIFY requires actual changes targeting this evidenced branch; file equality alone is insufficient. Branch SRC-CU-60d3496476d58093 pkg/lib/kptops/render_executor.go:862-908; eligible diagnosis unit_refs=[]; submitted change_refs=['C1'].", 'PRODUCTION_BRANCH_TARGET_UNAVAILABLE:production_path_review[1]:Branch SRC-CU-60d3496476d58093 pkg/lib/kptops/render_executor.go:862-908 has no legal target unit in the current diagnosis. Request diagnosis reassessment before claiming this edit; changing semantic_action text or reusing a unit bound to another branch cannot repair this missing binding. Do not invent a unit, discard unresolved obligations or weaken branch coverage.')

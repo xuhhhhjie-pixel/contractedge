@@ -1,0 +1,12 @@
+{
+  "status": "CLOSED_DEFAULT_FULL_METHOD_SINGLE",
+  "formal_ready": false,
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "independent_status": "PASS",
+  "public_outcome": "UNKNOWN",
+  "model_calls": 4,
+  "patch_bytes": 2020,
+  "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+  "receipt_sha256": "c547265d9d6e7b5643e5b0372550aeeff63d63d8c47903ddc595bf46a351037c",
+  "trace_sha256": "bcd16307cb026795dcb9ede47add2e3d4c0789e948f9b46b67f69a2fca553c84"
+}

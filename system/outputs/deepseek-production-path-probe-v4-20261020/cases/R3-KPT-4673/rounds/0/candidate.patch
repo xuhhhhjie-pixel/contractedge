@@ -1,0 +1,65 @@
+diff --git a/pkg/lib/kptops/render_executor.go b/pkg/lib/kptops/render_executor.go
+index 0c6fabc..c201635 100644
+--- a/pkg/lib/kptops/render_executor.go
++++ b/pkg/lib/kptops/render_executor.go
+@@ -822,6 +822,13 @@ func (pn *pkgNode) runMutators(ctx context.Context, hctx *hydrationContext, inpu
+ 		if err != nil {
+ 			return nil, err
+ 		}
++		// The configPath-designated resource is supplied to the owning function
++		// as functionConfig and must not also be treated as an ordinary input
++		// item. Keep it in the outer input/merge path so later mutators and the
++		// final render still retain it.
++		if pl.Mutators[i].ConfigPath != "" {
++			selectedInput = pn.excludeConfigPath(selectedInput, pl.Mutators[i].ConfigPath)
++		}
+ 		output := &kio.PackageBuffer{}
+ 		// create a kio pipeline from kyaml library to execute the function chains
+ 		mutation := kio.Pipeline{
+@@ -897,6 +904,13 @@ func (pn *pkgNode) runValidators(ctx context.Context, hctx *hydrationContext, in
+ 			return err
+ 		}
+ 
++		// Exclude the configPath-designated resource from the read-only
++		// selectedResources clone so the owning validator does not also receive
++		// it as an ordinary input item.
++		if function.ConfigPath != "" {
++			selectedResources = pn.excludeConfigPath(selectedResources, function.ConfigPath)
++		}
++
+ 		if _, err = validator.Filter(cloneResources(selectedResources)); err != nil {
+ 			hctx.validationSteps = append(hctx.validationSteps, captureStepResult(function, hctx.fnResults, resultCountBeforeExec, err))
+ 			return err
+@@ -914,6 +928,32 @@ func cloneResources(input []*yaml.RNode) (output []*yaml.RNode) {
+ 	return
+ }
+ 
++// excludeConfigPath removes the resource designated by configPath from the
++// given resource list. The configPath resource is supplied to its owning
++// function as functionConfig and must not also be treated as an ordinary input
++// item. Resources are matched by package path and file path annotations, the
++// same identity used by refreshFnConfig.
++func (pn *pkgNode) excludeConfigPath(input []*yaml.RNode, configPath string) []*yaml.RNode {
++	var result []*yaml.RNode
++	for _, r := range input {
++		pkgPath, err := pkg.GetPkgPathAnnotation(r)
++		if err != nil {
++			result = append(result, r)
++			continue
++		}
++		currPath, _, err := kioutil.GetFileAnnotations(r)
++		if err != nil {
++			result = append(result, r)
++			continue
++		}
++		if pkgPath == pn.pkg.UniquePath.String() && currPath == configPath {
++			continue
++		}
++		result = append(result, r)
++	}
++	return result
++}
++
+ // refreshFnConfig updates the runner's functionConfig from the in-memory input
+ // to pick up any mutations applied earlier in the pipeline.
+ func (pn *pkgNode) refreshFnConfig(runner *fnruntime.FunctionRunner, input []*yaml.RNode, configPath string) error {

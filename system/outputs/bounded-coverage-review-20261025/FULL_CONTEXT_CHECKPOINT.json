@@ -1,0 +1,35 @@
+{
+  "created_utc": "2026-10-25T14:27:36.403475+00:00",
+  "status": "OFFLINE_ENGINEERING_PASS_NOT_EFFECTIVENESS_QUALIFIED",
+  "snapshot": "docs/development/bounded-coverage-review-v046-20261025-v3.snapshot.json",
+  "snapshot_sha256": "9ace13a0ba534bd1f46dd86784c310c264fd005caffa71f3b8048f28a0c59e91",
+  "source_sha256": "86a0a15d820e55db4c6ee811b6905432d94ddbc73e3eadc7fc4261075f1e17fc",
+  "focused_tests_passed": 92,
+  "focused_subtests_passed": 2,
+  "new_operation_context_cases": 12,
+  "new_cases_before_fix": {
+    "failed": 6,
+    "passed": 6
+  },
+  "red_log": "full-context-red.log",
+  "green_log": "full-context-green.log",
+  "exact_public_replay": "KPT_ACK_EXACT_REPLAY_v3.json",
+  "full_suite_unit": "contractedge-coverage046-context-full-20261025.service",
+  "full_suite_log": "/home/xhj/contractedge-coverage046-context-full-20261025.log",
+  "full_suite_status": "PASS",
+  "new_paid_calls": 0,
+  "formal_ready": false,
+  "limitations": [
+    "Not integrated with upstream producer/freshness validation and scoring-parent-r2 authority",
+    "Plan verification_scope adequacy remains an analyzed follow-up, no source fix claimed",
+    "No same-version046 paid panel, independent repair effectiveness not established"
+  ],
+  "full_tests_passed": 1793,
+  "full_subtests_passed": 91,
+  "full_suite_duration_seconds": 483.49,
+  "full_suite_actual_isolated_enabled": true,
+  "freeze_sha256_after": "9ace13a0ba534bd1f46dd86784c310c264fd005caffa71f3b8048f28a0c59e91",
+  "freeze_unchanged": true,
+  "document_drift": "Initial post-test verification caught an appended bound report; restored exact frozen report bytes, saved new notes outside binding. Source/config/tests unchanged. Both failed and passing verifier reports retained.",
+  "updated_utc": "2026-10-25T14:33:31.431008+00:00"
+}

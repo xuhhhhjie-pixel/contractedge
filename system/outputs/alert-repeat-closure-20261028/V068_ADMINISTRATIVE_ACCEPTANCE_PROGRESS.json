@@ -1,0 +1,440 @@
+{
+  "checked_at": "2026-10-29T10:36:41.715684+08:00",
+  "status": "ALL46_COMPLETE_ADMISSION_READY",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "panel_root": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028",
+  "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
+  "registered_slots": 46,
+  "closed_slots": 46,
+  "A_pairs": 7,
+  "candidate_A_pass": 7,
+  "baseline_A_pass": 3,
+  "A_paired_wins": 4,
+  "A_paired_losses": 0,
+  "administratively_recovered_slots": 1,
+  "original_source_receipt_reclassified": false,
+  "new_case_members_added": 0,
+  "scores_from_other_method_versions_inherited": false,
+  "current_state": {
+    "status": "ORIGINAL46_CLOSED_PENDING_FINAL_EFFECT_AND_DELIVERY_ASSESSMENT",
+    "closed_slots": 46,
+    "completed_groups": [
+      "A",
+      "repeat",
+      "recovery",
+      "B"
+    ],
+    "at": "2026-10-29T05:09:01.912691+08:00",
+    "formal_ready": false
+  },
+  "formal_ready": true,
+  "scope": "Original46 development acceptance complete with explicit one-slot administrative recovery; frozen method admission only, formal150 not started.",
+  "candidate_seeded_recovery": [
+    {
+      "case_id": "R3-KPT-4673",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-b014df76f3113bdb25b07e03/.isolated-7b33a03d18c44a9d9e6002bdadb67e3b/receipt.json",
+          "sha256": "dcd7bcbd52bd8ebb76c2eb28adc301cad4547fa3ab194e7482f5fec02883cbb7"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-b014df76f3113bdb25b07e03/R3-KPT-4673/repair.trace.json",
+          "sha256": "3ace4a942038877936714a5d96717b93b1452f542b2364624960462aec68c9cc"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-b014df76f3113bdb25b07e03/result.json",
+          "sha256": "c71761d4e7d4189cbfb6ea1463c8cd33365f13a5dc07d6379aa786b45d87397b"
+        }
+      }
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "repeat": 1,
+      "status": "PASS",
+      "public_decision": "PASS",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-1bf2d595d501802118c43695/.isolated-1d44cc8701d947cfad0aca370a8d9084/receipt.json",
+          "sha256": "50fe2a67d548007022a58b1d11030bb581be8ef0ce4684db3ec001831b264266"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-1bf2d595d501802118c43695/R3-KPT-4673/repair.trace.json",
+          "sha256": "59a453084a91ffae52692c81bf101816e55c766f9f6ae8d476e8c0ac7f3473b0"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-1bf2d595d501802118c43695/result.json",
+          "sha256": "1f8d3459a441cf0780fbaa9c51006119683d5f24d4cda6a000af2e93e7111205"
+        }
+      }
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-833d9fec72fc75d823c9c702/.isolated-778c9ef46db44175a17986049ae9e0ad/receipt.json",
+          "sha256": "f67cc3ae7719bfc0076b57ab96259185dc92fc536b106b3a25e001bdf5d3b9a1"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-833d9fec72fc75d823c9c702/RW-ALERTMANAGER-4705/repair.trace.json",
+          "sha256": "7f6417ded9a7df8eca50492420280cc33ab607cb9d5a7747555e393e22e4a3a0"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-833d9fec72fc75d823c9c702/result.json",
+          "sha256": "73d1c46a6e84b74aff63dfd8f6a3ad06ed0dcf0a277e0e8640aa81324095415e"
+        }
+      }
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "repeat": 1,
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-3c876390d002229b412fc40b/.isolated-b55d8a8c459a419e8c71037e64824679/receipt.json",
+          "sha256": "bfb34f89817612d88ea6e52a29c86e6129c5a81a2670449d4a19806c7ce8e2ba"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-3c876390d002229b412fc40b/RW-ALERTMANAGER-4705/repair.trace.json",
+          "sha256": "485202ad14bd289864ea82e6b899292b0b5397c16096b0bc4df888d7edefca13"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-3c876390d002229b412fc40b/result.json",
+          "sha256": "25ad3de13ec6d6cc4491bf7208078c407ead3d3ced5774e5e0465e0515c0baed"
+        }
+      }
+    }
+  ],
+  "B_prerequisite": {
+    "open": true,
+    "missing": [],
+    "errors": []
+  },
+  "B_closed_results": [
+    {
+      "case_id": "RW-CAND-114",
+      "variant": "candidate",
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-a59cbd0380209008b953b050/.isolated-d0b8e3b7b2094dfb8b0fe9264b25f9ae/receipt.json",
+          "sha256": "d59a15311aacef5154d0c3196515acdc32d1829648b90470e32fb748a5c65bc8"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-a59cbd0380209008b953b050/RW-CAND-114/repair.trace.json",
+          "sha256": "80e4bd2021529872d5be763b56dbd5320eb8c1394bbc3ef9f49b948a0f1ace6d"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-a59cbd0380209008b953b050/result.json",
+          "sha256": "48c8e09930fcf0665e92ef088f94f9f79343cf0615ebb3e5029d2b57df8008e1"
+        }
+      }
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "variant": "baseline",
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-620390e2891096c1ce2941a2/.isolated-5d8d01e4c845466d8ba9de104ec4b5b7/receipt.json",
+          "sha256": "461c3a445e14f518ea368961c83a1a0a2f7d84a81e92b68aea597cfee36e7acf"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-620390e2891096c1ce2941a2/RW-CAND-114/repair.trace.json",
+          "sha256": "a21512a11853b04435efd5dd22cf8dcf4d54f95689416309d722720a9fd3b140"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-620390e2891096c1ce2941a2/result.json",
+          "sha256": "17edd22d0a372695ed807f3dd04ce723e7fd43f00a9a7a44cccbd4fb9b1419de"
+        }
+      }
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "variant": "baseline",
+      "status": "PASS",
+      "public_decision": "PASS",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-b3b20f10c04f6a0bb9714c0b/.isolated-4b1bf6d697824e559917fd8b8bc58306/receipt.json",
+          "sha256": "a3979c1e2c5fd349db594419839e1c85f5ba487f81b4a1c4e835fab44a5263b3"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-b3b20f10c04f6a0bb9714c0b/RW-CAND-134/repair.trace.json",
+          "sha256": "88be2a68f9d5e15658bfc69880cd9cae887ce3eb43b67a592bb365b71f4df780"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-b3b20f10c04f6a0bb9714c0b/result.json",
+          "sha256": "40b9f7030b6d53f04a91b83ce76fc5b0604026bddc4443415fa9fcc6c38ec8e3"
+        }
+      }
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "variant": "candidate",
+      "status": "PASS",
+      "public_decision": "PASS",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-a4651652e0f25e417ab23767/.isolated-61940fd2a7fa4c63b00229199e984340/receipt.json",
+          "sha256": "0ec876b693198e10bf7b43fb4f320dcf2675feb28c1b45152b53b1875fbfc55b"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-a4651652e0f25e417ab23767/RW-CAND-134/repair.trace.json",
+          "sha256": "675c47738e443c413545472f5001156b9fcfcc9e8d240364c35c1452e94edcd0"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-a4651652e0f25e417ab23767/result.json",
+          "sha256": "24c4f3580054ec39bd79b8af81d46f7f032591ffa7ba7039c185b65c30758500"
+        }
+      }
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "variant": "baseline",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-fd56f4f5a51af6f4ac2e99fc/.isolated-2523b96917894a8980d95c0e880eaf2a/receipt.json",
+          "sha256": "ad1143440b0e2168aaabfed03c476637c212f0e093d28bc9636f31b4e3fc7042"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-fd56f4f5a51af6f4ac2e99fc/RW-HELM-CONTROLLER-1589/repair.trace.json",
+          "sha256": "6966677bfe7ac41cb3393b71daf3670af10b14f96248e2671773b525715d1e5c"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-fd56f4f5a51af6f4ac2e99fc/result.json",
+          "sha256": "c373b13a1901ea57a99b62738905ed9ac539c54f747291e6396d7e2a087addc8"
+        }
+      }
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "variant": "candidate",
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-519dfe95312a2ee83cc53b34/.isolated-f1be3ebc035444a59dfd93f47322eab7/receipt.json",
+          "sha256": "3910e819f2819929d147940dcc6cfd6c162de7f781055e24edc03f7daeb36a0a"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-519dfe95312a2ee83cc53b34/RW-HELM-CONTROLLER-1589/repair.trace.json",
+          "sha256": "7fa8d35732916b4a9306081007a1301effdfbca8f17ff6846f27a8da5217fa51"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-519dfe95312a2ee83cc53b34/result.json",
+          "sha256": "5c8f98aad31cf3a775c7d6869c312981ace7f2f3c8f3b9ff4867c42884b86b9b"
+        }
+      }
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "variant": "baseline",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-fc7c9a44ca1c4bb7edb04add/.isolated-bb9fe30b59e64fd893a06b51bc759518/receipt.json",
+          "sha256": "e5216388d463eb8ebb16b516c5a7eadbef17627a1718211257a2118be012f24f"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-fc7c9a44ca1c4bb7edb04add/RW-ARGO-CD-27136/repair.trace.json",
+          "sha256": "25b02a137a37f12a984919e8bf920b1dc94da8c3c64a1d7958dd4dae85a8630d"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-fc7c9a44ca1c4bb7edb04add/result.json",
+          "sha256": "61bee58547d8e6479a906d1af9bffc98fa33689464fee6fd8cbc22903d1d9388"
+        }
+      }
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "variant": "candidate",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/.isolated-395d46b2d44447e0adcb45722f924af7/receipt.json",
+          "sha256": "daa8abc2bcfb7e26d8bafd1ba09dcac6ed270044cb22b3326136fc62bf966e32"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/RW-ARGO-CD-27136/repair.trace.json",
+          "sha256": "5c5a5c0838a4b843edccff76e344bd4f4b1caa9c692b61b999cf85997c27588d"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/result.json",
+          "sha256": "0ce3ce68f858cd01b5e1c6876a5ae5d5c5b78e24a7992cc440c63a0381853d5a"
+        }
+      }
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "variant": "baseline",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-ec66d873adb0dfa95b02688d/.isolated-282c7106047f4c6ab96fbe5fdca91834/receipt.json",
+          "sha256": "84cebe4d5dbfc360346798b6ce6be34f23cd0c38614dd48a3b2aea19452cf83a"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-ec66d873adb0dfa95b02688d/R3-KUBEBUILDER-5119/repair.trace.json",
+          "sha256": "256c6b4c049d961c95f22a65788a95828658b085b0a2a56b6e71bb993f6e9f01"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-ec66d873adb0dfa95b02688d/result.json",
+          "sha256": "8b5be04fe36d8b8eab3fe68e8e8eab0f631826823fe3884f5ef5cfec02420a2c"
+        }
+      }
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "variant": "candidate",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/.isolated-3b771e8f7eb4436bbbdbda6d6ff18796/receipt.json",
+          "sha256": "99d589296ea9011069aa93adc568f117336243d179597331ae234ed49b13994e"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/R3-KUBEBUILDER-5119/repair.trace.json",
+          "sha256": "e30bc854a4b7c8954432029ae68d7dc89456e4425d237c0bd2b60939744bc317"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/result.json",
+          "sha256": "bb83ef0649226da6a5319a4148ab824cb119873dacb39ccf15ed7c1589788a78"
+        }
+      }
+    }
+  ],
+  "B_as_of_summary": {
+    "closed_slots": 20,
+    "complete_pairs": 10,
+    "registered_pairs": 10,
+    "candidate_pass": 3,
+    "baseline_pass": 2,
+    "paired_wins": 1,
+    "paired_regressions": 0,
+    "both_failed_pairs": 7
+  },
+  "B_failure_analysis": [
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "variant": "candidate",
+      "independent_status": "SEMANTIC_FAIL",
+      "method_status": "EVIDENCE_GAP",
+      "public_decision": "UNKNOWN",
+      "actual_request_checks": [
+        {
+          "call_index": 0,
+          "request_digest": "809976755fe0212bb4ab40a3b2687383d066b1b8937a8c4c84221adefc4c50e5",
+          "characters": 85804,
+          "symbol_mentions": 0,
+          "definition_header_present": false
+        },
+        {
+          "call_index": 1,
+          "request_digest": "e55f60c67aa09e8399c17ba2f12682dc3a7e0ab0f339dd9b00c7c31aa8a5eb3f",
+          "characters": 102546,
+          "symbol_mentions": 2,
+          "definition_header_present": false
+        }
+      ],
+      "model_calls_reference": {
+        "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/RW-ARGO-CD-27136/model_calls.json",
+        "sha256": "0b8abb5b41a1ff7417781e234f2432fb42338ee14fd6c1b0ab3b187c2118b8b9"
+      },
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/.isolated-395d46b2d44447e0adcb45722f924af7/receipt.json",
+          "sha256": "daa8abc2bcfb7e26d8bafd1ba09dcac6ed270044cb22b3326136fc62bf966e32"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/RW-ARGO-CD-27136/repair.trace.json",
+          "sha256": "5c5a5c0838a4b843edccff76e344bd4f4b1caa9c692b61b999cf85997c27588d"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-9bba89f391b684557d228cb6/result.json",
+          "sha256": "0ce3ce68f858cd01b5e1c6876a5ae5d5c5b78e24a7992cc440c63a0381853d5a"
+        }
+      },
+      "finding": "Neither diagnosis request contains the normalizeTargetResources definition; the expanded request only includes its invocation and symbol entry.",
+      "scope": "Request-delivery evidence only. Whole-repository availability and the exact selection/extraction cause are not established. No hidden scoring content was inspected or used for tuning; frozen method unchanged."
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "variant": "candidate",
+      "independent_status": "SEMANTIC_FAIL",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "build_state": "PASSED",
+      "public_decision": "UNKNOWN",
+      "rounds": 1,
+      "public_checks": [
+        {
+          "id": "P1-SM-NAME-PREFIX",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        },
+        {
+          "id": "P2-METRICS-SERVERNAME-PREFIX",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        },
+        {
+          "id": "preserve:PC1-DEFAULT-PREFIX-NAMES",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        },
+        {
+          "id": "preserve:PC2-PROM-DISABLED-OMIT-SM",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        },
+        {
+          "id": "open:OBL1-RENDERED-SM-NAME",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        },
+        {
+          "id": "open:OBL2-RENDERED-SM-SERVERNAME",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary"
+        }
+      ],
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/.isolated-3b771e8f7eb4436bbbdbda6d6ff18796/receipt.json",
+          "sha256": "99d589296ea9011069aa93adc568f117336243d179597331ae234ed49b13994e"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/methods/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/R3-KUBEBUILDER-5119/repair.trace.json",
+          "sha256": "e30bc854a4b7c8954432029ae68d7dc89456e4425d237c0bd2b60939744bc317"
+        },
+        "score": {
+          "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/independent/fixed46-official-v068-20261028-698d843579dfc385f54e3d69/result.json",
+          "sha256": "bb83ef0649226da6a5319a4148ab824cb119873dacb39ccf15ed7c1589788a78"
+        }
+      },
+      "finding": "Public compilation passed, while the six registered plan/preservation/open checks remained UNKNOWN outside this version's declared public observation boundary. Independent scoring failed; no root-cause attribution from hidden assertions.",
+      "root_cause_status": "UNDETERMINED",
+      "scope": "Current registered public capabilities do not verify generated ServiceMonitor naming and TLS serverName. This does not claim those properties are intrinsically unobservable. No hidden grading content inspected; no method tuning or retry."
+    }
+  ],
+  "final_evidence": {
+    "certificate": "administrative-admission/V068_FINAL_ADMISSION.json",
+    "full46_index": "administrative-admission/V068_VERIFIED_TERMINALS.json",
+    "metrics": "administrative-admission/FINAL_ACCEPTANCE_METRICS.json",
+    "audit": "FINAL_DELIVERY_AUDIT.md"
+  }
+}

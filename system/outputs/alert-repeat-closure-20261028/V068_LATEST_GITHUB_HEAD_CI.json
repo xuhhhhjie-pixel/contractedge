@@ -1,0 +1,46 @@
+{
+  "conclusion": "success",
+  "headSha": "86b6a246debd244edc7ba72a43252be3393f2aac",
+  "jobs": [
+    {
+      "conclusion": "success",
+      "name": "Contracts, providers, budgets and replay (Python 3.10)",
+      "steps": []
+    },
+    {
+      "conclusion": "success",
+      "name": "Vendored native TopoMen fixture integration (separate scope)",
+      "steps": []
+    },
+    {
+      "conclusion": "success",
+      "name": "Actual Docker limits, isolated public runtime and portable suite",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Install required method namespace isolation tool"
+        },
+        {
+          "conclusion": "success",
+          "name": "Verify method namespaces before long runtime validation"
+        }
+      ]
+    },
+    {
+      "conclusion": "success",
+      "name": "Contracts, providers, budgets and replay (Python 3.12)",
+      "steps": []
+    },
+    {
+      "conclusion": "success",
+      "name": "Offline public cases and persistent READY continuation",
+      "steps": []
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/xuhhhhjie-pixel/contractedge/actions/runs/40732168472",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "source_verified_from_git_tree": true,
+  "scope": "Latest pushed GitHub source CI:five jobs including actual namespace and resource/cleanup controls. Parent administrative authority separately covered by108 server tests and preserved replay; CI does not execute that server incident.",
+  "formal_ready": false
+}

@@ -1,0 +1,141 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_______ test_same_file_precise_query_keeps_only_exact_token_and_case[1] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-548/test_same_file_precise_query_k0')
+limit = 1
+
+    @pytest.mark.parametrize('limit', [1, 40])
+    def test_same_file_precise_query_keeps_only_exact_token_and_case(tmp_path, limit):
+        (tmp_path / 'docs.md').write_text('Queue processing background.\n')
+        (tmp_path / 'controller.go').write_text('''package controller
+    func WrongCase() { consume(obj.nextQueueTokenName) }
+    func Substring() { consume(obj.PrevNextQueueTokenName) }
+    func Exact() { consume(obj.NextQueueTokenName) }
+    ''')
+        snap = compute_snapshot(tmp_path)
+        seeds = extract_units(snap, {'seed_paths': ['docs.md']})
+        units, _ = extract_gap_extension_units(snap, ['docs.md'], seeds,
+            [dict(id='G1', locator_hint={'search_term': 'NextQueueTokenName'})], max_units=limit)
+>       assert [u.get('symbol') for u in units] == ['Exact']
+E       AssertionError: assert ['WrongCase'] == ['Exact']
+E         
+E         At index 0 diff: 'WrongCase' != 'Exact'
+E         Use -v to get more diff
+
+review_boundary_tests.py:21: AssertionError
+_______ test_same_file_precise_query_keeps_only_exact_token_and_case[40] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-548/test_same_file_precise_query_k1')
+limit = 40
+
+    @pytest.mark.parametrize('limit', [1, 40])
+    def test_same_file_precise_query_keeps_only_exact_token_and_case(tmp_path, limit):
+        (tmp_path / 'docs.md').write_text('Queue processing background.\n')
+        (tmp_path / 'controller.go').write_text('''package controller
+    func WrongCase() { consume(obj.nextQueueTokenName) }
+    func Substring() { consume(obj.PrevNextQueueTokenName) }
+    func Exact() { consume(obj.NextQueueTokenName) }
+    ''')
+        snap = compute_snapshot(tmp_path)
+        seeds = extract_units(snap, {'seed_paths': ['docs.md']})
+        units, _ = extract_gap_extension_units(snap, ['docs.md'], seeds,
+            [dict(id='G1', locator_hint={'search_term': 'NextQueueTokenName'})], max_units=limit)
+>       assert [u.get('symbol') for u in units] == ['Exact']
+E       AssertionError: assert ['WrongCase',...ing', 'Exact'] == ['Exact']
+E         
+E         At index 0 diff: 'WrongCase' != 'Exact'
+E         Left contains 2 more items, first extra item: 'Substring'
+E         Use -v to get more diff
+
+review_boundary_tests.py:21: AssertionError
+______ test_stale_field_contract_spends_budget_before_next_package[files] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-548/test_stale_field_contract_spen0')
+bound = 'files'
+
+    @pytest.mark.parametrize('bound', ['files', 'bytes'])
+    def test_stale_field_contract_spends_budget_before_next_package(tmp_path, bound):
+        (tmp_path / 'go.mod').write_text('module example.org/app\n')
+        (tmp_path / 'worker').mkdir(); (tmp_path / 'one').mkdir(); (tmp_path / 'two').mkdir()
+        source = '''package worker
+    import (
+     p1 "example.org/app/one"
+     p2 "example.org/app/two"
+    )
+    type Worker struct {
+     a p1.Queue
+     b p2.Queue
+    }
+    func (w *Worker) Run() {
+     w.a.Publish()
+     w.b.Publish()
+    }
+    '''
+        (tmp_path / 'worker/work.go').write_text(source)
+        contract = 'package api\ntype Queue interface {\n Publish()\n}\n'
+        first = tmp_path / 'one/api.go'; second = tmp_path / 'two/api.go'
+        first.write_text(contract); second.write_text(contract)
+        snap = compute_snapshot(tmp_path)
+        first.write_text(contract + '// stale\n')
+        gap = dict(id='G1', locator_hint={'path': 'worker/work.go', 'symbol': 'Worker.Run',
+                                        'search_term': 'a.Publish b.Publish'})
+        limits = dict(seed_declarations=parse_source_units('worker/work.go', source, snap.snapshot_id))
+        if bound == 'files':
+            limits['max_new_files'] = 2
+        else:
+            limits['max_bytes'] = len(source.encode()) + first.stat().st_size
+        units, audit = locate_gap_roles(snap, [gap], limits)
+>       assert not any(u['path'] == 'two/api.go' for u in units)
+E       assert not True
+E        +  where True = any(<generator object test_stale_field_contract_spends_budget_before_next_package.<locals>.<genexpr> at 0x7f04d10ab1b0>)
+
+review_boundary_tests.py:56: AssertionError
+______ test_stale_field_contract_spends_budget_before_next_package[bytes] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-548/test_stale_field_contract_spen1')
+bound = 'bytes'
+
+    @pytest.mark.parametrize('bound', ['files', 'bytes'])
+    def test_stale_field_contract_spends_budget_before_next_package(tmp_path, bound):
+        (tmp_path / 'go.mod').write_text('module example.org/app\n')
+        (tmp_path / 'worker').mkdir(); (tmp_path / 'one').mkdir(); (tmp_path / 'two').mkdir()
+        source = '''package worker
+    import (
+     p1 "example.org/app/one"
+     p2 "example.org/app/two"
+    )
+    type Worker struct {
+     a p1.Queue
+     b p2.Queue
+    }
+    func (w *Worker) Run() {
+     w.a.Publish()
+     w.b.Publish()
+    }
+    '''
+        (tmp_path / 'worker/work.go').write_text(source)
+        contract = 'package api\ntype Queue interface {\n Publish()\n}\n'
+        first = tmp_path / 'one/api.go'; second = tmp_path / 'two/api.go'
+        first.write_text(contract); second.write_text(contract)
+        snap = compute_snapshot(tmp_path)
+        first.write_text(contract + '// stale\n')
+        gap = dict(id='G1', locator_hint={'path': 'worker/work.go', 'symbol': 'Worker.Run',
+                                        'search_term': 'a.Publish b.Publish'})
+        limits = dict(seed_declarations=parse_source_units('worker/work.go', source, snap.snapshot_id))
+        if bound == 'files':
+            limits['max_new_files'] = 2
+        else:
+            limits['max_bytes'] = len(source.encode()) + first.stat().st_size
+        units, audit = locate_gap_roles(snap, [gap], limits)
+>       assert not any(u['path'] == 'two/api.go' for u in units)
+E       assert not True
+E        +  where True = any(<generator object test_stale_field_contract_spends_budget_before_next_package.<locals>.<genexpr> at 0x7f04d10ab760>)
+
+review_boundary_tests.py:56: AssertionError
+=========================== short test summary info ============================
+FAILED review_boundary_tests.py::test_same_file_precise_query_keeps_only_exact_token_and_case[1]
+FAILED review_boundary_tests.py::test_same_file_precise_query_keeps_only_exact_token_and_case[40]
+FAILED review_boundary_tests.py::test_stale_field_contract_spends_budget_before_next_package[files]
+FAILED review_boundary_tests.py::test_stale_field_contract_spends_budget_before_next_package[bytes]
+4 failed in 0.15s

@@ -1,0 +1,10 @@
+{
+  "status": "OLD_CI_REFERENCE_RED_CURRENT_REFERENCE_GREEN",
+  "workflow": ".github/workflows/development.yml",
+  "before": "configs/trial-isolation-acceptance-v046.example.json",
+  "after": "configs/trial-isolation-acceptance-v060-ordering.example.json",
+  "method_source_changed": false,
+  "proof": "Existing production verify_source on parsed actual CI command; current binding already actual8 PASS",
+  "full_regression_repeated": false,
+  "new_model_calls": 0
+}

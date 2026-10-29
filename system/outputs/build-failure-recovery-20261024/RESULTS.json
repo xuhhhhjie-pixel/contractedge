@@ -1,0 +1,46 @@
+{
+  "version": "0.6.35",
+  "source_sha256": "68e5275224d95958f054acda90108c5f0a84272fa1569b6a90ae3e1aaa74b9dd",
+  "formal_ready": false,
+  "original_broken": {
+    "method_status": "BUDGET_EXHAUSTED",
+    "independent_status": "SEMANTIC_FAIL",
+    "model_calls": 6,
+    "scored": 1,
+    "not_run": 45,
+    "public_checks_pass": 3,
+    "public_checks_fail": 5,
+    "terminal_error": "BudgetExceeded: Planning evidence extension exceeds the existing round budget"
+  },
+  "supplemental": {
+    "role": "SUPPLEMENTAL_CROSS_VERSION_SAVED_RESPONSE_CONTINUATION",
+    "counts_in_46_slot_panel": false,
+    "counts_as_fresh_broken_attempt": false,
+    "saved_responses": 8,
+    "new_paid_model_calls": 3,
+    "public_checks_pass": 8,
+    "public_checks_fail": 0,
+    "build_state": "PASSED",
+    "semantic_outcome": "UNKNOWN",
+    "independent_status": "PASS",
+    "patch_sha256": "bd9c6ee68767f4eebe9f9c531e5086fc4395f4133fcf55b34e33a4a33e11a0a1"
+  },
+  "next_earliest_failure": {
+    "status": "REPRODUCED_ZERO_HTTP",
+    "six_saved_messages_exact": true,
+    "reason": "initial_diagnosis_context_tokens also used for feedback rediagnosis and its extension; last123425input>120000 removes final source and stops, despite remaining global budgets",
+    "next_action": "Test phase-correct bounded input/output admission before any new paid call"
+  },
+  "money": {
+    "limit_cny": 150,
+    "total_committed_including_uncertain_cny": 96.631876,
+    "remaining_upper_cny": 53.368124,
+    "uncertain_reservations": 3,
+    "new_paid_calls": 9,
+    "charges_cny": {
+      "original": 0.847144,
+      "supplemental": 0.211582
+    },
+    "matching": "Unique exact prompt_version+provider_usage against nine new shared ledger entries; overlapping accounting snapshots not summed"
+  }
+}

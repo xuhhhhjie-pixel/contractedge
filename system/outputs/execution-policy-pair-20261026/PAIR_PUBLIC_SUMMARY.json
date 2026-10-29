@@ -1,0 +1,68 @@
+[
+  {
+    "arm": "control",
+    "status": "PUBLIC_EXECUTION_COMPLETE",
+    "source_snapshot": "60d68968cc67b5f7a1f9ebb83d7213266b1dd73a7d4979edb596a7961962215d",
+    "fresh_edit_rounds": 1,
+    "public_checks": [
+      [
+        "alertmanager-reload-v4:groups.visible_during_reload",
+        "PASS"
+      ],
+      [
+        "alertmanager-reload-v4:groups.visible_after_reload",
+        "PASS"
+      ],
+      [
+        "alertmanager-reload-v4:groups.visible_at_reload_return",
+        "PASS"
+      ],
+      [
+        "alertmanager-reload-v4:groups.unique_for_declared_route",
+        "PASS"
+      ]
+    ],
+    "calls": 5,
+    "execution_reasoning": [
+      [
+        "EXPLICIT_STAGE_CONFIGURATION",
+        {
+          "reasoning_tokens": 0
+        }
+      ]
+    ]
+  },
+  {
+    "arm": "reasoning",
+    "status": "PUBLIC_EXECUTION_COMPLETE",
+    "source_snapshot": "daeb8a29d9103cb5a9bead40d7a7013b359ee85c7ba77e6e0b494e1d21693318",
+    "fresh_edit_rounds": 1,
+    "public_checks": [
+      [
+        "alertmanager-reload-v4:groups.visible_during_reload",
+        "PASS"
+      ],
+      [
+        "alertmanager-reload-v4:groups.visible_after_reload",
+        "PASS"
+      ],
+      [
+        "alertmanager-reload-v4:groups.visible_at_reload_return",
+        "PASS"
+      ],
+      [
+        "alertmanager-reload-v4:groups.unique_for_declared_route",
+        "PASS"
+      ]
+    ],
+    "calls": 6,
+    "execution_reasoning": [
+      [
+        "COMPLEX_PLAN_REASONING",
+        {
+          "reasoning_tokens": 14346
+        }
+      ]
+    ]
+  }
+]

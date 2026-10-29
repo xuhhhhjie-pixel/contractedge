@@ -1,0 +1,3050 @@
+{
+  "run_id": "d2277d11-edb0-436f-ae50-c927fc1b7bd4",
+  "case_id": "RW-CERTMANAGER-9116",
+  "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+  "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "status": "READY_PARTIAL",
+  "requirement_spec": {
+    "schema_version": "ce.requirement_spec.v1_1",
+    "raw_text": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+    "intent_summary": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+    "outcomes": [
+      {
+        "id": "O1",
+        "statement": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+        "condition": null,
+        "source_refs": [
+          "requirement_text:0:231"
+        ],
+        "support": "EXPLICIT"
+      }
+    ],
+    "constraints": [],
+    "trigger": null,
+    "unknowns": [],
+    "status": "READY",
+    "clauses": [
+      {
+        "id": "Q1",
+        "text": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+        "source_ref": "requirement_text:0:231"
+      }
+    ],
+    "traceability_required": true,
+    "operation_consistency_required": true,
+    "lineage_required": true,
+    "prior_obligation_lineage": {}
+  },
+  "scope_resolution": {
+    "seed_paths": [
+      "internal/generated/openapi/zz_generated.openapi.go",
+      "deploy/charts/cert-manager/templates/crd-cert-manager.io_clusterissuers.yaml",
+      "deploy/charts/cert-manager/templates/crd-cert-manager.io_issuers.yaml",
+      "deploy/crds/cert-manager.io_clusterissuers.yaml",
+      "deploy/crds/cert-manager.io_issuers.yaml",
+      "design/20190708.certificate-request-crd.md",
+      "design/20200326.extensible-certificate-controller.md",
+      "design/20221205-memory-management.md",
+      "internal/apis/certmanager/types_certificate.go",
+      "internal/controller/certificates/policies/checks.go",
+      "pkg/apis/certmanager/v1/types_certificate.go",
+      "pkg/controller/certificates/issuing/issuing_controller.go",
+      "deploy/charts/cert-manager/templates/crd-cert-manager.io_certificates.yaml",
+      "deploy/crds/cert-manager.io_certificates.yaml",
+      "pkg/controller/certificates/issuing/issuing_controller_test.go",
+      "pkg/controller/certificates/readiness/readiness_controller_test.go",
+      "pkg/controller/certificates/requestmanager/requestmanager_controller.go",
+      "pkg/controller/certificates/requestmanager/requestmanager_controller_test.go",
+      "deploy/charts/cert-manager/templates/crd-acme.cert-manager.io_challenges.yaml",
+      "deploy/charts/cert-manager/values.schema.json",
+      "deploy/crds/acme.cert-manager.io_challenges.yaml",
+      "internal/controller/certificates/policies/checks_test.go",
+      "internal/vault/vault_test.go",
+      "pkg/acme/webhook/openapi/zz_generated.openapi.go",
+      "pkg/client/applyconfigurations/certmanager/v1/certificatestatus.go",
+      "pkg/controller/certificates/trigger/trigger_controller.go",
+      "test/integration/certificates/generates_new_private_key_per_request_test.go",
+      "test/integration/certificates/issuing_controller_test.go",
+      "deploy/charts/cert-manager/README.template.md",
+      "design/acme-orders-challenges-crd.md",
+      "make/e2e-setup.mk",
+      "cmd/controller/app/options/options.go",
+      "deploy/charts/cert-manager/values.yaml",
+      "internal/apis/certmanager/types_issuer.go",
+      "internal/controller/feature/features.go",
+      "internal/vault/vault.go",
+      "pkg/apis/certmanager/v1/types_issuer.go",
+      "pkg/client/applyconfigurations/certmanager/v1/certificatespec.go",
+      "pkg/controller/certificaterequests/acme/acme_test.go",
+      "pkg/controller/certificates/readiness/readiness_controller.go",
+      "pkg/controller/certificates/trigger/trigger_controller_test.go",
+      "test/integration/certificates/trigger_controller_test.go",
+      "internal/apis/acme/types_issuer.go",
+      "internal/apis/certmanager/zz_generated.deepcopy.go",
+      "internal/controller/certificates/policies/gatherer.go",
+      "internal/controller/certificates/policies/policies.go",
+      "pkg/apis/acme/v1/types_issuer.go",
+      "pkg/apis/certmanager/v1/zz_generated.deepcopy.go",
+      "pkg/client/applyconfigurations/internal/internal.go",
+      "pkg/controller/certificate-shim/sync_test.go",
+      "pkg/controller/certificaterequests/acme/acme.go",
+      "pkg/controller/certificates/keymanager/keymanager_controller.go",
+      "pkg/controller/certificates/requestmanager/util_test.go",
+      "pkg/controller/certificatesigningrequests/acme/acme_test.go",
+      "pkg/controller/certificatesigningrequests/selfsigned/selfsigned_test.go",
+      "pkg/issuer/venafi/client/venaficlient.go",
+      "pkg/server/tls/dynamic_source.go",
+      "pkg/util/pki/csr.go",
+      "pkg/util/pki/match.go",
+      "test/e2e/suite/conformance/certificates/tests.go",
+      "design/20210209.certificates.k8s.io-adoption.md",
+      "design/20220720-per-certificate-owner-ref.md",
+      "design/20250703.gatewayapi-listenerset.md",
+      "design/20250920.certificate-renewal-control.md"
+    ],
+    "unresolved": [
+      {
+        "kind": "concept",
+        "value": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+        "raw_text": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+        "origin_ref": "public.requirement",
+        "search_complete": true,
+        "truncated": false,
+        "results_capped": true,
+        "matched_path_count": 64,
+        "matches_total": 944
+      }
+    ],
+    "matched_by_hint": {
+      "public.requirement": [
+        "internal/generated/openapi/zz_generated.openapi.go",
+        "deploy/charts/cert-manager/templates/crd-cert-manager.io_clusterissuers.yaml",
+        "deploy/charts/cert-manager/templates/crd-cert-manager.io_issuers.yaml",
+        "deploy/crds/cert-manager.io_clusterissuers.yaml",
+        "deploy/crds/cert-manager.io_issuers.yaml",
+        "design/20190708.certificate-request-crd.md",
+        "design/20200326.extensible-certificate-controller.md",
+        "design/20221205-memory-management.md",
+        "internal/apis/certmanager/types_certificate.go",
+        "internal/controller/certificates/policies/checks.go",
+        "pkg/apis/certmanager/v1/types_certificate.go",
+        "pkg/controller/certificates/issuing/issuing_controller.go",
+        "deploy/charts/cert-manager/templates/crd-cert-manager.io_certificates.yaml",
+        "deploy/crds/cert-manager.io_certificates.yaml",
+        "pkg/controller/certificates/issuing/issuing_controller_test.go",
+        "pkg/controller/certificates/readiness/readiness_controller_test.go",
+        "pkg/controller/certificates/requestmanager/requestmanager_controller.go",
+        "pkg/controller/certificates/requestmanager/requestmanager_controller_test.go",
+        "deploy/charts/cert-manager/templates/crd-acme.cert-manager.io_challenges.yaml",
+        "deploy/charts/cert-manager/values.schema.json",
+        "deploy/crds/acme.cert-manager.io_challenges.yaml",
+        "internal/controller/certificates/policies/checks_test.go",
+        "internal/vault/vault_test.go",
+        "pkg/acme/webhook/openapi/zz_generated.openapi.go",
+        "pkg/client/applyconfigurations/certmanager/v1/certificatestatus.go",
+        "pkg/controller/certificates/trigger/trigger_controller.go",
+        "test/integration/certificates/generates_new_private_key_per_request_test.go",
+        "test/integration/certificates/issuing_controller_test.go",
+        "deploy/charts/cert-manager/README.template.md",
+        "design/acme-orders-challenges-crd.md",
+        "make/e2e-setup.mk",
+        "cmd/controller/app/options/options.go",
+        "deploy/charts/cert-manager/values.yaml",
+        "internal/apis/certmanager/types_issuer.go",
+        "internal/controller/feature/features.go",
+        "internal/vault/vault.go",
+        "pkg/apis/certmanager/v1/types_issuer.go",
+        "pkg/client/applyconfigurations/certmanager/v1/certificatespec.go",
+        "pkg/controller/certificaterequests/acme/acme_test.go",
+        "pkg/controller/certificates/readiness/readiness_controller.go",
+        "pkg/controller/certificates/trigger/trigger_controller_test.go",
+        "test/integration/certificates/trigger_controller_test.go",
+        "internal/apis/acme/types_issuer.go",
+        "internal/apis/certmanager/zz_generated.deepcopy.go",
+        "internal/controller/certificates/policies/gatherer.go",
+        "internal/controller/certificates/policies/policies.go",
+        "pkg/apis/acme/v1/types_issuer.go",
+        "pkg/apis/certmanager/v1/zz_generated.deepcopy.go",
+        "pkg/client/applyconfigurations/internal/internal.go",
+        "pkg/controller/certificate-shim/sync_test.go",
+        "pkg/controller/certificaterequests/acme/acme.go",
+        "pkg/controller/certificates/keymanager/keymanager_controller.go",
+        "pkg/controller/certificates/requestmanager/util_test.go",
+        "pkg/controller/certificatesigningrequests/acme/acme_test.go",
+        "pkg/controller/certificatesigningrequests/selfsigned/selfsigned_test.go",
+        "pkg/issuer/venafi/client/venaficlient.go",
+        "pkg/server/tls/dynamic_source.go",
+        "pkg/util/pki/csr.go",
+        "pkg/util/pki/match.go",
+        "test/e2e/suite/conformance/certificates/tests.go",
+        "design/20210209.certificates.k8s.io-adoption.md",
+        "design/20220720-per-certificate-owner-ref.md",
+        "design/20250703.gatewayapi-listenerset.md",
+        "design/20250920.certificate-renewal-control.md"
+      ]
+    },
+    "extension_paths": [
+      "cmd/cainjector/app/controller.go",
+      "cmd/cainjector/app/options/options.go",
+      "cmd/controller/app/controller.go",
+      "cmd/startupapicheck/pkg/check/api/api.go",
+      "cmd/startupapicheck/pkg/factory/factory.go",
+      "internal/apis/acme/types_challenge.go",
+      "internal/apis/acme/types_order.go",
+      "internal/apis/acme/zz_generated.deepcopy.go",
+      "internal/apis/certmanager/generic_issuer.go",
+      "internal/apis/certmanager/types.go",
+      "internal/apis/certmanager/types_certificaterequest.go",
+      "internal/apis/certmanager/v1/defaults.go",
+      "internal/apis/certmanager/validation/certificate.go",
+      "internal/apis/certmanager/validation/issuer.go",
+      "internal/apis/certmanager/validation/issuer_test.go",
+      "internal/apis/certmanager/validation/util/conditions.go"
+    ],
+    "search_audit": [
+      {
+        "kind": "concept",
+        "query": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+        "origin_ref": "public.requirement",
+        "matched_paths": [
+          "internal/generated/openapi/zz_generated.openapi.go",
+          "deploy/charts/cert-manager/templates/crd-cert-manager.io_clusterissuers.yaml",
+          "deploy/charts/cert-manager/templates/crd-cert-manager.io_issuers.yaml",
+          "deploy/crds/cert-manager.io_clusterissuers.yaml",
+          "deploy/crds/cert-manager.io_issuers.yaml",
+          "design/20190708.certificate-request-crd.md",
+          "design/20200326.extensible-certificate-controller.md",
+          "design/20221205-memory-management.md",
+          "internal/apis/certmanager/types_certificate.go",
+          "internal/controller/certificates/policies/checks.go",
+          "pkg/apis/certmanager/v1/types_certificate.go",
+          "pkg/controller/certificates/issuing/issuing_controller.go",
+          "deploy/charts/cert-manager/templates/crd-cert-manager.io_certificates.yaml",
+          "deploy/crds/cert-manager.io_certificates.yaml",
+          "pkg/controller/certificates/issuing/issuing_controller_test.go",
+          "pkg/controller/certificates/readiness/readiness_controller_test.go",
+          "pkg/controller/certificates/requestmanager/requestmanager_controller.go",
+          "pkg/controller/certificates/requestmanager/requestmanager_controller_test.go",
+          "deploy/charts/cert-manager/templates/crd-acme.cert-manager.io_challenges.yaml",
+          "deploy/charts/cert-manager/values.schema.json",
+          "deploy/crds/acme.cert-manager.io_challenges.yaml",
+          "internal/controller/certificates/policies/checks_test.go",
+          "internal/vault/vault_test.go",
+          "pkg/acme/webhook/openapi/zz_generated.openapi.go",
+          "pkg/client/applyconfigurations/certmanager/v1/certificatestatus.go",
+          "pkg/controller/certificates/trigger/trigger_controller.go",
+          "test/integration/certificates/generates_new_private_key_per_request_test.go",
+          "test/integration/certificates/issuing_controller_test.go",
+          "deploy/charts/cert-manager/README.template.md",
+          "design/acme-orders-challenges-crd.md",
+          "make/e2e-setup.mk",
+          "cmd/controller/app/options/options.go",
+          "deploy/charts/cert-manager/values.yaml",
+          "internal/apis/certmanager/types_issuer.go",
+          "internal/controller/feature/features.go",
+          "internal/vault/vault.go",
+          "pkg/apis/certmanager/v1/types_issuer.go",
+          "pkg/client/applyconfigurations/certmanager/v1/certificatespec.go",
+          "pkg/controller/certificaterequests/acme/acme_test.go",
+          "pkg/controller/certificates/readiness/readiness_controller.go",
+          "pkg/controller/certificates/trigger/trigger_controller_test.go",
+          "test/integration/certificates/trigger_controller_test.go",
+          "internal/apis/acme/types_issuer.go",
+          "internal/apis/certmanager/zz_generated.deepcopy.go",
+          "internal/controller/certificates/policies/gatherer.go",
+          "internal/controller/certificates/policies/policies.go",
+          "pkg/apis/acme/v1/types_issuer.go",
+          "pkg/apis/certmanager/v1/zz_generated.deepcopy.go",
+          "pkg/client/applyconfigurations/internal/internal.go",
+          "pkg/controller/certificate-shim/sync_test.go",
+          "pkg/controller/certificaterequests/acme/acme.go",
+          "pkg/controller/certificates/keymanager/keymanager_controller.go",
+          "pkg/controller/certificates/requestmanager/util_test.go",
+          "pkg/controller/certificatesigningrequests/acme/acme_test.go",
+          "pkg/controller/certificatesigningrequests/selfsigned/selfsigned_test.go",
+          "pkg/issuer/venafi/client/venaficlient.go",
+          "pkg/server/tls/dynamic_source.go",
+          "pkg/util/pki/csr.go",
+          "pkg/util/pki/match.go",
+          "test/e2e/suite/conformance/certificates/tests.go",
+          "design/20210209.certificates.k8s.io-adoption.md",
+          "design/20220720-per-certificate-owner-ref.md",
+          "design/20250703.gatewayapi-listenerset.md",
+          "design/20250920.certificate-renewal-control.md"
+        ],
+        "files_inspected": 1262,
+        "bytes_inspected": 16293555,
+        "search_complete": true,
+        "truncated": false,
+        "indexed_files_total": 1262,
+        "indexed_bytes_total": 15042378,
+        "match_mode": "CONCEPT_TERMS",
+        "query_terms": [
+          "acting",
+          "built",
+          "certificate",
+          "compare",
+          "controller",
+          "csr",
+          "current",
+          "fail",
+          "issuance",
+          "issuing",
+          "key",
+          "must",
+          "next",
+          "not",
+          "private",
+          "replaced",
+          "request",
+          "secret",
+          "stale",
+          "states",
+          "terminal"
+        ],
+        "matched_scores": {
+          "internal/generated/openapi/zz_generated.openapi.go": 21,
+          "deploy/charts/cert-manager/templates/crd-cert-manager.io_clusterissuers.yaml": 16,
+          "deploy/charts/cert-manager/templates/crd-cert-manager.io_issuers.yaml": 16,
+          "deploy/crds/cert-manager.io_clusterissuers.yaml": 16,
+          "deploy/crds/cert-manager.io_issuers.yaml": 16,
+          "design/20190708.certificate-request-crd.md": 16,
+          "design/20200326.extensible-certificate-controller.md": 16,
+          "design/20221205-memory-management.md": 16,
+          "internal/apis/certmanager/types_certificate.go": 15,
+          "internal/controller/certificates/policies/checks.go": 15,
+          "pkg/apis/certmanager/v1/types_certificate.go": 15,
+          "pkg/controller/certificates/issuing/issuing_controller.go": 15,
+          "deploy/charts/cert-manager/templates/crd-cert-manager.io_certificates.yaml": 14,
+          "deploy/crds/cert-manager.io_certificates.yaml": 14,
+          "pkg/controller/certificates/issuing/issuing_controller_test.go": 14,
+          "pkg/controller/certificates/readiness/readiness_controller_test.go": 14,
+          "pkg/controller/certificates/requestmanager/requestmanager_controller.go": 14,
+          "pkg/controller/certificates/requestmanager/requestmanager_controller_test.go": 14,
+          "deploy/charts/cert-manager/templates/crd-acme.cert-manager.io_challenges.yaml": 13,
+          "deploy/charts/cert-manager/values.schema.json": 13,
+          "deploy/crds/acme.cert-manager.io_challenges.yaml": 13,
+          "internal/controller/certificates/policies/checks_test.go": 13,
+          "internal/vault/vault_test.go": 13,
+          "pkg/acme/webhook/openapi/zz_generated.openapi.go": 13,
+          "pkg/client/applyconfigurations/certmanager/v1/certificatestatus.go": 13,
+          "pkg/controller/certificates/trigger/trigger_controller.go": 13,
+          "test/integration/certificates/generates_new_private_key_per_request_test.go": 13,
+          "test/integration/certificates/issuing_controller_test.go": 13,
+          "deploy/charts/cert-manager/README.template.md": 13,
+          "design/acme-orders-challenges-crd.md": 13,
+          "make/e2e-setup.mk": 13,
+          "cmd/controller/app/options/options.go": 12,
+          "deploy/charts/cert-manager/values.yaml": 12,
+          "internal/apis/certmanager/types_issuer.go": 12,
+          "internal/controller/feature/features.go": 12,
+          "internal/vault/vault.go": 12,
+          "pkg/apis/certmanager/v1/types_issuer.go": 12,
+          "pkg/client/applyconfigurations/certmanager/v1/certificatespec.go": 12,
+          "pkg/controller/certificaterequests/acme/acme_test.go": 12,
+          "pkg/controller/certificates/readiness/readiness_controller.go": 12,
+          "pkg/controller/certificates/trigger/trigger_controller_test.go": 12,
+          "test/integration/certificates/trigger_controller_test.go": 12,
+          "internal/apis/acme/types_issuer.go": 11,
+          "internal/apis/certmanager/zz_generated.deepcopy.go": 11,
+          "internal/controller/certificates/policies/gatherer.go": 11,
+          "internal/controller/certificates/policies/policies.go": 11,
+          "pkg/apis/acme/v1/types_issuer.go": 11,
+          "pkg/apis/certmanager/v1/zz_generated.deepcopy.go": 11,
+          "pkg/client/applyconfigurations/internal/internal.go": 11,
+          "pkg/controller/certificate-shim/sync_test.go": 11,
+          "pkg/controller/certificaterequests/acme/acme.go": 11,
+          "pkg/controller/certificates/keymanager/keymanager_controller.go": 11,
+          "pkg/controller/certificates/requestmanager/util_test.go": 11,
+          "pkg/controller/certificatesigningrequests/acme/acme_test.go": 11,
+          "pkg/controller/certificatesigningrequests/selfsigned/selfsigned_test.go": 11,
+          "pkg/issuer/venafi/client/venaficlient.go": 11,
+          "pkg/server/tls/dynamic_source.go": 11,
+          "pkg/util/pki/csr.go": 11,
+          "pkg/util/pki/match.go": 11,
+          "test/e2e/suite/conformance/certificates/tests.go": 11,
+          "design/20210209.certificates.k8s.io-adoption.md": 11,
+          "design/20220720-per-certificate-owner-ref.md": 11,
+          "design/20250703.gatewayapi-listenerset.md": 11,
+          "design/20250920.certificate-renewal-control.md": 11
+        },
+        "matches_total": 944,
+        "match_cap_applied": true,
+        "coverage_incomplete": true
+      }
+    ]
+  },
+  "candidate_set": {
+    "candidates": [
+      {
+        "id": "CU-14647a333787b689",
+        "kind": "FUNCTION_OR_TYPE",
+        "path": "internal/generated/openapi/zz_generated.openapi.go",
+        "locator": {
+          "start_line": 3694,
+          "end_line": 3773,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "cb871eb25890053a0a80595d396372b88ce9b65b40d8a095c753eeb0f13e43ea",
+        "parser_kind": "GO_LEXICAL_DECLARATION",
+        "text": "func schema_pkg_apis_certmanager_v1_CertificateStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {\n\treturn common.OpenAPIDefinition{\n\t\tSchema: spec.Schema{\n\t\t\tSchemaProps: spec.SchemaProps{\n\t\t\t\tDescription: \"CertificateStatus defines the observed state of Certificate\",\n\t\t\t\tType:        []string{\"object\"},\n\t\t\t\tProperties: map[string]spec.Schema{\n\t\t\t\t\t\"conditions\": {\n\t\t\t\t\t\tVendorExtensible: spec.VendorExtensible{\n\t\t\t\t\t\t\tExtensions: spec.Extensions{\n\t\t\t\t\t\t\t\t\"x-kubernetes-list-map-keys\": []interface{}{\n\t\t\t\t\t\t\t\t\t\"type\",\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\"x-kubernetes-list-type\": \"map\",\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t},\n\t\t\t\t\t\tSchemaProps: spec.SchemaProps{\n\t\t\t\t\t\t\tDescription: \"List of status conditions to indicate the status of certificates. Known condition types are `Ready` and `Issuing`.\",\n\t\t\t\t\t\t\tType:        []string{\"array\"},\n\t\t\t\t\t\t\tItems: &spec.SchemaOrArray{\n\t\t\t\t\t\t\t\tSchema: &spec.Schema{\n\t\t\t\t\t\t\t\t\tSchemaProps: spec.SchemaProps{\n\t\t\t\t\t\t\t\t\t\tRef: ref(\"github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1.CertificateCondition\"),\n\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t\t\"lastFailureTime\": {\n\t\t\t\t\t\tSchemaProps: spec.SchemaProps{\n\t\t\t\t\t\t\tDescription: \"LastFailureTime is set only if the latest issuance for this Certificate failed and contains the time of the failure. If an issuance has failed, the delay till the next issuance will be calculated using formula time.Hour * 2 ^ (failedIssuanceAttempts - 1). If the latest issuance has succeeded this field will be unset.\",\n\t\t\t\t\t\t\tRef:         ref(metav1.Time{}.OpenAPIModelName()),\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t\t\"notBefore\": {\n\t\t\t\t\t\tSchemaProps: spec.SchemaProps{\n\t\t\t\t\t\t\tDescription: \"The time after which the certificate stored in the secret named by this resource in `spec.secretName` is valid.\",\n\t\t\t\t\t\t\tRef:         ref(metav1.Time{}.OpenAPIModelName()),\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t\t\"notAfter\": {\n\t\t\t\t\t\tSchemaProps: spec.SchemaProps{\n\t\t\t\t\t\t\tDescription: \"The expiration time of the certificate stored in the secret named by this resource in `spec.secretName`.\",\n\t\t\t\t\t\t\tRef:         ref(metav1.Time{}.OpenAPIModelName()),\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t\t\"renewalTime\": {\n\t\t\t\t\t\tSchemaProps: spec.SchemaProps{\n\t\t\t\t\t\t\tDescription: \"RenewalTime is the time at which the certificate will be next renewed. If not set, no upcoming renewal is scheduled.\",\n\t\t\t\t\t\t\tRef:         ref(metav1.Time{}.OpenAPIModelName()),\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t\t\"revision\": {\n\t\t\t\t\t\tSchemaProps: spec.SchemaProps{\n\t\t\t\t\t\t\tDescription: \"The current 'revision' of the certificate as issued.\\n\\nWhen a CertificateRequest resource is created, it will have the `cert-manager.io/certificate-revision` set to one greater than the current value of this field.\\n\\nUpon issuance, this field will be set to the value of the annotation on the CertificateRequest resource used to issue the certificate.\\n\\nPersisting the value on the CertificateRequest resource allows the certificates controller to know whether a request is part of an old issuance or if it is part of the ongoing revision's issuance by checking if the revision value in the annotation is greater than this field.\",\n\t\t\t\t\t\t\tType:        []string{\"integer\"},\n\t\t\t\t\t\t\tFormat:      \"int32\",\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t\t\"nextPrivateKeySecretName\": {\n\t\t\t\t\t\tSchemaProps: spec.SchemaProps{\n\t\t\t\t\t\t\tDescription: \"The name of the Secret resource containing the private key to be used for the next certificate iteration. The keymanager controller will automatically set this field if the `Issuing` condition is set to `True`. It will automatically unset this field when the Issuing condition is not set or False.\",\n\t\t\t\t\t\t\tType:        []string{\"string\"},\n\t\t\t\t\t\t\tFormat:      \"\",\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t\t\"failedIssuanceAttempts\": {\n\t\t\t\t\t\tSchemaProps: spec.SchemaProps{\n\t\t\t\t\t\t\tDescription: \"The number of continuous failed issuance attempts up till now. This field gets removed (if set) on a successful issuance and gets set to 1 if unset and an issuance has failed. If an issuance has failed, the delay till the next issuance will be calculated using formula time.Hour * 2 ^ (failedIssuanceAttempts - 1).\",\n\t\t\t\t\t\t\tType:        []string{\"integer\"},\n\t\t\t\t\t\t\tFormat:      \"int32\",\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t\t\"acme\": {\n\t\t\t\t\t\tSchemaProps: spec.SchemaProps{\n\t\t\t\t\t\t\tDescription: \"ACME stores information that is fetched from the ACME CA server.\",\n\t\t\t\t\t\t\tRef:         ref(\"github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1.CertificateACMEStatus\"),\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t},\n",
+        "truncated": true,
+        "declared_symbols": [
+          "schema_pkg_apis_certmanager_v1_CertificateStatus"
+        ],
+        "references": [
+          "OpenAPIModelName",
+          "ref",
+          "removed"
+        ],
+        "symbol": "schema_pkg_apis_certmanager_v1_CertificateStatus",
+        "scope_path_rank": 0
+      },
+      {
+        "id": "CU-ee8f57d972b8f937",
+        "kind": "SOURCE_TEXT",
+        "path": "design/20200326.extensible-certificate-controller.md",
+        "locator": {
+          "start_line": 321,
+          "end_line": 388,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "48f593fdb42744f2340bbbc72d6c93a72fd12317f775891a8d13e8fc5e086b7f",
+        "parser_kind": "BOUNDED_TEXT_FALLBACK",
+        "text": "\nIt is responsible for encoding the private key and certificate data into the\nappropriate format.\n\nOnce the key-pair has been written to `spec.secretName`, it will set the\n`status.revision` field to that of the CertificateRequest and remove the\n`Issuing` status condition (in the same Update call).\n\nIt will behave as follows:\n\n* If the 'Issuing' condition is `True`:\n    * If the `status.nextPrivateKeySecretName` field is not set:\n        * Do nothing\n    * Find the CertificateRequest for `status.revision` + 1\n        * If none exist, do nothing.\n        * If multiple exist, do nothing (`requestmanager` will handle this)\n    * If the CertificateRequest is not in a 'final' state, do nothing.\n    * If it is 'valid':\n        * Verify the public key of the certificate request matches the public key\n          of the stored `status.nextPrivateKeySecretName`\n            * If not, do nothing (`requestmanager` will handle this)\n        * Verify the CSR options match what is requested in `certificate.spec`\n            * If not, do nothing (`requestmanager` will handle this)\n        * Encode and issue the key-pair (store it in the Secret)\n        * Set `status.revision` to revision of the CertificateRequest\n        * Remove `Issuing` status condition\n        * Clear `status.lastFailureTime` (if set)\n        * Log an Event\n    * If not 'valid':\n        * Set `status.lastFailureTime` (if not equal to CertificateRequest)\n        * Set `Issuing` status condition to `False` with reason explaining when\n          the request will be retried\n* If the 'Issuing' condition is `False` or not set:\n    * Do nothing\n\n#### trigger\n\nThe trigger plugin is responsible for observing the state of the currently\nissued `spec.secretName` and the rest of the `certificate.spec` fields to\ndetermine whether a re-issuance is required.\nIt triggers re-issuance by adding the `Issuing` status condition when a new\ncertificate is required.\n\nThese conditions will cause a request to be triggered:\n\n* `spec.secretName` does not exist, or contains data that cannot be decoded.\n* Issuer name/kind annotations on Secret resource do not match current `spec.issuerRef`.\n* The public key of the `tls.key` and `tls.crt` do not match.\n* A CertificateRequest for the current `status.revision` exists and the\n  current requested `certificate.spec` does not match the options on the CSR.\n* If the stored x509 certificate's `NotAfter` is within `spec.renewBefore` of\n  the current time.\n\nAdditionally, the controller is responsible for implement a 'back-off' if\nCertificateRequest resources persistently fail to complete.\nFor now, this will be a continuation of the current behaviour of backing off\nby 1 hour after a request fails.\nEven if any of the above conditions are true, a request will not be triggered\nunless the current time is at least 1 hour after the `status.lastFailureTime`,\nif set.\nIn future we can extend this logic to back-off exponentially by storing a\nlonger history of CertificateRequest resource's failure times, but this is out\nof scope of this proposal.\n\nAnother actor may choose to manually trigger an issuance by setting the\n`Issuing` condition themselves (i.e. with a cert-manager CLI tool, or their own\ncontroller). The `trigger` controller will not interfere in this case and\nwill take no extra action.\n",
+        "truncated": false,
+        "declared_symbols": [],
+        "references": [],
+        "scope_path_rank": 6
+      },
+      {
+        "id": "CU-8142745e66f35f6a",
+        "kind": "FUNCTION_OR_TYPE",
+        "path": "internal/apis/certmanager/types_certificate.go",
+        "locator": {
+          "start_line": 535,
+          "end_line": 594,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "637946cc0e226c1d9279e4f1cdfe414fe58b517a8cb86539c0ae4f60e6bef413",
+        "parser_kind": "GO_LEXICAL_DECLARATION",
+        "text": "type CertificateStatus struct {\n\t// List of status conditions to indicate the status of certificates.\n\t// Known condition types are `Ready` and `Issuing`.\n\tConditions []CertificateCondition\n\n\t// LastFailureTime is set only if the latest issuance for this\n\t// Certificate failed and contains the time of the failure. If an\n\t// issuance has failed, the delay till the next issuance will be\n\t// calculated using formula time.Hour * 2 ^ (failedIssuanceAttempts -\n\t// 1). If the latest issuance has succeeded this field will be unset.\n\tLastFailureTime *metav1.Time\n\n\t// The time after which the certificate stored in the secret named\n\t// by this resource in `spec.secretName` is valid.\n\tNotBefore *metav1.Time\n\n\t// The expiration time of the certificate stored in the secret named\n\t// by this resource in `spec.secretName`.\n\tNotAfter *metav1.Time\n\n\t// RenewalTime is the time at which the certificate will be next\n\t// renewed.\n\t// If not set, no upcoming renewal is scheduled.\n\tRenewalTime *metav1.Time\n\n\t// The current 'revision' of the certificate as issued.\n\t//\n\t// When a CertificateRequest resource is created, it will have the\n\t// `cert-manager.io/certificate-revision` set to one greater than the\n\t// current value of this field.\n\t//\n\t// Upon issuance, this field will be set to the value of the annotation\n\t// on the CertificateRequest resource used to issue the certificate.\n\t//\n\t// Persisting the value on the CertificateRequest resource allows the\n\t// certificates controller to know whether a request is part of an old\n\t// issuance or if it is part of the ongoing revision's issuance by\n\t// checking if the revision value in the annotation is greater than this\n\t// field.\n\tRevision *int\n\n\t// The name of the Secret resource containing the private key to be used\n\t// for the next certificate iteration.\n\t// The keymanager controller will automatically set this field if the\n\t// `Issuing` condition is set to `True`.\n\t// It will automatically unset this field when the Issuing condition is\n\t// not set or False.\n\tNextPrivateKeySecretName *string\n\n\t// The number of continuous failed issuance attempts up till now. This\n\t// field gets removed (if set) on a successful issuance and gets set to\n\t// 1 if unset and an issuance has failed. If an issuance has failed, the\n\t// delay till the next issuance will be calculated using formula\n\t// time.Hour * 2 ^ (failedIssuanceAttempts - 1).\n\tFailedIssuanceAttempts *int\n\n\t// ACME stores information that is fetched from the ACME CA server.\n\t// +optional\n\tACME *CertificateACMEStatus\n}\n",
+        "truncated": false,
+        "declared_symbols": [
+          "CertificateStatus"
+        ],
+        "references": [
+          "removed"
+        ],
+        "symbol": "CertificateStatus",
+        "scope_path_rank": 8
+      },
+      {
+        "id": "CU-ddfb73f63384b82e",
+        "kind": "SOURCE_TEXT",
+        "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+        "locator": {
+          "start_line": 230,
+          "end_line": 309,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "a9535587696a94d698ff8467a126f7edaf2c2029341a5171e8e45e805a5c89d0",
+        "parser_kind": "BOUNDED_TEXT_FALLBACK",
+        "text": "\t\t// If the private key cannot be parsed here, do nothing as the key manager will handle this.\n\t\tlogf.WithResource(log, nextPrivateKeySecret).Error(err, \"failed to parse next private key, waiting for keymanager controller\")\n\t\treturn nil\n\t}\n\tpkViolations := utilpki.PrivateKeyMatchesSpec(pk, crt.Spec)\n\tif len(pkViolations) > 0 {\n\t\tlogf.WithResource(log, nextPrivateKeySecret).Info(\"stored next private key does not match requirements on Certificate resource, waiting for keymanager controller\", \"violations\", pkViolations)\n\t\treturn nil\n\t}\n\n\t// CertificateRequest revisions begin from 1. If no revision is set on the\n\t// status then assume no revision yet set.\n\tnextRevision := 1\n\tif crt.Status.Revision != nil {\n\t\tnextRevision = *crt.Status.Revision + 1\n\t}\n\n\treqs, err := certificates.ListCertificateRequestsMatchingPredicates(\n\t\tc.certificateRequestLister.CertificateRequests(crt.Namespace),\n\t\tpredicate.CertificateRequestRevision(nextRevision),\n\t\tpredicate.ResourceOwnedBy[*cmapi.CertificateRequest](crt),\n\t)\n\tif err != nil || len(reqs) != 1 {\n\t\t// If error return.\n\t\t// if no error but none exist do nothing.\n\t\t// If no error but multiple exist, then leave to requestmanager controller\n\t\t// to clean up.\n\t\treturn err\n\t}\n\n\treq := reqs[0]\n\tlog = logf.WithResource(log, req)\n\n\t// Verify the CSR options match what is requested in certificate.spec.\n\t// If there are violations in the spec, then the requestmanager will handle this.\n\trequestViolations, err := utilpki.RequestMatchesSpec(req, crt.Spec)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif len(requestViolations) > 0 {\n\t\tlog.V(logf.DebugLevel).Info(\"CertificateRequest does not match Certificate, waiting for keymanager controller\")\n\t\treturn nil\n\t}\n\n\tcertIssuingCond := apiutil.GetCertificateCondition(crt, cmapi.CertificateConditionIssuing)\n\tcrReadyCond := apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady)\n\tif certIssuingCond == nil {\n\t\t// This should never happen\n\t\tlog.V(logf.ErrorLevel).Info(\"Certificate does not have an issuing condition\")\n\t\treturn nil\n\t}\n\t// If the CertificateRequest for this revision failed before the\n\t// Issuing condition was last updated on the Certificate, then it must be a\n\t// failed CertificateRequest from the previous issuance for the same\n\t// revision. Leave it to the certificate-requests controller to delete the\n\t// CertificateRequest and create a new one.\n\tif req.Status.FailureTime != nil &&\n\t\treq.Status.FailureTime.Before(certIssuingCond.LastTransitionTime) && crReadyCond.Reason == cmapi.CertificateRequestReasonFailed {\n\t\tlog.V(logf.InfoLevel).Info(\"Found a failed CertificateRequest from previous issuance, waiting for it to be deleted...\")\n\t\treturn nil\n\t}\n\n\t// Now check if CertificateRequest is in any of the final states so that\n\t// this issuance can be completed as either succeeded or failed. Failed\n\t// issuance will be retried with a delay (the logic for that lives in\n\t// certificates-trigger controller). Final states are: Denied condition\n\t// with status True => fail issuance InvalidRequest  condition with\n\t// status True => fail issuance Ready condition with reason Failed =>\n\t// fail issuance Ready condition with reason Issued => finalize issuance\n\t// as succeeded.\n\n\t// In case of a non-compliant issuer, a CertificateRequest can have both\n\t// Denied status True (set by an approver) and Ready condition with\n\t// reason Issued (set by the issuer). In this case, we prioritize the\n\t// Denied condition and fail the issuance. This is done for consistency\n\t// and also to avoid race conditions between the non-compliant issuer\n\t// and this control loop.\n\n\t// If the certificate request was denied, set the last failure time to\n\t// now, bump the issuance attempts and set the Issuing status condition\n",
+        "truncated": false,
+        "declared_symbols": [],
+        "references": [],
+        "query_window": true,
+        "query_origin": "PUBLIC_REQUIREMENT_IDENTIFIER",
+        "scope_path_rank": 11
+      },
+      {
+        "id": "CU-da8fb3ecf5de8318",
+        "kind": "FUNCTION_OR_TYPE",
+        "path": "pkg/apis/certmanager/v1/types_certificate.go",
+        "locator": {
+          "start_line": 646,
+          "end_line": 715,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "4c73cb3734d067f889a4c408c27313f1fc9f73ab486f0642a49f5d921fa5f285",
+        "parser_kind": "GO_LEXICAL_DECLARATION",
+        "text": "type CertificateStatus struct {\n\t// List of status conditions to indicate the status of certificates.\n\t// Known condition types are `Ready` and `Issuing`.\n\t// +optional\n\t// +listType=map\n\t// +listMapKey=type\n\tConditions []CertificateCondition `json:\"conditions,omitempty\"`\n\n\t// LastFailureTime is set only if the latest issuance for this\n\t// Certificate failed and contains the time of the failure. If an\n\t// issuance has failed, the delay till the next issuance will be\n\t// calculated using formula time.Hour * 2 ^ (failedIssuanceAttempts -\n\t// 1). If the latest issuance has succeeded this field will be unset.\n\t// +optional\n\tLastFailureTime *metav1.Time `json:\"lastFailureTime,omitempty\"`\n\n\t// The time after which the certificate stored in the secret named\n\t// by this resource in `spec.secretName` is valid.\n\t// +optional\n\tNotBefore *metav1.Time `json:\"notBefore,omitempty\"`\n\n\t// The expiration time of the certificate stored in the secret named\n\t// by this resource in `spec.secretName`.\n\t// +optional\n\tNotAfter *metav1.Time `json:\"notAfter,omitempty\"`\n\n\t// RenewalTime is the time at which the certificate will be next\n\t// renewed.\n\t// If not set, no upcoming renewal is scheduled.\n\t// +optional\n\tRenewalTime *metav1.Time `json:\"renewalTime,omitempty\"`\n\n\t// The current 'revision' of the certificate as issued.\n\t//\n\t// When a CertificateRequest resource is created, it will have the\n\t// `cert-manager.io/certificate-revision` set to one greater than the\n\t// current value of this field.\n\t//\n\t// Upon issuance, this field will be set to the value of the annotation\n\t// on the CertificateRequest resource used to issue the certificate.\n\t//\n\t// Persisting the value on the CertificateRequest resource allows the\n\t// certificates controller to know whether a request is part of an old\n\t// issuance or if it is part of the ongoing revision's issuance by\n\t// checking if the revision value in the annotation is greater than this\n\t// field.\n\t// +optional\n\tRevision *int `json:\"revision,omitempty\"`\n\n\t// The name of the Secret resource containing the private key to be used\n\t// for the next certificate iteration.\n\t// The keymanager controller will automatically set this field if the\n\t// `Issuing` condition is set to `True`.\n\t// It will automatically unset this field when the Issuing condition is\n\t// not set or False.\n\t// +optional\n\tNextPrivateKeySecretName *string `json:\"nextPrivateKeySecretName,omitempty\"`\n\n\t// The number of continuous failed issuance attempts up till now. This\n\t// field gets removed (if set) on a successful issuance and gets set to\n\t// 1 if unset and an issuance has failed. If an issuance has failed, the\n\t// delay till the next issuance will be calculated using formula\n\t// time.Hour * 2 ^ (failedIssuanceAttempts - 1).\n\t// +optional\n\tFailedIssuanceAttempts *int `json:\"failedIssuanceAttempts,omitempty\"`\n\n\t// ACME stores information that is fetched from the ACME CA server.\n\t// +optional\n\tACME *CertificateACMEStatus `json:\"acme,omitempty\"`\n}\n",
+        "truncated": false,
+        "declared_symbols": [
+          "CertificateStatus"
+        ],
+        "references": [
+          "removed"
+        ],
+        "symbol": "CertificateStatus",
+        "scope_path_rank": 10
+      },
+      {
+        "id": "CU-58129a427dd71f72",
+        "kind": "SOURCE_TEXT",
+        "path": "deploy/charts/cert-manager/templates/crd-cert-manager.io_clusterissuers.yaml",
+        "locator": {
+          "start_line": 3390,
+          "end_line": 3469,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "c3058cf43a71aa69788460ba9ea1d4b5457a1dc5679e6c237d86dd32cf70d46e",
+        "parser_kind": "BOUNDED_TEXT_FALLBACK",
+        "text": "                    crlDistributionPoints:\n                      description: |-\n                        The CRL distribution points is an X.509 v3 certificate extension which identifies\n                        the location of the CRL from which the revocation of this certificate can be checked.\n                        If not set, certificates will be issued without distribution points set.\n                      items:\n                        type: string\n                      type: array\n                      x-kubernetes-list-type: atomic\n                    issuingCertificateURLs:\n                      description: |-\n                        IssuingCertificateURLs is a list of URLs which this issuer should embed into certificates\n                        it creates. See https://www.rfc-editor.org/rfc/rfc5280#section-4.2.2.1 for more details.\n                        As an example, such a URL might be \"http://ca.domain.com/ca.crt\".\n                      items:\n                        type: string\n                      type: array\n                      x-kubernetes-list-type: atomic\n                    ocspServers:\n                      description: |-\n                        The OCSP server list is an X.509 v3 extension that defines a list of\n                        URLs of OCSP responders. The OCSP responders can be queried for the\n                        revocation status of an issued certificate. If not set, the\n                        certificate will be issued with no OCSP servers set. For example, an\n                        OCSP server URL could be \"http://ocsp.int-x3.letsencrypt.org\".\n                      items:\n                        type: string\n                      type: array\n                      x-kubernetes-list-type: atomic\n                    secretName:\n                      description: |-\n                        SecretName is the name of the secret used to sign Certificates issued\n                        by this Issuer.\n                      type: string\n                  required:\n                    - secretName\n                  type: object\n                selfSigned:\n                  description: |-\n                    SelfSigned configures this issuer to 'self sign' certificates using the\n                    private key used to create the CertificateRequest object.\n                  properties:\n                    crlDistributionPoints:\n                      description: |-\n                        The CRL distribution points is an X.509 v3 certificate extension which identifies\n                        the location of the CRL from which the revocation of this certificate can be checked.\n                        If not set certificate will be issued without CDP. Values are strings.\n                      items:\n                        type: string\n                      type: array\n                      x-kubernetes-list-type: atomic\n                  type: object\n                vault:\n                  description: |-\n                    Vault configures this issuer to sign certificates using a HashiCorp Vault\n                    PKI backend.\n                  properties:\n                    auth:\n                      description: Auth configures how cert-manager authenticates with the Vault server.\n                      properties:\n                        appRole:\n                          description: |-\n                            AppRole authenticates with Vault using the App Role auth mechanism,\n                            with the role and secret stored in a Kubernetes Secret resource.\n                          properties:\n                            path:\n                              description: |-\n                                Path where the App Role authentication backend is mounted in Vault, e.g:\n                                \"approle\"\n                              type: string\n                            roleId:\n                              description: |-\n                                RoleID configured in the App Role authentication backend when setting\n                                up the authentication backend in Vault.\n                              type: string\n                            secretRef:\n                              description: |-\n                                Reference to a key in a Secret that contains the App Role secret used\n                                to authenticate with Vault.\n                                The `key` field must be specified and denotes which entry within the Secret\n",
+        "truncated": false,
+        "declared_symbols": [],
+        "references": [],
+        "query_window": true,
+        "query_origin": "PUBLIC_REQUIREMENT_IDENTIFIER",
+        "scope_path_rank": 1
+      },
+      {
+        "id": "CU-d165f91108eb07af",
+        "kind": "SOURCE_TEXT",
+        "path": "deploy/charts/cert-manager/templates/crd-cert-manager.io_certificates.yaml",
+        "locator": {
+          "start_line": 816,
+          "end_line": 895,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "139e4d41313a93bc5425ee14b97c5f407b4dbef089ba10ada90ad544d6b2279f",
+        "parser_kind": "BOUNDED_TEXT_FALLBACK",
+        "text": "                      reason:\n                        description: |-\n                          Reason is a brief machine readable explanation for the condition's last\n                          transition.\n                        type: string\n                      status:\n                        description: Status of the condition, one of (`True`, `False`, `Unknown`).\n                        enum:\n                          - \"True\"\n                          - \"False\"\n                          - Unknown\n                        type: string\n                      type:\n                        description: Type of the condition, known values are (`Ready`, `Issuing`).\n                        type: string\n                    required:\n                      - status\n                      - type\n                    type: object\n                  type: array\n                  x-kubernetes-list-map-keys:\n                    - type\n                  x-kubernetes-list-type: map\n                failedIssuanceAttempts:\n                  description: |-\n                    The number of continuous failed issuance attempts up till now. This\n                    field gets removed (if set) on a successful issuance and gets set to\n                    1 if unset and an issuance has failed. If an issuance has failed, the\n                    delay till the next issuance will be calculated using formula\n                    time.Hour * 2 ^ (failedIssuanceAttempts - 1).\n                  type: integer\n                lastFailureTime:\n                  description: |-\n                    LastFailureTime is set only if the latest issuance for this\n                    Certificate failed and contains the time of the failure. If an\n                    issuance has failed, the delay till the next issuance will be\n                    calculated using formula time.Hour * 2 ^ (failedIssuanceAttempts -\n                    1). If the latest issuance has succeeded this field will be unset.\n                  format: date-time\n                  type: string\n                nextPrivateKeySecretName:\n                  description: |-\n                    The name of the Secret resource containing the private key to be used\n                    for the next certificate iteration.\n                    The keymanager controller will automatically set this field if the\n                    `Issuing` condition is set to `True`.\n                    It will automatically unset this field when the Issuing condition is\n                    not set or False.\n                  type: string\n                notAfter:\n                  description: |-\n                    The expiration time of the certificate stored in the secret named\n                    by this resource in `spec.secretName`.\n                  format: date-time\n                  type: string\n                notBefore:\n                  description: |-\n                    The time after which the certificate stored in the secret named\n                    by this resource in `spec.secretName` is valid.\n                  format: date-time\n                  type: string\n                renewalTime:\n                  description: |-\n                    RenewalTime is the time at which the certificate will be next\n                    renewed.\n                    If not set, no upcoming renewal is scheduled.\n                  format: date-time\n                  type: string\n                revision:\n                  description: |-\n                    The current 'revision' of the certificate as issued.\n\n                    When a CertificateRequest resource is created, it will have the\n                    `cert-manager.io/certificate-revision` set to one greater than the\n                    current value of this field.\n\n                    Upon issuance, this field will be set to the value of the annotation\n                    on the CertificateRequest resource used to issue the certificate.\n\n                    Persisting the value on the CertificateRequest resource allows the\n",
+        "truncated": false,
+        "declared_symbols": [],
+        "references": [],
+        "query_window": true,
+        "query_origin": "PUBLIC_REQUIREMENT_IDENTIFIER",
+        "scope_path_rank": 12
+      },
+      {
+        "id": "CU-84f33394a20626dc",
+        "kind": "SOURCE_TEXT",
+        "path": "deploy/crds/cert-manager.io_certificates.yaml",
+        "locator": {
+          "start_line": 836,
+          "end_line": 915,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "82d2916a0ae7ef480eaa641a7dc610d0fb5a6a1012938f27d14016cd1f919a33",
+        "parser_kind": "BOUNDED_TEXT_FALLBACK",
+        "text": "                        Reason is a brief machine readable explanation for the condition's last\n                        transition.\n                      type: string\n                    status:\n                      description: Status of the condition, one of (`True`, `False`,\n                        `Unknown`).\n                      enum:\n                      - \"True\"\n                      - \"False\"\n                      - Unknown\n                      type: string\n                    type:\n                      description: Type of the condition, known values are (`Ready`,\n                        `Issuing`).\n                      type: string\n                  required:\n                  - status\n                  - type\n                  type: object\n                type: array\n                x-kubernetes-list-map-keys:\n                - type\n                x-kubernetes-list-type: map\n              failedIssuanceAttempts:\n                description: |-\n                  The number of continuous failed issuance attempts up till now. This\n                  field gets removed (if set) on a successful issuance and gets set to\n                  1 if unset and an issuance has failed. If an issuance has failed, the\n                  delay till the next issuance will be calculated using formula\n                  time.Hour * 2 ^ (failedIssuanceAttempts - 1).\n                type: integer\n              lastFailureTime:\n                description: |-\n                  LastFailureTime is set only if the latest issuance for this\n                  Certificate failed and contains the time of the failure. If an\n                  issuance has failed, the delay till the next issuance will be\n                  calculated using formula time.Hour * 2 ^ (failedIssuanceAttempts -\n                  1). If the latest issuance has succeeded this field will be unset.\n                format: date-time\n                type: string\n              nextPrivateKeySecretName:\n                description: |-\n                  The name of the Secret resource containing the private key to be used\n                  for the next certificate iteration.\n                  The keymanager controller will automatically set this field if the\n                  `Issuing` condition is set to `True`.\n                  It will automatically unset this field when the Issuing condition is\n                  not set or False.\n                type: string\n              notAfter:\n                description: |-\n                  The expiration time of the certificate stored in the secret named\n                  by this resource in `spec.secretName`.\n                format: date-time\n                type: string\n              notBefore:\n                description: |-\n                  The time after which the certificate stored in the secret named\n                  by this resource in `spec.secretName` is valid.\n                format: date-time\n                type: string\n              renewalTime:\n                description: |-\n                  RenewalTime is the time at which the certificate will be next\n                  renewed.\n                  If not set, no upcoming renewal is scheduled.\n                format: date-time\n                type: string\n              revision:\n                description: |-\n                  The current 'revision' of the certificate as issued.\n\n                  When a CertificateRequest resource is created, it will have the\n                  `cert-manager.io/certificate-revision` set to one greater than the\n                  current value of this field.\n\n                  Upon issuance, this field will be set to the value of the annotation\n                  on the CertificateRequest resource used to issue the certificate.\n\n                  Persisting the value on the CertificateRequest resource allows the\n",
+        "truncated": false,
+        "declared_symbols": [],
+        "references": [],
+        "query_window": true,
+        "query_origin": "PUBLIC_REQUIREMENT_IDENTIFIER",
+        "scope_path_rank": 13
+      },
+      {
+        "id": "CU-6e3f4bd5c23d1cc7",
+        "kind": "SOURCE_TEXT",
+        "path": "pkg/controller/certificates/requestmanager/requestmanager_controller.go",
+        "locator": {
+          "start_line": 186,
+          "end_line": 265,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "6e03068874fa8cf0cec0ccc50263c285cf1cb98be065e8db0e954ba7de205e28",
+        "parser_kind": "BOUNDED_TEXT_FALLBACK",
+        "text": "\t// Discover all 'owned' CertificateRequests\n\trequests, err := certificates.ListCertificateRequestsMatchingPredicates(\n\t\tc.certificateRequestLister.CertificateRequests(crt.Namespace),\n\t\tpredicate.ResourceOwnedBy[*cmapi.CertificateRequest](crt),\n\t)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\t// delete any existing CertificateRequest resources that do not have a\n\t// revision annotation\n\tif requests, err = c.deleteRequestsWithoutRevision(ctx, requests...); err != nil {\n\t\treturn err\n\t}\n\n\tcurrentCertificateRevision := 0\n\tif crt.Status.Revision != nil {\n\t\tcurrentCertificateRevision = *crt.Status.Revision\n\t}\n\tnextRevision := currentCertificateRevision + 1\n\n\trequests, err = requestsWithRevision(requests, nextRevision)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\trequests, err = c.deleteRequestsNotMatchingSpec(ctx, crt, pk.Public(), requests...)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\trequests, err = c.deleteCurrentFailedRequests(ctx, crt, requests...)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tif len(requests) > 1 {\n\t\t// TODO: we should handle this case better, but for now do nothing to\n\t\t//  avoid getting into loops where we keep creating multiple requests\n\t\t//  and deleting them again.\n\t\tlog.V(logf.ErrorLevel).Info(\"Multiple matching CertificateRequest resources exist, delete one of them. This is likely an error and should be reported on the issue tracker!\")\n\t\treturn nil\n\t}\n\n\tif len(requests) == 1 {\n\t\t// Nothing to do as we've already verified that the CertificateRequest\n\t\t// is up to date above.\n\t\treturn nil\n\t}\n\n\treturn c.createNewCertificateRequest(ctx, crt, pk, nextRevision, nextPrivateKeySecret.Name)\n}\n\nfunc (c *controller) deleteCurrentFailedRequests(ctx context.Context, crt *cmapi.Certificate, reqs ...*cmapi.CertificateRequest) ([]*cmapi.CertificateRequest, error) {\n\tlog := logf.FromContext(ctx).WithValues(\"Certificate\", crt.Name)\n\tvar remaining []*cmapi.CertificateRequest\n\tfor _, req := range reqs {\n\t\tlog = logf.WithRelatedResource(log, req)\n\n\t\t// Check if there are any 'current' CertificateRequests that\n\t\t// failed during the previous issuance cycle. Those should be\n\t\t// deleted so that a new one gets created and the issuance is\n\t\t// re-tried. In practice no more than one CertificateRequest is\n\t\t// expected at this point.\n\t\tcrReadyCond := apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady)\n\t\tif crReadyCond == nil || crReadyCond.Status != cmmeta.ConditionFalse || crReadyCond.Reason != cmapi.CertificateRequestReasonFailed {\n\t\t\tremaining = append(remaining, req)\n\t\t\tcontinue\n\t\t}\n\n\t\tcertIssuingCond := apiutil.GetCertificateCondition(crt, cmapi.CertificateConditionIssuing)\n\t\tif certIssuingCond == nil {\n\t\t\t// This should never happen\n\t\t\tlog.V(logf.ErrorLevel).Info(\"Certificate does not have Issuing condition\")\n\t\t\treturn nil, nil\n\t\t}\n\t\t// If the Issuing condition on the Certificate is newer than the\n\t\t// failure time on CertificateRequest, it means that the\n\t\t// CertificateRequest failed during the previous issuance (for the\n\t\t// same revision). If it is a CertificateRequest that failed\n",
+        "truncated": false,
+        "declared_symbols": [],
+        "references": [],
+        "query_window": true,
+        "query_origin": "PUBLIC_REQUIREMENT_IDENTIFIER",
+        "scope_path_rank": 16
+      },
+      {
+        "id": "CU-81c6b5f1fa9872f7",
+        "kind": "SOURCE_TEXT",
+        "path": "design/20190708.certificate-request-crd.md",
+        "locator": {
+          "start_line": 401,
+          "end_line": 480,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "ebf48dc2d529242675fc394bb5f2ad723078e8db8da8c4d5746f5a4d68871c40",
+        "parser_kind": "BOUNDED_TEXT_FALLBACK",
+        "text": "- Check the group belongs to the owning `Issuer`, exit if not.\n- Check if `CertificateRequest` is in a terminal failed state.\n  A controller may choose to add additional conditions to a failed `CertificateRequest`, but must not attempt to issue a certificate.\n  Currently terminal failed states are:\n  - `Ready` condition with a `Failed` reason // usually set by the issuer\n  - `InvalidRequest` condition with `True` status // usually set by the issuer\n  - `Denied` condition with `True` status // usually set by approver\n\n- Check the `Issuer` type is of the same type, exit if not.\n- Verify the Spec of the `CertificateRequest`.\n- If a certificate exits then update the status if needed and exit.\n- Sign the certificate via the Issuer using the contents of Spec.\n\nIt is worth noting that whether the certificate is invalid, out-of-date or\nfailed then the controller should take no further action on the resource. It is\nthe responsibility of a higher level controller such as the `Certificate`\ncontroller to take further action to retry the certificate issuance through\nmanaging the life cycle of the `CertificateRequest` resources.\n\nWith all `Issuer`s updated with `CertificateRequest` controllers, the\n`Certificate` controller will be migrated to begin to use and manage the life\ncycle `CertificateRequest`s to resolve it's Spec. Further concrete\nimplementation details TBD.\n\n\n#### ACME\n\nThe `CertificateRequest` controller is responsible for creating `Order`\nresources to fulfil ACME certificate requests. If the `Order` fails due to a\nnon-networking or other non-transient issue then the `Order` is marked as failed\n- this means the `CertificateRequest` too shall be marked as failed and no\nfurther processing will take place by the `CertificateRequest` controller on\nthis resource.\n\n#### Issuing Controller\n\nIssuing controller considers all Denied CertificateRequests to be in a final failed state.\nThe issuance will be failed and will be repeatedly retried with an exponential backoff ../20220118.certificate-issuance-exponential-backoff.md.\nIf the cause of the denial was a misconfigured Certificate spec, the issuance will be retried immediately once the spec is corrected.\nIf the cause of the denial was misconfigured policy resources, a user who has fixed the resources and wants to retry immediately can do so using [cmctl renew](https://cert-manager.io/docs/reference/cmctl/#renew)\n\nThe issuing controller does not check Approved condition. It is the issuer's\nresponsibility not to issue certificates for CertificateRequests that have not\nbeen approved.\n\n### Failure\n\nA `CertificateRequest` is considered in a final failed state if:\n- it has a Ready condition with Failed reason\n- it has a Denied condition with True status\n- it has InvalidRequest reason with True status\n\n### Internal API Resource Behaviour\n\nThe group name of `IssuerRef` inside `CertificateRequest`s is to be defaulted\nto \"cert-manager.io\" if the field is empty, using a mutating webhook. This\nmeans that if unspecified, `CertificateRequest` objects will be put into the\nownership of the default pool of issuers in the cert-manager project.\n\nUntil the mutating webhook is fully implemented, we will handle defaulting\ninternally in the controller.\n\n### CertificateRequest Annotations\nIn order for `CertificateRequest` controllers to resolve requests, extra\ninformation may be needed that is not present in the API Spec. To pass on this\ninformation, a set of one or more annotations should be defined, with reliable\nvalue pairs. These annotations should be considered optional. Any\n`CertificateRequest` controller that relies on these to function should\nfallback gracefully or be marked as failed in the event a required annotation is\nmissing. The currently defined annotations are:\n\n- `cert-manager.io/private-key-secret-name`: The name of the secret, in the\n  same namespace as the `CertificateRequest`, that stores the private key which\n  was used to sign the x509 certificate signing request. This is required by the\n  `SelfSigning` issuer to sign its own certificate. If this annotation is missing\n  or empty, the `SelfSign` `CertificateRequest` controller will mark the resource\n  as failed and no further processing will take place on it. Currently the\n  `Certificate` controller adds this annotation to all `CertificateRequest`\n  resources it creates with the defined `SecretName` in the Spec of the\n  `Certificate`.\n",
+        "truncated": false,
+        "declared_symbols": [],
+        "references": [],
+        "scope_path_rank": 5
+      },
+      {
+        "id": "CU-0200e62c77d0ae1f",
+        "kind": "SOURCE_TEXT",
+        "path": "pkg/controller/certificates/issuing/issuing_controller_test.go",
+        "locator": {
+          "start_line": 152,
+          "end_line": 231,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "b456e1bba2270aa5d8e81288ac3bd7615a7140be22f66260845d484033ad1416",
+        "parser_kind": "BOUNDED_TEXT_FALLBACK",
+        "text": "\t\t\t\t\tissuingCert.DeepCopy(),\n\t\t\t\t\tgen.CertificateRequestFrom(exampleBundle.CertificateRequestReady,\n\t\t\t\t\t\tgen.SetCertificateRequestName(fmt.Sprintf(\"%s-2\", exampleBundle.CertificateRequestReady.Name)),\n\t\t\t\t\t\tgen.AddCertificateRequestAnnotations(map[string]string{\n\t\t\t\t\t\t\tcmapi.CertificateRequestRevisionAnnotationKey: \"2\", // Current Certificate revision=1\n\t\t\t\t\t\t}),\n\t\t\t\t\t),\n\t\t\t\t},\n\t\t\t\tKubeObjects:     []runtime.Object{},\n\t\t\t\tExpectedActions: []testpkg.Action{},\n\t\t\t},\n\t\t\texpectedErr: false,\n\t\t},\n\n\t\t\"if certificate is in Issuing state, one CertificateRequest, but not in final state, do nothing\": {\n\t\t\tcertificate: exampleBundle.Certificate,\n\t\t\tbuilder: &testpkg.Builder{\n\t\t\t\tCertManagerObjects: []runtime.Object{\n\t\t\t\t\tissuingCert.DeepCopy(),\n\t\t\t\t\tgen.CertificateRequestFrom(exampleBundle.CertificateRequestReady,\n\t\t\t\t\t\tgen.AddCertificateRequestAnnotations(map[string]string{\n\t\t\t\t\t\t\tcmapi.CertificateRequestRevisionAnnotationKey: \"2\", // Current Certificate revision=1\n\t\t\t\t\t\t}),\n\t\t\t\t\t\tgen.SetCertificateRequestStatusCondition(cmapi.CertificateRequestCondition{\n\t\t\t\t\t\t\tType:   cmapi.CertificateRequestConditionReady,\n\t\t\t\t\t\t\tStatus: cmmeta.ConditionFalse,\n\t\t\t\t\t\t\tReason: cmapi.CertificateRequestReasonPending,\n\t\t\t\t\t\t}),\n\t\t\t\t\t)},\n\t\t\t\tKubeObjects:     []runtime.Object{},\n\t\t\t\tExpectedActions: []testpkg.Action{},\n\t\t\t},\n\t\t\texpectedErr: false,\n\t\t},\n\n\t\t\"if certificate is in Issuing state, one CertificateRequest, but has failed and does not match the certificate spec, do nothing\": {\n\t\t\tcertificate: exampleBundle.Certificate,\n\t\t\tbuilder: &testpkg.Builder{\n\t\t\t\tCertManagerObjects: []runtime.Object{\n\t\t\t\t\tissuingCert.DeepCopy(),\n\t\t\t\t\tgen.CertificateRequestFrom(\n\t\t\t\t\t\ttestcrypto.MustCreateCryptoBundle(t,\n\t\t\t\t\t\t\tgen.CertificateFrom(issuingCert,\n\t\t\t\t\t\t\t\tgen.SetCertificateDNSNames(\"foo.com\"), // Mismatch since the cert has \"example.com\"\n\t\t\t\t\t\t\t), fixedClock,\n\t\t\t\t\t\t).CertificateRequest,\n\t\t\t\t\t\tgen.AddCertificateRequestAnnotations(map[string]string{\n\t\t\t\t\t\t\tcmapi.CertificateRequestRevisionAnnotationKey: \"2\", // Current Certificate revision=1\n\t\t\t\t\t\t}), gen.SetCertificateRequestStatusCondition(cmapi.CertificateRequestCondition{\n\t\t\t\t\t\t\tType:    cmapi.CertificateRequestConditionReady,\n\t\t\t\t\t\t\tStatus:  cmmeta.ConditionFalse,\n\t\t\t\t\t\t\tReason:  cmapi.CertificateRequestReasonFailed,\n\t\t\t\t\t\t\tMessage: \"The certificate request failed because of reasons\",\n\t\t\t\t\t\t}),\n\t\t\t\t\t),\n\t\t\t\t},\n\t\t\t\tKubeObjects: []runtime.Object{\n\t\t\t\t\t&corev1.Secret{\n\t\t\t\t\t\tObjectMeta: metav1.ObjectMeta{\n\t\t\t\t\t\t\tName:      nextPrivateKeySecretName,\n\t\t\t\t\t\t\tNamespace: exampleBundle.Certificate.Namespace,\n\t\t\t\t\t\t},\n\t\t\t\t\t\tData: map[string][]byte{\n\t\t\t\t\t\t\tcorev1.TLSPrivateKeyKey: exampleBundle.PrivateKeyBytes,\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t},\n\t\t\t\tExpectedActions: []testpkg.Action{},\n\t\t\t},\n\t\t\texpectedErr: false,\n\t\t},\n\t\t\"if certificate is in Issuing state, one CertificateRequest that has failed during previous issuance, do nothing\": {\n\t\t\tcertificate: exampleBundle.Certificate,\n\t\t\tbuilder: &testpkg.Builder{\n\t\t\t\tCertManagerObjects: []runtime.Object{\n\t\t\t\t\tgen.CertificateFrom(issuingCert),\n\t\t\t\t\tgen.CertificateRequestFrom(exampleBundle.CertificateRequestFailed,\n\t\t\t\t\t\tgen.AddCertificateRequestAnnotations(map[string]string{\n\t\t\t\t\t\t\tcmapi.CertificateRequestRevisionAnnotationKey: \"2\", // Current Certificate revision=1\n\t\t\t\t\t\t}),\n",
+        "truncated": false,
+        "declared_symbols": [],
+        "references": [],
+        "query_window": true,
+        "query_origin": "PUBLIC_REQUIREMENT_IDENTIFIER",
+        "scope_path_rank": 14
+      },
+      {
+        "id": "CU-fa84b213eb681d13",
+        "kind": "FUNCTION_OR_TYPE",
+        "path": "pkg/client/applyconfigurations/certmanager/v1/certificatestatus.go",
+        "locator": {
+          "start_line": 29,
+          "end_line": 79,
+          "column_start": 1
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "2eb108c63dd20a2a6d2228fcf5b5a27f3d7fb364e40a58e69a9ff1c7e9fc7488",
+        "parser_kind": "GO_LEXICAL_DECLARATION",
+        "text": "type CertificateStatusApplyConfiguration struct {\n\t// List of status conditions to indicate the status of certificates.\n\t// Known condition types are `Ready` and `Issuing`.\n\tConditions []CertificateConditionApplyConfiguration `json:\"conditions,omitempty\"`\n\t// LastFailureTime is set only if the latest issuance for this\n\t// Certificate failed and contains the time of the failure. If an\n\t// issuance has failed, the delay till the next issuance will be\n\t// calculated using formula time.Hour * 2 ^ (failedIssuanceAttempts -\n\t// 1). If the latest issuance has succeeded this field will be unset.\n\tLastFailureTime *metav1.Time `json:\"lastFailureTime,omitempty\"`\n\t// The time after which the certificate stored in the secret named\n\t// by this resource in `spec.secretName` is valid.\n\tNotBefore *metav1.Time `json:\"notBefore,omitempty\"`\n\t// The expiration time of the certificate stored in the secret named\n\t// by this resource in `spec.secretName`.\n\tNotAfter *metav1.Time `json:\"notAfter,omitempty\"`\n\t// RenewalTime is the time at which the certificate will be next\n\t// renewed.\n\t// If not set, no upcoming renewal is scheduled.\n\tRenewalTime *metav1.Time `json:\"renewalTime,omitempty\"`\n\t// The current 'revision' of the certificate as issued.\n\t//\n\t// When a CertificateRequest resource is created, it will have the\n\t// `cert-manager.io/certificate-revision` set to one greater than the\n\t// current value of this field.\n\t//\n\t// Upon issuance, this field will be set to the value of the annotation\n\t// on the CertificateRequest resource used to issue the certificate.\n\t//\n\t// Persisting the value on the CertificateRequest resource allows the\n\t// certificates controller to know whether a request is part of an old\n\t// issuance or if it is part of the ongoing revision's issuance by\n\t// checking if the revision value in the annotation is greater than this\n\t// field.\n\tRevision *int `json:\"revision,omitempty\"`\n\t// The name of the Secret resource containing the private key to be used\n\t// for the next certificate iteration.\n\t// The keymanager controller will automatically set this field if the\n\t// `Issuing` condition is set to `True`.\n\t// It will automatically unset this field when the Issuing condition is\n\t// not set or False.\n\tNextPrivateKeySecretName *string `json:\"nextPrivateKeySecretName,omitempty\"`\n\t// The number of continuous failed issuance attempts up till now. This\n\t// field gets removed (if set) on a successful issuance and gets set to\n\t// 1 if unset and an issuance has failed. If an issuance has failed, the\n\t// delay till the next issuance will be calculated using formula\n\t// time.Hour * 2 ^ (failedIssuanceAttempts - 1).\n\tFailedIssuanceAttempts *int `json:\"failedIssuanceAttempts,omitempty\"`\n\t// ACME stores information that is fetched from the ACME CA server.\n\tACME *CertificateACMEStatusApplyConfiguration `json:\"acme,omitempty\"`\n}\n",
+        "truncated": false,
+        "declared_symbols": [
+          "CertificateStatusApplyConfiguration"
+        ],
+        "references": [
+          "removed"
+        ],
+        "symbol": "CertificateStatusApplyConfiguration",
+        "scope_path_rank": 24
+      }
+    ],
+    "selected_ids": [
+      "CU-14647a333787b689",
+      "CU-ee8f57d972b8f937",
+      "CU-8142745e66f35f6a",
+      "CU-ddfb73f63384b82e",
+      "CU-da8fb3ecf5de8318",
+      "CU-58129a427dd71f72",
+      "CU-d165f91108eb07af",
+      "CU-84f33394a20626dc",
+      "CU-6e3f4bd5c23d1cc7",
+      "CU-81c6b5f1fa9872f7",
+      "CU-0200e62c77d0ae1f",
+      "CU-fa84b213eb681d13"
+    ],
+    "dropped_ids": [
+      "CU-15238b1657ae38b4",
+      "CU-44754b7198c9ca02",
+      "CU-1c754864f78db37c",
+      "CU-92711c5d49d830be",
+      "CU-96f73ef0d171ccb6",
+      "CU-f256a39f77d11122",
+      "CU-b8e669a1b248a132",
+      "CU-88f9f5d1acf03a9b",
+      "CU-eef5c440a4e5c35c",
+      "CU-159d277031f7c261",
+      "CU-38ae2c2ac17ea04e",
+      "CU-47a4f3f1c424b5ed",
+      "CU-cd499b5f03a930aa",
+      "CU-a36417010a661ff1",
+      "CU-2ee71431dff09a15",
+      "CU-34798c77d0a36ab8",
+      "CU-726ed600b4a49ac0",
+      "CU-338ce37b2171433e",
+      "CU-848cc3cfd63e63ab",
+      "CU-93256040ed0225e5",
+      "CU-fb6b54285a7cfcdf",
+      "CU-bacac746404d74f4",
+      "CU-e8140597007ab882",
+      "CU-b3cfcd589cd9b0dc",
+      "CU-fad9c929a8e31a03",
+      "CU-e14039c66230558a",
+      "CU-6333bf2e6aefb0d8",
+      "CU-46eb53bfdadf3617",
+      "CU-8122512b50143f72",
+      "CU-8cf58507a586d6fd",
+      "CU-858049ecc240f5ae",
+      "CU-542fe522d23a0bf6",
+      "CU-7005f97b2ac17f7f",
+      "CU-26157fae6ba48012",
+      "CU-4fb8d7d642c5d680",
+      "CU-0f9ca7111bc53c76",
+      "CU-486f01c0b892a906",
+      "CU-6f072ac094ed9daa",
+      "CU-62658eb603a896ba",
+      "CU-0d4ed2c717d76041",
+      "CU-ffdac7e9e3130396",
+      "CU-3a1d8862cf2d493a",
+      "CU-fe74c7e1f15c0cf5",
+      "CU-cdf3bcfed877c6b9",
+      "CU-7ca6b535826e7a19",
+      "CU-73da76e43ecd4078",
+      "CU-e9981e05f14c7721",
+      "CU-f01eb3e40fc02230",
+      "CU-efce2b5299207b75",
+      "CU-0da01258a9498d39",
+      "CU-d6ef913f18e02717",
+      "CU-cdec7662e3a0612d",
+      "CU-3f6b1965768997d2",
+      "CU-401eae203622d96e",
+      "CU-7e73bb415fa6f4b9",
+      "CU-ac752c28a71a879a",
+      "CU-d1adc249c53cf43b",
+      "CU-4d037e82d56ee19c",
+      "CU-4dad16d68e51346c",
+      "CU-cdb4891729b7e0d7",
+      "CU-6e596e01b737b664",
+      "CU-b5cf0e754b7d31af",
+      "CU-0cd1b304de977209",
+      "CU-ff6ad35dafab2e09",
+      "CU-1b17068c64d7e80b",
+      "CU-ec76a1f50eb0316c",
+      "CU-a3867a1cf4320e32",
+      "CU-a47d4ebd6a580fc6"
+    ],
+    "ranking_features": {
+      "CU-14647a333787b689": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 12,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 1,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 12,
+        "hop_distance": 0,
+        "selection_step": 1,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-58129a427dd71f72": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 6,
+        "hop_distance": 0,
+        "selection_step": 6,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-1c754864f78db37c": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-b8e669a1b248a132": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-eef5c440a4e5c35c": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-81c6b5f1fa9872f7": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 13,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 3,
+        "requirement_term_hits": 13,
+        "hop_distance": 0,
+        "selection_step": 10,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-ee8f57d972b8f937": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 14,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 14,
+        "hop_distance": 0,
+        "selection_step": 2,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-38ae2c2ac17ea04e": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 8,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 8,
+        "hop_distance": 0
+      },
+      "CU-8142745e66f35f6a": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 11,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 1,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 11,
+        "hop_distance": 0,
+        "selection_step": 3,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-f256a39f77d11122": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 12,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 11,
+        "hop_distance": 0
+      },
+      "CU-da8fb3ecf5de8318": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 11,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 1,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 11,
+        "hop_distance": 0,
+        "selection_step": 5,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-ddfb73f63384b82e": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 14,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 3,
+        "requirement_term_hits": 14,
+        "hop_distance": 0,
+        "selection_step": 4,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-d165f91108eb07af": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 11,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 11,
+        "hop_distance": 0,
+        "selection_step": 7,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-84f33394a20626dc": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 11,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 11,
+        "hop_distance": 0,
+        "selection_step": 8,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-0200e62c77d0ae1f": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 11,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 10,
+        "hop_distance": 0,
+        "selection_step": 11,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-cd499b5f03a930aa": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 9,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 8,
+        "hop_distance": 0
+      },
+      "CU-6e3f4bd5c23d1cc7": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 11,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 3,
+        "requirement_term_hits": 11,
+        "hop_distance": 0,
+        "selection_step": 9,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-44754b7198c9ca02": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 10,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 9,
+        "hop_distance": 0
+      },
+      "CU-ff6ad35dafab2e09": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 2,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 2,
+        "hop_distance": 0
+      },
+      "CU-338ce37b2171433e": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 7,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 7,
+        "hop_distance": 0
+      },
+      "CU-6e596e01b737b664": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 3,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 3,
+        "hop_distance": 0
+      },
+      "CU-a36417010a661ff1": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 10,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 9,
+        "hop_distance": 0
+      },
+      "CU-cdf3bcfed877c6b9": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 5,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 4,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 5,
+        "hop_distance": 0
+      },
+      "CU-d6ef913f18e02717": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 5,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 1,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 5,
+        "hop_distance": 0
+      },
+      "CU-fa84b213eb681d13": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 11,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 1,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 11,
+        "hop_distance": 0,
+        "selection_step": 12,
+        "new_gap_ids": [],
+        "max_overlap_percent": 0
+      },
+      "CU-88f9f5d1acf03a9b": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 9,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 4,
+        "anchor_priority": 0,
+        "observable_term_hits": 3,
+        "requirement_term_hits": 9,
+        "hop_distance": 0
+      },
+      "CU-92711c5d49d830be": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 9,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 6,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 9,
+        "hop_distance": 0
+      },
+      "CU-96f73ef0d171ccb6": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 9,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 9,
+        "hop_distance": 0
+      },
+      "CU-fad9c929a8e31a03": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-7ca6b535826e7a19": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 9,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 3,
+        "requirement_term_hits": 9,
+        "hop_distance": 0
+      },
+      "CU-93256040ed0225e5": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 4,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-34798c77d0a36ab8": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 8,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 3,
+        "requirement_term_hits": 8,
+        "hop_distance": 0
+      },
+      "CU-fb6b54285a7cfcdf": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 4,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-8cf58507a586d6fd": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 7,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 7,
+        "hop_distance": 0
+      },
+      "CU-858049ecc240f5ae": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 7,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 7,
+        "hop_distance": 0
+      },
+      "CU-bacac746404d74f4": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 4,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 3,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 4,
+        "hop_distance": 0
+      },
+      "CU-542fe522d23a0bf6": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 7,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 7,
+        "hop_distance": 0
+      },
+      "CU-848cc3cfd63e63ab": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 9,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 9,
+        "hop_distance": 0
+      },
+      "CU-26157fae6ba48012": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 5,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 5,
+        "hop_distance": 0
+      },
+      "CU-46eb53bfdadf3617": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 5,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 1,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 5,
+        "hop_distance": 0
+      },
+      "CU-159d277031f7c261": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 9,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 5,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 9,
+        "hop_distance": 0
+      },
+      "CU-2ee71431dff09a15": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 3,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-7e73bb415fa6f4b9": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-6f072ac094ed9daa": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-726ed600b4a49ac0": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 10,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 10,
+        "hop_distance": 0
+      },
+      "CU-0f9ca7111bc53c76": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 7,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-ac752c28a71a879a": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-0d4ed2c717d76041": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-486f01c0b892a906": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-efce2b5299207b75": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 5,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 2,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 4,
+        "hop_distance": 0
+      },
+      "CU-e8140597007ab882": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 9,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 9,
+        "hop_distance": 0
+      },
+      "CU-47a4f3f1c424b5ed": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 8,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 5,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 8,
+        "hop_distance": 0
+      },
+      "CU-15238b1657ae38b4": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 8,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 2,
+        "mechanism_symbol_hits": 5,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 8,
+        "hop_distance": 0
+      },
+      "CU-b3cfcd589cd9b0dc": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 5,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 3,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 4,
+        "hop_distance": 0
+      },
+      "CU-73da76e43ecd4078": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 8,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 2,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 7,
+        "hop_distance": 0
+      },
+      "CU-0cd1b304de977209": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 4,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 4,
+        "hop_distance": 0
+      },
+      "CU-d1adc249c53cf43b": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 4,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 1,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 4,
+        "hop_distance": 0
+      },
+      "CU-4fb8d7d642c5d680": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-62658eb603a896ba": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 7,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 7,
+        "hop_distance": 0
+      },
+      "CU-ffdac7e9e3130396": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-e14039c66230558a": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 8,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 3,
+        "requirement_term_hits": 8,
+        "hop_distance": 0
+      },
+      "CU-6333bf2e6aefb0d8": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 7,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 4,
+        "requirement_term_hits": 7,
+        "hop_distance": 0
+      },
+      "CU-0da01258a9498d39": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 7,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 3,
+        "requirement_term_hits": 7,
+        "hop_distance": 0
+      },
+      "CU-cdec7662e3a0612d": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 3,
+        "requirement_term_hits": 6,
+        "hop_distance": 0
+      },
+      "CU-3f6b1965768997d2": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 5,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 1,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 5,
+        "hop_distance": 1
+      },
+      "CU-e9981e05f14c7721": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 8,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 3,
+        "requirement_term_hits": 8,
+        "hop_distance": 1
+      },
+      "CU-401eae203622d96e": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 4,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 1,
+        "anchor_priority": 0,
+        "observable_term_hits": 3,
+        "requirement_term_hits": 4,
+        "hop_distance": 1
+      },
+      "CU-ec76a1f50eb0316c": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 1,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 1,
+        "hop_distance": 1
+      },
+      "CU-a3867a1cf4320e32": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 0,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 0,
+        "hop_distance": 1
+      },
+      "CU-cdb4891729b7e0d7": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 4,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 4,
+        "hop_distance": 1
+      },
+      "CU-4d037e82d56ee19c": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 6,
+        "hop_distance": 1
+      },
+      "CU-1b17068c64d7e80b": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 2,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 2,
+        "hop_distance": 1
+      },
+      "CU-a47d4ebd6a580fc6": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 0,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 0,
+        "hop_distance": 1
+      },
+      "CU-7005f97b2ac17f7f": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 8,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 8,
+        "hop_distance": 1
+      },
+      "CU-8122512b50143f72": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 6,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 2,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 6,
+        "hop_distance": 1
+      },
+      "CU-3a1d8862cf2d493a": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 2,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 2,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 2,
+        "hop_distance": 1
+      },
+      "CU-f01eb3e40fc02230": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 5,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 2,
+        "anchor_priority": 0,
+        "observable_term_hits": 2,
+        "requirement_term_hits": 5,
+        "hop_distance": 1
+      },
+      "CU-4dad16d68e51346c": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 3,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 2,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 3,
+        "hop_distance": 1
+      },
+      "CU-b5cf0e754b7d31af": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 4,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 0,
+        "mechanism_symbol_hits": 0,
+        "anchor_priority": 0,
+        "observable_term_hits": 1,
+        "requirement_term_hits": 4,
+        "hop_distance": 1
+      },
+      "CU-fe74c7e1f15c0cf5": {
+        "lexical_sibling_candidate": 0,
+        "exact_identifier_hits": 2,
+        "resource_kind_hits": 0,
+        "literal_identifier_hits": 1,
+        "mechanism_symbol_hits": 2,
+        "anchor_priority": 0,
+        "observable_term_hits": 0,
+        "requirement_term_hits": 2,
+        "hop_distance": 1
+      }
+    },
+    "edges": [],
+    "context_tokens": 87780,
+    "max_context_tokens": 220000,
+    "top_n": 12,
+    "extension_used": false,
+    "drop_reasons": {
+      "CU-15238b1657ae38b4": "TOP_N_LIMIT",
+      "CU-44754b7198c9ca02": "TOP_N_LIMIT",
+      "CU-1c754864f78db37c": "TOP_N_LIMIT",
+      "CU-92711c5d49d830be": "TOP_N_LIMIT",
+      "CU-96f73ef0d171ccb6": "TOP_N_LIMIT",
+      "CU-f256a39f77d11122": "TOP_N_LIMIT",
+      "CU-b8e669a1b248a132": "TOP_N_LIMIT",
+      "CU-88f9f5d1acf03a9b": "TOP_N_LIMIT",
+      "CU-eef5c440a4e5c35c": "TOP_N_LIMIT",
+      "CU-159d277031f7c261": "TOP_N_LIMIT",
+      "CU-38ae2c2ac17ea04e": "TOP_N_LIMIT",
+      "CU-47a4f3f1c424b5ed": "TOP_N_LIMIT",
+      "CU-cd499b5f03a930aa": "TOP_N_LIMIT",
+      "CU-a36417010a661ff1": "TOP_N_LIMIT",
+      "CU-2ee71431dff09a15": "TOP_N_LIMIT",
+      "CU-34798c77d0a36ab8": "TOP_N_LIMIT",
+      "CU-726ed600b4a49ac0": "TOP_N_LIMIT",
+      "CU-338ce37b2171433e": "TOP_N_LIMIT",
+      "CU-848cc3cfd63e63ab": "TOP_N_LIMIT",
+      "CU-93256040ed0225e5": "TOP_N_LIMIT",
+      "CU-fb6b54285a7cfcdf": "TOP_N_LIMIT",
+      "CU-bacac746404d74f4": "TOP_N_LIMIT",
+      "CU-e8140597007ab882": "TOP_N_LIMIT",
+      "CU-b3cfcd589cd9b0dc": "TOP_N_LIMIT",
+      "CU-fad9c929a8e31a03": "TOP_N_LIMIT",
+      "CU-e14039c66230558a": "TOP_N_LIMIT",
+      "CU-6333bf2e6aefb0d8": "TOP_N_LIMIT",
+      "CU-46eb53bfdadf3617": "TOP_N_LIMIT",
+      "CU-8122512b50143f72": "TOP_N_LIMIT",
+      "CU-8cf58507a586d6fd": "TOP_N_LIMIT",
+      "CU-858049ecc240f5ae": "TOP_N_LIMIT",
+      "CU-542fe522d23a0bf6": "TOP_N_LIMIT",
+      "CU-7005f97b2ac17f7f": "TOP_N_LIMIT",
+      "CU-26157fae6ba48012": "TOP_N_LIMIT",
+      "CU-4fb8d7d642c5d680": "TOP_N_LIMIT",
+      "CU-0f9ca7111bc53c76": "TOP_N_LIMIT",
+      "CU-486f01c0b892a906": "TOP_N_LIMIT",
+      "CU-6f072ac094ed9daa": "TOP_N_LIMIT",
+      "CU-62658eb603a896ba": "TOP_N_LIMIT",
+      "CU-0d4ed2c717d76041": "TOP_N_LIMIT",
+      "CU-ffdac7e9e3130396": "TOP_N_LIMIT",
+      "CU-3a1d8862cf2d493a": "TOP_N_LIMIT",
+      "CU-fe74c7e1f15c0cf5": "TOP_N_LIMIT",
+      "CU-cdf3bcfed877c6b9": "TOP_N_LIMIT",
+      "CU-7ca6b535826e7a19": "TOP_N_LIMIT",
+      "CU-73da76e43ecd4078": "TOP_N_LIMIT",
+      "CU-e9981e05f14c7721": "TOP_N_LIMIT",
+      "CU-f01eb3e40fc02230": "TOP_N_LIMIT",
+      "CU-efce2b5299207b75": "TOP_N_LIMIT",
+      "CU-0da01258a9498d39": "TOP_N_LIMIT",
+      "CU-d6ef913f18e02717": "TOP_N_LIMIT",
+      "CU-cdec7662e3a0612d": "TOP_N_LIMIT",
+      "CU-3f6b1965768997d2": "TOP_N_LIMIT",
+      "CU-401eae203622d96e": "TOP_N_LIMIT",
+      "CU-7e73bb415fa6f4b9": "TOP_N_LIMIT",
+      "CU-ac752c28a71a879a": "TOP_N_LIMIT",
+      "CU-d1adc249c53cf43b": "TOP_N_LIMIT",
+      "CU-4d037e82d56ee19c": "TOP_N_LIMIT",
+      "CU-4dad16d68e51346c": "TOP_N_LIMIT",
+      "CU-cdb4891729b7e0d7": "TOP_N_LIMIT",
+      "CU-6e596e01b737b664": "TOP_N_LIMIT",
+      "CU-b5cf0e754b7d31af": "TOP_N_LIMIT",
+      "CU-0cd1b304de977209": "TOP_N_LIMIT",
+      "CU-ff6ad35dafab2e09": "TOP_N_LIMIT",
+      "CU-1b17068c64d7e80b": "TOP_N_LIMIT",
+      "CU-ec76a1f50eb0316c": "TOP_N_LIMIT",
+      "CU-a3867a1cf4320e32": "TOP_N_LIMIT",
+      "CU-a47d4ebd6a580fc6": "TOP_N_LIMIT"
+    },
+    "supplemental_evidence": [],
+    "context_audit": [
+      {
+        "request_tokens": 87780,
+        "input_limit": 120000,
+        "reserved_output_tokens": 16384,
+        "context_stage": "INITIAL_DIAGNOSIS",
+        "total_context_limit": 220000,
+        "selected_ids": [
+          "CU-14647a333787b689",
+          "CU-ee8f57d972b8f937",
+          "CU-8142745e66f35f6a",
+          "CU-ddfb73f63384b82e",
+          "CU-da8fb3ecf5de8318",
+          "CU-58129a427dd71f72",
+          "CU-d165f91108eb07af",
+          "CU-84f33394a20626dc",
+          "CU-6e3f4bd5c23d1cc7",
+          "CU-81c6b5f1fa9872f7",
+          "CU-0200e62c77d0ae1f",
+          "CU-fa84b213eb681d13"
+        ],
+        "surviving_reference_edges": 0,
+        "drop_reasons": {
+          "CU-15238b1657ae38b4": "TOP_N_LIMIT",
+          "CU-44754b7198c9ca02": "TOP_N_LIMIT",
+          "CU-1c754864f78db37c": "TOP_N_LIMIT",
+          "CU-92711c5d49d830be": "TOP_N_LIMIT",
+          "CU-96f73ef0d171ccb6": "TOP_N_LIMIT",
+          "CU-f256a39f77d11122": "TOP_N_LIMIT",
+          "CU-b8e669a1b248a132": "TOP_N_LIMIT",
+          "CU-88f9f5d1acf03a9b": "TOP_N_LIMIT",
+          "CU-eef5c440a4e5c35c": "TOP_N_LIMIT",
+          "CU-159d277031f7c261": "TOP_N_LIMIT",
+          "CU-38ae2c2ac17ea04e": "TOP_N_LIMIT",
+          "CU-47a4f3f1c424b5ed": "TOP_N_LIMIT",
+          "CU-cd499b5f03a930aa": "TOP_N_LIMIT",
+          "CU-a36417010a661ff1": "TOP_N_LIMIT",
+          "CU-2ee71431dff09a15": "TOP_N_LIMIT",
+          "CU-34798c77d0a36ab8": "TOP_N_LIMIT",
+          "CU-726ed600b4a49ac0": "TOP_N_LIMIT",
+          "CU-338ce37b2171433e": "TOP_N_LIMIT",
+          "CU-848cc3cfd63e63ab": "TOP_N_LIMIT",
+          "CU-93256040ed0225e5": "TOP_N_LIMIT",
+          "CU-fb6b54285a7cfcdf": "TOP_N_LIMIT",
+          "CU-bacac746404d74f4": "TOP_N_LIMIT",
+          "CU-e8140597007ab882": "TOP_N_LIMIT",
+          "CU-b3cfcd589cd9b0dc": "TOP_N_LIMIT",
+          "CU-fad9c929a8e31a03": "TOP_N_LIMIT",
+          "CU-e14039c66230558a": "TOP_N_LIMIT",
+          "CU-6333bf2e6aefb0d8": "TOP_N_LIMIT",
+          "CU-46eb53bfdadf3617": "TOP_N_LIMIT",
+          "CU-8122512b50143f72": "TOP_N_LIMIT",
+          "CU-8cf58507a586d6fd": "TOP_N_LIMIT",
+          "CU-858049ecc240f5ae": "TOP_N_LIMIT",
+          "CU-542fe522d23a0bf6": "TOP_N_LIMIT",
+          "CU-7005f97b2ac17f7f": "TOP_N_LIMIT",
+          "CU-26157fae6ba48012": "TOP_N_LIMIT",
+          "CU-4fb8d7d642c5d680": "TOP_N_LIMIT",
+          "CU-0f9ca7111bc53c76": "TOP_N_LIMIT",
+          "CU-486f01c0b892a906": "TOP_N_LIMIT",
+          "CU-6f072ac094ed9daa": "TOP_N_LIMIT",
+          "CU-62658eb603a896ba": "TOP_N_LIMIT",
+          "CU-0d4ed2c717d76041": "TOP_N_LIMIT",
+          "CU-ffdac7e9e3130396": "TOP_N_LIMIT",
+          "CU-3a1d8862cf2d493a": "TOP_N_LIMIT",
+          "CU-fe74c7e1f15c0cf5": "TOP_N_LIMIT",
+          "CU-cdf3bcfed877c6b9": "TOP_N_LIMIT",
+          "CU-7ca6b535826e7a19": "TOP_N_LIMIT",
+          "CU-73da76e43ecd4078": "TOP_N_LIMIT",
+          "CU-e9981e05f14c7721": "TOP_N_LIMIT",
+          "CU-f01eb3e40fc02230": "TOP_N_LIMIT",
+          "CU-efce2b5299207b75": "TOP_N_LIMIT",
+          "CU-0da01258a9498d39": "TOP_N_LIMIT",
+          "CU-d6ef913f18e02717": "TOP_N_LIMIT",
+          "CU-cdec7662e3a0612d": "TOP_N_LIMIT",
+          "CU-3f6b1965768997d2": "TOP_N_LIMIT",
+          "CU-401eae203622d96e": "TOP_N_LIMIT",
+          "CU-7e73bb415fa6f4b9": "TOP_N_LIMIT",
+          "CU-ac752c28a71a879a": "TOP_N_LIMIT",
+          "CU-d1adc249c53cf43b": "TOP_N_LIMIT",
+          "CU-4d037e82d56ee19c": "TOP_N_LIMIT",
+          "CU-4dad16d68e51346c": "TOP_N_LIMIT",
+          "CU-cdb4891729b7e0d7": "TOP_N_LIMIT",
+          "CU-6e596e01b737b664": "TOP_N_LIMIT",
+          "CU-b5cf0e754b7d31af": "TOP_N_LIMIT",
+          "CU-0cd1b304de977209": "TOP_N_LIMIT",
+          "CU-ff6ad35dafab2e09": "TOP_N_LIMIT",
+          "CU-1b17068c64d7e80b": "TOP_N_LIMIT",
+          "CU-ec76a1f50eb0316c": "TOP_N_LIMIT",
+          "CU-a3867a1cf4320e32": "TOP_N_LIMIT",
+          "CU-a47d4ebd6a580fc6": "TOP_N_LIMIT"
+        }
+      }
+    ],
+    "required_endpoint_ids": []
+  },
+  "diagnosis": {
+    "requirement_horizon": [
+      "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance."
+    ],
+    "observed_boundary": "Public observation is limited to the issuing controller package build (OBS1, OBS2: EXECUTION_PASS, hidden_semantic_evaluation NOT_RUN); no controller decision or cluster convergence was executed or observed.",
+    "inferred_causal_path": [
+      "A CertificateRequest is created from the NextPrivateKey Secret current at creation time.",
+      "Replacing the key leaves an older CertificateRequest for the next revision carrying the previous key's CSR.",
+      "The issuing controller reads the current next private key and matches it only against crt.Spec (PrivateKeyMatchesSpec).",
+      "The issuing controller matches the CertificateRequest only against crt.Spec (RequestMatchesSpec), never against the NextPrivateKey Secret.",
+      "A stale request that still matches crt.Spec passes both checks and is handled in its terminal state.",
+      "Terminal failure handling sets Issuing=False and lastFailureTime, failing the current Certificate issuance."
+    ],
+    "unverified_outcomes": [
+      "O1"
+    ],
+    "obligation_atoms": [
+      {
+        "id": "A1",
+        "outcome_id": "O1",
+        "statement": "Before acting on terminal CertificateRequest states, the issuing controller must compare the CertificateRequest's CSR with the current NextPrivateKey Secret.",
+        "source_refs": [
+          "requirement_text:0:231"
+        ],
+        "support": "EXPLICIT",
+        "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+        "stable_obligation_key": "OB-2ac55d40408c2e6df4a141ed"
+      },
+      {
+        "id": "A2",
+        "outcome_id": "O1",
+        "statement": "A stale CertificateRequest built from a replaced key must not fail the current Certificate issuance.",
+        "source_refs": [
+          "requirement_text:0:231"
+        ],
+        "support": "EXPLICIT",
+        "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance.",
+        "stable_obligation_key": "OB-af99a9da4582d6a340b9072d"
+      }
+    ],
+    "units": [
+      {
+        "id": "U1",
+        "role": "issuing controller decision loop",
+        "kind": "controller",
+        "semantic_role_class": "RUNTIME_CONSUMER",
+        "existence": "PRESENT",
+        "locator_refs": [
+          "SRC-CU-ddfb73f63384b82e"
+        ],
+        "requirement_refs": [
+          "O1"
+        ]
+      },
+      {
+        "id": "U2",
+        "role": "CertificateRequest resource and its terminal Ready/Denied/InvalidRequest conditions",
+        "kind": "kubernetes resource",
+        "semantic_role_class": "GENERATED_STATE",
+        "existence": "PRESENT",
+        "locator_refs": [
+          "SRC-CU-6e3f4bd5c23d1cc7",
+          "SRC-CU-81c6b5f1fa9872f7"
+        ],
+        "requirement_refs": [
+          "O1"
+        ]
+      },
+      {
+        "id": "U3",
+        "role": "NextPrivateKey Secret holding the current private key for the next iteration",
+        "kind": "kubernetes resource",
+        "semantic_role_class": "GENERATED_STATE",
+        "existence": "PRESENT",
+        "locator_refs": [
+          "SRC-CU-ddfb73f63384b82e",
+          "SRC-CU-ee8f57d972b8f937"
+        ],
+        "requirement_refs": [
+          "O1"
+        ]
+      },
+      {
+        "id": "U4",
+        "role": "Certificate status Issuing condition and lastFailureTime",
+        "kind": "kubernetes resource status",
+        "semantic_role_class": "OBSERVED_STATE",
+        "existence": "PRESENT",
+        "locator_refs": [
+          "SRC-CU-da8fb3ecf5de8318",
+          "SRC-CU-ddfb73f63384b82e"
+        ],
+        "requirement_refs": [
+          "O1"
+        ]
+      }
+    ],
+    "expected_relations": [
+      {
+        "id": "R1",
+        "source_unit_ids": [
+          "U2",
+          "U3"
+        ],
+        "target_unit_ids": [
+          "U1"
+        ],
+        "relation_form": "INDIVISIBLE_SHARED",
+        "shared_constraint_reason": "The contract constrains the correspondence of two inputs (the CertificateRequest CSR and the current NextPrivateKey Secret) and cannot be expressed as adjacent one-source/one-target edges.",
+        "mechanism": "The issuing controller lists the CertificateRequest for status.revision+1 and reads the current next private key, and must confirm the CSR was built from that key before handling terminal request states.",
+        "condition": "Certificate is in Issuing state and a CertificateRequest for the next revision is found",
+        "expected_contract": "On a mismatch between the CertificateRequest CSR and the current NextPrivateKey Secret, the controller must not act on the request's terminal state.",
+        "requirement_refs": [
+          "O1"
+        ],
+        "obligation_refs": [
+          "A1"
+        ],
+        "support_refs": [
+          "SRC-CU-ddfb73f63384b82e",
+          "SRC-CU-ee8f57d972b8f937"
+        ]
+      },
+      {
+        "id": "R2",
+        "source_unit_ids": [
+          "U1"
+        ],
+        "target_unit_ids": [
+          "U4"
+        ],
+        "relation_form": "DIRECT_EDGE",
+        "shared_constraint_reason": null,
+        "mechanism": "The controller writes the Certificate status Issuing condition and lastFailureTime from the request's terminal state.",
+        "condition": "A terminal request state is reached after the guard",
+        "expected_contract": "Only a request that passed the CSR/NextPrivateKey comparison may drive Issuing=False and lastFailureTime updates.",
+        "requirement_refs": [
+          "O1"
+        ],
+        "obligation_refs": [
+          "A1"
+        ],
+        "support_refs": [
+          "SRC-CU-ddfb73f63384b82e",
+          "SRC-CU-da8fb3ecf5de8318"
+        ]
+      },
+      {
+        "id": "R3",
+        "source_unit_ids": [
+          "U2"
+        ],
+        "target_unit_ids": [
+          "U4"
+        ],
+        "relation_form": "DIRECT_EDGE",
+        "shared_constraint_reason": null,
+        "mechanism": "A stale CertificateRequest carrying a replaced key's CSR reaches terminal handling and its terminal failure propagates to the Certificate status.",
+        "condition": "A stale request for the next revision is still present when terminal handling runs",
+        "expected_contract": "A stale request built from a replaced key must not cause the current Certificate issuance to fail.",
+        "requirement_refs": [
+          "O1"
+        ],
+        "obligation_refs": [
+          "A2"
+        ],
+        "support_refs": [
+          "SRC-CU-6e3f4bd5c23d1cc7",
+          "SRC-CU-81c6b5f1fa9872f7",
+          "SRC-CU-ddfb73f63384b82e"
+        ]
+      }
+    ],
+    "violations": [
+      {
+        "id": "V1",
+        "relation_id": "R1",
+        "broken_behavior": "The issuing controller does not compare the CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.",
+        "causal_explanation": "The pre-terminal guard matches the next private key only against crt.Spec (PrivateKeyMatchesSpec) and the request only against crt.Spec (RequestMatchesSpec); neither compares the request's CSR to the NextPrivateKey Secret, so a request built from a replaced key that still matches crt.Spec passes the guard and its terminal state is acted upon, failing the current issuance; key-mismatch handling is placed in the requestmanager instead.",
+        "evidence_refs": [
+          "SRC-CU-ddfb73f63384b82e",
+          "SRC-CU-ee8f57d972b8f937",
+          "SRC-CU-6e3f4bd5c23d1cc7"
+        ],
+        "support_basis": "STATIC_INFERENCE",
+        "causal_status": "SUPPORTED"
+      }
+    ],
+    "outcome_coverage": [
+      {
+        "outcome_id": "O1",
+        "repair_supported": [
+          "V1"
+        ],
+        "preserve_required": [],
+        "preserve_current_satisfaction": [],
+        "unresolved": []
+      }
+    ],
+    "evidence_refs": [
+      {
+        "id": "SRC-CU-ddfb73f63384b82e",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+          "start_line": 230,
+          "end_line": 309,
+          "column_start": 1
+        },
+        "content_digest": "a9535587696a94d698ff8467a126f7edaf2c2029341a5171e8e45e805a5c89d0",
+        "excerpt": "\t\t// If the private key cannot be parsed here, do nothing as the key manager will handle this.\n\t\tlogf.WithResource(log, nextPrivateKeySecret).Error(err, \"failed to parse next private key, waiting for keymanager controller\")\n\t\treturn nil\n\t}\n\tpkViolations := utilpki.PrivateKeyMatchesSpec(pk, crt.Spec)\n\tif len(pkViolations) > 0 {\n\t\tlogf.WithResource(log, nextPrivateKeySecret).Info(\"stored next private key does not match requirements on Certificate resource, waiting for keymanager controller\", \"violations\", pkViolations)\n\t\treturn nil\n\t}\n\n\t// CertificateRequest revisions begin from 1. If no revision is set on the\n\t// status then assume no revision yet set.\n\tnextRevision := 1\n\tif crt.Status.Revision != nil {\n\t\tnextRevision = *crt.Status.Revision + 1\n\t}\n\n\treqs, err := certificates.ListCertificateRequestsMatchingPredicates(\n\t\tc.certificateRequestLister.CertificateRequests(crt.Namespace),\n\t\tpredicate.CertificateRequestRevision(nextRevision),\n\t\tpredicate.ResourceOwnedBy[*cmapi.CertificateRequest](crt),\n\t)\n\tif err != nil || len(reqs) != 1 {\n\t\t// If error return.\n\t\t// if no error but none exist do nothing.\n\t\t// If no error but multiple exist, then leave to requestmanager controller\n\t\t// to clean up.\n\t\treturn err\n\t}\n\n\treq := reqs[0]\n\tlog = logf.WithResource(log, req)\n\n\t// Verify the CSR options match what is requested in certificate.spec.\n\t// If there are violations in the spec, then the requestmanager will handle this.\n\trequestViolations, err := utilpki.RequestMatchesSpec(req, crt.Spec)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif len(requestViolations) > 0 {\n\t\tlog.V(logf.DebugLevel).Info(\"CertificateRequest does not match Certificate, waiting for keymanager controller\")\n\t\treturn nil\n\t}\n\n\tcertIssuingCond := apiutil.GetCertificateCondition(crt, cmapi.CertificateConditionIssuing)\n\tcrReadyCond := apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady)\n\tif certIssuingCond == nil {\n\t\t// This should never happen\n\t\tlog.V(logf.ErrorLevel).Info(\"Certificate does not have an issuing condition\")\n\t\treturn nil\n\t}\n\t// If the CertificateRequest for this revision failed before the\n\t// Issuing condition was last updated on the Certificate, then it must be a\n\t// failed CertificateRequest from the previous issuance for the same\n\t// revision. Leave it to the certificate-requests controller to delete the\n\t// CertificateRequest and create a new one.\n\tif req.Status.FailureTime != nil &&\n\t\treq.Status.FailureTime.Before(certIssuingCond.LastTransitionTime) && crReadyCond.Reason == cmapi.CertificateRequestReasonFailed {\n\t\tlog.V(logf.InfoLevel).Info(\"Found a failed CertificateRequest from previous issuance, waiting for it to be deleted...\")\n\t\treturn nil\n\t}\n\n\t// Now check if CertificateRequest is in any of the final states so that\n\t// this issuance can be completed as either succeeded or failed. Failed\n\t// issuance will be retried with a delay (the logic for that lives in\n\t// certificates-trigger controller). Final states are: Denied condition\n\t// with status True => fail issuance InvalidRequest  condition with\n\t// status True => fail issuance Ready condition with reason Failed =>\n\t// fail issuance Ready condition with reason Issued => finalize issuance\n\t// as succeeded.\n\n\t// In case of a non-compliant issuer, a CertificateRequest can have both\n\t// Denied status True (set by an approver) and Ready condition with\n\t// reason Issued (set by the issuer). In this case, we prioritize the\n\t// Denied condition and fail the issuance. This is done for consistency\n\t// and also to avoid race conditions between the non-compliant issuer\n\t// and this control loop.\n\n\t// If the certificate request was denied, set the last failure time to\n\t// now, bump the issuance attempts and set the Issuing status condition\n",
+        "origin": "selected candidate CU-ddfb73f63384b82e"
+      },
+      {
+        "id": "SRC-CU-ee8f57d972b8f937",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "design/20200326.extensible-certificate-controller.md",
+          "start_line": 321,
+          "end_line": 388,
+          "column_start": 1
+        },
+        "content_digest": "48f593fdb42744f2340bbbc72d6c93a72fd12317f775891a8d13e8fc5e086b7f",
+        "excerpt": "\nIt is responsible for encoding the private key and certificate data into the\nappropriate format.\n\nOnce the key-pair has been written to `spec.secretName`, it will set the\n`status.revision` field to that of the CertificateRequest and remove the\n`Issuing` status condition (in the same Update call).\n\nIt will behave as follows:\n\n* If the 'Issuing' condition is `True`:\n    * If the `status.nextPrivateKeySecretName` field is not set:\n        * Do nothing\n    * Find the CertificateRequest for `status.revision` + 1\n        * If none exist, do nothing.\n        * If multiple exist, do nothing (`requestmanager` will handle this)\n    * If the CertificateRequest is not in a 'final' state, do nothing.\n    * If it is 'valid':\n        * Verify the public key of the certificate request matches the public key\n          of the stored `status.nextPrivateKeySecretName`\n            * If not, do nothing (`requestmanager` will handle this)\n        * Verify the CSR options match what is requested in `certificate.spec`\n            * If not, do nothing (`requestmanager` will handle this)\n        * Encode and issue the key-pair (store it in the Secret)\n        * Set `status.revision` to revision of the CertificateRequest\n        * Remove `Issuing` status condition\n        * Clear `status.lastFailureTime` (if set)\n        * Log an Event\n    * If not 'valid':\n        * Set `status.lastFailureTime` (if not equal to CertificateRequest)\n        * Set `Issuing` status condition to `False` with reason explaining when\n          the request will be retried\n* If the 'Issuing' condition is `False` or not set:\n    * Do nothing\n\n#### trigger\n\nThe trigger plugin is responsible for observing the state of the currently\nissued `spec.secretName` and the rest of the `certificate.spec` fields to\ndetermine whether a re-issuance is required.\nIt triggers re-issuance by adding the `Issuing` status condition when a new\ncertificate is required.\n\nThese conditions will cause a request to be triggered:\n\n* `spec.secretName` does not exist, or contains data that cannot be decoded.\n* Issuer name/kind annotations on Secret resource do not match current `spec.issuerRef`.\n* The public key of the `tls.key` and `tls.crt` do not match.\n* A CertificateRequest for the current `status.revision` exists and the\n  current requested `certificate.spec` does not match the options on the CSR.\n* If the stored x509 certificate's `NotAfter` is within `spec.renewBefore` of\n  the current time.\n\nAdditionally, the controller is responsible for implement a 'back-off' if\nCertificateRequest resources persistently fail to complete.\nFor now, this will be a continuation of the current behaviour of backing off\nby 1 hour after a request fails.\nEven if any of the above conditions are true, a request will not be triggered\nunless the current time is at least 1 hour after the `status.lastFailureTime`,\nif set.\nIn future we can extend this logic to back-off exponentially by storing a\nlonger history of CertificateRequest resource's failure times, but this is out\nof scope of this proposal.\n\nAnother actor may choose to manually trigger an issuance by setting the\n`Issuing` condition themselves (i.e. with a cert-manager CLI tool, or their own\ncontroller). The `trigger` controller will not interfere in this case and\nwill take no extra action.\n",
+        "origin": "selected candidate CU-ee8f57d972b8f937"
+      },
+      {
+        "id": "SRC-CU-6e3f4bd5c23d1cc7",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificates/requestmanager/requestmanager_controller.go",
+          "start_line": 186,
+          "end_line": 265,
+          "column_start": 1
+        },
+        "content_digest": "6e03068874fa8cf0cec0ccc50263c285cf1cb98be065e8db0e954ba7de205e28",
+        "excerpt": "\t// Discover all 'owned' CertificateRequests\n\trequests, err := certificates.ListCertificateRequestsMatchingPredicates(\n\t\tc.certificateRequestLister.CertificateRequests(crt.Namespace),\n\t\tpredicate.ResourceOwnedBy[*cmapi.CertificateRequest](crt),\n\t)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\t// delete any existing CertificateRequest resources that do not have a\n\t// revision annotation\n\tif requests, err = c.deleteRequestsWithoutRevision(ctx, requests...); err != nil {\n\t\treturn err\n\t}\n\n\tcurrentCertificateRevision := 0\n\tif crt.Status.Revision != nil {\n\t\tcurrentCertificateRevision = *crt.Status.Revision\n\t}\n\tnextRevision := currentCertificateRevision + 1\n\n\trequests, err = requestsWithRevision(requests, nextRevision)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\trequests, err = c.deleteRequestsNotMatchingSpec(ctx, crt, pk.Public(), requests...)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\trequests, err = c.deleteCurrentFailedRequests(ctx, crt, requests...)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tif len(requests) > 1 {\n\t\t// TODO: we should handle this case better, but for now do nothing to\n\t\t//  avoid getting into loops where we keep creating multiple requests\n\t\t//  and deleting them again.\n\t\tlog.V(logf.ErrorLevel).Info(\"Multiple matching CertificateRequest resources exist, delete one of them. This is likely an error and should be reported on the issue tracker!\")\n\t\treturn nil\n\t}\n\n\tif len(requests) == 1 {\n\t\t// Nothing to do as we've already verified that the CertificateRequest\n\t\t// is up to date above.\n\t\treturn nil\n\t}\n\n\treturn c.createNewCertificateRequest(ctx, crt, pk, nextRevision, nextPrivateKeySecret.Name)\n}\n\nfunc (c *controller) deleteCurrentFailedRequests(ctx context.Context, crt *cmapi.Certificate, reqs ...*cmapi.CertificateRequest) ([]*cmapi.CertificateRequest, error) {\n\tlog := logf.FromContext(ctx).WithValues(\"Certificate\", crt.Name)\n\tvar remaining []*cmapi.CertificateRequest\n\tfor _, req := range reqs {\n\t\tlog = logf.WithRelatedResource(log, req)\n\n\t\t// Check if there are any 'current' CertificateRequests that\n\t\t// failed during the previous issuance cycle. Those should be\n\t\t// deleted so that a new one gets created and the issuance is\n\t\t// re-tried. In practice no more than one CertificateRequest is\n\t\t// expected at this point.\n\t\tcrReadyCond := apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady)\n\t\tif crReadyCond == nil || crReadyCond.Status != cmmeta.ConditionFalse || crReadyCond.Reason != cmapi.CertificateRequestReasonFailed {\n\t\t\tremaining = append(remaining, req)\n\t\t\tcontinue\n\t\t}\n\n\t\tcertIssuingCond := apiutil.GetCertificateCondition(crt, cmapi.CertificateConditionIssuing)\n\t\tif certIssuingCond == nil {\n\t\t\t// This should never happen\n\t\t\tlog.V(logf.ErrorLevel).Info(\"Certificate does not have Issuing condition\")\n\t\t\treturn nil, nil\n\t\t}\n\t\t// If the Issuing condition on the Certificate is newer than the\n\t\t// failure time on CertificateRequest, it means that the\n\t\t// CertificateRequest failed during the previous issuance (for the\n\t\t// same revision). If it is a CertificateRequest that failed\n",
+        "origin": "selected candidate CU-6e3f4bd5c23d1cc7"
+      },
+      {
+        "id": "SRC-CU-da8fb3ecf5de8318",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/apis/certmanager/v1/types_certificate.go",
+          "start_line": 646,
+          "end_line": 715,
+          "column_start": 1
+        },
+        "content_digest": "4c73cb3734d067f889a4c408c27313f1fc9f73ab486f0642a49f5d921fa5f285",
+        "excerpt": "type CertificateStatus struct {\n\t// List of status conditions to indicate the status of certificates.\n\t// Known condition types are `Ready` and `Issuing`.\n\t// +optional\n\t// +listType=map\n\t// +listMapKey=type\n\tConditions []CertificateCondition `json:\"conditions,omitempty\"`\n\n\t// LastFailureTime is set only if the latest issuance for this\n\t// Certificate failed and contains the time of the failure. If an\n\t// issuance has failed, the delay till the next issuance will be\n\t// calculated using formula time.Hour * 2 ^ (failedIssuanceAttempts -\n\t// 1). If the latest issuance has succeeded this field will be unset.\n\t// +optional\n\tLastFailureTime *metav1.Time `json:\"lastFailureTime,omitempty\"`\n\n\t// The time after which the certificate stored in the secret named\n\t// by this resource in `spec.secretName` is valid.\n\t// +optional\n\tNotBefore *metav1.Time `json:\"notBefore,omitempty\"`\n\n\t// The expiration time of the certificate stored in the secret named\n\t// by this resource in `spec.secretName`.\n\t// +optional\n\tNotAfter *metav1.Time `json:\"notAfter,omitempty\"`\n\n\t// RenewalTime is the time at which the certificate will be next\n\t// renewed.\n\t// If not set, no upcoming renewal is scheduled.\n\t// +optional\n\tRenewalTime *metav1.Time `json:\"renewalTime,omitempty\"`\n\n\t// The current 'revision' of the certificate as issued.\n\t//\n\t// When a CertificateRequest resource is created, it will have the\n\t// `cert-manager.io/certificate-revision` set to one greater than the\n\t// current value of this field.\n\t//\n\t// Upon issuance, this field will be set to the value of the annotation\n\t// on the CertificateRequest resource used to issue the certificate.\n\t//\n\t// Persisting the value on the CertificateRequest resource allows the\n\t// certificates controller to know whether a request is part of an old\n\t// issuance or if it is part of the ongoing revision's issuance by\n\t// checking if the revision value in the annotation is greater than this\n\t// field.\n\t// +optional\n\tRevision *int `json:\"revision,omitempty\"`\n\n\t// The name of the Secret resource containing the private key to be used\n\t// for the next certificate iteration.\n\t// The keymanager controller will automatically set this field if the\n\t// `Issuing` condition is set to `True`.\n\t// It will automatically unset this field when the Issuing condition is\n\t// not set or False.\n\t// +optional\n\tNextPrivateKeySecretName *string `json:\"nextPrivateKeySecretName,omitempty\"`\n\n\t// The number of continuous failed issuance attempts up till now. This\n\t// field gets removed (if set) on a successful issuance and gets set to\n\t// 1 if unset and an issuance has failed. If an issuance has failed, the\n\t// delay till the next issuance will be calculated using formula\n\t// time.Hour * 2 ^ (failedIssuanceAttempts - 1).\n\t// +optional\n\tFailedIssuanceAttempts *int `json:\"failedIssuanceAttempts,omitempty\"`\n\n\t// ACME stores information that is fetched from the ACME CA server.\n\t// +optional\n\tACME *CertificateACMEStatus `json:\"acme,omitempty\"`\n}\n",
+        "origin": "selected candidate CU-da8fb3ecf5de8318"
+      },
+      {
+        "id": "SRC-CU-81c6b5f1fa9872f7",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "design/20190708.certificate-request-crd.md",
+          "start_line": 401,
+          "end_line": 480,
+          "column_start": 1
+        },
+        "content_digest": "ebf48dc2d529242675fc394bb5f2ad723078e8db8da8c4d5746f5a4d68871c40",
+        "excerpt": "- Check the group belongs to the owning `Issuer`, exit if not.\n- Check if `CertificateRequest` is in a terminal failed state.\n  A controller may choose to add additional conditions to a failed `CertificateRequest`, but must not attempt to issue a certificate.\n  Currently terminal failed states are:\n  - `Ready` condition with a `Failed` reason // usually set by the issuer\n  - `InvalidRequest` condition with `True` status // usually set by the issuer\n  - `Denied` condition with `True` status // usually set by approver\n\n- Check the `Issuer` type is of the same type, exit if not.\n- Verify the Spec of the `CertificateRequest`.\n- If a certificate exits then update the status if needed and exit.\n- Sign the certificate via the Issuer using the contents of Spec.\n\nIt is worth noting that whether the certificate is invalid, out-of-date or\nfailed then the controller should take no further action on the resource. It is\nthe responsibility of a higher level controller such as the `Certificate`\ncontroller to take further action to retry the certificate issuance through\nmanaging the life cycle of the `CertificateRequest` resources.\n\nWith all `Issuer`s updated with `CertificateRequest` controllers, the\n`Certificate` controller will be migrated to begin to use and manage the life\ncycle `CertificateRequest`s to resolve it's Spec. Further concrete\nimplementation details TBD.\n\n\n#### ACME\n\nThe `CertificateRequest` controller is responsible for creating `Order`\nresources to fulfil ACME certificate requests. If the `Order` fails due to a\nnon-networking or other non-transient issue then the `Order` is marked as failed\n- this means the `CertificateRequest` too shall be marked as failed and no\nfurther processing will take place by the `CertificateRequest` controller on\nthis resource.\n\n#### Issuing Controller\n\nIssuing controller considers all Denied CertificateRequests to be in a final failed state.\nThe issuance will be failed and will be repeatedly retried with an exponential backoff ../20220118.certificate-issuance-exponential-backoff.md.\nIf the cause of the denial was a misconfigured Certificate spec, the issuance will be retried immediately once the spec is corrected.\nIf the cause of the denial was misconfigured policy resources, a user who has fixed the resources and wants to retry immediately can do so using [cmctl renew](https://cert-manager.io/docs/reference/cmctl/#renew)\n\nThe issuing controller does not check Approved condition. It is the issuer's\nresponsibility not to issue certificates for CertificateRequests that have not\nbeen approved.\n\n### Failure\n\nA `CertificateRequest` is considered in a final failed state if:\n- it has a Ready condition with Failed reason\n- it has a Denied condition with True status\n- it has InvalidRequest reason with True status\n\n### Internal API Resource Behaviour\n\nThe group name of `IssuerRef` inside `CertificateRequest`s is to be defaulted\nto \"cert-manager.io\" if the field is empty, using a mutating webhook. This\nmeans that if unspecified, `CertificateRequest` objects will be put into the\nownership of the default pool of issuers in the cert-manager project.\n\nUntil the mutating webhook is fully implemented, we will handle defaulting\ninternally in the controller.\n\n### CertificateRequest Annotations\nIn order for `CertificateRequest` controllers to resolve requests, extra\ninformation may be needed that is not present in the API Spec. To pass on this\ninformation, a set of one or more annotations should be defined, with reliable\nvalue pairs. These annotations should be considered optional. Any\n`CertificateRequest` controller that relies on these to function should\nfallback gracefully or be marked as failed in the event a required annotation is\nmissing. The currently defined annotations are:\n\n- `cert-manager.io/private-key-secret-name`: The name of the secret, in the\n  same namespace as the `CertificateRequest`, that stores the private key which\n  was used to sign the x509 certificate signing request. This is required by the\n  `SelfSigning` issuer to sign its own certificate. If this annotation is missing\n  or empty, the `SelfSign` `CertificateRequest` controller will mark the resource\n  as failed and no further processing will take place on it. Currently the\n  `Certificate` controller adds this annotation to all `CertificateRequest`\n  resources it creates with the defined `SecretName` in the Spec of the\n  `Certificate`.\n",
+        "origin": "selected candidate CU-81c6b5f1fa9872f7"
+      },
+      {
+        "id": "OBS1",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "PUBLIC_OBSERVATION",
+        "evidence_kind": "EXECUTION_ONLY",
+        "locator": {
+          "path": "launcher/tool.stdout",
+          "file_sha256": "1f6638b081ee330a84b9f83367d6ed4821e69395697ef8d5f20de7fb802aeadc",
+          "start_byte": 0,
+          "copied_bytes": 303,
+          "truncated": false,
+          "whole_file_read": true
+        },
+        "content_digest": "1f6638b081ee330a84b9f83367d6ed4821e69395697ef8d5f20de7fb802aeadc",
+        "excerpt": "{\"case_id\": \"RW-CERTMANAGER-9116\", \"status\": \"EXECUTION_PASS\", \"hidden_semantic_evaluation\": \"NOT_RUN\", \"private_materials_loaded\": false, \"scenarios\": [{\"scenario\": \"public-issuing-controller-build\", \"exit_code\": 0, \"elapsed_seconds\": 191.50015433132648, \"timed_out\": false, \"output_limited\": false}]}\n",
+        "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+      },
+      {
+        "id": "OBS2",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "PUBLIC_OBSERVATION",
+        "evidence_kind": "EXECUTION_ONLY",
+        "locator": {
+          "path": "raw/public_execution.json",
+          "file_sha256": "bf8eabb293f6a3cf751ed962f6b28fc36485f3b3621e46bbe72b43c0eecb913f",
+          "start_byte": 0,
+          "copied_bytes": 359,
+          "truncated": false,
+          "whole_file_read": true
+        },
+        "content_digest": "bf8eabb293f6a3cf751ed962f6b28fc36485f3b3621e46bbe72b43c0eecb913f",
+        "excerpt": "{\n  \"case_id\": \"RW-CERTMANAGER-9116\",\n  \"status\": \"EXECUTION_PASS\",\n  \"hidden_semantic_evaluation\": \"NOT_RUN\",\n  \"private_materials_loaded\": false,\n  \"scenarios\": [\n    {\n      \"scenario\": \"public-issuing-controller-build\",\n      \"exit_code\": 0,\n      \"elapsed_seconds\": 191.50015433132648,\n      \"timed_out\": false,\n      \"output_limited\": false\n    }\n  ]\n}\n",
+        "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+      }
+    ],
+    "evidence_gaps": [],
+    "status": "READY",
+    "clause_treatments": [
+      {
+        "source_ref": "requirement_text:0:231",
+        "disposition": "OBLIGATION",
+        "obligation_refs": [
+          "A1",
+          "A2"
+        ],
+        "rationale": "The clause states the issuing controller's guard predicate (CSR vs current NextPrivateKey Secret before terminal-state action) and the required non-failure effect for a stale replaced-key request."
+      }
+    ],
+    "schema_version": "ce.diagnosis_packet.v1_1",
+    "run_id": "d2277d11-edb0-436f-ae50-c927fc1b7bd4",
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+    "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+    "requirement_spec": {
+      "schema_version": "ce.requirement_spec.v1_1",
+      "raw_text": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+      "intent_summary": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+      "outcomes": [
+        {
+          "id": "O1",
+          "statement": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+          "condition": null,
+          "source_refs": [
+            "requirement_text:0:231"
+          ],
+          "support": "EXPLICIT"
+        }
+      ],
+      "constraints": [],
+      "trigger": null,
+      "unknowns": [],
+      "status": "READY",
+      "clauses": [
+        {
+          "id": "Q1",
+          "text": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.",
+          "source_ref": "requirement_text:0:231"
+        }
+      ],
+      "traceability_required": true,
+      "operation_consistency_required": true,
+      "lineage_required": true,
+      "prior_obligation_lineage": {}
+    },
+    "obligation_lineage": {
+      "schema_version": "ce.obligation_lineage.v1",
+      "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+      "requirement_digest": "d4dd65c54bbcc64f5a7884e7ed19a2a3064ebbe07e98a3660520e2d84d40a10d",
+      "nodes": {
+        "OB-2ac55d40408c2e6df4a141ed": {
+          "id": "OB-2ac55d40408c2e6df4a141ed",
+          "definition": {
+            "id": "A1",
+            "outcome_id": "O1",
+            "statement": "Before acting on terminal CertificateRequest states, the issuing controller must compare the CertificateRequest's CSR with the current NextPrivateKey Secret.",
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "support": "EXPLICIT",
+            "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+            "stable_obligation_key": "OB-2ac55d40408c2e6df4a141ed"
+          },
+          "aliases": [],
+          "sources": [
+            {
+              "source_refs": [
+                "requirement_text:0:231"
+              ],
+              "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+              "scope_quote": null
+            }
+          ],
+          "parents": [],
+          "children": [],
+          "residual": null,
+          "kind": "OBLIGATION"
+        },
+        "OB-af99a9da4582d6a340b9072d": {
+          "id": "OB-af99a9da4582d6a340b9072d",
+          "definition": {
+            "id": "A2",
+            "outcome_id": "O1",
+            "statement": "A stale CertificateRequest built from a replaced key must not fail the current Certificate issuance.",
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "support": "EXPLICIT",
+            "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance.",
+            "stable_obligation_key": "OB-af99a9da4582d6a340b9072d"
+          },
+          "aliases": [],
+          "sources": [
+            {
+              "source_refs": [
+                "requirement_text:0:231"
+              ],
+              "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance.",
+              "scope_quote": null
+            }
+          ],
+          "parents": [],
+          "children": [],
+          "residual": null,
+          "kind": "OBLIGATION"
+        }
+      },
+      "events": [
+        {
+          "kind": "REGISTER",
+          "id": "LE-0635f097c83a7741a6723cd6",
+          "parent_ids": [],
+          "atom_refs": [
+            "A1"
+          ],
+          "resolved_ids": {
+            "A1": "OB-2ac55d40408c2e6df4a141ed"
+          },
+          "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+          "rationale": "Exact runner-bound source identity; original semantics retained"
+        },
+        {
+          "kind": "REGISTER",
+          "id": "LE-14be460b22d8a4277facd2f4",
+          "parent_ids": [],
+          "atom_refs": [
+            "A2"
+          ],
+          "resolved_ids": {
+            "A2": "OB-af99a9da4582d6a340b9072d"
+          },
+          "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+          "rationale": "Exact runner-bound source identity; original semantics retained"
+        }
+      ],
+      "bindings": {
+        "A1": "OB-2ac55d40408c2e6df4a141ed",
+        "A2": "OB-af99a9da4582d6a340b9072d"
+      },
+      "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba"
+    }
+  },
+  "changeset": {
+    "schema_version": "ce.semantic_changeset.v1_1",
+    "run_id": "d2277d11-edb0-436f-ae50-c927fc1b7bd4",
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+    "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+    "diagnosis_digest": "9dde115bc59581efa14b7e507265fa61b093652fe69bfa7d5028d9c2d54d7430",
+    "goal": "Restore the issuing controller guard that compares a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states, so a stale replaced-key request cannot fail the current Certificate issuance.",
+    "planned_violation_ids": [
+      "V1"
+    ],
+    "changes": [
+      {
+        "id": "C1",
+        "target": {
+          "kind": "EXISTING",
+          "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+          "locator": {
+            "start_line": 230,
+            "end_line": 309
+          },
+          "unit_refs": [
+            "U1",
+            "U3",
+            "U4"
+          ],
+          "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+          "content_digest": "33cfb3ab055a4a168ea6db02bd9ea93f7450ede34b02cc7e14be1189ac7b9233"
+        },
+        "operation": "MODIFY",
+        "semantic_action": "In the issuing controller decision loop, after retrieving the single CertificateRequest for nextRevision and before handling terminal request conditions, add a guard that compares the request CSR public key with pk.Public() from the current NextPrivateKey Secret. On mismatch, log and return nil without updating Certificate status. Leave existing PrivateKeyMatchesSpec and RequestMatchesSpec checks and terminal handling intact after the new guard.",
+        "intent": "Restore A1/A2: only a CertificateRequest whose CSR matches the current NextPrivateKey Secret may drive terminal issuance outcomes; a stale request built from a replaced key must not set Issuing=False or lastFailureTime.",
+        "violation_refs": [
+          "V1"
+        ],
+        "postcondition_refs": [
+          "P1"
+        ],
+        "depends_on": []
+      }
+    ],
+    "postconditions": [
+      {
+        "id": "P1",
+        "statement": "When a Certificate is in Issuing state and a CertificateRequest for the next revision exists, if the request CSR public key does not match the current NextPrivateKey Secret, the issuing controller does not process the request terminal conditions and returns without setting Issuing=False or lastFailureTime.",
+        "requirement_refs": [
+          "O1"
+        ],
+        "obligation_refs": [
+          "A1",
+          "A2"
+        ],
+        "relation_refs": [
+          "R1",
+          "R2",
+          "R3"
+        ],
+        "planned_check": "No public behavioral probe is available; the public runner only builds the issuing controller package (OBS1/OBS2). Source review must confirm the new guard precedes terminal handling, and the package build must pass.",
+        "check_scope": "pkg/controller/certificates/issuing/issuing_controller.go decision loop before terminal CertificateRequest condition handling; public observation limited to package build.",
+        "verification_kind": "NOT_PUBLICLY_OBSERVABLE",
+        "stable_obligation_keys": [
+          "OB-2ac55d40408c2e6df4a141ed",
+          "OB-af99a9da4582d6a340b9072d"
+        ]
+      }
+    ],
+    "preserve_constraints": [],
+    "open_obligations": [
+      {
+        "id": "O1-R1",
+        "outcome_id": "O1",
+        "obligation_refs": [
+          "A1",
+          "A2"
+        ],
+        "statement": "Behavioral verification that a stale CertificateRequest built from a replaced key is ignored by the issuing controller before terminal-state handling is not publicly observable.",
+        "reason": "Public execution capability is limited to building the issuing controller package. No controller decision or cluster convergence was executed, so the planned production relation remains unverified beyond source-level inference and build success.",
+        "verification_kind": "NOT_PUBLICLY_OBSERVABLE",
+        "stable_obligation_keys": [
+          "OB-2ac55d40408c2e6df4a141ed",
+          "OB-af99a9da4582d6a340b9072d"
+        ]
+      }
+    ],
+    "outcome_coverage": [
+      {
+        "outcome_id": "O1",
+        "repair_supported": [
+          "V1"
+        ],
+        "preserve_required": [],
+        "unresolved": [
+          "O1"
+        ]
+      }
+    ],
+    "status": "READY_PARTIAL",
+    "preservation_impact": [],
+    "evidence_gaps": [],
+    "obligation_lineage": {
+      "schema_version": "ce.obligation_lineage.v1",
+      "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+      "requirement_digest": "d4dd65c54bbcc64f5a7884e7ed19a2a3064ebbe07e98a3660520e2d84d40a10d",
+      "nodes": {
+        "OB-2ac55d40408c2e6df4a141ed": {
+          "id": "OB-2ac55d40408c2e6df4a141ed",
+          "definition": {
+            "id": "A1",
+            "outcome_id": "O1",
+            "statement": "Before acting on terminal CertificateRequest states, the issuing controller must compare the CertificateRequest's CSR with the current NextPrivateKey Secret.",
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "support": "EXPLICIT",
+            "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+            "stable_obligation_key": "OB-2ac55d40408c2e6df4a141ed"
+          },
+          "aliases": [],
+          "sources": [
+            {
+              "source_refs": [
+                "requirement_text:0:231"
+              ],
+              "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+              "scope_quote": null
+            }
+          ],
+          "parents": [],
+          "children": [],
+          "residual": null,
+          "kind": "OBLIGATION"
+        },
+        "OB-af99a9da4582d6a340b9072d": {
+          "id": "OB-af99a9da4582d6a340b9072d",
+          "definition": {
+            "id": "A2",
+            "outcome_id": "O1",
+            "statement": "A stale CertificateRequest built from a replaced key must not fail the current Certificate issuance.",
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "support": "EXPLICIT",
+            "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance.",
+            "stable_obligation_key": "OB-af99a9da4582d6a340b9072d"
+          },
+          "aliases": [],
+          "sources": [
+            {
+              "source_refs": [
+                "requirement_text:0:231"
+              ],
+              "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance.",
+              "scope_quote": null
+            }
+          ],
+          "parents": [],
+          "children": [],
+          "residual": null,
+          "kind": "OBLIGATION"
+        }
+      },
+      "events": [
+        {
+          "kind": "REGISTER",
+          "id": "LE-0635f097c83a7741a6723cd6",
+          "parent_ids": [],
+          "atom_refs": [
+            "A1"
+          ],
+          "resolved_ids": {
+            "A1": "OB-2ac55d40408c2e6df4a141ed"
+          },
+          "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+          "rationale": "Exact runner-bound source identity; original semantics retained"
+        },
+        {
+          "kind": "REGISTER",
+          "id": "LE-14be460b22d8a4277facd2f4",
+          "parent_ids": [],
+          "atom_refs": [
+            "A2"
+          ],
+          "resolved_ids": {
+            "A2": "OB-af99a9da4582d6a340b9072d"
+          },
+          "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+          "rationale": "Exact runner-bound source identity; original semantics retained"
+        }
+      ],
+      "bindings": {
+        "A1": "OB-2ac55d40408c2e6df4a141ed",
+        "A2": "OB-af99a9da4582d6a340b9072d"
+      },
+      "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba"
+    }
+  },
+  "model_calls": [
+    {
+      "stage": "DIAGNOSIS",
+      "prompt_version": "diagnosis.v1.1.26",
+      "request_metadata": {
+        "run_id": "d2277d11-edb0-436f-ae50-c927fc1b7bd4",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+        "schema_in_prompt": true,
+        "selected_ids": [
+          "CU-14647a333787b689",
+          "CU-ee8f57d972b8f937",
+          "CU-8142745e66f35f6a",
+          "CU-ddfb73f63384b82e",
+          "CU-da8fb3ecf5de8318",
+          "CU-58129a427dd71f72",
+          "CU-d165f91108eb07af",
+          "CU-84f33394a20626dc",
+          "CU-6e3f4bd5c23d1cc7",
+          "CU-81c6b5f1fa9872f7",
+          "CU-0200e62c77d0ae1f",
+          "CU-fa84b213eb681d13"
+        ],
+        "dropped_ids": [
+          "CU-15238b1657ae38b4",
+          "CU-44754b7198c9ca02",
+          "CU-1c754864f78db37c",
+          "CU-92711c5d49d830be",
+          "CU-96f73ef0d171ccb6",
+          "CU-f256a39f77d11122",
+          "CU-b8e669a1b248a132",
+          "CU-88f9f5d1acf03a9b",
+          "CU-eef5c440a4e5c35c",
+          "CU-159d277031f7c261",
+          "CU-38ae2c2ac17ea04e",
+          "CU-47a4f3f1c424b5ed",
+          "CU-cd499b5f03a930aa",
+          "CU-a36417010a661ff1",
+          "CU-2ee71431dff09a15",
+          "CU-34798c77d0a36ab8",
+          "CU-726ed600b4a49ac0",
+          "CU-338ce37b2171433e",
+          "CU-848cc3cfd63e63ab",
+          "CU-93256040ed0225e5",
+          "CU-fb6b54285a7cfcdf",
+          "CU-bacac746404d74f4",
+          "CU-e8140597007ab882",
+          "CU-b3cfcd589cd9b0dc",
+          "CU-fad9c929a8e31a03",
+          "CU-e14039c66230558a",
+          "CU-6333bf2e6aefb0d8",
+          "CU-46eb53bfdadf3617",
+          "CU-8122512b50143f72",
+          "CU-8cf58507a586d6fd",
+          "CU-858049ecc240f5ae",
+          "CU-542fe522d23a0bf6",
+          "CU-7005f97b2ac17f7f",
+          "CU-26157fae6ba48012",
+          "CU-4fb8d7d642c5d680",
+          "CU-0f9ca7111bc53c76",
+          "CU-486f01c0b892a906",
+          "CU-6f072ac094ed9daa",
+          "CU-62658eb603a896ba",
+          "CU-0d4ed2c717d76041",
+          "CU-ffdac7e9e3130396",
+          "CU-3a1d8862cf2d493a",
+          "CU-fe74c7e1f15c0cf5",
+          "CU-cdf3bcfed877c6b9",
+          "CU-7ca6b535826e7a19",
+          "CU-73da76e43ecd4078",
+          "CU-e9981e05f14c7721",
+          "CU-f01eb3e40fc02230",
+          "CU-efce2b5299207b75",
+          "CU-0da01258a9498d39",
+          "CU-d6ef913f18e02717",
+          "CU-cdec7662e3a0612d",
+          "CU-3f6b1965768997d2",
+          "CU-401eae203622d96e",
+          "CU-7e73bb415fa6f4b9",
+          "CU-ac752c28a71a879a",
+          "CU-d1adc249c53cf43b",
+          "CU-4d037e82d56ee19c",
+          "CU-4dad16d68e51346c",
+          "CU-cdb4891729b7e0d7",
+          "CU-6e596e01b737b664",
+          "CU-b5cf0e754b7d31af",
+          "CU-0cd1b304de977209",
+          "CU-ff6ad35dafab2e09",
+          "CU-1b17068c64d7e80b",
+          "CU-ec76a1f50eb0316c",
+          "CU-a3867a1cf4320e32",
+          "CU-a47d4ebd6a580fc6"
+        ],
+        "gap_delivery": {
+          "status": "DELIVERED",
+          "records": [],
+          "missing_required_ids": [],
+          "interpretation": "Exact endpoint excerpts delivered; does not prove causal relevance or resolve gaps"
+        },
+        "context_audit": [
+          {
+            "request_tokens": 87780,
+            "input_limit": 120000,
+            "reserved_output_tokens": 16384,
+            "context_stage": "INITIAL_DIAGNOSIS",
+            "total_context_limit": 220000,
+            "selected_ids": [
+              "CU-14647a333787b689",
+              "CU-ee8f57d972b8f937",
+              "CU-8142745e66f35f6a",
+              "CU-ddfb73f63384b82e",
+              "CU-da8fb3ecf5de8318",
+              "CU-58129a427dd71f72",
+              "CU-d165f91108eb07af",
+              "CU-84f33394a20626dc",
+              "CU-6e3f4bd5c23d1cc7",
+              "CU-81c6b5f1fa9872f7",
+              "CU-0200e62c77d0ae1f",
+              "CU-fa84b213eb681d13"
+            ],
+            "surviving_reference_edges": 0,
+            "drop_reasons": {
+              "CU-15238b1657ae38b4": "TOP_N_LIMIT",
+              "CU-44754b7198c9ca02": "TOP_N_LIMIT",
+              "CU-1c754864f78db37c": "TOP_N_LIMIT",
+              "CU-92711c5d49d830be": "TOP_N_LIMIT",
+              "CU-96f73ef0d171ccb6": "TOP_N_LIMIT",
+              "CU-f256a39f77d11122": "TOP_N_LIMIT",
+              "CU-b8e669a1b248a132": "TOP_N_LIMIT",
+              "CU-88f9f5d1acf03a9b": "TOP_N_LIMIT",
+              "CU-eef5c440a4e5c35c": "TOP_N_LIMIT",
+              "CU-159d277031f7c261": "TOP_N_LIMIT",
+              "CU-38ae2c2ac17ea04e": "TOP_N_LIMIT",
+              "CU-47a4f3f1c424b5ed": "TOP_N_LIMIT",
+              "CU-cd499b5f03a930aa": "TOP_N_LIMIT",
+              "CU-a36417010a661ff1": "TOP_N_LIMIT",
+              "CU-2ee71431dff09a15": "TOP_N_LIMIT",
+              "CU-34798c77d0a36ab8": "TOP_N_LIMIT",
+              "CU-726ed600b4a49ac0": "TOP_N_LIMIT",
+              "CU-338ce37b2171433e": "TOP_N_LIMIT",
+              "CU-848cc3cfd63e63ab": "TOP_N_LIMIT",
+              "CU-93256040ed0225e5": "TOP_N_LIMIT",
+              "CU-fb6b54285a7cfcdf": "TOP_N_LIMIT",
+              "CU-bacac746404d74f4": "TOP_N_LIMIT",
+              "CU-e8140597007ab882": "TOP_N_LIMIT",
+              "CU-b3cfcd589cd9b0dc": "TOP_N_LIMIT",
+              "CU-fad9c929a8e31a03": "TOP_N_LIMIT",
+              "CU-e14039c66230558a": "TOP_N_LIMIT",
+              "CU-6333bf2e6aefb0d8": "TOP_N_LIMIT",
+              "CU-46eb53bfdadf3617": "TOP_N_LIMIT",
+              "CU-8122512b50143f72": "TOP_N_LIMIT",
+              "CU-8cf58507a586d6fd": "TOP_N_LIMIT",
+              "CU-858049ecc240f5ae": "TOP_N_LIMIT",
+              "CU-542fe522d23a0bf6": "TOP_N_LIMIT",
+              "CU-7005f97b2ac17f7f": "TOP_N_LIMIT",
+              "CU-26157fae6ba48012": "TOP_N_LIMIT",
+              "CU-4fb8d7d642c5d680": "TOP_N_LIMIT",
+              "CU-0f9ca7111bc53c76": "TOP_N_LIMIT",
+              "CU-486f01c0b892a906": "TOP_N_LIMIT",
+              "CU-6f072ac094ed9daa": "TOP_N_LIMIT",
+              "CU-62658eb603a896ba": "TOP_N_LIMIT",
+              "CU-0d4ed2c717d76041": "TOP_N_LIMIT",
+              "CU-ffdac7e9e3130396": "TOP_N_LIMIT",
+              "CU-3a1d8862cf2d493a": "TOP_N_LIMIT",
+              "CU-fe74c7e1f15c0cf5": "TOP_N_LIMIT",
+              "CU-cdf3bcfed877c6b9": "TOP_N_LIMIT",
+              "CU-7ca6b535826e7a19": "TOP_N_LIMIT",
+              "CU-73da76e43ecd4078": "TOP_N_LIMIT",
+              "CU-e9981e05f14c7721": "TOP_N_LIMIT",
+              "CU-f01eb3e40fc02230": "TOP_N_LIMIT",
+              "CU-efce2b5299207b75": "TOP_N_LIMIT",
+              "CU-0da01258a9498d39": "TOP_N_LIMIT",
+              "CU-d6ef913f18e02717": "TOP_N_LIMIT",
+              "CU-cdec7662e3a0612d": "TOP_N_LIMIT",
+              "CU-3f6b1965768997d2": "TOP_N_LIMIT",
+              "CU-401eae203622d96e": "TOP_N_LIMIT",
+              "CU-7e73bb415fa6f4b9": "TOP_N_LIMIT",
+              "CU-ac752c28a71a879a": "TOP_N_LIMIT",
+              "CU-d1adc249c53cf43b": "TOP_N_LIMIT",
+              "CU-4d037e82d56ee19c": "TOP_N_LIMIT",
+              "CU-4dad16d68e51346c": "TOP_N_LIMIT",
+              "CU-cdb4891729b7e0d7": "TOP_N_LIMIT",
+              "CU-6e596e01b737b664": "TOP_N_LIMIT",
+              "CU-b5cf0e754b7d31af": "TOP_N_LIMIT",
+              "CU-0cd1b304de977209": "TOP_N_LIMIT",
+              "CU-ff6ad35dafab2e09": "TOP_N_LIMIT",
+              "CU-1b17068c64d7e80b": "TOP_N_LIMIT",
+              "CU-ec76a1f50eb0316c": "TOP_N_LIMIT",
+              "CU-a3867a1cf4320e32": "TOP_N_LIMIT",
+              "CU-a47d4ebd6a580fc6": "TOP_N_LIMIT"
+            }
+          }
+        ]
+      },
+      "response_metadata": {
+        "output_mode_requested": "json_object",
+        "output_mode_effective": "json_object",
+        "output_fallback_reason": null,
+        "application_validation_required": true,
+        "endpoint_schema_support": "UNKNOWN",
+        "model_identity_policy": "require_match",
+        "requested_output_schema_sha256": "61fcd48dc0a45a57c31b3b424979c9e1d164438d608bc5ce0e62e786a9118705",
+        "wire_output_schema_sha256": null,
+        "provider": "openai-compatible",
+        "prompt_version": "diagnosis.v1.1.26",
+        "adapter_class": "contractedge.model.provider.OpenAICompatibleProvider",
+        "strict_schema": false,
+        "effective_thinking": "enabled",
+        "effective_reasoning_effort": "low",
+        "requested_model": "deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "model": "deepseek-v4.1-flash",
+        "model_identity_status": "MATCH",
+        "model_identity_verified": true,
+        "usage": {
+          "prompt_tokens": 24753,
+          "completion_tokens": 13284,
+          "total_tokens": 38037,
+          "completion_tokens_details": {
+            "reasoning_tokens": 11338
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 2048
+          }
+        },
+        "request_id": "03340d3c-d78d-4745-996c-6e8ad3afda4c",
+        "finish_reason": "stop",
+        "money_usage_identity_verified": true
+      },
+      "response_content": "{\"requirement_horizon\": [\"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\"], \"observed_boundary\": \"Public observation is limited to the issuing controller package build (OBS1, OBS2: EXECUTION_PASS, hidden_semantic_evaluation NOT_RUN); no controller decision or cluster convergence was executed or observed.\", \"inferred_causal_path\": [\"A CertificateRequest is created from the NextPrivateKey Secret current at creation time.\", \"Replacing the key leaves an older CertificateRequest for the next revision carrying the previous key's CSR.\", \"The issuing controller reads the current next private key and matches it only against crt.Spec (PrivateKeyMatchesSpec).\", \"The issuing controller matches the CertificateRequest only against crt.Spec (RequestMatchesSpec), never against the NextPrivateKey Secret.\", \"A stale request that still matches crt.Spec passes both checks and is handled in its terminal state.\", \"Terminal failure handling sets Issuing=False and lastFailureTime, failing the current Certificate issuance.\"], \"unverified_outcomes\": [\"O1\"], \"obligation_atoms\": [{\"id\": \"A1\", \"outcome_id\": \"O1\", \"statement\": \"Before acting on terminal CertificateRequest states, the issuing controller must compare the CertificateRequest's CSR with the current NextPrivateKey Secret.\", \"source_refs\": [\"requirement_text:0:231\"], \"support\": \"EXPLICIT\", \"source_quote\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states\"}, {\"id\": \"A2\", \"outcome_id\": \"O1\", \"statement\": \"A stale CertificateRequest built from a replaced key must not fail the current Certificate issuance.\", \"source_refs\": [\"requirement_text:0:231\"], \"support\": \"EXPLICIT\", \"source_quote\": \"a stale request built from a replaced key must not fail the current Certificate issuance.\"}], \"units\": [{\"id\": \"U1\", \"role\": \"issuing controller decision loop\", \"kind\": \"controller\", \"semantic_role_class\": \"RUNTIME_CONSUMER\", \"existence\": \"PRESENT\", \"locator_refs\": [\"SRC-CU-ddfb73f63384b82e\"], \"requirement_refs\": [\"O1\"]}, {\"id\": \"U2\", \"role\": \"CertificateRequest resource and its terminal Ready/Denied/InvalidRequest conditions\", \"kind\": \"kubernetes resource\", \"semantic_role_class\": \"GENERATED_STATE\", \"existence\": \"PRESENT\", \"locator_refs\": [\"SRC-CU-6e3f4bd5c23d1cc7\", \"SRC-CU-81c6b5f1fa9872f7\"], \"requirement_refs\": [\"O1\"]}, {\"id\": \"U3\", \"role\": \"NextPrivateKey Secret holding the current private key for the next iteration\", \"kind\": \"kubernetes resource\", \"semantic_role_class\": \"GENERATED_STATE\", \"existence\": \"PRESENT\", \"locator_refs\": [\"SRC-CU-ddfb73f63384b82e\", \"SRC-CU-ee8f57d972b8f937\"], \"requirement_refs\": [\"O1\"]}, {\"id\": \"U4\", \"role\": \"Certificate status Issuing condition and lastFailureTime\", \"kind\": \"kubernetes resource status\", \"semantic_role_class\": \"OBSERVED_STATE\", \"existence\": \"PRESENT\", \"locator_refs\": [\"SRC-CU-da8fb3ecf5de8318\", \"SRC-CU-ddfb73f63384b82e\"], \"requirement_refs\": [\"O1\"]}], \"expected_relations\": [{\"id\": \"R1\", \"source_unit_ids\": [\"U2\", \"U3\"], \"target_unit_ids\": [\"U1\"], \"relation_form\": \"INDIVISIBLE_SHARED\", \"shared_constraint_reason\": \"The contract constrains the correspondence of two inputs (the CertificateRequest CSR and the current NextPrivateKey Secret) and cannot be expressed as adjacent one-source/one-target edges.\", \"mechanism\": \"The issuing controller lists the CertificateRequest for status.revision+1 and reads the current next private key, and must confirm the CSR was built from that key before handling terminal request states.\", \"condition\": \"Certificate is in Issuing state and a CertificateRequest for the next revision is found\", \"expected_contract\": \"On a mismatch between the CertificateRequest CSR and the current NextPrivateKey Secret, the controller must not act on the request's terminal state.\", \"requirement_refs\": [\"O1\"], \"obligation_refs\": [\"A1\"], \"support_refs\": [\"SRC-CU-ddfb73f63384b82e\", \"SRC-CU-ee8f57d972b8f937\"]}, {\"id\": \"R2\", \"source_unit_ids\": [\"U1\"], \"target_unit_ids\": [\"U4\"], \"relation_form\": \"DIRECT_EDGE\", \"shared_constraint_reason\": null, \"mechanism\": \"The controller writes the Certificate status Issuing condition and lastFailureTime from the request's terminal state.\", \"condition\": \"A terminal request state is reached after the guard\", \"expected_contract\": \"Only a request that passed the CSR/NextPrivateKey comparison may drive Issuing=False and lastFailureTime updates.\", \"requirement_refs\": [\"O1\"], \"obligation_refs\": [\"A1\"], \"support_refs\": [\"SRC-CU-ddfb73f63384b82e\", \"SRC-CU-da8fb3ecf5de8318\"]}, {\"id\": \"R3\", \"source_unit_ids\": [\"U2\"], \"target_unit_ids\": [\"U4\"], \"relation_form\": \"DIRECT_EDGE\", \"shared_constraint_reason\": null, \"mechanism\": \"A stale CertificateRequest carrying a replaced key's CSR reaches terminal handling and its terminal failure propagates to the Certificate status.\", \"condition\": \"A stale request for the next revision is still present when terminal handling runs\", \"expected_contract\": \"A stale request built from a replaced key must not cause the current Certificate issuance to fail.\", \"requirement_refs\": [\"O1\"], \"obligation_refs\": [\"A2\"], \"support_refs\": [\"SRC-CU-6e3f4bd5c23d1cc7\", \"SRC-CU-81c6b5f1fa9872f7\", \"SRC-CU-ddfb73f63384b82e\"]}], \"violations\": [{\"id\": \"V1\", \"relation_id\": \"R1\", \"broken_behavior\": \"The issuing controller does not compare the CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.\", \"causal_explanation\": \"The pre-terminal guard matches the next private key only against crt.Spec (PrivateKeyMatchesSpec) and the request only against crt.Spec (RequestMatchesSpec); neither compares the request's CSR to the NextPrivateKey Secret, so a request built from a replaced key that still matches crt.Spec passes the guard and its terminal state is acted upon, failing the current issuance; key-mismatch handling is placed in the requestmanager instead.\", \"evidence_refs\": [\"SRC-CU-ddfb73f63384b82e\", \"SRC-CU-ee8f57d972b8f937\", \"SRC-CU-6e3f4bd5c23d1cc7\"], \"support_basis\": \"STATIC_INFERENCE\", \"causal_status\": \"SUPPORTED\"}], \"outcome_coverage\": {\"O1\": {\"disposition\": \"REPAIR_SUPPORTED\", \"preservation_status\": \"NOT_APPLICABLE\", \"preservation_evidence_refs\": []}}, \"evidence_refs\": [\"SRC-CU-ddfb73f63384b82e\", \"SRC-CU-ee8f57d972b8f937\", \"SRC-CU-6e3f4bd5c23d1cc7\", \"SRC-CU-da8fb3ecf5de8318\", \"SRC-CU-81c6b5f1fa9872f7\", \"OBS1\", \"OBS2\"], \"evidence_gaps\": [], \"status\": \"READY\", \"clause_treatments\": [{\"source_ref\": \"requirement_text:0:231\", \"disposition\": \"OBLIGATION\", \"obligation_refs\": [\"A1\", \"A2\"], \"rationale\": \"The clause states the issuing controller's guard predicate (CSR vs current NextPrivateKey Secret before terminal-state action) and the required non-failure effect for a stale replaced-key request.\"}]}",
+      "elapsed_seconds": 135.09993962198496,
+      "prompt_tokens_reserved": 87780,
+      "output_tokens_reserved": 16384,
+      "runner_binding": {
+        "owner": "runner",
+        "model_supplied_fields": [],
+        "evidence_records_bound": 7,
+        "retained_uncited_public_evidence_ids": [],
+        "outcome_coverage_encoding": "keyed_disposition_adapter",
+        "mismatched_model_fields": []
+      }
+    },
+    {
+      "stage": "SEMANTIC_CHANGESET",
+      "prompt_version": "changeset.v1.1.13",
+      "request_metadata": {
+        "run_id": "d2277d11-edb0-436f-ae50-c927fc1b7bd4",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+        "execution_capabilities_digest": "c1e11b1e4bfa373503505c00347ee70794054200b5e03628dc97c409780c57c8",
+        "system_prompt_sha256": "66a72935658340cfe88edf90bef49fc1be6f19232927825fccba61e5de0b8ade",
+        "planning_format_retry_index": 0
+      },
+      "response_metadata": {
+        "output_mode_requested": "json_object",
+        "output_mode_effective": "json_object",
+        "output_fallback_reason": null,
+        "application_validation_required": true,
+        "endpoint_schema_support": "UNKNOWN",
+        "model_identity_policy": "require_match",
+        "requested_output_schema_sha256": "995fbb7cc32c1f6ecb80c33a8b816b24c937e6ea1d7119211adb94c69bb04613",
+        "wire_output_schema_sha256": null,
+        "provider": "openai-compatible",
+        "prompt_version": "changeset.v1.1.13",
+        "adapter_class": "contractedge.model.provider.OpenAICompatibleProvider",
+        "strict_schema": false,
+        "effective_thinking": "enabled",
+        "effective_reasoning_effort": "low",
+        "requested_model": "deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "model": "deepseek-v4.1-flash",
+        "model_identity_status": "MATCH",
+        "model_identity_verified": true,
+        "usage": {
+          "prompt_tokens": 15381,
+          "completion_tokens": 4837,
+          "total_tokens": 20218,
+          "completion_tokens_details": {
+            "reasoning_tokens": 3988
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "request_id": "12cd1398-9b2d-4438-b25b-45652aec98e0",
+        "finish_reason": "stop",
+        "money_usage_identity_verified": true
+      },
+      "response_content": "{\"schema_version\":\"ce.semantic_changeset.v1_1\",\"run_id\":\"d2277d11-edb0-436f-ae50-c927fc1b7bd4\",\"snapshot_id\":\"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\",\"input_digest\":\"0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c\",\"diagnosis_digest\":\"9dde115bc59581efa14b7e507265fa61b093652fe69bfa7d5028d9c2d54d7430\",\"goal\":\"Restore the issuing controller guard that compares a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states, so a stale replaced-key request cannot fail the current Certificate issuance.\",\"planned_violation_ids\":[\"V1\"],\"changes\":[{\"id\":\"C1\",\"target\":{\"target_kind\":\"EXISTING\",\"source_path\":\"pkg/controller/certificates/issuing/issuing_controller.go\",\"unit_refs\":[\"U1\",\"U3\",\"U4\"]},\"operation\":\"MODIFY\",\"semantic_action\":\"In the issuing controller decision loop, after retrieving the single CertificateRequest for nextRevision and before handling terminal request conditions, add a guard that compares the request CSR public key with pk.Public() from the current NextPrivateKey Secret. On mismatch, log and return nil without updating Certificate status. Leave existing PrivateKeyMatchesSpec and RequestMatchesSpec checks and terminal handling intact after the new guard.\",\"intent\":\"Restore A1/A2: only a CertificateRequest whose CSR matches the current NextPrivateKey Secret may drive terminal issuance outcomes; a stale request built from a replaced key must not set Issuing=False or lastFailureTime.\",\"violation_refs\":[\"V1\"],\"postcondition_refs\":[\"P1\"],\"depends_on\":[]}],\"postconditions\":[{\"id\":\"P1\",\"statement\":\"When a Certificate is in Issuing state and a CertificateRequest for the next revision exists, if the request CSR public key does not match the current NextPrivateKey Secret, the issuing controller does not process the request terminal conditions and returns without setting Issuing=False or lastFailureTime.\",\"requirement_refs\":[\"O1\"],\"obligation_refs\":[\"A1\",\"A2\"],\"relation_refs\":[\"R1\",\"R2\",\"R3\"],\"planned_check\":\"No public behavioral probe is available; the public runner only builds the issuing controller package (OBS1/OBS2). Source review must confirm the new guard precedes terminal handling, and the package build must pass.\",\"check_scope\":\"pkg/controller/certificates/issuing/issuing_controller.go decision loop before terminal CertificateRequest condition handling; public observation limited to package build.\",\"verification_kind\":\"NOT_PUBLICLY_OBSERVABLE\"}],\"preserve_constraints\":[],\"open_obligations\":[{\"id\":\"O1-R1\",\"outcome_id\":\"O1\",\"obligation_refs\":[\"A1\",\"A2\"],\"statement\":\"Behavioral verification that a stale CertificateRequest built from a replaced key is ignored by the issuing controller before terminal-state handling is not publicly observable.\",\"reason\":\"Public execution capability is limited to building the issuing controller package. No controller decision or cluster convergence was executed, so the planned production relation remains unverified beyond source-level inference and build success.\",\"verification_kind\":\"NOT_PUBLICLY_OBSERVABLE\"}],\"outcome_coverage\":[{\"outcome_id\":\"O1\",\"repair_supported\":[\"V1\"],\"preserve_required\":[],\"unresolved\":[\"O1\"]}],\"status\":\"READY_PARTIAL\",\"preservation_impact\":[],\"evidence_gaps\":[]}",
+      "elapsed_seconds": 182.00984889268875,
+      "semantic_call_index": 1,
+      "prompt_tokens_reserved": 54073,
+      "output_tokens_reserved": 16384,
+      "runner_binding": {
+        "owner": "runner",
+        "model_mismatched_fields": [],
+        "explicit_open_projection": {
+          "added_unresolved": [],
+          "model_status": "READY_PARTIAL",
+          "bound_status": "READY_PARTIAL"
+        },
+        "model_supplied_fields": [
+          "diagnosis_digest",
+          "input_digest",
+          "run_id",
+          "schema_version",
+          "snapshot_id"
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "structural_validation": "PASS",
+  "semantic_review": {
+    "decision": "UNCERTAIN",
+    "method": "NOT_CONFIGURED",
+    "independent": null,
+    "rationale": "No independent semantic reviewer was configured.",
+    "interpretation": "reviewer judgment; not a correctness proof"
+  },
+  "retrieval_rounds": [
+    {
+      "round_id": 1,
+      "seed_paths": [
+        "internal/generated/openapi/zz_generated.openapi.go",
+        "deploy/charts/cert-manager/templates/crd-cert-manager.io_clusterissuers.yaml",
+        "deploy/charts/cert-manager/templates/crd-cert-manager.io_issuers.yaml",
+        "deploy/crds/cert-manager.io_clusterissuers.yaml",
+        "deploy/crds/cert-manager.io_issuers.yaml",
+        "design/20190708.certificate-request-crd.md",
+        "design/20200326.extensible-certificate-controller.md",
+        "design/20221205-memory-management.md",
+        "internal/apis/certmanager/types_certificate.go",
+        "internal/controller/certificates/policies/checks.go",
+        "pkg/apis/certmanager/v1/types_certificate.go",
+        "pkg/controller/certificates/issuing/issuing_controller.go",
+        "deploy/charts/cert-manager/templates/crd-cert-manager.io_certificates.yaml",
+        "deploy/crds/cert-manager.io_certificates.yaml",
+        "pkg/controller/certificates/issuing/issuing_controller_test.go",
+        "pkg/controller/certificates/readiness/readiness_controller_test.go",
+        "pkg/controller/certificates/requestmanager/requestmanager_controller.go",
+        "pkg/controller/certificates/requestmanager/requestmanager_controller_test.go",
+        "deploy/charts/cert-manager/templates/crd-acme.cert-manager.io_challenges.yaml",
+        "deploy/charts/cert-manager/values.schema.json",
+        "deploy/crds/acme.cert-manager.io_challenges.yaml",
+        "internal/controller/certificates/policies/checks_test.go",
+        "internal/vault/vault_test.go",
+        "pkg/acme/webhook/openapi/zz_generated.openapi.go",
+        "pkg/client/applyconfigurations/certmanager/v1/certificatestatus.go",
+        "pkg/controller/certificates/trigger/trigger_controller.go",
+        "test/integration/certificates/generates_new_private_key_per_request_test.go",
+        "test/integration/certificates/issuing_controller_test.go",
+        "deploy/charts/cert-manager/README.template.md",
+        "design/acme-orders-challenges-crd.md",
+        "make/e2e-setup.mk",
+        "cmd/controller/app/options/options.go",
+        "deploy/charts/cert-manager/values.yaml",
+        "internal/apis/certmanager/types_issuer.go",
+        "internal/controller/feature/features.go",
+        "internal/vault/vault.go",
+        "pkg/apis/certmanager/v1/types_issuer.go",
+        "pkg/client/applyconfigurations/certmanager/v1/certificatespec.go",
+        "pkg/controller/certificaterequests/acme/acme_test.go",
+        "pkg/controller/certificates/readiness/readiness_controller.go",
+        "pkg/controller/certificates/trigger/trigger_controller_test.go",
+        "test/integration/certificates/trigger_controller_test.go",
+        "internal/apis/acme/types_issuer.go",
+        "internal/apis/certmanager/zz_generated.deepcopy.go",
+        "internal/controller/certificates/policies/gatherer.go",
+        "internal/controller/certificates/policies/policies.go",
+        "pkg/apis/acme/v1/types_issuer.go",
+        "pkg/apis/certmanager/v1/zz_generated.deepcopy.go",
+        "pkg/client/applyconfigurations/internal/internal.go",
+        "pkg/controller/certificate-shim/sync_test.go",
+        "pkg/controller/certificaterequests/acme/acme.go",
+        "pkg/controller/certificates/keymanager/keymanager_controller.go",
+        "pkg/controller/certificates/requestmanager/util_test.go",
+        "pkg/controller/certificatesigningrequests/acme/acme_test.go",
+        "pkg/controller/certificatesigningrequests/selfsigned/selfsigned_test.go",
+        "pkg/issuer/venafi/client/venaficlient.go",
+        "pkg/server/tls/dynamic_source.go",
+        "pkg/util/pki/csr.go",
+        "pkg/util/pki/match.go",
+        "test/e2e/suite/conformance/certificates/tests.go",
+        "design/20210209.certificates.k8s.io-adoption.md",
+        "design/20220720-per-certificate-owner-ref.md",
+        "design/20250703.gatewayapi-listenerset.md",
+        "design/20250920.certificate-renewal-control.md"
+      ],
+      "probe_entrypoint_resolution": {
+        "inspected_files": 0,
+        "inspected_bytes": 0,
+        "truncated": false,
+        "located_paths": [],
+        "basis": "Declarations of public APIs used by registered public producers or probe programs; not repair targets or causal edges",
+        "configuration_consumers": {
+          "inspected_files": 0,
+          "inspected_bytes": 0,
+          "truncated": false,
+          "identifiers": [],
+          "basis": "Bounded exact identifier sharing with public configuration; not a verified causal edge or edit grant"
+        },
+        "lifecycle_source_lookup": [],
+        "exception_source_lookup": []
+      },
+      "selected_ids": [
+        "CU-14647a333787b689",
+        "CU-ee8f57d972b8f937",
+        "CU-8142745e66f35f6a",
+        "CU-ddfb73f63384b82e",
+        "CU-da8fb3ecf5de8318",
+        "CU-58129a427dd71f72",
+        "CU-d165f91108eb07af",
+        "CU-84f33394a20626dc",
+        "CU-6e3f4bd5c23d1cc7",
+        "CU-81c6b5f1fa9872f7",
+        "CU-0200e62c77d0ae1f",
+        "CU-fa84b213eb681d13"
+      ],
+      "dropped_ids": [
+        "CU-15238b1657ae38b4",
+        "CU-44754b7198c9ca02",
+        "CU-1c754864f78db37c",
+        "CU-92711c5d49d830be",
+        "CU-96f73ef0d171ccb6",
+        "CU-f256a39f77d11122",
+        "CU-b8e669a1b248a132",
+        "CU-88f9f5d1acf03a9b",
+        "CU-eef5c440a4e5c35c",
+        "CU-159d277031f7c261",
+        "CU-38ae2c2ac17ea04e",
+        "CU-47a4f3f1c424b5ed",
+        "CU-cd499b5f03a930aa",
+        "CU-a36417010a661ff1",
+        "CU-2ee71431dff09a15",
+        "CU-34798c77d0a36ab8",
+        "CU-726ed600b4a49ac0",
+        "CU-338ce37b2171433e",
+        "CU-848cc3cfd63e63ab",
+        "CU-93256040ed0225e5",
+        "CU-fb6b54285a7cfcdf",
+        "CU-bacac746404d74f4",
+        "CU-e8140597007ab882",
+        "CU-b3cfcd589cd9b0dc",
+        "CU-fad9c929a8e31a03",
+        "CU-e14039c66230558a",
+        "CU-6333bf2e6aefb0d8",
+        "CU-46eb53bfdadf3617",
+        "CU-8122512b50143f72",
+        "CU-8cf58507a586d6fd",
+        "CU-858049ecc240f5ae",
+        "CU-542fe522d23a0bf6",
+        "CU-7005f97b2ac17f7f",
+        "CU-26157fae6ba48012",
+        "CU-4fb8d7d642c5d680",
+        "CU-0f9ca7111bc53c76",
+        "CU-486f01c0b892a906",
+        "CU-6f072ac094ed9daa",
+        "CU-62658eb603a896ba",
+        "CU-0d4ed2c717d76041",
+        "CU-ffdac7e9e3130396",
+        "CU-3a1d8862cf2d493a",
+        "CU-fe74c7e1f15c0cf5",
+        "CU-cdf3bcfed877c6b9",
+        "CU-7ca6b535826e7a19",
+        "CU-73da76e43ecd4078",
+        "CU-e9981e05f14c7721",
+        "CU-f01eb3e40fc02230",
+        "CU-efce2b5299207b75",
+        "CU-0da01258a9498d39",
+        "CU-d6ef913f18e02717",
+        "CU-cdec7662e3a0612d",
+        "CU-3f6b1965768997d2",
+        "CU-401eae203622d96e",
+        "CU-7e73bb415fa6f4b9",
+        "CU-ac752c28a71a879a",
+        "CU-d1adc249c53cf43b",
+        "CU-4d037e82d56ee19c",
+        "CU-4dad16d68e51346c",
+        "CU-cdb4891729b7e0d7",
+        "CU-6e596e01b737b664",
+        "CU-b5cf0e754b7d31af",
+        "CU-0cd1b304de977209",
+        "CU-ff6ad35dafab2e09",
+        "CU-1b17068c64d7e80b",
+        "CU-ec76a1f50eb0316c",
+        "CU-a3867a1cf4320e32",
+        "CU-a47d4ebd6a580fc6"
+      ],
+      "scope_extension_paths": [
+        "cmd/cainjector/app/controller.go",
+        "cmd/cainjector/app/options/options.go",
+        "cmd/controller/app/controller.go",
+        "cmd/startupapicheck/pkg/check/api/api.go",
+        "cmd/startupapicheck/pkg/factory/factory.go",
+        "internal/apis/acme/types_challenge.go",
+        "internal/apis/acme/types_order.go",
+        "internal/apis/acme/zz_generated.deepcopy.go",
+        "internal/apis/certmanager/generic_issuer.go",
+        "internal/apis/certmanager/types.go",
+        "internal/apis/certmanager/types_certificaterequest.go",
+        "internal/apis/certmanager/v1/defaults.go",
+        "internal/apis/certmanager/validation/certificate.go",
+        "internal/apis/certmanager/validation/issuer.go",
+        "internal/apis/certmanager/validation/issuer_test.go",
+        "internal/apis/certmanager/validation/util/conditions.go"
+      ],
+      "extension_used": false
+    }
+  ],
+  "run_context": {
+    "run_id": "d2277d11-edb0-436f-ae50-c927fc1b7bd4",
+    "case_id": "RW-CERTMANAGER-9116",
+    "round_id": 0,
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+    "parent_snapshot_id": null,
+    "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+    "prompt_version": "contractedge-front-half.v1_1",
+    "model_config": {
+      "model": "deepseek-v4.1-flash",
+      "provider": "openai_compatible",
+      "schema_in_prompt": true
+    },
+    "retrieval_config": {
+      "top_n": 12,
+      "operation_consistency_enabled": true,
+      "production_path_review_enabled": true,
+      "public_execution_capabilities": {
+        "schema_version": "ce.public_execution_capabilities.v1",
+        "source": {
+          "path": "environment.json",
+          "sha256": "377db8923c5a14d6732c45e9dc40860dac1cd915e7c006945fad363fdc948c15",
+          "task_observation_limit_source": "task.yaml:observation_limit"
+        },
+        "task_observation_limit": "Check the stated controller decision only; no downstream cluster convergence is implied.",
+        "environment_observation_limit": "Production issuing controller package build; private request/key fixtures and oracle are not exposed",
+        "observation_boundary": null,
+        "public_scope": null,
+        "native_input_boundary": null,
+        "candidate_command": null,
+        "build_entrypoint": null,
+        "public_runner": null,
+        "expected_artifact": null,
+        "scenarios": [
+          {
+            "name": "public-issuing-controller-build",
+            "argv": [
+              "sh",
+              "/work/.contractedge-deps/setup/build.sh"
+            ]
+          }
+        ],
+        "editable_policy": {
+          "allowed_paths": [
+            "pkg/*.go",
+            "internal/*.go"
+          ],
+          "forbidden_paths": [
+            "**/*test*",
+            "**/contractedge*",
+            "private/**",
+            "verifier/**",
+            "evaluator/**",
+            "oracle/**",
+            "go.mod",
+            "go.sum",
+            "**/go.mod",
+            "**/go.sum",
+            ".contractedge-deps/**"
+          ],
+          "policy_status": "DECLARED"
+        },
+        "network": "none",
+        "interpretation": "Declared public execution/observation only. Build success is not behavioral success; unavailable behavior stays UNKNOWN. No additional execution or edit permission.",
+        "consumer_id": "contractedge.topomen_source_consumer.v1",
+        "execution_backend": "topomen_agent",
+        "supported_operations": [
+          "MODIFY",
+          "CREATE"
+        ],
+        "method_behavior_probes": []
+      },
+      "max_context_tokens": 220000,
+      "max_scope_search_files": 20000,
+      "max_scope_search_bytes": 67108864,
+      "max_scope_search_file_bytes": 2097152,
+      "max_scope_matches_per_hint": 64,
+      "max_absence_search_files": 2000,
+      "max_absence_search_bytes": 67108864,
+      "production_path_frontier": [],
+      "necessary_source_support": [],
+      "source_prerequisites": []
+    },
+    "budget": {
+      "max_output_tokens": 16384,
+      "max_model_calls": 12,
+      "max_total_tokens": 2000000,
+      "max_elapsed_seconds": 8774.55815216899
+    }
+  },
+  "schema_version": "ce.run_trace.v1_1"
+}

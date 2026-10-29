@@ -1,0 +1,55 @@
+{
+  "status": "PASS",
+  "completed_at": "2026-10-28T03:37:55.905730+00:00",
+  "exit_code": 0,
+  "tests": 2271,
+  "subtests": 91,
+  "summary": "2271 passed, 91 subtests passed in 489.67s (0:08:09)",
+  "command": [
+    "/home/xhj/contractedge-alert-closure-20261028/system/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests"
+  ],
+  "source_sha256": "b6e846213f344ecc1f0dc6b1e2b17b2d43d747b97cd62b626f7512e9a8945692",
+  "freeze_sha256": "002f77fceb4d29ac541254a498180a12d894d84ecc4f0ee94318fc967000d1a2",
+  "log_sha256": "82f0294d709b3c29d5bec65f921e595e7a9c575f305998f66cb15f22cb74bea5",
+  "runner_sha256": "6e356967af1cafeb5cab1b536e848fbecab797fb12686e73e6627b0e72fc8a6d",
+  "verification": {
+    "schema_version": "ce.development_snapshot_verification.v1",
+    "development_snapshot_id": "readiness-feedback-v063-20261028",
+    "status": "PASS",
+    "formal_ready": false,
+    "coverage": {
+      "source": 116,
+      "configuration": 66,
+      "fixture": 211,
+      "tooling_files": 289,
+      "repository_files": 1
+    },
+    "unbound_legacy_fixture_files": [],
+    "errors": []
+  },
+  "actual_isolated_demos_enabled": true,
+  "external_public_fixtures": {
+    "status": "PASS",
+    "manifest_sha256": "e8ce3fe884b709fb5658163dc6e18eb32f5b2a7a1f4f49256387b2808880898b",
+    "digests": {
+      "outputs/deepseek-final-regression-v2-20261020/cases/RW-CAND-130/broken-public/observation.json": "1818a647f13d9617877168b6d72ff4820eed8c5f5db2281c41b459d41bfd2651",
+      "outputs/deepseek-final-regression-v2-20261020/cases/RW-CAND-130/model_calls.json": "a82f79d0764454d662a8dfff59451b16b7211dddcddd15f0496e77fc3234490f",
+      "outputs/deepseek-final-regression-v2-20261020/cases/RW-CAND-130/rounds/0/front.trace.json": "a0083c0faf2ff4816b668f131e63780481070c55de2744993f76d8b70ee51ec0",
+      "outputs/deepseek-final-single-v3-20261020/cases/RW-CAND-130/rounds/0/public/raw": "255a23da0fb947bfa07a31882ac8ca935494a56443e46b6bc244606c41b07e41",
+      "outputs/deepseek-optimized-new-development-v1-20261020/cases/R4-PROVIDER-HELM-408/rounds/0/public/raw/public-production-oci-http-transport.stdout": "cfd46633cf5db09bbe657992e5759bb87187bf9e0d8faa27a5e1fda771ea3658",
+      "outputs/final-optimization-20261020/calibration-R3-KPT-4673/probe/report.json": "c100b8247d57f72f28c952fa76f76c6f90b78534ce94fd96c6e744ebabaa2908",
+      "outputs/reliability-closure-20261020/kopf-closure-replay-v0620/S0": "9fc5b2332a41763ac95ac93fc96e2f7838765d2e423671dab03d5893525c31ca",
+      "outputs/reliability-closure-20261020/public-source-alertmanager": "858393f941bc534253cc8fc16758a688fe93e1bae4940cb4ac4ab8fd22924789",
+      "outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/method_input.json": "0d35b86c4866e3fc4b79cc722c407bb68fb74ffcc9ca05fb1f419bee4cbcdd43",
+      "outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/rounds/0/front.trace.json": "d478c6665a5313f2ea90daa45274e626e5c44db4a2aae24d25eeac968466b810",
+      "outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/method_input.json": "2cfb1bc1072df06091e2f39430c47cd21fef2d42bb30a5281f185989b584a44c",
+      "outputs/reliability-closure-20261020/runs/delivery-0.6.20-repeat-R3-KOPF-726-1-candidate/cases/R3-KOPF-726/rounds/0/front.trace.json": "499487192b792610ece5df8a082a8810dd0c86f327f59b02ae4a05876e15ce33"
+    }
+  },
+  "model_calls_added": 0,
+  "formal_ready": false
+}

@@ -1,0 +1,19 @@
+{
+  "role": "SUPPLEMENTAL_PLANNING_CORRECTION_ONLY",
+  "new_paid_calls": 1,
+  "saved_responses": 5,
+  "first_five_exact": true,
+  "draft_exact": true,
+  "source_unchanged": true,
+  "input_bound": 150107,
+  "output_bound": 16384,
+  "counts_in_46_slot_panel": false,
+  "counts_as_behavior_repair_success": false,
+  "formal_ready": false,
+  "captured_next_request": true,
+  "next_prompt": "topomen-source-execution.v1",
+  "method_status": null,
+  "validated_plan_status": "READY_PARTIAL",
+  "validation_errors": [],
+  "stopped_before_execution": true
+}

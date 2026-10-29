@@ -1,0 +1,35 @@
+{
+  "status": "PREPAID_PREFLIGHT_PASS",
+  "requests": [
+    {
+      "arm": "control",
+      "input_bound": 123562,
+      "output_bound": 16384,
+      "total_bound": 139946,
+      "context_limit": 220000
+    },
+    {
+      "arm": "treatment",
+      "input_bound": 125675,
+      "output_bound": 16384,
+      "total_bound": 142059,
+      "context_limit": 220000
+    }
+  ],
+  "negative_checks": [
+    {
+      "action": "prepare",
+      "result": "REJECTED_EXPECTED",
+      "reason": "Existing predeclared root",
+      "exit_code": 1
+    },
+    {
+      "action": "execute",
+      "result": "REJECTED_EXPECTED",
+      "reason": "Full qualification not yet available",
+      "exit_code": 1
+    }
+  ],
+  "ledger_unchanged": true,
+  "new_model_calls": 0
+}

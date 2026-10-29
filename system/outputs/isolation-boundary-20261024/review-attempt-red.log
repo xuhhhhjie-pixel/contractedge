@@ -1,0 +1,54 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_failed_attempt_cannot_create_new_session_or_reset_journal ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-396/test_failed_attempt_cannot_cre0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbcd8795cf0>
+
+    def test_failed_attempt_cannot_create_new_session_or_reset_journal(tmp_path,monkeypatch):
+        from types import SimpleNamespace
+        from contractedge.dataset import admission,benchmark
+        from contractedge.execution import topomen_agent
+        isolated=load();output=tmp_path/'results/CASE';key=tmp_path/'key';key.write_text('never read')
+        registration=tmp_path/'registration.json'
+        identity={'case_id':'CASE','output_path':str(output),'attempt_id':'dev-attempt-1'}
+        registration.write_text(json.dumps({**identity,'role':'ISOLATED_DEVELOPMENT_VALIDATION',
+            'allow_paid':True,'counts_in_46_slot_panel':False}))
+        args=SimpleNamespace(output=str(output),method_root=str(Path(__file__).resolve().parents[1]),
+            benchmark_root=str(tmp_path/'benchmark'),case='CASE',execute=True,registration=str(registration),
+            api_key_file=str(key),attempt_id='dev-attempt-1',runtime_admission=None)
+        config={'money_budget':{'path':str(tmp_path/'money.json')},
+                'topomen_source_root':str(tmp_path/'native'),'topomen_source_sha256':'native'}
+        monkeypatch.setattr(admission,'check_case_admission',lambda *a:None)
+        monkeypatch.setattr(benchmark,'method_input_from_task',lambda *a:({'initial_snapshot_id':'S0'},{}))
+        monkeypatch.setattr(topomen_agent,'source_identity',lambda *a:{'source_sha256':'native'})
+        reached=[]
+        def interrupted(*a):
+            reached.append(True)
+            state=next(output.parent.glob('.isolated-*'));journal=state/'method-journal';journal.mkdir(exist_ok=True)
+            (journal/'sent.json').write_text(json.dumps({'status':'PENDING'}))
+            raise OSError('simulated interrupted run')
+        monkeypatch.setattr(isolated,'_runtime_admission',interrupted)
+        with pytest.raises(OSError,match='interrupted'):isolated.run_session(args,config,identity)
+        assert not output.exists()
+>       with pytest.raises(ValueError,match='already claimed'):isolated.run_session(args,config,identity)
+
+tests/test_isolated_coordinator.py:186: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_method.py:572: in run_session
+    preflight = _runtime_admission(config, args.runtime_admission)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+a = ({'money_budget': {'path': '/tmp/pytest-of-xhj/pytest-396/test_failed_attempt_cannot_cre0/money.json'}, 'topomen_source_root': '/tmp/pytest-of-xhj/pytest-396/test_failed_attempt_cannot_cre0/native', 'topomen_source_sha256': 'native'}, None)
+
+    def interrupted(*a):
+        reached.append(True)
+        state=next(output.parent.glob('.isolated-*'));journal=state/'method-journal';journal.mkdir(exist_ok=True)
+        (journal/'sent.json').write_text(json.dumps({'status':'PENDING'}))
+>       raise OSError('simulated interrupted run')
+E       OSError: simulated interrupted run
+
+tests/test_isolated_coordinator.py:182: OSError
+=========================== short test summary info ============================
+FAILED tests/test_isolated_coordinator.py::test_failed_attempt_cannot_create_new_session_or_reset_journal
+1 failed, 13 deselected in 0.21s

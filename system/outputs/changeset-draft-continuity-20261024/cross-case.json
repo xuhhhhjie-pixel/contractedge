@@ -1,0 +1,76 @@
+{
+  "rows": [
+    {
+      "case_id": "RW-CAND-130",
+      "input_bound": 98408,
+      "input_limit": 120000,
+      "prompt_version": "diagnosis.v1.1.26",
+      "messages_sha256": "c1b4fd8364ccdabe83caec639e1722bca9d489bae960751ed5a78dea2f23a4a6",
+      "output_schema_sha256": "1f7d232a4ee977e88284e102ff13e46ea931e78fe4dc2efaf52516312eebdf09",
+      "empty_citation_stress_current_observations": 17,
+      "projected_plan_input_bound": 44292,
+      "projected_plan_limit": 220000,
+      "edit_paths_added": 0,
+      "source_count": 10,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "input_bound": 117429,
+      "input_limit": 120000,
+      "prompt_version": "diagnosis.v1.1.26",
+      "messages_sha256": "d73f1fdc6b597030b7d4f57e7930fe69e4dbb38051c95211645912c08ae98552",
+      "output_schema_sha256": "01d6f6bcf6fff85e5d915f1798fb4049886c3b4be296413f8fb99c1ee8f2fac2",
+      "empty_citation_stress_current_observations": 40,
+      "projected_plan_input_bound": 66976,
+      "projected_plan_limit": 220000,
+      "edit_paths_added": 0,
+      "source_count": 6,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "input_bound": 86617,
+      "input_limit": 120000,
+      "prompt_version": "diagnosis.v1.1.26",
+      "messages_sha256": "0e5ea53cf309cd32461de712ad35c4c576e2c322b7525a051ab611209b6b03de",
+      "output_schema_sha256": "8ba55c35232a7cac9a6f399349789c1ba768cc70dc2a8918da45159c68c4aeac",
+      "empty_citation_stress_current_observations": 6,
+      "projected_plan_input_bound": 24666,
+      "projected_plan_limit": 220000,
+      "edit_paths_added": 0,
+      "source_count": 12,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "input_bound": 99998,
+      "input_limit": 120000,
+      "prompt_version": "diagnosis.v1.1.26",
+      "messages_sha256": "9baf6c5ff10ac65d3d482e335f27899c7bc5c1a099cd2387dfa67a284e5bda5c",
+      "output_schema_sha256": "fe83ee7392f59c242c7b9a46d8c805b8164fd753f8a16fb461d786b55dfaafe2",
+      "empty_citation_stress_current_observations": 7,
+      "projected_plan_input_bound": 37304,
+      "projected_plan_limit": 220000,
+      "edit_paths_added": 0,
+      "source_count": 12,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "input_bound": 117546,
+      "input_limit": 120000,
+      "prompt_version": "diagnosis.v1.1.26",
+      "messages_sha256": "5e040238d833cd6ac0fa42be83e2c5b9bd19fa3b9f42fd2e9e1092250e0d6d8a",
+      "output_schema_sha256": "0d30195b800ab61056d85e94800fa7d8f5ffe35d3748ded6607d6655205e2807",
+      "empty_citation_stress_current_observations": 3,
+      "projected_plan_input_bound": 17944,
+      "projected_plan_limit": 220000,
+      "edit_paths_added": 0,
+      "source_count": 10,
+      "source_unchanged": true
+    }
+  ],
+  "real_model_http_calls": 0,
+  "scope": "Five exposed public cases, same old v8 capabilities and observations. First-request no-change regression plus deliberately empty-citation transport projection to actual planning builder; not regenerated diagnosis/plans, model repair results or new-profile validation"
+}

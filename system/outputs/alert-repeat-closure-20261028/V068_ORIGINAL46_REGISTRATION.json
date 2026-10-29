@@ -1,0 +1,14 @@
+{
+  "status": "REGISTERED_NOT_DISPATCHED",
+  "panel": "/home/xhj/contractedge-fixed46-official-v068-20261028/panel.json",
+  "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
+  "original_registration_sha256": "e24f0320987a15c9ed2867ebb6f55efb104c4e7ce4b6a9bccd1565a5d34e099b",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "registered_slots": 46,
+  "closed_slots": 0,
+  "scores_inherited": false,
+  "extra_cases_added": 0,
+  "early_gate_reuses_original_necessary_conditions": true,
+  "controller_necessary_failure_checks": 5,
+  "formal_ready": false
+}

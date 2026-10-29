@@ -1,0 +1,249 @@
+{
+  "schema_version": "contractedge.runtime_images.v1",
+  "platform": "linux/amd64",
+  "status": "COMPLETE",
+  "images": [
+    {
+      "docker_image_identity": "sha256:116d58cbd88c1297624acc6e967a060012422bacf9930927e23fb719189c6f36",
+      "archive": "image-116d58cbd88c1297.tar",
+      "archive_sha256": "1d9c32ce4b0237cb257f8d40a758ec155d7224237cb0933497c34af1018f5bfc",
+      "archive_bytes": 307358720,
+      "references": [
+        "golang:1.26.6-bookworm@sha256:116d58cbd88c1297624acc6e967a060012422bacf9930927e23fb719189c6f36"
+      ],
+      "restore_tags": [
+        "golang:1.26.6-bookworm"
+      ],
+      "platform": "linux/amd64"
+    },
+    {
+      "docker_image_identity": "sha256:280008a67a8ad92f613e06954e76ec6ccd63f00ff344d01119591375d6f9af45",
+      "archive": "image-280008a67a8ad92f.tar",
+      "archive_sha256": "68c7f026c925901fca8f5ed015a802d6529f6691970e2fc76e1619763dd18c90",
+      "archive_bytes": 37419520,
+      "references": [
+        "contractedge/r1-helm-cli:pilot-20261008@sha256:280008a67a8ad92f613e06954e76ec6ccd63f00ff344d01119591375d6f9af45",
+        "contractedge/r1-helm-cli@sha256:280008a67a8ad92f613e06954e76ec6ccd63f00ff344d01119591375d6f9af45"
+      ],
+      "restore_tags": [
+        "contractedge/r1-helm-cli:contractedge-frozen-280008a67a8a",
+        "contractedge/r1-helm-cli:pilot-20261008"
+      ],
+      "platform": "linux/amd64"
+    },
+    {
+      "docker_image_identity": "sha256:2d97f6910b16bd338d3060f261f53f144965f755599aab1acda1e13cf1731b1b",
+      "archive": "image-2d97f6910b16bd33.tar",
+      "archive_sha256": "141bd403876922004768d4bf7ec6bc9285c5d65b6460e51d922c4d4a1b4f873e",
+      "archive_bytes": 47202304,
+      "references": [
+        "python@sha256:2d97f6910b16bd338d3060f261f53f144965f755599aab1acda1e13cf1731b1b"
+      ],
+      "restore_tags": [
+        "python:contractedge-frozen-2d97f6910b16"
+      ],
+      "platform": "linux/amd64"
+    },
+    {
+      "docker_image_identity": "sha256:76c375eed56144c68d6197c55bc5a4552fb42002190b796729901cbab3ae6e51",
+      "archive": "image-76c375eed56144c6.tar",
+      "archive_sha256": "f30fb06183f464cd1cf1f58c427bf51ce08111af3c2d59e707692fab4a643b29",
+      "archive_bytes": 37881856,
+      "references": [
+        "alpine/helm@sha256:76c375eed56144c68d6197c55bc5a4552fb42002190b796729901cbab3ae6e51"
+      ],
+      "restore_tags": [
+        "alpine/helm:contractedge-frozen-76c375eed561"
+      ],
+      "platform": "linux/amd64"
+    },
+    {
+      "docker_image_identity": "sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+      "archive": "image-a688600ca24f8a4d.tar",
+      "archive_sha256": "6d3be0a5c96e37cc95060cadf943fba589829c03c21a7bcaf3359c7c68d9d684",
+      "archive_bytes": 307425792,
+      "references": [
+        "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d"
+      ],
+      "restore_tags": [
+        "golang:1.26.8-bookworm"
+      ],
+      "platform": "linux/amd64"
+    },
+    {
+      "docker_image_identity": "sha256:bab1b7ef4b450c81002278d035eff85ebe394ae94df904f7a3ba14f7e16e487b",
+      "archive": "image-bab1b7ef4b450c81.tar",
+      "archive_sha256": "f8da4f8e60c104136b02029b43a95069bfaf8aa53b288666b043e62ff592222e",
+      "archive_bytes": 50811904,
+      "references": [
+        "python:3.11-slim@sha256:bab1b7ef4b450c81002278d035eff85ebe394ae94df904f7a3ba14f7e16e487b",
+        "python@sha256:bab1b7ef4b450c81002278d035eff85ebe394ae94df904f7a3ba14f7e16e487b"
+      ],
+      "restore_tags": [
+        "python:3.11-slim",
+        "python:contractedge-frozen-bab1b7ef4b45"
+      ],
+      "platform": "linux/amd64"
+    },
+    {
+      "docker_image_identity": "sha256:c6d8088ddb279625a2e1ca3b08b22c18c946d1f65c8b810f28f1597435a1134c",
+      "archive": "image-c6d8088ddb279625.tar",
+      "archive_sha256": "33fe200d73c5f8b8bf9160284a4e7cccc48ac320140ed77d14bd33fcdc724784",
+      "archive_bytes": 34699776,
+      "references": [
+        "alpine/helm@sha256:c6d8088ddb279625a2e1ca3b08b22c18c946d1f65c8b810f28f1597435a1134c"
+      ],
+      "restore_tags": [
+        "alpine/helm:contractedge-frozen-c6d8088ddb27"
+      ],
+      "platform": "linux/amd64"
+    },
+    {
+      "docker_image_identity": "sha256:72500537a4c18b14ae0cc61f39e7c800c8bd7aa68039e8d843ff427e40a7aefe",
+      "archive": "image-72500537a4c18b14.tar",
+      "archive_sha256": "cd89314af274bdddbb672bc89bf64f2f4770faff369ac525141bc982d185da5f",
+      "archive_bytes": 179123712,
+      "references": [
+        "contractedge/flb10720-builder@sha256:72500537a4c18b14ae0cc61f39e7c800c8bd7aa68039e8d843ff427e40a7aefe"
+      ],
+      "restore_tags": [
+        "contractedge/flb10720-builder:contractedge-frozen-72500537a4c1"
+      ],
+      "platform": "linux/amd64",
+      "cpu_features_required": [
+        "avx2"
+      ]
+    },
+    {
+      "docker_image_identity": "sha256:9820aca42262f58451f006de3213055974b36f24b31508c1baa73c967fcecb99",
+      "archive": "image-9820aca42262f584.tar",
+      "archive_sha256": "d80c66eaa368c153654ecae1ad129c724f4641a7345ebadaae02e15962be3f39",
+      "archive_bytes": 313649664,
+      "references": [
+        "golang:1.23.4-bookworm@sha256:9820aca42262f58451f006de3213055974b36f24b31508c1baa73c967fcecb99"
+      ],
+      "restore_tags": [
+        "golang:1.23.4-bookworm"
+      ],
+      "platform": "linux/amd64"
+    },
+    {
+      "docker_image_identity": "sha256:4f43b271f9673eb7bd0cb3a49cc17b08d8d6ee110277e26dbacc93c43a5a7793",
+      "archive": "image-4f43b271f9673eb7.tar",
+      "archive_sha256": "525146a1c53e69112b240676662c11a8dbb60760b3909b5ff6b2a5df84208e33",
+      "archive_bytes": 300014592,
+      "references": [
+        "golang:1.25.3-bookworm@sha256:4f43b271f9673eb7bd0cb3a49cc17b08d8d6ee110277e26dbacc93c43a5a7793"
+      ],
+      "restore_tags": [
+        "golang:1.25.3-bookworm"
+      ],
+      "platform": "linux/amd64"
+    },
+    {
+      "docker_image_identity": "sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5",
+      "archive": "image-8f693eaa7e0a8e71.tar",
+      "archive_sha256": "1c34767f76f6d8a3793edb8ea6e802cff9f74f0937424d3806518865980c3b3f",
+      "archive_bytes": 414565888,
+      "references": [
+        "node:20-bookworm@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5"
+      ],
+      "restore_tags": [
+        "node:20-bookworm"
+      ],
+      "platform": "linux/amd64"
+    },
+    {
+      "docker_image_identity": "sha256:53eeac89074db483fdf0ab3be1df32bf6e47562263d2d0d6baa7f26acb4957dd",
+      "archive": "image-53eeac89074db483.tar",
+      "archive_sha256": "d29d715f99ae32f9f17f8398c9b7abe1948f9ac3b905e9fbccb9786b2fa0757a",
+      "archive_bytes": 307337728,
+      "references": [
+        "golang@sha256:53eeac89074db483fdf0ab3be1df32bf6e47562263d2d0d6baa7f26acb4957dd"
+      ],
+      "restore_tags": [
+        "golang:contractedge-frozen-53eeac89074d"
+      ],
+      "platform": "linux/amd64",
+      "source_case_ids": [
+        "R4-AWS-LBC-4876"
+      ],
+      "source_adapter": "evaluation/R4/R4-AWS-LBC-4876/candidate-adapter-v3.pending.json",
+      "source_adapter_sha256": "b9f8ff1a5b6733b8c58679db0d86ad5bb41486ca3f0a8ad1ab58bdd65520b797"
+    },
+    {
+      "docker_image_identity": "sha256:2e32f7d302adc1c37428355c1e646897c0c53f4fd60b6a551245fb90ee129f91",
+      "archive": "image-2e32f7d302adc1c3.tar",
+      "archive_sha256": "7c6fffc23ed6dfb9c75421c8577ea52dfd45b352d91df49da961a100dae13f8b",
+      "archive_bytes": 50462720,
+      "references": [
+        "python:3.11-slim-bookworm@sha256:2e32f7d302adc1c37428355c1e646897c0c53f4fd60b6a551245fb90ee129f91"
+      ],
+      "restore_tags": [
+        "python:contractedge-frozen-2e32f7d302ad"
+      ],
+      "platform": "linux/amd64",
+      "source_case_ids": [
+        "R3-PULUMI-KUBERNETES-4426"
+      ],
+      "source_adapter": "evaluation/R3/R3-PULUMI-KUBERNETES-4426/artifact-v3-provider-flow/adapter.json",
+      "source_adapter_sha256": "557051fc8613eec75649743f0715837429260f2bf02b944998a999aa38f0d318"
+    },
+    {
+      "docker_image_identity": "sha256:e4a7ace3dc0d645ed97f8d9ad0b0d3f0b14fa8d150138f27f116d7105a639b82",
+      "archive": "image-e4a7ace3dc0d645e.tar",
+      "archive_sha256": "bb67c253ce6b1c0c8a43c54c88be6cbb3e283189a8c27178befbfebc4c88b67e",
+      "archive_bytes": 234434048,
+      "references": [
+        "maven@sha256:e4a7ace3dc0d645ed97f8d9ad0b0d3f0b14fa8d150138f27f116d7105a639b82"
+      ],
+      "restore_tags": [
+        "maven:contractedge-frozen-e4a7ace3dc0d"
+      ],
+      "platform": "linux/amd64",
+      "source_case_ids": [
+        "R4-FLINK-OPERATOR-1168"
+      ],
+      "source_adapter": "evaluation/R4/R4-FLINK-OPERATOR-1168/scorer-v1/revision-v4-testjar32/adapter.json",
+      "source_adapter_sha256": "bef567af6b24778bf9d21cd65a7da8fc4aa88c4ff32411fc1c7e818440310393"
+    },
+    {
+      "docker_image_identity": "sha256:3d699e4d15d0f8f13c9195c0632a16702b8cbdece2955af1c23b37ae5d55a253",
+      "archive": "image-3d699e4d15d0f8f1.tar",
+      "archive_sha256": "331e91a200e5f67efb99d03ed6defce3e5321628737e47810c6d4b1a13c3a3af",
+      "archive_bytes": 308958208,
+      "references": [
+        "golang@sha256:3d699e4d15d0f8f13c9195c0632a16702b8cbdece2955af1c23b37ae5d55a253"
+      ],
+      "restore_tags": [
+        "golang:contractedge-frozen-3d699e4d15d0"
+      ],
+      "platform": "linux/amd64",
+      "source_case_ids": [
+        "CRI-O-7954"
+      ],
+      "source_adapter": "evaluation/R5/CRI-O-7954-intake/historical-pair-v2/runtime-scorer-v1/root-admission-preparation-v1/execution-entry-v2/adapter.json",
+      "source_adapter_sha256": "a5ebf5e94f1e3acbf95223cc5282d5d5b58bfd39a05822561aa1fefeeca477c8"
+    },
+    {
+      "docker_image_identity": "sha256:9fa9101141c01e9440216d32eb2b380b3c3079bea07aeab3546020cc91b3662c",
+      "archive": "image-9fa9101141c01e94.tar",
+      "archive_sha256": "5b97addacfa4007322aa6e6d7f0c6dee0b0283300e9b20f7dff1c55b73edea5f",
+      "archive_bytes": 330612224,
+      "references": [
+        "golang@sha256:9fa9101141c01e9440216d32eb2b380b3c3079bea07aeab3546020cc91b3662c"
+      ],
+      "restore_tags": [
+        "golang:contractedge-frozen-9fa9101141c0"
+      ],
+      "platform": "linux/amd64"
+    }
+  ],
+  "archive_integrity_scope": "16 indexed archives present; added OTEL Go1.20.14 image independently rehashed, restored in empty store and fixed Go binary started offline.",
+  "runtime_smoke_evidence": {
+    "added_four": "execution/runtime-extension-20261017/clean-restore-v1/result.json",
+    "added_four_sha256": "bfbeb415263335fe74378e565e4c95dfff013ac37053e789f3cf16ad57bc8786",
+    "otel2171_added_one": "execution/runtime-otel2171-extension-20261018/restore-result.json",
+    "otel2171_added_one_sha256": "35aeae43171be076989baa4c52eaba69fe0b3a774b5ccf4a7ce0f4ee57b21a5d"
+  }
+}

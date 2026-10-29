@@ -1,0 +1,74 @@
+{
+  "scope": "Failed planning/native component, retained separately; public observations/model artifacts, aggregate independent_status only in result; no checkpoints or private grader",
+  "files": [
+    {
+      "path": "after.json",
+      "bytes": 59726,
+      "sha256": "00a3942a61b82bcca9868d7e28bc5f1393ab9b7a067640b5b975f439ecc99d42"
+    },
+    {
+      "path": "before.json",
+      "bytes": 59923,
+      "sha256": "6b710f73dbdf3b92e559a26bbc7c7584a3c1c26925c45eab93f875bf65bc59d6"
+    },
+    {
+      "path": "candidate-decision.json",
+      "bytes": 1452,
+      "sha256": "de323aaf16b55c76e37afb36105848da922d5fdb6ce3e1cbd467755f82830c86"
+    },
+    {
+      "path": "candidate.patch",
+      "bytes": 3405,
+      "sha256": "2283f8c36c317ef09543143283c49ca491043c5a71dba5a3556eced2b8718884"
+    },
+    {
+      "path": "changeset.json",
+      "bytes": 42092,
+      "sha256": "9082a4f4877334b1a296b27202af29cd47167cc651eedc6ba0ec72b3f4743d6f"
+    },
+    {
+      "path": "execution.json",
+      "bytes": 196518,
+      "sha256": "5adf00454a35489c2119c95d1599cc6cf8dc5bca10ef3b3e888736b71884fbfa"
+    },
+    {
+      "path": "expected-planning-request.json",
+      "bytes": 249867,
+      "sha256": "5b7bf39e390be83bbf299e00d57aad1b80ceda930564c554bca1330280f521ad"
+    },
+    {
+      "path": "model_calls.json",
+      "bytes": 1354608,
+      "sha256": "d1f2f3901cb4d220846c1a02123f76734cac48db28e27f6d34d6a997b0338aa5"
+    },
+    {
+      "path": "patch.json",
+      "bytes": 855,
+      "sha256": "52f0ab1e0545d683c6d20e1787dc63feaa26abd70543607b6a4218b8cdb4442a"
+    },
+    {
+      "path": "plan.json",
+      "bytes": 64637,
+      "sha256": "bc58e17d3426bae0cd92cc577f3b3825918dda8dae46eff02b146fb234b8b75b"
+    },
+    {
+      "path": "planning-validation.json",
+      "bytes": 36,
+      "sha256": "655823ac7f996b259837b1279f4757264aac1ab82808d9b562c06a9f640f36af"
+    },
+    {
+      "path": "registration.json",
+      "bytes": 1560,
+      "sha256": "a53c87cff87b1eab7138cfae4170a666d4f8220efd5ca2d465589bf74440d4c7"
+    },
+    {
+      "path": "result.json",
+      "bytes": 871,
+      "sha256": "51916a64aaa7ddd777d93d9fa4613200705dfb00d8cdd364fd393f3059ad4b4e"
+    }
+  ],
+  "archive": "PUBLIC_FAILED_STRATEGY_COMPONENT_v060.tar.gz",
+  "archive_sha256": "6eda7801a92e7273693a7d4bf78bde45da5248389a3d2e67d9010d1d963058d8",
+  "hidden_outputs_included": false,
+  "credentials_included": false
+}

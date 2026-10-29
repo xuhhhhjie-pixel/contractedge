@@ -1,0 +1,20 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__ test_seeded_entry_applies_real_public_patch_before_unsupported_plan_result __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-392/test_seeded_entry_applies_real0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fd49d443910>
+
+    def test_seeded_entry_applies_real_public_patch_before_unsupported_plan_result(tmp_path,monkeypatch):
+        result,source,seed=recovery_fixture(tmp_path,monkeypatch)
+>       assert result['status']=='RECOVERY_PLAN_UNSUPPORTED',result['errors']
+E       AssertionError: ["NameError: name 'subprocess' is not defined"]
+E       assert 'RECOVERY_FAILED' == 'RECOVERY_PLAN_UNSUPPORTED'
+E         
+E         - RECOVERY_PLAN_UNSUPPORTED
+E         + RECOVERY_FAILED
+
+tests/test_isolated_worker_entry.py:88: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_isolated_worker_entry.py::test_seeded_entry_applies_real_public_patch_before_unsupported_plan_result
+1 failed, 5 deselected in 0.27s

@@ -1,0 +1,74 @@
+{
+  "schema_version": "ce.formal_gate_evidence.v1",
+  "gate": "G4",
+  "identity": {
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
+    "candidate_config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "executed_at": "2026-10-28T21:09:16.693212+00:00",
+  "checker": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/finalize_admission_v068_resumed.py",
+    "sha256": "e4e067f66e6b083fe8fcc548b7f0439c5ea9fe3957830381e90e1164e6550bf2"
+  },
+  "inputs": [
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_REGISTERED_EFFECT_ASSESSMENT.json",
+      "sha256": "44b9b1a490dbb7e1066f0ed1d5b5256e8ea92e4776fb7bc052f2214c5521d9d7"
+    },
+    {
+      "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/records.json",
+      "sha256": "c0d99709cff730da145de5b0f21a7083c6a46d452944bf237df9f03c4ec1ce36"
+    },
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/fixed46-isolated-panel-20261025/ORIGINAL_REGISTRATION_v038.json",
+      "sha256": "e24f0320987a15c9ed2867ebb6f55efb104c4e7ce4b6a9bccd1565a5d34e099b"
+    }
+  ],
+  "checks": [
+    {
+      "id": "original_successes_preserved",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_REGISTERED_EFFECT_ASSESSMENT.json",
+          "sha256": "44b9b1a490dbb7e1066f0ed1d5b5256e8ea92e4776fb7bc052f2214c5521d9d7"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_VERIFIED_TERMINALS.json",
+          "sha256": "441db9a2d9ec2cf6dc0e369e0441ecc15f3ffbec4bb8c33b8d8fc70ba45c136e"
+        }
+      ]
+    },
+    {
+      "id": "registered_repetition",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_REGISTERED_EFFECT_ASSESSMENT.json",
+          "sha256": "44b9b1a490dbb7e1066f0ed1d5b5256e8ea92e4776fb7bc052f2214c5521d9d7"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_VERIFIED_TERMINALS.json",
+          "sha256": "441db9a2d9ec2cf6dc0e369e0441ecc15f3ffbec4bb8c33b8d8fc70ba45c136e"
+        }
+      ]
+    },
+    {
+      "id": "registered_seeded_recovery",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_REGISTERED_EFFECT_ASSESSMENT.json",
+          "sha256": "44b9b1a490dbb7e1066f0ed1d5b5256e8ea92e4776fb7bc052f2214c5521d9d7"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_VERIFIED_TERMINALS.json",
+          "sha256": "441db9a2d9ec2cf6dc0e369e0441ecc15f3ffbec4bb8c33b8d8fc70ba45c136e"
+        }
+      ]
+    }
+  ],
+  "scope": "Original success, repeat and two-repository/two-attempt saved-failure rules. No qualification singles or historical best results imported."
+}

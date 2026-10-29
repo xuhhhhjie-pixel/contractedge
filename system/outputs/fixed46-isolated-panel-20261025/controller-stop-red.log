@@ -1,0 +1,54 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_controller_interrupt_allows_owned_method_to_record_cleanup ________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-492/test_controller_interrupt_allo0')
+
+    def test_controller_interrupt_allows_owned_method_to_record_cleanup(tmp_path):
+        scripts=Path(__file__).resolve().parents[1]/'scripts';ready=tmp_path/'ready';clean=tmp_path/'closed'
+        child=tmp_path/'child.py';child.write_text('''import signal,sys
+    from pathlib import Path
+    def close(*args):Path(sys.argv[2]).write_text('closed');raise SystemExit(0)
+    signal.signal(signal.SIGTERM,close)
+    Path(sys.argv[1]).write_text('ready')
+    while True:signal.pause()
+    ''')
+        helper=tmp_path/'parent.py';helper.write_text('''import sys
+    from pathlib import Path
+    from run_fixed_panel import Transport
+    Transport().dispatch([sys.executable,sys.argv[1],sys.argv[2],sys.argv[3]],Path(sys.argv[4]))
+    ''')
+        process=subprocess.Popen([sys.executable,str(helper),str(child),str(ready),str(clean),str(tmp_path/'method.log')],
+            env={**os.environ,'PYTHONPATH':str(scripts),'PYTHONDONTWRITEBYTECODE':'1'},stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+        try:
+            deadline=time.monotonic()+10
+            while not ready.exists() and time.monotonic()<deadline and process.poll() is None:time.sleep(.01)
+            assert ready.exists()
+            os.kill(process.pid,signal.SIGINT);process.wait(timeout=10)
+>           assert clean.read_text()=='closed'
+
+tests/test_fixed_panel_driver.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-xhj/pytest-492/test_controller_interrupt_allo0/closed')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-xhj/pytest-492/test_controller_interrupt_allo0/closed'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_fixed_panel_driver.py::test_controller_interrupt_allows_owned_method_to_record_cleanup
+1 failed, 10 deselected in 0.62s

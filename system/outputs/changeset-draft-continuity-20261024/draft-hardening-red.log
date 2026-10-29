@@ -1,0 +1,210 @@
+........FF..                                                             [100%]
+=================================== FAILURES ===================================
+____ test_malformed_prior_state_is_rejected_without_untyped_failure[state0] ____
+
+context = <tests.test_feedback_context.FeedbackContextTests testMethod=runTest>
+state = []
+
+    @pytest.mark.parametrize('state',[[],{},None])
+    def test_malformed_prior_state_is_rejected_without_untyped_failure(context,state):
+        packet,run=packet_context(context);prior=attempt(context);prior['state']=state
+        with pytest.raises(ValueError,match='Previous ChangeSet'):
+>           build_changeset_request(packet,run,[{'code':'INVALID'}],previous_attempt=prior)
+
+tests/test_changeset_draft_continuity.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+diagnosis = DiagnosisPacket(schema_version='ce.diagnosis_packet.v1_1', run_id='b4c79351-0dc9-458c-b117-2fedbd1c646a', snapshot_id=...: [{'id': 'Q1', 'text': 'When enabled, render the selected ServiceAccount.', 'source_ref': 'requirement_text:0:49'}]}})
+run_context = RunContext(run_id='b4c79351-0dc9-458c-b117-2fedbd1c646a', case_id='CASE-1', round_id=0, snapshot_id='0c484ef116e802ee8..., budget={'max_output_tokens': 2048, 'max_model_calls': 24, 'max_total_tokens': 500000, 'max_elapsed_seconds': 1200.0})
+validation_feedback = [{'code': 'INVALID'}]
+previous_attempt = {'run_id': 'b4c79351-0dc9-458c-b117-2fedbd1c646a', 'snapshot_id': '0c484ef116e802ee848698dda88da96cdf9065ca111b32a7c0a...eef9f97c58e8d94fb7732d9f', 'diagnosis_digest': '7b445889f968c3017c29a15cfbb894e59dfbd48f78a915041230c439026a46c7', ...}
+
+    def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
+                                validation_feedback: list[Mapping[str, Any]] | None = None, *,
+                                previous_attempt: Mapping[str, Any] | None = None) -> ModelRequest:
+        retrieval = getattr(run_context, 'retrieval_config', {})
+        support = list(retrieval.get('necessary_source_support', []))
+        prerequisites = list(retrieval.get('source_prerequisites', []))
+        for record in support:
+            if (record.get('snapshot_id') != run_context.snapshot_id or record.get('kind') != 'SOURCE_SPAN'
+                    or not isinstance(record.get('excerpt'), str)
+                    or hashlib.sha256(record['excerpt'].encode()).hexdigest() != record.get('content_digest')):
+                raise ValueError('Planning source support must bind fresh exact source evidence')
+        capabilities = resolve_execution_capabilities(getattr(run_context, 'retrieval_config', {}).get('public_execution_capabilities'))
+        policy = capabilities.get('editable_policy')
+        frontier = getattr(run_context, 'retrieval_config', {}).get('production_path_frontier', [])
+        probe_ids = [p['id']+':'+cid for p in capabilities.get('method_behavior_probes',[]) for cid in p['checks']]
+        editable_targets = {path: ids for path, ids in _unit_ids_by_source_path(diagnosis.raw).items()
+                            if target_permission_error(path, policy) is None}
+        user_payload = {
+            "schema_version": "ce.semantic_changeset.v1_1",
+            "output_schema": _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities),
+            "run_context": {"run_id": run_context.run_id, "case_id": run_context.case_id,
+                            "snapshot_id": run_context.snapshot_id, "input_digest": run_context.input_digest},
+            "diagnosis_packet": dict(diagnosis.raw),
+            "read_only_source_support": support,
+            "source_prerequisites": prerequisites,
+            "production_path_frontier": frontier,
+            "existing_target_paths": [{"path": path, "unit_ids": sorted(unit_ids)}
+                                       for path, unit_ids in sorted(editable_targets.items())],
+            "diagnosis_digest": canonical_digest(diagnosis.raw),
+            "public_execution_capabilities": capabilities,
+            "validation_feedback": list(validation_feedback or []),
+            "output_contract": "Return only a SemanticChangeSet v1.1 JSON object; no markdown fences.",
+        }
+        if not run_context.model_config.get('schema_in_prompt', True):
+            user_payload.pop('output_schema')
+            user_payload['output_fields'] = list(_case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)['properties'])
+        system_prompt = CHANGESET_SYSTEM_PROMPT + (COVERAGE_PROMPT + IMPACT_PROMPT if diagnosis.raw.get('requirement_spec',{}).get('traceability_required') else '') + (FRONTIER_PROMPT if frontier else "")
+        system_prompt += (" Current execution consumer " + capabilities["consumer_id"] + " supports only "
+                          + ", ".join(capabilities["supported_operations"])
+                          + ". Do not propose unsupported operations; retain genuinely unresolved obligations instead.")
+        if support:
+            system_prompt += (' Explicitly plan each new local helper in an authorized owning file, including caller dependencies. '
+                'A proposed helper implementation is not required to pre-exist: distinguish an evidenced defect and a planned '
+                'implementation from an unknown existing ownership, input or lifecycle contract. Use NEEDS_EVIDENCE for '
+                'missing contracts needed to justify the strategy, not merely because the repair code has not been written. '
+                'External API availability/signatures may remain implementation uncertainties for compilation to check when '
+                'the supplied source contract names the operation and the client binding is evidenced; never invent an '
+                'existing method or claim runtime success. Keep behavior not publicly observable explicitly unverified. '
+                'A caller edit cannot authorize unplanned library edits or new editable paths.')
+            system_prompt += (' Read-only source support is fresh public implementation context, not an extra editable target '
+                'or an automatically verified causal relation. Inspect initialization, readiness and state preservation '
+                'before accepting a lifecycle handoff plan: starting an asynchronous call does not establish readiness. '
+                'Record applicable prerequisites and how current postconditions, preservation or open obligations check them. '
+                'If these sources contradict the accepted diagnosis or require new semantic units, use NEEDS_EVIDENCE '
+                'with the exact source locator; do not silently invent supported units or broaden edit permissions. '
+                'Unknown readiness remains unverified; do not propose a delay as proof of correctness.')
+        if prerequisites:
+            system_prompt += (' Review each source_prerequisites entry exactly once in precondition_review. '
+                'Describe the actual requirement-relevant condition from the supplied source, not an assumed generic readiness rule. '
+                'REQUIRED binds real postcondition/preservation IDs in verification_refs; finite checks retain their coverage limit. '
+                'A runtime prerequisite with only BUILD_ONLY/UNKNOWN checks also needs a real open_obligation_ref. '
+                'UNRESOLVED binds existing open_obligation_refs and does not claim the condition satisfied. '
+                'NOT_APPLICABLE has empty reference arrays and a source-grounded relevance rationale. '
+                'This is prerequisite accountability, not a static proof that the proposed code or synchronization is correct.')
+        if probe_ids:
+            system_prompt += " Registered method_behavior_probes are additional public method-owned observations, not frozen independent scorers. For obligations actually covered by these probe assertions choose PUBLIC_BEHAVIOR, set verification_scope.scenario to the registered method scenario and predeclare all necessary behavior_check_refs. Missing, failed or unrelated check results cannot establish PASS. Respect each probe boundary; do not infer external runtime coverage from local stand-ins."
+        model = str(run_context.model_config.get("model", "UNCONFIGURED"))
+        max_tokens = int(run_context.budget.get("max_output_tokens", 4096))
+        output_schema = _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)
+        messages = ({"role": "system", "content": system_prompt},
+                    {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False, sort_keys=True)})
+        draft_metadata = {}
+        if previous_attempt is not None:
+            identity = dict(run_id=run_context.run_id, snapshot_id=run_context.snapshot_id,
+                input_digest=run_context.input_digest, diagnosis_digest=canonical_digest(diagnosis.raw))
+            if (not isinstance(previous_attempt, Mapping) or not validation_feedback
+                    or any(previous_attempt.get(k) != v for k, v in identity.items())
+>                   or previous_attempt.get('state') not in {'REJECTED_PLAN_DRAFT', 'CURRENT_PLAN_FOR_REVISION'}
+                    or not isinstance(previous_attempt.get('response_content'), str)
+                    or not previous_attempt['response_content'].strip()):
+E                   TypeError: unhashable type: 'list'
+
+src/contractedge/changeset/prompt.py:238: TypeError
+____ test_malformed_prior_state_is_rejected_without_untyped_failure[state1] ____
+
+context = <tests.test_feedback_context.FeedbackContextTests testMethod=runTest>
+state = {}
+
+    @pytest.mark.parametrize('state',[[],{},None])
+    def test_malformed_prior_state_is_rejected_without_untyped_failure(context,state):
+        packet,run=packet_context(context);prior=attempt(context);prior['state']=state
+        with pytest.raises(ValueError,match='Previous ChangeSet'):
+>           build_changeset_request(packet,run,[{'code':'INVALID'}],previous_attempt=prior)
+
+tests/test_changeset_draft_continuity.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+diagnosis = DiagnosisPacket(schema_version='ce.diagnosis_packet.v1_1', run_id='e064a197-8eac-4f22-9be8-69bc1feed7ce', snapshot_id=...: [{'id': 'Q1', 'text': 'When enabled, render the selected ServiceAccount.', 'source_ref': 'requirement_text:0:49'}]}})
+run_context = RunContext(run_id='e064a197-8eac-4f22-9be8-69bc1feed7ce', case_id='CASE-1', round_id=0, snapshot_id='0c484ef116e802ee8..., budget={'max_output_tokens': 2048, 'max_model_calls': 24, 'max_total_tokens': 500000, 'max_elapsed_seconds': 1200.0})
+validation_feedback = [{'code': 'INVALID'}]
+previous_attempt = {'run_id': 'e064a197-8eac-4f22-9be8-69bc1feed7ce', 'snapshot_id': '0c484ef116e802ee848698dda88da96cdf9065ca111b32a7c0a...eef9f97c58e8d94fb7732d9f', 'diagnosis_digest': 'a6083d6532ac2acf4e299eb5e0d83d1ac2599b989887a00479677e0f768e8db1', ...}
+
+    def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
+                                validation_feedback: list[Mapping[str, Any]] | None = None, *,
+                                previous_attempt: Mapping[str, Any] | None = None) -> ModelRequest:
+        retrieval = getattr(run_context, 'retrieval_config', {})
+        support = list(retrieval.get('necessary_source_support', []))
+        prerequisites = list(retrieval.get('source_prerequisites', []))
+        for record in support:
+            if (record.get('snapshot_id') != run_context.snapshot_id or record.get('kind') != 'SOURCE_SPAN'
+                    or not isinstance(record.get('excerpt'), str)
+                    or hashlib.sha256(record['excerpt'].encode()).hexdigest() != record.get('content_digest')):
+                raise ValueError('Planning source support must bind fresh exact source evidence')
+        capabilities = resolve_execution_capabilities(getattr(run_context, 'retrieval_config', {}).get('public_execution_capabilities'))
+        policy = capabilities.get('editable_policy')
+        frontier = getattr(run_context, 'retrieval_config', {}).get('production_path_frontier', [])
+        probe_ids = [p['id']+':'+cid for p in capabilities.get('method_behavior_probes',[]) for cid in p['checks']]
+        editable_targets = {path: ids for path, ids in _unit_ids_by_source_path(diagnosis.raw).items()
+                            if target_permission_error(path, policy) is None}
+        user_payload = {
+            "schema_version": "ce.semantic_changeset.v1_1",
+            "output_schema": _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities),
+            "run_context": {"run_id": run_context.run_id, "case_id": run_context.case_id,
+                            "snapshot_id": run_context.snapshot_id, "input_digest": run_context.input_digest},
+            "diagnosis_packet": dict(diagnosis.raw),
+            "read_only_source_support": support,
+            "source_prerequisites": prerequisites,
+            "production_path_frontier": frontier,
+            "existing_target_paths": [{"path": path, "unit_ids": sorted(unit_ids)}
+                                       for path, unit_ids in sorted(editable_targets.items())],
+            "diagnosis_digest": canonical_digest(diagnosis.raw),
+            "public_execution_capabilities": capabilities,
+            "validation_feedback": list(validation_feedback or []),
+            "output_contract": "Return only a SemanticChangeSet v1.1 JSON object; no markdown fences.",
+        }
+        if not run_context.model_config.get('schema_in_prompt', True):
+            user_payload.pop('output_schema')
+            user_payload['output_fields'] = list(_case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)['properties'])
+        system_prompt = CHANGESET_SYSTEM_PROMPT + (COVERAGE_PROMPT + IMPACT_PROMPT if diagnosis.raw.get('requirement_spec',{}).get('traceability_required') else '') + (FRONTIER_PROMPT if frontier else "")
+        system_prompt += (" Current execution consumer " + capabilities["consumer_id"] + " supports only "
+                          + ", ".join(capabilities["supported_operations"])
+                          + ". Do not propose unsupported operations; retain genuinely unresolved obligations instead.")
+        if support:
+            system_prompt += (' Explicitly plan each new local helper in an authorized owning file, including caller dependencies. '
+                'A proposed helper implementation is not required to pre-exist: distinguish an evidenced defect and a planned '
+                'implementation from an unknown existing ownership, input or lifecycle contract. Use NEEDS_EVIDENCE for '
+                'missing contracts needed to justify the strategy, not merely because the repair code has not been written. '
+                'External API availability/signatures may remain implementation uncertainties for compilation to check when '
+                'the supplied source contract names the operation and the client binding is evidenced; never invent an '
+                'existing method or claim runtime success. Keep behavior not publicly observable explicitly unverified. '
+                'A caller edit cannot authorize unplanned library edits or new editable paths.')
+            system_prompt += (' Read-only source support is fresh public implementation context, not an extra editable target '
+                'or an automatically verified causal relation. Inspect initialization, readiness and state preservation '
+                'before accepting a lifecycle handoff plan: starting an asynchronous call does not establish readiness. '
+                'Record applicable prerequisites and how current postconditions, preservation or open obligations check them. '
+                'If these sources contradict the accepted diagnosis or require new semantic units, use NEEDS_EVIDENCE '
+                'with the exact source locator; do not silently invent supported units or broaden edit permissions. '
+                'Unknown readiness remains unverified; do not propose a delay as proof of correctness.')
+        if prerequisites:
+            system_prompt += (' Review each source_prerequisites entry exactly once in precondition_review. '
+                'Describe the actual requirement-relevant condition from the supplied source, not an assumed generic readiness rule. '
+                'REQUIRED binds real postcondition/preservation IDs in verification_refs; finite checks retain their coverage limit. '
+                'A runtime prerequisite with only BUILD_ONLY/UNKNOWN checks also needs a real open_obligation_ref. '
+                'UNRESOLVED binds existing open_obligation_refs and does not claim the condition satisfied. '
+                'NOT_APPLICABLE has empty reference arrays and a source-grounded relevance rationale. '
+                'This is prerequisite accountability, not a static proof that the proposed code or synchronization is correct.')
+        if probe_ids:
+            system_prompt += " Registered method_behavior_probes are additional public method-owned observations, not frozen independent scorers. For obligations actually covered by these probe assertions choose PUBLIC_BEHAVIOR, set verification_scope.scenario to the registered method scenario and predeclare all necessary behavior_check_refs. Missing, failed or unrelated check results cannot establish PASS. Respect each probe boundary; do not infer external runtime coverage from local stand-ins."
+        model = str(run_context.model_config.get("model", "UNCONFIGURED"))
+        max_tokens = int(run_context.budget.get("max_output_tokens", 4096))
+        output_schema = _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)
+        messages = ({"role": "system", "content": system_prompt},
+                    {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False, sort_keys=True)})
+        draft_metadata = {}
+        if previous_attempt is not None:
+            identity = dict(run_id=run_context.run_id, snapshot_id=run_context.snapshot_id,
+                input_digest=run_context.input_digest, diagnosis_digest=canonical_digest(diagnosis.raw))
+            if (not isinstance(previous_attempt, Mapping) or not validation_feedback
+                    or any(previous_attempt.get(k) != v for k, v in identity.items())
+>                   or previous_attempt.get('state') not in {'REJECTED_PLAN_DRAFT', 'CURRENT_PLAN_FOR_REVISION'}
+                    or not isinstance(previous_attempt.get('response_content'), str)
+                    or not previous_attempt['response_content'].strip()):
+E                   TypeError: unhashable type: 'dict'
+
+src/contractedge/changeset/prompt.py:238: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_changeset_draft_continuity.py::test_malformed_prior_state_is_rejected_without_untyped_failure[state0]
+FAILED tests/test_changeset_draft_continuity.py::test_malformed_prior_state_is_rejected_without_untyped_failure[state1]
+2 failed, 10 passed in 1.75s

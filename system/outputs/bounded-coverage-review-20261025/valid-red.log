@@ -1,0 +1,221 @@
+FFFFF.......FF                                                           [100%]
+=================================== FAILURES ===================================
+_ test_positive_necessary_coverage_is_local_unknown_for_every_obligation_kind[postconditions-] _
+
+group = 'postconditions', prefix = ''
+
+    @pytest.mark.parametrize('group,prefix', [('postconditions', ''), ('preserve_constraints', 'preserve:'),
+                                             ('open_obligations', 'open:')])
+    def test_positive_necessary_coverage_is_local_unknown_for_every_obligation_kind(group, prefix):
+>       result = ModelPublicReviewer(NeverCall(), len, {'model': 'fixture', 'max_context_tokens': 12000}).review(
+            'Public requirement', {group: [obligation()]}, observed())
+
+tests/test_necessary_coverage_review.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/review.py:30: in review
+    return self._review_model(requirement,plan,observation)
+src/contractedge/execution/review.py:123: in _review_model
+    response = complete_quoted(self.provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_necessary_coverage_review.NeverCall object at 0x7fbcda0e5510>
+request = ModelRequest(model='fixture', prompt_version='public-postcondition-review.v2', messages=({'role': 'system', 'content':...erties': {'observation_id': {'type': 'string', 'enum': ['a', 'b']}, 'quote': {'type': 'string'}}}}}}}}}, thinking=None)
+
+    def complete_json(self, request):
+>       raise AssertionError('Only UNKNOWN is admissible for the complete positive necessary evidence')
+E       AssertionError: Only UNKNOWN is admissible for the complete positive necessary evidence
+
+tests/test_necessary_coverage_review.py:33: AssertionError
+_ test_positive_necessary_coverage_is_local_unknown_for_every_obligation_kind[preserve_constraints-preserve:] _
+
+group = 'preserve_constraints', prefix = 'preserve:'
+
+    @pytest.mark.parametrize('group,prefix', [('postconditions', ''), ('preserve_constraints', 'preserve:'),
+                                             ('open_obligations', 'open:')])
+    def test_positive_necessary_coverage_is_local_unknown_for_every_obligation_kind(group, prefix):
+>       result = ModelPublicReviewer(NeverCall(), len, {'model': 'fixture', 'max_context_tokens': 12000}).review(
+            'Public requirement', {group: [obligation()]}, observed())
+
+tests/test_necessary_coverage_review.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/review.py:30: in review
+    return self._review_model(requirement,plan,observation)
+src/contractedge/execution/review.py:123: in _review_model
+    response = complete_quoted(self.provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_necessary_coverage_review.NeverCall object at 0x7fbcdaa53460>
+request = ModelRequest(model='fixture', prompt_version='public-postcondition-review.v2', messages=({'role': 'system', 'content':...erties': {'observation_id': {'type': 'string', 'enum': ['a', 'b']}, 'quote': {'type': 'string'}}}}}}}}}, thinking=None)
+
+    def complete_json(self, request):
+>       raise AssertionError('Only UNKNOWN is admissible for the complete positive necessary evidence')
+E       AssertionError: Only UNKNOWN is admissible for the complete positive necessary evidence
+
+tests/test_necessary_coverage_review.py:33: AssertionError
+_ test_positive_necessary_coverage_is_local_unknown_for_every_obligation_kind[open_obligations-open:] _
+
+group = 'open_obligations', prefix = 'open:'
+
+    @pytest.mark.parametrize('group,prefix', [('postconditions', ''), ('preserve_constraints', 'preserve:'),
+                                             ('open_obligations', 'open:')])
+    def test_positive_necessary_coverage_is_local_unknown_for_every_obligation_kind(group, prefix):
+>       result = ModelPublicReviewer(NeverCall(), len, {'model': 'fixture', 'max_context_tokens': 12000}).review(
+            'Public requirement', {group: [obligation()]}, observed())
+
+tests/test_necessary_coverage_review.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/review.py:30: in review
+    return self._review_model(requirement,plan,observation)
+src/contractedge/execution/review.py:123: in _review_model
+    response = complete_quoted(self.provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_necessary_coverage_review.NeverCall object at 0x7fbcda839510>
+request = ModelRequest(model='fixture', prompt_version='public-postcondition-review.v2', messages=({'role': 'system', 'content':...erties': {'observation_id': {'type': 'string', 'enum': ['a', 'b']}, 'quote': {'type': 'string'}}}}}}}}}, thinking=None)
+
+    def complete_json(self, request):
+>       raise AssertionError('Only UNKNOWN is admissible for the complete positive necessary evidence')
+E       AssertionError: Only UNKNOWN is admissible for the complete positive necessary evidence
+
+tests/test_necessary_coverage_review.py:33: AssertionError
+_______ test_internal_mechanical_shortcut_never_promotes_unknown_to_pass _______
+
+    def test_internal_mechanical_shortcut_never_promotes_unknown_to_pass():
+>       result = ModelPublicReviewer(NeverCall(), len, {'model': 'fixture', 'max_context_tokens': 12000})._review_model(
+            'Public requirement', {'postconditions': [obligation()]}, observed())
+
+tests/test_necessary_coverage_review.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/review.py:123: in _review_model
+    response = complete_quoted(self.provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_necessary_coverage_review.NeverCall object at 0x7fbcd9ef6110>
+request = ModelRequest(model='fixture', prompt_version='public-postcondition-review.v2', messages=({'role': 'system', 'content':...erties': {'observation_id': {'type': 'string', 'enum': ['a', 'b']}, 'quote': {'type': 'string'}}}}}}}}}, thinking=None)
+
+    def complete_json(self, request):
+>       raise AssertionError('Only UNKNOWN is admissible for the complete positive necessary evidence')
+E       AssertionError: Only UNKNOWN is admissible for the complete positive necessary evidence
+
+tests/test_necessary_coverage_review.py:33: AssertionError
+______ test_known_failure_keeps_priority_over_positive_necessary_sibling _______
+
+    def test_known_failure_keeps_priority_over_positive_necessary_sibling():
+        failed = {**obligation(), 'id': 'Q', 'behavior_check_refs': ['failed', 'missing']}
+>       result = ModelPublicReviewer(NeverCall(), len, {'model': 'fixture', 'max_context_tokens': 12000}).review(
+            'Public requirement', {'postconditions': [obligation(), failed]},
+            observed([obs('a', 'PASS'), obs('b', 'PASS'), obs('failed', 'FAIL')]))
+
+tests/test_necessary_coverage_review.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/review.py:36: in review
+    body=self._review_model(requirement,remaining,observation)
+src/contractedge/execution/review.py:123: in _review_model
+    response = complete_quoted(self.provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_necessary_coverage_review.NeverCall object at 0x7fbcdac53490>
+request = ModelRequest(model='fixture', prompt_version='public-postcondition-review.v2', messages=({'role': 'system', 'content':...'observation_id': {'type': 'string', 'enum': ['a', 'b', 'failed']}, 'quote': {'type': 'string'}}}}}}}}}, thinking=None)
+
+    def complete_json(self, request):
+>       raise AssertionError('Only UNKNOWN is admissible for the complete positive necessary evidence')
+E       AssertionError: Only UNKNOWN is admissible for the complete positive necessary evidence
+
+tests/test_necessary_coverage_review.py:33: AssertionError
+_ test_unresolved_semantic_sibling_still_reaches_model_with_only_its_own_check _
+
+    def test_unresolved_semantic_sibling_still_reaches_model_with_only_its_own_check():
+        class Capture(FixtureProvider):
+            def complete_json(self, request):
+                checks = json.loads(request.messages[1]['content'])['checks']
+                assert [c['id'] for c in checks] == ['Q']
+                return super().complete_json(request)
+        provider = Capture({'checks': [{'id': 'Q', 'status': 'UNKNOWN', 'rationale': 'No sufficient evidence',
+                                        'evidence': []}], 'failure_kind': 'UNKNOWN', 'rationale': 'Public limit'})
+        unresolved = {'id': 'Q', 'statement': 'Unresolved requirement', 'verification_kind': 'PUBLIC_BEHAVIOR'}
+>       result = ModelPublicReviewer(provider, len, {'model': 'fixture', 'max_context_tokens': 12000}).review(
+            'Public requirement', {'postconditions': [obligation(), unresolved]}, observed())
+
+tests/test_necessary_coverage_review.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/review.py:30: in review
+    return self._review_model(requirement,plan,observation)
+src/contractedge/execution/review.py:123: in _review_model
+    response = complete_quoted(self.provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_necessary_coverage_review.test_unresolved_semantic_sibling_still_reaches_model_with_only_its_own_check.<locals>.Capture object at 0x7fbcdacb2a10>
+request = ModelRequest(model='fixture', prompt_version='public-postcondition-review.v2', messages=({'role': 'system', 'content':...erties': {'observation_id': {'type': 'string', 'enum': ['a', 'b']}, 'quote': {'type': 'string'}}}}}}}}}, thinking=None)
+
+    def complete_json(self, request):
+        checks = json.loads(request.messages[1]['content'])['checks']
+>       assert [c['id'] for c in checks] == ['Q']
+E       AssertionError: assert ['P', 'Q'] == ['Q']
+E         
+E         At index 0 diff: 'P' != 'Q'
+E         Left contains one more item: 'Q'
+E         Use -v to get more diff
+
+tests/test_necessary_coverage_review.py:89: AssertionError
+_________________ test_local_unknown_stays_pending_in_feedback _________________
+
+    def test_local_unknown_stays_pending_in_feedback():
+        plan = {'status': 'READY_PARTIAL', 'changes': [{'id': 'C', 'postcondition_refs': ['P']}],
+                'postconditions': [obligation()]}
+        observation = observed()
+>       review = ModelPublicReviewer(NeverCall(), len, {'model': 'fixture', 'max_context_tokens': 12000}).review(
+            'Public requirement', plan, observation)
+
+tests/test_necessary_coverage_review.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/contractedge/execution/review.py:30: in review
+    return self._review_model(requirement,plan,observation)
+src/contractedge/execution/review.py:123: in _review_model
+    response = complete_quoted(self.provider, request, quote)
+src/contractedge/model/admission.py:127: in complete_quoted
+    return _dispatch_quoted(provider, request, quote)
+src/contractedge/model/admission.py:121: in _dispatch_quoted
+    return provider.complete_json(request)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.test_necessary_coverage_review.NeverCall object at 0x7fbcd9ef7df0>
+request = ModelRequest(model='fixture', prompt_version='public-postcondition-review.v2', messages=({'role': 'system', 'content':...erties': {'observation_id': {'type': 'string', 'enum': ['a', 'b']}, 'quote': {'type': 'string'}}}}}}}}}, thinking=None)
+
+    def complete_json(self, request):
+>       raise AssertionError('Only UNKNOWN is admissible for the complete positive necessary evidence')
+E       AssertionError: Only UNKNOWN is admissible for the complete positive necessary evidence
+
+tests/test_necessary_coverage_review.py:33: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_necessary_coverage_review.py::test_positive_necessary_coverage_is_local_unknown_for_every_obligation_kind[postconditions-]
+FAILED tests/test_necessary_coverage_review.py::test_positive_necessary_coverage_is_local_unknown_for_every_obligation_kind[preserve_constraints-preserve:]
+FAILED tests/test_necessary_coverage_review.py::test_positive_necessary_coverage_is_local_unknown_for_every_obligation_kind[open_obligations-open:]
+FAILED tests/test_necessary_coverage_review.py::test_internal_mechanical_shortcut_never_promotes_unknown_to_pass
+FAILED tests/test_necessary_coverage_review.py::test_known_failure_keeps_priority_over_positive_necessary_sibling
+FAILED tests/test_necessary_coverage_review.py::test_unresolved_semantic_sibling_still_reaches_model_with_only_its_own_check
+FAILED tests/test_necessary_coverage_review.py::test_local_unknown_stays_pending_in_feedback
+7 failed, 7 passed in 0.31s

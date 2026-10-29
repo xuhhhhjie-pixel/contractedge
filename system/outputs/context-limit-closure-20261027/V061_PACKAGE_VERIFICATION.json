@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "version": "0.6.61",
+  "source_sha256": "5edf97368ec7c7546f295d84db550cb50e4a0767515fc997436558db9abd4738",
+  "installed_method_files": 116,
+  "all_source_files_identical": true,
+  "wheel_sha256": "6b42730c52abb19fac9dbae7d4b98c61bfca73b007958fea5e1efa6e785edad1",
+  "initial_no_build_isolation": "FAILED_MISSING_BDIST_WHEEL; preserved log; package source unchanged",
+  "pep517_declared_build_backend": "PASS",
+  "formal_ready": false
+}

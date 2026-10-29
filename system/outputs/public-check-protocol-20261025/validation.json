@@ -1,0 +1,94 @@
+{
+  "schema_version": "ce.public_check_protocol_validation.v1",
+  "status": "PASS_ENGINEERING_ONLY",
+  "method_version": "0.6.45",
+  "created_utc": "2026-10-25T03:07:20.209781+00:00",
+  "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df",
+  "freeze": {
+    "path": "docs/development/public-check-protocol-20261025-v045-doc-r2.snapshot.json",
+    "sha256": "564b4e777baa1b7794b7443433f07afee7e3a58c9640ce483fb0bc5f79a11f2c",
+    "verification": {
+      "coverage": {
+        "configuration": 16,
+        "fixture": 170,
+        "repository_files": 1,
+        "source": 116,
+        "tooling_files": 79
+      },
+      "development_snapshot_id": "public-check-protocol-20261025-v045-doc-r2",
+      "errors": [],
+      "formal_ready": false,
+      "schema_version": "ce.development_snapshot_verification.v1",
+      "status": "PASS",
+      "unbound_legacy_fixture_files": []
+    }
+  },
+  "full_regression": {
+    "passed": 1727,
+    "subtests_passed": 91,
+    "isolated_demos_enabled": true
+  },
+  "portable_subset": {
+    "passed": 1694,
+    "subtests_passed": 86,
+    "six_historical_native_modules_excluded": true
+  },
+  "installed": {
+    "runtime_files_matched": 116,
+    "passed": 75,
+    "subtests_passed": 28,
+    "explicit_repository_public_fixture_root": true,
+    "standalone_examples_bundled": false
+  },
+  "actual_isolation": {
+    "eight_cell": "PASS",
+    "eight_cell_sessions": 14,
+    "eight_cell_containers": 28,
+    "mode_cells": 24,
+    "mode_sessions_closed": 48,
+    "mode_runs": 96,
+    "http_requests_to_model": 0
+  },
+  "protocol_requirements": {
+    "registered_only_schema_and_both_sources": "PASS",
+    "three_obligation_kinds": "PASS",
+    "unknown_duplicate_scenario_and_coverage_rejection": "PASS",
+    "explicit_finite_scenario_observations": "PASS",
+    "initial_correction_revision_and_ready_identity": "PASS",
+    "failure_to_feedback": "PASS",
+    "actual_six_stage_alignment": "PASS"
+  },
+  "independent_code_review": {
+    "returned_important_findings": 2,
+    "reproduced_and_fixed": 2,
+    "complete_final_conclusion_received": false,
+    "reason": "Service usage limit; root performed supplementary review; no full independent clean-review claim"
+  },
+  "legacy_delivery_manifest": {
+    "version": "0.6.44",
+    "preserved": true,
+    "against_current_v045": "EXPECTED_VERSION_MISMATCH_14_CHANGED_FILES",
+    "current_verifier": "scripts/verify_development_snapshot.py"
+  },
+  "new_model_http_calls": 0,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "original_46_driver_migrated": false,
+  "benchmark_effectiveness": "NOT_RUN_FOR_THIS_VERSION",
+  "evidence_sha256": {
+    "full-final.log": "d11e3618aabc5d281422768b4cd39e3b99fca16557806a21681e4de4bb022a3b",
+    "portable-final.log": "729f03dfca45a6bed8636ff7045e42a0c4a90ae65e0c3b43d044000d469e3d55",
+    "installed-focused.log": "41a68f2822fcde529fea9d5d9dea6e50a70b2331209588b84734347fb898846f",
+    "ACTUAL_STAGE_ALIGNMENT.json": "858aa7662de619f13610907814c21ec3751e86db3a2e980673c871b1686ce7a1",
+    "V045_ACTUAL8.json": "d903d35b14d40afeb12dd930f0edd6e832a22a1ad84f80175cfd0c09fb1b8f96",
+    "V045_METHOD24.json": "603ab9780cadcf04a875fb4dd926c687267c4d30b088332a030839b43a085239",
+    "V045_RUNTIME_INVENTORY.json": "4829ca5226b590a01626d829ca0451577e81f774a6db8932ab381339a5f421e3",
+    "V045_ENGINEERING_JOB.json": "0a725535d51995b273dabc323213f189f5972bc539e5e48c4d0896087acd3790",
+    "V045_PORTABLE_JOB.json": "19fdaf91b01311bcbe8afb1e010f5b5e3497a3978de947d65ce9e63f20a99193",
+    "red.log": "1e5f4bf7e453d33b00da35eb678a2bdefa20881cd5b1e47de747a943704b2a73",
+    "ready-red.log": "5a65037618e9bbc22e1e959b91e8dcc1a2d9628205fd818140a56bee3b737661",
+    "dispatch-red.log": "20aeefaf7246a762a923457019c403665ee959dc1509af8164ee8bc4f13fcae2",
+    "COMPLETION_AUDIT.md": "8279718641182c33ff350d9dd8ca6ba7efe860a3d9d0ce46bf7382bf76c7a4ec"
+  },
+  "next_step": "docs/reports/2026-10-25-public-check-protocol-closure.md"
+}

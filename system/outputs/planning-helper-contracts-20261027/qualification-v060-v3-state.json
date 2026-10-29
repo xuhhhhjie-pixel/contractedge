@@ -1,0 +1,29 @@
+{
+  "status": "STOP_QUALIFICATION_NOT_PASSED",
+  "stages": [
+    {
+      "stage": "public-sandbox",
+      "exit": 0
+    },
+    {
+      "stage": "actual-eight",
+      "exit": 0
+    },
+    {
+      "stage": "full-regression",
+      "exit": 1
+    }
+  ],
+  "source_sha256": "542509c7002fa920759cb80a0ace9d6fbc8d69bd21d9d9c99f15f091990b51ad",
+  "freeze_sha256": "67be68e6c9db43804a1d8444bade0bab7f95b55324f1e01d11cac81f6a7420af",
+  "model_calls_added": 0,
+  "formal_ready": false,
+  "B_opened": false,
+  "preflight": {
+    "status": "PASS",
+    "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
+    "configuration_sha256": "be8a7dc2dc0e87d76e60fb84de688b93ef1ad4a839f3545530ad5e7e00209866"
+  },
+  "active_stage": "full-regression",
+  "error": "RuntimeError: full-regression failed; no automatic retry"
+}

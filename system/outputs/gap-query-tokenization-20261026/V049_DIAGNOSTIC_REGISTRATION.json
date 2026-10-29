@@ -1,0 +1,35 @@
+{
+  "schema_version": "ce.minimal_root_cause_diagnostic.v1",
+  "source_sha256": "758eb3a563c18eac6ec456f6293647094d86d96ad9b750f0dce448e53bd97683",
+  "freeze_sha256": "9881d355c65f56fc92317d9d7f1711fe20b9ab9642a58e24de0d4f140ad7a4bd",
+  "qualification_sha256": "2e68c094341ec103a32b5f082ddf1bcc918891839e18ba1e1566c046ae6db953",
+  "driver_sha256": "6c9490d45748701a3462daea68de21ef7065c1f6400fbc0797104946e961dfa1",
+  "attempts": [
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "attempt_id": "diagnostic-source049-v2-20261026-rw-certmanager-9116",
+      "output": "/home/xhj/contractedge-diagnostic-source049-v2-20261026/methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116",
+      "registration": "/home/xhj/contractedge-diagnostic-source049-v2-20261026/registrations/RW-CERTMANAGER-9116.json",
+      "registration_sha256": "cd4339648c3cb584b9aec819e9cd87a07b1c2ff6aa355eb95fb49d8b5341204e"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "attempt_id": "diagnostic-source049-v2-20261026-r3-kpt-4673",
+      "output": "/home/xhj/contractedge-diagnostic-source049-v2-20261026/methods/R3-KPT-4673/R3-KPT-4673",
+      "registration": "/home/xhj/contractedge-diagnostic-source049-v2-20261026/registrations/R3-KPT-4673.json",
+      "registration_sha256": "6a953189bf0c0b7bcfbf0d73d18747a8bef1f5cf2caf4ccf0518b77b429b0cf4"
+    }
+  ],
+  "once_per_case": true,
+  "superseded_v1_was_never_dispatched": true,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "cumulative_api_limit_cny": 150,
+  "predecessor_v048_outcomes": "BOTH_SEMANTIC_FAIL_PRESERVED",
+  "hypotheses": [
+    "Multiword exact identifiers recover the implementation before pool truncation",
+    "Recovered implementation reaches planning and source execution; original KPT success path remains intact"
+  ],
+  "success_gate": "Cert independent PASS/public not FAIL before KPT control; both required and no inheritance into fixed46",
+  "transient_workspace_policy": "RETIRE_CLOSED_SCORED_PUBLIC_WORKSPACE"
+}

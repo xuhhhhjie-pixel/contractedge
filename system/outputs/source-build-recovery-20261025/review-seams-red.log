@@ -1,0 +1,72 @@
+..FFF                                                                    [100%]
+=================================== FAILURES ===================================
+_ test_actual_isolated_worker_and_compatibility_export_keep_partial_operation_proof _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-461/test_actual_isolated_worker_an0')
+
+    def test_actual_isolated_worker_and_compatibility_export_keep_partial_operation_proof(tmp_path):
+        from copy import deepcopy
+        from contractedge.orchestration.repair import rebind_execution_plan
+        from contractedge.execution.topomen import apply_edits
+        from tests.test_continuation_operation_coverage import fixture
+        from tests.test_isolated_worker_entry import worker
+        prior, edits, policy = fixture(tmp_path)
+        original = deepcopy(prior)
+        original['operations'][0]['intent'] = 'Historical original intent'
+        applied = apply_edits(prior, tmp_path, policy, edits)
+        rebound = worker().bind_seed_retry(rebind_execution_plan, original, tmp_path, {}, prior, applied)
+>       assert rebound['execution_continuation']['prior_applied_operations']['C1']['path'] == 'templates/serviceaccount.yaml'
+E       KeyError: 'prior_applied_operations'
+
+tests/test_seed_retry_binding.py:48: KeyError
+_ test_native_post_replacement_exit_restores_only_owned_edits_without_model_replay[False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-461/test_native_post_replacement_e0')
+external_change = False
+
+    @pytest.mark.parametrize('external_change', [False, True])
+    def test_native_post_replacement_exit_restores_only_owned_edits_without_model_replay(tmp_path, external_change):
+        public = freeze_example('config-binding', tmp_path)
+        config = {**default_config('config-binding'), 'execution_backend': 'topomen_agent',
+                  'max_rounds': 1, 'run_id': 'native-edit-window',
+                  'topomen_source_root': str(Path(__file__).resolve().parents[1]/'vendor/topomen')}
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        child = tmp_path/'native-write-child.py'; child.write_text(CHILD)
+        result = subprocess.run([sys.executable, '-B', str(child), str(tmp_path)],
+                                capture_output=True, text=True, timeout=120)
+        assert result.returncode == 73, result.stderr + result.stdout
+        run = tmp_path/'run'; source = run/'workspace/source/repo'
+        saved = json.loads((run/'journal/recovery.identity.json').read_text())
+        events = [json.loads(p.read_text()) for p in sorted((run/'journal/trials/round-0').glob('[0-9]*.json'))]
+>       assert 'EDIT_INTENT' in [event['kind'] for event in events]
+E       AssertionError: assert 'EDIT_INTENT' in ['BEGIN_COMMITTED', 'AUTHORITY_DURABLE']
+
+tests/test_native_edit_window_recovery.py:46: AssertionError
+_ test_native_post_replacement_exit_restores_only_owned_edits_without_model_replay[True] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-461/test_native_post_replacement_e1')
+external_change = True
+
+    @pytest.mark.parametrize('external_change', [False, True])
+    def test_native_post_replacement_exit_restores_only_owned_edits_without_model_replay(tmp_path, external_change):
+        public = freeze_example('config-binding', tmp_path)
+        config = {**default_config('config-binding'), 'execution_backend': 'topomen_agent',
+                  'max_rounds': 1, 'run_id': 'native-edit-window',
+                  'topomen_source_root': str(Path(__file__).resolve().parents[1]/'vendor/topomen')}
+        (tmp_path/'config.json').write_text(json.dumps(config))
+        child = tmp_path/'native-write-child.py'; child.write_text(CHILD)
+        result = subprocess.run([sys.executable, '-B', str(child), str(tmp_path)],
+                                capture_output=True, text=True, timeout=120)
+        assert result.returncode == 73, result.stderr + result.stdout
+        run = tmp_path/'run'; source = run/'workspace/source/repo'
+        saved = json.loads((run/'journal/recovery.identity.json').read_text())
+        events = [json.loads(p.read_text()) for p in sorted((run/'journal/trials/round-0').glob('[0-9]*.json'))]
+>       assert 'EDIT_INTENT' in [event['kind'] for event in events]
+E       AssertionError: assert 'EDIT_INTENT' in ['BEGIN_COMMITTED', 'AUTHORITY_DURABLE']
+
+tests/test_native_edit_window_recovery.py:46: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_seed_retry_binding.py::test_actual_isolated_worker_and_compatibility_export_keep_partial_operation_proof
+FAILED tests/test_native_edit_window_recovery.py::test_native_post_replacement_exit_restores_only_owned_edits_without_model_replay[False]
+FAILED tests/test_native_edit_window_recovery.py::test_native_post_replacement_exit_restores_only_owned_edits_without_model_replay[True]
+3 failed, 2 passed in 5.63s

@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "canonical_schema": "execution_feedback.v1 semantic_outcome",
+  "checks": [
+    {
+      "independent": "PASS",
+      "public": "PUBLIC_REVIEW_PASS",
+      "allowed": true
+    },
+    {
+      "independent": "PASS",
+      "public": "UNKNOWN",
+      "allowed": true
+    },
+    {
+      "independent": "PASS",
+      "public": "PUBLIC_REVIEW_FAIL",
+      "allowed": false
+    },
+    {
+      "independent": "PASS",
+      "public": "FAIL",
+      "allowed": false
+    },
+    {
+      "independent": "SEMANTIC_FAIL",
+      "public": "PUBLIC_REVIEW_PASS",
+      "allowed": false
+    },
+    {
+      "independent": "NO_CANDIDATE",
+      "public": "UNKNOWN",
+      "allowed": false
+    }
+  ],
+  "new_model_calls": 0,
+  "old_driver_never_executed": true,
+  "root_created": false
+}

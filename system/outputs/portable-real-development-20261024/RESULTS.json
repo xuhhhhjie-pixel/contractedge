@@ -1,0 +1,60 @@
+{
+  "role": "SINGLE_CLEAN_CLONE_OPERATIONAL_VALIDATION",
+  "status": "PASS_REAL_CLEAN_CLONE_CLI_PUBLIC_PATCH_AND_INDEPENDENT_SCORE",
+  "method_version": "0.6.38",
+  "source_digest": "5f9e90c459b95e703b0c9f32b9f9d70fff1eb859f90e95489f0083c632f422fe",
+  "clone_commit": "8625d0744ceb0cda7911fc60af6aa97ca9c1f9ba",
+  "fresh_venv": true,
+  "case_id": "RW-CAND-130",
+  "method_status": "PUBLIC_REVIEW_COMPLETE",
+  "independent_status": "PASS",
+  "model_calls": 4,
+  "edit_rounds": 1,
+  "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+  "patch_bytes": 1474,
+  "batch_sha256": "72c2d89f897404bb6bf3e73531749cde18ad1b16967ffd8c19c132f9e36af004",
+  "independent_cohort_sha256": "864d68d49772875b6765c4c7cb1c4de7eb4ce9cca82d7ef64fdbc6c6cdb1feb3",
+  "native_agent": "topomen.collaboration.base_agent.DefaultAgent",
+  "native_source_sha256": "3dfc43754d4bae6dbc99051ed607d4cc756b26049b79b7f5cc2f9865ee17b2dd",
+  "public150_input_projection": {
+    "verified": 150,
+    "private_materials_loaded": false,
+    "source_trees_extracted": 0,
+    "release_identity": {
+      "release_id": "ContractEdge-benchmark150-v1-20261019",
+      "release_entry_sha256": "6f0d200363dbe14595f2cb3c4cbbaab324b0cc62eb760acc4393d3fbe02a66ef",
+      "public_manifest_sha256": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+      "selected_cases": 150,
+      "by_class": {
+        "R1": 30,
+        "R2": 30,
+        "R3": 30,
+        "R4": 30,
+        "R5": 30
+      }
+    }
+  },
+  "original_source_roots_absent_in_requests": true,
+  "config_adaptations": [
+    "run_id",
+    "topomen_source_root",
+    "lock_root",
+    "money_budget.path"
+  ],
+  "G3_accepted": false,
+  "G6_complete": false,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "new_cost_cny": 0.383612,
+  "ledger_record_ids": [
+    "aa0a3f80cfa64be7a6d8aa433a5cf01b",
+    "2d99958b59b54c3d9d8ad2acafe718a1",
+    "8fc28548167046fb9152fc61df079152",
+    "a3ddd046b9244104a40792cc3d4fe27b"
+  ],
+  "limits": [
+    "Same Linux host/localGit clone, not remote/newOS",
+    "Docker daemon remains available; no strong G3 claim",
+    "Only pre-model startup recovery exercised; not request-unknown/patch interruption/scoring recovery/full formal scheduling"
+  ]
+}

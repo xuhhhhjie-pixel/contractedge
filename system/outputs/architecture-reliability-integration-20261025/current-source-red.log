@@ -1,0 +1,28 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_current_candidate_front_uses_seed_bytes_and_valid_handoff_without_claiming_success _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-446/test_current_candidate_front_u0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f4fc3595780>
+
+    def test_current_candidate_front_uses_seed_bytes_and_valid_handoff_without_claiming_success(tmp_path,monkeypatch):
+        from contractedge.orchestration.feedback import validate_feedback
+        observed=[]
+        def inspect_front(source,method,workspace,provider,config,counter,**kw):
+            assert (source/'main.go').read_text()=='seeded\n'
+            feedback=kw['execution_feedback']
+            validate_feedback(feedback,case_id=method.case_id,input_digest=method.input_digest,
+                              to_snapshot=compute_snapshot(source).snapshot_id)
+            assert feedback['run_id']==config['run_id']
+            assert feedback['semantic_outcome']=='UNKNOWN' and feedback['public_check_results']==[]
+            assert feedback['from_snapshot']==method.initial_snapshot_id
+            assert feedback['to_snapshot']!=method.initial_snapshot_id
+            observed.append(feedback)
+        result,_,_=recovery_fixture(tmp_path,monkeypatch,mode='CURRENT_CANDIDATE',front_check=inspect_front)
+>       assert observed and result['status']=='RECOVERY_PLAN_UNSUPPORTED'
+E       assert ([])
+
+tests/test_isolated_worker_entry.py:102: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_isolated_worker_entry.py::test_current_candidate_front_uses_seed_bytes_and_valid_handoff_without_claiming_success
+1 failed in 1.95s

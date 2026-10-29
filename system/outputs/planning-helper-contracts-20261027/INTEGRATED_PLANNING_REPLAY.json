@@ -1,0 +1,18 @@
+{
+  "status": "ACTUAL_SAVED_PLANNING_HELPER_REPLAY_PASS",
+  "model_calls": 0,
+  "source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "source_unchanged": true,
+  "helper_records": 8,
+  "helper_bytes": 5443,
+  "prerequisite_reviews": 8,
+  "actual_adapter_body_verified": true,
+  "final_delivery_gate_pass": true,
+  "old_plan_missing_review_rejected": true,
+  "other_payload_fields_unchanged": true,
+  "model_and_output_budget_unchanged": true,
+  "total_token_bound": 174448,
+  "context_cap": 220000,
+  "formal_ready": false,
+  "limitation": "Planning input and review accountability only; no model-generated new plan or repair-quality improvement established."
+}

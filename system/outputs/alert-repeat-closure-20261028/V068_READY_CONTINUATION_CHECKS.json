@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "tests": 35,
+  "deselected": 1,
+  "scope": "Existing READY identity/source consistency, recorder hooks, token/call/time budget and parent broker tests. Actual namespace integration not repeated; prior exact-source actual8 evidence retained. This is not an ACK behavioral result.",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "new_model_calls": 0
+}

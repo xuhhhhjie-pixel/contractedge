@@ -1,0 +1,1 @@
+{"coverage": {"configuration": 59, "fixture": 205, "repository_files": 1, "source": 116, "tooling_files": 288}, "development_snapshot_id": "ordering-source-v060-20261027-v1", "errors": [], "formal_ready": false, "schema_version": "ce.development_snapshot_verification.v1", "status": "PASS", "unbound_legacy_fixture_files": []}

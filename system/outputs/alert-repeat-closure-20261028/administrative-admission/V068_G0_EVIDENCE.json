@@ -1,0 +1,134 @@
+{
+  "schema_version": "ce.formal_gate_evidence.v1",
+  "gate": "G0",
+  "identity": {
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
+    "candidate_config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "executed_at": "2026-10-28T16:19:25.382656+00:00",
+  "checker": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/finalize_admission_v068_resumed.py",
+    "sha256": "e4e067f66e6b083fe8fcc548b7f0439c5ea9fe3957830381e90e1164e6550bf2"
+  },
+  "inputs": [
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+      "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+    },
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+      "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+    },
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+      "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+    },
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_G0_EVIDENCE.json",
+      "sha256": "1b296c69a5ceab41dcb08b49676679b046633c88b33a956dffcc5ddb8fefcc9f"
+    },
+    {
+      "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/panel.json",
+      "sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d"
+    },
+    {
+      "path": "/home/xhj/contractedge-parent402-v068-20261028/qualification.json",
+      "sha256": "7385997adf075a0602c4466cf5710fba523d9a082878b517a42fc55e37575c07"
+    }
+  ],
+  "checks": [
+    {
+      "id": "membership150",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+          "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+          "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+        }
+      ]
+    },
+    {
+      "id": "public_evaluation_mapping",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+          "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+          "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+        }
+      ]
+    },
+    {
+      "id": "archive_grader_partition_integrity",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+          "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+          "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+        }
+      ]
+    },
+    {
+      "id": "release_layout_mapping",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+          "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+          "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+        }
+      ]
+    },
+    {
+      "id": "resource_preflight150",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+          "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+          "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+        }
+      ]
+    }
+  ],
+  "scope": "Reuse verified unchanged method source/config/data evidence; explicitly bind same-source administrative parent amendment. No old method-version effectiveness is inherited."
+}

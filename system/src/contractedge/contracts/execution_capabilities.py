@@ -27,7 +27,7 @@ def public_behavior_check_catalog(capabilities: Mapping | None) -> list[dict]:
                 or not isinstance(producer_sha, str)
                 or not re.fullmatch(r'[0-9a-f]{64}', producer_sha)
                 or not isinstance(statement, str) or not statement):
-            raise ValueError('Invalid or conflicting public behavior check capability')
+            raise ValueError('Public check IDs must be unique; invalid or conflicting public behavior check capability')
         if verification_scope is not None and (not isinstance(verification_scope, Mapping)
                 or set(verification_scope) != {'scenario'} or not isinstance(verification_scope['scenario'], str)
                 or not verification_scope['scenario']):
@@ -63,15 +63,31 @@ def public_behavior_check_catalog(capabilities: Mapping | None) -> list[dict]:
             if (not isinstance(check, Mapping) or not isinstance(check.get('id'), str)
                     or not check['id'].startswith(registered['probe_id'] + ':')):
                 raise ValueError('Registered check ID must bind its declared producer')
-            members = check.get('covered_scenarios')
-            if members is not None and (not isinstance(members, list) or not members
-                    or any(not isinstance(value, str) or not value for value in members)
-                    or len(set(members)) != len(members)):
-                raise ValueError('Public scenario coverage must be explicit and unique')
+            # Both published revisions are accepted only as explicit declarations.
+            # Never infer a scenario from an ID or silently prefer conflicting fields.
+            if ('scenario' in check or 'scenario_members' in check) and not (
+                    'scenario' in check and 'scenario_members' in check):
+                raise ValueError('Registered public check requires its declared scenario and members')
+            legacy_scenario = check.get('scenario')
+            scope = check.get('verification_scope')
+            if scope is None and isinstance(legacy_scenario, str) and legacy_scenario.strip():
+                scope = {'scenario': legacy_scenario}
+            if (not isinstance(scope, Mapping) or set(scope) != {'scenario'}
+                    or not isinstance(scope['scenario'], str) or not scope['scenario'].strip()
+                    or legacy_scenario is not None and legacy_scenario != scope['scenario']):
+                raise ValueError('Registered public check requires a consistent explicit scenario')
+            members = check.get('scenario_members', check.get('covered_scenarios'))
+            if (not isinstance(members, list) or not members
+                    or any(not isinstance(value, str) or not value.strip() for value in members)
+                    or len(set(members)) != len(members)
+                    or 'scenario_members' in check and 'covered_scenarios' in check
+                    and check['scenario_members'] != check['covered_scenarios']):
+                raise ValueError('Registered public check scenario coverage must be explicit and unique')
+            if not isinstance(check.get('scope'), str) or not check['scope'].strip():
+                raise ValueError('Registered public check requires a finite scope')
             add(check['id'], 'REGISTERED_PUBLIC_CHECK', registered['probe_id'],
-                registered.get('observer_sha256'), check.get('statement'),
-                check.get('verification_scope'), scope=check.get('scope'),
-                covered_scenarios=members)
+                registered.get('observer_sha256'), check.get('statement'), scope,
+                scope=check.get('scope'), covered_scenarios=list(members))
     return result
 
 

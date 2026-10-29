@@ -1,0 +1,9 @@
+{
+  "status": "SUCCESSFUL_KPT_INITIAL_REQUEST_UNCHANGED_ZERO_API",
+  "source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "all_messages_identical": true,
+  "model_and_output_schema_unchanged": true,
+  "new_api_calls": 0,
+  "formal_ready": false,
+  "scope": "Exact initial request equivalence; not a new statistical replicate or same-source formal panel result"
+}

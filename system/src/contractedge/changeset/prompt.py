@@ -13,24 +13,32 @@ from contractedge.model.provider import ModelRequest
 from contractedge.model.schema import constrained_output_schema
 from contractedge.contracts.permissions import target_permission_error
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities, public_behavior_check_catalog
+from contractedge.contracts.public_checks import public_check_catalog
 
+
+from contractedge.contracts.pointers import JSON_POINTER_GUIDANCE
 
 CHANGESET_SYSTEM_PROMPT = """Produce one ContractEdge SemanticChangeSet v1.1 JSON object. Plan only changes that restore supported planned violations. Every change must cite a supported violation and postcondition. Preserve already satisfied outcomes and list unresolved obligations. Existing targets must use current snapshot paths/digests. A missing target may be NEW only when an EXPECTED_MISSING role and evidence justify it. Read-only source evidence does not grant edit permission: existing_target_paths contains only publicly editable targets. Do not write patch code or claim that any edit has been applied."""
 CHANGESET_SYSTEM_PROMPT += " In this model-facing schema, each target uses target_kind. For target_kind EXISTING, emit source_path and unit_refs from the same entry in existing_target_paths; every unit in that change must resolve to that one source_path. If a supported repair needs edits in multiple files, create separate changes, one per source_path, and link each change to the relevant supported violation and postcondition. Do not combine units from different files in one target. Do not invent a path, locator, snapshot ID, or digest because the runner resolves those from the current source snapshot. For target_kind NEW, emit parent_path, proposed_path, expected_role, anchor_unit_refs, missing_unit_refs, and justification_refs. Do not mix fields from these two forms. The runner translates your selector into the canonical v1.1 target before validation."
 CHANGESET_SYSTEM_PROMPT += " Trace each proposed setting or field through its production consumer to the generated or runtime outcome, using the supplied evidence and supported relation chain. Do not add an unused value or declaration whose consumer path is absent from the supplied evidence. State a postcondition at the contract boundary that the change is intended to restore; do not treat merely adding a configuration key as sufficient when no consuming template or code is evidenced."
 CHANGESET_SYSTEM_PROMPT += " Every planned postcondition must cite the atomic obligation IDs it restores, as well as its relation_refs. Preserve or leave open each atom not repaired this round by citing that atom in the matching preserve_constraints or open_obligations entry. Do not treat a test-only edit as restoration of a production relation; tests may be supplementary changes but cannot replace the production change or its postcondition."
+CHANGESET_SYSTEM_PROMPT += " outcome_coverage.preserve_required contains outcome IDs whose already satisfied parts must have explicit preserve_constraints entries. open_obligations do not substitute for those preservation constraints. For an outcome containing both failed and passing predicates, preserve the supported passing predicates, plan the failed ones, and retain genuinely unverified residuals as open; do not delete a preservation requirement to satisfy validation. If no changes are planned, preservation_impact must use GLOBAL with empty change_refs rather than referring to absent changes."
 CHANGESET_SYSTEM_PROMPT += " If planning needs additional evidence, return NEEDS_EVIDENCE with no executable changes and explicit open obligations. When you can locate the missing evidence, include evidence_gaps with id, summary and locator_hint.path, locator_hint.symbol or locator_hint.search_term. This shares the single Diagnosis extension allowance; it does not create a new round or replenish budgets. Otherwise omit evidence_gaps or return an empty array."
-CHANGESET_SYSTEM_PROMPT += " Make every action specific enough for a separate executor: identify the production consumer and intended binding/state change in semantic_action, and preserve the requirement trigger/scope in intent. Use depends_on only for real prerequisites. Do not restate 'fix configuration' as the entire action or embed full implementation code. Each P must state the actual observable boundary in planned_check/check_scope. Set verification_kind to PUBLIC_STRUCTURE, PUBLIC_BEHAVIOR, BUILD_ONLY, NOT_PUBLICLY_OBSERVABLE or UNKNOWN according to the declared public capabilities. A behavior P is not BUILD_ONLY merely because only builds are available. Unobservable behavior remains open to verification but does not prevent an otherwise supported executable change. Do not invent a new probe, command or hidden fixture. Preserve all supported atoms not repaired by this change."
+CHANGESET_SYSTEM_PROMPT += " Make every action specific enough for a separate executor: identify the production consumer and intended binding/state change in semantic_action, and preserve the requirement trigger/scope in intent. Use depends_on only for real prerequisites. Do not restate 'fix configuration' as the entire action or embed full implementation code. When reordering a production block, identify where every referenced input is initialized and remains in scope. Place the block only after those evidenced prerequisites and before the dependent behavior; a source line naming one prerequisite does not prove all inputs are available. Preserve error handling and guards when describing the move. Each P must state the actual observable boundary in planned_check/check_scope. Set verification_kind to PUBLIC_STRUCTURE, PUBLIC_BEHAVIOR, BUILD_ONLY, NOT_PUBLICLY_OBSERVABLE or UNKNOWN according to the declared public capabilities. A behavior P is not BUILD_ONLY merely because only builds are available. Unobservable behavior remains open to verification but does not prevent an otherwise supported executable change. Do not invent a new probe, command or hidden fixture. Preserve all supported atoms not repaired by this change."
 
 CHANGESET_SYSTEM_PROMPT += " Review each atom against its original wording and trigger/object/preservation scope before planning. For each already evidenced production branch relevant to the same obligation, state in semantic_action/intent whether it is changed, remains valid with supporting rationale, or remains unresolved; do not equate an exact target with complete branch coverage. A broad owning-function obligation cannot silently narrow to one validator or one execution mode. No whole-repository branch enumeration is required. For declared-input equality use verification_kind=DECLARED_INPUT_EQUALITY and comparison_requirements binding every required artifact_id/input_pointer/output_pointer before execution. Use one P per scenario/resource when needed. Bindings contain paths, never expected values; incomplete or unavailable bindings remain UNKNOWN. Use verification_scope with scenario/resource identities when supplied by public artifacts; do not guess missing identities. Apply the appropriate verification kind to preservation and open obligations too."
 
 CHANGESET_SYSTEM_PROMPT += " Before proposing reuse or transfer of runtime objects, inspect their ownership, cancellation, timer/channel lifetime, route/input binding and synchronization contracts in the supplied source. Transferring a map of pointers does not establish that the pointed-to objects remain usable under the replacement owner. If this repair strategy depends on a missing lifecycle contract, use the existing NEEDS_EVIDENCE extension with exact symbols rather than treating a proposed helper API as evidence that the strategy is safe. Preserve all source-supported behavior and retain unverified parts explicitly."
 
+CHANGESET_SYSTEM_PROMPT += " When a change narrows a collection passed to a consumer, trace the complete collection through every relevant output/writeback branch. State how items excluded from that consumer remain available where preservation requires them. Preserving an existing assignment or helper sequence is not sufficient when its inputs or activation conditions change. Align initialization, helper use and cleanup with the same applicable conditions, or explain a supported alternative. Preserve required behavior rather than freezing a source statement that conflicts with the new selection."
+
+CHANGESET_SYSTEM_PROMPT += " " + JSON_POINTER_GUIDANCE
+
 COVERAGE_PROMPT = " For each behavior_check_refs binding explicitly set check_coverage: ALL_OF only if those checks together cover the complete concrete statement; NECESSARY_ONLY if failure of a required instance disproves it but success does not exhaust all inputs, branches or modes; SUPPORTING only if a failed result would not contradict the statement (for example an unrelated control). Incomplete mode coverage alone is NECESSARY_ONLY, not SUPPORTING. Bind the named necessary checks even when a public result was not selected; unobserved results stay UNKNOWN. Explain coverage_rationale using the public check descriptions. Narrow statements or leave UNKNOWN rather than claiming broad sufficiency."
 
-IMPACT_PROMPT = " When preservation_impact is requested, account for every preserve_id exactly once: CHANGES lists all concrete change_refs that may influence it with a rationale; GLOBAL has an empty list and explains why the constraint is global. These are possible impact associations, never proof of causality or permission to skip preservation checks."
+IMPACT_PROMPT = " When preservation_impact is requested, preserve_id refers to the id of an entry you declare in this plan's preserve_constraints, never its outcome_id or an outcome ID. Account for each such entry exactly once: CHANGES lists all concrete change_refs that may influence it with a rationale; GLOBAL has an empty list and explains why the constraint is global. If preserve_constraints is empty, preservation_impact must also be empty. These are possible impact associations, never proof of causality or permission to skip preservation checks."
 
-FRONTIER_PROMPT = " production_path_frontier is a bounded lexical sibling inventory, not a proven call graph or new edit permission. Review each supplied source_evidence_id exactly once in production_path_review: MODIFY with change_refs targeting that actual branch, PRESERVE with a concrete reason, OUT_OF_SCOPE with a concrete relevance explanation, or UNRESOLVED with real open_obligation_refs. Do not silently omit another owning-function branch or relabel it repaired because a neighbouring branch is changed. Inspect the exact source text; shared names alone do not prove relevance. Unrepresented or truncated source remains a coverage limit."
+FRONTIER_PROMPT = " production_path_frontier is a bounded lexical sibling inventory, not a proven call graph or new edit permission. Review each supplied source_evidence_id exactly once in production_path_review: MODIFY with change_refs targeting that actual branch, PRESERVE with a concrete reason, OUT_OF_SCOPE with a concrete relevance explanation, or UNRESOLVED with real open_obligation_refs. Do not silently omit another owning-function branch or relabel it repaired because a neighbouring branch is changed. Inspect the exact source text; shared names alone do not prove relevance. Unrepresented or truncated source remains a coverage limit. MODIFY has nonempty real change_refs and empty open_obligation_refs; incomplete runtime verification belongs in the plan open_obligations, without erasing it. UNRESOLVED describes unplanned branch intent with real open_obligation_refs and empty change_refs. PRESERVE and OUT_OF_SCOPE have both reference arrays empty."
 
 
 
@@ -95,7 +103,10 @@ def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = Non
     if prerequisites:
         schema['required'].append('precondition_review')
         properties['precondition_review']['minItems'] = len(prerequisites)
+        properties['precondition_review']['maxItems'] = len(prerequisites)
         properties['precondition_review']['items']['properties']['source_evidence_ref']['enum'] = [r['source_evidence_ref'] for r in prerequisites]
+        if any(r.get('establishment_required') is True for r in prerequisites):
+            properties['precondition_review']['items']['required'].append('establishment')
     else:
         properties.pop('precondition_review', None)
     properties.pop("obligation_lineage",None)
@@ -108,6 +119,8 @@ def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = Non
         fields.pop('stable_obligation_keys',None)
         if not probe_ids and not raw.get('requirement_spec',{}).get('traceability_required'):
             fields.pop('check_coverage',None);fields.pop('coverage_rationale',None)
+        if probe_ids and raw.get('requirement_spec',{}).get('traceability_required'):
+            properties[kind]['items']['required'].extend(['check_coverage','coverage_rationale'])
         if probe_ids:
             fields['behavior_check_refs']['items']['enum'] = list(probe_ids)
         else:
@@ -146,6 +159,8 @@ def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = Non
     properties["open_obligations"]["items"]["properties"]["obligation_refs"]["items"]["enum"] = obligation_ids
     if not preserve_ids:
         properties["preserve_constraints"]["maxItems"] = 0
+        if "preservation_impact" in properties:
+            properties["preservation_impact"]["maxItems"] = 0
     if not outcome_ids:
         properties["open_obligations"]["maxItems"] = 0
     coverage = properties["outcome_coverage"]["items"]["properties"]
@@ -157,7 +172,8 @@ def _case_output_schema(diagnosis: DiagnosisPacket, policy: Mapping | None = Non
 
 
 def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
-                            validation_feedback: list[Mapping[str, Any]] | None = None) -> ModelRequest:
+                            validation_feedback: list[Mapping[str, Any]] | None = None, *,
+                            previous_attempt: Mapping[str, Any] | None = None) -> ModelRequest:
     retrieval = getattr(run_context, 'retrieval_config', {})
     support = list(retrieval.get('necessary_source_support', []))
     prerequisites = list(retrieval.get('source_prerequisites', []))
@@ -169,8 +185,7 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
     capabilities = resolve_execution_capabilities(getattr(run_context, 'retrieval_config', {}).get('public_execution_capabilities'))
     policy = capabilities.get('editable_policy')
     frontier = getattr(run_context, 'retrieval_config', {}).get('production_path_frontier', [])
-    check_catalog = public_behavior_check_catalog(capabilities)
-    probe_ids = [check['id'] for check in check_catalog]
+    probe_ids = list(public_check_catalog(capabilities))
     editable_targets = {path: ids for path, ids in _unit_ids_by_source_path(diagnosis.raw).items()
                         if target_permission_error(path, policy) is None}
     user_payload = {
@@ -186,17 +201,22 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
                                    for path, unit_ids in sorted(editable_targets.items())],
         "diagnosis_digest": canonical_digest(diagnosis.raw),
         "public_execution_capabilities": capabilities,
+        "public_behavior_check_catalog": [
+            {key:value for key,value in row.items() if key not in {"statement", "boundary", "scope"}}
+            for row in public_behavior_check_catalog(capabilities)],
+        "public_behavior_check_catalog_description_source": (
+            "Identity and scope index only. Complete predicate statements and observation boundaries remain "
+            "in public_execution_capabilities under the same producer/check IDs; neither declaration is a result."),
         "validation_feedback": list(validation_feedback or []),
         "output_contract": "Return only a SemanticChangeSet v1.1 JSON object; no markdown fences.",
     }
-    if check_catalog:
-        user_payload['public_behavior_check_catalog'] = check_catalog
+    if retrieval.get('planning_helper_contracts') is True:
+        user_payload['run_context']['planning_helper_contracts']={
+            'enabled':True,'max_bytes':retrieval.get('planning_helper_max_bytes',24000)}
     if not run_context.model_config.get('schema_in_prompt', True):
         user_payload.pop('output_schema')
         user_payload['output_fields'] = list(_case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)['properties'])
-    traceability = diagnosis.raw.get('requirement_spec',{}).get('traceability_required')
-    system_prompt = (CHANGESET_SYSTEM_PROMPT + (COVERAGE_PROMPT if probe_ids or traceability else '')
-                     + (IMPACT_PROMPT if traceability else '') + (FRONTIER_PROMPT if frontier else ""))
+    system_prompt = CHANGESET_SYSTEM_PROMPT + (COVERAGE_PROMPT + IMPACT_PROMPT if diagnosis.raw.get('requirement_spec',{}).get('traceability_required') else '') + (FRONTIER_PROMPT if frontier else "")
     system_prompt += (" Current execution consumer " + capabilities["consumer_id"] + " supports only "
                       + ", ".join(capabilities["supported_operations"])
                       + ". Do not propose unsupported operations; retain genuinely unresolved obligations instead.")
@@ -218,24 +238,100 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
             'Unknown readiness remains unverified; do not propose a delay as proof of correctness.')
     if prerequisites:
         system_prompt += (' Review each source_prerequisites entry exactly once in precondition_review. '
+            'source_alias_refs name identical snapshot/span/content aliases, not extra review entries. '
+            'Consolidate multiple conditions and their check references for one canonical source into one row. '
             'Describe the actual requirement-relevant condition from the supplied source, not an assumed generic readiness rule. '
             'REQUIRED binds real postcondition/preservation IDs in verification_refs; finite checks retain their coverage limit. '
             'A runtime prerequisite with only BUILD_ONLY/UNKNOWN checks also needs a real open_obligation_ref. '
             'UNRESOLVED binds existing open_obligation_refs and does not claim the condition satisfied. '
             'NOT_APPLICABLE has empty reference arrays and a source-grounded relevance rationale. '
             'This is prerequisite accountability, not a static proof that the proposed code or synchronization is correct.')
+        if any(r.get('establishment_required') is True for r in prerequisites):
+            system_prompt += (' For each precondition_review provide establishment independently of verification_refs: '
+                'CURRENT_SOURCE identifies the existing establishment mechanism with a verbatim source_quote from that '
+                'source_evidence_ref and no change_refs. PLANNED_CHANGE identifies real change_refs and how those edits '
+                'will establish the condition before its dependent use; source_quote locates the current limitation, '
+                'not nonexistent repair code. Use UNRESOLVED or NOT_APPLICABLE with matching disposition and no changes. '
+                'A test is a later observation, never an establishment mechanism. For asynchronous work distinguish '
+                'the actual requirement-relevant state from weaker proxies: being safe to read an empty collection '
+                'does not mean the collection already contains the required data, and eventual consumption is not completion before publication. '
+                'launch, empty-state initialization, data consumption/completion, publication to readers, and retirement. '
+                'State the actual completion boundary and ordering; starting a worker or receiving a buffered iterator '
+                'does not prove its data has been consumed. When the existing implementation lacks a completion primitive, '
+                'plan one within authorized existing targets and caller dependencies if its input/ownership contracts are '
+                'evidenced. Its absence alone is a repair task, not missing evidence. Leave genuinely unknown contracts open. '
+                'These records constrain intent and source identity; execution and finite behavior checks still decide the outcome.')
     if probe_ids:
-        system_prompt += " The public_behavior_check_catalog is a read-only projection of two distinct capability sources. METHOD_BEHAVIOR_PROBE entries are method-owned observations; REGISTERED_PUBLIC_CHECK entries describe the independent frozen public checker. Neither is hidden grading or a check result. For a covered obligation choose PUBLIC_BEHAVIOR, copy its explicit verification_scope from the relevant capability and predeclare the necessary behavior_check_refs and coverage_rationale. An aggregate covered_scenarios list is finite, not universal coverage. Do not guess a scenario from a check ID or invent a binding; leave unsupported scope UNKNOWN. Missing, failed, unrelated or partially covering checks cannot establish PASS."
+        system_prompt += " Registered method_behavior_probes are additional public method-owned observations, not frozen independent scorers. For obligations actually covered by these probe assertions choose PUBLIC_BEHAVIOR, set verification_scope.scenario to the registered method scenario and predeclare all necessary behavior_check_refs. Missing, failed or unrelated check results cannot establish PASS. Respect each probe boundary; do not infer external runtime coverage from local stand-ins."
+    if capabilities.get('registered_public_checks'):
+        system_prompt += (' registered_public_checks also declare available public observations. For each binding '
+            'copy its exact registered check ID and scenario into behavior_check_refs and verification_scope.scenario. '
+            'scenario_members limits the finite inputs covered by that predicate; it is not a different execution scenario. '
+            'Checks may share a suite scenario while asserting different predicates. Do not infer scenario from a check ID, '
+            'or bind unrelated checks. Declare check_coverage and coverage_rationale for every bound obligation. '
+            'ALL_OF applies only to a concrete predicate fully covered by those checks; broader requirements retain '
+            'NECESSARY_ONLY or unresolved obligations. No binding or PASS is supplied on your behalf.')
     model = str(run_context.model_config.get("model", "UNCONFIGURED"))
     max_tokens = int(run_context.budget.get("max_output_tokens", 4096))
     output_schema = _case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)
-    return ModelRequest(model=model, prompt_version=("changeset.v1.1.12" if probe_ids else
-                        "changeset.v1.1.11" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.10"),
-                        messages=({"role": "system", "content": system_prompt},
-                                  {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False, sort_keys=True)}),
+    messages = ({"role": "system", "content": system_prompt},
+                {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False, sort_keys=True)})
+    draft_metadata = {}
+    if previous_attempt is not None:
+        identity = dict(run_id=run_context.run_id, snapshot_id=run_context.snapshot_id,
+            input_digest=run_context.input_digest, diagnosis_digest=canonical_digest(diagnosis.raw))
+        if (not isinstance(previous_attempt, Mapping) or not validation_feedback
+                or any(previous_attempt.get(k) != v for k, v in identity.items())
+                or not isinstance(previous_attempt.get('state'), str)
+                or previous_attempt.get('state') not in {'REJECTED_PLAN_DRAFT', 'CURRENT_PLAN_FOR_REVISION'}
+                or not isinstance(previous_attempt.get('response_content'), str)
+                or not previous_attempt['response_content'].strip()):
+            raise ValueError('Previous ChangeSet must bind the current run, input, snapshot and diagnosis, with revision feedback')
+        original_content = previous_attempt['response_content']
+        digest = hashlib.sha256(original_content.encode()).hexdigest()
+        content = original_content
+        projection = None
+        if previous_attempt['state'] == 'CURRENT_PLAN_FOR_REVISION':
+            # A validated runner target uses a different dialect from the model
+            # selector schema. Project identities, never repair a rejected draft.
+            view = json.loads(original_content)
+            for change in view.get('changes', []):
+                target = change.get('target', {})
+                if target.get('kind') == 'EXISTING':
+                    if not isinstance(target.get('path'), str) or not target.get('unit_refs'):
+                        raise ValueError('Current plan target requires explicit path and unit identities')
+                    change['target'] = dict(target_kind='EXISTING', source_path=target['path'],
+                                            unit_refs=list(target['unit_refs']))
+                elif target.get('kind') == 'NEW':
+                    change['target'] = {key:value for key,value in target.items() if key!='kind'}
+                    change['target']['target_kind'] = 'NEW'
+            content = json.dumps(view, ensure_ascii=False, sort_keys=True, separators=(',', ':'))
+            projection = 'MODEL_TARGET_VIEW_OF_CURRENT_PLAN; semantic actions and obligations unchanged'
+        projected_digest = hashlib.sha256(content.encode()).hexdigest()
+        messages += ({'role': 'assistant', 'content': content}, {'role': 'user', 'content': json.dumps(dict(
+            previous_attempt_state=previous_attempt['state'], previous_attempt_sha256=digest,
+            previous_attempt_projection=projection, previous_attempt_message_sha256=projected_digest,
+            binding=identity, validation_feedback=list(validation_feedback),
+            instruction='Revise the preceding planning draft using the current schema, source and feedback. '
+                'It is prior planning state, never new evidence or proof of behavior. '
+                'A current-plan target view uses model selectors; the original canonical plan remains bound by its digest. '
+                'Preserve unaffected valid fields and all requirement obligations; correct the cited errors without inventing support. '
+                'Return one complete SemanticChangeSet with every required field. Do not emit this revision wrapper.'),
+            ensure_ascii=False, sort_keys=True)})
+        draft_metadata = dict(previous_changeset_sha256=digest, previous_changeset_state=previous_attempt['state'],
+                              previous_changeset_message_sha256=projected_digest)
+    return ModelRequest(model=model, prompt_version=("changeset.v1.1.16" if any(r.get('establishment_required') is True for r in prerequisites) else
+                        "changeset.v1.1.14" if capabilities.get('registered_public_checks') else
+                        "changeset.v1.1.13" if diagnosis.raw.get("requirement_spec",{}).get("traceability_required") else "changeset.v1.1.12"),
+                        messages=messages,
                         max_output_tokens=max_tokens, temperature=0.0,
                         metadata={"run_id": run_context.run_id, "snapshot_id": run_context.snapshot_id,
                                   "input_digest": run_context.input_digest,
                                   "execution_capabilities_digest": canonical_digest(capabilities),
-                                  "system_prompt_sha256": hashlib.sha256(system_prompt.encode()).hexdigest()},
+                                  "system_prompt_sha256": hashlib.sha256(system_prompt.encode()).hexdigest(),
+                                  **({'precondition_establishment_required':True}
+                                     if retrieval.get('precondition_establishment_required') is True else {}),
+                                  **({'planning_helper_contracts':user_payload['run_context']['planning_helper_contracts']}
+                                     if retrieval.get('planning_helper_contracts') is True else {}),
+                                  **draft_metadata},
                         output_schema=output_schema)

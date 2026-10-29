@@ -1,0 +1,9 @@
+{
+  "status": "REVIEW_IMPORTANT_FIXED_FULL_REGRESSION_PASSED",
+  "reviewer": "/root/pending_preservation_review",
+  "finding": "Only necessary prior pending PRESERVE bindings should become protection; SUPPORTING could otherwise over-lock target behavior",
+  "fix": "Import only ALL_OF/NECESSARY_ONLY; disputed and target-postcondition exclusions retained. Whole UNKNOWN never becomes PASS.",
+  "verification": "2reviewRED7PASS toGREEN; author2malformedcoverageRED9PASS toGREEN;47relatedPASS;full870+22;portable837+17",
+  "deferred_minors": [],
+  "rereview": false
+}

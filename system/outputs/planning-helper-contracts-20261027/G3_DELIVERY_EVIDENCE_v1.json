@@ -1,0 +1,68 @@
+{
+  "schema_version": "ce.formal_gate_evidence.v1",
+  "gate": "G3",
+  "identity": {
+    "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+    "panel_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
+    "candidate_config_sha256": "be8a7dc2dc0e87d76e60fb84de688b93ef1ad4a839f3545530ad5e7e00209866",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "executed_at": "2026-10-27T08:55:18.094438+00:00",
+  "checker": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/finish_gate_evidence_complete.py",
+    "sha256": "d7264817b18d5e0a81d356d59efa0cca87291b0e34c7e8d4c6ceb493259f0033"
+  },
+  "inputs": [
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/CI_REMOTE_SUCCESS_e50be76.json",
+      "sha256": "0ea691f24aed6d3e23b9e251a2b0c5c95326bfb3affb31345351ecb144efd853"
+    },
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+      "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+    },
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G3_VERIFIED_TERMINALS_v1.json",
+      "sha256": "cf5ddc5c8bae47147413294421bd26af03627d03fc87bad12975b5e55eba3925"
+    },
+    {
+      "path": "/home/xhj/contractedge-fixed46-source060-20261027/runs/records.json",
+      "sha256": "3133ae367199e638ca60d5068c2885bfec94df6c7117fe510dc80439ebba8f1f"
+    }
+  ],
+  "checks": [
+    {
+      "id": "method_filesystem_isolation",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/CI_REMOTE_SUCCESS_e50be76.json",
+          "sha256": "0ea691f24aed6d3e23b9e251a2b0c5c95326bfb3affb31345351ecb144efd853"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+          "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_isolated_method.py",
+          "sha256": "3f4824d157ac1bdd0bdda0ddd1a4d63e2ad9789894e857016b9142ee598203cd"
+        }
+      ]
+    },
+    {
+      "id": "per_attempt_source_config_data_patch_score_identity",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G3_VERIFIED_TERMINALS_v1.json",
+          "sha256": "cf5ddc5c8bae47147413294421bd26af03627d03fc87bad12975b5e55eba3925"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/scripts/fixed_panel.py",
+          "sha256": "2bf3bce16706a298d3d4c2706f41ab0428f99714b4b102e6da268505d6e83833"
+        }
+      ]
+    }
+  ],
+  "scope": "Actual Linux namespace canaries and exact-source isolation; every currently closed original slot verified by existing protocol. Refresh after records append; incomplete effects remain G4/G5 failure. Serial only."
+}

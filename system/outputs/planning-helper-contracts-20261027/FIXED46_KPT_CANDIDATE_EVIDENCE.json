@@ -1,0 +1,116 @@
+{
+  "status": "CURRENT_FIXED46_KPT_CANDIDATE_INDEPENDENT_PASS",
+  "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+  "slot_id": "fixed46-v060-order-20261027-f30e0215f0d113880a6411c5",
+  "independent_status": "PASS",
+  "public_decision": "UNKNOWN",
+  "model_calls": 7,
+  "patch_bytes": 3483,
+  "patch_sha256": "0a8c93132422f28630fbccb20e5461529d5c1449b56b5078e81c9a8025f576fb",
+  "helper_body_delivery": {
+    "planning": {
+      "func MergeWithInput": true,
+      "func SetResourceIDs": true,
+      "func DeleteResourceIDs": true
+    },
+    "execution": {
+      "func MergeWithInput": true,
+      "func SetResourceIDs": true,
+      "func DeleteResourceIDs": true
+    }
+  },
+  "precondition_review": [
+    {
+      "source_evidence_ref": "HELPER-b5d0b3260f63e3c7",
+      "condition": "AreKRM validates that input resources are KRM; runPipeline calls it only when the pipeline is empty, so it is not on the configPath exclusion path.",
+      "disposition": "NOT_APPLICABLE",
+      "verification_refs": [],
+      "open_obligation_refs": [],
+      "rationale": "AreKRM is invoked in the pl.IsEmpty() branch, which returns before runMutators/runValidators; the planned changes do not alter that branch."
+    },
+    {
+      "source_evidence_ref": "HELPER-b1458129855125de",
+      "condition": "MergeWithInput merges transformed output with input by kpt-resource-id annotation; the selector/exclusion mutator branch relies on it to retain unselected resources.",
+      "disposition": "REQUIRED",
+      "verification_refs": [
+        "PC-1",
+        "PRES-A3",
+        "PRES-A4"
+      ],
+      "open_obligation_refs": [],
+      "rationale": "CHG-1 keeps MergeWithInput with the full input in the selector/exclusion branch so the omitted configPath resource, being unselected, is retained; PC-1 and preservation checks cover this."
+    },
+    {
+      "source_evidence_ref": "HELPER-bf52db689d494726",
+      "condition": "SetResourceIDs annotates each input resource with kpt-resource-id before mutation when selectors or exclusions are present.",
+      "disposition": "REQUIRED",
+      "verification_refs": [
+        "PC-1",
+        "PRES-ANNOT"
+      ],
+      "open_obligation_refs": [],
+      "rationale": "CHG-1 preserves the existing SetResourceIDs call on the full input before selection; PRES-ANNOT covers annotation cleanup and PC-1 covers selector-mode exclusion."
+    },
+    {
+      "source_evidence_ref": "HELPER-222efe5087442853",
+      "condition": "DeleteResourceIDs removes kpt-resource-id annotations after merge in the selector/exclusion branch.",
+      "disposition": "REQUIRED",
+      "verification_refs": [
+        "PRES-ANNOT"
+      ],
+      "open_obligation_refs": [],
+      "rationale": "CHG-1 preserves the existing DeleteResourceIDs call after MergeWithInput; PRES-ANNOT covers annotation cleanup."
+    },
+    {
+      "source_evidence_ref": "HELPER-a6f6c10ee69b1968",
+      "condition": "SelectInput returns input unchanged when no selectors, applies selectors, then applies exclusions; the planned changes pass an ordinary-input slice with the configPath resource omitted.",
+      "disposition": "REQUIRED",
+      "verification_refs": [
+        "PC-1",
+        "PC-2"
+      ],
+      "open_obligation_refs": [
+        "OPEN-2"
+      ],
+      "rationale": "CHG-1 and CHG-2 change the slice passed to SelectInput; PC-1/PC-2 cover end-to-end exclusion, and OPEN-2 records that the configPath lookup itself is not directly probed."
+    },
+    {
+      "source_evidence_ref": "HELPER-d7ef1feaad1e24dd",
+      "condition": "errors.E wraps errors with op/path/name; runPipeline uses it to wrap runMutators/runValidators errors.",
+      "disposition": "NOT_APPLICABLE",
+      "verification_refs": [],
+      "open_obligation_refs": [],
+      "rationale": "The planned changes preserve existing error returns and do not alter error wrapping in runPipeline."
+    },
+    {
+      "source_evidence_ref": "HELPER-db4df3998fec9e0b",
+      "condition": "Pkg.Pipeline returns the Kptfile pipeline; runMutators/runValidators read pl.Mutators/pl.Validators and their ConfigPath fields.",
+      "disposition": "REQUIRED",
+      "verification_refs": [
+        "PC-1",
+        "PC-2"
+      ],
+      "open_obligation_refs": [],
+      "rationale": "CHG-1/CHG-2 read ConfigPath from the pipeline entries returned by Pipeline(); PC-1/PC-2 cover the resulting exclusion behavior."
+    },
+    {
+      "source_evidence_ref": "HELPER-3ed56f200d966206",
+      "condition": "ValidatePipeline checks that each non-empty ConfigPath corresponds to a resource path in the package; runPipeline calls it before runMutators.",
+      "disposition": "REQUIRED",
+      "verification_refs": [
+        "PC-1",
+        "PC-2"
+      ],
+      "open_obligation_refs": [
+        "OPEN-2"
+      ],
+      "rationale": "ValidatePipeline establishes that a configPath resource exists in the package; CHG-1/CHG-2 rely on the same file-annotation path match, and OPEN-2 records that the lookup itself is not directly probed."
+    }
+  ],
+  "trial_decision": "PROMOTE",
+  "known_preservation_regressions": [],
+  "repair_mechanism": "Keep full input and filtered ordinary input distinct; preserve selected/excluded branch identity merge; retain omitted config separately and append only in no-selector writeback, without introducing a new helper call whose ID prerequisite would need widening.",
+  "scope": "One already-exposed fixed development candidate; not a causal ablation or whole-benchmark claim",
+  "counts_in_46_slot_panel": true,
+  "formal_ready": false
+}

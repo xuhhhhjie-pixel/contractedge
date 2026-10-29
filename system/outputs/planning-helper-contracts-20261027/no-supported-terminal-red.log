@@ -1,0 +1,12 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_queue_classifies_method_failure_separately_from_infrastructure_stop[NO_SUPPORTED_VIOLATION-METHOD_RESULT] _
+tests/test_isolated_coordinator.py:133: in test_queue_classifies_method_failure_separately_from_infrastructure_stop
+    assert isolated.validate_method_result(tmp_path,'CASE',bridge,journal)['classification']==want
+E   AssertionError: assert 'INFRASTRUCTURE_STOP' == 'METHOD_RESULT'
+E     
+E     - METHOD_RESULT
+E     + INFRASTRUCTURE_STOP
+=========================== short test summary info ============================
+FAILED tests/test_isolated_coordinator.py::test_queue_classifies_method_failure_separately_from_infrastructure_stop[NO_SUPPORTED_VIOLATION-METHOD_RESULT]
+1 failed, 21 deselected in 0.10s

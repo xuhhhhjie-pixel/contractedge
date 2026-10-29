@@ -129,9 +129,10 @@ class _ModelPort:
 
 
 class _FileEnvironment:
-    def __init__(self, plan, source, policy, submitted, *, require_behavior_change=False):
+    def __init__(self, plan, source, policy, submitted, *, require_behavior_change=False, trial_session=None):
         self.plan, self.source, self.policy, self.submitted = plan, source, policy, submitted
         self.require_behavior_change=require_behavior_change
+        self.trial_session = trial_session
         self.result = None
 
     def execute(self, action, cwd=''):
@@ -139,7 +140,8 @@ class _FileEnvironment:
                 or action['kind'] != 'apply_source_edits' or self.result is not None):
             raise PlanRejected('Native TopoMen environment only accepts one scoped source-edit transaction')
         self.result = apply_edits(self.plan, self.source, self.policy, action['body'],
-                                  require_behavior_change=self.require_behavior_change)
+                                  require_behavior_change=self.require_behavior_change,
+                                  trial_session=self.trial_session)
         raise self.submitted({'role': 'exit', 'content': 'Accepted source edits applied.',
             'extra': {'exit_status': 'Submitted', 'submission': 'Accepted source edits applied.'}})
 
@@ -155,6 +157,7 @@ class TopoMenAgentExecutor:
     def __init__(self, provider, token_counter, config: Mapping, *, on_trace=None):
         self.provider, self.token_counter, self.config = provider, token_counter, dict(config)
         self.on_trace, self.last_trace = on_trace, None
+        self.trial_session = None
 
     def execute(self, plan: Mapping, source: Path, policy: Mapping, *, requirement: str,
                 declared_artifacts=(), observations=(), feedback=None, previous_attempt=None) -> dict:
@@ -165,7 +168,8 @@ class TopoMenAgentExecutor:
         agent_class, submitted, provenance = _native_agent(self.config)
         model = _ModelPort(self.provider, request, self.token_counter, self.config, quote=quote)
         environment = _FileEnvironment(plan, source, policy, submitted,
-            require_behavior_change=json.loads(request.messages[1]['content'])['require_behavior_change'])
+            require_behavior_change=json.loads(request.messages[1]['content'])['require_behavior_change'],
+            trial_session=self.trial_session)
         agent = agent_class(model=model, env=environment,
             system_template='{{ execution_system }}', instance_template='{{ execution_input }}',
             step_limit=1, cost_limit=0)

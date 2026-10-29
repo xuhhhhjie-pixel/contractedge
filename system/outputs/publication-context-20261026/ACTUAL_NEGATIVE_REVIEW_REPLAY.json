@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "review": {
+    "checks": [
+      {
+        "id": "P1",
+        "status": "FAIL",
+        "rationale": "Deterministic aggregation of predeclared NECESSARY_ONLY check bindings; semantic coverage remains declared, not independently proven.",
+        "evidence": [
+          {
+            "observation_id": "OBS1",
+            "quote": "{\n  \"probe_id\": \"alertmanager-reload-v4\",\n  \"probe_sha256\": \"0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62\",\n  \"snapshot_id\": \"9f22a7869e41ce3acde4d589451c3594e2c9e8e4fb8a7d0141c312cc07738534\",\n  \"boundary\": \"Local production process HTTP API; 2ms target sampling during twenty valid reloads; no guarantee at unsampled instants or distributed convergence; not tamper-proof or independent grading\",\n  \"id\": \"groups.visible_during_reload\",\n  \"status\": \"FAIL\",\n  \"observed\": {\n    \"after_unique\": true,\n    \"after_visible\": true,\n    \"at_return_missing\": 0,\n    \"at_return_samples\": 20,\n    \"baseline_visible\": true,\n    \"injected_groups\": 2048,\n    \"missing_samples\": 20,\n    \"non_unique_samples\": 0,\n    \"samples\": 281,\n    \"sampling_interval_ms\": 2,\n    \"sampling_workers\": 4,\n    \"scope\": \"Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence\",\n    \"successful_reloads\": 20\n  },\n  \"statement\": \"The injected active alert remains in the production groups API at each successful sample during twenty valid configuration reloads\"\n}\n"
+          },
+          {
+            "observation_id": "OBS2",
+            "quote": "{\n  \"probe_id\": \"alertmanager-reload-v4\",\n  \"probe_sha256\": \"0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62\",\n  \"snapshot_id\": \"9f22a7869e41ce3acde4d589451c3594e2c9e8e4fb8a7d0141c312cc07738534\",\n  \"boundary\": \"Local production process HTTP API; 2ms target sampling during twenty valid reloads; no guarantee at unsampled instants or distributed convergence; not tamper-proof or independent grading\",\n  \"id\": \"groups.visible_after_reload\",\n  \"status\": \"PASS\",\n  \"observed\": {\n    \"after_unique\": true,\n    \"after_visible\": true,\n    \"at_return_missing\": 0,\n    \"at_return_samples\": 20,\n    \"baseline_visible\": true,\n    \"injected_groups\": 2048,\n    \"missing_samples\": 20,\n    \"non_unique_samples\": 0,\n    \"samples\": 281,\n    \"sampling_interval_ms\": 2,\n    \"sampling_workers\": 4,\n    \"scope\": \"Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence\",\n    \"successful_reloads\": 20\n  },\n  \"statement\": \"The injected active alert is visible in the production groups API after the reload sampling window\"\n}\n"
+          },
+          {
+            "observation_id": "OBS3",
+            "quote": "{\n  \"probe_id\": \"alertmanager-reload-v4\",\n  \"probe_sha256\": \"0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62\",\n  \"snapshot_id\": \"9f22a7869e41ce3acde4d589451c3594e2c9e8e4fb8a7d0141c312cc07738534\",\n  \"boundary\": \"Local production process HTTP API; 2ms target sampling during twenty valid reloads; no guarantee at unsampled instants or distributed convergence; not tamper-proof or independent grading\",\n  \"id\": \"groups.visible_at_reload_return\",\n  \"status\": \"PASS\",\n  \"observed\": {\n    \"after_unique\": true,\n    \"after_visible\": true,\n    \"at_return_missing\": 0,\n    \"at_return_samples\": 20,\n    \"baseline_visible\": true,\n    \"injected_groups\": 2048,\n    \"missing_samples\": 20,\n    \"non_unique_samples\": 0,\n    \"samples\": 281,\n    \"sampling_interval_ms\": 2,\n    \"sampling_workers\": 4,\n    \"scope\": \"Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence\",\n    \"successful_reloads\": 20\n  },\n  \"statement\": \"Immediately after each of twenty successful reload responses, the production groups API contains all2048 injected active alert names\"\n}\n"
+          },
+          {
+            "observation_id": "OBS4",
+            "quote": "{\n  \"probe_id\": \"alertmanager-reload-v4\",\n  \"probe_sha256\": \"0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62\",\n  \"snapshot_id\": \"9f22a7869e41ce3acde4d589451c3594e2c9e8e4fb8a7d0141c312cc07738534\",\n  \"boundary\": \"Local production process HTTP API; 2ms target sampling during twenty valid reloads; no guarantee at unsampled instants or distributed convergence; not tamper-proof or independent grading\",\n  \"id\": \"groups.unique_for_declared_route\",\n  \"status\": \"PASS\",\n  \"observed\": {\n    \"after_unique\": true,\n    \"after_visible\": true,\n    \"at_return_missing\": 0,\n    \"at_return_samples\": 20,\n    \"baseline_visible\": true,\n    \"injected_groups\": 2048,\n    \"missing_samples\": 20,\n    \"non_unique_samples\": 0,\n    \"samples\": 281,\n    \"sampling_interval_ms\": 2,\n    \"sampling_workers\": 4,\n    \"scope\": \"Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence\",\n    \"successful_reloads\": 20\n  },\n  \"statement\": \"In the declared single receiver and group_by alertname scenario, groups have unique label/receiver identities and no unexpected receiver or extra group\"\n}\n"
+          }
+        ],
+        "decision_method": "BOUND_CHECK_AGGREGATION"
+      },
+      {
+        "id": "open:OB1",
+        "status": "UNKNOWN",
+        "evidence": [],
+        "rationale": "Unresolved public review"
+      }
+    ],
+    "failure_kind": "UNKNOWN",
+    "method": "BOUND_NEGATIVE_CHECK_AGGREGATION",
+    "rationale": "A bound necessary predicate failed; remaining unreviewed checks stay UNKNOWN.",
+    "decision": "FAIL",
+    "independent_hidden_evaluation": false
+  },
+  "source_plan_sha256": "ccd549637e3af33e2b9509670cc6212a880e5637b82fc1b84c429df2639b22c0",
+  "source_observation_sha256": "cb6926f17741a2a3c0cd379e1b7112245ccadf9a499f378c1484b20ea3734f1d",
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "formal_ready": false
+}

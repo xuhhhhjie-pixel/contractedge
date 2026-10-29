@@ -1,0 +1,109 @@
+{
+  "status": "SAVED_FAILURE_RECOVERY_ACCEPTED",
+  "result": {
+    "attempt": "saved-public-failure",
+    "case_id": "RW-ALERTMANAGER-4705",
+    "source_sha256": "5e1758b0ac0a306f089f9a1e2aacb58aff12739a803ac5544b44d95392bf3387",
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "independent_status": "PASS",
+    "public_semantic_status": "UNKNOWN",
+    "model_calls": 4,
+    "patch_bytes": 3929,
+    "completed_at": "2026-10-28T16:06:59.048640+08:00",
+    "counts_in_original46": false,
+    "formal_ready": false
+  },
+  "public_checks": [
+    {
+      "id": "alertmanager-reload-v4:groups.visible_during_reload",
+      "status": "PASS",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 0,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 0,
+        "non_unique_samples": 0,
+        "samples": 275,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      }
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.visible_after_reload",
+      "status": "PASS",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 0,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 0,
+        "non_unique_samples": 0,
+        "samples": 275,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      }
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.visible_at_reload_return",
+      "status": "PASS",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 0,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 0,
+        "non_unique_samples": 0,
+        "samples": 275,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      }
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.unique_for_declared_route",
+      "status": "PASS",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 0,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 0,
+        "non_unique_samples": 0,
+        "samples": 275,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      }
+    }
+  ],
+  "current_source_diagnosis_and_plan": true,
+  "plan_changed_ready_completion_condition": true,
+  "actual_behavior_edit_delivered": true,
+  "human_candidate_edit": false,
+  "fresh_interround_reassessment_exercised": false,
+  "scope": "Actual recovery from publicly failed seed with fresh failure-informed diagnosis and planning; first fresh edit passed, so new interround behavior-review branch was not needed in this attempt. That branch has zero-call actual-trace and counterexample coverage; no claim of its live dispatch here.",
+  "model_calls_sha256": "d7310ace83be70fa568ff57bd5c335e2b841ff84ee5c28eaaeb93a8dd4077ef3",
+  "provider": "https://api.deepseek.com",
+  "requested_model": "deepseek-flash",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "model_and_method_changed_from_v066": true,
+  "isolated_effect_attribution": false,
+  "formal_ready": false
+}

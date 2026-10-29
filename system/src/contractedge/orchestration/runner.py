@@ -14,7 +14,7 @@ import yaml
 
 from contractedge.changeset.prompt import build_changeset_request
 from contractedge.retrieval.frontier import production_frontier
-from contractedge.changeset.validate import validate_semantic_changeset
+from contractedge.changeset.validate import validate_semantic_changeset, production_branch_rebinding_gaps
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
 from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset_envelope
 from contractedge.contracts.models import ContractError, MethodInput, RunContext, ValidationResult, ValidationIssue
@@ -32,7 +32,7 @@ from contractedge.model.admission import quote_request, context_fits, complete_q
 from contractedge.orchestration.feedback import feedback_prompt_view
 from contractedge.orchestration.semantic_delivery import SemanticDeliveryError, delivery_context, install_monitor
 from contractedge.requirement.normalize import normalize_requirement
-from contractedge.retrieval.candidates import CandidateSet, build_candidate_set, extend_once, trim_context_bundle
+from contractedge.retrieval.candidates import CandidateSet, build_candidate_set, extend_once, trim_context_bundle, requires_gap_delivery
 from contractedge.retrieval.edges import build_direct_reference_edges
 from contractedge.source.scopes import (
     DEFAULT_SCOPE_MATCHES_PER_HINT, DEFAULT_SCOPE_SEARCH_BYTES, DEFAULT_SCOPE_SEARCH_FILE_BYTES,
@@ -173,6 +173,112 @@ def _changeset_retry_feedback(error: Exception) -> list[dict[str, str]]:
     return [{"code": code, "message": message[:1200]}]
 
 
+def _configuration_graph_feedback(messages, response_content: str) -> str:
+    """Inventory a rejected graph; canonical source anchors do not prove its edges."""
+    try:
+        draft = parse_diagnosis_response(response_content)
+    except (TypeError, ValueError):
+        return ''
+    if not isinstance(draft, Mapping):
+        return ''
+    request = {}
+    for message in reversed(messages):
+        if not isinstance(message, Mapping) or message.get('role') != 'user':
+            continue
+        try:
+            value = json.loads(message.get('content', ''))
+        except (TypeError, ValueError):
+            continue
+        if isinstance(value, Mapping) and 'run_context' in value and 'evidence_catalog' in value:
+            request = value
+            break
+    context = request.get('run_context')
+    snapshot = context.get('snapshot_id') if isinstance(context, Mapping) else None
+    catalog = request.get('evidence_catalog')
+    catalog = catalog if isinstance(catalog, list) else []
+    records = {}
+    for record in catalog:
+        if isinstance(record, Mapping) and isinstance(record.get('id'), str):
+            records.setdefault(record['id'], []).append(record)
+    sources = {}
+    for identity, matches in records.items():
+        if len(matches) != 1:
+            continue
+        record = matches[0]; excerpt = record.get('excerpt'); locator = record.get('locator')
+        try:
+            excerpt_digest = hashlib.sha256(excerpt.encode()).hexdigest() if isinstance(excerpt, str) else None
+        except UnicodeError:
+            continue
+        if (not isinstance(snapshot, str) or not snapshot or record.get('snapshot_id') != snapshot
+                or record.get('kind') != 'SOURCE_SPAN' or not isinstance(excerpt, str)
+                or excerpt_digest != record.get('content_digest')
+                or not isinstance(locator, Mapping) or not isinstance(locator.get('path'), str)):
+            continue
+        sources[identity] = dict(id=identity, locator=dict(locator), content_digest=record['content_digest'])
+    units = draft.get('units'); units = units if isinstance(units, list) else []
+    units_by_id = {}
+    for unit in units:
+        if isinstance(unit, Mapping) and isinstance(unit.get('id'), str):
+            units_by_id.setdefault(unit['id'], []).append(unit)
+    candidates = dict(configurations=[], source_anchored_consumers=[], unanchored_consumers=[],
+                      terminals=[], relations=[], current_source_spans=[], ambiguous_unit_ids=[])
+    cited_sources = set()
+    for identity, matches in units_by_id.items():
+        if len(matches) != 1:
+            candidates['ambiguous_unit_ids'].append(identity)
+            continue
+        unit = matches[0]; refs = unit.get('requirement_refs'); locators = unit.get('locator_refs')
+        if not isinstance(refs, list) or not all(isinstance(ref, str) for ref in refs):
+            continue
+        row = dict(unit_id=identity, requirement_refs=list(refs))
+        role = unit.get('semantic_role_class')
+        if not isinstance(role, str):
+            continue
+        if role == 'CONFIGURATION_INPUT':
+            candidates['configurations'].append(row)
+        elif role == 'PRODUCTION_CONSUMER' and unit.get('existence') == 'PRESENT':
+            source_refs = list(dict.fromkeys(ref for ref in locators if isinstance(ref, str) and ref in sources)) if isinstance(locators, list) else []
+            if source_refs:
+                row['source_refs'] = source_refs
+                cited_sources.update(source_refs)
+                candidates['source_anchored_consumers'].append(row)
+            else:
+                candidates['unanchored_consumers'].append(row)
+        elif role in {'GENERATED_STATE', 'RUNTIME_CONSUMER', 'OBSERVED_STATE'}:
+            candidates['terminals'].append(row)
+    relations = draft.get('expected_relations')
+    for relation in relations if isinstance(relations, list) else []:
+        if (not isinstance(relation, Mapping) or not isinstance(relation.get('id'), str)
+                or any(not isinstance(relation.get(key), list) or not all(isinstance(ref, str) for ref in relation[key])
+                       for key in ('source_unit_ids', 'target_unit_ids', 'requirement_refs'))):
+            continue
+        candidates['relations'].append({key: relation[key] for key in
+            ('id', 'source_unit_ids', 'target_unit_ids', 'requirement_refs')})
+    candidates['current_source_spans'] = [record for identity, record in sources.items() if identity in cited_sources]
+    prefix = ('\nNaming a function in mechanism text does not route an edge through its unit. '
+              'Inspect the existing units and actual directed endpoints against supplied excerpts. '
+              'Source anchoring proves availability, not the claimed role or causality. Do not invent '
+              'edges, new consumers or source citations to satisfy validation; retain unresolved gaps when needed. '
+              'Rejected graph inventory (not verified causality): ')
+    result = {key: [] for key in candidates}
+    result['omitted'] = {key: len(rows) for key, rows in candidates.items()}
+    def serialize():
+        return prefix + json.dumps(result, ensure_ascii=False, separators=(',', ':'))
+    # Round robin keeps one large category from starving all endpoint categories.
+    for index in range(max(map(len, candidates.values()), default=0)):
+        for key, rows in candidates.items():
+            if index >= len(rows) or len(result[key]) >= 8:
+                continue
+            result[key].append(rows[index]); result['omitted'][key] -= 1
+            try:
+                fits = len(serialize().encode()) <= 4096
+            except UnicodeError:
+                fits = False
+            if not fits:
+                result[key].pop(); result['omitted'][key] += 1
+    return serialize()
+
+
 def _append_diagnosis_retry_turn(messages, response_content: str, validation_feedback: str):
     """Retain rejected drafts and earlier corrections within the existing budget."""
     if 'CAUSAL_CLAIM_UNSUPPORTED' in validation_feedback:
@@ -188,6 +294,8 @@ def _append_diagnosis_retry_turn(messages, response_content: str, validation_fee
                 if not path.endswith(('.go','.py','.js','.ts','.tsx','.c','.h','.java')):continue
                 available.append(dict(id=record['id'],path=path,start_line=locator.get('start_line'),end_line=locator.get('end_line')))
         validation_feedback+=' Available source locations already supplied: '+json.dumps(available[:8])+'. Inspect their actual excerpts; availability alone is not causal support.'
+    if 'PRODUCTION_PATH_INCOMPLETE' in validation_feedback:
+        validation_feedback += _configuration_graph_feedback(messages, response_content)
     return tuple(messages) + (
         {"role": "assistant", "content": response_content},
         {"role": "user", "content": validation_feedback},
@@ -313,6 +421,20 @@ def _bind_diagnosis_envelope(payload: Mapping[str, Any], method_input: MethodInp
     body = _translate_model_outcome_coverage(body)
     catalog = build_evidence_catalog(method_input, candidate_set, context.snapshot_id)
     body["evidence_refs"] = bind_evidence_ids(_collect_diagnosis_evidence_ids(body), catalog)
+    # This is the canonical record registry, not just the model's chosen
+    # citations. Keep already-budgeted current observations available to plans
+    # even when the diagnosis did not use them to justify a causal claim.
+    retained_public_ids = []
+    bound_ids = {record['id'] for record in body['evidence_refs']}
+    for record in catalog:
+        if record.get('kind') != 'PUBLIC_OBSERVATION':
+            continue
+        if record.get('snapshot_id') != context.snapshot_id:
+            raise ValueError('Planning observations must belong to the current snapshot')
+        if record['id'] not in bound_ids:
+            body['evidence_refs'].append(dict(record))
+            bound_ids.add(record['id'])
+            retained_public_ids.append(record['id'])
     body.update(expected)
     from contractedge.requirement.normalize import bind_obligation_sources
     try:
@@ -340,6 +462,7 @@ def _bind_diagnosis_envelope(payload: Mapping[str, Any], method_input: MethodInp
         coverage_encoding = "v1_1_direct"
     return body, {"owner": "runner", "model_supplied_fields": sorted(supplied),
                   "evidence_records_bound": len(body["evidence_refs"]),
+                  "retained_uncited_public_evidence_ids": retained_public_ids,
                   "outcome_coverage_encoding": coverage_encoding,
                   "mismatched_model_fields": sorted(key for key, value in supplied.items()
                                                        if value != expected[key])}
@@ -421,16 +544,23 @@ class RunTrace:
 
 
 
-def required_source_prerequisites(candidate_set):
+def required_source_prerequisites(candidate_set, *, helper_support=(), establishment_required=False):
     """One producer/consumer projection of current, already-validated source roles.
 
     The Ready boundary independently recomputes these entries rather than
     trusting a saved context or dropping its role-specific requirements.
     """
+    from contractedge.diagnosis.evidence import reader_reference_contexts
+    # READY binds what its producer actually declared. A historical trace did
+    # not request this new review: do not silently add obligations on resume.
+    # fit_diagnosis marks every current selected reader role before planning.
+    reader_rows = reader_reference_contexts([u for u in candidate_set.candidates
+        if 'SOURCE_READER:'+u['id'] in u.get('gap_role_keys',[])])
     rows = []
     for unit in candidate_set.candidates:
         contracts = field_contract_contexts([unit], ' '.join(unit.get('source_contract_fields', [])))
-        if not unit.get('precondition_review_required') and not contracts:
+        readers = [row for row in reader_rows if row['source_evidence_ref']=='SRC-'+unit['id']]
+        if not unit.get('precondition_review_required') and not contracts and not readers:
             continue
         reason = ('Review the source-supported exception-producing guard and caller prerequisites; literal match and local calls are locators, not causal proof'
             if any(role.startswith('PUBLIC_EXCEPTION:') for role in unit.get('gap_role_keys', [])) else
@@ -439,12 +569,85 @@ def required_source_prerequisites(candidate_set):
             if not unit.get('precondition_review_required'):
                 reason = 'Review the applicability of the supplied field/API source contract; this is source interpretation, not observed runtime readiness.'
             reason += ' Review these exact source-local field contracts before inferring consumer behavior; producing a value is not proof the consumer applies it: '+json.dumps(contracts,ensure_ascii=False,separators=(',',':'))
+        if readers:
+            reason += (' Review the actual reference publication to readers separately from starting or retiring an object. '
+                'A wait after assigning the reader-visible reference does not cover reads before that wait. '
+                'These are lexical windows, not an automatically supported causal relation: '
+                +json.dumps(readers,ensure_ascii=False,separators=(',',':')))
         rows.append(dict(source_evidence_ref='SRC-'+unit['id'],reason=reason))
+    for helper in helper_support:
+        rows.append(dict(source_evidence_ref=helper['id'],reason=(
+            'Review the exact local helper contract before choosing implementation: input/output identity, '
+            'selection semantics, mutation and initialization/cleanup requirements. A new call path or changed '
+            'guard can require changing earlier initialization as well as later cleanup. Link applicable '
+            'conditions to existing checks or open obligations; do not treat lexical context as causal proof '
+            'or an additional editable target.')))
+    if establishment_required:
+        def source_key(snapshot_id,path,loc,text,digest):
+            if (not isinstance(snapshot_id,str) or not snapshot_id or not isinstance(path,str) or not path
+                    or not isinstance(text,str) or not isinstance(loc,Mapping) or hashlib.sha256(text.encode()).hexdigest()!=digest
+                    or type(loc.get('start_line')) is not int or type(loc.get('end_line')) is not int
+                    or not 1<=loc['start_line']<=loc['end_line']):
+                return None
+            return (snapshot_id,path,loc['start_line'],loc['end_line'],digest)
+        bindings={}
+        def bind(eid,key):
+            if eid in bindings and (key is None or bindings[eid] is None or bindings[eid]!=key):
+                raise ValueError('Prerequisite source ID is ambiguous across physical source records: '+eid)
+            bindings[eid]=key
+        for unit in candidate_set.candidates:
+            bind('SRC-'+unit['id'],source_key(unit.get('snapshot_id'),unit.get('path'),unit.get('locator',{}),
+                unit.get('text'),unit.get('content_digest')))
+        for helper in helper_support:
+            loc=helper.get('locator',{})
+            if not isinstance(loc,Mapping):loc={}
+            bind(helper['id'],source_key(helper.get('snapshot_id'),loc.get('path'),loc,
+                helper.get('excerpt'),helper.get('content_digest')))
+        # Physical equality only. Keep every role rationale and all original
+        # source evidence; this is neither semantic equivalence nor permission.
+        unique={};combined=[]
+        for index,row in enumerate(rows):
+            eid=row['source_evidence_ref'];key=bindings.get(eid) or ('UNBOUND',index)
+            if key not in unique:
+                row=dict(row);unique[key]=row;combined.append(row)
+            else:
+                canonical=unique[key]
+                if row['reason'] not in canonical['reason']:canonical['reason']+=' '+row['reason']
+                if eid!=canonical['source_evidence_ref'] and eid not in canonical.get('source_alias_refs',[]):
+                    canonical.setdefault('source_alias_refs',[]).append(eid)
+        rows=combined
+        for row in rows:
+            row['establishment_required'] = True
+    if len(rows)>12:
+        raise BudgetExceeded('Planning prerequisite review exceeds the existing 12-record contract; no required contract was silently dropped')
     return rows
 
 
 
-def required_planning_source_support(method_input, candidate_set, snapshot_id):
+def retain_supported_source(candidate_set, prior, snapshot_id, input_digest):
+    """Pin exact current causal support before any extension can rerank it.
+
+    This preserves source availability, not the truth of an old diagnosis.
+    The existing final request audit still rejects an unfit required set.
+    """
+    if not prior or prior.get('snapshot_id') != snapshot_id or prior.get('input_digest') != input_digest:
+        return candidate_set
+    refs = {ref[4:] for v in prior.get('violations', [])
+            if v.get('causal_status') == 'SUPPORTED' for ref in v.get('evidence_refs', [])
+            if isinstance(ref, str) and ref.startswith('SRC-')}
+    pinned = {u['id'] for u in candidate_set.candidates if u['id'] in refs
+              and u.get('snapshot_id') == snapshot_id
+              and isinstance(u.get('text'), str)
+              and hashlib.sha256(u['text'].encode()).hexdigest() == u.get('content_digest')}
+    return replace(candidate_set, candidates=tuple(
+        {**u, 'required_for_gap_delivery': True,
+         'gap_role_keys': list(dict.fromkeys([*u.get('gap_role_keys', []), 'DIAGNOSIS_CONTINUITY_REFERENCE']))}
+        if u['id'] in pinned else u for u in candidate_set.candidates),
+        required_endpoint_ids=tuple(dict.fromkeys([*candidate_set.required_endpoint_ids,
+            *(u['id'] for u in candidate_set.candidates if u['id'] in pinned)])))
+
+
+def required_planning_source_support(method_input, candidate_set, snapshot_id, *, helper_support=()):
     # The extension is the last bounded acquisition. A diagnosis citation is a
     # claim's support, not a lossless projection of its input context: uncited
     # type/owner definitions can be essential to planning the actual change.
@@ -454,11 +657,26 @@ def required_planning_source_support(method_input, candidate_set, snapshot_id):
     support_ids={'SRC-'+u['id'] for u in candidate_set.candidates
                  if candidate_set.extension_used or u['id'] in required
                  or any(k.startswith('PUBLIC_LIFECYCLE:') for k in u.get('gap_role_keys',[]))}
-    return [{**r,'delivery_required':True} for r in build_evidence_catalog(method_input,candidate_set,snapshot_id)
+    records=[r for r in build_evidence_catalog(method_input,candidate_set,snapshot_id)
             if r['id'] in support_ids and r.get('kind')=='SOURCE_SPAN']
+    records.extend(helper_support)
+    return [{**r,'delivery_required':True} for r in records]
 
 
-def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *, input_digest):
+def requirement_for_rediagnosis(requirement, prior, snapshot_id, input_digest):
+    """Carry validated obligation identities with same-snapshot reassessment."""
+    from copy import deepcopy
+    result = deepcopy(requirement)
+    if (result.get('lineage_required') and prior
+            and prior.get('snapshot_id') == snapshot_id
+            and prior.get('input_digest') == input_digest
+            and prior.get('obligation_lineage')):
+        result['prior_obligation_lineage'] = deepcopy(prior['obligation_lineage'])
+    return result
+
+
+def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *, input_digest,
+                         planning_context=None):
     """Carry reviewable claims, never prior verdicts as current evidence."""
     if not prior or prior.get('snapshot_id') != snapshot_id or prior.get('input_digest') != input_digest:
         return None
@@ -483,9 +701,68 @@ def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *
             omitted += 1
         else:
             claims.append(claim)
-    if not claims and not omitted:
+    branches, omitted_branches = [], 0
+    if (isinstance(planning_context, Mapping) and prior.get('run_id')
+            and all(planning_context.get(k) == prior.get(k)
+                    for k in ('run_id', 'snapshot_id', 'input_digest'))):
+        open_rows = planning_context.get('open_obligations', [])
+        from jsonschema import Draft202012Validator
+        from contractedge.contracts.validation import _load_schema
+        schema = _load_schema('ce.semantic_changeset.v1_1')
+        open_validator = Draft202012Validator({'$defs': schema['$defs'], '$ref': '#/$defs/openObligation'})
+        parents = {a['id']: a.get('outcome_id') for a in prior.get('obligation_atoms', [])}
+        outcomes = {o['id'] for o in prior.get('requirement_spec', {}).get('outcomes', [])}
+        opened, seen_open = {}, set()
+        for obligation in open_rows if isinstance(open_rows, list) else []:
+            if not isinstance(obligation, Mapping) or not isinstance(obligation.get('id'), str):
+                continue
+            oid = obligation['id']
+            if oid in seen_open:
+                opened.pop(oid, None)  # Duplicate IDs are ambiguous, never last-wins.
+                continue
+            seen_open.add(oid)
+            if (open_validator.is_valid(obligation) and obligation['outcome_id'] in outcomes
+                    and all(parents.get(ref) == obligation['outcome_id'] for ref in obligation['obligation_refs'])):
+                opened[oid] = obligation
+        atoms = {a['id'] for a in prior.get('obligation_atoms', [])}
+        seen = set()
+        reviews = planning_context.get('production_path_review', [])
+        for row in reviews if isinstance(reviews, list) else []:
+            if not isinstance(row, Mapping):
+                continue
+            eid = row.get('source_evidence_id')
+            refs = row.get('open_obligation_refs', [])
+            if (row.get('disposition') != 'UNRESOLVED' or row.get('change_refs') != []
+                    or not isinstance(eid, str) or not isinstance(row.get('rationale'), str)
+                    or not isinstance(refs, list) or not refs
+                    or any(not isinstance(ref, str) or ref not in opened for ref in refs)
+                    or any(not isinstance(opened[ref].get('obligation_refs', []), list)
+                           or not all(isinstance(a, str) for a in opened[ref].get('obligation_refs', [])) for ref in refs)
+                    or eid in seen):
+                continue
+            seen.add(eid)
+            record = current.get(eid, {})
+            original = previous.get(eid, {})
+            text = record.get('excerpt')
+            if (record.get('kind') != 'SOURCE_SPAN' or record.get('snapshot_id') != snapshot_id
+                    or not isinstance(text, str)
+                    or hashlib.sha256(text.encode()).hexdigest() != record.get('content_digest')
+                    or any(original.get(k) != record.get(k) for k in
+                           ('snapshot_id', 'kind', 'locator', 'content_digest', 'excerpt'))
+                    or any(not set(opened[ref].get('obligation_refs', [])) <= atoms for ref in refs)):
+                omitted_branches += 1
+                continue
+            concern = dict(source_evidence_ref=eid, snapshot_id=snapshot_id,
+                source_content_digest=record['content_digest'], locator=dict(record['locator']),
+                disposition='UNRESOLVED', rationale=row.get('rationale', ''),
+                open_obligations=[dict(opened[ref]) for ref in refs])
+            if len(branches) >= 4 or len(json.dumps(branches + [concern], ensure_ascii=False).encode()) > 8000:
+                omitted_branches += 1
+                continue
+            branches.append(concern)
+    if not claims and not omitted and not branches and not omitted_branches:
         return None
-    return {'snapshot_id': snapshot_id, 'prior_diagnosis_digest': canonical_digest(prior),
+    result = {'snapshot_id': snapshot_id, 'prior_diagnosis_digest': canonical_digest(prior),
         'claims_for_reassessment': claims, 'omitted_claim_count': omitted,
         'extension_gaps': [dict(g) for g in extension_gaps[:8]],
         'instruction': 'Prior claims are not trusted facts or edit permission. Cite only exact current evidence_catalog records; unavailable IDs cannot support claims. '
@@ -493,6 +770,16 @@ def diagnosis_continuity(prior, snapshot_id, evidence_catalog, extension_gaps, *
             'Revise or withdraw claims when current evidence warrants it; explain in causal_explanation/evidence_gaps.summary. '
             'Missing repair helpers may be introduced only with evidenced caller/interface prerequisites and edit permission. '
             'Unobserved outcomes remain UNKNOWN. Do not automatically retain old verdicts.'}
+    if branches or omitted_branches:
+        result.update(planning_branch_assessments=branches,
+            omitted_planning_branch_count=omitted_branches,
+            planning_context_digest=canonical_digest(planning_context),
+            planning_branch_interpretation='Unverified same-snapshot planning concerns, not new evidence, '
+                'supported violations or edit permission. Reassess each branch against the current source, '
+                'public observations and obligation scope. Bind participating branches to appropriate semantic '
+                'units only when justified; explain remaining uncertainty or irrelevance. Do not narrow a broad '
+                'obligation to one branch merely because the earlier supported diagnosis covered only that branch.')
+    return result
 
 
 
@@ -550,9 +837,13 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
     format_retries_used = 0
     truncation_recoveries_used = 0
     recovered_generation_modes: dict[str, str] = {}
+    planning_helpers = []
     separate_truncation_allowance = config.get("planning_truncation_separate_allowance", False)
     if type(separate_truncation_allowance) is not bool:
         raise ValueError("planning_truncation_separate_allowance must be boolean")
+    generation_recovery_scope = config.get('planning_generation_recovery_scope', 'prompt_version')
+    if generation_recovery_scope not in ('prompt_version', 'front_half'):
+        raise ValueError('planning_generation_recovery_scope must be prompt_version or front_half')
     engine = getattr(journal, "engine", None)
     policy = engine.policy if engine is not None else PolicyLedger(config)
     max_format_retries = policy.limit("format_correction")
@@ -575,18 +866,20 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 transition(RepairState(live_snapshot), result))
 
     def planning_generation_mode(request):
-        """Keep a completed truncation recovery for this prompt in this run only.
-
-        This changes transport, not evidence or validation. A different planning
-        schema and a fresh front half retain their original generation policy.
-        """
+        """Keep an observed recovery in its configured scope, never across runs."""
         origin = recovered_generation_modes.get(request.prompt_version)
+        origin_prompt = request.prompt_version
+        if origin is None and generation_recovery_scope == 'front_half' and recovered_generation_modes:
+            origin_prompt, origin = next(iter(recovered_generation_modes.items()))
         if origin is None:
             return request
+        provenance = ({'origin_prompt_version': origin_prompt} if generation_recovery_scope == 'front_half' else {})
         return replace(request, thinking='disabled', metadata={**request.metadata,
             'planning_generation_policy': {
                 'mode': 'disabled', 'reason': 'COMPLETED_REASONING_STARVED_JSON_RECOVERY',
-                'origin_stage': origin, 'scope': 'CURRENT_FRONT_HALF_PROMPT_VERSION'}})
+                'origin_stage': origin,
+                'scope': ('CURRENT_FRONT_HALF' if generation_recovery_scope == 'front_half'
+                          else 'CURRENT_FRONT_HALF_PROMPT_VERSION'), **provenance}})
 
     def complete_recorded(request, stage: str):
         ledger_start = journal.position() if journal is not None else 0
@@ -604,9 +897,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             planning = stage.startswith(('SEMANTIC_CHANGESET', 'CHANGESET'))
             semantic = delivery_context(parsed, consumer=stage, snapshot_id=snapshot_id,
                 diagnosis=diagnosis_wire, changeset=changeset_payload, feedback=execution_feedback,
-                necessary_support=(required_planning_source_support(parsed, candidate_set, snapshot_id)
+                necessary_support=(required_planning_source_support(parsed, candidate_set, snapshot_id,helper_support=planning_helpers)
                                    if planning and candidate_set is not None else ()),
-                prerequisites=(required_source_prerequisites(candidate_set)
+                prerequisites=(required_source_prerequisites(candidate_set,helper_support=planning_helpers,establishment_required=True)
                                if planning and candidate_set is not None else ()),
                 evidence=public_observations, source_requirements=planning)
             with monitor.scope(semantic) if monitor is not None else nullcontext():
@@ -710,38 +1003,35 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             recovered_generation_modes[request.prompt_version] = stage
         return result
 
-    def fit_diagnosis(candidate_set, method, requirement, context, *, prior=None, extension_gaps=()):
+    def fit_diagnosis(candidate_set, method, requirement, context, *, prior=None, extension_gaps=(),
+                      planning_context=None):
         """Fit the complete serialized request, including fixed prompt overhead, in context."""
         fitted = candidate_set
         contracts = field_contract_contexts(fitted.candidates, parsed.requirement_text)
         by_unit = {}
         for record in contracts:
             by_unit.setdefault(record['candidate_id'], []).append(record['field_name'])
+        from contractedge.diagnosis.evidence import reader_reference_contexts
+        reader_ids={row['candidate_id'] for row in reader_reference_contexts(fitted.candidates)}
+        contract_ids=set(by_unit)|reader_ids
         fitted = replace(fitted, candidates=tuple(
-            {**u, 'source_contract_fields': by_unit[u['id']],
-             'gap_role_keys': list(dict.fromkeys([*u.get('gap_role_keys', []), 'SOURCE_CONTRACT:'+u['id']]))}
-            if u['id'] in by_unit else u for u in fitted.candidates),
-            required_endpoint_ids=tuple(dict.fromkeys([*fitted.required_endpoint_ids, *by_unit])))
-        if prior and prior.get('snapshot_id') == context.snapshot_id and prior.get('input_digest') == context.input_digest:
-            # Reserve exact still-selected source references, within the existing
-            # Top-N. The full request fitter/audit remains authoritative.
-            prior_ids = {ref[4:] for v in prior.get('violations', [])
-                if v.get('causal_status') == 'SUPPORTED' for ref in v.get('evidence_refs', [])
-                if ref.startswith('SRC-')}
-            pinned = [u['id'] for u in fitted.candidates if u['id'] in prior_ids]
-            fitted = replace(fitted, candidates=tuple(
-                {**u, 'gap_role_keys': list(dict.fromkeys([*u.get('gap_role_keys', []), 'DIAGNOSIS_CONTINUITY_REFERENCE']))}
-                if u['id'] in pinned else u for u in fitted.candidates),
-                required_endpoint_ids=tuple(dict.fromkeys([*fitted.required_endpoint_ids, *pinned])))
+            {**u, **({'source_contract_fields':by_unit[u['id']]} if u['id'] in by_unit else {}),
+             'gap_role_keys': list(dict.fromkeys([*u.get('gap_role_keys', []),
+                *(('SOURCE_CONTRACT:'+u['id'],) if u['id'] in by_unit else ()),
+                *(('SOURCE_READER:'+u['id'],) if u['id'] in reader_ids else ())]))}
+            if u['id'] in contract_ids else u for u in fitted.candidates),
+            required_endpoint_ids=tuple(dict.fromkeys([*fitted.required_endpoint_ids, *sorted(contract_ids)])))
+        fitted = retain_supported_source(fitted, prior, context.snapshot_id, context.input_digest)
         required_endpoint_ids=list(dict.fromkeys([*fitted.required_endpoint_ids,
-            *[c['id'] for c in fitted.candidates if c.get('gap_role_keys')]]))
+            *[c['id'] for c in fitted.candidates if requires_gap_delivery(c)]]))
         while True:
             if not fitted.candidates:
                 return fitted,None,0
             request = build_diagnosis_request(method, requirement, fitted, context,
                                               scope_resolution=scope)
             continuity = diagnosis_continuity(prior, context.snapshot_id,
-                build_evidence_catalog(method, fitted, context.snapshot_id), extension_gaps, input_digest=context.input_digest)
+                build_evidence_catalog(method, fitted, context.snapshot_id), extension_gaps,
+                input_digest=context.input_digest, planning_context=planning_context)
             if continuity is not None:
                 body = json.loads(request.messages[1]['content'])
                 body['diagnosis_continuity'] = continuity
@@ -759,7 +1049,19 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                         ensure_ascii=False)},))
             request = planning_generation_mode(request)
             count = request_tokens(request)
-            first_limit = min(fitted.max_context_tokens, int(config.get('initial_diagnosis_context_tokens', fitted.max_context_tokens)))
+            # The smaller initial allowance is not a second global context cap.
+            # Evidence extensions and validated feedback add state on
+            # rediagnosis; fit both in the existing total, reserving output.
+            total_limit = min(int(config['max_context_tokens']),
+                int(config.get('model_context_tokens') or config['max_context_tokens']))
+            initial_context = execution_feedback is None and not fitted.extension_used
+            # Legacy synthetic callers declare only an input cap. Preserve
+            # that admission contract; real profiles declare a model window.
+            reserve_output = execution_feedback is not None or config.get('model_context_tokens') is not None
+            first_limit = (min(fitted.max_context_tokens,
+                int(config.get('initial_diagnosis_context_tokens', fitted.max_context_tokens)))
+                if initial_context else
+                min(fitted.max_context_tokens, total_limit - (request.max_output_tokens if reserve_output else 0)))
             if count <= first_limit:
                 if config.get('gap_role_delivery_enabled'):
                     from contractedge.retrieval.gap_delivery import audit_gap_delivery
@@ -771,6 +1073,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                         return fitted,None,count
                 audit = {'request_tokens': count, 'input_limit': first_limit,
                          'reserved_output_tokens': request.max_output_tokens,
+                         'context_stage': ('INITIAL_DIAGNOSIS' if initial_context else
+                             'FEEDBACK_REDIAGNOSIS' if execution_feedback is not None else 'EVIDENCE_REDIAGNOSIS'),
+                         'total_context_limit': total_limit,
                          'selected_ids': list(fitted.selected_ids),
                          'surviving_reference_edges': len(fitted.edges),
                          'drop_reasons': dict(fitted.drop_reasons or {})}
@@ -1094,7 +1399,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             try:
                 policy.consume("evidence_extension", attempt_id)
                 candidate_set = extend_once(
-                    candidate_set, diagnosis.evidence_gaps, extension_units,
+                    (retain_supported_source(candidate_set, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
+                     if config.get('gap_role_delivery_enabled') else candidate_set),
+                    diagnosis.evidence_gaps, extension_units,
                     max_context_tokens=int(config["max_context_tokens"]), token_counter=token_counter,
                 )
                 candidate_set = replace(candidate_set, supplemental_evidence=absence_evidence)
@@ -1110,6 +1417,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 "selected_ids": list(candidate_set.selected_ids), "dropped_ids": list(candidate_set.dropped_ids),
                 "gap_search": gap_search_audit})
             if candidate_set.selected_ids:
+                requirement = requirement_for_rediagnosis(requirement, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
                 candidate_set, diagnosis_request, prompt_tokens = fit_diagnosis(
                     candidate_set, run_input, requirement, context, prior=diagnosis.raw, extension_gaps=diagnosis.evidence_gaps)
                 failure=evidence_delivery_failure(candidate_set,diagnosis.raw)
@@ -1226,6 +1534,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
         change_attempt = -1
         planning_corrections_used = 0
         planning_extension_attempted = False
+        previous_changeset_attempt = None
         while True:
             # A valid source request is not a malformed plan. Keep the one
             # acquisition and the configured correction allowance separate;
@@ -1245,11 +1554,23 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 context = replace(context, retrieval_config={**context.retrieval_config,
                     'production_path_frontier': production_frontier(candidate_set.candidates, parsed.requirement_text)})
                 run_context_wire = asdict(context)
+            helper_enabled=config.get('helper_preconditions_enabled',False)
+            helper_bytes=max(0,min(int(config.get('max_execution_support_bytes',24000)),24000))
+            planning_helpers=[];helper_audit=[]
+            if helper_enabled:
+                from contractedge.execution.helper_context import planning_helper_source_support
+                planning_helpers,helper_audit=planning_helper_source_support(snapshot,candidate_set.candidates,
+                    max_bytes=helper_bytes)
             context = replace(context, retrieval_config={**context.retrieval_config,
-                    'necessary_source_support': required_planning_source_support(run_input,candidate_set,snapshot.snapshot_id),
-                    'source_prerequisites': required_source_prerequisites(candidate_set)})
+                    'planning_helper_contracts':bool(helper_enabled),
+                    'planning_helper_max_bytes':helper_bytes,
+                    'planning_helper_audit':helper_audit,
+                    'precondition_establishment_required':True,
+                    'necessary_source_support': required_planning_source_support(run_input,candidate_set,snapshot.snapshot_id,helper_support=planning_helpers),
+                    'source_prerequisites': required_source_prerequisites(candidate_set,helper_support=planning_helpers,establishment_required=True)})
             run_context_wire = asdict(context)
-            changeset_request = build_changeset_request(diagnosis, context, feedback)
+            changeset_request = build_changeset_request(diagnosis, context, feedback,
+                previous_attempt=previous_changeset_attempt if feedback else None)
             changeset_request = replace(changeset_request, metadata={**changeset_request.metadata,
                 'planning_format_retry_index': planning_corrections_used})
             changeset_request = planning_generation_mode(changeset_request)
@@ -1281,6 +1602,10 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             identity_bound = False
             changeset_payload = None
             validation = None
+            previous_changeset_attempt = (dict(run_id=run_id, snapshot_id=snapshot.snapshot_id,
+                input_digest=parsed.input_digest, diagnosis_digest=canonical_digest(diagnosis.raw),
+                response_content=changeset_response.content, state='REJECTED_PLAN_DRAFT')
+                if isinstance(changeset_response.content, str) and changeset_response.content.strip() else None)
             try:
                 changeset_payload = parse_json_response(changeset_response.content)
                 changeset_payload, changeset_binding = bind_changeset_envelope(
@@ -1299,13 +1624,29 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 validation = validate_semantic_changeset(changeset_payload, diagnosis, snapshot,
                 policy=(config.get('public_execution_capabilities') or {}).get('editable_policy'),
                     frontier=context.retrieval_config.get('production_path_frontier'),
-                    prerequisites=context.retrieval_config.get('source_prerequisites'), capabilities=consumer_capabilities)
+                    prerequisites=context.retrieval_config.get('source_prerequisites'), capabilities=consumer_capabilities,
+                    source_support=context.retrieval_config.get('necessary_source_support'))
             feedback = [{"code": issue.code, "path": issue.path, "message": issue.message}
                         for issue in validation.errors]
             if feedback:
                 calls[-1]['validation_feedback'] = feedback
             planning_gaps = _safe_planning_gaps(changeset_payload)
-            if (changeset_payload.get('status') == 'NEEDS_EVIDENCE' and planning_gaps
+            extension_trigger = 'CHANGESET_NEEDS_EVIDENCE'
+            binding_errors = {'PRODUCTION_BRANCH_CHANGE_INVALID', 'PRODUCTION_BRANCH_TARGET_UNAVAILABLE'}
+            # A plan cannot create a missing diagnosis unit by rewriting its
+            # action text. Reuse the one existing acquisition/reassessment;
+            # never auto-create units or expand edit permissions here.
+            if (config.get('gap_role_delivery_enabled') and not planning_gaps
+                    and not planning_extension_attempted and not candidate_set.extension_used
+                    and feedback and {e['code'] for e in feedback} <= binding_errors
+                    and any(e['code'] == 'PRODUCTION_BRANCH_TARGET_UNAVAILABLE' for e in feedback)):
+                planning_gaps = production_branch_rebinding_gaps(changeset_payload, diagnosis,
+                    context.retrieval_config.get('production_path_frontier', []))
+                if planning_gaps:
+                    extension_trigger = 'CHANGESET_TARGET_BINDING_GAP'
+                    calls[-1]['target_binding_reassessment'] = planning_gaps
+            if ((changeset_payload.get('status') == 'NEEDS_EVIDENCE'
+                    or extension_trigger == 'CHANGESET_TARGET_BINDING_GAP') and planning_gaps
                     and not planning_extension_attempted and not candidate_set.extension_used):
                 planning_extension_attempted = True
                 gap_units, audit = extract_gap_extension_units(snapshot, scope.seed_paths, units,
@@ -1330,7 +1671,10 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     continue
                 try:
                     policy.consume("evidence_extension", attempt_id)
-                    candidate_set = extend_once(candidate_set, planning_gaps, extra,
+                    candidate_set = extend_once(
+                        (retain_supported_source(candidate_set, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
+                     if config.get('gap_role_delivery_enabled') else candidate_set),
+                        planning_gaps, extra,
                         max_context_tokens=int(config['max_context_tokens']), token_counter=token_counter)
                 except ValueError:
                     if validation.valid:
@@ -1338,9 +1682,11 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     continue
                 candidate_set = replace(candidate_set, supplemental_evidence=absence)
                 retrieval_rounds.append({'round_id': 2, 'extension_used': True,
-                    'trigger': 'CHANGESET_NEEDS_EVIDENCE', 'selected_ids': list(candidate_set.selected_ids),
+                    'trigger': extension_trigger, 'selected_ids': list(candidate_set.selected_ids),
                     'gap_search': audit})
-                candidate_set, request, count = fit_diagnosis(candidate_set, run_input, requirement, context, prior=diagnosis.raw, extension_gaps=planning_gaps)
+                requirement = requirement_for_rediagnosis(requirement, diagnosis.raw, snapshot.snapshot_id, parsed.input_digest)
+                candidate_set, request, count = fit_diagnosis(candidate_set, run_input, requirement, context,
+                    prior=diagnosis.raw, extension_gaps=planning_gaps, planning_context=changeset_payload)
                 failure=evidence_delivery_failure(candidate_set,diagnosis.raw,changeset_payload)
                 if failure is not None:return failure
                 if request is None or not within_budget(request, count):
@@ -1353,7 +1699,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     calls.append({'stage': 'DIAGNOSIS_EXTENSION' if history == tuple(request.messages) else 'DIAGNOSIS_FORMAT_RETRY',
                         'prompt_version': request.prompt_version, 'response_content': response.content,
                         'response_metadata': dict(response.metadata), 'request_metadata': dict(request.metadata),
-                        'extension_used': True, 'trigger': 'CHANGESET_NEEDS_EVIDENCE',
+                        'extension_used': True, 'trigger': extension_trigger,
                         'elapsed_seconds': time.monotonic() - started,
                         'prompt_tokens_reserved': count, 'output_tokens_reserved': request.max_output_tokens})
                     response = recover_truncated_planning(response, request, 'DIAGNOSIS_EXTENSION')
@@ -1398,6 +1744,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 # The next plan is based on a new diagnosis. Previous plan
                 # errors do not describe it, but any used correction stays used.
                 feedback = []
+                previous_changeset_attempt = None
                 continue
             if validation.valid:
                 break

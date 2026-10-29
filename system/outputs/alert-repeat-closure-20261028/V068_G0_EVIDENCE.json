@@ -1,0 +1,122 @@
+{
+  "schema_version": "ce.formal_gate_evidence.v1",
+  "gate": "G0",
+  "identity": {
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "panel_sha256": "61c9cbb11bc0a65c7896fe5ddbb2ad77e7cd44a01396075e7fdfbc424c972530",
+    "candidate_config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "executed_at": "2026-10-28T10:58:55.656779+00:00",
+  "checker": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/collect_static_delivery_v068.py",
+    "sha256": "f964d30c2905fa430f61c4d4679ad1af26d52246962e478fd9068d4727914d43"
+  },
+  "inputs": [
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+      "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+    },
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+      "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+    },
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+      "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+    }
+  ],
+  "checks": [
+    {
+      "id": "membership150",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+          "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+          "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+        }
+      ]
+    },
+    {
+      "id": "public_evaluation_mapping",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+          "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+          "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+        }
+      ]
+    },
+    {
+      "id": "archive_grader_partition_integrity",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+          "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+          "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+        }
+      ]
+    },
+    {
+      "id": "release_layout_mapping",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+          "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+          "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+        }
+      ]
+    },
+    {
+      "id": "resource_preflight150",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_STATIC_DATASET_ADMISSION.json",
+          "sha256": "17c3cf7404d2f1a85e0f13278fb50300c22343e2c477ea918f957d97b8352eeb"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_LOCAL_IMAGE_PREFLIGHT.json",
+          "sha256": "8b068108cd2f7e46cae65d45d8949ff8e6e13130f393b411541f048138c71257"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_PUBLIC_ROUTES.json",
+          "sha256": "85f6ed8b4b4b0e7048e1e470f14b27a5cc95a8f1badf4c28441243d0f2e04302"
+        }
+      ]
+    }
+  ],
+  "scope": "Zero-model static management preflight of the current150 unified release: actual public bytes, hash-only private entry pins, current public routes and local images/resources. No all-case build/runtime/repair-success claim. Recheck resources before formal launch."
+}

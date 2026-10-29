@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "tests": 1939,
+  "subtests": 91,
+  "source_sha256": "9c795e1eaa7e81cd34e707c4869db9aa536005674d6d227b651e3719f2532057",
+  "freeze_sha256": "250ab61b5fdb21fd4e55657a8e18186ea49ae7a70e4c2961c59803803136e4ee",
+  "log_sha256": "8baa5488acda4d00bee6aa578bc54a69dfc7e2297ab3668c62581e493c064d7f",
+  "actual_isolated_demos_enabled": true,
+  "new_model_calls": 0,
+  "formal_ready": false,
+  "scope": "Current frozen source engineering regression only; actual8/public sandbox separate; effectiveness pending"
+}

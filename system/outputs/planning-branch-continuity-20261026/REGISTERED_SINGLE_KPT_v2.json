@@ -1,0 +1,17 @@
+{
+  "schema_version": "ce.single_root_cause_validation.v1",
+  "source_sha256": "74e7a3f5fd9010cb7a9eb399410e851b7d205d8ec5d0e063799e5f8cd21d997a",
+  "freeze_sha256": "b90d81b6ab1abce30a7482497ebfb43a6280034bdaf2d26e4082e28c42013511",
+  "registration_sha256": "06bf0eafb53254bb6e9c7c3fb9734230f7d8e0a5a80f9f9940c4cb7d32e272fb",
+  "driver_sha256": "d81592d805003c421be4bee5f028b2612cc83882b810fc9df0190a49b690d34d",
+  "qualification_sha256": "ccc8338543234fb8ab92240d595c0c819808d9ef72ba7b4d88076e165376f819",
+  "before_implementation": "Source055 KPT SEMANTIC_FAIL/publicFAIL; first plan recognized validator concern but extension diagnostic lacked planning review. First trial regression restored in second edit; validator still failed.",
+  "hypothesis": "Existing same-snapshot planning-evidence diagnosis receives previously recognized in-scope branch concerns and may form a complete supported plan; no forcing of causality or units.",
+  "success": "Fresh patch independentPASS and publicnotFAIL; audit actual handoff use, diagnosis units and plan/validator behavior. If mechanism not triggered, success is only an originalBroken repair witness, not causal proof.",
+  "once_only": true,
+  "max_model_calls": 12,
+  "max_rounds": 2,
+  "cumulative_budget_cny": 150,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

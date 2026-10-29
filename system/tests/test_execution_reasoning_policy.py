@@ -56,6 +56,32 @@ def test_unknown_policy_fails_before_model_call(tmp_path):
         request(tmp_path,plan,config)
 
 
+def test_failed_trial_only_keeps_code_output_budget_for_initial_precondition_plan(tmp_path):
+    plan,config=fixture(tmp_path)
+    config['execution_reasoning_policy']='failed_trial_only'
+    plan['precondition_review']=[dict(disposition='REQUIRED',source_evidence_ref='unused')]
+    plan['coordination_context']={'source_support':[dict(id='unused',snapshot_id=plan['snapshot_id'],
+        locator={'path':'templates/serviceaccount.yaml'},excerpt='')]}
+    result=request(tmp_path,plan,config)
+    assert result.thinking=='disabled' and result.max_output_tokens==16384
+
+
+def test_failed_trial_only_still_reasons_on_a_bound_behavior_regression(tmp_path):
+    plan,config=fixture(tmp_path);config['execution_reasoning_policy']='failed_trial_only'
+    result=request(tmp_path,plan,config,previous_attempt=rejected_predicate_attempt(plan))
+    assert result.thinking=='enabled'
+    assert result.metadata['execution_thinking_policy']=='FAILED_TRIAL_REASONING'
+
+
+def test_request_explains_multiple_edits_reuse_the_same_semantic_change_id(tmp_path):
+    import json
+    plan,config=fixture(tmp_path)
+    body=json.loads(request(tmp_path,plan,config).messages[1]['content'])
+    assert body['edit_batch_rules']['multiple_edits_per_change_id'] is True
+    assert body['edit_batch_rules']['numbered_fields_allowed'] is False
+    assert set(body['edit_batch_rules']['allowed_edit_fields'])=={'change_id','path','operation','old_text','new_text'}
+
+
 def rejected_predicate_attempt(plan):
     from tests.test_failure_tasks import predicate_record
     from contractedge.orchestration.feedback import feedback_prompt_view

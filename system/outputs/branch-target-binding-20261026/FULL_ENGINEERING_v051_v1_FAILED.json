@@ -1,0 +1,13 @@
+{
+  "status": "FAIL",
+  "exit_code": 1,
+  "failed": 2,
+  "passed": 1953,
+  "subtests": 91,
+  "source_sha256": "0af0aea93477232fc59f7ca11394b71eece9a10c236e298715889077fad17779",
+  "log_sha256": "015d32b7fa3f4013f99417c5aba9aad994fcf960cb5be8fd636572d1ad9d2417",
+  "formal_ready": false,
+  "qualification_accepted": false,
+  "paid_root_created": false,
+  "scope": "Actual full-run process exited1; raw zero-call qualification erroneously parsed substring and is explicitly rejected"
+}

@@ -1,0 +1,21 @@
+{
+  "status": "INITIAL_PRODUCTION_WINDOW_DELIVERED",
+  "request_sha256": "9c278a3feb99ffd7ebddfee1db829c6e41da1c8c01b2d92dd02116c5c70ab97b",
+  "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "evidence_id": "SRC-CU-ddfb73f63384b82e",
+  "locator": {
+    "column_start": 1,
+    "end_line": 309,
+    "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+    "start_line": 230
+  },
+  "content_digest": "a9535587696a94d698ff8467a126f7edaf2c2029341a5171e8e45e805a5c89d0",
+  "selected_count": 12,
+  "request_tokens": 87780,
+  "input_limit": 120000,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "complete_function_delivered": false,
+  "formal_ready": false,
+  "scope": "Offline request capture after scope code fix, before version-label bump; source behavior identical but not a fresh model result"
+}

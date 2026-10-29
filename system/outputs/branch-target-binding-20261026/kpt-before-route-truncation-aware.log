@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-branch-binding-20261026/system/scripts/replay_saved_front_request.py", line 80, in <module>
+    main()
+  File "/home/xhj/contractedge-branch-binding-20261026/system/scripts/replay_saved_front_request.py", line 67, in main
+    assert len(captured) == 1, f'Capture boundary not reached: {trace.status}, {trace.errors}'
+AssertionError: Capture boundary not reached: BUDGET_EXHAUSTED, ('ChangeSet output reached the configured generation token limit',)

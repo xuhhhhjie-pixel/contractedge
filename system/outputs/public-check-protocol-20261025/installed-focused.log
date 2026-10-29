@@ -1,0 +1,3 @@
+{"installed_version": "0.6.45", "runtime_files_matched": 116, "installed_root": "/home/xhj/contractedge-latest-integration-20261024/.superpowers/venv-v045/lib/python3.10/site-packages/contractedge", "public_fixture_root": "/home/xhj/contractedge-latest-integration-20261024/system", "scope": "Noneditable runtime plus explicit repository public test resources; not standalone bundled examples"}
+...........................................................................                                          [100%]
+75 passed, 28 subtests passed in 3.82s

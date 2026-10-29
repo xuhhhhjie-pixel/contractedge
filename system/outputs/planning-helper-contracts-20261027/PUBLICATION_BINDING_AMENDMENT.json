@@ -1,0 +1,21 @@
+{
+  "status": "METADATA_ONLY_PUBLICATION_BINDING_VERIFIED",
+  "original_snapshot_sha256": "37309739907c42aec9b0e4e484e52eefce305d61578a496ecdefb601f3c4ffba",
+  "publication_snapshot_sha256": "48c0859c86ef75fa249cf894e2413f8c2239beb80bc42946119b147f88d949fd",
+  "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+  "only_execution_difference": "CI workflow selects the already-qualified exact-source actual8 binding instead of stalev046",
+  "unchanged": [
+    "all116methodsourcefiles",
+    "methodconfigand59stageconfigurationbindings",
+    "205fixturefiles",
+    "288toolingfiles",
+    "original46registrationanddispatches"
+  ],
+  "changed_repository_files": [
+    ".github/workflows/development.yml"
+  ],
+  "full_engineering_repeated": false,
+  "new_model_calls": 0,
+  "qualification": "ORDERING_SOURCE_QUALIFICATION.json, exact same source/config/test/tool identity",
+  "formal_ready": false
+}

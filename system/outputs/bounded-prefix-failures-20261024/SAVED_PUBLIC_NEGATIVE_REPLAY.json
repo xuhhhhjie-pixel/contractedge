@@ -1,0 +1,22 @@
+{
+  "schema_version": "ce.partial_negative_public_replay.v1",
+  "method_source_version": "0.6.41",
+  "candidate_source_version": "0.6.40",
+  "case_id": "RW-ALERTMANAGER-4705",
+  "candidate_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
+  "registered_probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62",
+  "probe_status": "PARTIAL",
+  "source_unchanged": true,
+  "observed_negative_checks": 1,
+  "public_decision": "FAIL",
+  "decision_method": "BOUND_CHECK_AGGREGATION",
+  "semantic_outcome": "PUBLIC_REVIEW_FAIL",
+  "feedback_route": "EXECUTE",
+  "causal_attribution": "UNKNOWN",
+  "unobserved_visibility_claim": "UNKNOWN",
+  "new_model_calls": 0,
+  "private_materials_loaded": false,
+  "fixture_plan_not_new_model_plan": true,
+  "independent_score_claim": false,
+  "formal_ready": false
+}

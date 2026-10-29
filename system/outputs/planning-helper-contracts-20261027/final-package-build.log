@@ -1,0 +1,9 @@
+Processing /home/xhj/contractedge-planning-branch-continuity-20261026/system
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: contractedge-system
+  Building wheel for contractedge-system (pyproject.toml): started
+  Building wheel for contractedge-system (pyproject.toml): finished with status 'done'
+  Created wheel for contractedge-system: filename=contractedge_system-0.6.60-py3-none-any.whl size=417051 sha256=f9735c61b46537f9b2d7c8ce63ed7c667c74ac18f3feb6d1c64f104577aa7387
+  Stored in directory: /tmp/pip-ephem-wheel-cache-k9nacyuf/wheels/f7/2a/cf/706f84ed48df2bd140ffa8f24983bf32d914a566006836ee4f
+Successfully built contractedge-system

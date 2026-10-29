@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "source_sha256": "7b5d07480e61e83d440250c6503af2dd48a6f2b3e7b9714460fbea0f893ef0d5",
+  "wheel_sha256": "9fbbe6ce7175b598d116b6f71609455256d967c22d6eaf9a42e5f6071fecffc3",
+  "version": "0.6.60",
+  "installed_source_files": 116,
+  "runtime_deployed": false
+}

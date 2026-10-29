@@ -29,11 +29,12 @@ from tests.test_public_observer import (
 )
 
 
-# A declared fixture contract, not an ID-to-scenario inference in the consumer.
+# Explicit local suite scope; per-check finite members remain independently declared.
+# Migrated from PR #19 per-predicate scenario names, without weakening scope checks.
 SCOPES = {
-    "selected": {"scenario": "selected"},
-    "disabled": {"scenario": "disabled"},
-    "stable": {"scenario": "all-published-scenarios"},
+    "selected": {"scenario": "selected-and-preservation"},
+    "disabled": {"scenario": "selected-and-preservation"},
+    "stable": {"scenario": "selected-and-preservation"},
 }
 CHECK_IDS = {
     "selected": "contractedge-public-process-v1:selected",
@@ -240,7 +241,7 @@ def test_mechanical_aggregation_keeps_uncited_operation_failures_in_scope(public
     if operation_scope == "stale-snapshot":
         operation["snapshot_id"] = "stale-" + public_report["snapshot_id"]
     elif operation_scope == "other-scenario":
-        operation["scenario"] = SCOPES["disabled"]["scenario"]
+        operation["scenario"] = "unrelated-execution-scenario"
     observations = [*public_report["observations"], operation]
     # This record is not a bound-check citation. Passing only the filtered
     # records to support_error would incorrectly discard the current failure.
@@ -267,7 +268,7 @@ def test_actual_failed_value_supports_a_declared_necessary_failure(public_report
     result, provider = review(public_report, condition)
     assert result["decision"] == "FAIL", result
     assert result["checks"][0]["status"] == "FAIL"
-    assert result["method"] == "BOUND_CHECK_AGGREGATION"
+    assert result["method"] == "BOUND_NEGATIVE_CHECK_AGGREGATION"
     assert provider.requests == []
     final = public_observer.enforce_public_profile(result, public_report)
     assert final["decision"] == "FAIL", final
@@ -398,3 +399,34 @@ def test_rehashed_profile_cannot_register_a_forged_probe_or_scope(public_report,
         return  # Explicit protocol rejection is also fail-closed.
     assert result["decision"] != "PASS", result
     assert result["required_public_profile"]["binding_valid"] is False
+
+
+def test_revision_keeps_failure_facts_without_repeating_large_check_boundaries():
+    """A long shared boundary must not grow once per check in a revision."""
+    from contractedge.model.admission import quote_request
+    boundary = 'Finite public observation scope. ' * 700
+    declared = {'method_behavior_probes': [{
+        'id': 'generic-public-observer', 'sha256': 'a'*64,
+        'scenario': 'generic-input-suite', 'boundary': boundary,
+        'checks': {'predicate-'+str(i): 'Published finite predicate '+str(i) for i in range(12)},
+    }]}
+    diagnosis = validate_diagnosis(valid_diagnosis(), parse_method_input(valid_method_input()), None)
+    context = SimpleNamespace(run_id='bounded-revision', case_id='RW-DEMO-001', snapshot_id='snap-0',
+        input_digest=diagnosis.input_digest, model_config={'model':'fixture'}, budget={'max_output_tokens':16384},
+        retrieval_config={'public_execution_capabilities':declared})
+    facts = 'PUBLIC_COUNTEREXAMPLES_1_2_3_4'
+    prior = json.dumps(valid_plan())
+    request = build_changeset_request(diagnosis, context, [{'code':'PUBLIC_FAILURE','message':facts}],
+        previous_attempt={'state':'CURRENT_PLAN_FOR_REVISION','run_id':context.run_id,
+            'snapshot_id':context.snapshot_id,'input_digest':context.input_digest,
+            'diagnosis_digest':canonical_digest(diagnosis.raw),'response_content':prior})
+    provider = OpenAICompatibleProvider('https://fixture.invalid/v1','UNUSED_TEST_KEY')
+    quote = quote_request(provider, request, lambda text: len(text.encode('utf-8')))
+    assert quote.total_tokens < 220000
+    wire = json.loads(quote.prepared.body)
+    body = json.loads(wire['messages'][1]['content'])
+    assert body['public_execution_capabilities']['method_behavior_probes'] == declared['method_behavior_probes']
+    assert body['validation_feedback'][0]['message'] == facts
+    assert json.loads(wire['messages'][2]['content'])['postconditions'] == json.loads(prior)['postconditions']
+    assert len(body['public_behavior_check_catalog']) == 12
+    assert json.dumps(body).count(boundary) == 1

@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "source_sha256": "5e1758b0ac0a306f089f9a1e2aacb58aff12739a803ac5544b44d95392bf3387",
+  "freeze_sha256": "be70b52a854913a483d231a0aa93497f07d1448de5493a4e7407ca998c3d0546",
+  "wheel_sha256": "85e5d78a6f7e7b5499b632f88fca2886621552033bd0cd376b0a3bc23cd3ff8f",
+  "installed_source_files": 116,
+  "installed_source_set_exact": true,
+  "final_build": "PASS_PEP517_ISOLATED_BUILD",
+  "model_http_calls_added": 0,
+  "formal_ready": false
+}

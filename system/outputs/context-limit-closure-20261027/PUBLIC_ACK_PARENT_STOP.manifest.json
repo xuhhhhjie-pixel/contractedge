@@ -1,0 +1,46 @@
+{
+  "scope": "Original public method/RPC failure, no hidden grader or source/checkpoint tree; current guard and zeroHTTP replay included",
+  "archive_sha256": "ad224305a8448f1956d772affaa9f4a4461ab88c315a30f4c329f2bc3612fd0b",
+  "members": {
+    "original/receipt.json": {
+      "sha256": "219d5ccf7d56761fa7c1d1995114500c84466f7cd82851377d60c806891b629e",
+      "bytes": 587466
+    },
+    "original/parent-model-calls.json": {
+      "sha256": "b7a4a1ad9e3b9e63e40b784e155962a7b0af2cc4fae030f407e806657e43f3c4",
+      "bytes": 2430978
+    },
+    "original/method-model-calls.json": {
+      "sha256": "2611e61c2bd6e396a97d14b7b5a7b1db84b1ae52899ae8b6f0c8c6422c5c5cf4",
+      "bytes": 2175809
+    },
+    "original/repair.trace.json": {
+      "sha256": "7fb514c507b6a2b542b21ecba8f2e5581d088e967038ff3dc67b804afe57101c",
+      "bytes": 68285
+    },
+    "original/queue-state.json": {
+      "sha256": "39847db3b4c569722ea05dfc80f280af464a969904cb48d21946e064cde44d1f",
+      "bytes": 303
+    },
+    "original/run_isolated_method.py": {
+      "sha256": "d3d41ae6d6cde2436e52a276f9efe45ec233ad020e4d66c779b53ae3ea708655",
+      "bytes": 55577
+    },
+    "corrected/run_isolated_method.py": {
+      "sha256": "8f52a8bbea29a8de36a468fcbaa93ba5ad1e2c0d3395bafb6acc619db6c3b298",
+      "bytes": 55779
+    },
+    "replay/replay-actual-request.py": {
+      "sha256": "563982ff0bf2402d5cff8198f26d3529e06fb44fb208e8f130685072409b6081",
+      "bytes": 6548
+    },
+    "replay/ACK_CONTEXT_BOUNDARY_REPLAY.json": {
+      "sha256": "229a983464cd224ee89854b9d5cbe82c06ae0f3e3cef00a4bab86a411362e63f",
+      "bytes": 4118
+    },
+    "original/pending/f853055159e342c08719bf162b485af5.json": {
+      "sha256": "7c1e58860b36a71b1c7dc5a7094ab3f64594012776a439c1cb87eee0e5654a48",
+      "bytes": 127
+    }
+  }
+}

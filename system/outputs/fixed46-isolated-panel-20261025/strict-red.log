@@ -1,0 +1,28 @@
+.............F..F........                                                [100%]
+=================================== FAILURES ===================================
+______ test_rehashed_recovery_seed_cannot_replace_original_public_failure ______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-482/test_rehashed_recovery_seed_ca0')
+
+    def test_rehashed_recovery_seed_cannot_replace_original_public_failure(tmp_path):
+        panel,path,_=fixture(tmp_path);seed=panel['seeds']['A2'];Path(seed['path']).write_text('different patch')
+        seed['sha256']=hashlib.sha256(Path(seed['path']).read_bytes()).hexdigest();path.write_text(json.dumps(panel))
+>       with pytest.raises(ValueError,match='original'):load().verify_panel(path)
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_fixed_panel.py:93: Failed
+_____ test_unknown_baseline_outcome_cannot_count_as_completed_prerequisite _____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-482/test_unknown_baseline_outcome_0')
+
+    def test_unknown_baseline_outcome_cannot_count_as_completed_prerequisite(tmp_path):
+        panel,_,_=fixture(tmp_path);rows=[r for r in records(panel) if r['group']!='B']
+        next(r for r in rows if r['variant']=='baseline')['status']='UNKNOWN'
+>       assert load().b_gate(panel,rows)['open'] is False
+E       assert True is False
+
+tests/test_fixed_panel.py:137: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fixed_panel.py::test_rehashed_recovery_seed_cannot_replace_original_public_failure
+FAILED tests/test_fixed_panel.py::test_unknown_baseline_outcome_cannot_count_as_completed_prerequisite
+2 failed, 23 passed in 0.72s

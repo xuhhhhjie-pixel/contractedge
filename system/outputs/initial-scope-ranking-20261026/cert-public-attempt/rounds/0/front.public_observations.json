@@ -1,0 +1,36 @@
+[
+  {
+    "id": "OBS1",
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+    "kind": "PUBLIC_OBSERVATION",
+    "evidence_kind": "EXECUTION_ONLY",
+    "locator": {
+      "path": "launcher/tool.stdout",
+      "file_sha256": "1f6638b081ee330a84b9f83367d6ed4821e69395697ef8d5f20de7fb802aeadc",
+      "start_byte": 0,
+      "copied_bytes": 303,
+      "truncated": false,
+      "whole_file_read": true
+    },
+    "content_digest": "1f6638b081ee330a84b9f83367d6ed4821e69395697ef8d5f20de7fb802aeadc",
+    "excerpt": "{\"case_id\": \"RW-CERTMANAGER-9116\", \"status\": \"EXECUTION_PASS\", \"hidden_semantic_evaluation\": \"NOT_RUN\", \"private_materials_loaded\": false, \"scenarios\": [{\"scenario\": \"public-issuing-controller-build\", \"exit_code\": 0, \"elapsed_seconds\": 191.50015433132648, \"timed_out\": false, \"output_limited\": false}]}\n",
+    "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+  },
+  {
+    "id": "OBS2",
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+    "kind": "PUBLIC_OBSERVATION",
+    "evidence_kind": "EXECUTION_ONLY",
+    "locator": {
+      "path": "raw/public_execution.json",
+      "file_sha256": "bf8eabb293f6a3cf751ed962f6b28fc36485f3b3621e46bbe72b43c0eecb913f",
+      "start_byte": 0,
+      "copied_bytes": 359,
+      "truncated": false,
+      "whole_file_read": true
+    },
+    "content_digest": "bf8eabb293f6a3cf751ed962f6b28fc36485f3b3621e46bbe72b43c0eecb913f",
+    "excerpt": "{\n  \"case_id\": \"RW-CERTMANAGER-9116\",\n  \"status\": \"EXECUTION_PASS\",\n  \"hidden_semantic_evaluation\": \"NOT_RUN\",\n  \"private_materials_loaded\": false,\n  \"scenarios\": [\n    {\n      \"scenario\": \"public-issuing-controller-build\",\n      \"exit_code\": 0,\n      \"elapsed_seconds\": 191.50015433132648,\n      \"timed_out\": false,\n      \"output_limited\": false\n    }\n  ]\n}\n",
+    "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+  }
+]

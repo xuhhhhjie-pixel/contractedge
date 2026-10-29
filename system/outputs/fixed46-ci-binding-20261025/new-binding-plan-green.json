@@ -1,0 +1,74 @@
+{
+  "status": "PREPARED_NOT_RUN",
+  "harness_version": 2,
+  "identity": {
+    "current_head": "4e0d84e9b165aaac66d8c41607d804709b576bae",
+    "base_commit": "89b97f5add97e771abcd1ac283d63eca0a6f43b4",
+    "original_binding_source_scripts_aggregate": "369a070bff63f71ab5d14dcf215804cd45a39d87648f0dc0915eb75f89ffe611",
+    "original_binding_repair_sha256": "96510f0bf2b81ed2657002d55b64b42058a4a6fea1660e97563b3fa7966b0603",
+    "explicit_expected_repair_sha256": null,
+    "effective_file_mapping_sha256": "369a070bff63f71ab5d14dcf215804cd45a39d87648f0dc0915eb75f89ffe611",
+    "effective_file_mapping_digest_definition": "SHA256 of UTF-8 JSON file-to-SHA256 mapping, sorted keys, compact separators, ensure_ascii=False",
+    "bound_files_verified": 238
+  },
+  "binding_sha256": "6d6950ab5913e268f7581f8aa6226a98b3f7431ef23ab810115160d21b19890d",
+  "harness_sha256": "68c92ec561ced7193183b5b0eed497776f7a575dfe658c56f9a988c4157c072d",
+  "cells": [
+    {
+      "dialect": "topomen-native",
+      "point": "normal",
+      "expected_runtime_sessions": 2,
+      "status": "NOT_RUN"
+    },
+    {
+      "dialect": "topomen-native",
+      "point": "after-applied",
+      "expected_runtime_sessions": 1,
+      "status": "NOT_RUN"
+    },
+    {
+      "dialect": "topomen-native",
+      "point": "after-observed",
+      "expected_runtime_sessions": 2,
+      "status": "NOT_RUN"
+    },
+    {
+      "dialect": "topomen-native",
+      "point": "before-selection",
+      "expected_runtime_sessions": 2,
+      "status": "NOT_RUN"
+    },
+    {
+      "dialect": "modify-only",
+      "point": "normal",
+      "expected_runtime_sessions": 2,
+      "status": "NOT_RUN"
+    },
+    {
+      "dialect": "modify-only",
+      "point": "after-applied",
+      "expected_runtime_sessions": 1,
+      "status": "NOT_RUN"
+    },
+    {
+      "dialect": "modify-only",
+      "point": "after-observed",
+      "expected_runtime_sessions": 2,
+      "status": "NOT_RUN"
+    },
+    {
+      "dialect": "modify-only",
+      "point": "before-selection",
+      "expected_runtime_sessions": 2,
+      "status": "NOT_RUN"
+    }
+  ],
+  "real_model_http_calls": 0,
+  "expected_actual_sessions": 14,
+  "expected_actual_candidate_observer_containers": 28,
+  "runtime": {
+    "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+    "docker_host": "unix:///run/user/1008/docker.sock"
+  },
+  "scope": "Actual isolation only when executed successfully; no host/mock equivalence claim."
+}

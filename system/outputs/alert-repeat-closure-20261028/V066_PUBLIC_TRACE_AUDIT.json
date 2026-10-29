@@ -1,0 +1,88 @@
+{
+  "status": "TARGETED_EFFECT_NOT_ACCEPTED",
+  "source_sha256": "57fbb6b65bdcdc3fbf6bc1ed869d6b138b27b5bdfde90baeddfdce77b16f069d",
+  "result": {
+    "attempt": "saved-public-failure",
+    "case_id": "RW-ALERTMANAGER-4705",
+    "source_sha256": "57fbb6b65bdcdc3fbf6bc1ed869d6b138b27b5bdfde90baeddfdce77b16f069d",
+    "method_status": "PUBLIC_EXECUTION_COMPLETE",
+    "independent_status": "PASS",
+    "public_semantic_status": "PUBLIC_REVIEW_FAIL",
+    "model_calls": 6,
+    "patch_bytes": 3455,
+    "completed_at": "2026-10-28T14:46:54.683341+08:00",
+    "counts_in_original46": false,
+    "formal_ready": false
+  },
+  "public_rounds": [
+    {
+      "round": 0,
+      "snapshot": "17f1bdc5e533668d9d524c5121560e8e5c10778d6a1b3f5fbe5b49f34ae9c93d",
+      "checks": [
+        {
+          "id": "alertmanager-reload-v4:groups.visible_during_reload",
+          "status": "FAIL",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.visible_after_reload",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.visible_at_reload_return",
+          "status": "FAIL",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.unique_for_declared_route",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        }
+      ],
+      "sampled_missing": 16,
+      "samples": 262,
+      "reload_returns_missing": 10,
+      "reload_returns": 20
+    },
+    {
+      "round": 1,
+      "snapshot": "019976222bb6940cc97cca7abad696e225ab8be116e75be44ab62aab028b3f84",
+      "checks": [
+        {
+          "id": "alertmanager-reload-v4:groups.visible_during_reload",
+          "status": "FAIL",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.visible_after_reload",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.visible_at_reload_return",
+          "status": "FAIL",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        },
+        {
+          "id": "alertmanager-reload-v4:groups.unique_for_declared_route",
+          "status": "PASS",
+          "probe_sha256": "0c0b320a420c895d04ed2d29bbf955acbbbff0ec03823373a222a69ac8911e62"
+        }
+      ],
+      "sampled_missing": 23,
+      "samples": 270,
+      "reload_returns_missing": 7,
+      "reload_returns": 20
+    }
+  ],
+  "readiness_recovered": true,
+  "plan_reassessment_dispatched": false,
+  "first_feedback_route": "EXECUTE",
+  "first_feedback_failure_kind": "UNKNOWN",
+  "second_edit": "Only ordinary Go comment text changed; require_behavior_change was true but the conservative fingerprint preserved comment text",
+  "current_request_sha256": "9727bdf1759781fdc2c670aa0d5c025f2128b10ad0f806247c29d6f44a73c2d8",
+  "method_cleanup_confirmed": true,
+  "independent_grader_details_read": false,
+  "formal_ready": false
+}

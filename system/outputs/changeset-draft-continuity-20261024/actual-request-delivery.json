@@ -1,0 +1,234 @@
+{
+  "scope": "Actual serialized method requests only; checks in current stage input, prior plan text excluded from evidence count; no semantic sufficiency or scoring claim",
+  "version": "0.6.37",
+  "rows": [
+    {
+      "index": 0,
+      "prompt_version": "diagnosis.v1.1.26",
+      "messages_sha256": "fd1fbf764d0a85ec7e893df089183e2b16d51fdd6351033a186cb0ac228a25da",
+      "public_source": "evidence_catalog",
+      "check_ids": [
+        "cloudwatch-tags-v2:addition",
+        "cloudwatch-tags-v2:put_error",
+        "cloudwatch-tags-v2:removal",
+        "cloudwatch-tags-v2:remove_all",
+        "cloudwatch-tags-v2:tag_error",
+        "cloudwatch-tags-v2:unchanged",
+        "cloudwatch-tags-v2:unchanged_other_field",
+        "cloudwatch-tags-v2:value_change"
+      ],
+      "check_count": 8,
+      "evidence_snapshots": [
+        "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60"
+      ],
+      "prior_draft_digests": [],
+      "response_status": "READY",
+      "response_present": true,
+      "input_bound": 95662,
+      "output_bound": 16384
+    },
+    {
+      "index": 1,
+      "prompt_version": "changeset.v1.1.11",
+      "messages_sha256": "dfb29c39338283fe5a575c0dbbc00ffbd4570fc4dcc9a3583aa50a754e73257a",
+      "public_source": "diagnosis_packet.evidence_refs",
+      "check_ids": [
+        "cloudwatch-tags-v2:addition",
+        "cloudwatch-tags-v2:put_error",
+        "cloudwatch-tags-v2:removal",
+        "cloudwatch-tags-v2:remove_all",
+        "cloudwatch-tags-v2:tag_error",
+        "cloudwatch-tags-v2:unchanged",
+        "cloudwatch-tags-v2:unchanged_other_field",
+        "cloudwatch-tags-v2:value_change"
+      ],
+      "check_count": 8,
+      "evidence_snapshots": [
+        "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60"
+      ],
+      "prior_draft_digests": [],
+      "response_status": "READY",
+      "response_present": true,
+      "input_bound": 111524,
+      "output_bound": 16384
+    },
+    {
+      "index": 2,
+      "prompt_version": "topomen-source-execution.v1",
+      "messages_sha256": "41e2feb4871aea610c779f9ddd4f3705f5f7065415f218879e79aa05f38c6b94",
+      "public_source": "public_observations",
+      "check_ids": [
+        "cloudwatch-tags-v2:addition",
+        "cloudwatch-tags-v2:put_error",
+        "cloudwatch-tags-v2:removal",
+        "cloudwatch-tags-v2:remove_all",
+        "cloudwatch-tags-v2:tag_error",
+        "cloudwatch-tags-v2:unchanged",
+        "cloudwatch-tags-v2:unchanged_other_field",
+        "cloudwatch-tags-v2:value_change"
+      ],
+      "check_count": 8,
+      "evidence_snapshots": [
+        "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60"
+      ],
+      "prior_draft_digests": [],
+      "response_status": null,
+      "response_present": true,
+      "input_bound": 109715,
+      "output_bound": 16384
+    },
+    {
+      "index": 3,
+      "prompt_version": "public-postcondition-review.v1",
+      "messages_sha256": "cba4ebe1d484fb4c705fa8629bbf70d4317c2c6a9846fd71086d59d5e64f9694",
+      "public_source": "public_observations",
+      "check_ids": [
+        "cloudwatch-tags-v2:addition",
+        "cloudwatch-tags-v2:put_error",
+        "cloudwatch-tags-v2:removal",
+        "cloudwatch-tags-v2:remove_all",
+        "cloudwatch-tags-v2:tag_error",
+        "cloudwatch-tags-v2:unchanged",
+        "cloudwatch-tags-v2:unchanged_other_field",
+        "cloudwatch-tags-v2:value_change"
+      ],
+      "check_count": 8,
+      "evidence_snapshots": [
+        "5005dd7693e66fbb79403d8031c44a81c2b8fcac67918358d02f72ba5bf09b00"
+      ],
+      "prior_draft_digests": [],
+      "response_status": null,
+      "response_present": true,
+      "input_bound": 32445,
+      "output_bound": 8192
+    },
+    {
+      "index": 4,
+      "prompt_version": "public-postcondition-review.v1",
+      "messages_sha256": "30c0fdf3e44a5d4b9ce4e59b59859874a73e9ad2bc09029e7b805ba505f62e4f",
+      "public_source": "public_observations",
+      "check_ids": [
+        "cloudwatch-tags-v2:addition",
+        "cloudwatch-tags-v2:put_error",
+        "cloudwatch-tags-v2:removal",
+        "cloudwatch-tags-v2:remove_all",
+        "cloudwatch-tags-v2:tag_error",
+        "cloudwatch-tags-v2:unchanged",
+        "cloudwatch-tags-v2:unchanged_other_field",
+        "cloudwatch-tags-v2:value_change"
+      ],
+      "check_count": 8,
+      "evidence_snapshots": [
+        "5005dd7693e66fbb79403d8031c44a81c2b8fcac67918358d02f72ba5bf09b00"
+      ],
+      "prior_draft_digests": [
+        "d452390d6f8e7d842c885436b7bbc52e72a68b941a46588700fb6f8c03a57b0f"
+      ],
+      "response_status": null,
+      "response_present": true,
+      "input_bound": 36583,
+      "output_bound": 8192
+    },
+    {
+      "index": 5,
+      "prompt_version": "diagnosis.v1.1.26",
+      "messages_sha256": "c970568b2def4ec27f76707c50f9debb59b5649c0fc1f3241082deebb7859a48",
+      "public_source": "evidence_catalog",
+      "check_ids": [
+        "cloudwatch-tags-v2:addition",
+        "cloudwatch-tags-v2:put_error",
+        "cloudwatch-tags-v2:removal",
+        "cloudwatch-tags-v2:remove_all",
+        "cloudwatch-tags-v2:tag_error",
+        "cloudwatch-tags-v2:unchanged",
+        "cloudwatch-tags-v2:unchanged_other_field",
+        "cloudwatch-tags-v2:value_change"
+      ],
+      "check_count": 8,
+      "evidence_snapshots": [
+        "5005dd7693e66fbb79403d8031c44a81c2b8fcac67918358d02f72ba5bf09b00"
+      ],
+      "prior_draft_digests": [],
+      "response_status": "READY",
+      "response_present": true,
+      "input_bound": 180177,
+      "output_bound": 16384
+    },
+    {
+      "index": 6,
+      "prompt_version": "changeset.v1.1.11",
+      "messages_sha256": "d466f8a2c93dc48e9f2f642e20b1db02accd1acf223f14c2db6dc54bdf00907e",
+      "public_source": "diagnosis_packet.evidence_refs",
+      "check_ids": [
+        "cloudwatch-tags-v2:addition",
+        "cloudwatch-tags-v2:put_error",
+        "cloudwatch-tags-v2:removal",
+        "cloudwatch-tags-v2:remove_all",
+        "cloudwatch-tags-v2:tag_error",
+        "cloudwatch-tags-v2:unchanged",
+        "cloudwatch-tags-v2:unchanged_other_field",
+        "cloudwatch-tags-v2:value_change"
+      ],
+      "check_count": 8,
+      "evidence_snapshots": [
+        "5005dd7693e66fbb79403d8031c44a81c2b8fcac67918358d02f72ba5bf09b00"
+      ],
+      "prior_draft_digests": [],
+      "response_status": "READY",
+      "response_present": true,
+      "input_bound": 138411,
+      "output_bound": 16384
+    },
+    {
+      "index": 7,
+      "prompt_version": "topomen-source-execution.v1",
+      "messages_sha256": "31d981a95385171d5df88423f03b56e5989d5c93cc20ccc2bd99d238247cfc0c",
+      "public_source": "public_observations",
+      "check_ids": [
+        "cloudwatch-tags-v2:addition",
+        "cloudwatch-tags-v2:put_error",
+        "cloudwatch-tags-v2:removal",
+        "cloudwatch-tags-v2:remove_all",
+        "cloudwatch-tags-v2:tag_error",
+        "cloudwatch-tags-v2:unchanged",
+        "cloudwatch-tags-v2:unchanged_other_field",
+        "cloudwatch-tags-v2:value_change"
+      ],
+      "check_count": 8,
+      "evidence_snapshots": [
+        "5005dd7693e66fbb79403d8031c44a81c2b8fcac67918358d02f72ba5bf09b00"
+      ],
+      "prior_draft_digests": [],
+      "response_status": null,
+      "response_present": true,
+      "input_bound": 144214,
+      "output_bound": 16384
+    },
+    {
+      "index": 8,
+      "prompt_version": "public-postcondition-review.v1",
+      "messages_sha256": "f9791ca34160964c29f6d06f345d53907acd5b62cc819b8eef30628f79993fa0",
+      "public_source": "public_observations",
+      "check_ids": [
+        "cloudwatch-tags-v2:addition",
+        "cloudwatch-tags-v2:put_error",
+        "cloudwatch-tags-v2:removal",
+        "cloudwatch-tags-v2:remove_all",
+        "cloudwatch-tags-v2:tag_error",
+        "cloudwatch-tags-v2:unchanged",
+        "cloudwatch-tags-v2:unchanged_other_field",
+        "cloudwatch-tags-v2:value_change"
+      ],
+      "check_count": 8,
+      "evidence_snapshots": [
+        "88a30690562fa5f592fecc16895b916aea0ece9f61d64f67190bf35fad88b48d"
+      ],
+      "prior_draft_digests": [],
+      "response_status": null,
+      "response_present": true,
+      "input_bound": 33757,
+      "output_bound": 8192
+    }
+  ],
+  "new_model_calls": 0
+}

@@ -1,0 +1,86 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_real_extension_boundary_reserves_supported_source_before_ranking[DIAGNOSIS] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-558/test_real_extension_boundary_r0')
+trigger = 'DIAGNOSIS'
+
+    @pytest.mark.parametrize('trigger', ['DIAGNOSIS', 'CHANGESET'])
+    def test_real_extension_boundary_reserves_supported_source_before_ranking(tmp_path, trigger):
+        value, source = front_fixture(tmp_path)
+        class Provider(PlanningGapProvider):
+            def complete_json(self, request):
+                response = super().complete_json(request)
+                if trigger == 'DIAGNOSIS' and request.prompt_version.startswith('diagnosis.') and self.diagnosis_calls == 1:
+                    body = json.loads(response.content)
+                    body.update(status='NEEDS_EVIDENCE', evidence_gaps=[dict(id='G1',summary='Check optional implementation',
+                        locator_hint={'path':'templates/optional-serviceaccount.yaml'})])
+                    return ModelResponse(json.dumps(body), {})
+                return response
+        provider = Provider()
+        provider._snapshot_digests = {'templates/serviceaccount.yaml': hashlib.sha256(source.read_bytes()).hexdigest()}
+        observed = []
+        def inspect(candidates, *args, **kwargs):
+            refs = {r[4:] for v in provider.diagnosis['violations'] if v['causal_status']=='SUPPORTED'
+                    for r in v['evidence_refs'] if r.startswith('SRC-')}
+            observed.append(refs)
+            assert refs and refs <= set(candidates.required_endpoint_ids)
+            return extend_once(candidates, *args, **kwargs)
+        with patch('contractedge.orchestration.runner.extend_once', side_effect=inspect):
+            trace = run_front_half(value, tmp_path, provider,
+                dict(model={'model':'fixture'},max_context_tokens=24000,max_output_tokens=1024,max_total_tokens=100000),
+                lambda text: len(text.split()))
+        assert observed
+>       assert trace.status in {'READY','NEEDS_EVIDENCE'}, trace.errors
+E       AssertionError: ("AssertionError: assert ({'CU-7b89f8b49e33a999'} and {'CU-7b89f8b49e33a999'} <= set()
+E           
+E           Extra items in the left set:
+E           'CU-7b89f8b49e33a999')",)
+E       assert 'INFRASTRUCTURE_ERROR' in {'NEEDS_EVIDENCE', 'READY'}
+E        +  where 'INFRASTRUCTURE_ERROR' = RunTrace(run_id='0809e628-1d29-4f68-a125-ec232e0b83ef', case_id='RW-DEMO-001', input_digest='154792c07110ae78914bf9518...udget': {'max_output_tokens': 1024, 'max_model_calls': 24, 'max_total_tokens': 100000, 'max_elapsed_seconds': 1200.0}}).status
+
+tests/test_prior_source_rerank_continuity.py:40: AssertionError
+_ test_real_extension_boundary_reserves_supported_source_before_ranking[CHANGESET] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-558/test_real_extension_boundary_r1')
+trigger = 'CHANGESET'
+
+    @pytest.mark.parametrize('trigger', ['DIAGNOSIS', 'CHANGESET'])
+    def test_real_extension_boundary_reserves_supported_source_before_ranking(tmp_path, trigger):
+        value, source = front_fixture(tmp_path)
+        class Provider(PlanningGapProvider):
+            def complete_json(self, request):
+                response = super().complete_json(request)
+                if trigger == 'DIAGNOSIS' and request.prompt_version.startswith('diagnosis.') and self.diagnosis_calls == 1:
+                    body = json.loads(response.content)
+                    body.update(status='NEEDS_EVIDENCE', evidence_gaps=[dict(id='G1',summary='Check optional implementation',
+                        locator_hint={'path':'templates/optional-serviceaccount.yaml'})])
+                    return ModelResponse(json.dumps(body), {})
+                return response
+        provider = Provider()
+        provider._snapshot_digests = {'templates/serviceaccount.yaml': hashlib.sha256(source.read_bytes()).hexdigest()}
+        observed = []
+        def inspect(candidates, *args, **kwargs):
+            refs = {r[4:] for v in provider.diagnosis['violations'] if v['causal_status']=='SUPPORTED'
+                    for r in v['evidence_refs'] if r.startswith('SRC-')}
+            observed.append(refs)
+            assert refs and refs <= set(candidates.required_endpoint_ids)
+            return extend_once(candidates, *args, **kwargs)
+        with patch('contractedge.orchestration.runner.extend_once', side_effect=inspect):
+            trace = run_front_half(value, tmp_path, provider,
+                dict(model={'model':'fixture'},max_context_tokens=24000,max_output_tokens=1024,max_total_tokens=100000),
+                lambda text: len(text.split()))
+        assert observed
+>       assert trace.status in {'READY','NEEDS_EVIDENCE'}, trace.errors
+E       AssertionError: ("AssertionError: assert ({'CU-7b89f8b49e33a999'} and {'CU-7b89f8b49e33a999'} <= set()
+E           
+E           Extra items in the left set:
+E           'CU-7b89f8b49e33a999')",)
+E       assert 'INFRASTRUCTURE_ERROR' in {'NEEDS_EVIDENCE', 'READY'}
+E        +  where 'INFRASTRUCTURE_ERROR' = RunTrace(run_id='fd5120e6-0662-4949-a5aa-219d573166a8', case_id='RW-DEMO-001', input_digest='154792c07110ae78914bf9518...udget': {'max_output_tokens': 1024, 'max_model_calls': 24, 'max_total_tokens': 100000, 'max_elapsed_seconds': 1200.0}}).status
+
+tests/test_prior_source_rerank_continuity.py:40: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_prior_source_rerank_continuity.py::test_real_extension_boundary_reserves_supported_source_before_ranking[DIAGNOSIS]
+FAILED tests/test_prior_source_rerank_continuity.py::test_real_extension_boundary_reserves_supported_source_before_ranking[CHANGESET]
+2 failed in 0.38s

@@ -159,6 +159,7 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
         sources.append({'path': path, 'content': content})
     context = dict(plan.get('coordination_context') or {})
     support, support_audit, used = [], [], 0
+    support_source_texts = {}
     targets = {s['path'] for s in sources}
     prerequisite_refs={r['source_evidence_ref'] for r in plan.get('precondition_review', [])
                        if r.get('disposition') != 'NOT_APPLICABLE'}
@@ -190,15 +191,26 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
                                 'end_line':start+len(excerpt.splitlines())-1},
                             'origin':'Fresh re-read of an exact unchanged prerequisite span; prior semantic intent remains historical, not re-proven'}
                     support.append(dict(evidence)); used += len(excerpt.encode())
+                    support_source_texts[path] = actual
             except (OSError, ValueError, TypeError):
                 reason = 'UNAVAILABLE_SOURCE'
         support_audit.append({'id': evidence.get('id'), 'path': path, 'result': reason or 'INCLUDED_READ_ONLY'})
+    compiler_api = []
     if config.get('execution_helper_support_enabled'):
-        from contractedge.execution.helper_context import local_helper_support
-        helpers, audit = local_helper_support(compute_snapshot(source), sources, plan['operations'],
-            max_bytes=max(0, int(config.get('max_execution_support_bytes', 24000))-used))
+        from contractedge.execution.helper_context import compiler_dependency_support, local_helper_support
+        snapshot = compute_snapshot(source)
+        remaining = max(0, int(config.get('max_execution_support_bytes', 24000))-used)
+        compiler_api, compiler_audit = compiler_dependency_support(snapshot, feedback, max_bytes=remaining)
+        if not compiler_api and previous_attempt:
+            historical = (previous_attempt.get('rejected_trial') or {}).get('feedback')
+            compiler_api, historical_audit = compiler_dependency_support(snapshot, historical, max_bytes=remaining)
+            compiler_audit.extend(historical_audit)
+        remaining -= sum(len(r['excerpt'].encode()) for r in compiler_api)
+        support_audit.extend(compiler_audit)
+        helpers, audit = local_helper_support(snapshot, sources, plan['operations'], max_bytes=remaining)
         existing = {(r['locator']['path'], r['content_digest']) for r in support}
-        support.extend(h for h in helpers if (h['locator']['path'], h['content_digest']) not in existing)
+        support.extend(h for h in helpers[:8-len(compiler_api)]
+                       if (h['locator']['path'], h['content_digest']) not in existing)
         support_audit.extend(audit)
     # Never duplicate full support excerpts inside both the plan and the bounded
     # support view. Stale diagnosis remains historical on EXECUTE continuation.
@@ -221,6 +233,10 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
             feedback_view['shared_context_reference_policy']=(
                 'Each *_record_ref resolves to the complete identical object at that JSON Pointer in this request. '
                 'The accepted plan and original validated feedback remain unchanged; no obligation or capability was removed.')
+    # Runtime facts in the original validated feedback may be compacted into
+    # shared error tasks for delivery. Decide policy from their bound records,
+    # never infer provenance from the task's human-readable description.
+    reasoning_previous = previous_attempt
     if previous_attempt and isinstance(previous_attempt.get('rejected_trial'),Mapping):
         historical=previous_attempt['rejected_trial'].get('feedback')
         if isinstance(historical,Mapping):
@@ -239,6 +255,17 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
                'execution_feedback_digest': canonical_digest(feedback) if feedback is not None else None,
                'previous_execution_attempt': previous_attempt,
                'edit_contract': 'Return one JSON object containing only edits, with each edit containing only change_id, path, operation, old_text and new_text. Transport settings such as type=json_object are not output fields. Encode source strings exactly once as JSON: after JSON decoding, old_text must equal a unique current substring, with actual line breaks and tabs rather than literal backslash-n or backslash-t substitutes. CREATE uses empty old_text and complete file content. Prefer short, unique literal anchors copied exactly from current_target_files, preserving whitespace. Split separate regions into separate edits; avoid whole-file rewrites. Correct previous_execution_attempt using the supplied validation error and the current file. Cover every accepted operation, preserve all conditions and unrelated behavior. Do not add tests, fabricate observations or edit task/runner/oracle.'}
+    if compiler_api:
+        payload['compiler_api_context'] = {'declarations': compiler_api, 'policy': (
+            'These declarations come from hash-pinned public dependencies selected by a recorded compiler failure. '
+            'Use the actual field types and method signatures to correct API usage in current_target_files. '
+            'A declaration is read-only interface evidence, not an editable target or proof of behavior. '
+            'The failure belongs to its recorded trial snapshot; the imported dependency is re-resolved from current source.')}
+    payload['edit_batch_rules'] = {
+        'multiple_edits_per_change_id': True,
+        'allowed_edit_fields': ['change_id','path','operation','old_text','new_text'],
+        'numbered_fields_allowed': False,
+        'application_order': 'Separate regions are separate edits array items, reusing the same accepted change_id and path. Items for one operation apply in array order; each old_text matches the current virtual file after prior items. Never append numbered fields such as old_text_2, even when empty. The complete batch validates before writing.'}
     if config.get('helper_preconditions_enabled'):
         from contractedge.execution.preconditions import validate_helper_preconditions
         payload['helper_preconditions']=validate_helper_preconditions(plan,{s['path']:s['content'] for s in sources},support)
@@ -253,7 +280,53 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
             'establish data readiness. Trace initialization, reader selection, publication and old-instance shutdown '
             'against fresh source contracts. Preserve the required state throughout the transition, not just before '
             'and after; a fixed sleep or moving Stop alone is not evidence of readiness. Unsupported readiness '
-            'assumptions must remain unproven and be tested through the public boundary.')
+            'assumptions must remain unproven and be tested through the public boundary. '
+            'When implementing a completion signal, account for zero initial work, the first item, and the full backlog. '
+            'Signal after the required work is complete, not on receipt of the first item; an empty workload must not wait for an item that cannot arrive before readiness.')
+        from contractedge.diagnosis.evidence import reader_reference_contexts
+        from contractedge.source.parsers import parse_source_units
+        target_units=[];target_refs={}
+        for item in sources:
+            if not item['path'].endswith('.go') or not item['content']:continue
+            parsed=parse_source_units(item['path'],item['content'],acceptance['snapshot_id'],
+                                      max_lines=768,max_chars=32000)
+            target_units.extend(parsed)
+            target_refs.update({u['id']:dict(path=item['path'],snapshot_id=acceptance['snapshot_id'],
+                content_digest=hashlib.sha256(item['content'].encode()).hexdigest()) for u in parsed})
+        # EvidenceRecord does not preserve the parser's truncation flag. Never
+        # reconstruct an implicitly complete declaration from its excerpt.
+        # Reuse the full text already read for freshness, and accept only a
+        # complete declaration contained in the delivered canonical span.
+        support_units=[]; support_refs={}; parsed_support={}
+        for record in support:
+            path=record.get('locator',{}).get('path','')
+            if (record.get('kind')!='SOURCE_SPAN' or not record.get('id','').startswith('SRC-')
+                    or not path.endswith('.go') or path not in support_source_texts):
+                continue
+            if path not in parsed_support:
+                parsed_support[path]=parse_source_units(path,support_source_texts[path],
+                    acceptance['snapshot_id'],max_lines=768,max_chars=32000)
+            for unit in parsed_support[path]:
+                if (unit.get('truncated') or unit.get('kind')!='FUNCTION_OR_TYPE'
+                        or unit['locator']['start_line']<record['locator']['start_line']
+                        or unit['locator']['end_line']>record['locator']['end_line']
+                        or unit['text'] not in record['excerpt']):
+                    continue
+                support_units.append(unit)
+                support_refs[unit['id']]=record
+        readers=reader_reference_contexts([*target_units,*support_units])
+        for row in readers:
+            if row['candidate_id'] in target_refs:
+                row['source_target']=target_refs[row.pop('candidate_id')]
+                # This is a current_target_files quote, not an invented
+                # diagnosis EvidenceRecord or a new allowed evidence ID.
+                row.pop('source_evidence_ref')
+            elif row['candidate_id'] in support_refs:
+                parent=support_refs[row['candidate_id']]
+                row.update(candidate_id=parent['id'][4:],source_evidence_ref=parent['id'],
+                           source_content_digest=parent['content_digest'])
+        while len(json.dumps(readers,ensure_ascii=False).encode())>8000:readers.pop()
+        payload['source_reader_reference_contexts']=readers
     if config.get('writeback_context_enabled'):
         from contractedge.execution.writeback_context import writeback_context
         payload['collection_writeback_context']=writeback_context(sources,plan['operations'],acceptance['snapshot_id'])
@@ -285,29 +358,38 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
             raise PlanRejected('Execution thinking override requires a valid compatible transport setting')
         metadata['execution_thinking_policy'] = 'EXPLICIT_STAGE_CONFIGURATION'
     reasoning_policy=config.get('execution_reasoning_policy')
-    if reasoning_policy not in {None,'complex_plan'}:
+    if reasoning_policy not in {None,'complex_plan','failed_trial_only'}:
         raise PlanRejected('Unknown execution reasoning policy')
     complex_plan=(len(plan['operations'])>1 or any(
         r.get('disposition')=='REQUIRED' for r in plan.get('precondition_review',[])))
-    previous=previous_attempt or {}
+    previous=reasoning_previous or {}
     trial=previous.get('rejected_trial') or {}
     decision=trial.get('decision') or trial.get('candidate_decision') or {}
     if (trial.get('decision') and trial.get('candidate_decision')
             and trial['decision']!=trial['candidate_decision']):decision={}
     history=trial.get('feedback') or {}
     failed_predicates=(history.get('failure_tasks') or {}).get('failed_predicates',[])
-    failed_trial=(previous.get('source_snapshot')==acceptance['snapshot_id']
-        and decision.get('decision')=='REJECT_REGRESSION'
+    bound_trial=(previous.get('source_snapshot')==acceptance['snapshot_id']
         and decision.get('from_snapshot')==acceptance['snapshot_id']
         and bool(trial.get('snapshot_id')) and trial['snapshot_id']!=acceptance['snapshot_id']
-        and decision.get('trial_snapshot')==trial['snapshot_id']==history.get('to_snapshot')
+        and decision.get('trial_snapshot')==trial['snapshot_id']==history.get('to_snapshot'))
+    failed_behavior=(bound_trial and decision.get('decision')=='REJECT_REGRESSION'
         and any(p.get('snapshot_id')==trial['snapshot_id'] and p.get('status')=='FAIL'
                 and p.get('probe_sha256') and p.get('content_digest') for p in failed_predicates))
-    if reasoning_policy=='complex_plan' and (complex_plan or failed_trial):
+    failed_runtime=False
+    if bound_trial and decision.get('decision')=='UNCOMPARABLE' and history.get('build_state')=='FAILED':
+        from contractedge.execution.public import has_candidate_runtime_failure
+        failed_runtime=has_candidate_runtime_failure(dict(status='EXECUTION_FAILED',snapshot_id=trial['snapshot_id'],
+            candidate_runtime_failures=[f for f in history.get('observation_diagnostics',[])
+                if isinstance(f,Mapping) and f.get('kind')=='CANDIDATE_RUNTIME_FAILURE']))
+    failed_trial=bound_trial and (failed_behavior or failed_runtime)
+    if (reasoning_policy in {'complex_plan','failed_trial_only'}
+            and (failed_trial or reasoning_policy=='complex_plan' and complex_plan)):
         if config.get('provider')!='openai_compatible':
             raise PlanRejected('Complex execution reasoning policy requires compatible transport')
         thinking='enabled'
         metadata['execution_thinking_policy']='FAILED_TRIAL_REASONING' if failed_trial else 'COMPLEX_PLAN_REASONING'
+        if failed_runtime:metadata['execution_reasoning_trigger']='VERIFIED_RUNTIME_FAILURE'
     previous = previous_attempt or {}
     previous_metadata = previous.get('response_metadata') or {}
     usage = previous_metadata.get('usage') or {}

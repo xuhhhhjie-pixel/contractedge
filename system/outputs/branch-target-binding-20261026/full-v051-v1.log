@@ -1,0 +1,111 @@
+....................................................... [  2%]
+........................................................................ [  6%]
+........................................................................ [ 10%]
+..................................................................... [ 13%]
+........................................................................ [ 17%]
+........................................................................ [ 21%]
+................................................... [ 23%]
+.................................................................. [ 27%]
+........................................................................ [ 30%]
+........................................................................ [ 34%]
+........................................................................ [ 38%]
+........................................................................ [ 41%]
+........................................................................ [ 45%]
+...................................................................... [ 49%]
+.......................................................FF............... [ 52%]
+........................................................................ [ 56%]
+........................................................................ [ 60%]
+........................................................................ [ 63%]
+.............................................................. [ 66%]
+........................................................................ [ 70%]
+........................................................................ [ 74%]
+............................................ [ 76%]
+........................................................................ [ 80%]
+...................................................................... [ 83%]
+........................................................................ [ 87%]
+........................................................................ [ 91%]
+........................................................................ [ 94%]
+...................................................................... [ 98%]
+..............................                                           [100%]
+=================================== FAILURES ===================================
+__ OrchestrationTests.test_evidence_gap_runs_one_bounded_diagnosis_extension ___
+
+self = <tests.test_orchestration.OrchestrationTests testMethod=test_evidence_gap_runs_one_bounded_diagnosis_extension>
+
+    def test_evidence_gap_runs_one_bounded_diagnosis_extension(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "templates/serviceaccount.yaml"
+            source.parent.mkdir()
+            source.write_text("apiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: default\n", encoding="utf-8")
+            PipelineFixtureProvider._snapshot_digests = {"templates/serviceaccount.yaml": hashlib.sha256(source.read_bytes()).hexdigest()}
+            method = valid_method_input()
+            method["requirement_text"] = "When enabled, render the selected ServiceAccount."
+            method["public_observable_text"] = "The rendered ServiceAccount name is default instead of selected."
+            method["scope_hints"] = [{"kind": "path", "value": "templates/serviceaccount.yaml",
+                                      "raw_text": "templates/serviceaccount.yaml", "origin_ref": "artifact_scope[0]"}]
+            method["initial_snapshot_id"] = compute_snapshot(root).snapshot_id
+            method["public_evidence"] = [{"id": "PUB1", "snapshot_id": method["initial_snapshot_id"],
+                "kind": "PUBLIC_OBSERVATION", "locator": {"path": "evidence/PUB1.json"},
+                "content_digest": hashlib.sha256(b"public observation").hexdigest(),
+                "excerpt": method["public_observable_text"], "origin": "fixture"}]
+            method.pop("input_digest", None)
+            method["input_digest"] = canonical_digest(method)
+            provider = InvalidExtensionThenCorrectedProvider()
+            trace = run_front_half(method, root, provider,
+                {"run_id": "run-extension", "model": {"model": "fixture"}, "top_n": 1,
+                 "max_context_tokens": 5000, "max_format_retries": 1},
+                token_counter=lambda text: len(text.split()))
+>       self.assertEqual(trace.status, "READY", f"{trace.errors}")
+E       AssertionError: 'BUDGET_EXHAUSTED' != 'READY'
+E       - BUDGET_EXHAUSTED
+E       + READY
+E        : ('diagnosis extension exceeds the context, token, or time budget',)
+
+tests/test_orchestration.py:649: AssertionError
+_ OrchestrationTests.test_evidence_gap_searches_a_query_matched_direct_source_neighbor _
+
+self = <tests.test_orchestration.OrchestrationTests testMethod=test_evidence_gap_searches_a_query_matched_direct_source_neighbor>
+
+    def test_evidence_gap_searches_a_query_matched_direct_source_neighbor(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            controller = root / "src/controller.go"
+            service = root / "src/service.go"
+            controller.parent.mkdir()
+            controller.write_text("package app\nfunc Reconcile() { ensureService() }\n", encoding="utf-8")
+            service.write_text("package app\nfunc ensureService() { buildService() }\n", encoding="utf-8")
+            PipelineFixtureProvider._snapshot_digests = {
+                "src/service.go": hashlib.sha256(service.read_bytes()).hexdigest()}
+            method = valid_method_input()
+            method["public_observable_text"] = "The controller does not reach ensureService."
+            method["scope_hints"] = [{"kind": "path", "value": "src/controller.go",
+                                      "raw_text": "src/controller.go", "origin_ref": "scope"}]
+            method["initial_snapshot_id"] = compute_snapshot(root).snapshot_id
+            evidence_payload = {"id": "PUB1", "kind": "PUBLIC_OBSERVATION",
+                                "excerpt": method["public_observable_text"], "origin": "fixture"}
+            evidence_bytes = (json.dumps(evidence_payload, sort_keys=True, indent=2) + "\n").encode()
+            method["public_evidence"] = [{"id": "PUB1", "snapshot_id": method["initial_snapshot_id"],
+                "kind": "PUBLIC_OBSERVATION", "locator": {"path": "evidence/PUB1.json"},
+                "content_digest": hashlib.sha256(evidence_bytes).hexdigest(),
+                "excerpt": method["public_observable_text"], "origin": "fixture"}]
+            method.pop("input_digest", None)
+            method["input_digest"] = canonical_digest(method)
+            provider = NeighborExtensionProvider()
+    
+            trace = run_front_half(method, root, provider,
+                {"run_id": "run-neighbor-extension", "model": {"model": "fixture"},
+                 "top_n": 1, "max_units": 8, "max_extension_files": 0,
+                 "max_context_tokens": 5000}, token_counter=lambda text: len(text.split()))
+    
+>       self.assertEqual(trace.status, "READY", f"{trace.errors}; selected={[u['path'] for u in trace.candidate_set.candidates]}; plan={trace.changeset}")
+E       AssertionError: 'BUDGET_EXHAUSTED' != 'READY'
+E       - BUDGET_EXHAUSTED
+E       + READY
+E        : ('diagnosis extension exceeds the context, token, or time budget',); selected=[]; plan=None
+
+tests/test_orchestration.py:692: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_orchestration.py::OrchestrationTests::test_evidence_gap_runs_one_bounded_diagnosis_extension
+FAILED tests/test_orchestration.py::OrchestrationTests::test_evidence_gap_searches_a_query_matched_direct_source_neighbor
+2 failed, 1953 passed, 91 subtests passed in 486.32s (0:08:06)

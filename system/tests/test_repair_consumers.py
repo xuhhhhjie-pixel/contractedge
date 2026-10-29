@@ -254,7 +254,7 @@ def test_alternate_format_injects_into_unmodified_repair_host_loop(tmp_path):
     assert projected['schema_version']=='ce.modify_input.v1' and 'operations' not in projected
     assert execution['consumer_id']==ModifyOnlyConsumer.ID
     assert [call['prompt_version'] for call in calls][-2:]==[
-        ModifyOnlyConsumer.PROMPT,'public-postcondition-review.v1']
+        ModifyOnlyConsumer.PROMPT,'public-postcondition-review.v2']
     assert report['initial_snapshot_id']!=report['final_snapshot_id']
     assert execution_review_mapping(execution)[0]['literal_edits'][0]['new_text']=='name = config["selected_name"]'
     broken=json.loads((output/'initial-public-observation.json').read_text())

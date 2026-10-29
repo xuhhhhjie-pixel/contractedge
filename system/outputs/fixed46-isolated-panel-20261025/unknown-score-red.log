@@ -1,0 +1,44 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_unresolved_grading_stops_queue_before_dispatching_another_method _____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-490/test_unresolved_grading_stops_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f40b6afe380>
+
+    def test_unresolved_grading_stops_queue_before_dispatching_another_method(tmp_path,monkeypatch):
+        panel,path,slot,transport=prepared(tmp_path);m=load()
+        tool=Path(panel['benchmark_root'])/'tools/score_case.py';tool.write_text(tool.read_text().replace("'status':'PASS'","'status':'UNKNOWN'"))
+        mapping={'score_case.py':hashlib.sha256(tool.read_bytes()).hexdigest()}
+        panel['execution_environment']['public_tool_files']=hashlib.sha256(json.dumps(mapping,sort_keys=True,separators=(',',':')).encode()).hexdigest();path.write_text(json.dumps(panel))
+        monkeypatch.setattr(m,'Transport',lambda:transport)
+        monkeypatch.setattr(m,'pair_budget',lambda *a:{'admitted':True})
+>       assert m.run_panel(path,'A',tmp_path/'unused-key')==2
+
+tests/test_fixed_panel_driver.py:202: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_fixed_panel.py:202: in run_panel
+    row = run_slot(panel_path, slot['slot_id'], key)
+scripts/run_fixed_panel.py:123: in run_slot
+    validate_slot_registration(authority, identity, panel_path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+record = {'python_environment': {'interpreter_sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'}, 'de...{'score_case.py': 'c4488cbba39778a04cdbb2c57b6b7b27ef962160044cde598e200e06e60d36da'}, 'public_release_files': {}, ...}
+identity = {'python_environment': {'interpreter_sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'}, 'de...{'score_case.py': 'c4488cbba39778a04cdbb2c57b6b7b27ef962160044cde598e200e06e60d36da'}, 'public_release_files': {}, ...}
+panel_path = PosixPath('/tmp/pytest-of-xhj/pytest-490/test_unresolved_grading_stops_0/panel.json')
+
+    def validate_slot_registration(record, identity, panel_path):
+        panel = verify_panel(panel_path)
+        verify_environment(panel, identity)
+        if (record.get('role') != 'ISOLATED_FIXED_PANEL_SLOT' or record.get('allow_paid') is not True
+                or record.get('counts_in_46_slot_panel') is not True
+                or record.get('panel_registration_sha256') != sha(panel_path)
+                or any(record.get(k) != v for k, v in identity.items())):
+>           raise ValueError('Invalid exact fixed-panel dispatch authority')
+E           ValueError: Invalid exact fixed-panel dispatch authority
+
+scripts/fixed_panel.py:155: ValueError
+----------------------------- Captured stdout call -----------------------------
+{"case_id": "A0", "group": "A", "public_decision": "PASS", "slot_id": "panel-test-5f64533dd0e158304c397e4a", "status": "UNKNOWN", "variant": "baseline"}
+=========================== short test summary info ============================
+FAILED tests/test_fixed_panel_driver.py::test_unresolved_grading_stops_queue_before_dispatching_another_method
+1 failed, 9 deselected in 0.37s

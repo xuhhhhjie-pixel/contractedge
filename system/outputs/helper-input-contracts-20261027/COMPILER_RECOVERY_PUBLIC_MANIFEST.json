@@ -1,0 +1,28 @@
+{
+  "files": {
+    "result.json": "34dbbe252b2fada4d022c14155a884f40771a8caa756be3c80b560554a2ae50b",
+    "state.json": "34dbbe252b2fada4d022c14155a884f40771a8caa756be3c80b560554a2ae50b",
+    "experiment.json": "884ea03eba0bef0047200df115204dad4bc1dc9166623f0a61d6ca7811ad3263",
+    "experiment.preparation-v1.json": "059104273149feea9b88f8bee145cce1fbb828136716864a3cdcce5272665c90",
+    "registration.json": "fc09de3b4846550c13811a3d3c198fd903278938a09b41ea7b17c1ece08823ba",
+    "claimed.json": "ce07f3234d7a6e4652cb56d3ac66deec817aa7e6a17710fee2596a8e001a1dde",
+    "before.json": "fb2903f0712989869da3d98e78ff71c9458df75e517d72654a1bc508221a6ab1",
+    "after.json": "73c95f656ba55749179fd61aaf50ad1f1f86eeb87392f25e1052b9bc5460caa9",
+    "historical-feedback.json": "f0a16afc85fb4f9ac096d18e96c06bc539c58e76c9075d4bb70bc7eb76e5aed0",
+    "previous-attempt.json": "24babc5545eb50dcc293454c32b6cbd86cb870ee5e4465aec3630e7ca30b4317",
+    "candidate-decision.json": "762ddfc63796e3d3be042b382c19a804b293968cdc0b3b1205cfb16e1d23069b",
+    "patch.json": "30fb05887ae6230169e24e7c217e56433f58285e02b17b710cd0573b36b62cd6",
+    "candidate.patch": "146ccbca2d5744d25801e95521e5715be3c24608f6d12f4d082d2472a8d0a3d3",
+    "execution.json": "3b84d02a86de75c95eca50a1b4d45b68972924c200687849fdf8bf729958fdc0",
+    "model_calls.json": "afb745832090644f08b399222647691a0727588de6b9d5ea29812b976efef57c",
+    "frozen-method-probes.json": "5e2bbad0599da8cc310bd5633bdf1d9886aa17f35a667d51c914cf45102a6eff"
+  },
+  "archive_sha256": "c09ecbdb5852328dbcdd8e8ace8afa1bbf11dd16e5605bdbe3cf5955dd11a92a",
+  "excluded": [
+    "private-grader.log",
+    "independent/",
+    "checkpoint.json",
+    "workspace/"
+  ],
+  "formal_ready": false
+}

@@ -1,0 +1,247 @@
+FFFF......FF                                                             [100%]
+=================================== FAILURES ===================================
+_ test_mechanical_success_keeps_uncited_operation_context[same-object-True-public-object-adoption-v1] _
+
+adapter = 'public-object-adoption-v1', scope_case = 'same-object'
+blocked = True
+
+    @pytest.mark.parametrize('adapter', ['public-object-adoption-v1', 'public-oci-transport-v1'])
+    @pytest.mark.parametrize('scope_case,blocked', [
+        ('same-object', True), ('unknown-object', True), ('other-object', False),
+        ('other-scenario', False), ('old-snapshot', False), ('global', True),
+    ])
+    def test_mechanical_success_keeps_uncited_operation_context(adapter, scope_case, blocked):
+        from tests.test_operation_consistency import failed
+    
+        condition = {**obligation(), 'check_coverage': 'ALL_OF',
+                     'verification_scope': {'scenario': 'trigger',
+                                            'resource': {'kind': 'Pod', 'name': 'selected'}}}
+        records = [obs('a', 'PASS'), obs('b', 'PASS')]
+        for record in records:
+            record['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        operation = failed()
+        operation['id'] = 'OP-uncited'
+        operation['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        if adapter == 'public-oci-transport-v1':
+            import hashlib
+            operation['adapter_id'] = adapter
+            operation['excerpt'] = json.dumps({'requests': [], 'client_error': 'Connection rejected'})
+            operation['content_digest'] = hashlib.sha256(operation['excerpt'].encode()).hexdigest()
+        if scope_case == 'unknown-object': operation.pop('resource_identity')
+        elif scope_case == 'other-object': operation['resource_identity']['name'] = 'control'
+        elif scope_case == 'other-scenario': operation['scenario'] = 'control'
+        elif scope_case == 'old-snapshot': operation['snapshot_id'] = 'S0'
+        elif scope_case == 'global': condition.pop('verification_scope')
+        records.append(operation)
+        result = deterministic_check_result(condition, records, snapshot_id='S1')
+        if blocked:
+>           assert result is None, 'A filtered check list must not hide a relevant failed operation'
+E           AssertionError: A filtered check list must not hide a relevant failed operation
+E           assert {'status': 'PASS', 'rationale': 'Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage rem...tatus":"PASS"}'}, {'observation_id': 'b', 'quote': '{"status":"PASS"}'}], 'decision_method': 'BOUND_CHECK_AGGREGATION'} is None
+
+tests/test_necessary_coverage_review.py:144: AssertionError
+_ test_mechanical_success_keeps_uncited_operation_context[same-object-True-public-oci-transport-v1] _
+
+adapter = 'public-oci-transport-v1', scope_case = 'same-object', blocked = True
+
+    @pytest.mark.parametrize('adapter', ['public-object-adoption-v1', 'public-oci-transport-v1'])
+    @pytest.mark.parametrize('scope_case,blocked', [
+        ('same-object', True), ('unknown-object', True), ('other-object', False),
+        ('other-scenario', False), ('old-snapshot', False), ('global', True),
+    ])
+    def test_mechanical_success_keeps_uncited_operation_context(adapter, scope_case, blocked):
+        from tests.test_operation_consistency import failed
+    
+        condition = {**obligation(), 'check_coverage': 'ALL_OF',
+                     'verification_scope': {'scenario': 'trigger',
+                                            'resource': {'kind': 'Pod', 'name': 'selected'}}}
+        records = [obs('a', 'PASS'), obs('b', 'PASS')]
+        for record in records:
+            record['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        operation = failed()
+        operation['id'] = 'OP-uncited'
+        operation['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        if adapter == 'public-oci-transport-v1':
+            import hashlib
+            operation['adapter_id'] = adapter
+            operation['excerpt'] = json.dumps({'requests': [], 'client_error': 'Connection rejected'})
+            operation['content_digest'] = hashlib.sha256(operation['excerpt'].encode()).hexdigest()
+        if scope_case == 'unknown-object': operation.pop('resource_identity')
+        elif scope_case == 'other-object': operation['resource_identity']['name'] = 'control'
+        elif scope_case == 'other-scenario': operation['scenario'] = 'control'
+        elif scope_case == 'old-snapshot': operation['snapshot_id'] = 'S0'
+        elif scope_case == 'global': condition.pop('verification_scope')
+        records.append(operation)
+        result = deterministic_check_result(condition, records, snapshot_id='S1')
+        if blocked:
+>           assert result is None, 'A filtered check list must not hide a relevant failed operation'
+E           AssertionError: A filtered check list must not hide a relevant failed operation
+E           assert {'status': 'PASS', 'rationale': 'Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage rem...tatus":"PASS"}'}, {'observation_id': 'b', 'quote': '{"status":"PASS"}'}], 'decision_method': 'BOUND_CHECK_AGGREGATION'} is None
+
+tests/test_necessary_coverage_review.py:144: AssertionError
+_ test_mechanical_success_keeps_uncited_operation_context[unknown-object-True-public-object-adoption-v1] _
+
+adapter = 'public-object-adoption-v1', scope_case = 'unknown-object'
+blocked = True
+
+    @pytest.mark.parametrize('adapter', ['public-object-adoption-v1', 'public-oci-transport-v1'])
+    @pytest.mark.parametrize('scope_case,blocked', [
+        ('same-object', True), ('unknown-object', True), ('other-object', False),
+        ('other-scenario', False), ('old-snapshot', False), ('global', True),
+    ])
+    def test_mechanical_success_keeps_uncited_operation_context(adapter, scope_case, blocked):
+        from tests.test_operation_consistency import failed
+    
+        condition = {**obligation(), 'check_coverage': 'ALL_OF',
+                     'verification_scope': {'scenario': 'trigger',
+                                            'resource': {'kind': 'Pod', 'name': 'selected'}}}
+        records = [obs('a', 'PASS'), obs('b', 'PASS')]
+        for record in records:
+            record['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        operation = failed()
+        operation['id'] = 'OP-uncited'
+        operation['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        if adapter == 'public-oci-transport-v1':
+            import hashlib
+            operation['adapter_id'] = adapter
+            operation['excerpt'] = json.dumps({'requests': [], 'client_error': 'Connection rejected'})
+            operation['content_digest'] = hashlib.sha256(operation['excerpt'].encode()).hexdigest()
+        if scope_case == 'unknown-object': operation.pop('resource_identity')
+        elif scope_case == 'other-object': operation['resource_identity']['name'] = 'control'
+        elif scope_case == 'other-scenario': operation['scenario'] = 'control'
+        elif scope_case == 'old-snapshot': operation['snapshot_id'] = 'S0'
+        elif scope_case == 'global': condition.pop('verification_scope')
+        records.append(operation)
+        result = deterministic_check_result(condition, records, snapshot_id='S1')
+        if blocked:
+>           assert result is None, 'A filtered check list must not hide a relevant failed operation'
+E           AssertionError: A filtered check list must not hide a relevant failed operation
+E           assert {'status': 'PASS', 'rationale': 'Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage rem...tatus":"PASS"}'}, {'observation_id': 'b', 'quote': '{"status":"PASS"}'}], 'decision_method': 'BOUND_CHECK_AGGREGATION'} is None
+
+tests/test_necessary_coverage_review.py:144: AssertionError
+_ test_mechanical_success_keeps_uncited_operation_context[unknown-object-True-public-oci-transport-v1] _
+
+adapter = 'public-oci-transport-v1', scope_case = 'unknown-object'
+blocked = True
+
+    @pytest.mark.parametrize('adapter', ['public-object-adoption-v1', 'public-oci-transport-v1'])
+    @pytest.mark.parametrize('scope_case,blocked', [
+        ('same-object', True), ('unknown-object', True), ('other-object', False),
+        ('other-scenario', False), ('old-snapshot', False), ('global', True),
+    ])
+    def test_mechanical_success_keeps_uncited_operation_context(adapter, scope_case, blocked):
+        from tests.test_operation_consistency import failed
+    
+        condition = {**obligation(), 'check_coverage': 'ALL_OF',
+                     'verification_scope': {'scenario': 'trigger',
+                                            'resource': {'kind': 'Pod', 'name': 'selected'}}}
+        records = [obs('a', 'PASS'), obs('b', 'PASS')]
+        for record in records:
+            record['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        operation = failed()
+        operation['id'] = 'OP-uncited'
+        operation['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        if adapter == 'public-oci-transport-v1':
+            import hashlib
+            operation['adapter_id'] = adapter
+            operation['excerpt'] = json.dumps({'requests': [], 'client_error': 'Connection rejected'})
+            operation['content_digest'] = hashlib.sha256(operation['excerpt'].encode()).hexdigest()
+        if scope_case == 'unknown-object': operation.pop('resource_identity')
+        elif scope_case == 'other-object': operation['resource_identity']['name'] = 'control'
+        elif scope_case == 'other-scenario': operation['scenario'] = 'control'
+        elif scope_case == 'old-snapshot': operation['snapshot_id'] = 'S0'
+        elif scope_case == 'global': condition.pop('verification_scope')
+        records.append(operation)
+        result = deterministic_check_result(condition, records, snapshot_id='S1')
+        if blocked:
+>           assert result is None, 'A filtered check list must not hide a relevant failed operation'
+E           AssertionError: A filtered check list must not hide a relevant failed operation
+E           assert {'status': 'PASS', 'rationale': 'Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage rem...tatus":"PASS"}'}, {'observation_id': 'b', 'quote': '{"status":"PASS"}'}], 'decision_method': 'BOUND_CHECK_AGGREGATION'} is None
+
+tests/test_necessary_coverage_review.py:144: AssertionError
+_ test_mechanical_success_keeps_uncited_operation_context[global-True-public-object-adoption-v1] _
+
+adapter = 'public-object-adoption-v1', scope_case = 'global', blocked = True
+
+    @pytest.mark.parametrize('adapter', ['public-object-adoption-v1', 'public-oci-transport-v1'])
+    @pytest.mark.parametrize('scope_case,blocked', [
+        ('same-object', True), ('unknown-object', True), ('other-object', False),
+        ('other-scenario', False), ('old-snapshot', False), ('global', True),
+    ])
+    def test_mechanical_success_keeps_uncited_operation_context(adapter, scope_case, blocked):
+        from tests.test_operation_consistency import failed
+    
+        condition = {**obligation(), 'check_coverage': 'ALL_OF',
+                     'verification_scope': {'scenario': 'trigger',
+                                            'resource': {'kind': 'Pod', 'name': 'selected'}}}
+        records = [obs('a', 'PASS'), obs('b', 'PASS')]
+        for record in records:
+            record['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        operation = failed()
+        operation['id'] = 'OP-uncited'
+        operation['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        if adapter == 'public-oci-transport-v1':
+            import hashlib
+            operation['adapter_id'] = adapter
+            operation['excerpt'] = json.dumps({'requests': [], 'client_error': 'Connection rejected'})
+            operation['content_digest'] = hashlib.sha256(operation['excerpt'].encode()).hexdigest()
+        if scope_case == 'unknown-object': operation.pop('resource_identity')
+        elif scope_case == 'other-object': operation['resource_identity']['name'] = 'control'
+        elif scope_case == 'other-scenario': operation['scenario'] = 'control'
+        elif scope_case == 'old-snapshot': operation['snapshot_id'] = 'S0'
+        elif scope_case == 'global': condition.pop('verification_scope')
+        records.append(operation)
+        result = deterministic_check_result(condition, records, snapshot_id='S1')
+        if blocked:
+>           assert result is None, 'A filtered check list must not hide a relevant failed operation'
+E           AssertionError: A filtered check list must not hide a relevant failed operation
+E           assert {'status': 'PASS', 'rationale': 'Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage rem...tatus":"PASS"}'}, {'observation_id': 'b', 'quote': '{"status":"PASS"}'}], 'decision_method': 'BOUND_CHECK_AGGREGATION'} is None
+
+tests/test_necessary_coverage_review.py:144: AssertionError
+_ test_mechanical_success_keeps_uncited_operation_context[global-True-public-oci-transport-v1] _
+
+adapter = 'public-oci-transport-v1', scope_case = 'global', blocked = True
+
+    @pytest.mark.parametrize('adapter', ['public-object-adoption-v1', 'public-oci-transport-v1'])
+    @pytest.mark.parametrize('scope_case,blocked', [
+        ('same-object', True), ('unknown-object', True), ('other-object', False),
+        ('other-scenario', False), ('old-snapshot', False), ('global', True),
+    ])
+    def test_mechanical_success_keeps_uncited_operation_context(adapter, scope_case, blocked):
+        from tests.test_operation_consistency import failed
+    
+        condition = {**obligation(), 'check_coverage': 'ALL_OF',
+                     'verification_scope': {'scenario': 'trigger',
+                                            'resource': {'kind': 'Pod', 'name': 'selected'}}}
+        records = [obs('a', 'PASS'), obs('b', 'PASS')]
+        for record in records:
+            record['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        operation = failed()
+        operation['id'] = 'OP-uncited'
+        operation['resource_identity'] = {'kind': 'Pod', 'name': 'selected'}
+        if adapter == 'public-oci-transport-v1':
+            import hashlib
+            operation['adapter_id'] = adapter
+            operation['excerpt'] = json.dumps({'requests': [], 'client_error': 'Connection rejected'})
+            operation['content_digest'] = hashlib.sha256(operation['excerpt'].encode()).hexdigest()
+        if scope_case == 'unknown-object': operation.pop('resource_identity')
+        elif scope_case == 'other-object': operation['resource_identity']['name'] = 'control'
+        elif scope_case == 'other-scenario': operation['scenario'] = 'control'
+        elif scope_case == 'old-snapshot': operation['snapshot_id'] = 'S0'
+        elif scope_case == 'global': condition.pop('verification_scope')
+        records.append(operation)
+        result = deterministic_check_result(condition, records, snapshot_id='S1')
+        if blocked:
+>           assert result is None, 'A filtered check list must not hide a relevant failed operation'
+E           AssertionError: A filtered check list must not hide a relevant failed operation
+E           assert {'status': 'PASS', 'rationale': 'Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage rem...tatus":"PASS"}'}, {'observation_id': 'b', 'quote': '{"status":"PASS"}'}], 'decision_method': 'BOUND_CHECK_AGGREGATION'} is None
+
+tests/test_necessary_coverage_review.py:144: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_necessary_coverage_review.py::test_mechanical_success_keeps_uncited_operation_context[same-object-True-public-object-adoption-v1]
+FAILED tests/test_necessary_coverage_review.py::test_mechanical_success_keeps_uncited_operation_context[same-object-True-public-oci-transport-v1]
+FAILED tests/test_necessary_coverage_review.py::test_mechanical_success_keeps_uncited_operation_context[unknown-object-True-public-object-adoption-v1]
+FAILED tests/test_necessary_coverage_review.py::test_mechanical_success_keeps_uncited_operation_context[unknown-object-True-public-oci-transport-v1]
+FAILED tests/test_necessary_coverage_review.py::test_mechanical_success_keeps_uncited_operation_context[global-True-public-object-adoption-v1]
+FAILED tests/test_necessary_coverage_review.py::test_mechanical_success_keeps_uncited_operation_context[global-True-public-oci-transport-v1]
+6 failed, 6 passed, 14 deselected in 0.21s

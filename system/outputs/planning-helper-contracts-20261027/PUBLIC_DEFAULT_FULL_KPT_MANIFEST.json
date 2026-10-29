@@ -1,0 +1,163 @@
+{
+  "files": [
+    {
+      "path": "experiment.json",
+      "bytes": 971,
+      "sha256": "fd0132f5569019892a1a11ac8987e81478e38948354d09c9178a41448f226904"
+    },
+    {
+      "path": "registration.json",
+      "bytes": 576671,
+      "sha256": "c4fe57ed8f2655a151c596d4ba8267a99b4d0e4b2d18e9b999ba364040786964"
+    },
+    {
+      "path": "state.json",
+      "bytes": 492,
+      "sha256": "7d032f65e0e9d9f3a84ae9cad7e22e246579df64f543e5651f5c109d00f24a77"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/method_input.json",
+      "bytes": 2448,
+      "sha256": "2237eb2997a1ee565660379b0b7c826bf60fcb836b7dcf33c176c8eac6ed6251"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/repair.trace.json",
+      "bytes": 136277,
+      "sha256": "f2826782c9683838935c469abf9229dfd485d4b8fcd4ebaf90ff045a7aa629b3"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/model_calls.json",
+      "bytes": 1968478,
+      "sha256": "316c76ac4a0d1d579036feddf2d55925c3d2dda7f9307c9ea3eec9cde7d13433"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/candidate.patch",
+      "bytes": 5256,
+      "sha256": "2fc64b14ca61a312af9ff28712f7aac2afd55a317c03908b76c4bbc7713fcbba"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/projection.json",
+      "bytes": 2716,
+      "sha256": "15809506398eefc7c841770454dbbbc0198104db33e76d2ceb5c8742b7f3c00f"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/execution.json",
+      "bytes": 208709,
+      "sha256": "ee6defa273fdb54c2582a07700abe0198ef905089dbb2eb7947fd42886095301"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/public-evidence.delivery.json",
+      "bytes": 23772,
+      "sha256": "fb60edcb9ae627db7a0017ddf648a0953351db7fdd6ccc38878f89ddef8bc1ed"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/patch.json",
+      "bytes": 1103,
+      "sha256": "16f7c8e3b46a4fb21c0c432d06226b66414bb3353cd7517a37d22af7712746ac"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/front.execution_feedback.json",
+      "bytes": 5,
+      "sha256": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/candidate.patch",
+      "bytes": 4198,
+      "sha256": "40b877be3d3fbc9711c248063d1716e90991d5d2f37d10ce6a94926556af4e77"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/feedback.json",
+      "bytes": 123945,
+      "sha256": "c02a61408c4ef812c0179b95b22a2343a06d1f89bf9ba2a88356949419428f74"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/candidate-decision.json",
+      "bytes": 2532,
+      "sha256": "f577e6d6bd666e194ce49e3a2f1241bf8f0efabafcd5bd93a54ca1b31d2bd83f"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/front.trace.json",
+      "bytes": 302560,
+      "sha256": "7d2c84db8d1776856f39dd5cf0120b0dadb3e055c336537a60f272988d22275c"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/plan.json",
+      "bytes": 62064,
+      "sha256": "4e32b5625a020c24cc76bb67da6fbaa00d83f120a6825a05d0dd6f2a39ad6d7d"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/public-review-plan.json",
+      "bytes": 39893,
+      "sha256": "40ed9cc2b7a90c4f230850fda2edf62ff63135c8509aad62ddc0e232dcae0576"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/front.delivery.json",
+      "bytes": 1864,
+      "sha256": "af17b5e58a53c5d61ed9856cc42558650bcd4ae82bb0a424a9537770a0cf95dd"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/0/public/observation.json",
+      "bytes": 59623,
+      "sha256": "2d5bafef6a66e664c648e9cdade0a9b71ca3003d150c9e8c7918efe9fe114db7"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/1/execution.json",
+      "bytes": 252097,
+      "sha256": "3a136e39288e09585ab4293b9b1296ff0ba81d15dd540e39fb01b1746f27a09c"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/1/public-evidence.delivery.json",
+      "bytes": 23772,
+      "sha256": "fb60edcb9ae627db7a0017ddf648a0953351db7fdd6ccc38878f89ddef8bc1ed"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/1/patch.json",
+      "bytes": 1103,
+      "sha256": "9d9fa8606831462a0dece755bddac4ab948b067d24d2c8d47969d6c9985b6089"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/1/candidate.patch",
+      "bytes": 5256,
+      "sha256": "2fc64b14ca61a312af9ff28712f7aac2afd55a317c03908b76c4bbc7713fcbba"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/1/feedback.json",
+      "bytes": 125127,
+      "sha256": "bee3ceed4106d7aeaa170a5d28de25b2d8a775f25751ad4d578ea73ccc924c7b"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/1/candidate-decision.json",
+      "bytes": 398,
+      "sha256": "8dc2c2fbe54e9aed99ba877cb794d0faa7ec0570d754a168bf1e2e68edca1858"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/1/front.trace.json",
+      "bytes": 302560,
+      "sha256": "7d2c84db8d1776856f39dd5cf0120b0dadb3e055c336537a60f272988d22275c"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/1/plan.json",
+      "bytes": 62423,
+      "sha256": "bae565787363a2d00d88962613b54954acffbe3293b5c26665429b70718c44b6"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/1/public-review-plan.json",
+      "bytes": 39893,
+      "sha256": "40ed9cc2b7a90c4f230850fda2edf62ff63135c8509aad62ddc0e232dcae0576"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/rounds/1/public/observation.json",
+      "bytes": 60182,
+      "sha256": "9f739dfc01eabc4fee375dd9992dc4aece61db904d4e9e9eb7a2e9b1e15655d8"
+    },
+    {
+      "path": "methods/R3-KPT-4673/R3-KPT-4673/broken-public/observation.json",
+      "bytes": 60221,
+      "sha256": "dd8bd6be68e28790afc6aa67b9a8ee9d0368c98528170dcda5bffcde2ad1d34f"
+    }
+  ],
+  "archive_sha256": "666f29713871805deb0f097b7b7bc42be50607207a833e8cdd3b32b186b23ff2",
+  "scope": "Public method inputs/requests/outputs/trials only; no broker secrets, hidden grader contents, checkpoints or source workspaces",
+  "source_sha256": "7b5d07480e61e83d440250c6503af2dd48a6f2b3e7b9714460fbea0f893ef0d5",
+  "formal_ready": false
+}

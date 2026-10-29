@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "source_sha256": "6cbcfd6d3a9018d31a6ebc0c7e59854f1f3e2f073d3aee839be26eee8668000a",
+  "original_snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "seed_snapshot": "38430dfa9c0344b66e7bff5f667a94f44aa096259fbfcbc1f33c9fa80d424f36",
+  "diagnosis_snapshot": "38430dfa9c0344b66e7bff5f667a94f44aa096259fbfcbc1f33c9fa80d424f36",
+  "all_messages_inspected": true,
+  "operation_fact_delivered": true,
+  "actual_seed_source_delivered": true,
+  "semantic_outcome": "UNKNOWN",
+  "source_cause": "UNKNOWN",
+  "model_http_calls_added": 0,
+  "request_sha256": "91632ecd3f95c255548731306656a853a258ad0d8e6f5caa5ef5340f597ad2b0",
+  "scope": "Actual public failure and fresh current-seed diagnosis request only; not real repair success",
+  "formal_ready": false
+}

@@ -50,11 +50,15 @@ jobs:
           python -m pytest -q
           tests/test_contracts.py tests/test_source_field_contracts.py tests/test_final_front_contract.py
           tests/test_model_provider.py tests/test_provider_output_identity.py
-          tests/test_public_check_protocol.py
           tests/test_run_budget.py tests/test_money_budget.py
           tests/test_public_failure.py tests/test_public_failure_contracts.py
           tests/test_transport_request_audit.py tests/test_development_snapshot.py tests/test_public_demo.py
           tests/test_evidence_delivery.py tests/test_front_delivery.py tests/test_request_admission.py tests/test_production_request_admission.py tests/test_stage_delivery_admission.py
+      - name: Reliability input, partial counterexamples and current-source continuation
+        run: >-
+          python -m pytest -q tests/test_comparison_pointer_contract.py tests/test_public_inventory_scope.py
+          tests/test_partial_probe_counterexamples.py tests/test_seed_known_edit_rejection.py
+          tests/test_isolated_worker_entry.py tests/test_candidate_build_failure.py tests/test_trial_panel_dispatch_binding.py
       - name: Stage references, final semantic delivery and READY inheritance
         run: >-
           python -m pytest -q
@@ -71,7 +75,7 @@ jobs:
           python -m pytest -q
           tests/test_trial_transactions.py tests/test_consumer_trial_recovery.py
           tests/test_repair_consumers.py tests/test_recovery_edit_windows.py
-          tests/test_persist_calls_primary_error.py
+          tests/test_persist_calls_primary_error.py tests/test_seed_retry_binding.py tests/test_native_edit_window_recovery.py
       - name: Four modes, six-case observer and cross-mode recovery controls
         run: >-
           python -m pytest -q
@@ -84,7 +88,7 @@ jobs:
 
   runtime-portable:
     name: Actual Docker limits, isolated public runtime and portable suite
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
       DOCKER_HOST: unix:///var/run/docker.sock
@@ -101,10 +105,29 @@ jobs:
           python-version: '3.12'
           cache: pip
           cache-dependency-path: system/requirements-dev.lock
+      - name: Install required method namespace isolation tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends bubblewrap apparmor-profiles apparmor-utils
+          bwrap --version
+          # This ephemeral runner needs the distribution's bwrap userns policy.
+          # Keep the host-wide AppArmor restriction and the method's namespaces.
+          if ! bwrap --unshare-user --unshare-net --ro-bind / / /bin/true; then
+            test "$(cat /proc/sys/kernel/apparmor_restrict_unprivileged_userns)" = 1
+            if [ ! -f /etc/apparmor.d/bwrap-userns-restrict ]; then
+              sudo install -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+            fi
+            sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+            bwrap --unshare-user --unshare-net --ro-bind / / /bin/true
+          fi
       - name: Install portable development environment
         run: |
           env -u PYTHONPATH python -m pip install -r requirements-dev.lock
           env -u PYTHONPATH python -m pip install --no-deps -e .
+      - name: Verify method namespaces before long runtime validation
+        run: >-
+          python -m pytest -q tests/test_isolated_method.py
+          -k 'actual_method_namespace or namespace_mounts_are_readonly'
       - name: Cache trusted public probe image
         run: docker pull "$CONTRACTEDGE_RUNTIME_IMAGE"
       - name: Verify CPU and memory enforcement; negotiate task Docker API
@@ -131,7 +154,7 @@ jobs:
         run: >-
           env -u DEEPSEEK_API_KEY -u OPENAI_API_KEY PYTHONDONTWRITEBYTECODE=1
           python -B scripts/run_trial_isolation_panel.py --system "$PWD"
-          --binding configs/trial-isolation-acceptance-protocol-20261025-r3.example.json
+          --binding configs/trial-isolation-acceptance-v068.example.json
           --output "$RUNNER_TEMP/trial-recovery-tests"
           --image "$CONTRACTEDGE_RUNTIME_IMAGE" --docker-host "$DOCKER_HOST"
           --docker-api-version "${DOCKER_API_VERSION:-}"

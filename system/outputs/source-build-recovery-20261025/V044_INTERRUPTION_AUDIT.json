@@ -1,0 +1,24 @@
+{
+  "schema_version": "ce.interruption_audit.v1",
+  "status": "INTERRUPTED_PUBLIC_OBSERVATION_NO_FINAL_METHOD_RESULT",
+  "audited_utc": "2026-10-25T02:04:56.338742+00:00",
+  "original_receipt_sha256": "e7f9ab7c2b7a03b1794e9ecd59ca7ddb2c5fb5700d520b4913278c9fda50bb93",
+  "original_receipt_preserved": true,
+  "controller_and_worker_absent": true,
+  "exclusive_run_lock_available": true,
+  "completed_model_requests": 4,
+  "unknown_model_requests": 0,
+  "unsettled_operation": "public.observe",
+  "observation_outcome": "UNKNOWN",
+  "candidate_snapshot": "54de36d862cb98ab45376c98f2b46cc6fbcab2ecf4219b28fd4e6fef931b593f",
+  "applied_execution_verified": true,
+  "candidate_exported_as_final": false,
+  "cleanup": {
+    "status": "OWNED_CONTAINERS_CLOSED",
+    "removed": []
+  },
+  "model_calls_added": 0,
+  "automatic_paid_retry": false,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

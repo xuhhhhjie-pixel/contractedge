@@ -1,8 +1,12 @@
+> Current:0.6.68 quote binding feedback candidate. Official-model controlled behavior-failure continuation passed on exact v067; do not inherit panel scores. Qualify this exact source before full paid cases; formal_ready=false.
+
 # ContractEdge system handoff
 
 Read README.md and docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md first.
-Runtime source is 0.6.27; formal_ready=false. Historical reports contain superseded status; CURRENT_STATUS.json and the handoff plan identify the current failed gate.
+This worktree source is a development-only 0.6.68 candidate; formal_ready=false. The preceding 0.6.61 fixed46 panel is stopped after18 closed slots at /home/xhj/contractedge-fixed46-source061-20261028; its Alertmanager repetition failed. Its immutable source remains in /home/xhj/contractedge-cleancheck-v060-ordering-20261027/system. Do not deploy this candidate, inherit old effectiveness results, or start paid comparison before the active panel is audited and a new exact registration is prepared. The separately preserved runtime /home/xhj/contractedge-system remains 0.6.40 until qualification. Historical reports contain superseded status; CURRENT_STATUS.json and the handoff plan identify the current failed gate.
 Preserve benchmark/ and tools/ in the repository root. Do not put credentials, hidden graders, GT/Fixed, runtime workspaces or caches into model context or Git.
 Use saved public failure replay before behavior changes; verify actual final serialized requests across diagnosis, plan, execution and re-diagnosis. Re-read the current snapshot after edits.
 Run python scripts/test_portable.py for the self-contained development subset; report explicitly that six historical/native modules are excluded. Full tests require the documented external fixtures. Never call subset results a full 662-test reproduction.
 Source changes require a new method freeze, configuration digest and registered same-version development panel. Do not pool historical best scores, overwrite failed attempts, or lower PASS/UNKNOWN gates. Publishing this development snapshot does not authorize formal150 runs.
+
+Current development execution uses scripts/run_isolated_method.py and parent-only scripts/score_isolated_method.py. The original 46-slot driver is migrated through scripts/prepare_fixed_panel.py and scripts/run_fixed_panel.py; its earlier A-group is closed; later groups remain gated. See outputs/fixed46-isolated-panel-20261025/COMPLETION_AUDIT.md. Do not count qualification singles or historical scores into that panel, change frozen execution files during a live cohort, or open later groups without verified prerequisites.

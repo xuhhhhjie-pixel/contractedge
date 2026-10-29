@@ -1,0 +1,23 @@
+{
+  "status": "ACTUAL_SAVED_TRACE_COMPLETE_PROCESSITEM_DELIVERY_PASS",
+  "selected_count": 12,
+  "source_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "request_sha256": "972ca2338e3e3201b0bcc551a7f7fce8b197e18f4dff606b6fca37d28ce9f577",
+  "records": [
+    {
+      "id": "SRC-CU-7e4d235001260b67",
+      "locator": {
+        "column_start": 1,
+        "end_line": 406,
+        "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+        "start_line": 175
+      },
+      "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+      "content_digest": "21ddd173b93d18720a2ec13d3b7394f3f40add609075586ffbd38d9b7474a61d"
+    }
+  ],
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "formal_ready": false,
+  "scope": "Delivery at extension request only; planning/execution and engineering qualification still required"
+}

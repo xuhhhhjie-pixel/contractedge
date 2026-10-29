@@ -1,0 +1,20 @@
+{
+  "status": "PASS_EXACT_REPLAY_AND_SELECTION",
+  "method_status": "PUBLIC_REVIEW_COMPLETE",
+  "errors": [],
+  "model_http_calls_added": 0,
+  "recorded_response_replayed": 1,
+  "same_exact_execution_request": true,
+  "same_model_patch": true,
+  "patch_bytes": 3147,
+  "semantic_call_count": 4,
+  "failed_transport_count_kept_outside": 1,
+  "outer_resource_calls": 5,
+  "semantic_reserved_tokens": 508853,
+  "failed_transport_tokens_kept_outside": 142142,
+  "outer_reserved_tokens": 650995,
+  "all_prior_active_time_retained": true,
+  "public_semantic": "PUBLIC_REVIEW_PASS",
+  "scope": "Offline actual source/consumer/selection replay of exactly received response and trusted saved public observations. Not a new runtime execution or independent repair score. No fabricated response for HTTP402.",
+  "formal_ready": false
+}

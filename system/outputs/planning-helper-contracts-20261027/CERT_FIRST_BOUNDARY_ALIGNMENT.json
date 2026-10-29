@@ -1,0 +1,61 @@
+{
+  "status": "PUBLIC_CONTROL_FIRST_SOURCE_GAP_IDENTIFIED",
+  "case_id": "RW-CERTMANAGER-9116",
+  "source_sha256": "33cfb3ab055a4a168ea6db02bd9ea93f7450ede34b02cc7e14be1189ac7b9233",
+  "selected_production_span": {
+    "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+    "start_line": 230,
+    "end_line": 309
+  },
+  "critical_source": [
+    {
+      "line": 234,
+      "text": "pkViolations := utilpki.PrivateKeyMatchesSpec(pk, crt.Spec)"
+    },
+    {
+      "line": 265,
+      "text": "requestViolations, err := utilpki.RequestMatchesSpec(req, crt.Spec)"
+    },
+    {
+      "line": 311,
+      "text": "if apiutil.CertificateRequestIsDenied(req) {"
+    },
+    {
+      "line": 318,
+      "text": "if apiutil.CertificateRequestHasInvalidRequest(req) {"
+    },
+    {
+      "line": 339,
+      "text": "publicKeyMatchesCSR, err := utilpki.PublicKeyMatchesCSR(pk.Public(), csr)"
+    }
+  ],
+  "requests": [
+    {
+      "call_index": 0,
+      "prompt_version": "diagnosis.v1.1.26",
+      "response_finish": "length",
+      "actual_csr_key_compare_symbol_present": false,
+      "actual_terminal_test_present": false
+    },
+    {
+      "call_index": 1,
+      "prompt_version": "diagnosis.v1.1.26",
+      "response_finish": "stop",
+      "actual_csr_key_compare_symbol_present": false,
+      "actual_terminal_test_present": false
+    },
+    {
+      "call_index": 2,
+      "prompt_version": "diagnosis.v1.1.26",
+      "response_finish": "stop",
+      "actual_csr_key_compare_symbol_present": false,
+      "actual_terminal_test_present": false
+    }
+  ],
+  "model_unsupported_claim": "PrivateKeyMatchesSpec and RequestMatchesSpec against Certificate.Spec were treated as proof of CSR/private-key identity",
+  "first_information_gap": "Actual CSR/key equality at line339 and terminal handlers311/318 did not reach selected production source excerpt",
+  "next_existing_mechanism": "Extend declared public producer/launcher scope or bounded containing-declaration selection; replay actual requests within existing budget before any further API call",
+  "source_must_remain_read_only": true,
+  "hidden_material_used": false,
+  "formal_ready": false
+}

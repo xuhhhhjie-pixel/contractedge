@@ -1,0 +1,22 @@
+{
+  "status": "ACTUAL_CLOSED_NO_SUPPORTED_TERMINAL_REPLAY_PASS",
+  "raw_receipt_sha256": "f90babd967afb428c9f20ff3df9b26ed0dfb12e04f8d4cd3e72b633d74ed0264",
+  "raw_receipt_unchanged": true,
+  "raw_classification": "INFRASTRUCTURE_STOP",
+  "current_replay": {
+    "classification": "METHOD_RESULT",
+    "method_status": "NO_SUPPORTED_VIOLATION",
+    "unknown_requests": 0,
+    "not_dispatched_requests": 0,
+    "candidate_verified": true,
+    "coordinator_policy_failures": [],
+    "recovery_failure": null,
+    "semantic_outcome_upgraded": false
+  },
+  "unknown_request_counterexample_preserved": true,
+  "new_api_calls": 0,
+  "new_method_source_changes": false,
+  "parent_script_sha256": "d3d41ae6d6cde2436e52a276f9efe45ec233ad020e4d66c779b53ae3ea708655",
+  "formal_ready": false,
+  "scope": "Offline interpretation proof only; original raw receipt and formal-panel records not rewritten"
+}

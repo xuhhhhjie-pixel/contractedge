@@ -1,0 +1,158 @@
+{
+  "status": "DELIVERY_VERIFIED_PLAN_REJECTED",
+  "calls": [
+    {
+      "index": 0,
+      "stage": "diagnosis.v1.1.26",
+      "field_source": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          },
+          "digest": "993996d987a4f64e6a4994b829aff82d1615d383513f5340a5a51137db773f30"
+        }
+      ],
+      "request_digest": "eb127f07d0be0a045909ef0a29d7e665bdb2789b77c474fe90857a69c54f9f3f",
+      "finish_reason": "stop",
+      "preserve_constraints": null,
+      "preservation_impact": null,
+      "validation_feedback": null
+    },
+    {
+      "index": 1,
+      "stage": "changeset.v1.1.13",
+      "field_source": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          },
+          "digest": "993996d987a4f64e6a4994b829aff82d1615d383513f5340a5a51137db773f30"
+        }
+      ],
+      "request_digest": "c6a7e65acd81c538b9b45dd16ff95cee19afc3985a7b7b4c032781ec5b358f76",
+      "finish_reason": "stop",
+      "preserve_constraints": [],
+      "preservation_impact": [
+        {
+          "preserve_id": "O1",
+          "scope": "GLOBAL",
+          "change_refs": [],
+          "rationale": "No executable changes are planned in this NEEDS_EVIDENCE round; preservation impact cannot be attributed to any change and remains global for the unmodified production reload path."
+        }
+      ],
+      "validation_feedback": []
+    },
+    {
+      "index": 2,
+      "stage": "diagnosis.v1.1.26",
+      "field_source": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          },
+          "digest": "993996d987a4f64e6a4994b829aff82d1615d383513f5340a5a51137db773f30"
+        }
+      ],
+      "request_digest": "5ce52e029d351d7a1a52a1615ea64ef72b2cf12ddeffebbf784716f334b5b195",
+      "finish_reason": "stop",
+      "preserve_constraints": null,
+      "preservation_impact": null,
+      "validation_feedback": null
+    },
+    {
+      "index": 3,
+      "stage": "changeset.v1.1.13",
+      "field_source": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          },
+          "digest": "993996d987a4f64e6a4994b829aff82d1615d383513f5340a5a51137db773f30"
+        }
+      ],
+      "request_digest": "15cd42873cecb19e74a47b368f1ecd62bf379c09d4f923c8d89fdc3e37000b0f",
+      "finish_reason": "length",
+      "preserve_constraints": null,
+      "preservation_impact": null,
+      "validation_feedback": []
+    },
+    {
+      "index": 4,
+      "stage": "changeset.v1.1.13",
+      "field_source": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          },
+          "digest": "993996d987a4f64e6a4994b829aff82d1615d383513f5340a5a51137db773f30"
+        }
+      ],
+      "request_digest": "d81487588c13ec40892beada8e1365d4751a73655f08de7a6c28fdcc45b4afde",
+      "finish_reason": "stop",
+      "preserve_constraints": [],
+      "preservation_impact": [
+        {
+          "preserve_id": "O1",
+          "scope": "CHANGES",
+          "change_refs": [
+            "CH1"
+          ],
+          "rationale": "CH1 reorders the dispatcher lifecycle in the reload callback, which is the production path that determines whether active alert groups remain visible through the groups API during a valid reload."
+        }
+      ],
+      "validation_feedback": []
+    },
+    {
+      "index": 5,
+      "stage": "changeset.v1.1.13",
+      "field_source": [
+        {
+          "id": "SRC-CU-HELPER-993996d987a4f64e",
+          "locator": {
+            "end_line": 196,
+            "path": "provider/mem/mem.go",
+            "start_line": 176
+          },
+          "digest": "993996d987a4f64e6a4994b829aff82d1615d383513f5340a5a51137db773f30"
+        }
+      ],
+      "request_digest": "98142bbdd6850cbcd9238c92c129ab63af43e25228ec914ab11400725f3a7ac9",
+      "finish_reason": "stop",
+      "preserve_constraints": [],
+      "preservation_impact": [
+        {
+          "preserve_id": "O1",
+          "scope": "CHANGES",
+          "change_refs": [
+            "CH1"
+          ],
+          "rationale": "CH1 reorders the dispatcher lifecycle in the reload callback, which is the production path that determines whether active alert groups remain visible through the groups API during a valid reload."
+        }
+      ],
+      "validation_feedback": [
+        {
+          "code": "PRESERVATION_IMPACT_INCOMPLETE",
+          "message": "Every preservation constraint needs exactly one impact scope",
+          "path": "preservation_impact"
+        }
+      ]
+    }
+  ],
+  "root": "Plan preservation_impact references outcome O1 while preserve_constraints is empty; correction message omitted expected/extra identities; same incorrect row repeated",
+  "formal_ready": false
+}

@@ -1,0 +1,47 @@
+{
+  "status": "CLOSED_KPT_PLANNING_TRUNCATION_NO_PATCH",
+  "method_status": "BUDGET_EXHAUSTED",
+  "independent_status": "SEMANTIC_FAIL",
+  "public_outcome": "UNKNOWN",
+  "model_calls": 3,
+  "patch_bytes": 0,
+  "graph_correction_exercised": false,
+  "planning_handoff_exercised": false,
+  "call_sequence": [
+    {
+      "stage": "DIAGNOSIS",
+      "finish": "length",
+      "reasoning_tokens": 15601
+    },
+    {
+      "stage": "TRUNCATION_RECOVERY",
+      "finish": "stop",
+      "thinking": "disabled"
+    },
+    {
+      "stage": "SEMANTIC_CHANGESET",
+      "finish": "length",
+      "reasoning_tokens": 11672
+    }
+  ],
+  "total_occupied_cny": 126.189522,
+  "remaining_upper_bound_cny": 23.810478000000003,
+  "new_e2e_occupied_cny": 0.513142,
+  "ledger_calls": 1221,
+  "cert_status": "NOT_RUN_PREREQUISITE_FAILED",
+  "receipt_refs": {
+    "receipt": {
+      "path": "/home/xhj/contractedge-e2e-source057-20261027/methods/R3-KPT-4673/.isolated-eccac398493d497eb00cb0971a000498/receipt.json",
+      "sha256": "a617df2eeaaee021908a80210a7231ec81c9c150effa65d9cbe31e6da5a4a0dd"
+    },
+    "trace": {
+      "path": "/home/xhj/contractedge-e2e-source057-20261027/methods/R3-KPT-4673/R3-KPT-4673/repair.trace.json",
+      "sha256": "9cceb6478701628bda62d74829b8a0d4560af2fb61423cd6961011bddabb41cf"
+    }
+  },
+  "archive_sha256": "6e41fe69747fd565d255f00dc1bda8b44e1711bb7a9d299acefd2d7045cb125e",
+  "archive_files": 126,
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "root_cause": "Existing shared once-only recovery was consumed by diagnosis; a different planning schema restored enabled thinking, and its reasoning-starved truncated output had no recovery left. This is an overly narrow generation-mode policy, not wrong data or a validator defect."
+}

@@ -76,7 +76,7 @@ def test_fresh_process_continuation_keeps_original_stage_refs_and_does_not_redis
     calls=read(continued/'combined.model_calls.json')
     assert calls[:2]==read(saved/'model_calls.json')
     assert len(calls)==4
-    assert [c['prompt_version'] for c in calls[2:]]==['topomen-source-execution.v1','public-postcondition-review.v1']
+    assert [c['prompt_version'] for c in calls[2:]]==['topomen-source-execution.v1','public-postcondition-review.v2']
     report=read(continued/'repair/repair.trace.json')
     assert report['status']=='PUBLIC_REVIEW_COMPLETE'
     assert report['budget']['resumed_model_calls']==2

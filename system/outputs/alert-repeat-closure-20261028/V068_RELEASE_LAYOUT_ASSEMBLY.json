@@ -1,0 +1,42 @@
+{
+  "status": "ASSEMBLED",
+  "cases": 150,
+  "files": 9090,
+  "package_pins": {
+    "R1": {
+      "checksums_sha256": "cf552cfd92c436f0458dac24c9880e7ecb9454bb130bc6e676c806819af2c292",
+      "entry_sha256": "538956af7215ab02db0e45a734f72b53f63f739ccab53ff2ca9536f3f9bbf438"
+    },
+    "R2": {
+      "checksums_sha256": "2ae09c88c495af6a66aa78495a0208c4629ad243c0102d1a2d44cc6cdf0fb4b6",
+      "entry_sha256": "d61a88a4129a549688ccd62a255c3e747c2e0f1118f9578e89ae26ef845c0e5e"
+    },
+    "R3": {
+      "checksums_sha256": "2732d189fe3a11ad7a5663f64bf1f06ae87df4733adb2efa565c79f9daa320bc",
+      "entry_sha256": "ac97cf0296bb03ef5dd3a6888581954ba6f26b5732e30dd0c08263d8da9c974c"
+    },
+    "R4": {
+      "checksums_sha256": "5c912d30aa9ec003555cc6e83a9b1e3608a08e70d49a8107e7a56941928ae932",
+      "entry_sha256": "2bc23d61df0176c5809b8b8c61a2b06abb995d16837c73db18cf35f95e6ee3b5"
+    },
+    "R5": {
+      "checksums_sha256": "9ca30358be314304f46af402845c5cde4781797b1138a7ce445299cfa3fb48b8",
+      "entry_sha256": "c59f02dd1a7f5c534ce3a92f05f7077582067a896feff33653c05ec5f17d7875"
+    }
+  },
+  "manifest_sha256": {
+    "public/manifest.jsonl": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+    "evaluation/manifest.jsonl": "c3c93eb008adbbaadc32ddc2a7f701c0e803307ae1209bf589dbdc94819ab31e",
+    "partition/member_groups.jsonl": "aa32b07dc8cd2f3c946cb54e42385bded2ccbdf3cdd31b2b358a999480146aea"
+  },
+  "metadata_sha256": {
+    "RELEASE_ENTRY.json": "6f0d200363dbe14595f2cb3c4cbbaab324b0cc62eb760acc4393d3fbe02a66ef",
+    "runtime/manifest.json": "4f99d952194852c3dd4630e55ef7d3bd36e5cc8a383daa3d42e5eafcf5b8a03d",
+    "partition/summary.json": "f2395886ea27d8c1a57ed0523800352234b15471baacfc04034f2a7edd47256f",
+    "tools/verify_release150.py": "7a12e78ab9bede4f7a9b5655ed2f042e57e0277fc02b3676eb5ffef530847f9d",
+    "tools/verify_release147.py": "afb9a68a239ac703c82a22b73969a1871bd11bb838c8a65cd447640ead42b705",
+    "tools/public_runners/contract_v1/run_contract_public.py": "f43fcc8557a57db9b0472403d9a6b9cc0fbf7b8bbf6735385385d484bd252d0f"
+  },
+  "model_calls": 0,
+  "scope": "Operative input/tool/evaluator/runtime layout. Historical aggregate evidence is not recreated; not a new repair result or environment admission."
+}

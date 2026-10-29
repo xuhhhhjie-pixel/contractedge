@@ -1,0 +1,68 @@
+{
+  "schema_version": "ce.formal_gate_evidence.v1",
+  "gate": "G3",
+  "identity": {
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
+    "candidate_config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "executed_at": "2026-10-28T21:09:16.693212+00:00",
+  "checker": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/finalize_admission_v068_resumed.py",
+    "sha256": "e4e067f66e6b083fe8fcc548b7f0439c5ea9fe3957830381e90e1164e6550bf2"
+  },
+  "inputs": [
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_GITHUB_CI.json",
+      "sha256": "b16da526ccf28d7a0db254e2334a689cff49f0c00c2f43627a95e0e8b5906806"
+    },
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_ACTUAL_ISOLATION.json",
+      "sha256": "c7e8d3b3b70e20e75ab55db7222d10cfa9d099bcff42526503badf2cd5bd0f28"
+    },
+    {
+      "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_VERIFIED_TERMINALS.json",
+      "sha256": "441db9a2d9ec2cf6dc0e369e0441ecc15f3ffbec4bb8c33b8d8fc70ba45c136e"
+    },
+    {
+      "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/records.json",
+      "sha256": "c0d99709cff730da145de5b0f21a7083c6a46d452944bf237df9f03c4ec1ce36"
+    }
+  ],
+  "checks": [
+    {
+      "id": "method_filesystem_isolation",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_GITHUB_CI.json",
+          "sha256": "b16da526ccf28d7a0db254e2334a689cff49f0c00c2f43627a95e0e8b5906806"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_ACTUAL_ISOLATION.json",
+          "sha256": "c7e8d3b3b70e20e75ab55db7222d10cfa9d099bcff42526503badf2cd5bd0f28"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/tests/test_isolated_method.py",
+          "sha256": "3f4824d157ac1bdd0bdda0ddd1a4d63e2ad9789894e857016b9142ee598203cd"
+        }
+      ]
+    },
+    {
+      "id": "per_attempt_source_config_data_patch_score_identity",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_VERIFIED_TERMINALS.json",
+          "sha256": "441db9a2d9ec2cf6dc0e369e0441ecc15f3ffbec4bb8c33b8d8fc70ba45c136e"
+        },
+        {
+          "path": "/home/xhj/contractedge-alert-closure-20261028/system/scripts/fixed_panel.py",
+          "sha256": "2bf3bce16706a298d3d4c2706f41ab0428f99714b4b102e6da268505d6e83833"
+        }
+      ]
+    }
+  ],
+  "scope": "Actual namespace/isolation evidence and all46 source/config/data/patch/score records reverified by the existing protocol. No unknown dispatch is retried. One explicit rejected HTTP402 is bound through declared administrative READY/received-response recovery; both infrastructure receipts and all prior resources remain, no uninterrupted-wall claim."
+}

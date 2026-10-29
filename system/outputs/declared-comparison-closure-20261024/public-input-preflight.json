@@ -1,0 +1,1531 @@
+{
+  "schema_version": "ce.public_input_preflight.v1",
+  "checker": "contractedge.dataset.benchmark.method_input_from_task+parse_method_input",
+  "checker_source_version": "0.6.40",
+  "checked_at": "2026-10-24T13:53:54.709800+00:00",
+  "status": "PASS",
+  "release": {
+    "release_id": "ContractEdge-benchmark150-v1-20261019",
+    "release_entry_sha256": "6f0d200363dbe14595f2cb3c4cbbaab324b0cc62eb760acc4393d3fbe02a66ef",
+    "public_manifest_sha256": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+    "selected_cases": 150,
+    "by_class": {
+      "R1": 30,
+      "R2": 30,
+      "R3": 30,
+      "R4": 30,
+      "R5": 30
+    }
+  },
+  "partition_manifest_sha256": "aa32b07dc8cd2f3c946cb54e42385bded2ccbdf3cdd31b2b358a999480146aea",
+  "development_members": 115,
+  "checked": 150,
+  "errors": [],
+  "records": [
+    {
+      "case_id": "RW-CAND-067",
+      "primary_class": "R1",
+      "source_file_count": 306,
+      "expanded_bytes": 2127958,
+      "snapshot_id": "67715bb2cae658b418724583898e62a05b73e657db7e3bb94ce8f3fba2ecae5d",
+      "input_digest": "67377e98524002e65d999663c69152055812c0642eeaf06329893a0c2c9102fd",
+      "source_sha256": "d15b19cedef67f778bb3c10ade425e7b0a68ceaf26c7d1a6e0bafd105a199e1f",
+      "task_manifest_sha256": "8a003923911bc697c4f812769f40f8a65c06d048bca7ca2cd420567977f5c21f"
+    },
+    {
+      "case_id": "RW-CAND-068",
+      "primary_class": "R1",
+      "source_file_count": 15,
+      "expanded_bytes": 88286,
+      "snapshot_id": "f1ce65ae0d7c2b27f68a8034f3fcf319e1fddc045ff6abd6470dfc11d4f0485b",
+      "input_digest": "eef0bc6c5fd8736479c80abc7f6e89d4957fbf093c306b22781ff4c8b4fa54bf",
+      "source_sha256": "7a2a983e06a257c9b731fd9e12e5f3eedec19d0a73f37547a3e8fb3f8f33deb4",
+      "task_manifest_sha256": "73b0c0bf1a4f2b0506cec7fe0982d46d87df2b201517d8299a0c01d391da0a01"
+    },
+    {
+      "case_id": "RW-CAND-070",
+      "primary_class": "R1",
+      "source_file_count": 38,
+      "expanded_bytes": 294228,
+      "snapshot_id": "8f4b74277e98942ab422c32906fd75ecec4476dbbfd82cbab22c502aa44376e2",
+      "input_digest": "37cb989eb24c517d18f4fb3b25db8c0576f0fafa0b8f6c8398622af5d9c0a538",
+      "source_sha256": "cdadec81607765800fd2e67ee048647b8fe9d6c215ad0905315b85018d3e7945",
+      "task_manifest_sha256": "5bda5c774887ebb72467bcb78e113101d03491d62d911405f4dc5b7c43364572"
+    },
+    {
+      "case_id": "RW-CAND-071",
+      "primary_class": "R1",
+      "source_file_count": 137,
+      "expanded_bytes": 385559,
+      "snapshot_id": "27bf4452e7dc50be689c74e011edb39df4cfce05d857affd6cb0bb786fd9cf84",
+      "input_digest": "75476481bbf24707025ab007ce302b17352cdce00bf9947622566825d03d5bc1",
+      "source_sha256": "9f2ec86b4655ff7070293c7b77fc85370429e104465aaa405a507f00578601df",
+      "task_manifest_sha256": "da6a190a0c9c990efba590d4ca156b8f09b208755a24dfff7bb0fabc56964c5f"
+    },
+    {
+      "case_id": "RW-CAND-072",
+      "primary_class": "R1",
+      "source_file_count": 37,
+      "expanded_bytes": 112968,
+      "snapshot_id": "563b1485073453ea750c7bc1cfeb80051e182f77c91212a6e7c19f86b8f8d203",
+      "input_digest": "d2b2450aada8eef7f4b13d4d7a6316eb8176144f9e948f8fe435032607ed098b",
+      "source_sha256": "be0d975808b93bdc6b36abb2755ca622bc0754576551adc03563fa98d106cacd",
+      "task_manifest_sha256": "3b9ab09459895abbcaacc996cdcac6af38c38929596ec5930f43aeb96f2edae1"
+    },
+    {
+      "case_id": "RW-CAND-073",
+      "primary_class": "R1",
+      "source_file_count": 3,
+      "expanded_bytes": 18456,
+      "snapshot_id": "b4a810ea2fbd62660d1a9e7f44b0a85da0c8c637cd1023f0944d7c691f47ec01",
+      "input_digest": "f3d04364c701f3a7e2431a73cf6731661354856e5f75815319f1b8536c7ed6b5",
+      "source_sha256": "2b7ad90c864a2208c672ca3d95c29f2c5007067215b30c6bc27f16204789b2a2",
+      "task_manifest_sha256": "2bbb491f00038369865c310bbbc51170553e576dca28ad35cf9b789ed061a6c4"
+    },
+    {
+      "case_id": "RW-CAND-076-AGGREGATE-VERIFIER-001",
+      "primary_class": "R1",
+      "source_file_count": 44,
+      "expanded_bytes": 60898,
+      "snapshot_id": "aef90515e13e7de66845dbf655b50a205a400089bb4b7dd217a3135cb02c6e1f",
+      "input_digest": "0ad07c04a93d79ed8dcd0bbe506a703e665d3c747894cc71f1d42608fe88a0d7",
+      "source_sha256": "942d79c62a654c8fbd9a3faedf733a41ca3d39f69db0627e157f097388972223",
+      "task_manifest_sha256": "13e69ba7cf0745e42bb4a01e5a6b3d7f7c19a0943811bf3f1c5ac94cabfe595c"
+    },
+    {
+      "case_id": "RW-CAND-077",
+      "primary_class": "R1",
+      "source_file_count": 8,
+      "expanded_bytes": 1061953,
+      "snapshot_id": "9a2e1e5bd6d8967d698e7d84e75342be814856e228f265b25911226436e03f7a",
+      "input_digest": "1e944a427f5c447fefd7f712b49962e10f5d11524312a739dcba2ff8ae64d13b",
+      "source_sha256": "2c6fd1918d0568eeeae7e043031f9c6e87f81592c2917648663ee35580a64f4d",
+      "task_manifest_sha256": "f9c45620be46c4b035d3a2b972ba61f52fb9a4682f64c73714f0a8a6e4c03646"
+    },
+    {
+      "case_id": "RW-CAND-081",
+      "primary_class": "R1",
+      "source_file_count": 72,
+      "expanded_bytes": 401883,
+      "snapshot_id": "0cf51498bf0da0325aae5326be816cd3d2f84e6ff200008db9647a1f81df7b6c",
+      "input_digest": "7762230feceeae7047a1b609cb3b999e3b1a41b04937549c256b2a2052df7dee",
+      "source_sha256": "ef7a0fbefc1299186b4089548e6cd49c1718a55bd8d5731586c5cbc23175f1a5",
+      "task_manifest_sha256": "8a4b91ba9c094f68450fb45a9e48fa4e691a52bb977a0d931ad874c6a4ebed1e"
+    },
+    {
+      "case_id": "RW-CAND-086",
+      "primary_class": "R1",
+      "source_file_count": 60,
+      "expanded_bytes": 319641,
+      "snapshot_id": "9c4cd89da9a93bf01fba10feaa74c124ab3cb1d0c68a6a1dc00f9d824ea1da5f",
+      "input_digest": "bdf0832a9de96838eda95011aa1f0a0e8f30d9de14269699ce5099b78fb969a2",
+      "source_sha256": "91bf63697b17e70566f44a2a3fc7bcd2bbc3ec2160429523032706268beb61c2",
+      "task_manifest_sha256": "c9faf3dc63acec1da749fe9da4965ccf727e5bbff261124ccf0f542e0454ac05"
+    },
+    {
+      "case_id": "RW-CAND-091",
+      "primary_class": "R1",
+      "source_file_count": 4,
+      "expanded_bytes": 47986,
+      "snapshot_id": "0c8eafaa10114eb10f1aedf697c61d17900a884c38f010aef7a9b92043e8e3b4",
+      "input_digest": "aa182d052b4967cbe093d494fb930bc09baf09982281570d3c649962e81e62b7",
+      "source_sha256": "a5710ec45d44553307e36fba6217d82aa2856342e00fb3da8aeab811cf3a2b66",
+      "task_manifest_sha256": "96d7b7986425bbb6eaa8b1197335baa8fb2c3e62b40d6b614765987489602593"
+    },
+    {
+      "case_id": "RW-CAND-094",
+      "primary_class": "R1",
+      "source_file_count": 27,
+      "expanded_bytes": 62029,
+      "snapshot_id": "c479b4487bf5b3a9fb4b698c9b20d7cc1ff5afb1e01bcdd42a5acf3303fa312e",
+      "input_digest": "a3b257b01d62b3a726f1b107c93d424c88fdb2fc1449c5fa583093137c4fee43",
+      "source_sha256": "8b060e8995eb3874084f0dda1fcb7859754c83390444725f6a8190dcb9fcad49",
+      "task_manifest_sha256": "7bfe887b6ae8ded13e38512a24e66e339e6f236682901865e37d9266779d74ad"
+    },
+    {
+      "case_id": "RW-CAND-095-AGGREGATE-VERIFIER-001",
+      "primary_class": "R1",
+      "source_file_count": 12,
+      "expanded_bytes": 10367,
+      "snapshot_id": "d921373f1c909c0d9f98e6a6f9867069a22cbfe506c60b3bba16a125b96424d1",
+      "input_digest": "778153992fdc9b466a42661d39625b84b636b2929503b1e108b0b6a1ddee95e7",
+      "source_sha256": "02c56302733aa3f6fbfeb60e24088dc9f858dcddb34717282e60eae4ac18e091",
+      "task_manifest_sha256": "593253c3075a697056c10188582b84432dcd948d50f29cde4bd321ac9b700c59"
+    },
+    {
+      "case_id": "RW-CAND-102",
+      "primary_class": "R1",
+      "source_file_count": 10,
+      "expanded_bytes": 27480,
+      "snapshot_id": "79837647d8fec81541645f274c3d33a16acb706736b45af5ee2043a7af9d7e95",
+      "input_digest": "7d93e815a1cdc71e3811d248428809e34f1c6bf26e04d2b6441a3558dbe00367",
+      "source_sha256": "b63ccdcbb1e70500fdd5878de3643abb15a8f69ec00f7f0cc74887829e6a6bc7",
+      "task_manifest_sha256": "83800403e453a741b24e5d9a517889e8abf4652ebefbc722d7c487792908f43f"
+    },
+    {
+      "case_id": "RW-CAND-103",
+      "primary_class": "R1",
+      "source_file_count": 13,
+      "expanded_bytes": 101973,
+      "snapshot_id": "4babc09c2e4672f724ee7a492191f072f68a07aab6a516509c906519f27422c9",
+      "input_digest": "5f182531e539ad941e1eebeff9e39796329fb407509ade7360af68e6ac7d1bb4",
+      "source_sha256": "62a63e39a6c54465a0b72fad026024da452e78838149587beefdd70269cb2065",
+      "task_manifest_sha256": "dcfe41dc6335e059fc2493ba0e75e4053d9bca07b8b1df0a65df4981bf00ca01"
+    },
+    {
+      "case_id": "RW-CAND-104",
+      "primary_class": "R1",
+      "source_file_count": 5,
+      "expanded_bytes": 31826,
+      "snapshot_id": "09b1058ab218651fe308ca6a86cb0e76d58f7d1d1a13b386afdf27e06d05bcdc",
+      "input_digest": "3f3b44dcfbf243c41d1f920b65e7333778f353400552e1275a75724d44470f82",
+      "source_sha256": "8686514ff3b0c93898c55297aa76b9f722e27eab4d14d23db08aa2b1d518c5b5",
+      "task_manifest_sha256": "f566e7eaf99166f0da6ae9953ea0d44fd1a049ea266b56e12d49ef9a6944ac82"
+    },
+    {
+      "case_id": "RW-CAND-106",
+      "primary_class": "R1",
+      "source_file_count": 57,
+      "expanded_bytes": 882227,
+      "snapshot_id": "22469372c1f4370a295f95d5481efc76477f61ae60dedb4d61627f88851fdeb5",
+      "input_digest": "6143d99e110f6c1979366dc688e8fb7685ddf099f6d64335e4c1f3e0f2caacf4",
+      "source_sha256": "2549385e651f966478376df528637f1526062b0791d72b92987e971071af9b65",
+      "task_manifest_sha256": "fa879ea9a77c622af58eb425c4fca679889b0938ab8245411ed70a40ae62b9e1"
+    },
+    {
+      "case_id": "RW-CAND-109",
+      "primary_class": "R1",
+      "source_file_count": 16,
+      "expanded_bytes": 131148,
+      "snapshot_id": "a60a832b30a99ded5c2c81d6951f1489c8107918c0f43d167e1f46ff1320b859",
+      "input_digest": "98a3859e2b84dae4c4bf6bc086908675607ff480ad5013f068174dd228b5361a",
+      "source_sha256": "ab2828201d4bbd6d9e2fdd7829e96a52cf736e510f5ecc992e7aac0d327794cf",
+      "task_manifest_sha256": "1a0305c39fff72aeb6df17a3a48cc0197098b3f8f406e2fa706dd40d7ce05eb4"
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "primary_class": "R1",
+      "source_file_count": 18,
+      "expanded_bytes": 26395,
+      "snapshot_id": "94c07a75d1e0e5f1eb03c8637c6a8431673111e51242bb8e50158aefb821f802",
+      "input_digest": "7929159cf99cb09b202dd1689f9b494efe3a9cacee0bcfbe435205556c95ff7c",
+      "source_sha256": "3568f7d916d2dae1d5b2c3fb68a76fd2958f67dfa65a2e053566c6baa218d051",
+      "task_manifest_sha256": "adc1f50be2738aa0f590faca61ae74ed261533a888ab5af6bc31136fe1bbb002"
+    },
+    {
+      "case_id": "RW-CAND-118",
+      "primary_class": "R1",
+      "source_file_count": 16,
+      "expanded_bytes": 46516,
+      "snapshot_id": "f9b5bf32b1e1bbf7a4351b52751f84eed759bf213ed211dc753929d9aa913bae",
+      "input_digest": "b6eedd2fd9afd7f11918c144cd9456f57fa914f94b75c6cef371fe6633291ad9",
+      "source_sha256": "f841c81fcb866185d1f8b96c5d64a38c371e52e0057184bfc474819a80eeba87",
+      "task_manifest_sha256": "2ff62dad82561273c9890e726a7a9c4aafc710ec4ebe43b872351bf9caf126ee"
+    },
+    {
+      "case_id": "RW-CAND-120",
+      "primary_class": "R1",
+      "source_file_count": 14,
+      "expanded_bytes": 25799,
+      "snapshot_id": "003d241f92f3dcd528a41a36766ff0ce102b43a8f1a06b09d6108f6c06298f88",
+      "input_digest": "de67c3aadae6619707964823525ab3e4bfcfcf6abbf9b100c05b655364ae4823",
+      "source_sha256": "acc330d3b03be84bff7c92e27f07ea3b776b4f6082a599099f7e05ce22336439",
+      "task_manifest_sha256": "72dae54b77c6c5036f1f34972dcb35a9fb2d1208dd3c2588f60d7d963ba22d06"
+    },
+    {
+      "case_id": "RW-CAND-127",
+      "primary_class": "R1",
+      "source_file_count": 13,
+      "expanded_bytes": 22933,
+      "snapshot_id": "56860e43d48044b7208964e2deb98e3457ba87ae45a507ed6ba6f34ab5eb2fcc",
+      "input_digest": "2e40dc51aa3f23d7846b1b9fa20afab5ac63f840e88acdfe639183f0417ea4ca",
+      "source_sha256": "99204e9a0346dfc392c8698a51cc09e63f44af978f7f0e6594ae377afba38eb1",
+      "task_manifest_sha256": "96564de3120a5d55311578260f834a0304fbc17a1f48fe6e0aad3ae66361d4c9"
+    },
+    {
+      "case_id": "RW-CAND-128",
+      "primary_class": "R1",
+      "source_file_count": 13,
+      "expanded_bytes": 44567,
+      "snapshot_id": "083ec8bd25d70899bddcbd379a3edd76bac212710f0a440a621d66ce2c49ecca",
+      "input_digest": "9a1099bc0e12f0cfbac564d6cf92a24ff07500b4e351d16a9f493856374cc0cc",
+      "source_sha256": "71456afa00e7d82f57dd86adb1b46ad638ddc56e27ff552e8c79941132bc23b9",
+      "task_manifest_sha256": "b32985749c837b2349df88451a41c589fb37768447cb99e3e8ed30956ade7ad3"
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "primary_class": "R1",
+      "source_file_count": 130,
+      "expanded_bytes": 746682,
+      "snapshot_id": "f44e75768af304334eff5fb7c49cc596b12218dbf83efdf95639691b167063f5",
+      "input_digest": "65190e26e2b2e7aedef7abd6a0f478dca0a9d8140a34b8d1cc9408621175359d",
+      "source_sha256": "4eb10ef4b81b9ddf338bde5bc983c64ab7f873003f40da31c04a14f54e369675",
+      "task_manifest_sha256": "65b35c865e56c72b6d7ece3309d3b6fe89255109d986325c3769c31d678fa2c8"
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "primary_class": "R1",
+      "source_file_count": 8,
+      "expanded_bytes": 12519,
+      "snapshot_id": "12a17b43260a954acb7d4dfd5e36aeeb66527d852b88b0dc6a10cdfb9a1e407c",
+      "input_digest": "d95e443ed42e95ef8f3496f3e0bd904c8e36454095ceca7813d994ea26def63d",
+      "source_sha256": "d271dd8d7fd5abe60d585fd98b2a9a91409c9aa19100f66813164d94aa160239",
+      "task_manifest_sha256": "7e9453097c61d61ffd0342110aa9f99956240c463c87c006b81ca0c20e066bff"
+    },
+    {
+      "case_id": "RW-CAND-137",
+      "primary_class": "R1",
+      "source_file_count": 9,
+      "expanded_bytes": 14458,
+      "snapshot_id": "f0a6bcd259f1f1ca54edee004526e82f64c59008d0f24e05556bbc2640c42743",
+      "input_digest": "5bbd1598c09cec6ecc07136dbf10b49c48cebe14444710d735045755ea805e0d",
+      "source_sha256": "968299e9a930c1084812fa74229ef139a04c898e5021bcede47b12420c335db8",
+      "task_manifest_sha256": "07996200d5a767e192800508709c1fcc83a13f2139dea9005dc699f8adbf2d1f"
+    },
+    {
+      "case_id": "RW-CAND-171",
+      "primary_class": "R1",
+      "source_file_count": 172,
+      "expanded_bytes": 5551201,
+      "snapshot_id": "50fa7b0525153ab85cf4d8357e056c524577387ea2376c6c1c277665426041e8",
+      "input_digest": "2380cd76a7ebb76eb2fffd327a28d209db66b1e9cbaf29089eac45ff7ba2d072",
+      "source_sha256": "2d79db2b4f6413253d813f278ed13557659b1dba17fc7ca0881341319397e442",
+      "task_manifest_sha256": "930a0fa00ff152e203cc8532ea71220c67ff7f55869a2b1a0941853aebe90a7d"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-HTTP-LOGGING-001",
+      "primary_class": "R1",
+      "source_file_count": 20,
+      "expanded_bytes": 40478,
+      "snapshot_id": "6278d36d235df9dc6c5fb86fa5fc7bc0ffba14a010939ade3aaf56af3ba4166f",
+      "input_digest": "5f9f578c87c8d9ef78d8eb82347f2fc9180f9bfd026e5ac95e806d9603928da1",
+      "source_sha256": "f4db9f91e45f2433f1caec3197ad424b397f8c0051f6cd53264cef88c0b52eff",
+      "task_manifest_sha256": "63adaa1054ba67819723898697a96108fc80e60a083cb0bdc676532c9b001bc4"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-RBAC-DISABLED-001",
+      "primary_class": "R1",
+      "source_file_count": 38,
+      "expanded_bytes": 706210,
+      "snapshot_id": "e40effa51329fa9a23ea9e811288801b5e97193df7d3a95ad91e46941d98fe05",
+      "input_digest": "571b67126cdc09b8f15a81333bc0a3b7d3524536f067332887bd092d098b235c",
+      "source_sha256": "6776460164ea300eaf98dea32471c9794dca95f50ae1231c5f1e0b801a228319",
+      "task_manifest_sha256": "0aceaa56b8703cbdde4ee444a09405430f7e5745b9d02e1b49839a581cf10307"
+    },
+    {
+      "case_id": "RW-HELM-PROM-KSM-EMPTY-HEADERS-001",
+      "primary_class": "R1",
+      "source_file_count": 24,
+      "expanded_bytes": 74949,
+      "snapshot_id": "f462a632627ca1ab04f57d2678aad709f4fa0876a2be5e092499b4dcad9851b6",
+      "input_digest": "6b8c44c7174f2476a4f218eff8ebcefa924375ecfa5a6916648dfb650d380f73",
+      "source_sha256": "76ad50ff66d11403c2ad062238ad846ef2aa4b4a8b3d3a9d8913e3622945b13d",
+      "task_manifest_sha256": "dcf66c08aa6d2d50b75d590e7efb862f3490bceadaea58331844a583078bd019"
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "primary_class": "R2",
+      "source_file_count": 334,
+      "expanded_bytes": 1533323,
+      "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+      "input_digest": "f6b578d68c32e9fd85a8a48cd9504d12fa516fb46011ffb11d446c0089283ae6",
+      "source_sha256": "32577cbb42230eb54736cd7158c59c0eef23e220e6165ce59e0806fc93937bf5",
+      "task_manifest_sha256": "617060121f039332a0af17a953de7ba0d171071da59610845ca73e035cc7b864"
+    },
+    {
+      "case_id": "R4-KEDA-8033",
+      "primary_class": "R2",
+      "source_file_count": 764,
+      "expanded_bytes": 8760520,
+      "snapshot_id": "eaec47d6108cd82e01944ebaeafdd293d17cdbb2786dd113107ffc8b1ff81b53",
+      "input_digest": "1c589f03c56e98fcc0965c6219cd0d624d707a0cdd10355782c5d1d50c0bf2a6",
+      "source_sha256": "76411b3120642bab7bcb8fb3f76138e76fbef9088fd79a213d33e642602368fc",
+      "task_manifest_sha256": "2ba1f1448ff1d35e33efcf4f05418dbe5cb9bc1f03152edc86f0e3747c028aef"
+    },
+    {
+      "case_id": "R4-KEDA-8227",
+      "primary_class": "R2",
+      "source_file_count": 787,
+      "expanded_bytes": 9400907,
+      "snapshot_id": "cc1d30c4f5ad51381be3c495d75ca59fa8a77e246f37c1022aeb1976c2b43de0",
+      "input_digest": "ebeabbfaf416b7e6df2a1c720a45737a437cb1665b781ef70a2d2fe39c9b5c9c",
+      "source_sha256": "e43dec8a84a1590a1d4b70c18f00ca77918fd52c53fcc371b62ef0298021cc14",
+      "task_manifest_sha256": "803aa17d5ed279f9412b8058982e47df627e88f91c4bef818c45b14a100cc7d0"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "primary_class": "R2",
+      "source_file_count": 181,
+      "expanded_bytes": 906061,
+      "snapshot_id": "a1b8e691476832976ef5ce4ee21e819b45f7bdffc8efc4ce2d5bc3b60698f5a8",
+      "input_digest": "1ac44b45c7190dd61220a6677bab866c7bf7a9cdabb725c7016d4b0bae65a722",
+      "source_sha256": "a6ca9e6a0ac9664a45c27290da3f0f5f02f3e9c8dd0071461a7d7b557575b4c9",
+      "task_manifest_sha256": "82fb0dfafe4c2b20a7cbb0eeaf53d10ea33e06184ff163e8b08efbf852e88010"
+    },
+    {
+      "case_id": "RW-ARGO-CD-23823",
+      "primary_class": "R2",
+      "source_file_count": 6282,
+      "expanded_bytes": 102682433,
+      "snapshot_id": "066ad8ddb429c959b24480f25e52471dd93168caf1dedf40c5e5cff1dc54a99d",
+      "input_digest": "a53f5b032eebd2da0cb227239b123544e1842fa455148170107f6483431fea9a",
+      "source_sha256": "279585c75849ec3f1fd28efeae8a57bb7d099f70b1ecbe459476f4b332157f9e",
+      "task_manifest_sha256": "7ca4346853f4b4bf0ff6888440e65b2aa726ceb32ba61c409fa6f3471df81a1e"
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "primary_class": "R2",
+      "source_file_count": 5185,
+      "expanded_bytes": 88737259,
+      "snapshot_id": "83e84c0a0595a3aaae7509d3125e640c39ea0498220c687b9595c67d90ca34b9",
+      "input_digest": "0a07e40760576804ef503a612905abb18883e0ee00567beabbac154a47db5e57",
+      "source_sha256": "804895d7bd54db581614bd48cea73b5430ddb2d542d42f565aca319faefd4356",
+      "task_manifest_sha256": "b2c6f1c638d7b7282492af397bbd589cb1820d5eb54f8ab771766aa909589d0e"
+    },
+    {
+      "case_id": "RW-ARGO-CD-29827",
+      "primary_class": "R2",
+      "source_file_count": 6025,
+      "expanded_bytes": 247526852,
+      "snapshot_id": "2555e99e2209d75a50efbc8f690fb5f28b71a32ae59df65cb8ac25edd4bf3fdc",
+      "input_digest": "a5c829ce8903851f4f8598bf9f8ac278b1c0a250e0570dcbc1f084f87916bf45",
+      "source_sha256": "59c9d4f01ddba913b211aeea06da888b03c43f1a9008d8ecc476f29a01cbfb87",
+      "task_manifest_sha256": "f0b77ec657f40dca1d5e3d09e0d7bf2494bcda5b94616c30442f174767c78d7b"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "primary_class": "R2",
+      "source_file_count": 1262,
+      "expanded_bytes": 15042378,
+      "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+      "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+      "source_sha256": "884a0d04adbc61933d0f5f80af9b2870050f3ae7bedfa2e032a38419de28776e",
+      "task_manifest_sha256": "641890f408e29eb490899dd38bef0c2a8f6edaf6d35595d181e38e0f5d1c716f"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9118",
+      "primary_class": "R2",
+      "source_file_count": 1262,
+      "expanded_bytes": 15045157,
+      "snapshot_id": "eac933df0452f07b5a957a78a80d347be477e7b4da487c22318ee1a930049d6e",
+      "input_digest": "5ff4e481808b295c79f4f6956de9876300e62e15e34f4d1f8a2ce2570f204ae2",
+      "source_sha256": "c8d21ff62412cf2fdd3dedc84a6d4790d22a65a11099474252391b2330ef9126",
+      "task_manifest_sha256": "f2413b98e27c859be2926818ffa5a48ebb6c2d687c665476c6ce3a24ff776483"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9128",
+      "primary_class": "R2",
+      "source_file_count": 1263,
+      "expanded_bytes": 15168123,
+      "snapshot_id": "e22d64489e1ee2bb14ebfd4f3c7fc272bdbc293559c31175c64f7f04834292d2",
+      "input_digest": "9700af36d9b92830bce521fd024679963e14777e25fd5888d98af9181bae0ec5",
+      "source_sha256": "46b3258401a6eee782c4becb7d079c9231567491977ad7c67f3554493978f5f8",
+      "task_manifest_sha256": "9b66a725443a9da3c7e6a31bdb1556853f46ae8b8731b054f68abf2d307d7c5f"
+    },
+    {
+      "case_id": "RW-CLUSTER-API-12341",
+      "primary_class": "R2",
+      "source_file_count": 2315,
+      "expanded_bytes": 30719625,
+      "snapshot_id": "9fd44fd287434f462709e600ed32200cfa79fb4a0d223e3374f8b20a37ef27bf",
+      "input_digest": "d0737aea13784094c134c37d188cb4e678a196169bdec4151468a983d3747d71",
+      "source_sha256": "ef209a31029ce7e39a5a3b8bd4674563199c36c6c95961320ba99af2f1bb2422",
+      "task_manifest_sha256": "52627834c2e1fc62c4917a51aadf5e658908c385125d7f56d1d790b41527d500"
+    },
+    {
+      "case_id": "RW-CLUSTER-API-13937",
+      "primary_class": "R2",
+      "source_file_count": 2368,
+      "expanded_bytes": 34709205,
+      "snapshot_id": "d933d4c75661037da7fdeccbb51bc883786618d99da5b0e8d4f793b276d6f645",
+      "input_digest": "605bf9b416a0f3ffbb3ee36ce94ea98c7298af49bc61940cf7645fbbe9e928e8",
+      "source_sha256": "0ec24e12ea921919668ab7a7e5229e9170fcac41fdb098beb5f9e82a1c5098a6",
+      "task_manifest_sha256": "af4ea8c93237ad825b8b47190254e3af06fba4ce94f8d4cc5f2dfd3022443354"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7733",
+      "primary_class": "R2",
+      "source_file_count": 948,
+      "expanded_bytes": 22724549,
+      "snapshot_id": "f38ad405f5294ea56d5b7e1f195e96c3ef90dfc92299171b1da2ffa980ec6d71",
+      "input_digest": "f268df96839c792747283538fd12c78a6c66659bc074f3b4d91b97f8d418df9e",
+      "source_sha256": "77166a5740ad55db0731bed8d76cc2603d2b532c237f8ffe779bf7b1a84bfd94",
+      "task_manifest_sha256": "7470056d69b77f791bf1462736a761a2ee9c0292ff09b3d6c105ff577cd33657"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7789",
+      "primary_class": "R2",
+      "source_file_count": 947,
+      "expanded_bytes": 22718041,
+      "snapshot_id": "e960b472ca637f89697af17bacd64674940be23eb34dbb4948b5c6de9a114935",
+      "input_digest": "c1dbbbdc0490df7dbd037092ebf03403fa6d054a53f409a4f85c9072208599b6",
+      "source_sha256": "c591be534197cc1120bda2e6659007c2cd63b2a7bf948bc19725787cceba224e",
+      "task_manifest_sha256": "6e7f874e7af9fb01f1c714a77627dca2bf8cb616b231a786554aa6b0bf49b692"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7860",
+      "primary_class": "R2",
+      "source_file_count": 952,
+      "expanded_bytes": 22788708,
+      "snapshot_id": "a1a6559ae4711de69dbc8bc246bf9fd732fdad580fe45aee43b7abfcf5f7c8fb",
+      "input_digest": "78cdc074d499f42acd3976141a0657934cb4fa8e65f605613200d387ec44e0ca",
+      "source_sha256": "ecf3671e961bfbc5d2d6291f912894a7e20861d292c512e36f64fc1c0776a343",
+      "task_manifest_sha256": "dda58e61723ad46bd0a38aa3ab536f11a2b923406c8e0b6220fb0f2b0a499c7b"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-RUNTIME-1088",
+      "primary_class": "R2",
+      "source_file_count": 202,
+      "expanded_bytes": 1444343,
+      "snapshot_id": "357d82672ad04e8580d0a3363ded73a79b1511975c2341af1df8208845b8bbe8",
+      "input_digest": "012d306075939620f56262086b9fe4890cde2888a7a5295912c8598f19c47a30",
+      "source_sha256": "15dbeaa9adc952411bd1252c96ade5f9e504baa20fd03b16d3336090d92fdbd0",
+      "task_manifest_sha256": "91ef8d5fc9d80f1d45843815fc4d21b0fe5d9eb4dbf6d68e089f39559363f88e"
+    },
+    {
+      "case_id": "RW-DAPR-10132",
+      "primary_class": "R2",
+      "source_file_count": 4247,
+      "expanded_bytes": 34159357,
+      "snapshot_id": "f67b0c38cba93a9fc2c1215556b88916c6e41c96d22a7b5d9328e4c4ecfd2450",
+      "input_digest": "37ccd3f65d27cd61cb8041743a2c0e3f799153ffe7ba650f445d0ac2db47b6fa",
+      "source_sha256": "07afcbf8ed9b9c9732b9f861a8e8b2defcb4831d1311d3d58c7b676abdcccb35",
+      "task_manifest_sha256": "e716e353b88a2148f45fbfa122361390548c4b2d398b40a656340fa2234298d0"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1411",
+      "primary_class": "R2",
+      "source_file_count": 290,
+      "expanded_bytes": 3128567,
+      "snapshot_id": "dd49723e72047985f1029a778b9d4c962139016aec7d2f679c7939a606915a1a",
+      "input_digest": "a10eaca3212c233698c00499beb3b1eec5a425d037b206057ff026c11307aadd",
+      "source_sha256": "d4e63b257089db64430e7c7233b192301248fc2984d36ea4806c543ca2dce2b1",
+      "task_manifest_sha256": "10c0b36ce028317e375d7ac0b86db9eaef90bfff8df0273f5e21dd5b98391c53"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1412",
+      "primary_class": "R2",
+      "source_file_count": 289,
+      "expanded_bytes": 3104289,
+      "snapshot_id": "26bab0b89a690114b16b85f74e275acea59ca5fd645781866f499527202dfdd9",
+      "input_digest": "d8c37bd987e6441e39643cb59e9b4aeb24f29908a4899b982a7dc658ba31d76e",
+      "source_sha256": "3354f9b6008737c6da68ed4346a7cdf9369a18d3ee0b6918a51fb0d34553ae17",
+      "task_manifest_sha256": "015066cdfa174de7b4b27545f18c10ede1fd9968d22eb27fc92467fbea1f9b89"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "primary_class": "R2",
+      "source_file_count": 332,
+      "expanded_bytes": 3290442,
+      "snapshot_id": "99320b653f4f3c40bc4a2d5eb397efbb2905cbb5240826a8ed000da4a3ae4cfa",
+      "input_digest": "4de3aae62fbf3cbdc96894b89ad62e6aa8baaf44b9669964c329cfd4be354f16",
+      "source_sha256": "40d9431438baa508ff92afde33e99ab575592d6ca88dd25c2a41cb8fe1316910",
+      "task_manifest_sha256": "bd9afa66b53653af466b5448acf2fc562961a52a587f733231b306bcf98c8240"
+    },
+    {
+      "case_id": "RW-IMAGE-REFLECTOR-824",
+      "primary_class": "R2",
+      "source_file_count": 144,
+      "expanded_bytes": 824656,
+      "snapshot_id": "c60f9421a3131165315c04efcb7668fcc5801f57952d3a49bedc14d6766f68a4",
+      "input_digest": "513bcea07ab06519886a8c12d175eefc4074e439868999e9c7c4264cd174d8a9",
+      "source_sha256": "5aa854f47df37366ccdebf3055458317b2d9bb3826263c2e6e5fa502b8622d81",
+      "task_manifest_sha256": "fbbb1ac0269e033b27a6372fcf96c295cbf509b2d6750a350f3a6be876ab30d6"
+    },
+    {
+      "case_id": "RW-KEDA-7777",
+      "primary_class": "R2",
+      "source_file_count": 17761,
+      "expanded_bytes": 189698468,
+      "snapshot_id": "271370101e97258b3e9b52dce8aa25e1340b6760fb600f7eff430a160400c41d",
+      "input_digest": "027a2dffe916a932356f67d8f8813d5e24fe5462e12d1a96564a28f25e309040",
+      "source_sha256": "71a9664ec33bac1535b7fcb2315b5055f9461a47ed30ccd0c845a5a8ce601214",
+      "task_manifest_sha256": "77913f19e2cf3634a8cf0c8811d4e33de9a34ab2d771e53a617d224d056c24c2"
+    },
+    {
+      "case_id": "RW-KEDA-8125",
+      "primary_class": "R2",
+      "source_file_count": 761,
+      "expanded_bytes": 8792696,
+      "snapshot_id": "18ed1c192741322b77f69d1074eff6f50691bd4ab1f2f667acf317c1e000561e",
+      "input_digest": "df02d525629080d311a68ddc259189018f6d53d8e4cf8ca05fb5924640252576",
+      "source_sha256": "2e5df908f958af0f91b88d0fcd14d4bfe3d2e512db9b853dbc03921f91733f83",
+      "task_manifest_sha256": "e4a743917575630d600fe94fd469a6f5623a1410cda56fd4cc824a9ac684fa98"
+    },
+    {
+      "case_id": "RW-KUSTOMIZE-CONTROLLER-1614",
+      "primary_class": "R2",
+      "source_file_count": 205,
+      "expanded_bytes": 1614222,
+      "snapshot_id": "c3a5e7fcefd449dfccd5ee3d3fdd3367fe2f0091ce5e51537518403ab80199e9",
+      "input_digest": "96b7fc1a0fc3852f364a211b17ace570f27337bbefdbbc3d0a124b0cbf53bef0",
+      "source_sha256": "d8e054cd5031f56b4c82cffad3e9a9e1317f8236a761d2dc09159fab195ccda3",
+      "task_manifest_sha256": "a7c587de04067e5c24f246ec61fce8480190f657dae7b74cfd069c29afdffb6b"
+    },
+    {
+      "case_id": "RW-KYVERNO-17395",
+      "primary_class": "R2",
+      "source_file_count": 9491,
+      "expanded_bytes": 39957617,
+      "snapshot_id": "6a28914353e4e9a40e7622ada6ae5e876411b5ae3f9fd516beb813ab9a851bd8",
+      "input_digest": "d7432b313b14b1341a26fc774c280c844b7d06dc31f91ea9b95061a08f381a3e",
+      "source_sha256": "c31e4969018a76c78cafbfd2d42bbd86b104421d59dfb3c9e0387441e3651b86",
+      "task_manifest_sha256": "71017bed262a6626a34b7ab3df196b253e1759d58c96cbe65630b838b34ebe8d"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8727",
+      "primary_class": "R2",
+      "source_file_count": 1631,
+      "expanded_bytes": 29828548,
+      "snapshot_id": "36aacc855366ea48dde450ab7773a21cbdc71dacb82776f31f065560ed2eda40",
+      "input_digest": "60462082ca069447f1c8c106b3e43b057a39c14df9021dc72400a6a31b07c8a2",
+      "source_sha256": "93d51659944da9c6a9d27c7e70fea1b2189ce468e46393d769e490709b83059f",
+      "task_manifest_sha256": "d0511bf49de416e5ac02d930ddc519e53bb854aec0dfeaf08845c9876ae940c0"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8739",
+      "primary_class": "R2",
+      "source_file_count": 1631,
+      "expanded_bytes": 29828548,
+      "snapshot_id": "36aacc855366ea48dde450ab7773a21cbdc71dacb82776f31f065560ed2eda40",
+      "input_digest": "5f8a4c08bca7d110cbeafa3d1663eb3bd86a3b40c6d8d25c7b65b8c9c6ed4138",
+      "source_sha256": "a98fc07cefbfafb0ae46f1323ed4a56f7367ee7e390faf5ad4d6b991926c9e5e",
+      "task_manifest_sha256": "9f5e3bd8ef32dd795285e94cfb422f22a513c1528096aba4c09c9f3f228c6b4f"
+    },
+    {
+      "case_id": "RW-SOURCE-CONTROLLER-1904",
+      "primary_class": "R2",
+      "source_file_count": 392,
+      "expanded_bytes": 3032622,
+      "snapshot_id": "53d59df1fb5f72bb272c4982b1a4129c165e2947fd671c38e706492cd33bb8bc",
+      "input_digest": "912a8856b31768186b883b03d4d16918e26d910894eb6f74e194743a142447c2",
+      "source_sha256": "5ba712973a002ce9c04089c4235ab968cd487bf30f9be088e8ee162885002922",
+      "task_manifest_sha256": "888f8678ee17a59db2073ae1f85aa6663d4c4cf61ead17722b2e3045f7554c07"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7523",
+      "primary_class": "R3",
+      "source_file_count": 925,
+      "expanded_bytes": 22632510,
+      "snapshot_id": "a097759c041329a62c8f135d1db56a540ea30c92ac943a19c790c5585acee188",
+      "input_digest": "832873ba505beb8946ca63cc27f91924ba845fbe61489ef28dce23fcf7b2a6e1",
+      "source_sha256": "8432237b084414098654d98a36ce3e4c56a7e257ac430db1b70326215df692ab",
+      "task_manifest_sha256": "a714f5b1642ee60d2c16beb4b9aec8c368a249208c58d3b06bc6ac47ef04d1f3"
+    },
+    {
+      "case_id": "R3-KUSTOMIZE-5940",
+      "primary_class": "R3",
+      "source_file_count": 1491,
+      "expanded_bytes": 12575618,
+      "snapshot_id": "d1fc99e8fae18872bb4de192c59a0e06a3aa8172092a5abc73620bb667d74aea",
+      "input_digest": "723db4c49a204be1f08d0883b16d1fcfe524975a0a5947d9ae581f0fdee78348",
+      "source_sha256": "df9f866cda99dfeca76bdc7592f22691b0e2f3b8d5d092b78b3425b681c33c7d",
+      "task_manifest_sha256": "cbe5f1f82f63c93c15ab5abecf505d0a8d0a23b7e72ec4b41ddbbafed96988d0"
+    },
+    {
+      "case_id": "R3-KUSTOMIZE-6237",
+      "primary_class": "R3",
+      "source_file_count": 1512,
+      "expanded_bytes": 9031685,
+      "snapshot_id": "d8669a7eb0a391fc6eed70f2cd08793381d2a5042dcf6fbae61a145dabecfc3a",
+      "input_digest": "903df237aad22288963b11fcbad93ab74e037be1b9735965c2086fd55da10882",
+      "source_sha256": "7ded39d1ad22d95dc30d50540c621905c01ff02f5e71e2e624f8da187d926ed0",
+      "task_manifest_sha256": "ab619b2d82a7d9fa4c689c322a62885401a54ddcb84b865dd5853537a1023b54"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "primary_class": "R3",
+      "source_file_count": 1951,
+      "expanded_bytes": 24254610,
+      "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "input_digest": "5e35ce63106f134d43e682afb42610724cf49f54661cae8d679fd4ffcd57b6a3",
+      "source_sha256": "2a5e761ae5f266f234ff9e3fe68ac1456017aa8e726ecfaef9560cdede645606",
+      "task_manifest_sha256": "d969ab8ed02c089b089c13471e28a168ff943c5e33b06c7a2d0000b55efb2741"
+    },
+    {
+      "case_id": "R3-KOMPOSE-1887",
+      "primary_class": "R3",
+      "source_file_count": 589,
+      "expanded_bytes": 21935336,
+      "snapshot_id": "196d042119e98b775bcd4c0d69fcc254775e8ce867c54abbcfe5903ef1f38043",
+      "input_digest": "c1b2e03b12dd91d910d8dcc3b53579d75466d4d66455482a88a0f3d8883974d7",
+      "source_sha256": "1111b2b938a6b87ef6f425a881748de1e00d9537bbba3bbde6c348264ed6854c",
+      "task_manifest_sha256": "44b6b6a8fd5a13ead0c5b66c40b472fc87b55b76e2757211f76f45a386844c63"
+    },
+    {
+      "case_id": "R3-HELM-9175",
+      "primary_class": "R3",
+      "source_file_count": 1391,
+      "expanded_bytes": 2775790,
+      "snapshot_id": "a4698d5a1bd5276337ac701cf7f6c1f7183ef7029ad4896fbde578ebeed47d96",
+      "input_digest": "c78a07ac61f0f440fc19bab033f608f029f3852a66bc8c2617f25efff66c4b8f",
+      "source_sha256": "0d99fdd86fecb3ab343377003b69566dcedc4338120499ef98291031619e217f",
+      "task_manifest_sha256": "e9e39bc5fa259db89ee411581555d87af5a74c9ab99acb8642d567ede12de6dc"
+    },
+    {
+      "case_id": "R3-KUBESPAWNER-654",
+      "primary_class": "R3",
+      "source_file_count": 42,
+      "expanded_bytes": 436153,
+      "snapshot_id": "fd310413b101e224f0bc4b3a55980f182760b0f5bd0e7fd2e3f35abbc6d6e12c",
+      "input_digest": "a0cfae11464e9ad127e49c611838b753846da3482df5887cd8ef15a6dc164e0b",
+      "source_sha256": "8b4a0a6b769c7d7939e0ed6ced2f8a8e7fe3bd5248535cc8bd58e85b735c5f76",
+      "task_manifest_sha256": "831a711c1b467d88f9ab8ff612758b89645eeffeed232dd071ac2bfb198b872a"
+    },
+    {
+      "case_id": "R3-PREFECT-7244",
+      "primary_class": "R3",
+      "source_file_count": 983,
+      "expanded_bytes": 17191843,
+      "snapshot_id": "9a0f84fafe6218caff529687f2d65e005a4049a3885f9240dad15ac78cd48a73",
+      "input_digest": "02df0b196e064be797bd50ecf89ac2d534a9a280684bda3d06c95b59f8d61b01",
+      "source_sha256": "0bc29e5f95a6e3c1cc8f84ad1ac6022b63fe38c20275ed37b0a0245bae6e3010",
+      "task_manifest_sha256": "7559e9d03916e94f2b448fc5db3264d27ad98a87fdded59943409f1e192daeca"
+    },
+    {
+      "case_id": "R3-YTT-550",
+      "primary_class": "R3",
+      "source_file_count": 1001,
+      "expanded_bytes": 4294417,
+      "snapshot_id": "5e698036f37f13820f2b564b59074a0f636dd5a69077e9925961d262bf668f5a",
+      "input_digest": "3233419571ea51bdf469c4bc0015d5b4448f4b8553a7af1c55b56facabb8f5cf",
+      "source_sha256": "ac795f12c26e30c25a7c9b2dfb7ba66d969061c6b3aec243311c168badd36380",
+      "task_manifest_sha256": "919bddf48d5b31c3f0a7f7d4f048162c1360021518a6034c4af158604a99ef8f"
+    },
+    {
+      "case_id": "R3-CONTROLLER-TOOLS-1270",
+      "primary_class": "R3",
+      "source_file_count": 291,
+      "expanded_bytes": 1950222,
+      "snapshot_id": "92e805f76e8c1a84dc5bb67dda01cab0d26c703c8fb61f8804d852a678348fa2",
+      "input_digest": "05958ac5c4fcb113535825bf88553365689b608382fa1ee874fc195ba0ef2efc",
+      "source_sha256": "8c614168824c58848f222ec0d720d6bafaeb2d4acf83671d09c492dfe3b4396b",
+      "task_manifest_sha256": "ad1aa419e29566e0d3a27009ce452dedf82bb0f8d8baee207aadb9bd77d0e03d"
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5708",
+      "primary_class": "R3",
+      "source_file_count": 1373,
+      "expanded_bytes": 9027393,
+      "snapshot_id": "039ef3682114ff2e8403916b344a09d044ee3772c03696c43d98804bbac03da4",
+      "input_digest": "436d0491de1ea2c9848be6c7ec5cf9d04d9e42babdefebfac91a479f355cfed4",
+      "source_sha256": "a3ccef62432705eb9fb86980b0b120c26fb9da00d9f0f08bc1ffe2ef645ed225",
+      "task_manifest_sha256": "9e0d4e8c109410ebba1131528c75df37a57d8ac8036d18010d7d37ba73713948"
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "primary_class": "R3",
+      "source_file_count": 14709,
+      "expanded_bytes": 201038785,
+      "snapshot_id": "9f530aa302e98f4a0499c79631382a924a0ee1871eb9dbd00515e946cb29a697",
+      "input_digest": "c633ddde8bf8ed172c4488d9261d7be5fb1e7d35f9720446866a4e196764982f",
+      "source_sha256": "ef69a8f3a7256074085c02ecfb4a2d8b5b86eb73992d3fb91d649baf72b47906",
+      "task_manifest_sha256": "89cfec48901a5466ef1df68fd59ec4427ae43fee3622b08005ac81ac8d9e46ca"
+    },
+    {
+      "case_id": "R3-FLUX-KUSTOMIZE-1693",
+      "primary_class": "R3",
+      "source_file_count": 210,
+      "expanded_bytes": 1663171,
+      "snapshot_id": "6616c711602d4c14125aa39efeab477649535b8fc4111aa3ca8e90d7704e58ce",
+      "input_digest": "c0fc8584ae027ac8fedff981fd7fe2fe0681db3cd365c769afa6df83d9912332",
+      "source_sha256": "b122253104a42f53885dd2a5f9d43c01acf8d6a117bf1a6650283880499f29b0",
+      "task_manifest_sha256": "50a1e21898a9eed1327d7e1a5bdbf3cd7d22d01bcfcc1a62302361b1ecfa8504"
+    },
+    {
+      "case_id": "R3-HELM-31979",
+      "primary_class": "R3",
+      "source_file_count": 1988,
+      "expanded_bytes": 3941213,
+      "snapshot_id": "6f907ee584512c9988d023e24636a125e85bd86f3c7a46f7819cc7ad7d05ea67",
+      "input_digest": "472087ab4b7ab02da92544ac7903a3d0d0c51e4cf3b9705174f201136530382a",
+      "source_sha256": "16d55b226ad0609afe924c93bd8788aa07b461f92f91b5e383c471445d56ca20",
+      "task_manifest_sha256": "76165ff2334364fe8da74e45819eb7b290bbfc845a044079b2d2b2a996247b54"
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9892",
+      "primary_class": "R3",
+      "source_file_count": 15505,
+      "expanded_bytes": 210018802,
+      "snapshot_id": "4debb8f8eca7bf82c8353a7a3df2bec23583ee96daab58c06d0dcc2b81fc9278",
+      "input_digest": "b8172dfdfbdb8d7823a34dfe377b51e281213b3e9b537cc4c685c2813165ac97",
+      "source_sha256": "f71916322bd968c2317d98e92c07f09360f2d8312da93655d434efd258d8da64",
+      "task_manifest_sha256": "d85ae1080ab8a0f4c038af3fffd604df95f5120ae48a300384be6847163b89e0"
+    },
+    {
+      "case_id": "R3-UPJET-593",
+      "primary_class": "R3",
+      "source_file_count": 339,
+      "expanded_bytes": 4093422,
+      "snapshot_id": "133b883c6d9371e5fac4169aeb78924415f78888e3108ff5dda0f36a0cd6eb49",
+      "input_digest": "d14687d6ee1d51b13cdf2fa7bd1035fd38a5f3c46bea1b449819c98d60b2f343",
+      "source_sha256": "248cb9d030a5df25c23ac603323a862ff2c3538cbb0dda671099cc0e59328cc8",
+      "task_manifest_sha256": "4a9a10433222190fc1d570aefddc9f006220327e6351b2d0f94341a32cc6eb1a"
+    },
+    {
+      "case_id": "R3-YTT-1000",
+      "primary_class": "R3",
+      "source_file_count": 1192,
+      "expanded_bytes": 4655594,
+      "snapshot_id": "4d9b67aa0ddeaf8d9339457381cd41b3fade809032ad95af01832f1aca1eb6a3",
+      "input_digest": "b2d1dcf456910f310ffb35735bf02d54ac5f6412ee1a356b8090f15ff96032ac",
+      "source_sha256": "9e9167b3eee5e4f251831a1554606ed9e82f1e6f89edd47078b6594f54284cfc",
+      "task_manifest_sha256": "7b32b37024515447700d13926c5a30120d52d046b5c1db03296b32309f9ca0c5"
+    },
+    {
+      "case_id": "R3-CDK8S-327",
+      "primary_class": "R3",
+      "source_file_count": 367,
+      "expanded_bytes": 27241869,
+      "snapshot_id": "53d3513ae6947464c0a9f744edf08af388cca0d4e4ec6cc29e88e9ece23588cc",
+      "input_digest": "abda153e0dfdb50331e67141b098a25bd5be4b4bb0fcd2a449e8f7b94fb058e1",
+      "source_sha256": "f0e10420154c75fd353956604032b254978dc45aeac7722baf3eba666614ff7e",
+      "task_manifest_sha256": "b6cbe7e4b4315ff1a8ec4401e2429027bfbf42843a898969e715ab3a25f4f125"
+    },
+    {
+      "case_id": "R3-PULUMI-KUBERNETES-4426",
+      "primary_class": "R3",
+      "source_file_count": 12886,
+      "expanded_bytes": 144366256,
+      "snapshot_id": "434f8e83d068d31e5a99a0be9241bed9168ebb81f8dfd2eddeef469cdbff0fdf",
+      "input_digest": "92be841a166cd01f33f9cef7674429d0fb222b213c6622d06a3c137f1d3810a7",
+      "source_sha256": "a2f8bb2fce1ae51f5b6549e4caf8c9c85de3b31898b32f2bb7fff3ece32a1b7a",
+      "task_manifest_sha256": "58e416ea37c45cdbcb378a6a5a1da2edb41936b474c508bac555b117ce2e0b98"
+    },
+    {
+      "case_id": "R3-KPT-4746",
+      "primary_class": "R3",
+      "source_file_count": 2083,
+      "expanded_bytes": 24755735,
+      "snapshot_id": "09dd9c81f39b12001e6b1cd07ce0be9e40f43939a164f8b4aa3e7abb24901605",
+      "input_digest": "4e03c95b17aa7c9a7dd19828509e7b432cd58257dd9680391f9ec10e2259628b",
+      "source_sha256": "9db137c9d22965c48af8f975cbe4e37dd27827d3f893b2306e6e3e45fe02823b",
+      "task_manifest_sha256": "044c7236fa1e01b67eadc978ff5f181caa54d27b65a2dcc64cd13b1ff62bf83a"
+    },
+    {
+      "case_id": "R3-GARDEN-6713",
+      "primary_class": "R3",
+      "source_file_count": 2966,
+      "expanded_bytes": 52437985,
+      "snapshot_id": "c1f06cab14085047f994838b7ea6605e4584bd3eea5283e281cc5116d8a8623a",
+      "input_digest": "a638232e1e032bf06d2a696079ee6071f7d76d6bae90e2cbebfa7e285d2aba69",
+      "source_sha256": "dd0a3cea64f4231eb30bdff5da8d7856de6fd26fee4046614f9a5fe4ef06da76",
+      "task_manifest_sha256": "938194450e05408f8098fa6a094e4394b8e6a737ed407e2fd507bc5a4da21f65"
+    },
+    {
+      "case_id": "R3-KUBEVELA-7041",
+      "primary_class": "R3",
+      "source_file_count": 2001,
+      "expanded_bytes": 17622993,
+      "snapshot_id": "fbf82c1c3a223d594f365345a7c43fd550b045f75b28e5385280704b1846f443",
+      "input_digest": "ff5f57bc77adad324b392ff6aaba48545d313fcd37ebb4b336b09683070df9a1",
+      "source_sha256": "303eb70c299cc12f7b4a622955d2c4b5ece6bd7c69fc611f07378cff26a9bfa3",
+      "task_manifest_sha256": "475d590ae7f7a17131ea410ad77a429b8855ed1f5ded477cb9d0257f4a8f2261"
+    },
+    {
+      "case_id": "R3-KOMPOSE-2124",
+      "primary_class": "R3",
+      "source_file_count": 605,
+      "expanded_bytes": 21889073,
+      "snapshot_id": "bcde59951fb3710d59a18bf71e388176709ab8e1db3b9a92648c5fb95d268e03",
+      "input_digest": "fed0d280bed8763d6d3cb352e0d58e618b123a4f90a7705e5fde675f92ecfbf2",
+      "source_sha256": "bfcc101e64a0597688f6c7400b71d41bba6d8b0f1a4a01dcabc08d2e0dd2d405",
+      "task_manifest_sha256": "6127e2e36a05725e7d274a2de7684f154c831c808258a6aad4e4492c472b2ccd"
+    },
+    {
+      "case_id": "R3-PULUMI-KUBERNETES-4293",
+      "primary_class": "R3",
+      "source_file_count": 12550,
+      "expanded_bytes": 139983836,
+      "snapshot_id": "10770e11848df4e59a32789d845b7fa92de542e65f6dc237b109c6995136c845",
+      "input_digest": "9dabae425f303c915b354b55714b889148bfef734c69c36875bda48370ba57a1",
+      "source_sha256": "d4c88d84ca5a9519a289915da95d2927511e88406f1e0869309be90e18847d9b",
+      "task_manifest_sha256": "273af8f742d557adaa1a47b0e2821d08ba7588b3168d690527416eae5840c926"
+    },
+    {
+      "case_id": "R3-KUBESPAWNER-451",
+      "primary_class": "R3",
+      "source_file_count": 43,
+      "expanded_bytes": 262652,
+      "snapshot_id": "f331c723e6911354681e606ea92f57cc143f71248269f85839b27624da25cf81",
+      "input_digest": "d1827bf862d072e01de1cbe96a40636d721444ea27d7dab39e66e681184a58b0",
+      "source_sha256": "51be0d9057a257a34b833c05e185c943fd545c3ad5aaf7416b71e408e2045846",
+      "task_manifest_sha256": "3ba167779b9b59f1e16827b815efc207186cdacb9fd5f42ea50df9cf343009a9"
+    },
+    {
+      "case_id": "R3-FLINK-OPERATOR-1152",
+      "primary_class": "R3",
+      "source_file_count": 964,
+      "expanded_bytes": 24951772,
+      "snapshot_id": "f6d1ce7caaf19e2badee2f78a199801879e8a7168e05bcd175a2d1f1d719bef1",
+      "input_digest": "cda5e366d1f4d64bc5e38eacdff5a330723be7fbcb872d2936c970d7fd740216",
+      "source_sha256": "4c1d204f6b9e2609b3a0c3c877918634a62e6a69a87aea03d0d5a5897ddd1d15",
+      "task_manifest_sha256": "def0cea499c5712dcc8c434e894559503fd2d0ac3740b3b9f1e3022c60c392b7"
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "primary_class": "R3",
+      "source_file_count": 1286,
+      "expanded_bytes": 9074153,
+      "snapshot_id": "28706ba06514b8a9f7d25f6e20ba685ecf672673e9f0d3f9cdfdaaba325a217a",
+      "input_digest": "aeb8c88b3d085a4a9b5f8136f85f6e24876eae8af2abc764a6d7884446bb9fae",
+      "source_sha256": "af9392e0682d280a6d169074fb9b7b58d6615a310b3c0b134019947cf27ad87d",
+      "task_manifest_sha256": "655e9f1d2564bee5c98b876443832d042672d8090a88b1c5133ba413452da27c"
+    },
+    {
+      "case_id": "R3-HELMFILE-2531",
+      "primary_class": "R3",
+      "source_file_count": 897,
+      "expanded_bytes": 6457354,
+      "snapshot_id": "a7fcea3e4ce382af2fd7c63a357a7c5b23fdec572d4a863aab6d80b81bf813ac",
+      "input_digest": "0d02f6e5627dc8563984e8661bc899c8c46adda0e1463926eae498287e53e952",
+      "source_sha256": "7e2fa14736d5ce8b7943e0538db6b1df3579f877bdcc9d55c8f7a49074de3940",
+      "task_manifest_sha256": "72aeafa4292b7f0f5cd872d22e7d96323c2b9b02a0a7c83b87e625b196a1484a"
+    },
+    {
+      "case_id": "R3-KUBEVELA-7383",
+      "primary_class": "R3",
+      "source_file_count": 2202,
+      "expanded_bytes": 21116947,
+      "snapshot_id": "6fc70a115bbb552c71f0a1234259a13357a281a2dbde812f4f25e4829e913daf",
+      "input_digest": "107f0422b8fa81f359b6a0b6bdbda8a33863b0a7146073c43d0575ec12f03b18",
+      "source_sha256": "dd4dd70d9a4de4250327ec8e550deeb0710586917ad2980295274691b5961fbf",
+      "task_manifest_sha256": "c649daf32e7c035390f131a63bf42aeab4c2946dc844df3891273c14d3de7758"
+    },
+    {
+      "case_id": "R4-CLUSTER-API-OPENSTACK-3393",
+      "primary_class": "R3",
+      "source_file_count": 672,
+      "expanded_bytes": 7596615,
+      "snapshot_id": "4d63b5f112da53e45e156461ffb88c263d84bde7ec9f6aef5bd9a985331a77f2",
+      "input_digest": "c79f6a2a9fd174f21fc55e4554429c29f78c3c926a8a8c98f173c922d8e7d65e",
+      "source_sha256": "ee7464bde03e167a8a1c3b74423119879834e1f482f8039629b88a3e8697af6a",
+      "task_manifest_sha256": "7a07f3af84322b3ddb937cad8c1e759d8c687f12faa467b528ab5d8942c68d36"
+    },
+    {
+      "case_id": "R4-OTEL-5594",
+      "primary_class": "R2",
+      "source_file_count": 1752,
+      "expanded_bytes": 11551511,
+      "snapshot_id": "33e55ae20b9c1a1a8e9b40df481aff5dd487f91027552ad05706fa4478c2b420",
+      "input_digest": "811bc51b12849b15415dba7356feaa3f6ccce526d4dbdfa000fd70723525901f",
+      "source_sha256": "cf3a461c2783e984f31a02ba31bd86d3d02f3e283a2967244dfd9a9578451794",
+      "task_manifest_sha256": "b19f2fc631408572bd20c0c41634f06e3624d7fff2824f6819584c61fcb873b2"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "primary_class": "R5",
+      "source_file_count": 549,
+      "expanded_bytes": 7258080,
+      "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "input_digest": "b0ec1187c6a3cc594ba5ccfd3b6c7b618b509e32ad4e6fbd5af08a422d967467",
+      "source_sha256": "50c36cd5d3b15c87e0ab22591306ab9e9ce29bd9fb4dde7207bc061897529182",
+      "task_manifest_sha256": "8e6a473dd35ef3d3b7b7be6b97387f9e4e1cb872e45e53064de3ec5577abe258"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-5040",
+      "primary_class": "R5",
+      "source_file_count": 601,
+      "expanded_bytes": 8504028,
+      "snapshot_id": "8f522483b62e03959f168bd8d01e139eee233ef13d48cc830690be9c7f11a241",
+      "input_digest": "48e40afbb6df7191e3f567faa33506b42a97a581090067977f49064a8b809ee8",
+      "source_sha256": "6484787e39e61458f3179fb1be8a75c7487c9d2c5dd2239f3ae8eecf096f7577",
+      "task_manifest_sha256": "d57a416efa6e16dedcb09db3216c0f5a798427fe7a031a4510d179f7427d201c"
+    },
+    {
+      "case_id": "RW-ALLOY-6818",
+      "primary_class": "R5",
+      "source_file_count": 4184,
+      "expanded_bytes": 39174652,
+      "snapshot_id": "d7904a61a04903909db530cf7a56ed1fa22fccc9498c621c1d9b6785b2eaa6dd",
+      "input_digest": "a4ff73cc8aaf08c2dbfe1a1f2be4d7baf5871bb093792d47b3e45d898e8bfd71",
+      "source_sha256": "36a79ad9bedd16b87003882fff8d18d4c533420f11db6f2fa634dc8aa3e159db",
+      "task_manifest_sha256": "05890086617d54d178997333d137039072aea8ec7af533dcf42b1dc81879b16f"
+    },
+    {
+      "case_id": "CRI-O-7954",
+      "primary_class": "R5",
+      "source_file_count": 8903,
+      "expanded_bytes": 91524978,
+      "snapshot_id": "f4f7d79ea0fbd6bba1502817cf4d6569a0bdb1ecacc4c3aabb32103307d82ea7",
+      "input_digest": "3835bc4309a6bc62cba9478154744ad1f9ffeab5d6681576f3700eda8a8ee468",
+      "source_sha256": "9de91356a94433aa5d9930b2fbbe5dc20a42c6fb2316432536a5338185d45ec2",
+      "task_manifest_sha256": "eacbc54eb7ab0f37454627225d000df0af12d5e7aa273cbb621ad0ef9394c2be"
+    },
+    {
+      "case_id": "RW-COREDNS-7562",
+      "primary_class": "R5",
+      "source_file_count": 880,
+      "expanded_bytes": 2788090,
+      "snapshot_id": "78584d471e927d2ea1c4b8c967a0b5bb7511f1dc12f83f3ea2ad0b47df85e72e",
+      "input_digest": "b1fa74cceab95a3d7123449bf0b100081507faea8711a63c36e7ebe81e1868fc",
+      "source_sha256": "449a0fd519135e8b96075332eabb0cb6a75f893f5adb5ab601113d209cc424f3",
+      "task_manifest_sha256": "bc79bb4d708cf9955f5c08c6c09122ad92a9d8a270b3b0a193c5ab566decd8b1"
+    },
+    {
+      "case_id": "RW-DAPR-10220",
+      "primary_class": "R5",
+      "source_file_count": 4335,
+      "expanded_bytes": 34765671,
+      "snapshot_id": "1350c00e6aa1aa45499fd9720a99ee8db4249437cba0f93d0e60a27c16720135",
+      "input_digest": "ef34b66a105cecf4fcccabf6d4cbd11d3081021854ed6146f1239c368b62ac32",
+      "source_sha256": "bd09fde66e4a5b90fab7374787e9b0e48682642f2a9f9e43b53c7ba174902ce8",
+      "task_manifest_sha256": "333747c9115d0ffecaa136bca440e9ebb4a52a682e555c67d1bc4a4ffc4bd8c8"
+    },
+    {
+      "case_id": "RW-DAPR-9173",
+      "primary_class": "R5",
+      "source_file_count": 2791,
+      "expanded_bytes": 17787953,
+      "snapshot_id": "fe0279f2ea9ad02331d657437a3bd4c2cd4cf21bbc47fa4cb3967d3720e6ac38",
+      "input_digest": "9e32e6d68f0e3111c5272adc88113bc6fb0f91d38662beba90964e6fb80c01d4",
+      "source_sha256": "5dd04505e82e1280c0ce3f22a98ab339b4e7271dc5b09ea6ed0ca506cfc83031",
+      "task_manifest_sha256": "067c4c90577fd2c90dfe7bb181bb2f9e530cf35c743eeb934da4c008574e6538"
+    },
+    {
+      "case_id": "RW-DAPR-9612",
+      "primary_class": "R5",
+      "source_file_count": 3593,
+      "expanded_bytes": 30215735,
+      "snapshot_id": "9b77c05e4edf39a9c5aab1ffdc2e3d63ef1af672c049c9312a6a2db456d56161",
+      "input_digest": "e9fe37569d88eeeca761ed0a9a4ec8a7744eb47bc8af2561cd62f3367a072ffb",
+      "source_sha256": "11be644a31018627ef8fd1da9ca72678106ff3030b462dd6f9faebaab9f6dca4",
+      "task_manifest_sha256": "795f17631771c68e9b9f313a782a8b8fcadec45efb0b708454bc9624f7ea1fb3"
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-10720",
+      "primary_class": "R5",
+      "source_file_count": 9920,
+      "expanded_bytes": 135572057,
+      "snapshot_id": "eafe5299bb9f35dd726f26e3be324ec593ab6a715047d6b1cc872a9fd8600704",
+      "input_digest": "2d0a1ebbf718a8bfa5c8603b219e7813874e24879b8ef5de1f3ccaa59ab4f559",
+      "source_sha256": "da06e4b30edadef939d4d90333e36a69f9f25c606c411b5065f62ff48ba6ad9e",
+      "task_manifest_sha256": "1da55edc89e6c88d9cacad402a9ea95d7bfc4a5827ca19c8b86560373ac2fa4b"
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-12495",
+      "primary_class": "R5",
+      "source_file_count": 12172,
+      "expanded_bytes": 173131200,
+      "snapshot_id": "6e0aba022779e4c79fa57ff13085f496d7b6098dd13ce4c16af8af42f1d9e7e3",
+      "input_digest": "3bfa04c812c48296669a356616512b6d450b8f801be9fa832a43fadcfe380957",
+      "source_sha256": "f410ab1b6b2bdeabbe875554ff062d921468d2044fa69103562d2fb7c459dcaf",
+      "task_manifest_sha256": "0d45d53f2ed0f7f3e0da823afaf45fb81da6bcb374d5aa245cf751549526af29"
+    },
+    {
+      "case_id": "RW-ISTIO-2944",
+      "primary_class": "R5",
+      "source_file_count": 1581,
+      "expanded_bytes": 16918937,
+      "snapshot_id": "cc5d33a8acecc9e2c2a5753a6d0740fe19bbe97488151498df89eff384c9b4b7",
+      "input_digest": "8c7dbb8a9ee9c686bf8dbfed1860ca58dee41bcd3373750907a210c169b05ca5",
+      "source_sha256": "87e3ebd5c963b97e7e7957f91db0e1184825e5e6c5c09e8c0ae882b7d202f9e8",
+      "task_manifest_sha256": "2b46df20b48d4db98981fcddcf0e88db2ca0ea9e2bb91be8dd1a9920de1e29df"
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2918",
+      "primary_class": "R5",
+      "source_file_count": 300,
+      "expanded_bytes": 1771254,
+      "snapshot_id": "8521adf8c834bbf5dfa2c9a073a65933a0122e4246b99e171aaeb7674f32f881",
+      "input_digest": "380e74609204acce18a3bf96e2048a55b78568f28f390ed1937d184dadb6504f",
+      "source_sha256": "440ed08c894935175f68a078023ba4bff506a2fd652c4f238e596fac33c63a77",
+      "task_manifest_sha256": "6e2032e53eb9f004d21406426b23883952e056569aaf4a2eb4e23c84fc76099f"
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2955",
+      "primary_class": "R5",
+      "source_file_count": 310,
+      "expanded_bytes": 1808158,
+      "snapshot_id": "0684adbc7e290ec78ad9cd7919bdb3189329871387a51f640c518d728c236e10",
+      "input_digest": "cc6b9d6b95af6841b0ffce424742fb0f130a428abdef6d4342365146cc3f0f0b",
+      "source_sha256": "102ffbced6316e3666d6743c50932e01b79c3bb5ccf5070b9d12089e07f9d145",
+      "task_manifest_sha256": "38a96bb60df9a9f769e34b578e2ee5292b26ffa1bba1a32c9f0e298c4c0e1c32"
+    },
+    {
+      "case_id": "RW-KYVERNO-17310",
+      "primary_class": "R5",
+      "source_file_count": 9475,
+      "expanded_bytes": 39848525,
+      "snapshot_id": "eadd8faafeb7cf5db8508f0cd3f326c0e5d72a77aec30c25c41250c3665c967c",
+      "input_digest": "0feb7b68061d272b4ec4cf2e4f5d14dd8eb8c96228b5884ac643868469a7b18b",
+      "source_sha256": "1661e96ac6436ff23ffeb139a8b25efc5160e5bdf06ad356bad97e0ffc59e8f0",
+      "task_manifest_sha256": "f20671480b7ee2299b74091ce0de367158b49ed984b54e255932518aa82ee87a"
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "primary_class": "R5",
+      "source_file_count": 567,
+      "expanded_bytes": 10704100,
+      "snapshot_id": "feba7c9a9dc1d79560603257c06c334b8b08fd06a30d8bd3d76bc3c6afdde769",
+      "input_digest": "c84ea2d8a10d7baf8c1557e94b1b81938089aea280dfe342c8db6c616b6f912d",
+      "source_sha256": "0a2f4775a91e1860f170d9384b28cd35fb4f936c02b440cd45a0fe72407c89df",
+      "task_manifest_sha256": "0c7d5e863fd9b8e64ed306c5d01d206e45b8dd57a3b2bc58422cd9b4053d2414"
+    },
+    {
+      "case_id": "RW-OPENCLAW-111511",
+      "primary_class": "R5",
+      "source_file_count": 27209,
+      "expanded_bytes": 337322305,
+      "snapshot_id": "966b06dc6c1cf17ba0113bf2f6ff97a4ded682bad65864e698526272ef1d75e8",
+      "input_digest": "e655bf365a98564357e77b2613f9313122ff467a7dfbd4764157ee05402e26e1",
+      "source_sha256": "de126a583b7fcab0ceea84f6db390373696b1316602c1b4c8c8b960b5704dd85",
+      "task_manifest_sha256": "07e10a7becf32a9a1cba76caae78667152726084a4141472270d871b2c1c8e89"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-10795",
+      "primary_class": "R5",
+      "source_file_count": 1665,
+      "expanded_bytes": 7945221,
+      "snapshot_id": "2933087b5d70a6e82f17133fad1adfa2a6392af604aac5a7ed5d68ea1e40693f",
+      "input_digest": "7e08a59d6574f5841ecdeb5ca82b2d990316648044ba2ecc8cae610376d93aed",
+      "source_sha256": "0e5f9217d338e1631aefa1eb00ae799fb98f90a36de0acffc5ab3d68ff4fffe4",
+      "task_manifest_sha256": "b88ee111e73e86a562042a56ae97396bb3eff778b5ebf0c6eb15968e4b09a802"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15572",
+      "primary_class": "R5",
+      "source_file_count": 2761,
+      "expanded_bytes": 11324265,
+      "snapshot_id": "e2b0a51a7a3fec1f3759ab757f46dee6a022bc35a6d6b00419e94e8399437ce1",
+      "input_digest": "56ec47e30d765edb6fad60a834e8402503ec3ed9e10b9af76455d8789a85088e",
+      "source_sha256": "d0a78385d15893f06ed6c17978d924087832d6f791f3405e45fea9077584851a",
+      "task_manifest_sha256": "14beb3bef6470454883b2afeceaf666a6511975f35a677be50c1ba5dd16f689f"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15868",
+      "primary_class": "R5",
+      "source_file_count": 2822,
+      "expanded_bytes": 11277968,
+      "snapshot_id": "4aff9f36ed2cc677ad8870ceb974d60a9ab2c3644065f080abe4e6ac74e2f5f9",
+      "input_digest": "09850aefea895059394eb00c90a40eb778baeb637b7f365f0fa266d426943d68",
+      "source_sha256": "72fea4fe8adf56bbf2bdcc7f2108a42bf029f728c75648a4dd5d4b389d5dc622",
+      "task_manifest_sha256": "f17897f46d2beee93cb00e1d38d2c46c8352f75a303edf11243f8bf6999e6911"
+    },
+    {
+      "case_id": "RW-OTEL-OPERATOR-2171",
+      "primary_class": "R5",
+      "source_file_count": 620,
+      "expanded_bytes": 3658831,
+      "snapshot_id": "1660256ee91bd6e2a1a122122adcd3ae7d1c91f02bbee2b1597db3bdbad4e0ce",
+      "input_digest": "05006cc49b53b88508493390ae1228157ef9727a9e22b086a2fb9fe760c1cec6",
+      "source_sha256": "227d14ae17a9f2d2f110d1a9e4e2095817913bde7e434f84d596597a865ca99f",
+      "task_manifest_sha256": "40bc83c6672b25dae94f249fac7ddc2397c94083918b1d2ddadecf6622c40b50"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-16340",
+      "primary_class": "R5",
+      "source_file_count": 1410,
+      "expanded_bytes": 24206975,
+      "snapshot_id": "c5e17a5a65b38dda947392b63e1ccec706196244c48bfc4cd2155ac4e8715fcb",
+      "input_digest": "ba9fec721b7aaa90d7d4f04bc03182e71bbcb326177dbbdc8a3cbb5ba74f7ad1",
+      "source_sha256": "469a670da936c065abd5d0f592b6818d4fbdb25d89f30c916fd5d8b7f3f936f3",
+      "task_manifest_sha256": "455fff8d641a084dad7a3c863531af89eff16b31dfc1005cd049d5bd3104f766"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-17807",
+      "primary_class": "R5",
+      "source_file_count": 1542,
+      "expanded_bytes": 26205988,
+      "snapshot_id": "262d7a5993404c82c5e68e3885a1af5bf9032239c152aacdf11c5b99bacf02c2",
+      "input_digest": "890758c6c36c37845f1ba827fb83b514f3a2ec9bb44fc305465a968fc3295e6d",
+      "source_sha256": "e44bcc1868d28d8159097b10cf177496847e49bd713ec7fb4b4ad6a77757b2fd",
+      "task_manifest_sha256": "288e8691d62f59261a144bbd3a9df1264d1f8d2b793e6c4448fbbf5bcb7ad0ab"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "primary_class": "R5",
+      "source_file_count": 1691,
+      "expanded_bytes": 29625512,
+      "snapshot_id": "f6d770793d534c02701a6e0543a6d0735e19ebde4e598f6e957c978a5a2204e4",
+      "input_digest": "faaee70c62153c51a96ad65adf20f606f3ae3860f30e1b70da600b8ae7ee5895",
+      "source_sha256": "80bafc81ab3d65d3e77165410e584cae7f11677dc2b9bd25f5a666d352ada2fc",
+      "task_manifest_sha256": "1c0abd65e872318af30bc7e9c1ac490604304fcc60d93f75bb32dd7216997bec"
+    },
+    {
+      "case_id": "RW-TEMPO-6435",
+      "primary_class": "R5",
+      "source_file_count": 14274,
+      "expanded_bytes": 157587389,
+      "snapshot_id": "3e5e6600bc1421636228ced17aed76fe4040f49c8e6b7b6f6670903974922de5",
+      "input_digest": "0affb565e1955790d5e66ab900cae0cc0cc5a319616539df41c9fa9d81686f97",
+      "source_sha256": "d0846283536f6e288a7d70df340029bfd2fa1d1d306ee0be11f0346474b98bb9",
+      "task_manifest_sha256": "657f89079f4b0ee38fa58d9764db0101b53d484ba4a9fb3326dc8b831294027f"
+    },
+    {
+      "case_id": "RW-TEMPO-6481",
+      "primary_class": "R5",
+      "source_file_count": 14275,
+      "expanded_bytes": 155086684,
+      "snapshot_id": "23fad9fd02ab444d214dc6ce72c1481fd52805c7f9ab2ca55c696499cbf8315a",
+      "input_digest": "9f13633122f32b6b28b351452d41979a770434c5ca551d9adb5ab2033cf5d427",
+      "source_sha256": "158daa98aa27c34d8f96ee048e7ec1c62bbd4b1b1f9265880c430ab6fda46f62",
+      "task_manifest_sha256": "fb88e2e4f8df2e50bec8cf20a5f42358b7eac75db201aa50c77fcabba61d9a08"
+    },
+    {
+      "case_id": "RW-TEMPO-6509",
+      "primary_class": "R5",
+      "source_file_count": 14267,
+      "expanded_bytes": 155128079,
+      "snapshot_id": "39b4b26c7ad729946d9bde9d9ad931df075fc2a35ace0aa105b11f31f20d3696",
+      "input_digest": "71fa8a5a227489b77687fadc1da55a9a80b3a333b253c333a1a0af3f40eb5642",
+      "source_sha256": "7e965d75752d6bb8f057f29fe00b0414f679648457637b9bd7c2c2581e604bbb",
+      "task_manifest_sha256": "180f14867f91efc185db778ca43d937d3e2321d525fae231004d6ab7555157c5"
+    },
+    {
+      "case_id": "RW-THANOS-6503",
+      "primary_class": "R5",
+      "source_file_count": 1061,
+      "expanded_bytes": 58258265,
+      "snapshot_id": "5d6db69c6516d78e8f42519be1caae4e991a82ab4ecfe073e9ff7c78f2a03828",
+      "input_digest": "67f9be6e65ca19dc322bd307682b2abbad8a81611023ffa9cf1c4611b5ae9ed8",
+      "source_sha256": "a9d87679785b4ead97513c862abebdb50f119aea583735ee019b802f67bac2ff",
+      "task_manifest_sha256": "4f17eaf11623d604cbc1e9868f0aadb2524b2a9fc989b1c769f9b432f70910f6"
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "primary_class": "R4",
+      "source_file_count": 127,
+      "expanded_bytes": 680814,
+      "snapshot_id": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+      "input_digest": "ec803df45cf09fe570dec3956e006145e531988c771cbd233a3ab3c4d78e638c",
+      "source_sha256": "4099dc909bea05ad42142b4b927529bd968933d2120b5c966ff99e556527627a",
+      "task_manifest_sha256": "0335444f98fbd473b5862fd293982ca81637132cffc2d8cff46918da1daa9951"
+    },
+    {
+      "case_id": "R4-ACK-S3-2965",
+      "primary_class": "R4",
+      "source_file_count": 128,
+      "expanded_bytes": 875236,
+      "snapshot_id": "694fe833223a5dac560ce69b5c17985c67f1f406f684c74b714b586053e5c145",
+      "input_digest": "1eb02792959b23aefebc1a9f008041ed9a1cb152aadd001ea2f33c18cbe5a2dd",
+      "source_sha256": "dd12956b24ac0cae00bea00c54fdb5147ddabfc301d100e0c0d3abdb001bd35c",
+      "task_manifest_sha256": "a60fe94eb7dffd7abf45dea393c48c4ecb855ddf5c8872df4fb3212372987af1"
+    },
+    {
+      "case_id": "R4-AWS-LBC-4847",
+      "primary_class": "R4",
+      "source_file_count": 1049,
+      "expanded_bytes": 13290338,
+      "snapshot_id": "dfb2f7c4730ab5fa1c44ba9121dbcaa17f17ca6ab61a81512d8861d1b1926409",
+      "input_digest": "aa8e28a6d9322259c0865a9fb91358c84db4ad5dcd369b47bfb002a24a11acf6",
+      "source_sha256": "9d6eddbd497e6a8635236047ee08d628417ba052a3651e05f7250661cb88050b",
+      "task_manifest_sha256": "1da6b04283354307555bb16cee9ac548af11c2dfd496e3d7aadbdfa4b153d764"
+    },
+    {
+      "case_id": "R4-AWS-LBC-4876",
+      "primary_class": "R4",
+      "source_file_count": 1037,
+      "expanded_bytes": 13204237,
+      "snapshot_id": "5428fd7aea31334022573726ba181c79f088837f42694ce23b9c4b0a0c5ed6a8",
+      "input_digest": "c818b13deb10f3e87b9f2b72bc58a8adb5d35333a5b3d5ad2ec343376e3b95d5",
+      "source_sha256": "4c59f7854ae06fdeaef27546a80e2c8dfe86020549ab24d806e0c1ed5328e0c5",
+      "task_manifest_sha256": "55079ea16292b67c2f41ee7332e071b6ee1cd3bb92ce87b77791ef9a39143643"
+    },
+    {
+      "case_id": "R4-CAPA-5111",
+      "primary_class": "R4",
+      "source_file_count": 1058,
+      "expanded_bytes": 14462290,
+      "snapshot_id": "d57990f2eba46bd67e1b78573ed176650cd3119795740a467df3649285a06861",
+      "input_digest": "8bf88fff20ed5743b7b24df21a4785aa1d0ff5ae1a08828c7a0b667ad0f8ba2b",
+      "source_sha256": "659b2f40dbb87d22a936ddfaa31abefeb4413e9dc7aac2bdf59615a2d42be290",
+      "task_manifest_sha256": "9fe02219160e5c0823e0dd2e4dce7efa138d44d76835bb6691f16ce9af8c6527"
+    },
+    {
+      "case_id": "R4-CERTMANAGER-9204",
+      "primary_class": "R4",
+      "source_file_count": 1263,
+      "expanded_bytes": 15110197,
+      "snapshot_id": "64dec6098477231ba69131b34071c37846ceab380489bf4f778905bec69c3b2b",
+      "input_digest": "7eb0acba8bb089387cf482934ba4b98616ffb4e5bf533f5dfaf8c31907bb9014",
+      "source_sha256": "e9d5aed7e14654baead1c3e199eb19a346bf31b65688d8a127664f4d1cfc40a7",
+      "task_manifest_sha256": "de03f4fb44f50b9564a645540be70e2d1a6b5808f4d70c8d5662885c40a2ffa9"
+    },
+    {
+      "case_id": "R4-CLUSTER-API-OPENSTACK-3319",
+      "primary_class": "R4",
+      "source_file_count": 668,
+      "expanded_bytes": 7557586,
+      "snapshot_id": "9f45f17a9ce8e933cd684a156b90ad64c4a58f14d75209d48a958ade8f263205",
+      "input_digest": "844484bd32446aa1c198f83051361147c31a0c8568420db4e455bccc89874a6c",
+      "source_sha256": "cff94aa7c5349f0253148c96b027a175e30b1fbe3262cf0d4b9e95b47e59412a",
+      "task_manifest_sha256": "6239baf1db9c898768e1d8143451ab2de418b4ba5f67e9d48d86cec6d051cf9d"
+    },
+    {
+      "case_id": "R4-EXTERNAL-DNS-6082",
+      "primary_class": "R4",
+      "source_file_count": 532,
+      "expanded_bytes": 5027050,
+      "snapshot_id": "abe06f4a5f5d593264c5f87f182130fcdc4adfe454f41f4136a31ac8d91e0cc3",
+      "input_digest": "10b73a9b9376c744f5017c82aa24bd7361722755cb7290a62a828f4c97234c79",
+      "source_sha256": "2e125cea7c47e48032a818c00827f69afde6456cbd5b3e6b91759378bbd5c2f1",
+      "task_manifest_sha256": "fe0e7a63739e91faa7094037e0f03f8dbe1b33a498bd9438d5e02e23a8bd21a2"
+    },
+    {
+      "case_id": "R4-EXTERNAL-DNS-6661",
+      "primary_class": "R4",
+      "source_file_count": 625,
+      "expanded_bytes": 6346502,
+      "snapshot_id": "488686a10a822924cbe55cabe5ed15d61d8f2ace492ac7e50e8472237c20a072",
+      "input_digest": "a02a9039af9ac443466b8987f7c5c068f4ebee98469504188261603c6b384427",
+      "source_sha256": "3a99a75a6797533fe709da41088c502e8a9c8eddbd974f36041574e3eb7aa557",
+      "task_manifest_sha256": "08d2e775044dd9c19c3cd9dc038cbe631ccd06f63bfdd6579d96b7b3bd44ad76"
+    },
+    {
+      "case_id": "R4-EXTERNAL-SECRETS-6821",
+      "primary_class": "R4",
+      "source_file_count": 1771,
+      "expanded_bytes": 37977059,
+      "snapshot_id": "4bee05db86a3895f077add31ff0212aeefc78e406658652c80a4a6d74981f179",
+      "input_digest": "aacbf1e8b22b1ad3023f3a540b18e9c7691fd9af20ad995778062894cc355fc3",
+      "source_sha256": "4f1f3c57a3537164fa09d389ba87c799b030f8dcb944e63d15433a475f613585",
+      "task_manifest_sha256": "0495c271ab86fca13e699118945adf7b8c217faa8434ef769d8001d349c344b0"
+    },
+    {
+      "case_id": "R4-EXTERNAL-SECRETS-6933",
+      "primary_class": "R4",
+      "source_file_count": 1805,
+      "expanded_bytes": 38168808,
+      "snapshot_id": "1ba082db84866c3746f6ffe7dccf4daf3cf821572d2a54a5902dd8f41f00c620",
+      "input_digest": "e97b60853f913cb83d0fa1b1ad42c951a9f38caa763603ec70364d112ef325c2",
+      "source_sha256": "12e5845f453b2996004faac206c09e6e6975b4f8c3db2ffe3e2dff45016888b8",
+      "task_manifest_sha256": "686f5339443c28c78260d4bc526d057dac635ac73266b555665876b4e70f2474"
+    },
+    {
+      "case_id": "R4-FLINK-OPERATOR-1168",
+      "primary_class": "R4",
+      "source_file_count": 963,
+      "expanded_bytes": 24914048,
+      "snapshot_id": "b08403dfa12a2e97707dade20d0e42d4a17ea91c266e400bbbab5188ba7b475c",
+      "input_digest": "42ff4c3226380c18474415cf2fd92ce34e98bac1ca069afb218484fc7b28c2b3",
+      "source_sha256": "77fa7e15085f6acb97b2c267e40e3a1020cf138da157a38008c744ca51f2e3c0",
+      "task_manifest_sha256": "c9946802b619eb59c0a2fd612b35f07463f5215fbd125950d77f671c818eb678"
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2214",
+      "primary_class": "R4",
+      "source_file_count": 2257,
+      "expanded_bytes": 28796728,
+      "snapshot_id": "5a08b6f017b072e3f7e648860b04ac52f46487418dbbecb04e3077b3d4180de3",
+      "input_digest": "b5e465d828afd086f535fe42af5a57eec7f244707e70dbb93923ea9a1642fc77",
+      "source_sha256": "c7b3a18919a45a9add967a7abe2756bc68704e13f8ca48027fdedab751d2ea18",
+      "task_manifest_sha256": "26101d3ca0ba674ba72d9c8d5cd7d0e38349c6153d51c0495de9d1be3ee9571d"
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2339",
+      "primary_class": "R4",
+      "source_file_count": 2273,
+      "expanded_bytes": 29207582,
+      "snapshot_id": "17d18b3b3fad868e5c6c8f3eac2ba09ff48e6e288ecf9268a4c1ca5876f38d30",
+      "input_digest": "d6ddbc839a0baa593b05793b169f50298283d0d345d890dc0f0d0581ae561e78",
+      "source_sha256": "78118551cd2567d86b908a206069ad67b74d8f8b9ac5c07e5367fc50fe75e19c",
+      "task_manifest_sha256": "0667038baa42b11bd4453e425e28339d7a099db775fde8918e87b17a966bd6f7"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-138",
+      "primary_class": "R4",
+      "source_file_count": 93,
+      "expanded_bytes": 586050,
+      "snapshot_id": "a36b549e38646c5b739bab9edda3347702ebbac010ee32295e0c77950caf597a",
+      "input_digest": "adc1ee97b9374bbb7a44e0365b7e3234754b55474e6d8f454cf777310aac64fc",
+      "source_sha256": "cbc00996b4235cc7dd72dec27e580424362c3f7e34fb2ae3dbb9211a30def143",
+      "task_manifest_sha256": "7b3a867344ff16ba50f6d3d3bd06d720dddfb5e98545b4fe7dc735ec40279779"
+    },
+    {
+      "case_id": "R4-PROVIDER-HTTP-153",
+      "primary_class": "R4",
+      "source_file_count": 230,
+      "expanded_bytes": 1127836,
+      "snapshot_id": "e3aac1306f13872f2bdd73c3a84ac86e77ecfd7b1dd9d5e88a24ab5285b5c87d",
+      "input_digest": "617f5bd41d8977f82a6a5c9df99bd5b64aa860220ea55a6bfd714f2e57a08cdf",
+      "source_sha256": "1235a35ab011098d657be5a6455fd24d2c8b257aa7d29998e06a17478b5d4c24",
+      "task_manifest_sha256": "24207adced9d9f669d553ee850e2fa088711a0b2ecc61c87fe09d48e8962cbf7"
+    },
+    {
+      "case_id": "R4-PROVIDER-SQL-240-421",
+      "primary_class": "R4",
+      "source_file_count": 298,
+      "expanded_bytes": 2163952,
+      "snapshot_id": "627ee099b71e1987f24ac85787b55bc451e7ba0c477869017a2474303af1cee4",
+      "input_digest": "0543637c905a8aa31e2b063b1db8900250cbfe1892bdebfaf803b0c4a0e232b6",
+      "source_sha256": "8b64a8affe570deb9b9e2fba05826f37f747fc7cc71d4d5ae47c503901fe314e",
+      "task_manifest_sha256": "3036d7245a307495cb3d8df703dcbfd0effcf2561a1fbf7086f4d8e20c17c7aa"
+    },
+    {
+      "case_id": "R4-PROVIDER-SQL-459",
+      "primary_class": "R4",
+      "source_file_count": 304,
+      "expanded_bytes": 2232794,
+      "snapshot_id": "922fa993297e06b385ad37d0eda09f93b305fd33c89ac9bfb019c9327246253a",
+      "input_digest": "f2345c94ae2cde5c51472eb3192f187e0c1b3b5ccf8999604b388090940be4bb",
+      "source_sha256": "773b4ec2e42ed2854557423387de180185cead55c187cc0ffc54cd950aa82ca9",
+      "task_manifest_sha256": "3abcfbee02cd854e8e2018254d90ad768d29f1a71bde0988dff622fe0b50104c"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AWS-2117",
+      "primary_class": "R4",
+      "source_file_count": 17012,
+      "expanded_bytes": 262354241,
+      "snapshot_id": "da89b3d23dcfbe5c1a8b6a5e9b05d4adc87300f5931668294cc00fe2f323257f",
+      "input_digest": "44d632a11e55e3c4adbfbe6e5bb19f4970f079f42f89ef67ca4e16c873432894",
+      "source_sha256": "5052f655f7d589f09728a8932a7807a48855af3d73b27a5cd0f76feede80aed2",
+      "task_manifest_sha256": "038c3d6707cdb508507a4d33205e19af36aae0817f89c5a1e4a4995d6a4915ed"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AWS-2182",
+      "primary_class": "R4",
+      "source_file_count": 17156,
+      "expanded_bytes": 274854162,
+      "snapshot_id": "ffab92130d5a2b8468320d32ccab3e53461818a027b6674853ad689ba8472805",
+      "input_digest": "2e070d1b2554eee54c0f8b0399a4eeceec2161fe1574cfabeb2b79a92404fc1e",
+      "source_sha256": "927d36cd26de20a12b7b9cf2d6df5066aaad9c93940098ace173284419da9ebb",
+      "task_manifest_sha256": "95d42c023d8c7060347a3ff00236c90e672eb913ae76247c75ce71924d160a5f"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AZURE-1247",
+      "primary_class": "R4",
+      "source_file_count": 12009,
+      "expanded_bytes": 201072951,
+      "snapshot_id": "5308460746a31708a759f40c068812da7b96e5349f80669aac1c8c2319dbfe9f",
+      "input_digest": "c41ce71afe80d25bb94d4d4551d66ab25331818c2e858d1dfa5d90bc8e14fdec",
+      "source_sha256": "069639ae51ba7e2457032da23bb244e37c3f26af281a4cf94e23880d095fd8fb",
+      "task_manifest_sha256": "55787051b1362102b5d88f0742356c18016e45dfa097bd041780126afe0c90cb"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AZURE-1260",
+      "primary_class": "R4",
+      "source_file_count": 12021,
+      "expanded_bytes": 201150475,
+      "snapshot_id": "f7f6775909b328d23680416498cf6823bb38cc10bbea0ebb216793d169fa9503",
+      "input_digest": "050f7864487b8d7cb8d1ea516be8d8d10208c434a530ecdad3ac17f39d5f10e1",
+      "source_sha256": "e7fd2b11eec3a9220b4ea5ceaf67063ec675ed7cd25f67a5b030b320ec89d8db",
+      "task_manifest_sha256": "71de3b396d62227e060d898039ec2e01d2b67bf7dc6766f5eb804a81b1844178"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-GCP-1015",
+      "primary_class": "R4",
+      "source_file_count": 6534,
+      "expanded_bytes": 142810974,
+      "snapshot_id": "f6aa713ce7bd01e12a5d285c3fc80971cd09b866b10237561da443a4ff7ef9d8",
+      "input_digest": "5737d33e7f7f9de38a387186984e5e8aaaa2726b01018f280d5ed16ceb3b1ccf",
+      "source_sha256": "a65947fa357d998c2d01a1e159c35bed695e8372e1bf3ebdb543762babfe6051",
+      "task_manifest_sha256": "29656fad7f80463f71e8d45c416b47ee627c54e7ebe77345094ceadda4cd9788"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-GCP-875",
+      "primary_class": "R4",
+      "source_file_count": 6463,
+      "expanded_bytes": 141425936,
+      "snapshot_id": "d0cce5b67c9e1e8ab52dc8ea57d1f3d6cce682b718011393837c28f8af316293",
+      "input_digest": "5f4c1ec0b15fdac3e593d7394f7e34a15df6ec8406f020bd195f38629a9ef62b",
+      "source_sha256": "7b4c6fb867811ce71c03f81885d55809e5ef29f21fd9597052be854cf5d658b1",
+      "task_manifest_sha256": "5e52512fde575bd0021076ac7a9a93369482e2df646b885e0aba08e7a8eac3e7"
+    },
+    {
+      "case_id": "R4-UPJET-564",
+      "primary_class": "R4",
+      "source_file_count": 228,
+      "expanded_bytes": 2731304,
+      "snapshot_id": "9ce4098741b55603b9f85fd955b20523f59f7feef870d74ad13b45941c68dd5f",
+      "input_digest": "6cb7555323e0fa306a5f82e73c5ece1c696c76d33b4ef074978499c0a0bbc1fa",
+      "source_sha256": "33dc462c57e253b23e77a32106898e8be7727e73c2ea8d03ba8f39c24c24f563",
+      "task_manifest_sha256": "60cb9914611fc6b36a7262fa996b37b8a3ebeb7f88cf9efca1fe745a911f655f"
+    },
+    {
+      "case_id": "R4-UPJET-640",
+      "primary_class": "R4",
+      "source_file_count": 339,
+      "expanded_bytes": 4078561,
+      "snapshot_id": "68452ddb1a1c62b6ba9e683a5f499023290edbed882ecd03cff025fe1d7f0d08",
+      "input_digest": "d6805e10362c3d620c52a78f21ac55735e28ae708493f374678d073285696069",
+      "source_sha256": "d0a19da58ee5d5825249f88065bfd734dfcf81f14b1fd18d4d7517058373f231",
+      "task_manifest_sha256": "544569ae9ed514b7e9ea623c6db8a15ac2a954e8d064a20435cf7bf01ce7bb9d"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-PROVIDER-AWS-2256",
+      "primary_class": "R4",
+      "source_file_count": 2272,
+      "expanded_bytes": 29060137,
+      "snapshot_id": "b216b43dcccfe0c630203ade5872ba73586d576b5b577157a003abf4b01066f7",
+      "input_digest": "3feef508f689aa16e25b03b8788d67845cff8a2a44cfc44cb08475205d422768",
+      "source_sha256": "f2cbc65807d821b21ad091b18635cf385af6e7278b336db6fe966315ba303045",
+      "task_manifest_sha256": "a6eaf6c3d0bf77feeb0351cb6e20dc037825a3c946fe072bd2f667957068643e"
+    },
+    {
+      "case_id": "RW-PROVIDER-AWS-2343",
+      "primary_class": "R4",
+      "source_file_count": 2275,
+      "expanded_bytes": 29214863,
+      "snapshot_id": "aed59f492e01f1fccb60ee3e41483f4f792e961fe3875588079ea144cf12e258",
+      "input_digest": "24b8c20c3e18392f7b57ea0cc7ba3d8bfd64db232174f475d28112dd075088e2",
+      "source_sha256": "fdd56a867399eed3cf5a31ade3453b9c9c8690c35f866b5845ec7cf4b329c768",
+      "task_manifest_sha256": "e862374f86f270b7cfdbe1bf451c6f55634f647b4c6831bf3477d4601072d932"
+    },
+    {
+      "case_id": "R4-UPJET-AWS-2137",
+      "primary_class": "R4",
+      "source_file_count": 19,
+      "expanded_bytes": 548442,
+      "snapshot_id": "f28456564547a54182ebe4790a7d10272355ec1570d46f7ba5445f27ff4e27ee",
+      "input_digest": "f6c18f4f2e90f49e171c252d8491daa5a0419f33d55ae5bc371aa6e53517392a",
+      "source_sha256": "55f0c8a78a75d732446dfd505b507889a052c2d03276b99b03393e8a81b304f0",
+      "task_manifest_sha256": "12a3df4597b51d5defc436d4bbd2ccd49e58f5a52d726a1198b8fdfa6e02f1a3"
+    },
+    {
+      "case_id": "R4-UPJET-GCP-1027",
+      "primary_class": "R4",
+      "source_file_count": 14,
+      "expanded_bytes": 401807,
+      "snapshot_id": "c2ece9b338329383841a679e2dc33c88b3116b85133d4eac3a05b5b08507f5bd",
+      "input_digest": "b6048d02ad15ffdafb4ceac69dde040a3c606bf2ed5b6e213f427834a44b7522",
+      "source_sha256": "60af4f8fc38f2996e346966c829f22c4bf437dd0c9f6e7618bab973e089db880",
+      "task_manifest_sha256": "4b5b773cdab88bda2a07ab120f0523cdd457374ae6ddee5ce1c0e4ea4eda96d3"
+    },
+    {
+      "case_id": "RW-HAPROXY-0D540394",
+      "primary_class": "R5",
+      "source_file_count": 1482,
+      "expanded_bytes": 22816805,
+      "snapshot_id": "7ae864e89fd57f798080797409420ef46d142f221449c4e698d0d73f7cd4df57",
+      "input_digest": "367cf0f6d4460bfae7d99398cc538d05dee2bc8edb5d0add42b0d43ac2485ea7",
+      "source_sha256": "9653e4e0bab83f57e46c33bb711b66f86fcb0fc4b6fd915d4ad28f4b3ac22142",
+      "task_manifest_sha256": "0acf43b53fe1e331e466589a5dee52155cef64e53ce0236ffa7cc5f53e72314a"
+    },
+    {
+      "case_id": "RW-ARGO-ROLLOUTS-4604",
+      "primary_class": "R2",
+      "source_file_count": 984,
+      "expanded_bytes": 21563942,
+      "snapshot_id": "2d860debc52ef20e6de2777e3961abad2e9e2dd82d167bfd10caebc8345f01a4",
+      "input_digest": "0a4314d3009125c803e7760f1ffde374a172b48c2448bd4c74df56c9170fa066",
+      "source_sha256": "7a92a4650a7c1dfcbbca51cd0b9c2153757a503b0de141b0c7b6747cbbf552c9",
+      "task_manifest_sha256": "ae5cc499864ec01bd3cd632de0fa12e74a6330d8937b3782e13b5758cd5a85cf"
+    },
+    {
+      "case_id": "RW-HAPROXY-REDIRECT-QS-001",
+      "primary_class": "R5",
+      "source_file_count": 1354,
+      "expanded_bytes": 20265811,
+      "snapshot_id": "b20015453a7e0284bcc5d90edb4047ef804a4b7946363030f1d7f7831e2853d1",
+      "input_digest": "373cbe5cea6730bdd55786a2662e0b832460d97802d3da9758f3b0f937c9c2ae",
+      "source_sha256": "03c2f39ca9ec92bcfe0408990a0ae1b995fe92fd94213533b6482a2794201dc5",
+      "task_manifest_sha256": "a8700cc469fd1d058257825c6feed5044c4a9075e96d62916702e453c07527ba"
+    },
+    {
+      "case_id": "RW-HAPROXY-HASH-NUMERIC-001",
+      "primary_class": "R5",
+      "source_file_count": 1485,
+      "expanded_bytes": 21808905,
+      "snapshot_id": "beb04451b950b03c403a97975ba2c85c7451f1ccbdebe886228dc8d8d08f834b",
+      "input_digest": "14d37d6a1e1cb035b780be2aef2bc6bbd2eb3b6966383fab3a2d2be516b21174",
+      "source_sha256": "b36ce7c52a86ce534ee8832c0622dec19700cdd7fa03b1fc3d3278743e34d3f4",
+      "task_manifest_sha256": "7bdc424ddd608fcbb0ca9a127f1de2ac6cfba83e9a662b2db3c709d033ebe857"
+    }
+  ],
+  "model_calls": 0,
+  "private_materials_loaded": false,
+  "source_extracted": false,
+  "independent_evaluators_checked": false,
+  "formal_ready": false
+}

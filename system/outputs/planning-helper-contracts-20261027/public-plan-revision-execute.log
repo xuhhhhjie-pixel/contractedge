@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/public_plan_revision_component.py", line 150, in <module>
+    prepare() if a.action=='prepare' else execute()
+  File "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/public_plan_revision_component.py", line 83, in execute
+    r=read(ROOT/'registration.json');config=read(CONFIG);trace,method,packet,request,payload=inputs()
+  File "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/public_plan_revision_component.py", line 29, in <lambda>
+    read=lambda p:json.loads(Path(p).read_text())
+  File "/usr/lib/python3.10/pathlib.py", line 1134, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.10/pathlib.py", line 1119, in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+FileNotFoundError: [Errno 2] No such file or directory: '/home/xhj/contractedge-public-plan-revision-v060-20261027/registration.json'

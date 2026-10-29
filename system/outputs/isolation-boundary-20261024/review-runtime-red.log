@@ -1,0 +1,120 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+___ test_installed_package_bytes_are_part_of_registered_runtime[example.py] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-400/test_installed_package_bytes_a0')
+package_file = 'example.py'
+
+    @pytest.mark.parametrize('package_file',['example.py','native.so','example.pyc','data.json'])
+    def test_installed_package_bytes_are_part_of_registered_runtime(tmp_path,package_file):
+        from types import SimpleNamespace
+        isolated=load();venv=tmp_path/'venv';(venv/'bin').mkdir(parents=True)
+        python=venv/'bin/python';python.write_bytes(b'pinned interpreter')
+        (venv/'pyvenv.cfg').write_text('home = /usr/bin\n')
+        site=venv/'lib/python3.10/site-packages';site.mkdir(parents=True)
+        metadata=site/'example-1.dist-info/METADATA';metadata.parent.mkdir();metadata.write_text('Version: 1\n')
+        executable=site/package_file;executable.write_bytes(b'original installed bytes')
+        method=tmp_path/'method';(method/'src').mkdir(parents=True)
+        config=tmp_path/'config.json';config.write_text('{}')
+        args=SimpleNamespace(method_root=str(method),benchmark_root=str(tmp_path/'benchmark'),config=str(config),case='CASE',
+            python=str(python),dependency_root=str(tmp_path/'deps'),seed=None,runtime_admission=None,
+            output=str(tmp_path/'results/CASE'),attempt_id='runtime-drift')
+        initial=isolated.execution_identity(args)
+        registration=tmp_path/'registration.json';registration.write_text(json.dumps({**initial,
+            'role':'ISOLATED_DEVELOPMENT_VALIDATION','allow_paid':True,'counts_in_46_slot_panel':False}))
+        executable.write_bytes(b'changed installed bytes')
+        assert metadata.read_text()=='Version: 1\n'
+>       with pytest.raises(ValueError):isolated.check_registration(registration,isolated.execution_identity(args))
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_isolated_coordinator.py:226: Failed
+____ test_installed_package_bytes_are_part_of_registered_runtime[native.so] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-400/test_installed_package_bytes_a1')
+package_file = 'native.so'
+
+    @pytest.mark.parametrize('package_file',['example.py','native.so','example.pyc','data.json'])
+    def test_installed_package_bytes_are_part_of_registered_runtime(tmp_path,package_file):
+        from types import SimpleNamespace
+        isolated=load();venv=tmp_path/'venv';(venv/'bin').mkdir(parents=True)
+        python=venv/'bin/python';python.write_bytes(b'pinned interpreter')
+        (venv/'pyvenv.cfg').write_text('home = /usr/bin\n')
+        site=venv/'lib/python3.10/site-packages';site.mkdir(parents=True)
+        metadata=site/'example-1.dist-info/METADATA';metadata.parent.mkdir();metadata.write_text('Version: 1\n')
+        executable=site/package_file;executable.write_bytes(b'original installed bytes')
+        method=tmp_path/'method';(method/'src').mkdir(parents=True)
+        config=tmp_path/'config.json';config.write_text('{}')
+        args=SimpleNamespace(method_root=str(method),benchmark_root=str(tmp_path/'benchmark'),config=str(config),case='CASE',
+            python=str(python),dependency_root=str(tmp_path/'deps'),seed=None,runtime_admission=None,
+            output=str(tmp_path/'results/CASE'),attempt_id='runtime-drift')
+        initial=isolated.execution_identity(args)
+        registration=tmp_path/'registration.json';registration.write_text(json.dumps({**initial,
+            'role':'ISOLATED_DEVELOPMENT_VALIDATION','allow_paid':True,'counts_in_46_slot_panel':False}))
+        executable.write_bytes(b'changed installed bytes')
+        assert metadata.read_text()=='Version: 1\n'
+>       with pytest.raises(ValueError):isolated.check_registration(registration,isolated.execution_identity(args))
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_isolated_coordinator.py:226: Failed
+___ test_installed_package_bytes_are_part_of_registered_runtime[example.pyc] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-400/test_installed_package_bytes_a2')
+package_file = 'example.pyc'
+
+    @pytest.mark.parametrize('package_file',['example.py','native.so','example.pyc','data.json'])
+    def test_installed_package_bytes_are_part_of_registered_runtime(tmp_path,package_file):
+        from types import SimpleNamespace
+        isolated=load();venv=tmp_path/'venv';(venv/'bin').mkdir(parents=True)
+        python=venv/'bin/python';python.write_bytes(b'pinned interpreter')
+        (venv/'pyvenv.cfg').write_text('home = /usr/bin\n')
+        site=venv/'lib/python3.10/site-packages';site.mkdir(parents=True)
+        metadata=site/'example-1.dist-info/METADATA';metadata.parent.mkdir();metadata.write_text('Version: 1\n')
+        executable=site/package_file;executable.write_bytes(b'original installed bytes')
+        method=tmp_path/'method';(method/'src').mkdir(parents=True)
+        config=tmp_path/'config.json';config.write_text('{}')
+        args=SimpleNamespace(method_root=str(method),benchmark_root=str(tmp_path/'benchmark'),config=str(config),case='CASE',
+            python=str(python),dependency_root=str(tmp_path/'deps'),seed=None,runtime_admission=None,
+            output=str(tmp_path/'results/CASE'),attempt_id='runtime-drift')
+        initial=isolated.execution_identity(args)
+        registration=tmp_path/'registration.json';registration.write_text(json.dumps({**initial,
+            'role':'ISOLATED_DEVELOPMENT_VALIDATION','allow_paid':True,'counts_in_46_slot_panel':False}))
+        executable.write_bytes(b'changed installed bytes')
+        assert metadata.read_text()=='Version: 1\n'
+>       with pytest.raises(ValueError):isolated.check_registration(registration,isolated.execution_identity(args))
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_isolated_coordinator.py:226: Failed
+____ test_installed_package_bytes_are_part_of_registered_runtime[data.json] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-400/test_installed_package_bytes_a3')
+package_file = 'data.json'
+
+    @pytest.mark.parametrize('package_file',['example.py','native.so','example.pyc','data.json'])
+    def test_installed_package_bytes_are_part_of_registered_runtime(tmp_path,package_file):
+        from types import SimpleNamespace
+        isolated=load();venv=tmp_path/'venv';(venv/'bin').mkdir(parents=True)
+        python=venv/'bin/python';python.write_bytes(b'pinned interpreter')
+        (venv/'pyvenv.cfg').write_text('home = /usr/bin\n')
+        site=venv/'lib/python3.10/site-packages';site.mkdir(parents=True)
+        metadata=site/'example-1.dist-info/METADATA';metadata.parent.mkdir();metadata.write_text('Version: 1\n')
+        executable=site/package_file;executable.write_bytes(b'original installed bytes')
+        method=tmp_path/'method';(method/'src').mkdir(parents=True)
+        config=tmp_path/'config.json';config.write_text('{}')
+        args=SimpleNamespace(method_root=str(method),benchmark_root=str(tmp_path/'benchmark'),config=str(config),case='CASE',
+            python=str(python),dependency_root=str(tmp_path/'deps'),seed=None,runtime_admission=None,
+            output=str(tmp_path/'results/CASE'),attempt_id='runtime-drift')
+        initial=isolated.execution_identity(args)
+        registration=tmp_path/'registration.json';registration.write_text(json.dumps({**initial,
+            'role':'ISOLATED_DEVELOPMENT_VALIDATION','allow_paid':True,'counts_in_46_slot_panel':False}))
+        executable.write_bytes(b'changed installed bytes')
+        assert metadata.read_text()=='Version: 1\n'
+>       with pytest.raises(ValueError):isolated.check_registration(registration,isolated.execution_identity(args))
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_isolated_coordinator.py:226: Failed
+=========================== short test summary info ============================
+FAILED tests/test_isolated_coordinator.py::test_installed_package_bytes_are_part_of_registered_runtime[example.py]
+FAILED tests/test_isolated_coordinator.py::test_installed_package_bytes_are_part_of_registered_runtime[native.so]
+FAILED tests/test_isolated_coordinator.py::test_installed_package_bytes_are_part_of_registered_runtime[example.pyc]
+FAILED tests/test_isolated_coordinator.py::test_installed_package_bytes_are_part_of_registered_runtime[data.json]
+4 failed, 16 deselected in 0.18s

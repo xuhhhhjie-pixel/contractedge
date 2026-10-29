@@ -1,0 +1,12 @@
+{
+  "status": "REGISTERED_SAME_ORIGINAL46_OFFICIAL_PROVIDER",
+  "panel": "/home/xhj/contractedge-fixed46-official-v067-20261028/panel.json",
+  "panel_sha256": "b5ee91a96ff1808141fd6249af0f5ad3c790e2792cf7537dd818a133bcb50ce0",
+  "source_sha256": "5e1758b0ac0a306f089f9a1e2aacb58aff12739a803ac5544b44d95392bf3387",
+  "slots": 46,
+  "old_results_inherited": false,
+  "targeted_qualification_counts_in_panel": false,
+  "membership_and_thresholds": "Original registration unchanged; official provider shared by both variants; all46 fresh records required",
+  "zero_call_preflight": "PASS_INTERFACE_COMPATIBILITY",
+  "formal_ready": false
+}

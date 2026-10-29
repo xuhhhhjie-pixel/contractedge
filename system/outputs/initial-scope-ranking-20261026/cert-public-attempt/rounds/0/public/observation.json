@@ -1,0 +1,76 @@
+{
+  "schema_version": "ce.public_observation.v1",
+  "status": "EXECUTION_PASS",
+  "input_digest": "a16b80b2e317e1721a1ef025aaf4d93de8abcb5ade3560b75e4164fa9d832dba",
+  "environment_digest": "eb608fdbfb89f03113e11de119d521611599b26a9010d89f610fb4cf80041f88",
+  "case_id": "RW-CERTMANAGER-9116",
+  "snapshot_id": "da155d856f99d504d8e61d2d271701087ab2bc5243acd01618ad6ccf61c13b88",
+  "observations": [
+    {
+      "id": "OBS1",
+      "snapshot_id": "da155d856f99d504d8e61d2d271701087ab2bc5243acd01618ad6ccf61c13b88",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "EXECUTION_ONLY",
+      "locator": {
+        "path": "launcher/tool.stdout",
+        "file_sha256": "a897d782b7582a71e42b332177b6a5146f2fe61d68b1f93b33cd391e9606cca5",
+        "start_byte": 0,
+        "copied_bytes": 303,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "a897d782b7582a71e42b332177b6a5146f2fe61d68b1f93b33cd391e9606cca5",
+      "excerpt": "{\"case_id\": \"RW-CERTMANAGER-9116\", \"status\": \"EXECUTION_PASS\", \"hidden_semantic_evaluation\": \"NOT_RUN\", \"private_materials_loaded\": false, \"scenarios\": [{\"scenario\": \"public-issuing-controller-build\", \"exit_code\": 0, \"elapsed_seconds\": 191.44061981514096, \"timed_out\": false, \"output_limited\": false}]}\n",
+      "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+    },
+    {
+      "id": "OBS2",
+      "snapshot_id": "da155d856f99d504d8e61d2d271701087ab2bc5243acd01618ad6ccf61c13b88",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "EXECUTION_ONLY",
+      "locator": {
+        "path": "raw/public_execution.json",
+        "file_sha256": "9de2c4837d84e15b946c19cdd77615ea2945b3f403b795a7ae4b4c4c39f197ba",
+        "start_byte": 0,
+        "copied_bytes": 359,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "9de2c4837d84e15b946c19cdd77615ea2945b3f403b795a7ae4b4c4c39f197ba",
+      "excerpt": "{\n  \"case_id\": \"RW-CERTMANAGER-9116\",\n  \"status\": \"EXECUTION_PASS\",\n  \"hidden_semantic_evaluation\": \"NOT_RUN\",\n  \"private_materials_loaded\": false,\n  \"scenarios\": [\n    {\n      \"scenario\": \"public-issuing-controller-build\",\n      \"exit_code\": 0,\n      \"elapsed_seconds\": 191.44061981514096,\n      \"timed_out\": false,\n      \"output_limited\": false\n    }\n  ]\n}\n",
+      "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+    }
+  ],
+  "launcher": {
+    "argv": [
+      "/home/xhj/contractedge-latest-integration-20261024/.superpowers/sdd/2026-10-24-latest-main-integration/venv-v044/bin/python",
+      "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019/tools/launch_public_case.py",
+      "--public-root",
+      "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019/public",
+      "--workspace",
+      "/home/xhj/contractedge-diagnostic-source050-v2-20261026/methods/RW-CERTMANAGER-9116/.isolated-e36284b217414a4bac8e2dcd66a22b49/producer/ce-public-runtime-9w9ikfma",
+      "--output",
+      "/home/xhj/contractedge-diagnostic-source050-v2-20261026/methods/RW-CERTMANAGER-9116/.isolated-e36284b217414a4bac8e2dcd66a22b49/producer/observation-048d12643a1d42dfabe4beef87be7acd/raw",
+      "--lock-root",
+      "/home/xhj/contractedge-latest-integration-20261024/.superpowers/sdd/2026-10-24-latest-main-integration/locks-v044",
+      "--execute"
+    ],
+    "returncode": 0,
+    "timed_out": false,
+    "stdout_sha256": "a897d782b7582a71e42b332177b6a5146f2fe61d68b1f93b33cd391e9606cca5",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw_execution_statuses": [
+    "EXECUTION_PASS"
+  ],
+  "method_probe_status": "NOT_RUN",
+  "candidate_runtime_failures": [],
+  "candidate_build_failures": [],
+  "observation_adapter_audit": [],
+  "runtime_cleanup": {
+    "status": "OWNED_CONTAINERS_CLOSED",
+    "removed": []
+  },
+  "source_unchanged_by_public_build": true,
+  "hidden_semantic_evaluation": "NOT_RUN"
+}

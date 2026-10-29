@@ -1,8 +1,8 @@
+> **2026-10-28 当前候选0.6.68：** 官方模型固定失败续修已证明重规划可产生有效修复；本候选仅补充KPT已观察到的辅助函数引文错绑反馈，未放宽校验。最终源码资格与同版效果验收尚待完成，formal_ready=false。
+
 # ContractEdge developer entry
 
-最终测试前提和审计边界见[收尾 r3](docs/development/2026-10-25-public-check-protocol-fixtures-r3.md)。当前验收工具修订见[同版工具 r2](docs/development/2026-10-25-public-check-protocol-harness-r2.md)。当前阶段收尾及检查绑定协议见[2026-10-25 修订说明](docs/development/2026-10-25-public-check-protocol-wrapup.md)，本轮同版结果见[验证记录](docs/development/architecture-public-check-protocol-20261025-r3.validation.json)。正式研究准入仍为 false。
-
-当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准；待冻结变更见同一对象的 `status` 与 `planned_snapshot`。包版本仍为 `0.6.27`，方法身份由同版源码、配置和测试面板摘要确定，不能沿用历史版本效果。`formal_ready=false`，不运行正式数据实验或隐藏评分。阶段 B 的范围与验证登记见[隔离运行与可信公开观察说明](docs/development/2026-10-23-architecture-b-runtime-observer.md)。 跨阶段引用、调用账本封存及 READY 原阶段继承见[阶段 A2 说明](docs/development/2026-10-23-architecture-a2-stage-references.md)；该阶段的通过范围以同版验证报告为准。 状态转换及标准CLI持久记录见[阶段C1说明](docs/development/2026-10-24-architecture-c1-state-cli.md)。 持久候选事务、恢复与可替换消费者见[阶段C2/D1说明](docs/development/2026-10-24-architecture-c2-transactions-consumers.md)。
+当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准；待冻结变更见同一对象的 `status` 与 `planned_snapshot`。上游冻结包版本为 `0.6.27`；本工作树开发候选包版本为 `0.6.68`，方法身份由同版源码、配置和测试面板摘要确定，不能沿用历史版本效果。`formal_ready=false`，未启动正式150；开发候选的独立评分由父侧隔离执行，评分内容不进入修复输入。阶段 B 的范围与验证登记见[隔离运行与可信公开观察说明](docs/development/2026-10-23-architecture-b-runtime-observer.md)。 跨阶段引用、调用账本封存及 READY 原阶段继承见[阶段 A2 说明](docs/development/2026-10-23-architecture-a2-stage-references.md)；该阶段的通过范围以同版验证报告为准。 状态转换及标准CLI持久记录见[阶段C1说明](docs/development/2026-10-24-architecture-c1-state-cli.md)。 持久候选事务、恢复与可替换消费者见[阶段C2/D1说明](docs/development/2026-10-24-architecture-c2-transactions-consumers.md)。
 
 ## 安装与冻结校验
 
@@ -134,3 +134,7 @@ python scripts/run_isolated_method_panel.py --image "$CONTRACTEDGE_RUNTIME_IMAGE
 `CURRENT_STATUS.json.historical_status.original_record`、原上传清单和历史 freeze 保留旧版本结果。当前下一步以 current_development、next_actions 和新同版证据为准。跨阶段统一引用、StageResult/transition、持久候选事务/任意中断恢复、消费者解耦和研究模式仍按完整架构方案逐项推进，不能把 B1/B2 当作整个架构目标完成。
 
 根目录 `benchmark/` 与 `tools/` 保留；本阶段不读取数据、GT/Fixed、隐藏评分或其他实验目录，不运行 formal150。工程闭环和公开单例结果不能替代论文效果、消融或泛化评价。
+
+## 本地真实可靠性记录（非本集成版本成绩）
+
+[0.6.40开发结果](outputs/declared-comparison-closure-20261024/COMPLETION_AUDIT.md)：三个独立PASS，但Alert公开复查发现重复身份。 [0.6.41有界失败修复](docs/reports/2026-10-24-bounded-prefix-failure-closure.md)：不扩大8MiB上限，保留已证实的唯一性FAIL，其他条件保持UNKNOWN。新集成源必须重做工程与同版实验，不能拼入旧成绩。

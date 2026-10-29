@@ -1,0 +1,427 @@
+{
+  "schema_version": "ce.formal_readiness.v1",
+  "status": "NOT_READY",
+  "formal_ready": false,
+  "checked_at": "2026-10-27T08:55:28.136339+00:00",
+  "checker": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/scripts/assess_formal_readiness.py",
+    "sha256": "54e9c43e7a88d276c28a1d37ad2ab0c3813d492feabea3b387f1f7bb1f920cc7"
+  },
+  "new_model_http_calls": 0,
+  "formal150_started": false,
+  "gates": {
+    "G0": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G0_DELIVERY_EVIDENCE_v2.json",
+        "sha256": "65e762848e48ca699d048325798c0276c94c8367cdf8ff48d2805030023fa950"
+      },
+      "required_checks": [
+        "membership150",
+        "public_evaluation_mapping",
+        "archive_grader_partition_integrity",
+        "release_layout_mapping",
+        "resource_preflight150"
+      ]
+    },
+    "G1": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G1_DELIVERY_EVIDENCE_v1.json",
+        "sha256": "67384174fc81419bfac44774073cf2f707c48b00da3c3d843c792b400a190cf6"
+      },
+      "required_checks": [
+        "obligation_lineage",
+        "operation_fact_consistency",
+        "helper_prerequisites",
+        "bounded_gap_delivery",
+        "candidate_preservation",
+        "feedback_unknown_reasons"
+      ]
+    },
+    "G2": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G2_DELIVERY_EVIDENCE_v1.json",
+        "sha256": "a06daa636508f190aa01adf382e675f841309a8a2541fdf7268fd6ee7173592e"
+      },
+      "required_checks": [
+        "exact_source_full_suite",
+        "current_cross_stage_delivery",
+        "supported_environment_ci"
+      ]
+    },
+    "G3": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G3_DELIVERY_EVIDENCE_v1.json",
+        "sha256": "c835697552fd446fd4287b7383cf65ffd2bef56b1fbdb13bbd435579d1e683ba"
+      },
+      "required_checks": [
+        "method_filesystem_isolation",
+        "per_attempt_source_config_data_patch_score_identity"
+      ]
+    },
+    "G4": {
+      "status": "FAIL",
+      "errors": [
+        "Evidence requires an exact path/SHA256 reference",
+        "Original same-version repetition/recovery/effect acceptance is incomplete or failed"
+      ],
+      "report": null,
+      "required_checks": [
+        "original_successes_preserved",
+        "registered_repetition",
+        "registered_seeded_recovery"
+      ]
+    },
+    "G5": {
+      "status": "FAIL",
+      "errors": [
+        "Evidence requires an exact path/SHA256 reference",
+        "Original same-version repetition/recovery/effect acceptance is incomplete or failed"
+      ],
+      "report": null,
+      "required_checks": [
+        "complete_original_panel",
+        "declared_paired_effect_gates",
+        "exposure_accounting"
+      ]
+    },
+    "G6": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/G6_DELIVERY_EVIDENCE_v1.json",
+        "sha256": "da5234ebcb6de8d32cacd9e7cc0845f82f6d0b6c2492504252cc49dd8106db13"
+      },
+      "required_checks": [
+        "clean_clone_real_roundtrip",
+        "durable_crash_recovery",
+        "resource_and_drift_checks",
+        "declared_serial_execution"
+      ]
+    }
+  },
+  "errors": [],
+  "scope": "Evidence admission for one frozen candidate; not a guarantee of all-case repair success or formal experiment funding",
+  "manifest": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/FINAL_ADMISSION_MANIFEST_v2.json",
+    "sha256": "d3a7b8ababae6b7503de2c36bdbcb8bbb6ac9009c9c64a136a6bf3ef893133df"
+  },
+  "snapshot_verification": {
+    "schema_version": "ce.development_snapshot_verification.v1",
+    "development_snapshot_id": "ordering-source-v060-20261027-delivery-v2",
+    "status": "PASS",
+    "formal_ready": false,
+    "coverage": {
+      "source": 116,
+      "configuration": 59,
+      "fixture": 205,
+      "tooling_files": 288,
+      "repository_files": 1
+    },
+    "unbound_legacy_fixture_files": [],
+    "errors": []
+  },
+  "identity": {
+    "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+    "panel_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
+    "candidate_config_sha256": "be8a7dc2dc0e87d76e60fb84de688b93ef1ad4a839f3545530ad5e7e00209866",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "panel": {
+    "closed_slots": 8,
+    "expected_slots": 46,
+    "complete": false,
+    "formal_effect_pass": false,
+    "effect": {
+      "status": "PENDING",
+      "observed_improvement": true,
+      "behavior_gates_passed": false,
+      "missing": [
+        [
+          "A",
+          "R4-ACK-CLOUDWATCH-2985",
+          0,
+          "baseline"
+        ],
+        [
+          "A",
+          "R4-ACK-CLOUDWATCH-2985",
+          0,
+          "candidate"
+        ],
+        [
+          "A",
+          "RW-ALERTMANAGER-4705",
+          0,
+          "baseline"
+        ],
+        [
+          "A",
+          "RW-ALERTMANAGER-4705",
+          0,
+          "candidate"
+        ],
+        [
+          "A",
+          "RW-CERTMANAGER-9116",
+          0,
+          "baseline"
+        ],
+        [
+          "A",
+          "RW-CERTMANAGER-9116",
+          0,
+          "candidate"
+        ],
+        [
+          "B",
+          "R3-KUBEBUILDER-5119",
+          0,
+          "baseline"
+        ],
+        [
+          "B",
+          "R3-KUBEBUILDER-5119",
+          0,
+          "candidate"
+        ],
+        [
+          "B",
+          "R3-SKAFFOLD-9732",
+          0,
+          "baseline"
+        ],
+        [
+          "B",
+          "R3-SKAFFOLD-9732",
+          0,
+          "candidate"
+        ],
+        [
+          "B",
+          "R4-CAPA-5111",
+          0,
+          "baseline"
+        ],
+        [
+          "B",
+          "R4-CAPA-5111",
+          0,
+          "candidate"
+        ],
+        [
+          "B",
+          "R4-PROVIDER-AWS-2339",
+          0,
+          "baseline"
+        ],
+        [
+          "B",
+          "R4-PROVIDER-AWS-2339",
+          0,
+          "candidate"
+        ],
+        [
+          "B",
+          "RW-ARGO-CD-27136",
+          0,
+          "baseline"
+        ],
+        [
+          "B",
+          "RW-ARGO-CD-27136",
+          0,
+          "candidate"
+        ],
+        [
+          "B",
+          "RW-CAND-114",
+          0,
+          "baseline"
+        ],
+        [
+          "B",
+          "RW-CAND-114",
+          0,
+          "candidate"
+        ],
+        [
+          "B",
+          "RW-CAND-134",
+          0,
+          "baseline"
+        ],
+        [
+          "B",
+          "RW-CAND-134",
+          0,
+          "candidate"
+        ],
+        [
+          "B",
+          "RW-HELM-CONTROLLER-1589",
+          0,
+          "baseline"
+        ],
+        [
+          "B",
+          "RW-HELM-CONTROLLER-1589",
+          0,
+          "candidate"
+        ],
+        [
+          "B",
+          "RW-NATS-SERVER-6609",
+          0,
+          "baseline"
+        ],
+        [
+          "B",
+          "RW-NATS-SERVER-6609",
+          0,
+          "candidate"
+        ],
+        [
+          "B",
+          "RW-PROMETHEUS-19838",
+          0,
+          "baseline"
+        ],
+        [
+          "B",
+          "RW-PROMETHEUS-19838",
+          0,
+          "candidate"
+        ],
+        [
+          "recovery",
+          "R3-KPT-4673",
+          0,
+          "baseline"
+        ],
+        [
+          "recovery",
+          "R3-KPT-4673",
+          0,
+          "candidate"
+        ],
+        [
+          "recovery",
+          "R3-KPT-4673",
+          1,
+          "baseline"
+        ],
+        [
+          "recovery",
+          "R3-KPT-4673",
+          1,
+          "candidate"
+        ],
+        [
+          "recovery",
+          "RW-ALERTMANAGER-4705",
+          0,
+          "baseline"
+        ],
+        [
+          "recovery",
+          "RW-ALERTMANAGER-4705",
+          0,
+          "candidate"
+        ],
+        [
+          "recovery",
+          "RW-ALERTMANAGER-4705",
+          1,
+          "baseline"
+        ],
+        [
+          "recovery",
+          "RW-ALERTMANAGER-4705",
+          1,
+          "candidate"
+        ],
+        [
+          "repeat",
+          "R3-KOPF-726",
+          1,
+          "baseline"
+        ],
+        [
+          "repeat",
+          "R3-KOPF-726",
+          1,
+          "candidate"
+        ],
+        [
+          "repeat",
+          "RW-ALERTMANAGER-4705",
+          1,
+          "baseline"
+        ],
+        [
+          "repeat",
+          "RW-ALERTMANAGER-4705",
+          1,
+          "candidate"
+        ]
+      ],
+      "regressions": [],
+      "historical_successes_preserved": false,
+      "critical_cases_pass_both_attempts": false,
+      "two_repository_recovery_pass_both_attempts": false,
+      "primary_counts": {
+        "baseline": 2,
+        "candidate": 4
+      },
+      "primary_denominator": 17,
+      "recovery_counts": {
+        "baseline": 0,
+        "candidate": 0
+      },
+      "effect_claim": "Observed paired improvement, not statistical significance",
+      "scope": "Behavior acceptance requires separately verified engineering closure. Fixed development panel and finite repetition only; no statistical significance or full150 guarantee Final delivery additionally requires the declared primary and B effect gates.",
+      "delivery_effect_gates_passed": false,
+      "paired_primary_improvement": true,
+      "B_counts": {
+        "baseline": 0,
+        "candidate": 0
+      },
+      "B_not_below_baseline": true,
+      "acceptance_policy": "Final design: all behavior gates, strictly more primary independent PASS, B not below baseline; recovery improvement alone is insufficient"
+    },
+    "all_terminal_gate": {
+      "open": false,
+      "missing": [
+        "fixed46-v060-order-20261027-a62911320d2450c09640ca1c",
+        "fixed46-v060-order-20261027-bcd9a8d56a4e00f2f902f406",
+        "fixed46-v060-order-20261027-7e110f10f2707f003c394c2c",
+        "fixed46-v060-order-20261027-5ece967e93e69ab025d7d758",
+        "fixed46-v060-order-20261027-5b4e270cd9beb190997cb43f",
+        "fixed46-v060-order-20261027-f836a8138f6b34ea264edf20",
+        "fixed46-v060-order-20261027-4ada1358a8a7db96b35bcd8e",
+        "fixed46-v060-order-20261027-92201d988b606f41830e70a5",
+        "fixed46-v060-order-20261027-c1cec2a408efc5e10c83fb8e",
+        "fixed46-v060-order-20261027-c389d4dfccac51c96e7ee10f",
+        "fixed46-v060-order-20261027-b014df76f3113bdb25b07e03",
+        "fixed46-v060-order-20261027-44d1f6c59760035709127588",
+        "fixed46-v060-order-20261027-f2c810d86ae1d3f2c49a963f",
+        "fixed46-v060-order-20261027-1bf2d595d501802118c43695",
+        "fixed46-v060-order-20261027-7cf96bc3f16296239e7fb685",
+        "fixed46-v060-order-20261027-833d9fec72fc75d823c9c702",
+        "fixed46-v060-order-20261027-3c876390d002229b412fc40b",
+        "fixed46-v060-order-20261027-0688f115ed8fa72b524b54cd"
+      ],
+      "errors": []
+    },
+    "public_unknown_retained": 4,
+    "record_identity_policy": "Existing verify_panel/verified_records and independent finalize; no model or new score dispatch"
+  }
+}

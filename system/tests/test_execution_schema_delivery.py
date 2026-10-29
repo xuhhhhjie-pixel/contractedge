@@ -55,6 +55,31 @@ def test_native_schema_transport_does_not_duplicate_schema_in_messages(tmp_path)
     assert 'output_schema' not in json.loads(request.messages[1]['content'])
 
 
+def test_separate_regions_for_one_change_apply_as_one_validated_batch(tmp_path):
+    from contractedge.execution.topomen import apply_edits
+    plan,config=fixture(tmp_path)
+    source=tmp_path/'templates/serviceaccount.yaml'
+    source.write_text('name: default\nmarker: before\n')
+    plan=bound_plan(tmp_path)
+    body={'edits':[dict(change_id='C1',path='templates/serviceaccount.yaml',operation='MODIFY',
+        old_text=old,new_text=new) for old,new in [('name: default','name: selected'),('marker: before','marker: after')]]}
+    request=build_execution_request(plan,tmp_path,{'allowed_paths':['templates/**']},len,config,requirement='Select name and marker')
+    validated=validate_execution_response(ModelResponse(json.dumps(body),{}),request)
+    result=apply_edits(plan,tmp_path,{'allowed_paths':['templates/**']},validated)
+    assert result['status']=='APPLIED'
+    assert source.read_text()=='name: selected\nmarker: after\n'
+
+
+def test_numbered_empty_edit_field_stays_rejected_without_source_changes(tmp_path):
+    plan,config=fixture(tmp_path);source=tmp_path/'templates/serviceaccount.yaml'
+    body={'edits':[dict(change_id='C1',path='templates/serviceaccount.yaml',operation='MODIFY',
+        old_text='name: default',new_text='name: selected',old_text_2='')]}
+    request=build_execution_request(plan,tmp_path,{'allowed_paths':['templates/**']},len,config,requirement='Select name')
+    with pytest.raises(PlanRejected,match='Additional properties'):
+        validate_execution_response(ModelResponse(json.dumps(body),{}),request)
+    assert source.read_text()=='name: default\n'
+
+
 def test_literal_multiline_edit_applies_and_double_escaped_anchor_stays_rejected(tmp_path):
     plan, config = fixture(tmp_path)
     source = tmp_path / 'templates/serviceaccount.yaml'

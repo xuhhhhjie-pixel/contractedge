@@ -1,0 +1,82 @@
+{
+  "version": "0.6.37",
+  "method_status": "PUBLIC_EXECUTION_COMPLETE",
+  "independent_status": "PASS",
+  "model_calls": 9,
+  "edit_rounds": 2,
+  "first_trial_public": {
+    "PASS": 3,
+    "FAIL": 5
+  },
+  "final_public": {
+    "PASS": 8,
+    "FAIL": 0
+  },
+  "semantic_outcome": "UNKNOWN",
+  "route": "STOP",
+  "unverified_obligations": 3,
+  "candidate_patch_sha256": "c52869dbf9a2e0c3521c3e6212c736ee9241392f878b4341414d8adf93006f92",
+  "final_snapshot": "88a30690562fa5f592fecc16895b916aea0ece9f61d64f67190bf35fad88b48d",
+  "scored": 1,
+  "not_run": 45,
+  "formal_ready": false,
+  "gate": {
+    "accepted": true,
+    "reason": "INDEPENDENT_PASS_NO_SELECTED_PUBLIC_FAILURE",
+    "patch_sha256": "c52869dbf9a2e0c3521c3e6212c736ee9241392f878b4341414d8adf93006f92",
+    "snapshot_id": "88a30690562fa5f592fecc16895b916aea0ece9f61d64f67190bf35fad88b48d"
+  },
+  "supplemental_plan_only": {
+    "role": "SUPPLEMENTAL_PLANNING_CORRECTION_ONLY",
+    "new_paid_calls": 1,
+    "saved_responses": 5,
+    "first_five_exact": true,
+    "draft_exact": true,
+    "source_unchanged": true,
+    "input_bound": 150107,
+    "output_bound": 16384,
+    "counts_in_46_slot_panel": false,
+    "counts_as_behavior_repair_success": false,
+    "formal_ready": false,
+    "captured_next_request": true,
+    "next_prompt": "topomen-source-execution.v1",
+    "method_status": null,
+    "validated_plan_status": "READY_PARTIAL",
+    "validation_errors": [],
+    "stopped_before_execution": true
+  },
+  "money": {
+    "limit_cny": 150,
+    "committed_including_uncertain_cny": 98.616916,
+    "remaining_upper_cny": 51.383084,
+    "uncertain_reservations": 3,
+    "new_paid_calls": 10,
+    "new_cost_cny": 1.085144,
+    "attribution": {
+      "original_broken": {
+        "new_paid_calls": 9,
+        "cost_cny": 0.968414,
+        "ledger_record_ids": [
+          "3c6fe60ece7847d1a1919b1cf793082d",
+          "f45c0e07e8c84eedae60639c2177c28d",
+          "133a043e21084a6dab30697506ff57bc",
+          "a543d5e9cd434c71b8507f23c5ac048c",
+          "581d012d4436456ba21a3f99ad8c6fb8",
+          "ce16a4e0b66a49aea93e7018ca07e0b1",
+          "21c44865653a44d7b9a42096fd0f696d",
+          "55d7959f45e64320a1fbcaecfc60143a",
+          "f4f970b1dce84f4fbda3a5be9366bc14"
+        ]
+      },
+      "supplemental_plan_correction": {
+        "new_paid_calls": 1,
+        "cost_cny": 0.11673,
+        "ledger_record_ids": [
+          "bc7f0f4e9eb049618b691789036e8e21"
+        ]
+      }
+    },
+    "basis": "Unique prompt_version+exactusage matching of10newsettledsharedledgerrecords; savedresponsesnotchargedagain. Pinned conservative2input/8output CNY per million, not provider invoice."
+  },
+  "scope": "One originalBroken same-version failure→rediagnosis→secondedit→8publicPASS→independentPASS; not46panel acceptance/generalization. Supplementalonecall only validates planning correction, excludedfrompanel/repaircount."
+}

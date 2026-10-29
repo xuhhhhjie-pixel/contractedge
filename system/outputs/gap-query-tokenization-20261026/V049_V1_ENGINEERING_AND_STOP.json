@@ -1,0 +1,10 @@
+{
+  "engineering_status": "PASS",
+  "passed": 1930,
+  "subtests": 91,
+  "log_sha256": "7aa079855378d393d911fbc32fbd66bf050f10eb5b584c06cc9ccd369aff7591",
+  "runtime_qualification": "STOPPED_BEFORE_DISPATCH",
+  "model_calls_added": 0,
+  "formal_ready": false,
+  "reason": "Additional real-input audit found existing directory encoded as complete zero-hit exact-file absence; superseded before registration"
+}

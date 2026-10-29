@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "checked_at": "2026-10-28T23:55:04.624110+08:00",
+  "method_source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "parent_files": {
+    "scripts/fixed_panel.py": "c5d5ab3a115e96b1b9df4a079315d045bd53647cdf74e986a38b16a15c959a53",
+    "scripts/financial_continuation.py": "ddcb8763eff0f8ac4e965dabfa24827aa55e469f55310c95897cb5716fdb16c2",
+    "scripts/prepare_financial_panel.py": "1980ce659e9a09fac28bd1053e14719df27a904197c333a7ba470f0407742886",
+    "scripts/run_financial_panel.py": "2bf4238e13413201b0ac44c8a263e657f8e0ac4359f1ccb7734fbaa3facdc990",
+    "tests/test_financial_continuation.py": "880ac62ea031552a8ad81c6332ed696d8714e0a07e1d4b46ad215ce1d197786e"
+  },
+  "test_summary": {
+    "passed": 108,
+    "actual_process_exit_code": 0,
+    "receipt": {
+      "path": "/home/xhj/contractedge-parent402-v068-20261028/qualification-process.json",
+      "sha256": "11a335189a82236e67e390ae5ca471ee820d5f9ad3f3d2d8815a62071758075e"
+    },
+    "log": {
+      "path": "/home/xhj/contractedge-parent402-v068-20261028/qualification-final.log",
+      "sha256": "c55bcefeae87dc1a3392a98a02e6fdae776632e7380d4d3d450452fba6a7440f"
+    },
+    "scope": "Parent-only authority/recovery, actual saved source/receipts with rehashed counterexamples. Core2354+91 reused, not rerun."
+  },
+  "actual_namespace_public_smoke": {
+    "path": "/home/xhj/contractedge-parent402-smoke-20261028/.isolated-88fe65f2380d49c7848a6998ad770766/receipt.json",
+    "sha256": "facbff064c1a2e324ee20460f7e504f04cf40e7e0ae5afdf2ed0564034063a87"
+  },
+  "zero_model_http_selection_replay": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_ACK_SELECTION_NO_HTTP_REPLAY.json",
+    "sha256": "460b9286563d5a101d4a5c74273582609fe05cef3c62f5c84d08acf552d17b91"
+  },
+  "actual_isolated_recovery": {
+    "path": "/home/xhj/contractedge-ack402-continuation-v068-20261028/selection-replay/result.json",
+    "sha256": "2fea76a4d1e629adeb131635eb2fb9155bc386781ff89cdef096b9870c2c6bff"
+  },
+  "qualification_scope": "Source algorithm, RPC/namespace handlers and public/grader code unchanged. Only parent authority, per-read prefix verification and administrative binding added. Native smoke covers unchanged role paths; final authority covered by108 tests. Builder publication additionally binds this report by hash, checked at actual zero-call publication.",
+  "new_method_semantic_calls_for_qualification": 0,
+  "full_method_suite_repeated": false,
+  "formal_ready": false
+}

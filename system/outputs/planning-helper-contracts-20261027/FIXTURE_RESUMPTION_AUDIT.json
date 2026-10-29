@@ -1,0 +1,32 @@
+{
+  "status": "EXACT_SOURCE_FULL_PLUS_TARGETED_FIXTURE_RESUMPTION_PASS",
+  "source_sha256": "542509c7002fa920759cb80a0ace9d6fbc8d69bd21d9d9c99f15f091990b51ad",
+  "original_full_status": "FAIL_TWO_OLD_FIXTURE_INPUTS",
+  "original_full_passed": 2170,
+  "original_full_subtests": 91,
+  "original_full_log_sha256": "d4e220509d60c01cc1aec0330b6e526449408b819708457a2c743977da2dc25e",
+  "corrected_nodes": [
+    {
+      "file": "tests/test_cloudwatch_public_probe.py",
+      "nodeid": "tests/test_cloudwatch_public_probe.py::test_registered_checks_reach_review_feedback_and_regression_guard",
+      "old_sha256": "1b3b964ee9f21a956fc512059fb218bcd7a4cc8a55917930afe666f95cda2171",
+      "new_sha256": "8225ecb2a3a9a57bcf213352dc54c94b62056653509586e305188423d423e230",
+      "all_assertions_unchanged": true,
+      "other_functions_and_module_scope_unchanged": true
+    },
+    {
+      "file": "tests/test_partial_probe_counterexamples.py",
+      "nodeid": "tests/test_partial_probe_counterexamples.py::test_partial_negative_fact_reaches_necessary_failure_without_asserting_visibility",
+      "old_sha256": "9c7431fa9fc0b2ce81e794edba02d0937245bfede7298435c8c1c3e74260218c",
+      "new_sha256": "2fd61c6779daabf308252f1b4328a7e8e7f2c2a4545586616ea605361630c0b5",
+      "all_assertions_unchanged": true,
+      "other_functions_and_module_scope_unchanged": true
+    }
+  ],
+  "targeted_passed": 88,
+  "targeted_junit_sha256": "da7a71825ab71ea7a302ca0cf358d190e9b0af57291bafd05cd5cc5d0b178c23",
+  "single_full_suite_pass": false,
+  "source_and_configuration_unchanged": true,
+  "formal_ready": false,
+  "qualification_scope": "Minimal real development component only; original46/formal gates remain closed; no single full2172 PASS claimed"
+}

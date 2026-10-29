@@ -1,0 +1,21 @@
+# 规划阶段助手契约连续送达
+
+source059公开编译续修由BUILD_FAIL变为编译通过，但38项公开检查9FAIL、8保持回退，独立SEMANTIC_FAIL，候选恢复。source058三个真实规划请求没有MergeWithInput正文、没有source_prerequisites；执行才收到助手正文。原计划要求新增exclusions而保持merge，未明确新路径的身份初始化。不得继续用同一欠充分计划反复执行。
+
+复用现有local_go_helper_support、规划read_only_source_support和source_prerequisites，不新增分析Agent、控制流证明器或案例规则。用当前已选Go声明定位显式限定的本地import助手，并沿既有扫描规则附带输入类型的同包契约，最多4个种子文件、每文件512KiB，总计2MiB；原助手扫描128文件/4MiB、最多8条/24KB。最终完整请求仍服从原上下文预算，不能静默裁剪必需契约。源码契约只是只读解释依据，不是新的诊断因果证明或编辑权限。
+
+仅helper_preconditions_enabled的新增运行启用，RunContext显式记录启用和实际预算。初次规划/纠错/补证后的规划均重建当前契约。READY独立从同快照重算支持与前提列表，旧轨迹未登记此机制时保留原行为。每个助手契约由已有precondition_review表达REQUIRED/UNRESOLVED/NOT_APPLICABLE，并绑定实际检查或未验证义务；这只保证前提被审查，不能证明代码满足前提。
+
+拒绝过期种子、摘要/行区间不一致、歧义、测试文件和软链；预算不足保留审计。相同计划支持继续传入原生执行阶段。先通用正反例、真实旧规划请求零调用回放，再新源码冻结完整资格。任何真实验证需要单独预登记；不继承059工程或效果成绩，不改变原46/G0–G6正式门槛。
+
+直接的同包裸调用（如Apply调用邻接文件的Merge）不是现有入口查询能力，本次不新增该解析器，必须保留为未覆盖范围；不能声称所有生产助手已找到。当前原生请求的启用/字节预算同时进入实际请求payload及不可变调用记录的request_metadata，READY与该登记核对后才独立重算，不能降为历史行为。原12条precondition_review上限保持，无法容纳时零调用停止并说明容量不足。
+
+## 与协作者 PR #19 的统一整合
+
+在现有分支合入 origin/main@7a5100e（PR #19，Wen5555/Orion），保留本地后续修复。两份公开检查目录统一以 execution_capabilities.public_behavior_check_catalog 校验，public_checks 仅保留原规划接口的投影。两种已发布声明可读取；同时出现的 scenario/verification_scope 或 scenario_members/covered_scenarios 必须一致，缺失、重复生产者和冲突在调用前拒绝。producer摘要、当前快照、重复观察、同场景未引用操作异常核验进入实际审核和反馈。保留本地完整资源清单、保守对象作用域、必要条件UNKNOWN及负结果汇总语义。
+
+PR #19 的34个反例保留；因本地公开运行套件使用 selected-and-preservation，测试改为该显式作用域，other-scenario 使用真正不同的运行场景。旧方法检查测试补齐真实生产者所需的摘要和谓词描述。边界运输mock维持本地冻结checker的原输出结构。第一次不兼容运行33FAIL/1PASS，整合后与本地相关回归145PASS；其余集成验证见日志。
+
+最新本地v2源码已完成2138+91及actual8，但公开沙箱因脚本硬编码不存在的v2数据目录停止。保留原失败，不改旧日志。整合后使用CURRENT_STATUS的正式v1数据绑定，在长任务前检查目录、配置、公开manifest、分区及Docker入口；先完成沙箱再启动统一全回归。源码整合发生变化，因此只对整合候选统一跑一轮全回归；单纯路径修正无需重跑原源码测试。
+
+本轮保持0.6.60开发版本，不另开分支；v3冻结标记整合后的精确字节，与旧v2不同。当前成果、真实新计划效果、同版跨案例门分别验收，不计正式150。

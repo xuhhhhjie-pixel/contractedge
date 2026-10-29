@@ -1,0 +1,34 @@
+{
+  "status": "FAIL",
+  "exit_code": 1,
+  "tests": null,
+  "subtests": null,
+  "command": [
+    "/home/xhj/contractedge-system/.venv-dev/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests"
+  ],
+  "source_sha256": "74e7a3f5fd9010cb7a9eb399410e851b7d205d8ec5d0e063799e5f8cd21d997a",
+  "freeze_sha256": "b0c91012af37ba2b758c143a4b09e3f0674f6c251b4faa1052865a5f0766c901",
+  "log_sha256": "4ae5bceec2702b347c84f0474fb56b89820b770f9f2f85a7b858c88268cad481",
+  "runner_sha256": "3ff33e7a2584fcde4ff46a693ce5dae662e48d05899522f1dd5fe4a1444ab4f8",
+  "verification": {
+    "schema_version": "ce.development_snapshot_verification.v1",
+    "development_snapshot_id": "planning-branch-continuity-v056-20261026-v1",
+    "status": "PASS",
+    "formal_ready": false,
+    "coverage": {
+      "source": 116,
+      "configuration": 47,
+      "fixture": 200,
+      "tooling_files": 202,
+      "repository_files": 1
+    },
+    "unbound_legacy_fixture_files": [],
+    "errors": []
+  },
+  "actual_isolated_demos_enabled": true,
+  "formal_ready": false
+}

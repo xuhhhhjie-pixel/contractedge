@@ -1,0 +1,23 @@
+{
+  "schema_version": "ce.method_input.v1_1",
+  "case_id": "R3-KPT-4673",
+  "release_id": "ContractEdge-benchmark150-v1-20261019",
+  "original_broken_revision": "archive-sha256:2a5e761ae5f266f234ff9e3fe68ac1456017aa8e726ecfaef9560cdede645606",
+  "archive_path": "R3/tasks/R3-KPT-4673/source.tar.gz",
+  "archive_sha256": "2a5e761ae5f266f234ff9e3fe68ac1456017aa8e726ecfaef9560cdede645606",
+  "source_root": "kpt-6345d96d661eae1f6cdcb97b1f70080ce35f61a4",
+  "initial_snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "requirement_text": "# Requirement\n\nWhen a `Kptfile` pipeline uses `configPath` to designate a KRM resource in the same package, `kpt fn render` should provide that resource to its owning function as `functionConfig` without also treating it as an ordinary input item. The function should still transform the workload resources it is meant to process. A later pipeline function may still see and transform the config resource, and both resources should appear correctly in the final rendered KRM package.\n",
+  "public_observable_text": "Production transformation/generated artifact or schema contract only; no live convergence assertion.",
+  "scope_hints": [
+    {
+      "kind": "concept",
+      "value": "# Requirement\n\nWhen a `Kptfile` pipeline uses `configPath` to designate a KRM resource in the same package, `kpt fn render` should provide that resource to its owning function as `functionConfig` without also treating it as an ordinary input item. The function should still transform the workload resources it is meant to process. A later pipeline function may still see and transform the config resource, and both resources should appear correctly in the final rendered KRM package.\n",
+      "raw_text": "# Requirement\n\nWhen a `Kptfile` pipeline uses `configPath` to designate a KRM resource in the same package, `kpt fn render` should provide that resource to its owning function as `functionConfig` without also treating it as an ordinary input item. The function should still transform the workload resources it is meant to process. A later pipeline function may still see and transform the config resource, and both resources should appear correctly in the final rendered KRM package.\n",
+      "origin_ref": "public.requirement"
+    }
+  ],
+  "public_evidence": [],
+  "declared_artifacts": [],
+  "input_digest": "5e35ce63106f134d43e682afb42610724cf49f54661cae8d679fd4ffcd57b6a3"
+}

@@ -1,0 +1,212 @@
+{
+  "schema_version": "ce.formal_gate_evidence.v1",
+  "gate": "G1",
+  "identity": {
+    "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+    "panel_sha256": "82b706c255159b4441aece340f47d4f61f45fb101afc26b0bcbb47da3b18143e",
+    "candidate_config_sha256": "be8a7dc2dc0e87d76e60fb84de688b93ef1ad4a839f3545530ad5e7e00209866",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "executed_at": "2026-10-27T08:55:18.094438+00:00",
+  "checker": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/finish_gate_evidence_complete.py",
+    "sha256": "d7264817b18d5e0a81d356d59efa0cca87291b0e34c7e8d4c6ceb493259f0033"
+  },
+  "inputs": [
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/IMPLEMENTATION_COVERAGE_v1.json",
+      "sha256": "96aae692b2195dbac2ddf9163163e1ddabce867d90a401b4e9f049e30453e922"
+    },
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+      "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+    },
+    {
+      "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/configs/fixed46-candidate-v060-budget150.json",
+      "sha256": "be8a7dc2dc0e87d76e60fb84de688b93ef1ad4a839f3545530ad5e7e00209866"
+    }
+  ],
+  "checks": [
+    {
+      "id": "obligation_lineage",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/IMPLEMENTATION_COVERAGE_v1.json",
+          "sha256": "96aae692b2195dbac2ddf9163163e1ddabce867d90a401b4e9f049e30453e922"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+          "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_explicit_obligation_lineage.py",
+          "sha256": "f1a9b73485892bcfe84116ef8f3ed684307ab4e4a07d1d769f8025f41a10ca8c"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_obligation_lineage.py",
+          "sha256": "e5004772d263e80d536063934f2cde29ec371b7738de973fce7737256d385f32"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_lineage_request_continuity.py",
+          "sha256": "1b0f58b8c058ef92a06907831a58cc678a9d51d7cb3a82e86189c805f46fbb9a"
+        }
+      ]
+    },
+    {
+      "id": "operation_fact_consistency",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/IMPLEMENTATION_COVERAGE_v1.json",
+          "sha256": "96aae692b2195dbac2ddf9163163e1ddabce867d90a401b4e9f049e30453e922"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+          "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_structured_observation_adapters.py",
+          "sha256": "eb7484083d5e42fb1ec4c01ab13a9ee9c76f722c9aa4553288800baffe5a2765"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_operation_consistency.py",
+          "sha256": "7dddb8c15789687ab8ce484a9f365f1d6a02444a0081f30cc76794a161a8186e"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_operation_failure_routing.py",
+          "sha256": "1d327f9e9e9fd0e30772d35cb430505dc713e84fa95a23729124de6bacf8d4e4"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_observation_selection.py",
+          "sha256": "639c065183004db47989ed3a92384c573cec64f852b5c765597ccdf1615ea5d9"
+        }
+      ]
+    },
+    {
+      "id": "helper_prerequisites",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/IMPLEMENTATION_COVERAGE_v1.json",
+          "sha256": "96aae692b2195dbac2ddf9163163e1ddabce867d90a401b4e9f049e30453e922"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+          "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_helper_preconditions.py",
+          "sha256": "f15f02827a119ee34e5a675f9ecaab22e4172a4b9b4d3ee793c3f9b416312363"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_plan_precondition_coverage.py",
+          "sha256": "678f765204d3358a7ce76d3e9ad09d7b1b7a021ec6f86fb511d588ffa2c39750"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_planning_helper_contracts.py",
+          "sha256": "771ad6f9ed34c0f7d1c6ed742c5c7c79f96ab2cf3fabc530802e67303c45c323"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_execution_helper_context.py",
+          "sha256": "0577f0ea754c055d4d088ec201d3004b6a3cf181b76363f02c8311ec63b8648b"
+        }
+      ]
+    },
+    {
+      "id": "bounded_gap_delivery",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/IMPLEMENTATION_COVERAGE_v1.json",
+          "sha256": "96aae692b2195dbac2ddf9163163e1ddabce867d90a401b4e9f049e30453e922"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+          "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_gap_delivery.py",
+          "sha256": "493b95e1b294f0c5d0799b6e80cfec25343d536a72ba5a2999d6bf9f9b0efa10"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_probe_source_entrypoints.py",
+          "sha256": "c8fa5fde096434a8605b54193d8b8d19c1152ee280a47c6c1329ab26e932ccc3"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_ready_support_consistency.py",
+          "sha256": "cf0246b0968cb5661c5acad628cc013d2c9b41e21da4d01b180c1de0cafbce63"
+        }
+      ]
+    },
+    {
+      "id": "candidate_preservation",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/IMPLEMENTATION_COVERAGE_v1.json",
+          "sha256": "96aae692b2195dbac2ddf9163163e1ddabce867d90a401b4e9f049e30453e922"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+          "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_candidate_regression_guard.py",
+          "sha256": "4a9bf103a6720e77d38242e25a9a7dd7c3bc3732c28d827a4a9451f880af7199"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_preservation_impact.py",
+          "sha256": "b538b5841804ca78910bd21ae556a25d6fbb586f1ac2683593d82115db1da65f"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_pending_preservation_guard.py",
+          "sha256": "2078be8a36aed2bae30c2ad28ff130d7331d821ea9de22492e7b6b5ae5af68fd"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_preservation_identity_feedback.py",
+          "sha256": "7387244a3866f999d06cca333012551673031c9f6beb13a0631aa3eaaf9b1c3d"
+        }
+      ]
+    },
+    {
+      "id": "feedback_unknown_reasons",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/IMPLEMENTATION_COVERAGE_v1.json",
+          "sha256": "96aae692b2195dbac2ddf9163163e1ddabce867d90a401b4e9f049e30453e922"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/ORDERING_SOURCE_QUALIFICATION.json",
+          "sha256": "b9f70e2e104d6e61900ace34bd74b1a2fd6b215faf090b6d8126bbb58a53f6bb"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_check_coverage.py",
+          "sha256": "d4a3af6c9d1918600d14769d5f8e3ff479e0b77fb0e53875a6c82510da241694"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_failure_tasks.py",
+          "sha256": "e402d77120bcb857d26f54e502a9ddde2a93f6e7a1cb6841f6d6ddb57c3356cd"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_method_behavior_probes.py",
+          "sha256": "dc9675cb3106b07edabed440d5488c2af385bc33d5a46e0243a18804eecd7a3e"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_temporal_probe_dispatch.py",
+          "sha256": "4cf067e95aec9c5cf8de029b045cee3c0613a4c525d876d9decdc47c80433309"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_temporal_response_bounds.py",
+          "sha256": "5bca0737e8fc6f704636fb4b9216481bf7cb735c75c165c8c5833aeec79d9408"
+        },
+        {
+          "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/tests/test_necessary_coverage_review.py",
+          "sha256": "11c5a102da7d6e9edf7d185679004b5f6e9d955629eb625a98ceb0b1001b9888"
+        }
+      ]
+    }
+  ],
+  "scope": "Author requirement-to-implementation/test mapping; two previously unbound fixture modules are separately pinned to published bytes and rerun. Not independent whole-branch review, arbitrary semantic proof or real repair acceptance"
+}

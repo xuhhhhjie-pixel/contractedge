@@ -1,0 +1,262 @@
+{
+  "scope": "Public saved-candidate operational replay only, zero model HTTP, no new fixed46 result",
+  "archive_sha256": "9a4aa8ec06f639998e45f01b5519d1259d2b254aaf9cea8fd1d93ecaa4421106",
+  "members": {
+    "checker/clean_clone_roundtrip.py": {
+      "sha256": "60e821bf2b13c0b58068ea9a161d8d8cfb09c6c09d26c05d1467ddc336b96f24",
+      "bytes": 8766
+    },
+    "exported-candidate.patch": {
+      "sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+      "bytes": 1474
+    },
+    "operational-readiness.json": {
+      "sha256": "d7c122ebbef1f33378cdd1d9e8c62edc9487a1887167f8a1c6c9975d3535d349",
+      "bytes": 3581
+    },
+    "producer/source-switch.json": {
+      "sha256": "6e43a9205b5c632f289c4ed1d4b805d58ccd318d15776539c0812b2789885226",
+      "bytes": 874
+    },
+    "public-export-checker/collect_patch.py": {
+      "sha256": "325b1325abfa152891830463811410b05d323068dbe00dca6a9a75943b1987f7",
+      "bytes": 1913
+    },
+    "public-observation/launcher/tool.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "public-observation/launcher/tool.stdout": {
+      "sha256": "e75904784abd838c52ba33731177675e92e306c724e919c0989b26fad461a816",
+      "bytes": 396
+    },
+    "public-observation/observation.json": {
+      "sha256": "e7607c39cd86fb80bce2ccbfb0dd41795e94cd7c9a876c5b9ba89189d25267b1",
+      "bytes": 666141
+    },
+    "public-observation/raw/control.pod-spec-0000.json": {
+      "sha256": "9af6a9fff28575287397e6e77a837c96f27db8688410afb8cdc74d3a54c6d966",
+      "bytes": 4508
+    },
+    "public-observation/raw/control.pod-spec-0001.json": {
+      "sha256": "343d56d7a7395dcc54f084787a51c3fa362d73999e770c2ab7d05756aaa81752",
+      "bytes": 1394
+    },
+    "public-observation/raw/control.pod-spec-0002.json": {
+      "sha256": "d623a52ad3ec7ce6fef2c767e846e46786bba69833c71cdd010dc9b0f3a3f43c",
+      "bytes": 1081
+    },
+    "public-observation/raw/control.pod-spec-0003.json": {
+      "sha256": "925caee8c9a30d6e91bfcb907ae23eedfa8419143ab40aca43e219f41c6044a7",
+      "bytes": 1030
+    },
+    "public-observation/raw/control.render-index.json": {
+      "sha256": "db17b4b7d3cc5cf10e667743a0db99c8789fa25b4dfdb256f41e639709fd0a9b",
+      "bytes": 24615
+    },
+    "public-observation/raw/control.render-kind-Application.json": {
+      "sha256": "ede3a9248c216bf0ae5c35b1d22f15ac011bf93e014497bd5536ee7337a95ef1",
+      "bytes": 375
+    },
+    "public-observation/raw/control.render-kind-ClusterRole.json": {
+      "sha256": "e845e6c0e2486885ebd21c7faab8de868af32b6f0956bd8ae9f728e49986016b",
+      "bytes": 369
+    },
+    "public-observation/raw/control.render-kind-ClusterRoleBinding.json": {
+      "sha256": "047a0e7d77bbefa37a56da752b8e829a1f3321e4f1c61c071cef4c8656f4aba5",
+      "bytes": 506
+    },
+    "public-observation/raw/control.render-kind-ComponentDefinition.json": {
+      "sha256": "b862fd6afcec4b89f23197b30aae8b61629085e34d2342411959ef64d96a9461",
+      "bytes": 1260
+    },
+    "public-observation/raw/control.render-kind-ConfigMap.json": {
+      "sha256": "6fa3c7839b6ca0ba9919f8f89ce580ce3af00a765589b9bda7a5fc403e1fe0f0",
+      "bytes": 1071
+    },
+    "public-observation/raw/control.render-kind-Deployment.json": {
+      "sha256": "0e0c8e8e3c33fbcbb746dd1dceaa941b2ae16510fca6b1ac600f7f03495a16e6",
+      "bytes": 367
+    },
+    "public-observation/raw/control.render-kind-Job.json": {
+      "sha256": "10e0a172e465ca474875fa34dd6b7bd26741368d587b746f5894d65ab7cbcedd",
+      "bytes": 484
+    },
+    "public-observation/raw/control.render-kind-MutatingWebhookConfiguration.json": {
+      "sha256": "5875c6708ab6d6274b5e41469220f2143165a3cb90b15cb0ee5b324cbb1a1d2e",
+      "bytes": 413
+    },
+    "public-observation/raw/control.render-kind-Pod.json": {
+      "sha256": "8cc594635bc5e64f6826d251550d0b06c36cb925582682035769196741fa790c",
+      "bytes": 360
+    },
+    "public-observation/raw/control.render-kind-PolicyDefinition.json": {
+      "sha256": "326f6c0d967a253b3c51e18782e44636dcf0776e2613c89642d3ee279489e39c",
+      "bytes": 1368
+    },
+    "public-observation/raw/control.render-kind-Role.json": {
+      "sha256": "c0dbe931b42ab543145b4d62ec1190953e8d89b20bd4f5a8f41b5207d3ad0e7d",
+      "bytes": 605
+    },
+    "public-observation/raw/control.render-kind-RoleBinding.json": {
+      "sha256": "766bbf8b033cfeef86b7e58986c8934a05ab9eafb3d884ab7c32e7c89ea01157",
+      "bytes": 643
+    },
+    "public-observation/raw/control.render-kind-Service.json": {
+      "sha256": "28b5b3422cd234eb7c46db8a5018262bfa0c109a6a7e5c071f0eaccac8d203a7",
+      "bytes": 366
+    },
+    "public-observation/raw/control.render-kind-ServiceAccount.json": {
+      "sha256": "cce290d169779f16eb9dbc72c8c945f9482860183d267d57eac851c3353b9e6a",
+      "bytes": 494
+    },
+    "public-observation/raw/control.render-kind-TraitDefinition.json": {
+      "sha256": "dbc9a764ee2a5e4a73918bdad2f0cd57a4ed92dbccdb4d4678e7e3a4f6854533",
+      "bytes": 4065
+    },
+    "public-observation/raw/control.render-kind-ValidatingWebhookConfiguration.json": {
+      "sha256": "5f3ec8758923811d2030d40e0d3ac2cbbb4658a405ca48bc685d48df7579feae",
+      "bytes": 417
+    },
+    "public-observation/raw/control.render-kind-WorkflowStepDefinition.json": {
+      "sha256": "1fde91996aff5d215d29daeef7a92565989ed022b60c9ee18a86d7e79a10c485",
+      "bytes": 4456
+    },
+    "public-observation/raw/control.render-overview.json": {
+      "sha256": "9e9ffd0bcf22c60352117ac5882147550483a0ddb9eb91da6dda42dec33d1c9a",
+      "bytes": 689
+    },
+    "public-observation/raw/control.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "public-observation/raw/control.stdout": {
+      "sha256": "ca657d52603d6e67893e29f1e49cfdb05acb6af000bf0694f2049a1bd4e00241",
+      "bytes": 346969
+    },
+    "public-observation/raw/public_execution.json": {
+      "sha256": "66f8a9a2cd73a35dc676e6b23e75a4b82517681e67d40c7c5c756303e7f081c2",
+      "bytes": 492
+    },
+    "public-observation/raw/trigger.pod-spec-0000.json": {
+      "sha256": "ea875a0b20684eeaff01866cdff07f4c72413235a43d30a2a8d501dbb345f694",
+      "bytes": 2651
+    },
+    "public-observation/raw/trigger.pod-spec-0001.json": {
+      "sha256": "a2e32f87d64e1f0133bb09fd73be37b9b20b89806a1ed54e8aca5bb47f29c2e5",
+      "bytes": 4964
+    },
+    "public-observation/raw/trigger.pod-spec-0002.json": {
+      "sha256": "bb0cbfe9f7a0c710504214a2f4537cd30d25481b03be182ec760bd1fc7b8730e",
+      "bytes": 1394
+    },
+    "public-observation/raw/trigger.pod-spec-0003.json": {
+      "sha256": "084c8f7a5e881fe51c75d3efac7f931ae9ea507d291d85b089f1bf2160a124a9",
+      "bytes": 1081
+    },
+    "public-observation/raw/trigger.pod-spec-0004.json": {
+      "sha256": "521670e448c7e53791a7fc32dca252072eb6633ef68469a610cd469cf64fcf8d",
+      "bytes": 1030
+    },
+    "public-observation/raw/trigger.pod-spec-0005.json": {
+      "sha256": "2a5793c3da89d90f6492f8a695dc0df49446429e74683b2bdb690082a32da61d",
+      "bytes": 1777
+    },
+    "public-observation/raw/trigger.pod-spec-0006.json": {
+      "sha256": "c2bb19d9544489d2dd61da3b37f3e0d5c97adab1159a79dfe83d33dc990f1de7",
+      "bytes": 1632
+    },
+    "public-observation/raw/trigger.render-index.json": {
+      "sha256": "0b8a5710b142329f4b23241dcf575397aa0fe4dd5139f5c0ac0b480a486a7d2f",
+      "bytes": 32585
+    },
+    "public-observation/raw/trigger.render-kind-APIService.json": {
+      "sha256": "ac7d439789d978e524fb3e04ccbe17b4b2182900587afeef5ca2e93bf492c412",
+      "bytes": 374
+    },
+    "public-observation/raw/trigger.render-kind-Application.json": {
+      "sha256": "c9a254462fc69d3066b1ce754638b971cf1bfe910e0ca92a4b41fefa7d9c8807",
+      "bytes": 375
+    },
+    "public-observation/raw/trigger.render-kind-ClusterRole.json": {
+      "sha256": "33bbed165145348ff40493318d855c7160686d04b9ca438800dc7ca964986b66",
+      "bytes": 487
+    },
+    "public-observation/raw/trigger.render-kind-ClusterRoleBinding.json": {
+      "sha256": "3eb93551c1a9451d3d088d82d57d2f96d9310e90938fd39814fede0300f96da2",
+      "bytes": 631
+    },
+    "public-observation/raw/trigger.render-kind-ComponentDefinition.json": {
+      "sha256": "f426a624808bdfbd60e6a1374214ba9a21b0769d9cac58558d36c448eb763140",
+      "bytes": 1260
+    },
+    "public-observation/raw/trigger.render-kind-ConfigMap.json": {
+      "sha256": "f2a7099694566d229a809fcca14d96d811b948242775eee59777585e502795e5",
+      "bytes": 1194
+    },
+    "public-observation/raw/trigger.render-kind-Deployment.json": {
+      "sha256": "e7dbd7b04f8743596f0157da205b01df069a9f37cbbd4ef00b7160329688ee4c",
+      "bytes": 478
+    },
+    "public-observation/raw/trigger.render-kind-Job.json": {
+      "sha256": "7c84a383cfba02a18402a565bda3e7fd0039864eb36ed69e41496ca80a45f040",
+      "bytes": 747
+    },
+    "public-observation/raw/trigger.render-kind-MutatingWebhookConfiguration.json": {
+      "sha256": "80794c33216916ebd6bcece25ff2de4b328016619c9a7700b86f90872f6f523f",
+      "bytes": 413
+    },
+    "public-observation/raw/trigger.render-kind-Pod.json": {
+      "sha256": "d407015367f85b378d0aa5b2d2b7bc9f430871b4beb5d4271238dafc5b80d7ad",
+      "bytes": 360
+    },
+    "public-observation/raw/trigger.render-kind-PolicyDefinition.json": {
+      "sha256": "88b23236319bf5836b3cbcdb16ce3f9f5024f4f191b831f81a3ecefa88d1eaae",
+      "bytes": 1368
+    },
+    "public-observation/raw/trigger.render-kind-Role.json": {
+      "sha256": "88167ef57a8679be63c2bc6f0454afebb964670a858f42631841df33d84f0ab4",
+      "bytes": 730
+    },
+    "public-observation/raw/trigger.render-kind-RoleBinding.json": {
+      "sha256": "4af120f2e0a63b03f9ab8f76a5768618151da03010f721eae21c5eee0f78c43f",
+      "bytes": 775
+    },
+    "public-observation/raw/trigger.render-kind-Service.json": {
+      "sha256": "0fe3bc32ef7fd13b87ef49ee3d1b940492ffd48ad25a1dc4ec3a6e553137e9e9",
+      "bytes": 482
+    },
+    "public-observation/raw/trigger.render-kind-ServiceAccount.json": {
+      "sha256": "e5f22ba213419fe5d563aed0fa55e4d787432f72e57265126f7b329c3343da99",
+      "bytes": 629
+    },
+    "public-observation/raw/trigger.render-kind-TraitDefinition.json": {
+      "sha256": "39afad15d4b2f5d5b6548636e1b398222c5ed9448531daa28dcb1e682c689c79",
+      "bytes": 4065
+    },
+    "public-observation/raw/trigger.render-kind-ValidatingWebhookConfiguration.json": {
+      "sha256": "6b8ac29544b9808c32922515e1c9ba6453ad5d82f1c0e35a4e4e0784c50e7706",
+      "bytes": 417
+    },
+    "public-observation/raw/trigger.render-kind-WorkflowStepDefinition.json": {
+      "sha256": "6faf1df0a6ba5fa8d6853deed8a8216971321f8a6ce6738a2743d43a7b73ffa2",
+      "bytes": 4456
+    },
+    "public-observation/raw/trigger.render-overview.json": {
+      "sha256": "f243de9c7038de82f4986d5a979ced267e3434e67cea83a78ca5839ccb4f0927",
+      "bytes": 710
+    },
+    "public-observation/raw/trigger.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "public-observation/raw/trigger.stdout": {
+      "sha256": "9bfd14e01f3a498a6c5f2f6cecca69bfdc46bfeb836c066299efd66c6ff38dee",
+      "bytes": 359077
+    },
+    "sealed-input.json": {
+      "sha256": "31eb83baba3e56eadc11c8ead7ddec15a47135f5f7ef9c77f38aae4f72535e3c",
+      "bytes": 706
+    }
+  }
+}

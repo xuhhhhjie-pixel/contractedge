@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "model_calls_added": 0,
+  "hidden_feedback_read": false,
+  "source_sha256": "6cbcfd6d3a9018d31a6ebc0c7e59854f1f3e2f073d3aee839be26eee8668000a",
+  "trial_patch": {
+    "path": "/home/xhj/contractedge-establishment-v062-20261028/fresh-broken/case/RW-ALERTMANAGER-4705/rounds/0/candidate.patch",
+    "sha256": "b0bdd4729f37efd7cdedd98da19977795d0006652e3af0e4f0b2ed5e71ecfbc1"
+  },
+  "public_probe_report": {
+    "path": "/home/xhj/contractedge-establishment-v062-20261028/fresh-broken/case/RW-ALERTMANAGER-4705/rounds/0/public/method-probes/report.json",
+    "sha256": "4561519e3cfa19fe36684bc0b5afeaefe9d89553fc11f585cf733a4137485491"
+  },
+  "restored_snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "trial_snapshot": "38430dfa9c0344b66e7bff5f667a94f44aa096259fbfcbc1f33c9fa80d424f36",
+  "observed_operation": "PRODUCTION_PROCESS_READINESS",
+  "observed_source_cause": "UNKNOWN",
+  "semantic_outcome": "UNKNOWN",
+  "available_route": "EXECUTE_WITHIN_EXISTING_ROUND_LIMIT",
+  "failure_task_delivered": true,
+  "current_source_reread": true,
+  "request_sha256": "68d4ff39686becf6a00b7ee5d96adf034791e047decdc50d937bb790111b22b1",
+  "scope": "Public operation feedback and restored-source delivery only; no repair success inferred",
+  "formal_ready": false
+}

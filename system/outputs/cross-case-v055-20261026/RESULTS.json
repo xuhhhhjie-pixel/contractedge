@@ -1,0 +1,55 @@
+{
+  "status": "CLOSED_CROSS_CASE_GATE_FAILED_KPT",
+  "rows": [
+    {
+      "case_id": "R3-KPT-4673",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "SEMANTIC_FAIL",
+      "public_outcome": "PUBLIC_REVIEW_FAIL",
+      "patch_bytes": 2193,
+      "output": "/home/xhj/contractedge-cross-case-v055-20261026/methods/R3-KPT-4673/R3-KPT-4673",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-cross-case-v055-20261026/methods/R3-KPT-4673/.isolated-497e615a04e14549832bc4e68dd0933a/receipt.json",
+          "sha256": "47253a68f53979259a784533988c89fe606367feb055c39d3363d41fffcb75b7"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-cross-case-v055-20261026/methods/R3-KPT-4673/R3-KPT-4673/repair.trace.json",
+          "sha256": "15517c23ed954d98720594ab16a4c5689f1cb6de1b73a3c51eadcb26e2c4a073"
+        }
+      },
+      "model_calls": 9,
+      "errors": [],
+      "archive_sha256": "0b024d88711f6f741999c3b6fd10c8f26e7a2cfb3123c02fdb132c8b1f3489f5",
+      "archive_files": 383
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "public_outcome": "UNKNOWN",
+      "patch_bytes": 2249,
+      "output": "/home/xhj/contractedge-cross-case-v055-20261026/methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116",
+      "evidence_files": {
+        "receipt": {
+          "path": "/home/xhj/contractedge-cross-case-v055-20261026/methods/RW-CERTMANAGER-9116/.isolated-12e91b6e60284c11b74d29049f425cba/receipt.json",
+          "sha256": "3428c4d3cadaac66edb7e3ed7bd33e923c3f33d354ca703bc3682918f8bd81bb"
+        },
+        "trace": {
+          "path": "/home/xhj/contractedge-cross-case-v055-20261026/methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116/repair.trace.json",
+          "sha256": "c41dca953f693d94e9eab345e71836bd64e67172b2af7319041973b46a1bebd5"
+        }
+      },
+      "model_calls": 4,
+      "errors": [],
+      "archive_sha256": "891c47afb198f4ad19c5dccf4a91d8e46b0429f8d02ae613a5d9d6ceb4539862",
+      "archive_files": 216
+    }
+  ],
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "new_fixed46_dispatches": 0,
+  "cumulative_api_cny": 125.131942,
+  "remaining_upper_bound_cny": 24.868058,
+  "ledger_calls": 1214
+}

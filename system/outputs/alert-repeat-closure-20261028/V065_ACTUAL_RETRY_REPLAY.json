@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "model_http_calls_added": 0,
+  "source_sha256": "b4a6e47cf5c7404b7eb05cb7d7eb6b1aea6fdd08717f57ef9c11b748153dd256",
+  "original_effective_thinking": "disabled",
+  "new_effective_thinking": "enabled",
+  "trigger": "VERIFIED_RUNTIME_FAILURE",
+  "restored_snapshot": "38430dfa9c0344b66e7bff5f667a94f44aa096259fbfcbc1f33c9fa80d424f36",
+  "trial_snapshot": "a662c172cc9db0ce9ac6642118f6677fb9a91d890d22ca28806e73611e19f133",
+  "exact_public_calls_sha256": "0f9483534383edca6336d4b821b09573e776f5374c929f7d33443801a1c7d128",
+  "historical_failure_task_delivered": true,
+  "semantic_outcome": "UNKNOWN",
+  "no_behavior_verdict_changed": true,
+  "output_cap_unchanged": true,
+  "scope": "Execution policy and source/failure continuity only; model repair success not inferred",
+  "formal_ready": false
+}

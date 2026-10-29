@@ -1,0 +1,105 @@
+{
+  "status": "PASS",
+  "source_sha256": "6cbcfd6d3a9018d31a6ebc0c7e59854f1f3e2f073d3aee839be26eee8668000a",
+  "model_calls_added": 0,
+  "all_original_evidence_retained": true,
+  "automatic_plan_changes": false,
+  "results": [
+    {
+      "label": "Alert-success",
+      "current_snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "old_reviews": 12,
+      "new_reviews": 9,
+      "all_source_records_retained": 15,
+      "alias_ids": [
+        "HELPER-993996d987a4f64e",
+        "HELPER-c76cc3560e30e77d",
+        "HELPER-2605c1d6fe69909a"
+      ],
+      "request_sha256": "2d591ca1e14487eb19662d3b3e0d48b4d747b52336e68d86aeb23688dea2bf10"
+    },
+    {
+      "label": "Alert-failure",
+      "current_snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "old_reviews": 12,
+      "new_reviews": 9,
+      "all_source_records_retained": 15,
+      "alias_ids": [
+        "HELPER-993996d987a4f64e",
+        "HELPER-c76cc3560e30e77d",
+        "HELPER-2605c1d6fe69909a"
+      ],
+      "request_sha256": "1b253b91988d285e656b0d0c65788b95e6fbb256ed75237c76cacb450c55e250"
+    },
+    {
+      "label": "Alert-rediagnosis",
+      "current_snapshot": "46f113fe0f69324bda3c04de46ee0a1c70e151b06b5563bfa85fe464505ad997",
+      "old_reviews": 12,
+      "new_reviews": 11,
+      "all_source_records_retained": 20,
+      "alias_ids": [
+        "HELPER-2605c1d6fe69909a"
+      ],
+      "request_sha256": "9c48d6382e131eee987ba83857073b52500a98d5be5cf0144318566d21454656"
+    },
+    {
+      "label": "KPT-control",
+      "current_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "old_reviews": 8,
+      "new_reviews": 8,
+      "all_source_records_retained": 8,
+      "alias_ids": [],
+      "request_sha256": "2392908ec63c45cb3a5e52bfe8358354c9ed77fc7da8e95510841d3e12ce08b2"
+    },
+    {
+      "label": "ACK-control",
+      "current_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+      "old_reviews": 1,
+      "new_reviews": 1,
+      "all_source_records_retained": 12,
+      "alias_ids": [],
+      "request_sha256": "823c7d467619febf4460b5f3d170fd8e342f0e1f7bb636c5ebe2311215b998b3"
+    },
+    {
+      "label": "KOPF-control",
+      "current_snapshot": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+      "old_reviews": 1,
+      "new_reviews": 1,
+      "all_source_records_retained": 3,
+      "alias_ids": [],
+      "request_sha256": "76b69e1bc6258262acadbf2a4b2f4cd33213203062afe04f883aa21206c675c1"
+    },
+    {
+      "label": "Alert-actual-rejected-draft",
+      "current_snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "old_reviews": 12,
+      "new_reviews": 9,
+      "all_source_records_retained": 15,
+      "alias_ids": [
+        "HELPER-993996d987a4f64e",
+        "HELPER-c76cc3560e30e77d",
+        "HELPER-2605c1d6fe69909a"
+      ],
+      "request_sha256": "9fa998af74e6499fdb854236844a8be1e70092fa8329e696a48e3379cc9735d8",
+      "errors": [
+        {
+          "code": "SCHEMA_INVALID",
+          "path": "precondition_review",
+          "message": "Array has 13 items; maximum is 12. Duplicate source_evidence_ref: SRC-CU-647de303c8be8ecb (2). Consolidate all conditions for each source into one review, preserving every condition and check reference."
+        },
+        {
+          "code": "PRECONDITION_REVIEW_INCOMPLETE",
+          "path": "precondition_review",
+          "message": "Review each source exactly once. Missing: ; unexpected: HELPER-2605c1d6fe69909a, HELPER-993996d987a4f64e, HELPER-c76cc3560e30e77d; duplicate: SRC-CU-647de303c8be8ecb. Consolidate all conditions and check references for each canonical source into one review."
+        }
+      ],
+      "old_feedback_max_characters": 10962,
+      "new_feedback_characters": 459,
+      "rejected_draft_preserved_exactly": true,
+      "automatic_plan_changes": false,
+      "correction_request_sha256": "3c93cb0f1ad57f6164a402c6a47e0366bb0b734a433c013a45787e8011194141"
+    }
+  ],
+  "scope": "Request delivery and actionable structural correction, not repair success",
+  "formal_ready": false
+}

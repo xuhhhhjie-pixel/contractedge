@@ -1,0 +1,12 @@
+{
+  "status": "IMPORTANT_FIXED_TDD_FULL_SUITE_PASSED",
+  "findings": [
+    "Require explicitFalse completeness flags",
+    "Reject malformed containers and drop nonmapping facts"
+  ],
+  "red": "9failed14passed",
+  "related_green": "87passed",
+  "full": "841passed22subtests",
+  "reviewer_private_access": false,
+  "reviewer_edits": false
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": "ce.context_guard_real_request_replay.v1",
+  "status": "PASS_ZERO_HTTP",
+  "method_source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+  "method_configuration_sha256": "be8a7dc2dc0e87d76e60fb84de688b93ef1ad4a839f3545530ad5e7e00209866",
+  "recorded_guard_sha256": "d3d41ae6d6cde2436e52a276f9efe45ec233ad020e4d66c779b53ae3ea708655",
+  "corrected_guard_sha256": "8f52a8bbea29a8de36a468fcbaa93ba5ad1e2c0d3395bafb6acc619db6c3b298",
+  "results": [
+    {
+      "guard": "recorded",
+      "input_tokens": 211465,
+      "reserved_output_tokens": 16384,
+      "total_tokens": 227849,
+      "configured_input_cap": 220000,
+      "configured_total_cap": 262144,
+      "rpc_outcome": "OUTCOME_UNKNOWN",
+      "finite_dispatches": 0
+    },
+    {
+      "guard": "corrected",
+      "input_tokens": 211465,
+      "reserved_output_tokens": 16384,
+      "total_tokens": 227849,
+      "configured_input_cap": 220000,
+      "configured_total_cap": 262144,
+      "rpc_outcome": "DONE",
+      "finite_dispatches": 1
+    }
+  ],
+  "paid_prefix_unchanged": [
+    {
+      "prompt_version": "diagnosis.v1.1.26",
+      "request_digest": "74a9b48b6d5e24f89b227ebaa88cad91538a89fa12ed95c1d3d07a7a70133570",
+      "input_tokens": 95662,
+      "total_tokens": 112046,
+      "admission_unchanged": true
+    },
+    {
+      "prompt_version": "diagnosis.v1.1.26",
+      "request_digest": "c95ac8a1e92cd843cf58a344b0d131d686ed447041f8209ce8b46f9f7909c787",
+      "input_tokens": 104282,
+      "total_tokens": 120666,
+      "admission_unchanged": true
+    },
+    {
+      "prompt_version": "changeset.v1.1.13",
+      "request_digest": "aefbf1f402a2cbd2153a4ded763d6c501f937ed48ba00900dabbfef12f5d929d",
+      "input_tokens": 111440,
+      "total_tokens": 127824,
+      "admission_unchanged": true
+    },
+    {
+      "prompt_version": "topomen-source-execution.v1",
+      "request_digest": "cc1e81c5499bcc3ed66639bd046e939e1ff41794efa644e149eee705145a0a30",
+      "input_tokens": 107406,
+      "total_tokens": 123790,
+      "admission_unchanged": true
+    },
+    {
+      "prompt_version": "diagnosis.v1.1.26",
+      "request_digest": "2e184332e89ac1d8717fafdc0da108af0d894ba90dbae41980616f694caf9d0b",
+      "input_tokens": 203299,
+      "total_tokens": 219683,
+      "admission_unchanged": true
+    }
+  ],
+  "original_proofs": {
+    "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-bcd9a8d56a4e00f2f902f406/.isolated-2ed9e1d52cfc4556bc09255c4fc755d9/receipt.json": "219d5ccf7d56761fa7c1d1995114500c84466f7cd82851377d60c806891b629e",
+    "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-bcd9a8d56a4e00f2f902f406/.isolated-2ed9e1d52cfc4556bc09255c4fc755d9/method-journal/f853055159e342c08719bf162b485af5.json": "7c1e58860b36a71b1c7dc5a7094ab3f64594012776a439c1cb87eee0e5654a48",
+    "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-bcd9a8d56a4e00f2f902f406/.isolated-2ed9e1d52cfc4556bc09255c4fc755d9/child/R4-ACK-CLOUDWATCH-2985/model_calls.json": "2611e61c2bd6e396a97d14b7b5a7b1db84b1ae52899ae8b6f0c8c6422c5c5cf4",
+    "/home/xhj/contractedge-fixed46-source060-20261027/runs/methods/fixed46-v060-order-20261027-bcd9a8d56a4e00f2f902f406/.isolated-2ed9e1d52cfc4556bc09255c4fc755d9/parent-model-calls.json": "b7a4a1ad9e3b9e63e40b784e155962a7b0af2cc4fae030f407e806657e43f3c4"
+  },
+  "parent_actual_model_calls": 5,
+  "child_attempt_records": 6,
+  "last_paid_dispatches": 0,
+  "original_panel_closed_records": 9,
+  "original_panel_status": "AUDIT_REQUIRED_PRESERVED",
+  "original_journal_status": "PENDING_PRESERVED",
+  "financial_ledger_unchanged": true,
+  "ledger_sha256": "8e207efdd7f8c7a7a84db952c49f3ae0b96a0b4a6c23aca6f9d718081feeba7e",
+  "new_model_http_calls": 0,
+  "original_receipt_rewritten": false,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "scope": "Exact saved public request and actual RPC journal path with finite local ports; not model repair success, a retry of the original attempt, or permission to drop the original infrastructure stop"
+}

@@ -1,0 +1,109 @@
+....................................................... [  2%]
+........................................................................ [  5%]
+........................................................................ [  9%]
+...................F................................................. [ 12%]
+........................................................................ [ 15%]
+........................................................................ [ 18%]
+..................................................... [ 21%]
+................................................................ [ 24%]
+........................................................................ [ 27%]
+........................................................................ [ 30%]
+........................................................................ [ 34%]
+........................................................................ [ 37%]
+........................................................................ [ 40%]
+........................................................................ [ 44%]
+...................................................................... [ 47%]
+........................................................................ [ 50%]
+.....................................F.................................. [ 54%]
+........................................................................ [ 57%]
+........................................................................ [ 60%]
+........................................................................ [ 64%]
+.............................................................. [ 66%]
+........................................................................ [ 70%]
+........................................................................ [ 73%]
+.................................................................................................................... [ 78%]
+........................................................................ [ 82%]
+...................................................................... [ 85%]
+........................................................................ [ 88%]
+........................................................................ [ 92%]
+........................................................................ [ 95%]
+...................................................................... [ 98%]
+...............................                                          [100%]
+=================================== FAILURES ===================================
+______ test_registered_checks_reach_review_feedback_and_regression_guard _______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-677/test_registered_checks_reach_r0')
+
+    def test_registered_checks_reach_review_feedback_and_regression_guard(tmp_path):
+        """Exercise the common pipeline, without depending on server replay files."""
+        import hashlib
+        from contractedge.execution.probes import behavior_records
+        from contractedge.execution.review import ModelPublicReviewer
+        from contractedge.orchestration.feedback import make_feedback
+        from contractedge.orchestration.candidate_guard import compare_candidate_checks, preservation_check_ids
+        program, checks = registered_programs()['cloudwatch-tags-v1']
+        probe_sha = hashlib.sha256(program.encode()).hexdigest()
+    
+        def observed(snapshot, preservation_status):
+            directory = tmp_path / snapshot
+            (directory / 'cloudwatch-tags-v1').mkdir(parents=True)
+            report = dict(status='COMPLETE', snapshot_id=snapshot, probes=[dict(
+                probe_id='cloudwatch-tags-v1', status='COMPLETE', probe_sha256=probe_sha,
+                scenario='method-cloudwatch-tags-v1', boundary='Local SDK IO only',
+                checks=[dict(id=key, status=preservation_status if key == 'unchanged_other_field' else 'PASS',
+                             statement=value, observed={'scenario':key}) for key, value in checks.items()])])
+            records = behavior_records(report, directory)
+            observations = [dict(id='OBS'+str(i), kind='PUBLIC_OBSERVATION', snapshot_id=snapshot,
+                excerpt=path.read_text(), locator={'path':path.name},
+                content_digest=hashlib.sha256(path.read_bytes()).hexdigest(), **meta)
+                for i, (path, meta) in enumerate(records.items())]
+            return dict(status='EXECUTION_PASS', snapshot_id=snapshot, input_digest='a'*64,
+                        environment_digest='environment', observations=observations)
+    
+        incumbent, trial = observed('S0', 'PASS'), observed('S1', 'FAIL')
+        preservation = dict(id='S1', outcome_id='O1', statement='Non-tag updates preserve the external tag set',
+            verification_kind='PUBLIC_BEHAVIOR', verification_scope={'scenario':'method-cloudwatch-tags-v1'},
+            behavior_check_refs=['cloudwatch-tags-v1:unchanged_other_field'], check_coverage='ALL_OF',
+            coverage_rationale='This predicate is limited to the fixed non-tag update scenario')
+        plan = dict(status='READY', changes=[dict(id='C1', postcondition_refs=['P1'])],
+            postconditions=[dict(id='P1', statement='Changed tag value is applied', verification_kind='PUBLIC_BEHAVIOR',
+                behavior_check_refs=['cloudwatch-tags-v1:value_change'], check_coverage='ALL_OF')],
+            preserve_constraints=[preservation], open_obligations=[])
+    
+        class NoModel:
+            def complete_json(self, request):
+                raise AssertionError('Bound checks must be aggregated without another model call')
+    
+        review = ModelPublicReviewer(NoModel(), len, {}).review('Public predicates', plan, trial)
+        assert review['decision'] == 'FAIL'
+>       assert {c['id']:c['status'] for c in review['checks']} == {'P1':'PASS','preserve:S1':'FAIL'}
+E       AssertionError: assert {'P1': 'UNKNO...e:S1': 'FAIL'} == {'P1': 'PASS'...e:S1': 'FAIL'}
+E         
+E         Omitting 1 identical items, use -vv to show
+E         Differing items:
+E         {'P1': 'UNKNOWN'} != {'P1': 'PASS'}
+E         Use -v to get more diff
+
+tests/test_cloudwatch_public_probe.py:48: AssertionError
+_ test_partial_negative_fact_reaches_necessary_failure_without_asserting_visibility _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-677/test_partial_negative_fact_rea0')
+
+    def test_partial_negative_fact_reaches_necessary_failure_without_asserting_visibility(tmp_path):
+        (tmp_path/PID).mkdir()
+        records=behavior_records(report(),tmp_path)
+        assert len(records)==1
+        observations=[]
+        for path,meta in records.items():
+            observations.append({'id':'PREFIX','snapshot_id':'current','excerpt':path.read_text(),**meta})
+        obligation={'behavior_check_refs':[PID+':'+CHECK,PID+':groups.visible_after_reload'],
+                    'check_coverage':'NECESSARY_ONLY','verification_kind':'PUBLIC_BEHAVIOR'}
+        result=deterministic_check_result(obligation,observations,snapshot_id='current')
+>       assert result['status']=='FAIL'
+E       TypeError: 'NoneType' object is not subscriptable
+
+tests/test_partial_probe_counterexamples.py:39: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_cloudwatch_public_probe.py::test_registered_checks_reach_review_feedback_and_regression_guard
+FAILED tests/test_partial_probe_counterexamples.py::test_partial_negative_fact_reaches_necessary_failure_without_asserting_visibility
+2 failed, 2170 passed, 91 subtests passed in 453.15s (0:07:33)

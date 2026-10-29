@@ -19,6 +19,7 @@ from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset
 from contractedge.changeset.prompt import build_changeset_request
 from contractedge.changeset.validate import validate_semantic_changeset
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
+from contractedge.contracts.public_checks import public_check_catalog
 from contractedge.execution.runtime_preflight import check_runtime, scoped_runtime_environment
 from contractedge.contracts.models import RunContext
 from contractedge.contracts.validation import canonical_digest, parse_method_input, validate_run_trace
@@ -122,6 +123,14 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
         current = resolve_execution_capabilities(capabilities)
         if any(recorded[key] != current[key] for key in ('consumer_id', 'supported_operations')):
             raise ValueError('Ready trace execution capabilities differ from current consumer')
+        public_check_catalog(recorded)
+        public_check_catalog(current)
+        # READY/revision cannot authorize a check removed or redefined since
+        # the actual planning request. Bind definitions, not only check names.
+        keys = ('registered_public_checks', 'method_behavior_probes')
+        if canonical_digest({k: recorded[k] for k in keys if k in recorded}) != canonical_digest(
+                {k: current[k] for k in keys if k in current}):
+            raise ValueError('Ready trace public check capabilities differ from current declarations')
     candidates = CandidateSet(**trace['candidate_set'])
     # Revalidate source excerpts in a resumed trace against actual current files.
     for candidate in candidates.candidates:
@@ -138,8 +147,27 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
     # Runtime evidence lives in the trace, not a mutation of original MethodInput.
     public = tuple(e for e in trace['diagnosis']['evidence_refs'] if e['kind'] == 'PUBLIC_OBSERVATION')
     run_input = replace(method_input, public_evidence=public or method_input.public_evidence)
-    expected_support = required_planning_source_support(run_input,candidates,snapshot.snapshot_id)
-    expected_prerequisites = required_source_prerequisites(candidates)
+    declaration=None
+    establishment_declaration=False
+    for call in reversed(trace.get('model_calls',[])):
+        if str(call.get('prompt_version','')).startswith('changeset.'):
+            declaration=call.get('request_metadata',{}).get('planning_helper_contracts')
+            establishment_declaration=call.get('request_metadata',{}).get('precondition_establishment_required',False)
+            break
+    expected_declaration=({'enabled':True,'max_bytes':context.retrieval_config.get('planning_helper_max_bytes',24000)}
+        if context.retrieval_config.get('planning_helper_contracts') is True else None)
+    if canonical_digest(declaration)!=canonical_digest(expected_declaration):
+        raise ValueError('Ready trace helper context differs from its actual planning declaration')
+    if establishment_declaration != context.retrieval_config.get('precondition_establishment_required',False):
+        raise ValueError('Ready trace establishment requirements differ from actual planning declaration')
+    helpers=[]
+    if context.retrieval_config.get('planning_helper_contracts') is True:
+        from contractedge.execution.helper_context import planning_helper_source_support
+        helpers,_=planning_helper_source_support(snapshot,candidates.candidates,
+            max_bytes=context.retrieval_config.get('planning_helper_max_bytes',24000))
+    expected_support = required_planning_source_support(run_input,candidates,snapshot.snapshot_id,helper_support=helpers)
+    expected_prerequisites = required_source_prerequisites(candidates,helper_support=helpers,
+        establishment_required=context.retrieval_config.get('precondition_establishment_required') is True)
     if (context.retrieval_config.get('necessary_source_support', []) != expected_support
             or context.retrieval_config.get('source_prerequisites', []) != expected_prerequisites):
         raise ValueError('Ready trace prerequisite context differs from actually supplied current source')
@@ -153,6 +181,7 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
         policy=(context.retrieval_config.get('public_execution_capabilities') or {}).get('editable_policy'),
         frontier=context.retrieval_config.get('production_path_frontier'),
         prerequisites=context.retrieval_config.get('source_prerequisites'),
+        source_support=context.retrieval_config.get('necessary_source_support'),
         capabilities=context.retrieval_config.get('public_execution_capabilities'))
     if not validation.valid:
         raise ValueError('Ready trace plan failed consumer preflight: ' + str(validation.errors))
@@ -164,11 +193,89 @@ def canonical_text_digest(text):
     return hashlib.sha256(text.encode()).hexdigest()
 
 
+def plan_reassessment_required(plan: Mapping, current_snapshot: str, previous: Mapping | None) -> bool:
+    """Request a prerequisite review, without attributing the runtime failure.
+
+    Compiler errors and unrelated/unknown probe errors keep the existing edit
+    route. A verified readiness failure questions whether a required runtime
+    prerequisite was established; the planner may retain or revise its intent.
+    """
+    if not any(p.get('disposition') == 'REQUIRED' for p in plan.get('precondition_review', [])):
+        return False
+    previous = previous or {}
+    trial = previous.get('rejected_trial') or {}
+    decision = trial.get('decision') or trial.get('candidate_decision') or {}
+    if trial.get('decision') and trial.get('candidate_decision') and trial['decision'] != trial['candidate_decision']:
+        return False
+    historical = trial.get('feedback') or {}
+    if not (previous.get('source_snapshot') == current_snapshot
+            and decision.get('decision') == 'UNCOMPARABLE'
+            and decision.get('from_snapshot') == current_snapshot
+            and trial.get('snapshot_id') and trial['snapshot_id'] != current_snapshot
+            and decision.get('trial_snapshot') == trial['snapshot_id'] == historical.get('to_snapshot')
+            and historical.get('build_state') == 'FAILED'):
+        return False
+    from contractedge.execution.public import is_registered_readiness_failure
+    return any(isinstance(f, Mapping) and f.get('kind') == 'CANDIDATE_RUNTIME_FAILURE'
+        and f.get('snapshot_id') == trial['snapshot_id'] and is_registered_readiness_failure(f)
+        for f in historical.get('observation_diagnostics', []))
+
+
+def behavior_plan_reassessment_required(plan: Mapping, current_snapshot: str, feedback: Mapping | None) -> bool:
+    """A bound necessary failure can question intent even when startup succeeds."""
+    if (not feedback or feedback.get('to_snapshot') != current_snapshot
+            or feedback.get('semantic_outcome') != 'PUBLIC_REVIEW_FAIL'
+            or not any(p.get('disposition') == 'REQUIRED' for p in plan.get('precondition_review', []))):
+        return False
+    from contractedge.execution.support import deterministic_check_result
+    return any((result := deterministic_check_result(condition, feedback.get('public_observations', []),
+        snapshot_id=current_snapshot, capabilities=feedback.get('public_execution_capabilities')))
+        and result['status'] == 'FAIL'
+        for kind in ('postconditions', 'preserve_constraints', 'open_obligations')
+        for condition in plan.get(kind, []))
+
+
+def prerequisite_review_feedback(feedback: Mapping) -> dict:
+    """Use the existing uncertain diagnosis-stage route, not a causal verdict."""
+    result = {**feedback, 'route': 'DIAGNOSIS', 'next_action': 'DIAGNOSIS',
+        'failure_kind': 'DIAGNOSIS', 'route_confidence': 'LOW',
+        'rationale': 'A current necessary behavior failed under prerequisite-dependent intent. Reassess current '
+        'source and accepted assumptions before another edit; this route is not proof that the plan caused it. '
+        'DIAGNOSIS selects the work stage at LOW confidence, not proven source blame. This review instruction '
+        'supersedes the old execution-first instruction. The unchanged original feedback retains its attribution '
+        'and rationale; do not treat that historical instruction as the current action.'}
+    result.pop('routing_policy', None)
+    return result
+
+
 def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
-                provider, token_counter, config: Mapping) -> dict:
+                provider, token_counter, config: Mapping, *, rejected_trial=None) -> dict:
     packet, context = validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
-    request = build_changeset_request(packet, context, [{'code': 'PUBLIC_EXECUTION_PLAN_FEEDBACK',
-                                                        'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}])
+    validation_feedback = [{'code': 'PUBLIC_EXECUTION_PLAN_FEEDBACK',
+        'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}]
+    if rejected_trial is not None:
+        decision = rejected_trial.get('decision') or rejected_trial.get('candidate_decision') or {}
+        if (decision.get('from_snapshot') != context.snapshot_id
+                or decision.get('trial_snapshot') != rejected_trial.get('snapshot_id')
+                or rejected_trial.get('snapshot_id') == context.snapshot_id
+                or (rejected_trial.get('feedback') or {}).get('to_snapshot') != rejected_trial.get('snapshot_id')):
+            raise ValueError('Rejected trial snapshot does not bind this current plan revision')
+        validation_feedback.append({'code': 'REJECTED_TRIAL_PREREQUISITE_REASSESSMENT',
+            'message': json.dumps(dict(current_snapshot=context.snapshot_id, rejected_trial=rejected_trial,
+                instruction='The recorded failure is not proof of a plan defect or source cause. Reassess required '
+                'preconditions against the delivered current source and the historical failed edits. Distinguish '
+                'a false plan assumption from an implementation that did not fulfill valid intent. Preserve valid '
+                'intent when implementation alone failed; revise unsupported mechanisms instead of requiring the '
+                'executor to obey them. A source comment, empty collection, worker launch or first received item '
+                'does not prove completion. State the producer-backed completion condition, including zero initial '
+                'work and continued updates, or leave it unresolved. Historical observations retain their own '
+                'snapshot and cannot prove current satisfaction. Preserve every requirement and protected condition.'),
+                ensure_ascii=False)})
+    request = build_changeset_request(packet, context, validation_feedback,
+        previous_attempt=dict(run_id=context.run_id, snapshot_id=context.snapshot_id,
+            input_digest=context.input_digest, diagnosis_digest=canonical_digest(packet.raw),
+            response_content=json.dumps(trace['changeset'], ensure_ascii=False, sort_keys=True),
+            state='CURRENT_PLAN_FOR_REVISION'))
     quote = quote_request(provider, request, token_counter)
     if not context_fits(quote, int(config['max_context_tokens']), config.get('model_context_tokens')):
         raise BudgetExceeded('Plan revision exceeds the full context budget')
@@ -186,11 +293,13 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
         policy=(config.get('public_execution_capabilities') or {}).get('editable_policy'),
         frontier=context.retrieval_config.get('production_path_frontier'),
         prerequisites=context.retrieval_config.get('source_prerequisites'),
+        source_support=context.retrieval_config.get('necessary_source_support'),
         capabilities=context.retrieval_config.get('public_execution_capabilities'))
     if not validation.valid:
         raise PlanRejected('Feedback plan revision failed: ' + str(validation.errors))
     call = {'stage': 'EXECUTION_PLAN_REVISION', 'prompt_version': request.prompt_version,
             'response_content': response.content, 'response_metadata': dict(response.metadata), 'runner_binding': binding,
+            'request_metadata': dict(request.metadata),
             'prompt_tokens_reserved': quote.input_tokens,
             'output_tokens_reserved': request.max_output_tokens,
             'elapsed_seconds': provider.summary()['elapsed_seconds'] if isinstance(provider, BudgetedProvider) else 0}
@@ -198,10 +307,10 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
             'model_calls': list(trace['model_calls']) + [call]}
 
 
-def rebind_execution_plan(*args, **kwargs):
+def rebind_execution_plan(plan: Mapping, source: Path, feedback: Mapping, *, prior_execution=None) -> dict:
     """Compatibility export; new engine retries go through consumer.prepare."""
     from contractedge.execution.consumers.topomen import rebind_execution_plan as rebind
-    return rebind(*args, **kwargs)
+    return rebind(plan, source, feedback, prior_execution=prior_execution)
 
 
 def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
@@ -528,12 +637,32 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                                   'errors': delivery.receipt['errors']}, ensure_ascii=False))
                 break
             observations = delivery.records
+            if (mode == 'full' and trace is not None and retry_restored_candidate
+                    and plan_reassessment_required(trace.get('changeset') or {},compute_snapshot(source).snapshot_id,
+                                                   last_execution_attempt)):
+                revision_call_start=journal.position()
+                trace=revise_plan(trace,method_input,source,feedback,budget,token_counter,config,
+                    rejected_trial=last_execution_attempt['rejected_trial'])
+                write_json(directory/'plan-reassessment.trace.json',trace)
+                revision_value=journal.recorder.capture_value(trace['changeset'],'FINAL_SEMANTIC_PLAN',
+                    snapshot_id=trace['snapshot_id'])
+                journal.record('planning',attempt_id='round-'+str(round_id)+'.prerequisite-reassessment',
+                    snapshot_id=trace['snapshot_id'],status=trace['status'],call_start=revision_call_start,
+                    input_refs=tuple(journal.latest[k] for k in ('planning','feedback') if k in journal.latest),
+                    output_refs=(revision_value,))
+                # Re-prepare the consumer with the revised intent. Rebinding the
+                # previous AcceptedInput would silently discard the new plan.
+                execution_input=None;last_applied_execution=None;plan=None
             if trace is not None and engine.state.diagnosis_snapshot is None and trace.get('diagnosis'):
                 imported = (journal.capture('initial-front.trace.json', 'IMPORTED_FRONT_TRACE',
                                            snapshot_id=trace['snapshot_id']) if initial_trace else journal.latest.get('front'))
                 engine.step(StageResult('diagnosis', front_status(trace['diagnosis']['status']), imported,
                     snapshot_id=trace['snapshot_id']))
-            next_route = ('EXECUTE' if retry_restored_candidate else feedback['route'] if feedback else
+            behavior_reassessment = (mode == 'full' and trace is not None and
+                behavior_plan_reassessment_required(trace.get('changeset') or {},
+                    compute_snapshot(source).snapshot_id, feedback))
+            next_route = ('DIAGNOSIS' if behavior_reassessment else
+                          'EXECUTE' if retry_restored_candidate else feedback['route'] if feedback else
                           'EXECUTE' if trace is not None else 'DIAGNOSIS')
             round_decision = engine.start_round(StageResult('round_start', 'READY',
                 journal.latest.get('feedback') or journal.latest.get('front_import'),
@@ -554,10 +683,14 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     'model': {'model': config['model'], 'provider': config.get('provider', 'configured'),
                               'schema_in_prompt': config.get('schema_in_prompt', True)}}
                 trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
-                    budget, round_config, token_counter, execution_feedback=feedback if mode == 'full' else public_feedback(feedback),
+                    budget, round_config, token_counter,
+                    execution_feedback=(prerequisite_review_feedback(feedback) if behavior_reassessment else feedback)
+                        if mode == 'full' else public_feedback(feedback),
                     public_observations=observations, directory=directory, evidence_delivery=delivery.receipt,
                     journal=journal, attempt_id='round-' + str(round_id)).to_wire()
                 plan = None
+                execution_input = None
+                last_applied_execution = None
             if trace['status'] not in {'READY', 'READY_PARTIAL'}:
                 unknown = bool(budget.calls and budget.calls[-1].get('error')
                     and 'response_content' not in budget.calls[-1] and trace['status'] != 'BUDGET_EXHAUSTED')
@@ -582,8 +715,9 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     plan = None
                 else:
                     # Old source evidence cannot be relabelled as current solely to reuse a diagnosis.
-                    feedback = {**feedback, 'route': 'DIAGNOSIS', 'failure_kind': 'DIAGNOSIS',
-                                'rationale': 'Plan feedback requires rediagnosis because source evidence is stale.'}
+                    feedback = (prerequisite_review_feedback(feedback) if behavior_reassessment else
+                        {**feedback, 'route': 'DIAGNOSIS', 'failure_kind': 'DIAGNOSIS',
+                         'rationale': 'Plan feedback requires rediagnosis because source evidence is stale.'})
                     trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
                         budget, {**dict(config), 'run_id': run_id, 'model': {'model': config['model'],
                             'schema_in_prompt': config.get('schema_in_prompt', True)}},
@@ -869,14 +1003,14 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     'COMPLETE' if decision['decision'] == 'PROMOTE' else 'CANDIDATE_REJECTED',
                     journal.latest['candidate_decision'], snapshot_id=after))
                 if decision['decision']!='PROMOTE':
-                    # A registered production startup panic is actionable even
+                    # A source-bound compiler diagnostic or registered startup failure is actionable even
                     # when it prevented completing preservation checks. Keep
                     # their status UNKNOWN, restore the incumbent, and use only
                     # an already available edit round; generic probe/infra
                     # failures still stop without guessing a source repair.
-                    from contractedge.execution.public import has_candidate_runtime_failure
+                    from contractedge.execution.public import has_candidate_execution_failure
                     runtime_failed = (current_observation.get('snapshot_id')==decision['trial_snapshot']
-                        and has_candidate_runtime_failure(current_observation))
+                        and has_candidate_execution_failure(current_observation))
                     # Keep the trial artifacts above, but export only the coherent
                     # incumbent below. Failed trial evidence retains its own snapshot.
                     rejected_context={'snapshot_id':decision['trial_snapshot'],
@@ -899,7 +1033,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                         last_execution_attempt={**(last_execution_attempt or {}),'source_snapshot':before,
                             'validation_error':('Candidate rejected: a protected current behavior regressed. '
                                 if decision['decision']=='REJECT_REGRESSION' else
-                                'Candidate rejected: production startup failed and protected behavior could not be verified. ')
+                                'Candidate rejected: public production compilation, startup or readiness failed and protected behavior could not be verified; source cause remains unproven. ')
                                 +'Revise the accepted intent on the restored source using historical trial evidence; preserve every current condition.',
                             'rejected_trial':rejected_context}
                     rounds.append(dict(round_id=round_id,from_snapshot=before,

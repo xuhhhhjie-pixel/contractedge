@@ -1,0 +1,28 @@
+{
+  "status": "CLEAN_GITHUB_CLONE_INSTALL_PUBLIC_PROJECTION_AND_SYNTHETIC_RECOVERY_PASS",
+  "clone_commit": "ac9b3f6700945ac216bcf26a2c0ae93994342638",
+  "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+  "installed_version": "0.6.60",
+  "fresh_venv": true,
+  "install": "README pinned requirements, then pip install --no-deps -e .",
+  "cli_help_exit": 0,
+  "source_freeze_verification": "PASS",
+  "source_files": 116,
+  "recovery_tests": 35,
+  "recovery_subtests": 10,
+  "recovery_log_sha256": "42556f0f74902180bbebc987b324e766669a3245df7897a2b394c2c92e0f1e98",
+  "public_projection": {
+    "status": "PASS",
+    "prepared": 150,
+    "source_trees_extracted": 0,
+    "private_materials_loaded": false,
+    "preparation_sha256": "5782dd446994aff7191e1c4e33706e1b4806d582fe6b71db5b88e275ac183df9"
+  },
+  "scope": "Same-server clean GitHub checkout and new venv; three synthetic public CLI processes, fresh READY and trial recovery/tamper paths. Not a new live model episode or independent repair score, not full G6 across another host.",
+  "not_run": [
+    "Full server historical fixture suite in clean clone",
+    "New real benchmark method-to-independent-score round trip in cloned environment",
+    "All fixed46 same-version effect outcomes"
+  ],
+  "formal_ready": false
+}

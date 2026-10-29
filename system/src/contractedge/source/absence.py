@@ -49,6 +49,7 @@ def collect_absence_search_evidence(snapshot: Snapshot, evidence_gaps: Sequence[
     """
     root_paths = sorted(snapshot.file_digests)
     queries: list[tuple[str, str]] = []
+    skipped_directories: dict[str, dict[str, Any]] = {}
     for gap in evidence_gaps:
         hint = gap.get("locator_hint")
         if not isinstance(hint, Mapping):
@@ -59,7 +60,17 @@ def collect_absence_search_evidence(snapshot: Snapshot, evidence_gaps: Sequence[
             if not candidate.is_absolute() and ".." not in candidate.parts and "*" not in path:
                 normalized = candidate.as_posix()
                 if normalized not in {"", "."}:
-                    queries.append(("EXACT_PATH", normalized))
+                    children = [name for name in root_paths if name.startswith(normalized + "/")]
+                    if normalized not in snapshot.file_digests and children:
+                        # Retrieval accepts known directory hints. Their lack
+                        # of an exact *file* entry must not become negative
+                        # evidence about the directory or its implementation.
+                        skipped_directories[normalized] = dict(query=normalized,
+                            reason="KNOWN_DIRECTORY_HINT_NOT_EXACT_FILE_QUERY",
+                            matched_file_count=len(children), matched_paths_preview=children[:50],
+                            scope="snapshot_file_inventory_only; no implementation absence claim")
+                    else:
+                        queries.append(("EXACT_PATH", normalized))
         symbol = hint.get("symbol")
         if isinstance(symbol, str) and re.fullmatch(r"[A-Za-z_$][A-Za-z0-9_$]*", symbol.strip()):
             queries.append(("EXACT_SYMBOL", symbol.strip()))
@@ -127,7 +138,8 @@ def collect_absence_search_evidence(snapshot: Snapshot, evidence_gaps: Sequence[
             refreshed.append(replacement)
             audits.append(dict(replacement["locator"]))
         records, audits = refreshed, audits
-    return tuple(records), {"query_count": len(queries), "records": audits}
+    return tuple(records), {"query_count": len(queries), "records": audits,
+                            "skipped_directory_hints": list(skipped_directories.values())}
 
 
 def root_path(snapshot: Snapshot, relative: str):

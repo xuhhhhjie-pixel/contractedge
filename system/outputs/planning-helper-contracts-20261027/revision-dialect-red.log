@@ -1,0 +1,13 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_current_plan_revision_uses_model_target_dialect_and_preserves_obligations _
+tests/test_changeset_draft_continuity.py:117: in test_current_plan_revision_uses_model_target_dialect_and_preserves_obligations
+    assert not list(Draft202012Validator(target_schema).iter_errors(change['target']))
+E   assert not [<ValidationError: "'target_kind' is a required property">, <ValidationError: "'source_path' is a required property">,... "Additional properties are not allowed ('content_digest', 'kind', 'locator', 'path', 'snapshot_id' were unexpected)">]
+E    +  where [<ValidationError: "'target_kind' is a required property">, <ValidationError: "'source_path' is a required property">,... "Additional properties are not allowed ('content_digest', 'kind', 'locator', 'path', 'snapshot_id' were unexpected)">] = list(<generator object create.<locals>.Validator.iter_errors at 0x7fd46858d850>)
+E    +    where <generator object create.<locals>.Validator.iter_errors at 0x7fd46858d850> = iter_errors({'kind': 'EXISTING', 'path': 'templates/serviceaccount.yaml', 'locator': {'start_line': 1, 'end_line': 4}, 'unit_refs': ['U2'], ...})
+E    +      where iter_errors = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'source_path': {'enum': ['templates/se...ea... 1, 'type': 'array'}}, 'required': ['target_kind', 'source_path', 'unit_refs'], 'type': 'object'}, format_checker=None).iter_errors
+E    +        where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'source_path': {'enum': ['templates/se...ea... 1, 'type': 'array'}}, 'required': ['target_kind', 'source_path', 'unit_refs'], 'type': 'object'}, format_checker=None) = <class 'jsonschema.validators.Draft202012Validator'>({'type': 'object', 'properties': {'target_kind': {'type': 'string', 'enum': ['EXISTING']}, 'source_path': {'type': 'st...um': ['U2']}, 'maxItems': 32}}, 'required': ['target_kind', 'source_path', 'unit_refs'], 'additionalProperties': False})
+=========================== short test summary info ============================
+FAILED tests/test_changeset_draft_continuity.py::test_current_plan_revision_uses_model_target_dialect_and_preserves_obligations
+1 failed in 0.33s

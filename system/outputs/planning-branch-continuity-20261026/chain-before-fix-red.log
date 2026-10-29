@@ -1,0 +1,48 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_actual_extension_and_format_correction_keep_planner_concern _______
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-632/test_actual_extension_and_form0')
+
+    def test_actual_extension_and_format_correction_keep_planner_concern(tmp_path):
+        from contractedge.model.provider import ModelResponse
+        from contractedge.orchestration.runner import run_front_half
+        from tests.test_planning_evidence_extension import PlanningGapProvider,front_fixture
+        value,source=front_fixture(tmp_path)
+        class Provider(PlanningGapProvider):
+            def __init__(self):super().__init__();self.concern_seen=[]
+            def complete_json(self,request):
+                request_body=json.loads(request.messages[1]['content'])
+                if request.prompt_version.startswith('diagnosis.') and self.diagnosis_calls:
+                    rows=request_body['diagnosis_continuity']['planning_branch_assessments']
+                    assert len(rows)==1 and rows[0]['rationale']=='Another supplied production branch remains unresolved.'
+                    assert rows[0]['open_obligations'][0]['id']=='G1'
+                    catalog={e['id']:e for e in request_body['evidence_catalog']}
+                    assert rows[0]['source_evidence_ref'] in catalog
+                    assert rows[0]['source_content_digest']==catalog[rows[0]['source_evidence_ref']]['content_digest']
+                    self.concern_seen.append(rows[0])
+                response=super().complete_json(request)
+                if request.prompt_version.startswith('changeset.') and self.plan_calls==1:
+                    body=json.loads(response.content)
+                    record=next(e for e in request_body['diagnosis_packet']['evidence_refs'] if e['kind']=='SOURCE_SPAN')
+                    body['production_path_review']=[dict(source_evidence_id=record['id'],disposition='UNRESOLVED',rationale='Another supplied production branch remains unresolved.',change_refs=[],open_obligation_refs=['G1'])]
+                    return ModelResponse(json.dumps(body),{})
+                if request.prompt_version.startswith('diagnosis.') and self.diagnosis_calls==2:
+                    body=json.loads(response.content);body['violations'][0]['support_basis']='INVALID'
+                    return ModelResponse(json.dumps(body),{})
+                return response
+        provider=Provider();provider._snapshot_digests={'templates/serviceaccount.yaml':hashlib.sha256(source.read_bytes()).hexdigest()}
+        trace=run_front_half(value,tmp_path,provider,dict(model={'model':'fixture'},max_context_tokens=24000,
+            max_output_tokens=1024,max_total_tokens=100000,max_format_retries=1,
+            diagnosis_format_retry_per_context=True),lambda text:len(text.split()))
+>       assert trace.status=='READY',trace.errors
+E       AssertionError: ("KeyError: 'planning_branch_assessments'",)
+E       assert 'INFRASTRUCTURE_ERROR' == 'READY'
+E         
+E         - READY
+E         + INFRASTRUCTURE_ERROR
+
+tests/test_planning_branch_continuity.py:117: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_planning_branch_continuity.py::test_actual_extension_and_format_correction_keep_planner_concern
+1 failed, 22 deselected in 1.82s

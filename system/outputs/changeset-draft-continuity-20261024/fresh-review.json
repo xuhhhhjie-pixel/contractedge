@@ -1,0 +1,10 @@
+{
+  "status": "REVIEW_AND_FULL_REGRESSION_PASSED",
+  "reviewer": "/root/v0637_review",
+  "findings": [],
+  "scope": "Read-only working-tree diff vs ecf466f: exact recovered draft, identity guard, fresh-diagnosis reset, current-plan revision, unchanged correction/context limits and legacy initial requests",
+  "full": "859passed22subtests",
+  "portable": "826passed17subtests",
+  "rereview": false,
+  "deferred_minors": []
+}

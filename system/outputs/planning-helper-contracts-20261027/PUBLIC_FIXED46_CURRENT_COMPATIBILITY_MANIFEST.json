@@ -1,0 +1,108 @@
+{
+  "archive": "PUBLIC_FIXED46_CURRENT_COMPATIBILITY.tar.gz",
+  "archive_sha256": "79860c74129fbdaab7e46c6dd8849fed6b958e8a2f3e359eefc2f0e87ea9ba2d",
+  "files": [
+    {
+      "path": "COMPATIBILITY.json",
+      "bytes": 5025,
+      "sha256": "09bd34f188387b812a490dc349cdd344a66f1444808bc32ef2132e8b8a5cc96b"
+    },
+    {
+      "path": "captures/baseline-R3-KPT-4673/captured-request.json",
+      "bytes": 105471,
+      "sha256": "91008f1400fd64a1a675fad535b963ada89395f0600a71ffabaf5ac6e3b5d3fe"
+    },
+    {
+      "path": "captures/baseline-R3-KPT-4673/compatibility.json",
+      "bytes": 387,
+      "sha256": "b7e89e792fb4e2933de1fce0e251b427e2b5fcad14ffd5a0923eb464ac242d97"
+    },
+    {
+      "path": "captures/baseline-R3-KPT-4673/provenance.json",
+      "bytes": 859,
+      "sha256": "25cb2c9063c9078d1957d428f9e2deba46330282553f781ff96bc6de63c4358f"
+    },
+    {
+      "path": "captures/baseline-R3-KPT-4673/seed-handoff-feedback.json",
+      "bytes": 1577,
+      "sha256": "4fad425a9c7666837daa9dcea2d17ce51d42234d516c572161e2b6789bad2eb4"
+    },
+    {
+      "path": "captures/baseline-RW-ALERTMANAGER-4705/captured-request.json",
+      "bytes": 99139,
+      "sha256": "d47b178dd0afad4fe2f26837aedea606a908c802d334300e6cb4ce384139f165"
+    },
+    {
+      "path": "captures/baseline-RW-ALERTMANAGER-4705/compatibility.json",
+      "bytes": 396,
+      "sha256": "3a38da155608bea56cdd6308dfd37b0a3b57d53ff8048558db0e54dd5adbad03"
+    },
+    {
+      "path": "captures/baseline-RW-ALERTMANAGER-4705/provenance.json",
+      "bytes": 851,
+      "sha256": "b1e832acfd6d0951fc4cc759f113903387742e075b70c4d9edda0f0cba95d891"
+    },
+    {
+      "path": "captures/baseline-RW-ALERTMANAGER-4705/seed-handoff-feedback.json",
+      "bytes": 1586,
+      "sha256": "366b020fa4fc7bd497f8fc11ba1bb8f362cca061f15490016a7e90c9ea2f89bb"
+    },
+    {
+      "path": "captures/candidate-R3-KPT-4673/captured-request.json",
+      "bytes": 122662,
+      "sha256": "fde2319baa165070b4676bc689fcfb0da785bec08aea20a7862202b71435a630"
+    },
+    {
+      "path": "captures/candidate-R3-KPT-4673/compatibility.json",
+      "bytes": 388,
+      "sha256": "c0ff0f76a5202a3d64a79053c8d51ac425861d0d7be406cf7a3dee3ca6dfdcde"
+    },
+    {
+      "path": "captures/candidate-R3-KPT-4673/provenance.json",
+      "bytes": 859,
+      "sha256": "25cb2c9063c9078d1957d428f9e2deba46330282553f781ff96bc6de63c4358f"
+    },
+    {
+      "path": "captures/candidate-R3-KPT-4673/seed-handoff-feedback.json",
+      "bytes": 1577,
+      "sha256": "409dd21704660a55690219a77f8ea7bc79aeaa0080a90e5f2c02808a524a3d9a"
+    },
+    {
+      "path": "captures/candidate-RW-ALERTMANAGER-4705/captured-request.json",
+      "bytes": 107117,
+      "sha256": "a9bb400ebbc6e51597b3efb6fac9330ac03c378a826c193522c1dd4c5070aeb0"
+    },
+    {
+      "path": "captures/candidate-RW-ALERTMANAGER-4705/compatibility.json",
+      "bytes": 397,
+      "sha256": "6adcd5078d62806b9b11eb0db56f6a9b5579d8babbb36b3fc36f0d9dca87d29a"
+    },
+    {
+      "path": "captures/candidate-RW-ALERTMANAGER-4705/provenance.json",
+      "bytes": 851,
+      "sha256": "b1e832acfd6d0951fc4cc759f113903387742e075b70c4d9edda0f0cba95d891"
+    },
+    {
+      "path": "captures/candidate-RW-ALERTMANAGER-4705/seed-handoff-feedback.json",
+      "bytes": 1586,
+      "sha256": "0b877aade3f5c1624e03f6e1073be2c63c9736025f78487c80b5244a9920d562"
+    },
+    {
+      "path": "sandbox/baseline/.isolated-11b55f0671c6491f967818c3145de90d/receipt.json",
+      "bytes": 580602,
+      "sha256": "c6c5f67780f0402f2a314853b77f8e3d92d4214804645c9d21b6a23c8d6c0d5c"
+    },
+    {
+      "path": "sandbox/candidate/.isolated-37005d1c508e4ccaa10e4d468abe24e6/receipt.json",
+      "bytes": 585922,
+      "sha256": "c8eb9687a21e3208f8c25790092c2a4e10ee6139d83d9b87d1f94ef4458f324c"
+    },
+    {
+      "path": "state.json",
+      "bytes": 132,
+      "sha256": "ef531f4ce9a8e3e18d081bb4ac10766c34905399a84e4f193dd2d036e49bd06f"
+    }
+  ],
+  "new_model_http_calls": 0,
+  "scope": "Actual method sandbox receipts and synthetic EXECUTION_ONLY front captures; no repair or behavior success claim"
+}

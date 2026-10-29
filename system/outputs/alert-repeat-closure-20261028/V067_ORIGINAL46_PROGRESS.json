@@ -1,0 +1,45 @@
+{
+  "status": "STOPPED_EFFECT_PREREQUISITE",
+  "reason": "KPT candidate INVALID_PLAN after two helper/caller quote misbindings persisted through correction",
+  "closed_slots": 3,
+  "candidate_failures": [
+    "fixed46-official-v067-20261028-f30e0215f0d113880a6411c5"
+  ],
+  "subsequent_baseline_status": "INTERRUPTED_AFTER_KNOWN_CANDIDATE_GATE_FAILURE",
+  "subsequent_baseline_cleanup": "OWNED_CONTAINERS_CLOSED",
+  "automatic_method_retry": false,
+  "formal_ready": false,
+  "source_sha256": "5e1758b0ac0a306f089f9a1e2aacb58aff12739a803ac5544b44d95392bf3387",
+  "panel_sha256": "b5ee91a96ff1808141fd6249af0f5ad3c790e2792cf7537dd818a133bcb50ce0",
+  "rows": [
+    {
+      "slot_id": "fixed46-official-v067-20261028-f5dd18212d66edb1ba9b9990",
+      "group": "A",
+      "case_id": "RW-CAND-130",
+      "variant": "baseline",
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-official-v067-20261028-60944716e7069c9f5423fb67",
+      "group": "A",
+      "case_id": "RW-CAND-130",
+      "variant": "candidate",
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-official-v067-20261028-f30e0215f0d113880a6411c5",
+      "group": "A",
+      "case_id": "R3-KPT-4673",
+      "variant": "candidate",
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "method_status": "INVALID_PLAN"
+    }
+  ],
+  "original_failures_preserved": true,
+  "root_cause_scope": "All needed helper/caller excerpts were delivered; model quoted caller for helper identity; existing generic correction repeated without resolving that distinction. Candidate never reached editing; no behavior repair effect conclusion for KPT."
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": "ce.public_probe_overflow_investigation.v1",
+  "role": "INVESTIGATIVE_ONLY_NOT_FROZEN_METHOD_SCORE",
+  "case_id": "RW-ALERTMANAGER-4705",
+  "candidate_patch_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
+  "candidate_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
+  "probe_program_modified_for_diagnostics": true,
+  "original_probe_sha256": "cc9f5496072b4f4e922d702c3c74a48e35831c7cba16efdbac5ef8efe7e4ae4d",
+  "diagnostic_probe_sha256": "cdd562220c1f6b2bb9632ace79f60e8ee935785467bc8be8ecd813401a96ab07",
+  "observation_limit_bytes": 8388608,
+  "source_unchanged": true,
+  "status": "PROBE_ERROR",
+  "diagnostic_stderr": "PROBE_ERROR: reload-return observation: groups response exceeds 8388608 bytes; incomplete observation; diagnostic complete_prefix_groups=15116 duplicate_identities=13302 unique_identities=1814\nexit status 2\n",
+  "new_model_calls": 0,
+  "private_materials_loaded": false,
+  "counts_in_46_slot_panel": false,
+  "independent_score_claim": false,
+  "formal_ready": false
+}

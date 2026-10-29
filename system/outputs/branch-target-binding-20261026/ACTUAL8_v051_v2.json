@@ -1,0 +1,251 @@
+{
+  "status": "PASS",
+  "harness_version": 2,
+  "identity": {
+    "current_head": "511d77d2eb6f03860a0c596453059396ff6b8f01",
+    "base_commit": "89b97f5add97e771abcd1ac283d63eca0a6f43b4",
+    "original_binding_source_scripts_aggregate": "a6ae0757501edff30d1b0203244be51254bdadba109400a63bf70916507acd89",
+    "original_binding_repair_sha256": "96510f0bf2b81ed2657002d55b64b42058a4a6fea1660e97563b3fa7966b0603",
+    "explicit_expected_repair_sha256": null,
+    "effective_file_mapping_sha256": "a6ae0757501edff30d1b0203244be51254bdadba109400a63bf70916507acd89",
+    "effective_file_mapping_digest_definition": "SHA256 of UTF-8 JSON file-to-SHA256 mapping, sorted keys, compact separators, ensure_ascii=False",
+    "bound_files_verified": 246
+  },
+  "binding_sha256": "a4580dbbf08dd608261e311045fada7406b13a30ec1d8770fafc51cce7390435",
+  "harness_sha256": "68c92ec561ced7193183b5b0eed497776f7a575dfe658c56f9a988c4157c072d",
+  "cells": [
+    {
+      "dialect": "topomen-native",
+      "point": "normal",
+      "expected_runtime_sessions": 2,
+      "status": "PASS",
+      "fault_point": "normal",
+      "source_snapshot": "cacd1f465bd36ac0c8ec1904a878122d4b60ccabba7a15e4fe984b9c09baef49",
+      "actual_runtime_sessions": 2,
+      "actual_candidate_and_observer_containers": 4,
+      "model_calls": 3,
+      "original_reserved_tokens": 87732,
+      "selected_patch_sha256": "fa8820d9d35babd0e47afd7e02380bdf8f08e5d6fa4b6a47806ab9389c28ecbb",
+      "runtime_cleanup": "CONFIRMED",
+      "daemon_absence": "CONFIRMED",
+      "actual_review_path": {
+        "actual_prompt_versions": [
+          "diagnosis.v1.1.24",
+          "changeset.v1.1.14",
+          "topomen-source-execution.v1"
+        ],
+        "review": "BOUND_CHECK_AGGREGATION",
+        "model_review_dispatches": 0,
+        "independent_public_profile": "COMPLETE_BOUND_PASS",
+        "review_stage_receipt_sha256": "a5091167b326567bc72b53b9010106ce96e10942f563f901fceb9d4bc70a9187",
+        "review_sha256": "85a57894e93c0d2a198af7bb2905e7f78d35767100fd063073d5c1c5285528b5",
+        "review_delivery_sha256": "d0902e394f9b77c6acf831d56214e7e970154a9cf50fe2de970b3f81221fbca2",
+        "actual_observation_sha256": "feb6afcda5f53a5a283f52113ec7a0c7364b588f5817545d0f66a5026ee26507"
+      },
+      "interpretation": "Actual bounded public target and preservation checks PASS; not hidden/semantic generalization evidence."
+    },
+    {
+      "dialect": "topomen-native",
+      "point": "after-applied",
+      "expected_runtime_sessions": 1,
+      "status": "PASS",
+      "fault_point": "after-applied",
+      "source_snapshot": "65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15",
+      "actual_runtime_sessions": 1,
+      "actual_candidate_and_observer_containers": 2,
+      "model_calls": 3,
+      "original_reserved_tokens": 87767,
+      "selected_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runtime_cleanup": "CONFIRMED",
+      "daemon_absence": "CONFIRMED",
+      "actual_review_path": {
+        "actual_prompt_versions": [
+          "diagnosis.v1.1.24",
+          "changeset.v1.1.14",
+          "topomen-source-execution.v1"
+        ],
+        "review": "NOT_REACHED_AT_FAULT_BOUNDARY",
+        "model_review_dispatches": 0
+      },
+      "interpretation": "Engineering recovery PASS: original Broken incumbent retained; do not label its target repaired."
+    },
+    {
+      "dialect": "topomen-native",
+      "point": "after-observed",
+      "expected_runtime_sessions": 2,
+      "status": "PASS",
+      "fault_point": "after-observed",
+      "source_snapshot": "65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15",
+      "actual_runtime_sessions": 2,
+      "actual_candidate_and_observer_containers": 4,
+      "model_calls": 3,
+      "original_reserved_tokens": 87772,
+      "selected_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runtime_cleanup": "CONFIRMED",
+      "daemon_absence": "CONFIRMED",
+      "actual_review_path": {
+        "actual_prompt_versions": [
+          "diagnosis.v1.1.24",
+          "changeset.v1.1.14",
+          "topomen-source-execution.v1"
+        ],
+        "review": "NOT_REACHED_AT_FAULT_BOUNDARY",
+        "model_review_dispatches": 0
+      },
+      "interpretation": "Engineering recovery PASS: original Broken incumbent retained; do not label its target repaired."
+    },
+    {
+      "dialect": "topomen-native",
+      "point": "before-selection",
+      "expected_runtime_sessions": 2,
+      "status": "PASS",
+      "fault_point": "before-selection",
+      "source_snapshot": "65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15",
+      "actual_runtime_sessions": 2,
+      "actual_candidate_and_observer_containers": 4,
+      "model_calls": 3,
+      "original_reserved_tokens": 87782,
+      "selected_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runtime_cleanup": "CONFIRMED",
+      "daemon_absence": "CONFIRMED",
+      "actual_review_path": {
+        "actual_prompt_versions": [
+          "diagnosis.v1.1.24",
+          "changeset.v1.1.14",
+          "topomen-source-execution.v1"
+        ],
+        "review": "BOUND_CHECK_AGGREGATION",
+        "model_review_dispatches": 0,
+        "independent_public_profile": "COMPLETE_BOUND_PASS",
+        "review_stage_receipt_sha256": "bab713485791199b3e570c9a3d2f6e1d8a3f8d013f543ed0b3d600a7135be0d3",
+        "review_sha256": "85a57894e93c0d2a198af7bb2905e7f78d35767100fd063073d5c1c5285528b5",
+        "review_delivery_sha256": "d0902e394f9b77c6acf831d56214e7e970154a9cf50fe2de970b3f81221fbca2",
+        "actual_observation_sha256": "6956525a97ae6a3ee21d0a53c845974f4f4b9fdd8575a8d31e2cc38154b1add3"
+      },
+      "interpretation": "Engineering recovery PASS: original Broken incumbent retained; do not label its target repaired."
+    },
+    {
+      "dialect": "modify-only",
+      "point": "normal",
+      "expected_runtime_sessions": 2,
+      "status": "PASS",
+      "fault_point": "normal",
+      "source_snapshot": "cacd1f465bd36ac0c8ec1904a878122d4b60ccabba7a15e4fe984b9c09baef49",
+      "actual_runtime_sessions": 2,
+      "actual_candidate_and_observer_containers": 4,
+      "model_calls": 3,
+      "original_reserved_tokens": 88705,
+      "selected_patch_sha256": "fa8820d9d35babd0e47afd7e02380bdf8f08e5d6fa4b6a47806ab9389c28ecbb",
+      "runtime_cleanup": "CONFIRMED",
+      "daemon_absence": "CONFIRMED",
+      "actual_review_path": {
+        "actual_prompt_versions": [
+          "diagnosis.v1.1.24",
+          "changeset.v1.1.14",
+          "modify-only-literal-execution.v1"
+        ],
+        "review": "BOUND_CHECK_AGGREGATION",
+        "model_review_dispatches": 0,
+        "independent_public_profile": "COMPLETE_BOUND_PASS",
+        "review_stage_receipt_sha256": "8a308992fc5fe37691cdf6493131553c67b4463c9ba9da130eb22bf26e0872e3",
+        "review_sha256": "85a57894e93c0d2a198af7bb2905e7f78d35767100fd063073d5c1c5285528b5",
+        "review_delivery_sha256": "d0902e394f9b77c6acf831d56214e7e970154a9cf50fe2de970b3f81221fbca2",
+        "actual_observation_sha256": "6f0250aaf86b2867507cb5ba4f0271e88bd3181bf5cf864ed03617781e937151"
+      },
+      "interpretation": "Actual bounded public target and preservation checks PASS; not hidden/semantic generalization evidence."
+    },
+    {
+      "dialect": "modify-only",
+      "point": "after-applied",
+      "expected_runtime_sessions": 1,
+      "status": "PASS",
+      "fault_point": "after-applied",
+      "source_snapshot": "65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15",
+      "actual_runtime_sessions": 1,
+      "actual_candidate_and_observer_containers": 2,
+      "model_calls": 3,
+      "original_reserved_tokens": 88740,
+      "selected_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runtime_cleanup": "CONFIRMED",
+      "daemon_absence": "CONFIRMED",
+      "actual_review_path": {
+        "actual_prompt_versions": [
+          "diagnosis.v1.1.24",
+          "changeset.v1.1.14",
+          "modify-only-literal-execution.v1"
+        ],
+        "review": "NOT_REACHED_AT_FAULT_BOUNDARY",
+        "model_review_dispatches": 0
+      },
+      "interpretation": "Engineering recovery PASS: original Broken incumbent retained; do not label its target repaired."
+    },
+    {
+      "dialect": "modify-only",
+      "point": "after-observed",
+      "expected_runtime_sessions": 2,
+      "status": "PASS",
+      "fault_point": "after-observed",
+      "source_snapshot": "65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15",
+      "actual_runtime_sessions": 2,
+      "actual_candidate_and_observer_containers": 4,
+      "model_calls": 3,
+      "original_reserved_tokens": 88745,
+      "selected_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runtime_cleanup": "CONFIRMED",
+      "daemon_absence": "CONFIRMED",
+      "actual_review_path": {
+        "actual_prompt_versions": [
+          "diagnosis.v1.1.24",
+          "changeset.v1.1.14",
+          "modify-only-literal-execution.v1"
+        ],
+        "review": "NOT_REACHED_AT_FAULT_BOUNDARY",
+        "model_review_dispatches": 0
+      },
+      "interpretation": "Engineering recovery PASS: original Broken incumbent retained; do not label its target repaired."
+    },
+    {
+      "dialect": "modify-only",
+      "point": "before-selection",
+      "expected_runtime_sessions": 2,
+      "status": "PASS",
+      "fault_point": "before-selection",
+      "source_snapshot": "65ea947ae9d23109c1e182ad3f5956edfcd8335738f2fc8ae78990e35715bc15",
+      "actual_runtime_sessions": 2,
+      "actual_candidate_and_observer_containers": 4,
+      "model_calls": 3,
+      "original_reserved_tokens": 88755,
+      "selected_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runtime_cleanup": "CONFIRMED",
+      "daemon_absence": "CONFIRMED",
+      "actual_review_path": {
+        "actual_prompt_versions": [
+          "diagnosis.v1.1.24",
+          "changeset.v1.1.14",
+          "modify-only-literal-execution.v1"
+        ],
+        "review": "BOUND_CHECK_AGGREGATION",
+        "model_review_dispatches": 0,
+        "independent_public_profile": "COMPLETE_BOUND_PASS",
+        "review_stage_receipt_sha256": "ec89b735aef1a4b2b2e5591fd20d4ceaae0c53f287231e1f066bd20d6fedc653",
+        "review_sha256": "85a57894e93c0d2a198af7bb2905e7f78d35767100fd063073d5c1c5285528b5",
+        "review_delivery_sha256": "d0902e394f9b77c6acf831d56214e7e970154a9cf50fe2de970b3f81221fbca2",
+        "actual_observation_sha256": "5ea9dab2918c39445295e8b749f6679e155b295b6fa022c9c1c26dc9d32d7774"
+      },
+      "interpretation": "Engineering recovery PASS: original Broken incumbent retained; do not label its target repaired."
+    }
+  ],
+  "real_model_http_calls": 0,
+  "expected_actual_sessions": 14,
+  "expected_actual_candidate_observer_containers": 28,
+  "runtime": {
+    "image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+    "docker_host": "unix:///run/user/1008/docker.sock",
+    "docker_api_version": "1.54"
+  },
+  "scope": "All eight real isolated engineering cells passed; synthetic model responses only; not a benchmark/generalization result.",
+  "formal_ready": false,
+  "actual_runtime_sessions": 14,
+  "actual_candidate_observer_containers": 28,
+  "inventory_sha256": "6b474b89f307f6fa53fd58aa5999a60b331a12dacb4aecfab83c8254fe8530ea"
+}

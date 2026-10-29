@@ -1,0 +1,146 @@
+FFFFF..                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_identity_failure_feedback_names_the_actual_set_difference[expected0-supplied0-missing0-unexpected0-duplicate0] _
+
+expected = [], supplied = ['O1'], missing = [], unexpected = ['O1']
+duplicate = []
+
+    @pytest.mark.parametrize('expected,supplied,missing,unexpected,duplicate', [
+        ([], ['O1'], [], ['O1'], []),
+        (['KEEP-OUTPUT'], ['O1'], ['KEEP-OUTPUT'], ['O1'], []),
+        (['KEEP-OUTPUT'], ['KEEP-OUTPUT','KEEP-OUTPUT'], [], [], ['KEEP-OUTPUT']),
+        (['KEEP-OUTPUT'], [], ['KEEP-OUTPUT'], [], []),
+    ])
+    def test_identity_failure_feedback_names_the_actual_set_difference(expected,supplied,missing,unexpected,duplicate):
+        # A generic error leaves the executor unable to distinguish an extra row
+        # from an omitted constraint. Do not repair the model's plan in the engine.
+        plan=valid_plan()
+        plan['preserve_constraints']=[dict(id=ref,outcome_id='O1',obligation_refs=['A1'],
+            statement='Keep the selected object.',current_satisfaction='UNKNOWN',evidence_refs=[]) for ref in expected]
+        plan['preservation_impact']=[impact(ref) for ref in supplied]
+        before=deepcopy(plan)
+        result=validate_semantic_changeset(plan,diagnosis(),None)
+        messages=[r.message for r in result.errors if r.code=='PRESERVATION_IMPACT_INCOMPLETE']
+        assert len(messages)==1
+        message=messages[0]
+        for label,values in [('expected',expected),('missing',missing),('unexpected',unexpected),('duplicate',duplicate)]:
+>           assert label+'='+json.dumps(values,ensure_ascii=False) in message
+E           AssertionError: assert (('expected' + '=') + '[]') in 'Every preservation constraint needs exactly one impact scope'
+E            +  where '[]' = <function dumps at 0x7fba21c1d3f0>([], ensure_ascii=False)
+E            +    where <function dumps at 0x7fba21c1d3f0> = json.dumps
+
+tests/test_preservation_identity_feedback.py:42: AssertionError
+_ test_identity_failure_feedback_names_the_actual_set_difference[expected1-supplied1-missing1-unexpected1-duplicate1] _
+
+expected = ['KEEP-OUTPUT'], supplied = ['O1'], missing = ['KEEP-OUTPUT']
+unexpected = ['O1'], duplicate = []
+
+    @pytest.mark.parametrize('expected,supplied,missing,unexpected,duplicate', [
+        ([], ['O1'], [], ['O1'], []),
+        (['KEEP-OUTPUT'], ['O1'], ['KEEP-OUTPUT'], ['O1'], []),
+        (['KEEP-OUTPUT'], ['KEEP-OUTPUT','KEEP-OUTPUT'], [], [], ['KEEP-OUTPUT']),
+        (['KEEP-OUTPUT'], [], ['KEEP-OUTPUT'], [], []),
+    ])
+    def test_identity_failure_feedback_names_the_actual_set_difference(expected,supplied,missing,unexpected,duplicate):
+        # A generic error leaves the executor unable to distinguish an extra row
+        # from an omitted constraint. Do not repair the model's plan in the engine.
+        plan=valid_plan()
+        plan['preserve_constraints']=[dict(id=ref,outcome_id='O1',obligation_refs=['A1'],
+            statement='Keep the selected object.',current_satisfaction='UNKNOWN',evidence_refs=[]) for ref in expected]
+        plan['preservation_impact']=[impact(ref) for ref in supplied]
+        before=deepcopy(plan)
+        result=validate_semantic_changeset(plan,diagnosis(),None)
+        messages=[r.message for r in result.errors if r.code=='PRESERVATION_IMPACT_INCOMPLETE']
+        assert len(messages)==1
+        message=messages[0]
+        for label,values in [('expected',expected),('missing',missing),('unexpected',unexpected),('duplicate',duplicate)]:
+>           assert label+'='+json.dumps(values,ensure_ascii=False) in message
+E           assert (('expected' + '=') + '["KEEP-OUTPUT"]') in 'Every preservation constraint needs exactly one impact scope'
+E            +  where '["KEEP-OUTPUT"]' = <function dumps at 0x7fba21c1d3f0>(['KEEP-OUTPUT'], ensure_ascii=False)
+E            +    where <function dumps at 0x7fba21c1d3f0> = json.dumps
+
+tests/test_preservation_identity_feedback.py:42: AssertionError
+_ test_identity_failure_feedback_names_the_actual_set_difference[expected2-supplied2-missing2-unexpected2-duplicate2] _
+
+expected = ['KEEP-OUTPUT'], supplied = ['KEEP-OUTPUT', 'KEEP-OUTPUT']
+missing = [], unexpected = [], duplicate = ['KEEP-OUTPUT']
+
+    @pytest.mark.parametrize('expected,supplied,missing,unexpected,duplicate', [
+        ([], ['O1'], [], ['O1'], []),
+        (['KEEP-OUTPUT'], ['O1'], ['KEEP-OUTPUT'], ['O1'], []),
+        (['KEEP-OUTPUT'], ['KEEP-OUTPUT','KEEP-OUTPUT'], [], [], ['KEEP-OUTPUT']),
+        (['KEEP-OUTPUT'], [], ['KEEP-OUTPUT'], [], []),
+    ])
+    def test_identity_failure_feedback_names_the_actual_set_difference(expected,supplied,missing,unexpected,duplicate):
+        # A generic error leaves the executor unable to distinguish an extra row
+        # from an omitted constraint. Do not repair the model's plan in the engine.
+        plan=valid_plan()
+        plan['preserve_constraints']=[dict(id=ref,outcome_id='O1',obligation_refs=['A1'],
+            statement='Keep the selected object.',current_satisfaction='UNKNOWN',evidence_refs=[]) for ref in expected]
+        plan['preservation_impact']=[impact(ref) for ref in supplied]
+        before=deepcopy(plan)
+        result=validate_semantic_changeset(plan,diagnosis(),None)
+        messages=[r.message for r in result.errors if r.code=='PRESERVATION_IMPACT_INCOMPLETE']
+        assert len(messages)==1
+        message=messages[0]
+        for label,values in [('expected',expected),('missing',missing),('unexpected',unexpected),('duplicate',duplicate)]:
+>           assert label+'='+json.dumps(values,ensure_ascii=False) in message
+E           assert (('expected' + '=') + '["KEEP-OUTPUT"]') in 'Every preservation constraint needs exactly one impact scope'
+E            +  where '["KEEP-OUTPUT"]' = <function dumps at 0x7fba21c1d3f0>(['KEEP-OUTPUT'], ensure_ascii=False)
+E            +    where <function dumps at 0x7fba21c1d3f0> = json.dumps
+
+tests/test_preservation_identity_feedback.py:42: AssertionError
+_ test_identity_failure_feedback_names_the_actual_set_difference[expected3-supplied3-missing3-unexpected3-duplicate3] _
+
+expected = ['KEEP-OUTPUT'], supplied = [], missing = ['KEEP-OUTPUT']
+unexpected = [], duplicate = []
+
+    @pytest.mark.parametrize('expected,supplied,missing,unexpected,duplicate', [
+        ([], ['O1'], [], ['O1'], []),
+        (['KEEP-OUTPUT'], ['O1'], ['KEEP-OUTPUT'], ['O1'], []),
+        (['KEEP-OUTPUT'], ['KEEP-OUTPUT','KEEP-OUTPUT'], [], [], ['KEEP-OUTPUT']),
+        (['KEEP-OUTPUT'], [], ['KEEP-OUTPUT'], [], []),
+    ])
+    def test_identity_failure_feedback_names_the_actual_set_difference(expected,supplied,missing,unexpected,duplicate):
+        # A generic error leaves the executor unable to distinguish an extra row
+        # from an omitted constraint. Do not repair the model's plan in the engine.
+        plan=valid_plan()
+        plan['preserve_constraints']=[dict(id=ref,outcome_id='O1',obligation_refs=['A1'],
+            statement='Keep the selected object.',current_satisfaction='UNKNOWN',evidence_refs=[]) for ref in expected]
+        plan['preservation_impact']=[impact(ref) for ref in supplied]
+        before=deepcopy(plan)
+        result=validate_semantic_changeset(plan,diagnosis(),None)
+        messages=[r.message for r in result.errors if r.code=='PRESERVATION_IMPACT_INCOMPLETE']
+        assert len(messages)==1
+        message=messages[0]
+        for label,values in [('expected',expected),('missing',missing),('unexpected',unexpected),('duplicate',duplicate)]:
+>           assert label+'='+json.dumps(values,ensure_ascii=False) in message
+E           assert (('expected' + '=') + '["KEEP-OUTPUT"]') in 'Every preservation constraint needs exactly one impact scope'
+E            +  where '["KEEP-OUTPUT"]' = <function dumps at 0x7fba21c1d3f0>(['KEEP-OUTPUT'], ensure_ascii=False)
+E            +    where <function dumps at 0x7fba21c1d3f0> = json.dumps
+
+tests/test_preservation_identity_feedback.py:42: AssertionError
+_____ test_no_allowed_preservations_schema_rejects_outcome_as_an_impact_id _____
+
+    def test_no_allowed_preservations_schema_rejects_outcome_as_an_impact_id():
+        packet=diagnosis();packet.raw['requirement_spec']['traceability_required']=True
+        context=SimpleNamespace(run_id='run-1',case_id='demo',snapshot_id='snap-0',
+            input_digest=packet.input_digest,model_config={'model':'fixture'},budget={'max_output_tokens':1000})
+        request=build_changeset_request(packet,context)
+        schema=request.output_schema['properties']['preservation_impact']
+>       assert list(Draft202012Validator(schema).iter_errors([impact('O1')])), 'Empty preservation set must forbid an invented impact'
+E       AssertionError: Empty preservation set must forbid an invented impact
+E       assert []
+E        +  where [] = list(<generator object create.<locals>.Validator.iter_errors at 0x7fba213cb7d0>)
+E        +    where <generator object create.<locals>.Validator.iter_errors at 0x7fba213cb7d0> = iter_errors([{'preserve_id': 'O1', 'scope': 'CHANGES', 'change_refs': ['C1'], 'rationale': 'Shared production path.'}])
+E        +      where iter_errors = Draft202012Validator(schema={'items': {'additionalProperties': False, 'properties': {'change_refs': {'items': {'maxLen...ve_id', 'scope', 'change_refs', 'rationale'], 'type': 'object'}, 'maxItems': 32, 'type': 'array'}, format_checker=None).iter_errors
+E        +        where Draft202012Validator(schema={'items': {'additionalProperties': False, 'properties': {'change_refs': {'items': {'maxLen...ve_id', 'scope', 'change_refs', 'rationale'], 'type': 'object'}, 'maxItems': 32, 'type': 'array'}, format_checker=None) = Draft202012Validator({'type': 'array', 'items': {'type': 'object', 'additionalProperties': False, 'required': ['preserve_id', 'scope', 'cha...iqueItems': True, 'maxItems': 32}, 'rationale': {'type': 'string', 'minLength': 1, 'maxLength': 600}}}, 'maxItems': 32})
+
+tests/test_preservation_identity_feedback.py:53: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_preservation_identity_feedback.py::test_identity_failure_feedback_names_the_actual_set_difference[expected0-supplied0-missing0-unexpected0-duplicate0]
+FAILED tests/test_preservation_identity_feedback.py::test_identity_failure_feedback_names_the_actual_set_difference[expected1-supplied1-missing1-unexpected1-duplicate1]
+FAILED tests/test_preservation_identity_feedback.py::test_identity_failure_feedback_names_the_actual_set_difference[expected2-supplied2-missing2-unexpected2-duplicate2]
+FAILED tests/test_preservation_identity_feedback.py::test_identity_failure_feedback_names_the_actual_set_difference[expected3-supplied3-missing3-unexpected3-duplicate3]
+FAILED tests/test_preservation_identity_feedback.py::test_no_allowed_preservations_schema_rejects_outcome_as_an_impact_id
+5 failed, 2 passed in 0.21s

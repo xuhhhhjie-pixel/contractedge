@@ -1,0 +1,11 @@
+{
+  "status": "INSTALLED_PACKAGE_MATCHES_FROZEN_SOURCE",
+  "source_version": "0.6.60",
+  "metadata_version": "0.6.60",
+  "module": "/home/xhj/contractedge-planning-branch-continuity-20261026/.superpowers/sdd/2026-10-27-planning-helper-contracts/installed/contractedge/__init__.py",
+  "source_files_verified": 116,
+  "source_sha256": "988217f5f299e38fafab9307702f144eae4e765e8b25f25320fecfe851095bed",
+  "wheel_sha256": "8d7620cdd68ec4a0567beed8aaf4ddc89cd248dc4be30a8002af0e1df53e904f",
+  "runtime_deployed": false,
+  "formal_ready": false
+}

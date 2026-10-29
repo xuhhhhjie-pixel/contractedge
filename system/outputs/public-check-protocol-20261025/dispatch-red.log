@@ -1,0 +1,77 @@
+FF.F...                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_actual_current_fixture_dispatch_reaches_intended_fault_boundary[topomen-native] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-469/test_actual_current_fixture_di0')
+dialect = 'topomen-native'
+
+    @pytest.mark.parametrize('dialect', ['topomen-native', 'modify-only'])
+    def test_actual_current_fixture_dispatch_reaches_intended_fault_boundary(tmp_path, dialect):
+>       result = panel().validate_review_path(tmp_path, 'after-applied', dialect, calls(dialect))
+
+tests/test_trial_panel_dispatch_binding.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_trial_isolation_panel.py:217: in validate_review_path
+    require([call.get('prompt_version') for call in calls] == expected_prompts,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+message = 'Actual diagnosis/changeset/consumer dispatch sequence differs; no synthetic fourth review call is expected'
+
+    def require(condition, message):
+        if not condition:
+>           raise RuntimeError(message)
+E           RuntimeError: Actual diagnosis/changeset/consumer dispatch sequence differs; no synthetic fourth review call is expected
+
+scripts/run_trial_isolation_panel.py:30: RuntimeError
+_ test_actual_current_fixture_dispatch_reaches_intended_fault_boundary[modify-only] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-469/test_actual_current_fixture_di1')
+dialect = 'modify-only'
+
+    @pytest.mark.parametrize('dialect', ['topomen-native', 'modify-only'])
+    def test_actual_current_fixture_dispatch_reaches_intended_fault_boundary(tmp_path, dialect):
+>       result = panel().validate_review_path(tmp_path, 'after-applied', dialect, calls(dialect))
+
+tests/test_trial_panel_dispatch_binding.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_trial_isolation_panel.py:217: in validate_review_path
+    require([call.get('prompt_version') for call in calls] == expected_prompts,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+message = 'Actual diagnosis/changeset/consumer dispatch sequence differs; no synthetic fourth review call is expected'
+
+    def require(condition, message):
+        if not condition:
+>           raise RuntimeError(message)
+E           RuntimeError: Actual diagnosis/changeset/consumer dispatch sequence differs; no synthetic fourth review call is expected
+
+scripts/run_trial_isolation_panel.py:30: RuntimeError
+_ test_dispatch_binding_still_rejects_stale_or_unexpected_calls[pre-registry-planner] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-469/test_dispatch_binding_still_re1')
+mutation = 'pre-registry-planner'
+
+    @pytest.mark.parametrize('mutation', ['old-planner', 'pre-registry-planner', 'reordered', 'extra-review', 'wrong-consumer'])
+    def test_dispatch_binding_still_rejects_stale_or_unexpected_calls(tmp_path, mutation):
+        actual = calls('topomen-native')
+        if mutation == 'old-planner':
+            actual[1]['prompt_version'] = 'changeset.v1.1.10'
+        elif mutation == 'pre-registry-planner':
+            actual[1]['prompt_version'] = 'changeset.v1.1.12'
+        elif mutation == 'reordered':
+            actual[0], actual[1] = actual[1], actual[0]
+        elif mutation == 'extra-review':
+            actual.append({'prompt_version': 'public-postcondition-review.v2'})
+        else:
+            actual[2]['prompt_version'] = 'modify-only-literal-execution.v1'
+>       with pytest.raises(RuntimeError, match='dispatch sequence differs'):
+E       Failed: DID NOT RAISE RuntimeError
+
+tests/test_trial_panel_dispatch_binding.py:44: Failed
+=========================== short test summary info ============================
+FAILED tests/test_trial_panel_dispatch_binding.py::test_actual_current_fixture_dispatch_reaches_intended_fault_boundary[topomen-native]
+FAILED tests/test_trial_panel_dispatch_binding.py::test_actual_current_fixture_dispatch_reaches_intended_fault_boundary[modify-only]
+FAILED tests/test_trial_panel_dispatch_binding.py::test_dispatch_binding_still_rejects_stale_or_unexpected_calls[pre-registry-planner]
+3 failed, 4 passed in 0.38s

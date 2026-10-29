@@ -1,0 +1,2579 @@
+{
+  "private_materials_loaded": false,
+  "extracted": false,
+  "cases": [
+    {
+      "case_id": "RW-CAND-067",
+      "source_sha256": "d15b19cedef67f778bb3c10ade425e7b0a68ceaf26c7d1a6e0bafd105a199e1f",
+      "links": [],
+      "files": 306,
+      "total_bytes": 2127958,
+      "largest_file": 336956
+    },
+    {
+      "case_id": "RW-CAND-068",
+      "source_sha256": "7a2a983e06a257c9b731fd9e12e5f3eedec19d0a73f37547a3e8fb3f8f33deb4",
+      "links": [],
+      "files": 15,
+      "total_bytes": 88286,
+      "largest_file": 52632
+    },
+    {
+      "case_id": "RW-CAND-070",
+      "source_sha256": "cdadec81607765800fd2e67ee048647b8fe9d6c215ad0905315b85018d3e7945",
+      "links": [],
+      "files": 38,
+      "total_bytes": 294228,
+      "largest_file": 87594
+    },
+    {
+      "case_id": "RW-CAND-071",
+      "source_sha256": "9f2ec86b4655ff7070293c7b77fc85370429e104465aaa405a507f00578601df",
+      "links": [],
+      "files": 137,
+      "total_bytes": 385559,
+      "largest_file": 71204
+    },
+    {
+      "case_id": "RW-CAND-072",
+      "source_sha256": "be0d975808b93bdc6b36abb2755ca622bc0754576551adc03563fa98d106cacd",
+      "links": [],
+      "files": 37,
+      "total_bytes": 112968,
+      "largest_file": 19649
+    },
+    {
+      "case_id": "RW-CAND-073",
+      "source_sha256": "2b7ad90c864a2208c672ca3d95c29f2c5007067215b30c6bc27f16204789b2a2",
+      "links": [],
+      "files": 3,
+      "total_bytes": 18456,
+      "largest_file": 18273
+    },
+    {
+      "case_id": "RW-CAND-076-AGGREGATE-VERIFIER-001",
+      "source_sha256": "942d79c62a654c8fbd9a3faedf733a41ca3d39f69db0627e157f097388972223",
+      "links": [],
+      "files": 44,
+      "total_bytes": 60898,
+      "largest_file": 8954
+    },
+    {
+      "case_id": "RW-CAND-077",
+      "source_sha256": "2c6fd1918d0568eeeae7e043031f9c6e87f81592c2917648663ee35580a64f4d",
+      "links": [],
+      "files": 8,
+      "total_bytes": 1061953,
+      "largest_file": 874842
+    },
+    {
+      "case_id": "RW-CAND-081",
+      "source_sha256": "ef7a0fbefc1299186b4089548e6cd49c1718a55bd8d5731586c5cbc23175f1a5",
+      "links": [],
+      "files": 72,
+      "total_bytes": 401883,
+      "largest_file": 94691
+    },
+    {
+      "case_id": "RW-CAND-086",
+      "source_sha256": "91bf63697b17e70566f44a2a3fc7bcd2bbc3ec2160429523032706268beb61c2",
+      "links": [],
+      "files": 60,
+      "total_bytes": 319641,
+      "largest_file": 62055
+    },
+    {
+      "case_id": "RW-CAND-091",
+      "source_sha256": "a5710ec45d44553307e36fba6217d82aa2856342e00fb3da8aeab811cf3a2b66",
+      "links": [],
+      "files": 4,
+      "total_bytes": 47986,
+      "largest_file": 29330
+    },
+    {
+      "case_id": "RW-CAND-094",
+      "source_sha256": "8b060e8995eb3874084f0dda1fcb7859754c83390444725f6a8190dcb9fcad49",
+      "links": [],
+      "files": 27,
+      "total_bytes": 62029,
+      "largest_file": 13275
+    },
+    {
+      "case_id": "RW-CAND-095-AGGREGATE-VERIFIER-001",
+      "source_sha256": "02c56302733aa3f6fbfeb60e24088dc9f858dcddb34717282e60eae4ac18e091",
+      "links": [],
+      "files": 12,
+      "total_bytes": 10367,
+      "largest_file": 1838
+    },
+    {
+      "case_id": "RW-CAND-102",
+      "source_sha256": "b63ccdcbb1e70500fdd5878de3643abb15a8f69ec00f7f0cc74887829e6a6bc7",
+      "links": [],
+      "files": 10,
+      "total_bytes": 27480,
+      "largest_file": 11281
+    },
+    {
+      "case_id": "RW-CAND-103",
+      "source_sha256": "62a63e39a6c54465a0b72fad026024da452e78838149587beefdd70269cb2065",
+      "links": [],
+      "files": 13,
+      "total_bytes": 101973,
+      "largest_file": 85511
+    },
+    {
+      "case_id": "RW-CAND-104",
+      "source_sha256": "8686514ff3b0c93898c55297aa76b9f722e27eab4d14d23db08aa2b1d518c5b5",
+      "links": [],
+      "files": 5,
+      "total_bytes": 31826,
+      "largest_file": 20951
+    },
+    {
+      "case_id": "RW-CAND-106",
+      "source_sha256": "2549385e651f966478376df528637f1526062b0791d72b92987e971071af9b65",
+      "links": [],
+      "files": 57,
+      "total_bytes": 882227,
+      "largest_file": 352646
+    },
+    {
+      "case_id": "RW-CAND-109",
+      "source_sha256": "ab2828201d4bbd6d9e2fdd7829e96a52cf736e510f5ecc992e7aac0d327794cf",
+      "links": [],
+      "files": 16,
+      "total_bytes": 131148,
+      "largest_file": 39360
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "source_sha256": "3568f7d916d2dae1d5b2c3fb68a76fd2958f67dfa65a2e053566c6baa218d051",
+      "links": [],
+      "files": 18,
+      "total_bytes": 26395,
+      "largest_file": 6503
+    },
+    {
+      "case_id": "RW-CAND-118",
+      "source_sha256": "f841c81fcb866185d1f8b96c5d64a38c371e52e0057184bfc474819a80eeba87",
+      "links": [],
+      "files": 16,
+      "total_bytes": 46516,
+      "largest_file": 18915
+    },
+    {
+      "case_id": "RW-CAND-120",
+      "source_sha256": "acc330d3b03be84bff7c92e27f07ea3b776b4f6082a599099f7e05ce22336439",
+      "links": [],
+      "files": 14,
+      "total_bytes": 25799,
+      "largest_file": 6798
+    },
+    {
+      "case_id": "RW-CAND-127",
+      "source_sha256": "99204e9a0346dfc392c8698a51cc09e63f44af978f7f0e6594ae377afba38eb1",
+      "links": [],
+      "files": 13,
+      "total_bytes": 22933,
+      "largest_file": 5017
+    },
+    {
+      "case_id": "RW-CAND-128",
+      "source_sha256": "71456afa00e7d82f57dd86adb1b46ad638ddc56e27ff552e8c79941132bc23b9",
+      "links": [],
+      "files": 13,
+      "total_bytes": 44567,
+      "largest_file": 14484
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "source_sha256": "4eb10ef4b81b9ddf338bde5bc983c64ab7f873003f40da31c04a14f54e369675",
+      "links": [],
+      "files": 130,
+      "total_bytes": 746682,
+      "largest_file": 142710
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "source_sha256": "d271dd8d7fd5abe60d585fd98b2a9a91409c9aa19100f66813164d94aa160239",
+      "links": [],
+      "files": 8,
+      "total_bytes": 12519,
+      "largest_file": 6012
+    },
+    {
+      "case_id": "RW-CAND-137",
+      "source_sha256": "968299e9a930c1084812fa74229ef139a04c898e5021bcede47b12420c335db8",
+      "links": [],
+      "files": 9,
+      "total_bytes": 14458,
+      "largest_file": 4881
+    },
+    {
+      "case_id": "RW-CAND-171",
+      "source_sha256": "2d79db2b4f6413253d813f278ed13557659b1dba17fc7ca0881341319397e442",
+      "links": [],
+      "files": 172,
+      "total_bytes": 5551201,
+      "largest_file": 557442
+    },
+    {
+      "case_id": "RW-HELM-KEDA-HTTP-LOGGING-001",
+      "source_sha256": "f4db9f91e45f2433f1caec3197ad424b397f8c0051f6cd53264cef88c0b52eff",
+      "links": [],
+      "files": 20,
+      "total_bytes": 40478,
+      "largest_file": 9721
+    },
+    {
+      "case_id": "RW-HELM-KEDA-RBAC-DISABLED-001",
+      "source_sha256": "6776460164ea300eaf98dea32471c9794dca95f50ae1231c5f1e0b801a228319",
+      "links": [],
+      "files": 38,
+      "total_bytes": 706210,
+      "largest_file": 583071
+    },
+    {
+      "case_id": "RW-HELM-PROM-KSM-EMPTY-HEADERS-001",
+      "source_sha256": "76ad50ff66d11403c2ad062238ad846ef2aa4b4a8b3d3a9d8913e3622945b13d",
+      "links": [],
+      "files": 24,
+      "total_bytes": 74949,
+      "largest_file": 21036
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "source_sha256": "32577cbb42230eb54736cd7158c59c0eef23e220e6165ce59e0806fc93937bf5",
+      "links": [],
+      "files": 334,
+      "total_bytes": 1533323,
+      "largest_file": 36754
+    },
+    {
+      "case_id": "R4-KEDA-8033",
+      "source_sha256": "76411b3120642bab7bcb8fb3f76138e76fbef9088fd79a213d33e642602368fc",
+      "links": [],
+      "files": 764,
+      "total_bytes": 8760520,
+      "largest_file": 667457
+    },
+    {
+      "case_id": "R4-KEDA-8227",
+      "source_sha256": "e43dec8a84a1590a1d4b70c18f00ca77918fd52c53fcc371b62ef0298021cc14",
+      "links": [],
+      "files": 787,
+      "total_bytes": 9400907,
+      "largest_file": 667470
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "source_sha256": "a6ca9e6a0ac9664a45c27290da3f0f5f02f3e9c8dd0071461a7d7b557575b4c9",
+      "links": [],
+      "files": 181,
+      "total_bytes": 906061,
+      "largest_file": 63855
+    },
+    {
+      "case_id": "RW-ARGO-CD-23823",
+      "source_sha256": "279585c75849ec3f1fd28efeae8a57bb7d099f70b1ecbe459476f4b332157f9e",
+      "links": [
+        {
+          "path": "source/reposerver/repository/testdata/in-bounds-link/app/cm.link.yaml",
+          "target": "../cm.yaml"
+        },
+        {
+          "path": "source/reposerver/repository/testdata/in-bounds-values-file-link/values.yaml",
+          "target": "values-2.yaml"
+        },
+        {
+          "path": "source/reposerver/repository/testdata/link-to-nowhere/nowhere.json",
+          "target": "nowhere"
+        },
+        {
+          "path": "source/reposerver/repository/testdata/my-chart/my-chart-link.yaml",
+          "target": "my-chart-values.yaml"
+        },
+        {
+          "path": "source/reposerver/repository/testdata/out-of-bounds-link/out-of-bounds.json",
+          "target": "../out-of-bounds.json"
+        },
+        {
+          "path": "source/reposerver/repository/testdata/out-of-bounds-values-file-link/values.yaml",
+          "target": "../out-of-bounds.yaml"
+        },
+        {
+          "path": "source/reposerver/repository/testdata2/out-of-bounds-chart/link",
+          "target": "../../malicious/symlink"
+        },
+        {
+          "path": "source/test/e2e/testdata2/guestbook-partial-symlink-files/guestbook-ui-deployment.yaml",
+          "target": "../guestbook/guestbook-ui-deployment.yaml"
+        },
+        {
+          "path": "source/test/e2e/testdata2/guestbook-symlink-files/guestbook-ui-deployment.yaml",
+          "target": "../guestbook/guestbook-ui-deployment.yaml"
+        },
+        {
+          "path": "source/test/e2e/testdata2/guestbook-symlink-files/guestbook-ui-svc.yaml",
+          "target": "../guestbook/guestbook-ui-svc.yaml"
+        },
+        {
+          "path": "source/test/e2e/testdata2/guestbook-symlink-files/kustomization.yaml",
+          "target": "../guestbook/kustomization.yaml"
+        },
+        {
+          "path": "source/test/e2e/testdata2/guestbook-symlink-folder",
+          "target": "guestbook"
+        },
+        {
+          "path": "source/ui/tsconfig.json",
+          "target": "src/app/tsconfig.json"
+        },
+        {
+          "path": "source/util/app/path/testdata/badlink/badlink",
+          "target": "../../bla"
+        },
+        {
+          "path": "source/util/app/path/testdata/badlink2/badlink",
+          "target": "..///../bad//../link/"
+        },
+        {
+          "path": "source/util/app/path/testdata/badlink3/badlink",
+          "target": "../badlink3/test.txt"
+        },
+        {
+          "path": "source/util/app/path/testdata/goodlink/goodlink",
+          "target": "./file.txt"
+        },
+        {
+          "path": "source/util/app/path/testdata/goodlink/goodlink2",
+          "target": "subdir/file.txt"
+        },
+        {
+          "path": "source/util/app/path/testdata/goodlink/goodlink3",
+          "target": "subdir/..file.txt"
+        },
+        {
+          "path": "source/util/app/path/testdata/goodlink/subdir/goodlink",
+          "target": "../subdir/file.txt"
+        },
+        {
+          "path": "source/util/io/files/testdata/app/applicationset/readme-symlink",
+          "target": "../README.md"
+        },
+        {
+          "path": "source/util/io/files/testdata/symlink-exploit/tar_test_symlink",
+          "target": "../../tar_test.go"
+        },
+        {
+          "path": "source/util/io/path/testdata/bam",
+          "target": "baz"
+        },
+        {
+          "path": "source/util/io/path/testdata/bar",
+          "target": "foo"
+        },
+        {
+          "path": "source/util/io/path/testdata/baz",
+          "target": "bar"
+        }
+      ],
+      "files": 6282,
+      "total_bytes": 102682433,
+      "largest_file": 3100355
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "source_sha256": "804895d7bd54db581614bd48cea73b5430ddb2d542d42f565aca319faefd4356",
+      "links": [
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/reposerver/repository/testdata/in-bounds-link/app/cm.link.yaml",
+          "target": "../cm.yaml"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/reposerver/repository/testdata/in-bounds-values-file-link/values.yaml",
+          "target": "values-2.yaml"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/reposerver/repository/testdata/link-to-nowhere/nowhere.json",
+          "target": "nowhere"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/reposerver/repository/testdata/my-chart/my-chart-link.yaml",
+          "target": "my-chart-values.yaml"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/reposerver/repository/testdata/out-of-bounds-link/out-of-bounds.json",
+          "target": "../out-of-bounds.json"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/reposerver/repository/testdata/out-of-bounds-values-file-link/values.yaml",
+          "target": "../out-of-bounds.yaml"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/reposerver/repository/testdata2/out-of-bounds-chart/link",
+          "target": "../../malicious/symlink"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/test/e2e/testdata2/guestbook-partial-symlink-files/guestbook-ui-deployment.yaml",
+          "target": "../guestbook/guestbook-ui-deployment.yaml"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/test/e2e/testdata2/guestbook-symlink-files/guestbook-ui-deployment.yaml",
+          "target": "../guestbook/guestbook-ui-deployment.yaml"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/test/e2e/testdata2/guestbook-symlink-files/guestbook-ui-svc.yaml",
+          "target": "../guestbook/guestbook-ui-svc.yaml"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/test/e2e/testdata2/guestbook-symlink-files/kustomization.yaml",
+          "target": "../guestbook/kustomization.yaml"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/test/e2e/testdata2/guestbook-symlink-folder",
+          "target": "guestbook"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/test/e2e/testdata3/symlink-out-of-bounds/out-of-bounds",
+          "target": ".."
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/ui/tsconfig.json",
+          "target": "src/app/tsconfig.json"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/app/path/testdata/badlink/badlink",
+          "target": "../../bla"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/app/path/testdata/badlink2/badlink",
+          "target": "..///../bad//../link/"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/app/path/testdata/badlink3/badlink",
+          "target": "../badlink3/test.txt"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/app/path/testdata/goodlink/goodlink",
+          "target": "./file.txt"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/app/path/testdata/goodlink/goodlink2",
+          "target": "subdir/file.txt"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/app/path/testdata/goodlink/goodlink3",
+          "target": "subdir/..file.txt"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/app/path/testdata/goodlink/subdir/goodlink",
+          "target": "../subdir/file.txt"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/io/files/testdata/app/applicationset/readme-symlink",
+          "target": "../README.md"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/io/files/testdata/symlink-exploit/tar_test_symlink",
+          "target": "../../tar_test.go"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/io/path/testdata/bam",
+          "target": "baz"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/io/path/testdata/bar",
+          "target": "foo"
+        },
+        {
+          "path": "argo-cd-3eebbcb33b9d1684d967ea91459bd16235cb6e04/util/io/path/testdata/baz",
+          "target": "bar"
+        }
+      ],
+      "files": 5185,
+      "total_bytes": 88737259,
+      "largest_file": 24538344
+    },
+    {
+      "case_id": "RW-ARGO-CD-29827",
+      "source_sha256": "59c9d4f01ddba913b211aeea06da888b03c43f1a9008d8ecc476f29a01cbfb87",
+      "links": [
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/reposerver/repository/testdata/in-bounds-link/app/cm.link.yaml",
+          "target": "../cm.yaml"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/reposerver/repository/testdata/in-bounds-values-file-link/values.yaml",
+          "target": "values-2.yaml"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/reposerver/repository/testdata/link-to-nowhere/nowhere.json",
+          "target": "nowhere"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/reposerver/repository/testdata/my-chart/my-chart-link.yaml",
+          "target": "my-chart-values.yaml"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/reposerver/repository/testdata/out-of-bounds-link/out-of-bounds.json",
+          "target": "../out-of-bounds.json"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/reposerver/repository/testdata/out-of-bounds-values-file-link/values.yaml",
+          "target": "../out-of-bounds.yaml"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/reposerver/repository/testdata2/out-of-bounds-chart/link",
+          "target": "../../malicious/symlink"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/test/e2e/testdata2/guestbook-partial-symlink-files/guestbook-ui-deployment.yaml",
+          "target": "../guestbook/guestbook-ui-deployment.yaml"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/test/e2e/testdata2/guestbook-symlink-files/guestbook-ui-deployment.yaml",
+          "target": "../guestbook/guestbook-ui-deployment.yaml"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/test/e2e/testdata2/guestbook-symlink-files/guestbook-ui-svc.yaml",
+          "target": "../guestbook/guestbook-ui-svc.yaml"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/test/e2e/testdata2/guestbook-symlink-files/kustomization.yaml",
+          "target": "../guestbook/kustomization.yaml"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/test/e2e/testdata2/guestbook-symlink-folder",
+          "target": "guestbook"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/test/e2e/testdata3/symlink-out-of-bounds/out-of-bounds",
+          "target": ".."
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/ui/tsconfig.json",
+          "target": "src/app/tsconfig.json"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/app/path/testdata/badlink/badlink",
+          "target": "../../bla"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/app/path/testdata/badlink2/badlink",
+          "target": "..///../bad//../link/"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/app/path/testdata/badlink3/badlink",
+          "target": "../badlink3/test.txt"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/app/path/testdata/goodlink/goodlink",
+          "target": "./file.txt"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/app/path/testdata/goodlink/goodlink2",
+          "target": "subdir/file.txt"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/app/path/testdata/goodlink/goodlink3",
+          "target": "subdir/..file.txt"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/app/path/testdata/goodlink/subdir/goodlink",
+          "target": "../subdir/file.txt"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/io/files/testdata/app/applicationset/readme-symlink",
+          "target": "../README.md"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/io/files/testdata/symlink-exploit/tar_test_symlink",
+          "target": "../../tar_test.go"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/io/path/testdata/bam",
+          "target": "baz"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/io/path/testdata/bar",
+          "target": "foo"
+        },
+        {
+          "path": "argo-cd-6e03cb20e137ba5855264a17e777ebeb5a963a3b/util/io/path/testdata/baz",
+          "target": "bar"
+        }
+      ],
+      "files": 6025,
+      "total_bytes": 247526852,
+      "largest_file": 57068302
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "source_sha256": "884a0d04adbc61933d0f5f80af9b2870050f3ae7bedfa2e032a38419de28776e",
+      "links": [],
+      "files": 1262,
+      "total_bytes": 15042378,
+      "largest_file": 1535400
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9118",
+      "source_sha256": "c8d21ff62412cf2fdd3dedc84a6d4790d22a65a11099474252391b2330ef9126",
+      "links": [],
+      "files": 1262,
+      "total_bytes": 15045157,
+      "largest_file": 1535400
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9128",
+      "source_sha256": "46b3258401a6eee782c4becb7d079c9231567491977ad7c67f3554493978f5f8",
+      "links": [],
+      "files": 1263,
+      "total_bytes": 15168123,
+      "largest_file": 1557934
+    },
+    {
+      "case_id": "RW-CLUSTER-API-12341",
+      "source_sha256": "ef209a31029ce7e39a5a3b8bd4674563199c36c6c95961320ba99af2f1bb2422",
+      "links": [],
+      "files": 2315,
+      "total_bytes": 30719625,
+      "largest_file": 452780
+    },
+    {
+      "case_id": "RW-CLUSTER-API-13937",
+      "source_sha256": "0ec24e12ea921919668ab7a7e5229e9170fcac41fdb098beb5f9e82a1c5098a6",
+      "links": [],
+      "files": 2368,
+      "total_bytes": 34709205,
+      "largest_file": 626860
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7733",
+      "source_sha256": "77166a5740ad55db0731bed8d76cc2603d2b532c237f8ffe779bf7b1a84bfd94",
+      "links": [],
+      "files": 948,
+      "total_bytes": 22724549,
+      "largest_file": 3237596
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7789",
+      "source_sha256": "c591be534197cc1120bda2e6659007c2cd63b2a7bf948bc19725787cceba224e",
+      "links": [],
+      "files": 947,
+      "total_bytes": 22718041,
+      "largest_file": 3237596
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7860",
+      "source_sha256": "ecf3671e961bfbc5d2d6291f912894a7e20861d292c512e36f64fc1c0776a343",
+      "links": [],
+      "files": 952,
+      "total_bytes": 22788708,
+      "largest_file": 3237596
+    },
+    {
+      "case_id": "RW-CROSSPLANE-RUNTIME-1088",
+      "source_sha256": "15dbeaa9adc952411bd1252c96ade5f9e504baa20fd03b16d3336090d92fdbd0",
+      "links": [],
+      "files": 202,
+      "total_bytes": 1444343,
+      "largest_file": 121518
+    },
+    {
+      "case_id": "RW-DAPR-10132",
+      "source_sha256": "07afcbf8ed9b9c9732b9f861a8e8b2defcb4831d1311d3d58c7b676abdcccb35",
+      "links": [],
+      "files": 4247,
+      "total_bytes": 34159357,
+      "largest_file": 1462430
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1411",
+      "source_sha256": "d4e63b257089db64430e7c7233b192301248fc2984d36ea4806c543ca2dce2b1",
+      "links": [],
+      "files": 290,
+      "total_bytes": 3128567,
+      "largest_file": 882184
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1412",
+      "source_sha256": "3354f9b6008737c6da68ed4346a7cdf9369a18d3ee0b6918a51fb0d34553ae17",
+      "links": [],
+      "files": 289,
+      "total_bytes": 3104289,
+      "largest_file": 882184
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "source_sha256": "40d9431438baa508ff92afde33e99ab575592d6ca88dd25c2a41cb8fe1316910",
+      "links": [],
+      "files": 332,
+      "total_bytes": 3290442,
+      "largest_file": 882184
+    },
+    {
+      "case_id": "RW-IMAGE-REFLECTOR-824",
+      "source_sha256": "5aa854f47df37366ccdebf3055458317b2d9bb3826263c2e6e5fa502b8622d81",
+      "links": [],
+      "files": 144,
+      "total_bytes": 824656,
+      "largest_file": 50927
+    },
+    {
+      "case_id": "RW-KEDA-7777",
+      "source_sha256": "71a9664ec33bac1535b7fcb2315b5055f9461a47ed30ccd0c845a5a8ce601214",
+      "links": [],
+      "files": 17761,
+      "total_bytes": 189698468,
+      "largest_file": 3469475
+    },
+    {
+      "case_id": "RW-KEDA-8125",
+      "source_sha256": "2e5df908f958af0f91b88d0fcd14d4bfe3d2e512db9b853dbc03921f91733f83",
+      "links": [],
+      "files": 761,
+      "total_bytes": 8792696,
+      "largest_file": 667470
+    },
+    {
+      "case_id": "RW-KUSTOMIZE-CONTROLLER-1614",
+      "source_sha256": "d8e054cd5031f56b4c82cffad3e9a9e1317f8236a761d2dc09159fab195ccda3",
+      "links": [],
+      "files": 205,
+      "total_bytes": 1614222,
+      "largest_file": 163448
+    },
+    {
+      "case_id": "RW-KYVERNO-17395",
+      "source_sha256": "c31e4969018a76c78cafbfd2d42bbd86b104421d59dfb3c9e0387441e3651b86",
+      "links": [
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-generating-policies/_step-templates/create-policy.yaml",
+          "target": "../../_step-templates/create-policy.yaml"
+        },
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-generating-policies/_step-templates/namespaced-generating-policy-ready.yaml",
+          "target": "../../_step-templates/namespaced-generating-policy-ready.yaml"
+        },
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-mutating-policies/_step-templates/create-policy.yaml",
+          "target": "../../_step-templates/create-policy.yaml"
+        },
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-mutating-policies/_step-templates/namespaced-mutating-policy-ready.yaml",
+          "target": "../../_step-templates/namespaced-mutating-policy-ready.yaml"
+        },
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-validating-policies/_step-templates/create-policy.yaml",
+          "target": "../../_step-templates/create-policy.yaml"
+        },
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-validating-policies/_step-templates/namespaced-validating-policy-ready.yaml",
+          "target": "../../_step-templates/namespaced-validating-policy-ready.yaml"
+        }
+      ],
+      "files": 9491,
+      "total_bytes": 39957617,
+      "largest_file": 5701720
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8727",
+      "source_sha256": "93d51659944da9c6a9d27c7e70fea1b2189ce468e46393d769e490709b83059f",
+      "links": [],
+      "files": 1631,
+      "total_bytes": 29828548,
+      "largest_file": 4510866
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8739",
+      "source_sha256": "a98fc07cefbfafb0ae46f1323ed4a56f7367ee7e390faf5ad4d6b991926c9e5e",
+      "links": [],
+      "files": 1631,
+      "total_bytes": 29828548,
+      "largest_file": 4510866
+    },
+    {
+      "case_id": "RW-SOURCE-CONTROLLER-1904",
+      "source_sha256": "5ba712973a002ce9c04089c4235ab968cd487bf30f9be088e8ee162885002922",
+      "links": [],
+      "files": 392,
+      "total_bytes": 3032622,
+      "largest_file": 135635
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7523",
+      "source_sha256": "8432237b084414098654d98a36ce3e4c56a7e257ac430db1b70326215df692ab",
+      "links": [],
+      "files": 925,
+      "total_bytes": 22632510,
+      "largest_file": 3237596
+    },
+    {
+      "case_id": "R3-KUSTOMIZE-5940",
+      "source_sha256": "df9f866cda99dfeca76bdc7592f22691b0e2f3b8d5d092b78b3425b681c33c7d",
+      "links": [
+        {
+          "path": "source/functions/examples/validator-resource-requests/image/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/functions/examples/application-cr/image/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/functions/examples/template-go-nginx/image/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/functions/examples/validator-kubeval/image/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/functions/examples/injection-tshirt-sizes/image/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/kustomize/Makefile",
+          "target": "../Makefile-modules.mk"
+        },
+        {
+          "path": "source/cmd/k8scopy/Makefile",
+          "target": "../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/cmd/mdtogo/Makefile",
+          "target": "../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/someteam.example.com/v1/calvinduplicator/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/someteam.example.com/v1/sedtransformer/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/someteam.example.com/v1/bashedconfigmap/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/someteam.example.com/v1/someservicegenerator/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/someteam.example.com/v1/secretsfromdatabase/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/someteam.example.com/v1/dateprefixer/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/someteam.example.com/v1/printpluginenv/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/someteam.example.com/v1/stringprefixer/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/valueaddtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/prefixtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/namespacetransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/iampolicygenerator/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/patchjson6902transformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/labeltransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/replacementtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/patchtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/sortordertransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/secretgenerator/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/hashtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/imagetagtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/replicacounttransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/patchstrategicmergetransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/annotationstransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/suffixtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/configmapgenerator/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "source/plugin/builtin/helmchartinflationgenerator/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        }
+      ],
+      "files": 1491,
+      "total_bytes": 12575618,
+      "largest_file": 3469475
+    },
+    {
+      "case_id": "R3-KUSTOMIZE-6237",
+      "source_sha256": "7ded39d1ad22d95dc30d50540c621905c01ff02f5e71e2e624f8da187d926ed0",
+      "links": [
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/cmd/k8scopy/Makefile",
+          "target": "../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/cmd/mdtogo/Makefile",
+          "target": "../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/functions/examples/application-cr/image/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/functions/examples/injection-tshirt-sizes/image/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/functions/examples/template-go-nginx/image/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/functions/examples/validator-kubeval/image/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/functions/examples/validator-resource-requests/image/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/kustomize/Makefile",
+          "target": "../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/annotationstransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/configmapgenerator/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/hashtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/helmchartinflationgenerator/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/iampolicygenerator/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/imagetagtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/labeltransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/namespacetransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/patchjson6902transformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/patchstrategicmergetransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/patchtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/prefixtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/replacementtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/replicacounttransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/secretgenerator/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/sortordertransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/suffixtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/builtin/valueaddtransformer/Makefile",
+          "target": "../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/someteam.example.com/v1/bashedconfigmap/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/someteam.example.com/v1/calvinduplicator/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/someteam.example.com/v1/dateprefixer/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/someteam.example.com/v1/printpluginenv/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/someteam.example.com/v1/secretsfromdatabase/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/someteam.example.com/v1/sedtransformer/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/someteam.example.com/v1/someservicegenerator/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        },
+        {
+          "path": "kustomize-3f00f0aa9478f6a21d664cfa99d26d79b002b9ce/plugin/someteam.example.com/v1/stringprefixer/Makefile",
+          "target": "../../../../Makefile-modules.mk"
+        }
+      ],
+      "files": 1512,
+      "total_bytes": 9031685,
+      "largest_file": 496231
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "source_sha256": "2a5e761ae5f266f234ff9e3fe68ac1456017aa8e726ecfaef9560cdede645606",
+      "links": [
+        {
+          "path": "kpt-6345d96d661eae1f6cdcb97b1f70080ce35f61a4/internal/testutil/testdata/dataset6/java/config-symlink",
+          "target": "java-configmap.resource.yaml"
+        },
+        {
+          "path": "kpt-6345d96d661eae1f6cdcb97b1f70080ce35f61a4/internal/testutil/testdata/dataset6/mysql-symlink",
+          "target": "mysql"
+        }
+      ],
+      "files": 1951,
+      "total_bytes": 24254610,
+      "largest_file": 8857719
+    },
+    {
+      "case_id": "R3-KOMPOSE-1887",
+      "source_sha256": "1111b2b938a6b87ef6f425a881748de1e00d9537bbba3bbde6c348264ed6854c",
+      "links": [],
+      "files": 589,
+      "total_bytes": 21935336,
+      "largest_file": 11344959
+    },
+    {
+      "case_id": "R3-HELM-9175",
+      "source_sha256": "0d99fdd86fecb3ab343377003b69566dcedc4338120499ef98291031619e217f",
+      "links": [
+        {
+          "path": "helm-dd0d80d246d785df35d1504ac4854c3962ab59ec/internal/third_party/dep/fs/testdata/symlinks/file-symlink",
+          "target": "../test.file"
+        },
+        {
+          "path": "helm-dd0d80d246d785df35d1504ac4854c3962ab59ec/internal/third_party/dep/fs/testdata/symlinks/windows-file-symlink",
+          "target": "C:/Users/ibrahim/go/src/github.com/golang/dep/internal/fs/testdata/test.file"
+        }
+      ],
+      "files": 1391,
+      "total_bytes": 2775790,
+      "largest_file": 65575
+    },
+    {
+      "case_id": "R3-KUBESPAWNER-654",
+      "source_sha256": "8b4a0a6b769c7d7939e0ed6ced2f8a8e7fe3bd5248535cc8bd58e85b735c5f76",
+      "links": [],
+      "files": 42,
+      "total_bytes": 436153,
+      "largest_file": 122146
+    },
+    {
+      "case_id": "R3-PREFECT-7244",
+      "source_sha256": "0bc29e5f95a6e3c1cc8f84ad1ac6022b63fe38c20275ed37b0a0245bae6e3010",
+      "links": [],
+      "files": 983,
+      "total_bytes": 17191843,
+      "largest_file": 631361
+    },
+    {
+      "case_id": "R3-YTT-550",
+      "source_sha256": "ac795f12c26e30c25a7c9b2dfb7ba66d969061c6b3aec243311c168badd36380",
+      "links": [],
+      "files": 1001,
+      "total_bytes": 4294417,
+      "largest_file": 485044
+    },
+    {
+      "case_id": "R3-CONTROLLER-TOOLS-1270",
+      "source_sha256": "8c614168824c58848f222ec0d720d6bafaeb2d4acf83671d09c492dfe3b4396b",
+      "links": [],
+      "files": 291,
+      "total_bytes": 1950222,
+      "largest_file": 690814
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5708",
+      "source_sha256": "a3ccef62432705eb9fb86980b0b120c26fb9da00d9f0f08bc1ffe2ef645ed225",
+      "links": [],
+      "files": 1373,
+      "total_bytes": 9027393,
+      "largest_file": 562671
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "source_sha256": "ef69a8f3a7256074085c02ecfb4a2d8b5b86eb73992d3fb91d649baf72b47906",
+      "links": [],
+      "files": 14709,
+      "total_bytes": 201038785,
+      "largest_file": 4202169
+    },
+    {
+      "case_id": "R3-FLUX-KUSTOMIZE-1693",
+      "source_sha256": "b122253104a42f53885dd2a5f9d43c01acf8d6a117bf1a6650283880499f29b0",
+      "links": [],
+      "files": 210,
+      "total_bytes": 1663171,
+      "largest_file": 163448
+    },
+    {
+      "case_id": "R3-HELM-31979",
+      "source_sha256": "16d55b226ad0609afe924c93bd8788aa07b461f92f91b5e383c471445d56ca20",
+      "links": [
+        {
+          "path": "helm-1c007051ae371958c7163cadd7800c58c2d1eb6b/internal/third_party/dep/fs/testdata/symlinks/file-symlink",
+          "target": "../test.file"
+        },
+        {
+          "path": "helm-1c007051ae371958c7163cadd7800c58c2d1eb6b/internal/third_party/dep/fs/testdata/symlinks/windows-file-symlink",
+          "target": "C:/Users/ibrahim/go/src/github.com/golang/dep/internal/fs/testdata/test.file"
+        }
+      ],
+      "files": 1988,
+      "total_bytes": 3941213,
+      "largest_file": 71654
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9892",
+      "source_sha256": "f71916322bd968c2317d98e92c07f09360f2d8312da93655d434efd258d8da64",
+      "links": [],
+      "files": 15505,
+      "total_bytes": 210018802,
+      "largest_file": 4202169
+    },
+    {
+      "case_id": "R3-UPJET-593",
+      "source_sha256": "248cb9d030a5df25c23ac603323a862ff2c3538cbb0dda671099cc0e59328cc8",
+      "links": [
+        {
+          "path": "AGENTS.md",
+          "target": "CLAUDE.md"
+        }
+      ],
+      "files": 339,
+      "total_bytes": 4093422,
+      "largest_file": 638664
+    },
+    {
+      "case_id": "R3-YTT-1000",
+      "source_sha256": "9e9167b3eee5e4f251831a1554606ed9e82f1e6f89edd47078b6594f54284cfc",
+      "links": [],
+      "files": 1192,
+      "total_bytes": 4655594,
+      "largest_file": 485057
+    },
+    {
+      "case_id": "R3-CDK8S-327",
+      "source_sha256": "f0e10420154c75fd353956604032b254978dc45aeac7722baf3eba666614ff7e",
+      "links": [],
+      "files": 367,
+      "total_bytes": 27241869,
+      "largest_file": 12491218
+    },
+    {
+      "case_id": "R3-PULUMI-KUBERNETES-4426",
+      "source_sha256": "a2f8bb2fce1ae51f5b6549e4caf8c9c85de3b31898b32f2bb7fff3ece32a1b7a",
+      "links": [],
+      "files": 12886,
+      "total_bytes": 144366256,
+      "largest_file": 9865926
+    },
+    {
+      "case_id": "R3-KPT-4746",
+      "source_sha256": "9db137c9d22965c48af8f975cbe4e37dd27827d3f893b2306e6e3e45fe02823b",
+      "links": [
+        {
+          "path": "kpt-7ed7eddff8f357d1d157a91682327fda48b8c731/internal/testutil/testdata/dataset6/java/config-symlink",
+          "target": "java-configmap.resource.yaml"
+        }
+      ],
+      "files": 2083,
+      "total_bytes": 24755735,
+      "largest_file": 8857719
+    },
+    {
+      "case_id": "R3-GARDEN-6713",
+      "source_sha256": "dd0a3cea64f4231eb30bdff5da8d7856de6fd26fee4046614f9a5fe4ef06da76",
+      "links": [
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/bin/garden-debug",
+          "target": "../cli/bin/garden-debug.js"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/core/test/data/test-projects/build-dir/symlink-outside-module/symlink.txt",
+          "target": "../garden.yml"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/core/test/data/test-projects/build-dir/symlink-within-module/nested/symlink.txt",
+          "target": "../foo.txt"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/core/test/data/test-projects/build-dir/symlink-within-module/symlink.txt",
+          "target": "foo.txt"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/e2e/projects/code-synchronization",
+          "target": "../../examples/code-synchronization"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/e2e/projects/demo-project",
+          "target": "../../examples/demo-project"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/e2e/projects/gke",
+          "target": "../../examples/gke"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/e2e/projects/hadolint",
+          "target": "../../examples/hadolint"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/e2e/projects/jib-container",
+          "target": "../../examples/jib-container"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/e2e/projects/kustomize",
+          "target": "../../examples/kustomize"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/e2e/projects/remote-sources",
+          "target": "../../examples/remote-sources"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/e2e/projects/run-actions",
+          "target": "../../examples/run-actions"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/e2e/projects/templated-k8s-container",
+          "target": "../../examples/templated-k8s-container"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/e2e/projects/vote",
+          "target": "../../examples/vote"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/e2e/projects/vote-helm",
+          "target": "../../examples/vote-helm"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/plugins/jib/.prettierrc.json",
+          "target": "../../.prettierrc.json"
+        },
+        {
+          "path": "garden-a5783bd5e206a2022bde34bec5b16373865416a7/sdk/.prettierrc.json",
+          "target": "../.prettierrc.json"
+        }
+      ],
+      "files": 2966,
+      "total_bytes": 52437985,
+      "largest_file": 7535894
+    },
+    {
+      "case_id": "R3-KUBEVELA-7041",
+      "source_sha256": "303eb70c299cc12f7b4a622955d2c4b5ece6bd7c69fc611f07378cff26a9bfa3",
+      "links": [],
+      "files": 2001,
+      "total_bytes": 17622993,
+      "largest_file": 767067
+    },
+    {
+      "case_id": "R3-KOMPOSE-2124",
+      "source_sha256": "bfcc101e64a0597688f6c7400b71d41bba6d8b0f1a4a01dcabc08d2e0dd2d405",
+      "links": [],
+      "files": 605,
+      "total_bytes": 21889073,
+      "largest_file": 11344959
+    },
+    {
+      "case_id": "R3-PULUMI-KUBERNETES-4293",
+      "source_sha256": "d4c88d84ca5a9519a289915da95d2927511e88406f1e0869309be90e18847d9b",
+      "links": [],
+      "files": 12550,
+      "total_bytes": 139983836,
+      "largest_file": 9865926
+    },
+    {
+      "case_id": "R3-KUBESPAWNER-451",
+      "source_sha256": "51be0d9057a257a34b833c05e185c943fd545c3ad5aaf7416b71e408e2045846",
+      "links": [],
+      "files": 43,
+      "total_bytes": 262652,
+      "largest_file": 82095
+    },
+    {
+      "case_id": "R3-FLINK-OPERATOR-1152",
+      "source_sha256": "4c1d204f6b9e2609b3a0c3c877918634a62e6a69a87aea03d0d5a5897ddd1d15",
+      "links": [],
+      "files": 964,
+      "total_bytes": 24951772,
+      "largest_file": 2597319
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "source_sha256": "af9392e0682d280a6d169074fb9b7b58d6615a310b3c0b134019947cf27ad87d",
+      "links": [],
+      "files": 1286,
+      "total_bytes": 9074153,
+      "largest_file": 802140
+    },
+    {
+      "case_id": "R3-HELMFILE-2531",
+      "source_sha256": "7e2fa14736d5ce8b7943e0538db6b1df3579f877bdcc9d55c8f7a49074de3940",
+      "links": [
+        {
+          "path": "docs/contributing.md",
+          "target": "../CONTRIBUTING.md"
+        },
+        {
+          "path": "docs/license.md",
+          "target": "../LICENSE"
+        },
+        {
+          "path": "docs/users.md",
+          "target": "../USERS.md"
+        }
+      ],
+      "files": 897,
+      "total_bytes": 6457354,
+      "largest_file": 3385803
+    },
+    {
+      "case_id": "R3-KUBEVELA-7383",
+      "source_sha256": "dd4dd70d9a4de4250327ec8e550deeb0710586917ad2980295274691b5961fbf",
+      "links": [],
+      "files": 2202,
+      "total_bytes": 21116947,
+      "largest_file": 767067
+    },
+    {
+      "case_id": "R4-CLUSTER-API-OPENSTACK-3393",
+      "source_sha256": "ee7464bde03e167a8a1c3b74423119879834e1f482f8039629b88a3e8697af6a",
+      "links": [
+        {
+          "path": "hack/boilerplate/boilerplate.generatego.txt",
+          "target": "../boilerplate.go.txt"
+        }
+      ],
+      "files": 672,
+      "total_bytes": 7596615,
+      "largest_file": 1911532
+    },
+    {
+      "case_id": "R4-OTEL-5594",
+      "source_sha256": "cf3a461c2783e984f31a02ba31bd86d3d02f3e283a2967244dfd9a9578451794",
+      "links": [
+        {
+          "path": "opentelemetry-operator-ca0b832a4cb071d144d374b453d9560b77a7d8d7/AGENTS.md",
+          "target": "CONTRIBUTING.md"
+        },
+        {
+          "path": "opentelemetry-operator-ca0b832a4cb071d144d374b453d9560b77a7d8d7/CLAUDE.md",
+          "target": "AGENTS.md"
+        }
+      ],
+      "files": 1752,
+      "total_bytes": 11551511,
+      "largest_file": 1481669
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "source_sha256": "50c36cd5d3b15c87e0ab22591306ab9e9ce29bd9fb4dde7207bc061897529182",
+      "links": [],
+      "files": 549,
+      "total_bytes": 7258080,
+      "largest_file": 2844730
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-5040",
+      "source_sha256": "6484787e39e61458f3179fb1be8a75c7487c9d2c5dd2239f3ae8eecf096f7577",
+      "links": [],
+      "files": 601,
+      "total_bytes": 8504028,
+      "largest_file": 3241763
+    },
+    {
+      "case_id": "RW-ALLOY-6818",
+      "source_sha256": "36a79ad9bedd16b87003882fff8d18d4c533420f11db6f2fa634dc8aa3e159db",
+      "links": [],
+      "files": 4184,
+      "total_bytes": 39174652,
+      "largest_file": 4118776
+    },
+    {
+      "case_id": "CRI-O-7954",
+      "source_sha256": "9de91356a94433aa5d9930b2fbbe5dc20a42c6fb2316432536a5338185d45ec2",
+      "links": [
+        {
+          "path": "cri-o-944404a1d42848bc66df56ed284cefa67977453e/nix/default-amd64.nix",
+          "target": "default.nix"
+        },
+        {
+          "path": "cri-o-944404a1d42848bc66df56ed284cefa67977453e/test/testdata/policies/restrictive.json",
+          "target": "../../policy-signature.json"
+        },
+        {
+          "path": "cri-o-944404a1d42848bc66df56ed284cefa67977453e/test/testdata/policies/unrestrictive.json",
+          "target": "../../policy.json"
+        }
+      ],
+      "files": 8903,
+      "total_bytes": 91524978,
+      "largest_file": 8922562
+    },
+    {
+      "case_id": "RW-COREDNS-7562",
+      "source_sha256": "449a0fd519135e8b96075332eabb0cb6a75f893f5adb5ab601113d209cc424f3",
+      "links": [
+        {
+          "path": "coredns-5532ba84843c2f9fe22b4123ec32c51e88a7b8a1/CODE_OF_CONDUCT.md",
+          "target": ".github/CODE_OF_CONDUCT.md"
+        },
+        {
+          "path": "coredns-5532ba84843c2f9fe22b4123ec32c51e88a7b8a1/CONTRIBUTING.md",
+          "target": ".github/CONTRIBUTING.md"
+        },
+        {
+          "path": "coredns-5532ba84843c2f9fe22b4123ec32c51e88a7b8a1/SECURITY.md",
+          "target": ".github/SECURITY.md"
+        }
+      ],
+      "files": 880,
+      "total_bytes": 2788090,
+      "largest_file": 55089
+    },
+    {
+      "case_id": "RW-DAPR-10220",
+      "source_sha256": "bd09fde66e4a5b90fab7374787e9b0e48682642f2a9f9e43b53c7ba174902ce8",
+      "links": [],
+      "files": 4335,
+      "total_bytes": 34765671,
+      "largest_file": 1462430
+    },
+    {
+      "case_id": "RW-DAPR-9173",
+      "source_sha256": "5dd04505e82e1280c0ce3f22a98ab339b4e7271dc5b09ea6ed0ca506cfc83031",
+      "links": [],
+      "files": 2791,
+      "total_bytes": 17787953,
+      "largest_file": 1462430
+    },
+    {
+      "case_id": "RW-DAPR-9612",
+      "source_sha256": "11be644a31018627ef8fd1da9ca72678106ff3030b462dd6f9faebaab9f6dca4",
+      "links": [],
+      "files": 3593,
+      "total_bytes": 30215735,
+      "largest_file": 1462430
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-10720",
+      "source_sha256": "da06e4b30edadef939d4d90333e36a69f9f25c606c411b5065f62ff48ba6ad9e",
+      "links": [
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/Dockerfile",
+          "target": "./dockerfiles/Dockerfile"
+        },
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/lib/wasm-micro-runtime-WAMR-1.3.3/language-bindings/python/LICENSE",
+          "target": "../../LICENSE"
+        },
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/lib/zstd-1.5.7/tests/cli-tests/bin/unzstd",
+          "target": "zstd"
+        },
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/lib/zstd-1.5.7/tests/cli-tests/bin/zstdcat",
+          "target": "zstd"
+        },
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/tests/runtime/data/common/parsers.conf",
+          "target": "../../../../conf/parsers.conf"
+        },
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/tests/runtime/in_cpu.c",
+          "target": "in_simple_systems.c"
+        },
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/tests/runtime/in_disk.c",
+          "target": "in_simple_systems.c"
+        },
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/tests/runtime/in_dummy.c",
+          "target": "in_simple_systems.c"
+        },
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/tests/runtime/in_head.c",
+          "target": "in_simple_systems.c"
+        },
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/tests/runtime/in_mem.c",
+          "target": "in_simple_systems.c"
+        },
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/tests/runtime/in_proc.c",
+          "target": "in_simple_systems.c"
+        },
+        {
+          "path": "fluent-bit-fb0b3942c7542a5403bca25a2cba958303fad9ce/tests/runtime/in_random.c",
+          "target": "in_simple_systems.c"
+        }
+      ],
+      "files": 9920,
+      "total_bytes": 135572057,
+      "largest_file": 9022640
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-12495",
+      "source_sha256": "f410ab1b6b2bdeabbe875554ff062d921468d2044fa69103562d2fb7c459dcaf",
+      "links": [
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/Dockerfile",
+          "target": "./dockerfiles/Dockerfile"
+        },
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/lib/wasm-micro-runtime-WAMR-2.4.1/language-bindings/python/LICENSE",
+          "target": "../../LICENSE"
+        },
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/lib/zstd-1.5.7/tests/cli-tests/bin/unzstd",
+          "target": "zstd"
+        },
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/lib/zstd-1.5.7/tests/cli-tests/bin/zstdcat",
+          "target": "zstd"
+        },
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/tests/runtime/data/common/parsers.conf",
+          "target": "../../../../conf/parsers.conf"
+        },
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/tests/runtime/in_cpu.c",
+          "target": "in_simple_systems.c"
+        },
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/tests/runtime/in_disk.c",
+          "target": "in_simple_systems.c"
+        },
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/tests/runtime/in_dummy.c",
+          "target": "#include \"in_simple_systems.c\""
+        },
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/tests/runtime/in_head.c",
+          "target": "in_simple_systems.c"
+        },
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/tests/runtime/in_mem.c",
+          "target": "in_simple_systems.c"
+        },
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/tests/runtime/in_proc.c",
+          "target": "in_simple_systems.c"
+        },
+        {
+          "path": "fluent-bit-508c6b71ad19a049c634a98f2e7417cf18523c99/tests/runtime/in_random.c",
+          "target": "#include \"in_simple_systems.c\""
+        }
+      ],
+      "files": 12172,
+      "total_bytes": 173131200,
+      "largest_file": 9386637
+    },
+    {
+      "case_id": "RW-ISTIO-2944",
+      "source_sha256": "87e3ebd5c963b97e7e7957f91db0e1184825e5e6c5c09e8c0ae882b7d202f9e8",
+      "links": [],
+      "files": 1581,
+      "total_bytes": 16918937,
+      "largest_file": 1680448
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2918",
+      "source_sha256": "440ed08c894935175f68a078023ba4bff506a2fd652c4f238e596fac33c63a77",
+      "links": [],
+      "files": 300,
+      "total_bytes": 1771254,
+      "largest_file": 94181
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2955",
+      "source_sha256": "102ffbced6316e3666d6743c50932e01b79c3bb5ccf5070b9d12089e07f9d145",
+      "links": [],
+      "files": 310,
+      "total_bytes": 1808158,
+      "largest_file": 94181
+    },
+    {
+      "case_id": "RW-KYVERNO-17310",
+      "source_sha256": "1661e96ac6436ff23ffeb139a8b25efc5160e5bdf06ad356bad97e0ffc59e8f0",
+      "links": [
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-generating-policies/_step-templates/create-policy.yaml",
+          "target": "../../_step-templates/create-policy.yaml"
+        },
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-generating-policies/_step-templates/namespaced-generating-policy-ready.yaml",
+          "target": "../../_step-templates/namespaced-generating-policy-ready.yaml"
+        },
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-mutating-policies/_step-templates/create-policy.yaml",
+          "target": "../../_step-templates/create-policy.yaml"
+        },
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-mutating-policies/_step-templates/namespaced-mutating-policy-ready.yaml",
+          "target": "../../_step-templates/namespaced-mutating-policy-ready.yaml"
+        },
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-validating-policies/_step-templates/create-policy.yaml",
+          "target": "../../_step-templates/create-policy.yaml"
+        },
+        {
+          "path": "source/test/conformance/chainsaw/namespaced-validating-policies/_step-templates/namespaced-validating-policy-ready.yaml",
+          "target": "../../_step-templates/namespaced-validating-policy-ready.yaml"
+        }
+      ],
+      "files": 9475,
+      "total_bytes": 39848525,
+      "largest_file": 5701720
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "source_sha256": "0a2f4775a91e1860f170d9384b28cd35fb4f936c02b440cd45a0fe72407c89df",
+      "links": [],
+      "files": 567,
+      "total_bytes": 10704100,
+      "largest_file": 720446
+    },
+    {
+      "case_id": "RW-OPENCLAW-111511",
+      "source_sha256": "de126a583b7fcab0ceea84f6db390373696b1316602c1b4c8c8b960b5704dd85",
+      "links": [
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/.agents/skills/autoreview/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/apps/android/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/apps/ios/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/docs/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/docs/reference/templates/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/extensions/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/extensions/acpx/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/extensions/telegram/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/packages/acp-core/node_modules/@openclaw/normalization-core",
+          "target": "../../../normalization-core"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/packages/agent-core/node_modules/@openclaw/ai",
+          "target": "../../../ai"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/packages/gateway-client/node_modules/@openclaw/gateway-protocol",
+          "target": "../../../gateway-protocol"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/packages/media-core/node_modules/@openclaw/normalization-core",
+          "target": "../../../normalization-core"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/packages/sdk/node_modules/@openclaw/gateway-client",
+          "target": "../../../gateway-client"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/packages/speech-core/node_modules/.bin/openclaw",
+          "target": "../openclaw/openclaw.mjs"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/packages/speech-core/node_modules/openclaw",
+          "target": "../../.."
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/scripts/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/src/agents/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/src/agents/embedded-agent-runner/run/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/src/agents/tools/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/src/channels/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/src/channels/plugins/contracts/test-helpers/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/src/gateway/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/src/gateway/server-methods/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/src/infra/outbound/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/src/plugin-sdk/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/src/plugins/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/src/tui/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/test/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/test/helpers/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/ui/CLAUDE.md",
+          "target": "AGENTS.md"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/ui/node_modules/@openclaw/media-core",
+          "target": "../../../packages/media-core"
+        },
+        {
+          "path": "openclaw-5a6a19c13393529647895793861de2298d5573ad/ui/node_modules/@openclaw/normalization-core",
+          "target": "../../../packages/normalization-core"
+        }
+      ],
+      "files": 27209,
+      "total_bytes": 337322305,
+      "largest_file": 5410404
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-10795",
+      "source_sha256": "0e5f9217d338e1631aefa1eb00ae799fb98f90a36de0acffc5ab3d68ff4fffe4",
+      "links": [],
+      "files": 1665,
+      "total_bytes": 7945221,
+      "largest_file": 190223
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15572",
+      "source_sha256": "d0a78385d15893f06ed6c17978d924087832d6f791f3405e45fea9077584851a",
+      "links": [],
+      "files": 2761,
+      "total_bytes": 11324265,
+      "largest_file": 285214
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15868",
+      "source_sha256": "72fea4fe8adf56bbf2bdcc7f2108a42bf029f728c75648a4dd5d4b389d5dc622",
+      "links": [],
+      "files": 2822,
+      "total_bytes": 11277968,
+      "largest_file": 298340
+    },
+    {
+      "case_id": "RW-OTEL-OPERATOR-2171",
+      "source_sha256": "227d14ae17a9f2d2f110d1a9e4e2095817913bde7e434f84d596597a865ca99f",
+      "links": [],
+      "files": 620,
+      "total_bytes": 3658831,
+      "largest_file": 522887
+    },
+    {
+      "case_id": "RW-PROMETHEUS-16340",
+      "source_sha256": "469a670da936c065abd5d0f592b6818d4fbdb25d89f30c916fd5d8b7f3f936f3",
+      "links": [],
+      "files": 1410,
+      "total_bytes": 24206975,
+      "largest_file": 10003571
+    },
+    {
+      "case_id": "RW-PROMETHEUS-17807",
+      "source_sha256": "e44bcc1868d28d8159097b10cf177496847e49bd713ec7fb4b4ad6a77757b2fd",
+      "links": [],
+      "files": 1542,
+      "total_bytes": 26205988,
+      "largest_file": 10003571
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "source_sha256": "80bafc81ab3d65d3e77165410e584cae7f11677dc2b9bd25f5a666d352ada2fc",
+      "links": [],
+      "files": 1691,
+      "total_bytes": 29625512,
+      "largest_file": 10003571
+    },
+    {
+      "case_id": "RW-TEMPO-6435",
+      "source_sha256": "d0846283536f6e288a7d70df340029bfd2fa1d1d306ee0be11f0346474b98bb9",
+      "links": [
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/example/tk/vendor/1.32",
+          "target": "github.com/jsonnet-libs/k8s-libsonnet/1.32"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/example/tk/vendor/doc-util",
+          "target": "github.com/jsonnet-libs/docsonnet/doc-util"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/example/tk/vendor/grafana",
+          "target": "github.com/grafana/jsonnet-libs/grafana"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/example/tk/vendor/grafana-builder",
+          "target": "github.com/grafana/jsonnet-libs/grafana-builder"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/example/tk/vendor/ksonnet-util",
+          "target": "github.com/grafana/jsonnet-libs/ksonnet-util"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/example/tk/vendor/kube-state-metrics",
+          "target": "github.com/grafana/jsonnet-libs/kube-state-metrics"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/example/tk/vendor/memcached",
+          "target": "github.com/grafana/jsonnet-libs/memcached"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/example/tk/vendor/prometheus",
+          "target": "github.com/grafana/jsonnet-libs/prometheus"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/example/tk/vendor/tanka-util",
+          "target": "github.com/grafana/jsonnet-libs/tanka-util"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/operations/jsonnet-compiled/vendor/1.0.0",
+          "target": "github.com/jsonnet-libs/vertical-pod-autoscaler-libsonnet/1.0.0"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/operations/jsonnet-compiled/vendor/1.32",
+          "target": "github.com/jsonnet-libs/k8s-libsonnet/1.32"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/operations/jsonnet-compiled/vendor/ksonnet-util",
+          "target": "github.com/grafana/jsonnet-libs/ksonnet-util"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/operations/jsonnet-compiled/vendor/memcached",
+          "target": "github.com/grafana/jsonnet-libs/memcached"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/operations/jsonnet-compiled/vendor/microservices",
+          "target": "../../jsonnet/microservices"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/operations/jsonnet-compiled/vendor/rollout-operator",
+          "target": "github.com/grafana/rollout-operator/operations/rollout-operator"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/operations/tempo-mixin/vendor/grafana-builder",
+          "target": "github.com/grafana/jsonnet-libs/grafana-builder"
+        },
+        {
+          "path": "tempo-805ba3bde071194b9de6c3a7d63b6d9d1bebebc9/operations/tempo-mixin/vendor/mixin-utils",
+          "target": "github.com/grafana/jsonnet-libs/mixin-utils"
+        }
+      ],
+      "files": 14274,
+      "total_bytes": 157587389,
+      "largest_file": 2925642
+    },
+    {
+      "case_id": "RW-TEMPO-6481",
+      "source_sha256": "158daa98aa27c34d8f96ee048e7ec1c62bbd4b1b1f9265880c430ab6fda46f62",
+      "links": [
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/example/tk/vendor/1.32",
+          "target": "github.com/jsonnet-libs/k8s-libsonnet/1.32"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/example/tk/vendor/doc-util",
+          "target": "github.com/jsonnet-libs/docsonnet/doc-util"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/example/tk/vendor/grafana",
+          "target": "github.com/grafana/jsonnet-libs/grafana"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/example/tk/vendor/grafana-builder",
+          "target": "github.com/grafana/jsonnet-libs/grafana-builder"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/example/tk/vendor/ksonnet-util",
+          "target": "github.com/grafana/jsonnet-libs/ksonnet-util"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/example/tk/vendor/kube-state-metrics",
+          "target": "github.com/grafana/jsonnet-libs/kube-state-metrics"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/example/tk/vendor/memcached",
+          "target": "github.com/grafana/jsonnet-libs/memcached"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/example/tk/vendor/prometheus",
+          "target": "github.com/grafana/jsonnet-libs/prometheus"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/example/tk/vendor/tanka-util",
+          "target": "github.com/grafana/jsonnet-libs/tanka-util"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/operations/jsonnet-compiled/vendor/1.0.0",
+          "target": "github.com/jsonnet-libs/vertical-pod-autoscaler-libsonnet/1.0.0"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/operations/jsonnet-compiled/vendor/1.32",
+          "target": "github.com/jsonnet-libs/k8s-libsonnet/1.32"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/operations/jsonnet-compiled/vendor/ksonnet-util",
+          "target": "github.com/grafana/jsonnet-libs/ksonnet-util"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/operations/jsonnet-compiled/vendor/memcached",
+          "target": "github.com/grafana/jsonnet-libs/memcached"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/operations/jsonnet-compiled/vendor/microservices",
+          "target": "../../jsonnet/microservices"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/operations/jsonnet-compiled/vendor/rollout-operator",
+          "target": "github.com/grafana/rollout-operator/operations/rollout-operator"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/operations/tempo-mixin/vendor/grafana-builder",
+          "target": "github.com/grafana/jsonnet-libs/grafana-builder"
+        },
+        {
+          "path": "tempo-9c06f4ce4c1db4afe12f80b2649b4ea33de0809f/operations/tempo-mixin/vendor/mixin-utils",
+          "target": "github.com/grafana/jsonnet-libs/mixin-utils"
+        }
+      ],
+      "files": 14275,
+      "total_bytes": 155086684,
+      "largest_file": 2925642
+    },
+    {
+      "case_id": "RW-TEMPO-6509",
+      "source_sha256": "7e965d75752d6bb8f057f29fe00b0414f679648457637b9bd7c2c2581e604bbb",
+      "links": [
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/example/tk/vendor/1.32",
+          "target": "github.com/jsonnet-libs/k8s-libsonnet/1.32"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/example/tk/vendor/doc-util",
+          "target": "github.com/jsonnet-libs/docsonnet/doc-util"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/example/tk/vendor/grafana",
+          "target": "github.com/grafana/jsonnet-libs/grafana"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/example/tk/vendor/grafana-builder",
+          "target": "github.com/grafana/jsonnet-libs/grafana-builder"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/example/tk/vendor/ksonnet-util",
+          "target": "github.com/grafana/jsonnet-libs/ksonnet-util"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/example/tk/vendor/kube-state-metrics",
+          "target": "github.com/grafana/jsonnet-libs/kube-state-metrics"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/example/tk/vendor/memcached",
+          "target": "github.com/grafana/jsonnet-libs/memcached"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/example/tk/vendor/prometheus",
+          "target": "github.com/grafana/jsonnet-libs/prometheus"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/example/tk/vendor/tanka-util",
+          "target": "github.com/grafana/jsonnet-libs/tanka-util"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/operations/jsonnet-compiled/vendor/1.0.0",
+          "target": "github.com/jsonnet-libs/vertical-pod-autoscaler-libsonnet/1.0.0"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/operations/jsonnet-compiled/vendor/1.32",
+          "target": "github.com/jsonnet-libs/k8s-libsonnet/1.32"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/operations/jsonnet-compiled/vendor/ksonnet-util",
+          "target": "github.com/grafana/jsonnet-libs/ksonnet-util"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/operations/jsonnet-compiled/vendor/memcached",
+          "target": "github.com/grafana/jsonnet-libs/memcached"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/operations/jsonnet-compiled/vendor/microservices",
+          "target": "../../jsonnet/microservices"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/operations/jsonnet-compiled/vendor/rollout-operator",
+          "target": "github.com/grafana/rollout-operator/operations/rollout-operator"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/operations/tempo-mixin/vendor/grafana-builder",
+          "target": "github.com/grafana/jsonnet-libs/grafana-builder"
+        },
+        {
+          "path": "tempo-4195dca2022db17866b1ae73e1529ae04a1b5798/operations/tempo-mixin/vendor/mixin-utils",
+          "target": "github.com/grafana/jsonnet-libs/mixin-utils"
+        }
+      ],
+      "files": 14267,
+      "total_bytes": 155128079,
+      "largest_file": 2925642
+    },
+    {
+      "case_id": "RW-THANOS-6503",
+      "source_sha256": "a9d87679785b4ead97513c862abebdb50f119aea583735ee019b802f67bac2ff",
+      "links": [],
+      "files": 1061,
+      "total_bytes": 58258265,
+      "largest_file": 10003571
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "source_sha256": "4099dc909bea05ad42142b4b927529bd968933d2120b5c966ff99e556527627a",
+      "links": [],
+      "files": 127,
+      "total_bytes": 680814,
+      "largest_file": 78183
+    },
+    {
+      "case_id": "R4-ACK-S3-2965",
+      "source_sha256": "dd12956b24ac0cae00bea00c54fdb5147ddabfc301d100e0c0d3abdb001bd35c",
+      "links": [],
+      "files": 128,
+      "total_bytes": 875236,
+      "largest_file": 114613
+    },
+    {
+      "case_id": "R4-AWS-LBC-4847",
+      "source_sha256": "9d6eddbd497e6a8635236047ee08d628417ba052a3651e05f7250661cb88050b",
+      "links": [],
+      "files": 1049,
+      "total_bytes": 13290338,
+      "largest_file": 1442178
+    },
+    {
+      "case_id": "R4-AWS-LBC-4876",
+      "source_sha256": "4c59f7854ae06fdeaef27546a80e2c8dfe86020549ab24d806e0c1ed5328e0c5",
+      "links": [],
+      "files": 1037,
+      "total_bytes": 13204237,
+      "largest_file": 1442178
+    },
+    {
+      "case_id": "R4-CAPA-5111",
+      "source_sha256": "659b2f40dbb87d22a936ddfaa31abefeb4413e9dc7aac2bdf59615a2d42be290",
+      "links": [],
+      "files": 1058,
+      "total_bytes": 14462290,
+      "largest_file": 1934763
+    },
+    {
+      "case_id": "R4-CERTMANAGER-9204",
+      "source_sha256": "e9d5aed7e14654baead1c3e199eb19a346bf31b65688d8a127664f4d1cfc40a7",
+      "links": [],
+      "files": 1263,
+      "total_bytes": 15110197,
+      "largest_file": 1535400
+    },
+    {
+      "case_id": "R4-CLUSTER-API-OPENSTACK-3319",
+      "source_sha256": "cff94aa7c5349f0253148c96b027a175e30b1fbe3262cf0d4b9e95b47e59412a",
+      "links": [
+        {
+          "path": "hack/boilerplate/boilerplate.generatego.txt",
+          "target": "../boilerplate.go.txt"
+        }
+      ],
+      "files": 668,
+      "total_bytes": 7557586,
+      "largest_file": 1933310
+    },
+    {
+      "case_id": "R4-EXTERNAL-DNS-6082",
+      "source_sha256": "2e125cea7c47e48032a818c00827f69afde6456cbd5b3e6b91759378bbd5c2f1",
+      "links": [],
+      "files": 532,
+      "total_bytes": 5027050,
+      "largest_file": 256840
+    },
+    {
+      "case_id": "R4-EXTERNAL-DNS-6661",
+      "source_sha256": "3a99a75a6797533fe709da41088c502e8a9c8eddbd974f36041574e3eb7aa557",
+      "links": [],
+      "files": 625,
+      "total_bytes": 6346502,
+      "largest_file": 256840
+    },
+    {
+      "case_id": "R4-EXTERNAL-SECRETS-6821",
+      "source_sha256": "4f1f3c57a3537164fa09d389ba87c799b030f8dcb944e63d15433a475f613585",
+      "links": [],
+      "files": 1771,
+      "total_bytes": 37977059,
+      "largest_file": 1949635
+    },
+    {
+      "case_id": "R4-EXTERNAL-SECRETS-6933",
+      "source_sha256": "12e5845f453b2996004faac206c09e6e6975b4f8c3db2ffe3e2dff45016888b8",
+      "links": [],
+      "files": 1805,
+      "total_bytes": 38168808,
+      "largest_file": 1984607
+    },
+    {
+      "case_id": "R4-FLINK-OPERATOR-1168",
+      "source_sha256": "77fa7e15085f6acb97b2c267e40e3a1020cf138da157a38008c744ca51f2e3c0",
+      "links": [],
+      "files": 963,
+      "total_bytes": 24914048,
+      "largest_file": 2597319
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2214",
+      "source_sha256": "c7b3a18919a45a9add967a7abe2756bc68704e13f8ca48027fdedab751d2ea18",
+      "links": [],
+      "files": 2257,
+      "total_bytes": 28796728,
+      "largest_file": 1903687
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2339",
+      "source_sha256": "78118551cd2567d86b908a206069ad67b74d8f8b9ac5c07e5367fc50fe75e19c",
+      "links": [],
+      "files": 2273,
+      "total_bytes": 29207582,
+      "largest_file": 1903687
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-138",
+      "source_sha256": "cbc00996b4235cc7dd72dec27e580424362c3f7e34fb2ae3dbb9211a30def143",
+      "links": [],
+      "files": 93,
+      "total_bytes": 586050,
+      "largest_file": 216161
+    },
+    {
+      "case_id": "R4-PROVIDER-HTTP-153",
+      "source_sha256": "1235a35ab011098d657be5a6455fd24d2c8b257aa7d29998e06a17478b5d4c24",
+      "links": [],
+      "files": 230,
+      "total_bytes": 1127836,
+      "largest_file": 40940
+    },
+    {
+      "case_id": "R4-PROVIDER-SQL-240-421",
+      "source_sha256": "8b64a8affe570deb9b9e2fba05826f37f747fc7cc71d4d5ae47c503901fe314e",
+      "links": [],
+      "files": 298,
+      "total_bytes": 2163952,
+      "largest_file": 48560
+    },
+    {
+      "case_id": "R4-PROVIDER-SQL-459",
+      "source_sha256": "773b4ec2e42ed2854557423387de180185cead55c187cc0ffc54cd950aa82ca9",
+      "links": [],
+      "files": 304,
+      "total_bytes": 2232794,
+      "largest_file": 52429
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AWS-2117",
+      "source_sha256": "5052f655f7d589f09728a8932a7807a48855af3d73b27a5cd0f76feede80aed2",
+      "links": [],
+      "files": 17012,
+      "total_bytes": 262354241,
+      "largest_file": 14724468
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AWS-2182",
+      "source_sha256": "927d36cd26de20a12b7b9cf2d6df5066aaad9c93940098ace173284419da9ebb",
+      "links": [],
+      "files": 17156,
+      "total_bytes": 274854162,
+      "largest_file": 18969542
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AZURE-1247",
+      "source_sha256": "069639ae51ba7e2457032da23bb244e37c3f26af281a4cf94e23880d095fd8fb",
+      "links": [],
+      "files": 12009,
+      "total_bytes": 201072951,
+      "largest_file": 7095892
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AZURE-1260",
+      "source_sha256": "e7fd2b11eec3a9220b4ea5ceaf67063ec675ed7cd25f67a5b030b320ec89d8db",
+      "links": [],
+      "files": 12021,
+      "total_bytes": 201150475,
+      "largest_file": 7095892
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-GCP-1015",
+      "source_sha256": "a65947fa357d998c2d01a1e159c35bed695e8372e1bf3ebdb543762babfe6051",
+      "links": [],
+      "files": 6534,
+      "total_bytes": 142810974,
+      "largest_file": 16734434
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-GCP-875",
+      "source_sha256": "7b4c6fb867811ce71c03f81885d55809e5ef29f21fd9597052be854cf5d658b1",
+      "links": [],
+      "files": 6463,
+      "total_bytes": 141425936,
+      "largest_file": 16734434
+    },
+    {
+      "case_id": "R4-UPJET-564",
+      "source_sha256": "33dc462c57e253b23e77a32106898e8be7727e73c2ea8d03ba8f39c24c24f563",
+      "links": [],
+      "files": 228,
+      "total_bytes": 2731304,
+      "largest_file": 282066
+    },
+    {
+      "case_id": "R4-UPJET-640",
+      "source_sha256": "d0a19da58ee5d5825249f88065bfd734dfcf81f14b1fd18d4d7517058373f231",
+      "links": [
+        {
+          "path": "upjet-e606e6d941df26e7d4ffff387caf309d16f77367/AGENTS.md",
+          "target": "CLAUDE.md"
+        }
+      ],
+      "files": 339,
+      "total_bytes": 4078561,
+      "largest_file": 638664
+    },
+    {
+      "case_id": "RW-CROSSPLANE-PROVIDER-AWS-2256",
+      "source_sha256": "f2cbc65807d821b21ad091b18635cf385af6e7278b336db6fe966315ba303045",
+      "links": [],
+      "files": 2272,
+      "total_bytes": 29060137,
+      "largest_file": 1903687
+    },
+    {
+      "case_id": "RW-PROVIDER-AWS-2343",
+      "source_sha256": "fdd56a867399eed3cf5a31ade3453b9c9c8690c35f866b5845ec7cf4b329c768",
+      "links": [],
+      "files": 2275,
+      "total_bytes": 29214863,
+      "largest_file": 1903687
+    },
+    {
+      "case_id": "R4-UPJET-AWS-2137",
+      "source_sha256": "55f0c8a78a75d732446dfd505b507889a052c2d03276b99b03393e8a81b304f0",
+      "links": [],
+      "files": 19,
+      "total_bytes": 548442,
+      "largest_file": 122890
+    },
+    {
+      "case_id": "R4-UPJET-GCP-1027",
+      "source_sha256": "60af4f8fc38f2996e346966c829f22c4bf437dd0c9f6e7618bab973e089db880",
+      "links": [],
+      "files": 14,
+      "total_bytes": 401807,
+      "largest_file": 143395
+    },
+    {
+      "case_id": "RW-HAPROXY-0D540394",
+      "source_sha256": "9653e4e0bab83f57e46c33bb711b66f86fcb0fc4b6fd915d4ad28f4b3ac22142",
+      "links": [
+        {
+          "path": "haproxy-a376a1f7616f72a49d18e96d4fcac0c3634064aa/reg-tests/checks/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-a376a1f7616f72a49d18e96d4fcac0c3634064aa/reg-tests/compression/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-a376a1f7616f72a49d18e96d4fcac0c3634064aa/reg-tests/connection/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-a376a1f7616f72a49d18e96d4fcac0c3634064aa/reg-tests/http-messaging/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-a376a1f7616f72a49d18e96d4fcac0c3634064aa/reg-tests/lua/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-a376a1f7616f72a49d18e96d4fcac0c3634064aa/reg-tests/mailers/mailers.lua",
+          "target": "../../examples/lua/mailers.lua"
+        },
+        {
+          "path": "haproxy-a376a1f7616f72a49d18e96d4fcac0c3634064aa/reg-tests/peers/certs",
+          "target": "../ssl/certs"
+        },
+        {
+          "path": "haproxy-a376a1f7616f72a49d18e96d4fcac0c3634064aa/reg-tests/qmux/certs",
+          "target": "../ssl/certs"
+        },
+        {
+          "path": "haproxy-a376a1f7616f72a49d18e96d4fcac0c3634064aa/reg-tests/quic/certs",
+          "target": "../ssl/certs"
+        },
+        {
+          "path": "haproxy-a376a1f7616f72a49d18e96d4fcac0c3634064aa/reg-tests/server/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-a376a1f7616f72a49d18e96d4fcac0c3634064aa/reg-tests/ssl/certs/bug-2265.crt",
+          "target": "common.pem"
+        }
+      ],
+      "files": 1482,
+      "total_bytes": 22816805,
+      "largest_file": 1880759
+    },
+    {
+      "case_id": "RW-ARGO-ROLLOUTS-4604",
+      "source_sha256": "7a92a4650a7c1dfcbbca51cd0b9c2153757a503b0de141b0c7b6747cbbf552c9",
+      "links": [],
+      "files": 984,
+      "total_bytes": 21563942,
+      "largest_file": 2547205
+    },
+    {
+      "case_id": "RW-HAPROXY-REDIRECT-QS-001",
+      "source_sha256": "03c2f39ca9ec92bcfe0408990a0ae1b995fe92fd94213533b6482a2794201dc5",
+      "links": [
+        {
+          "path": "haproxy-577fa446914bd140d080005c3d5ab5fb97552f56/reg-tests/checks/common.pem",
+          "target": "../ssl/common.pem"
+        },
+        {
+          "path": "haproxy-577fa446914bd140d080005c3d5ab5fb97552f56/reg-tests/compression/common.pem",
+          "target": "../ssl/common.pem"
+        },
+        {
+          "path": "haproxy-577fa446914bd140d080005c3d5ab5fb97552f56/reg-tests/connection/ca-auth.crt",
+          "target": "../ssl/ca-auth.crt"
+        },
+        {
+          "path": "haproxy-577fa446914bd140d080005c3d5ab5fb97552f56/reg-tests/connection/client1.pem",
+          "target": "../ssl/client1.pem"
+        },
+        {
+          "path": "haproxy-577fa446914bd140d080005c3d5ab5fb97552f56/reg-tests/connection/common.pem",
+          "target": "../ssl/common.pem"
+        },
+        {
+          "path": "haproxy-577fa446914bd140d080005c3d5ab5fb97552f56/reg-tests/http-messaging/common.pem",
+          "target": "../ssl/common.pem"
+        },
+        {
+          "path": "haproxy-577fa446914bd140d080005c3d5ab5fb97552f56/reg-tests/lua/common.pem",
+          "target": "../ssl/common.pem"
+        },
+        {
+          "path": "haproxy-577fa446914bd140d080005c3d5ab5fb97552f56/reg-tests/mailers/mailers.lua",
+          "target": "../../examples/lua/mailers.lua"
+        },
+        {
+          "path": "haproxy-577fa446914bd140d080005c3d5ab5fb97552f56/reg-tests/peers/common.pem",
+          "target": "../ssl/common.pem"
+        },
+        {
+          "path": "haproxy-577fa446914bd140d080005c3d5ab5fb97552f56/reg-tests/server/common.pem",
+          "target": "../ssl/common.pem"
+        },
+        {
+          "path": "haproxy-577fa446914bd140d080005c3d5ab5fb97552f56/reg-tests/ssl/bug-2265.crt",
+          "target": "common.pem"
+        }
+      ],
+      "files": 1354,
+      "total_bytes": 20265811,
+      "largest_file": 1654226
+    },
+    {
+      "case_id": "RW-HAPROXY-HASH-NUMERIC-001",
+      "source_sha256": "b36ce7c52a86ce534ee8832c0622dec19700cdd7fa03b1fc3d3278743e34d3f4",
+      "links": [
+        {
+          "path": "haproxy-f2bf3483bae512aeaabb6c0fef0267ca84fe99cc/reg-tests/checks/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-f2bf3483bae512aeaabb6c0fef0267ca84fe99cc/reg-tests/compression/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-f2bf3483bae512aeaabb6c0fef0267ca84fe99cc/reg-tests/connection/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-f2bf3483bae512aeaabb6c0fef0267ca84fe99cc/reg-tests/http-messaging/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-f2bf3483bae512aeaabb6c0fef0267ca84fe99cc/reg-tests/lua/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-f2bf3483bae512aeaabb6c0fef0267ca84fe99cc/reg-tests/mailers/mailers.lua",
+          "target": "../../examples/lua/mailers.lua"
+        },
+        {
+          "path": "haproxy-f2bf3483bae512aeaabb6c0fef0267ca84fe99cc/reg-tests/peers/certs",
+          "target": "../ssl/certs"
+        },
+        {
+          "path": "haproxy-f2bf3483bae512aeaabb6c0fef0267ca84fe99cc/reg-tests/quic/certs",
+          "target": "../ssl/certs"
+        },
+        {
+          "path": "haproxy-f2bf3483bae512aeaabb6c0fef0267ca84fe99cc/reg-tests/server/certs",
+          "target": "../ssl/certs/"
+        },
+        {
+          "path": "haproxy-f2bf3483bae512aeaabb6c0fef0267ca84fe99cc/reg-tests/ssl/certs/bug-2265.crt",
+          "target": "common.pem"
+        }
+      ],
+      "files": 1485,
+      "total_bytes": 21808905,
+      "largest_file": 1815797
+    }
+  ]
+}

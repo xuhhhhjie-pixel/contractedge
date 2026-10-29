@@ -108,7 +108,7 @@ def test_real_loop_exports_incumbent_and_its_feedback_after_regression(tmp_path,
     assert (tmp_path/'run/rounds/1/candidate.patch').read_text()!=patch
 
 
-@pytest.mark.parametrize('failure,rounds,expected_calls',[('check',2,2),('startup_panic',2,2),('unclassified',2,1),('stale_panic',2,1),('startup_panic',1,1)])
+@pytest.mark.parametrize('failure,rounds,expected_calls',[('check',2,2),('startup_panic',2,2),('unclassified',2,1),('stale_panic',2,1),('startup_panic',1,1),('unpreserved_probe',2,1)])
 def test_first_trial_regression_can_revise_from_restored_source_within_two_rounds(tmp_path,failure,rounds,expected_calls):
     from contractedge.orchestration.repair import repair_case
     from contractedge.model.provider import ModelResponse
@@ -117,30 +117,7 @@ def test_first_trial_regression_can_revise_from_restored_source_within_two_round
     from tests.test_orchestration import PipelineFixtureProvider
     from tests.test_repair_execution import PublicLoopRunner, current_public_citation
     from contractedge.dataset.benchmark import file_sha
-    public,task=make_public_fixture(tmp_path/'benchmark')
-    # This authored check covers only the exact marker predicate used below;
-    # it makes no claim about general metadata validity or isolation.
-    retain_id='candidate-regression-fixture-v1:retain'
-    retain_statement='The metadata output in this finite fixture contains no regressed marker.'
-    retain_scenario='trigger'
-    environment_path=task/'environment.json'
-    environment=json.loads(environment_path.read_text())
-    environment['registered_public_checks']={
-        'schema_version':'ce.public_process_check_capabilities.v1',
-        'probe_id':'candidate-regression-fixture-v1','observer_sha256':'a'*64,
-        'checks':[dict(id=retain_id,statement=retain_statement,
-            scope='Only the finite fixture marker predicate.',
-            verification_scope={'scenario':retain_scenario},covered_scenarios=[retain_scenario])]}
-    environment_path.write_text(json.dumps(environment))
-    manifest_path=task/'manifest.json';manifest=json.loads(manifest_path.read_text())
-    manifest['file_sha256']['environment.json']=file_sha(environment_path)
-    manifest_path.write_text(json.dumps(manifest))
-    membership_path=public/'manifest.jsonl';member=json.loads(membership_path.read_text())
-    member['task_manifest_sha256']=file_sha(manifest_path)
-    membership_path.write_text(json.dumps(member)+'\n')
-    release_path=public.parent/'RELEASE_ENTRY.json';release=json.loads(release_path.read_text())
-    release['public_manifest_sha256']=file_sha(membership_path)
-    release_path.write_text(json.dumps(release))
+    public,_=make_public_fixture(tmp_path/'benchmark')
     class Provider(PipelineFixtureProvider):
         def complete_json(self,request):
             self._snapshot_digests={'templates/serviceaccount.yaml':file_sha(tmp_path/'run/workspace/source/repo/templates/serviceaccount.yaml')}
@@ -148,11 +125,10 @@ def test_first_trial_regression_can_revise_from_restored_source_within_two_round
             if not request.prompt_version.startswith('changeset.'):return response
             body=json.loads(response.content)
             body['preserve_constraints']=[dict(id='S1',outcome_id='O1',obligation_refs=['A1'],
-                statement=retain_statement,current_satisfaction='OBSERVED',
-                evidence_refs=[self.diagnosis['evidence_refs'][0]],behavior_check_refs=[retain_id],
-                verification_scope={'scenario':retain_scenario},check_coverage='ALL_OF',
-                coverage_rationale='This authored condition is exactly the finite no-regressed-marker predicate.',
-                verification_kind='PUBLIC_BEHAVIOR')]
+                statement='Metadata remains valid',current_satisfaction='OBSERVED',
+                evidence_refs=[self.diagnosis['evidence_refs'][0]],behavior_check_refs=['retain'],
+                check_coverage='ALL_OF',coverage_rationale='Checks valid metadata',verification_kind='PUBLIC_BEHAVIOR')]
+            if failure=='unpreserved_probe':body['preserve_constraints']=[]
             return ModelResponse(json.dumps(body),{})
     class Runner(PublicLoopRunner):
         def observe(self,workspace,output):
@@ -166,7 +142,7 @@ def test_first_trial_regression_can_revise_from_restored_source_within_two_round
                     if failure=='stale_panic':result['candidate_runtime_failures'][0]['snapshot_id']='stale'
                 return result
             result['observations'].append(dict(result['observations'][0],id='OBS2',evidence_kind='PUBLIC_BEHAVIOR',
-                scenario=retain_scenario,behavior_check=dict(id=retain_id,status=state,probe_sha256='a'*64)))
+                behavior_check=dict(id='retain',status=state,probe_sha256='a'*64)))
             return result
     class Executor:
         calls=0

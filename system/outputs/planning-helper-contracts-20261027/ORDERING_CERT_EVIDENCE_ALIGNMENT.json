@@ -1,0 +1,104 @@
+{
+  "status": "DEFAULT_CERT_FIRST_SOURCE_GAP_CLOSED_IN_REAL_EPISODE",
+  "source_sha256": "e0f482d61ba32da50e72208b21e1cd109154c7a4172d1238abcf6791c682c52b",
+  "prior_control": "CERT_CONTROL_RESULT.json: 3calls, NO_SUPPORTED_VIOLATION, aggregate SEMANTIC_FAIL",
+  "initial_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "diagnosis_status": "READY",
+  "supported_violation": {
+    "id": "V1",
+    "relation_id": "R1",
+    "broken_behavior": "Terminal-state handling calls failIssueCertificate before comparing CSR with current NextPrivateKey Secret.",
+    "causal_explanation": "In ProcessItem, Denied/InvalidRequest/Failed branches return failIssueCertificate before PublicKeyMatchesCSR(pk.Public(), csr); a stale request built from a replaced key can therefore fail the current issuance without the required comparison.",
+    "evidence_refs": [
+      "SRC-CU-aa41e29281734936"
+    ],
+    "support_basis": "STATIC_INFERENCE",
+    "causal_status": "SUPPORTED"
+  },
+  "plan_status": "READY_PARTIAL",
+  "plan_postconditions": [
+    {
+      "id": "P1",
+      "statement": "Before any Denied/InvalidRequest/Ready=Failed terminal-state handling, ProcessItem decodes req.Spec.Request and computes publicKeyMatchesCSR(pk.Public(), csr) against the current NextPrivateKey Secret.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A1"
+      ],
+      "relation_refs": [
+        "R1"
+      ],
+      "planned_check": "Inspect pkg/controller/certificates/issuing/issuing_controller.go to confirm the existing CSR decode and PublicKeyMatchesCSR call are relocated before CertificateRequestIsDenied, CertificateRequestHasInvalidRequest, and Ready=Failed handling; build the issuing controller package.",
+      "check_scope": "public-issuing-controller-build only; no runtime request/key fixture or oracle is available.",
+      "verification_kind": "UNKNOWN",
+      "semantic_statements": [
+        "The comparison is ordered before terminal-state failure actions."
+      ],
+      "stable_obligation_keys": [
+        "OB-2ac55d40408c2e6df4a141ed"
+      ]
+    },
+    {
+      "id": "P2",
+      "statement": "If the CSR does not match the current NextPrivateKey public key, ProcessItem returns nil without calling failIssueCertificate, so a stale request built from a replaced key does not fail the current issuance.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A2"
+      ],
+      "relation_refs": [
+        "R2"
+      ],
+      "planned_check": "Inspect the mismatch branch after the relocated comparison to confirm it logs and returns nil before any terminal-state failIssueCertificate call; build the issuing controller package.",
+      "check_scope": "public-issuing-controller-build only; runtime failure suppression is not publicly observable.",
+      "verification_kind": "UNKNOWN",
+      "semantic_statements": [
+        "Mismatch defers to requestmanager/keymanager instead of failing issuance."
+      ],
+      "stable_obligation_keys": [
+        "OB-40e358dc5bf545ece78146b1"
+      ]
+    }
+  ],
+  "actual_request_delivery": [
+    {
+      "call_index": 0,
+      "prompt_version": "diagnosis.v1.1.26",
+      "critical_public_source": {
+        "PublicKeyMatchesCSR(pk.Public(), csr)": true,
+        "CertificateRequestIsDenied(req)": true,
+        "CertificateRequestHasInvalidRequest(req)": true
+      }
+    },
+    {
+      "call_index": 1,
+      "prompt_version": "changeset.v1.1.13",
+      "critical_public_source": {
+        "PublicKeyMatchesCSR(pk.Public(), csr)": true,
+        "CertificateRequestIsDenied(req)": true,
+        "CertificateRequestHasInvalidRequest(req)": true
+      }
+    },
+    {
+      "call_index": 2,
+      "prompt_version": "topomen-source-execution.v1",
+      "critical_public_source": {
+        "PublicKeyMatchesCSR(pk.Public(), csr)": true,
+        "CertificateRequestIsDenied(req)": true,
+        "CertificateRequestHasInvalidRequest(req)": true
+      }
+    }
+  ],
+  "patch_bytes": 2020,
+  "patch_sha256": "8ed6c1c7800f78da03ca916137d8fcc288a12affbd565f49bc62b5f5ed8333af",
+  "final_snapshot": "d6e7d3bd3c2fd4c053c4cd1c447a758053ecf9657d4772e97412033daa34ec35",
+  "independent_status": "PASS",
+  "public_semantic_status": "UNKNOWN",
+  "model_calls": 4,
+  "new_engineering_qualification": "RUNNING, not inherited from v7",
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "limitation": "One exposed development episode; no causal ablation or whole-benchmark success claim"
+}

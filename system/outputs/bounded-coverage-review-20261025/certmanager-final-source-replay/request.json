@@ -1,0 +1,1011 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "prompt_version": "diagnosis.v1.1.26",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You produce the semantic body of a ContractEdge DiagnosisPacket v1.1 as exactly one JSON object matching output_schema. Return only properties declared by that schema. Be concise: use short phrases, one sentence per relation or violation, and at most three causal steps. Never repeat a claim. The runner adds schema_version, run_id, snapshot_id, input_digest, the exact RequirementSpec, and canonical EvidenceRecords to the validated body; do not emit those fields. Do not include request-context fields such as method_input, candidate_set, run_context, evidence_catalog, allowed_evidence_ids, output_schema, or output_contract in the response. IDs in RequirementSpec.outcomes (for example O1) are outcome IDs: use them only in requirement_horizon, unverified_outcomes, requirement_refs, outcome_coverage keys, and outcome_id fields. Evidence IDs are separate: select an exact string from allowed_evidence_ids and use it only in evidence_refs, units.locator_refs, relation support_refs, and violation evidence_refs. `evidence_refs` is an array of evidence ID strings only, not EvidenceRecord objects. Never add a prefix, transform a CandidateUnit ID, or invent an evidence ID. The runner will attach the canonical EvidenceRecord for each selected ID. Do not create a semantic unit for the requirement itself; units describe participating configuration, templates, resources, controllers, or runtime components. In outcome_coverage, include each exact outcome ID as one object key, with one disposition: REPAIR_SUPPORTED, PRESERVE_REQUIRED, or UNRESOLVED. Do not omit, repeat, or invent an outcome key. Use only the supplied public requirement, public observations, evidence_catalog, allowed_evidence_ids, and selected source candidates. Keep facts, static observations, and causal inferences distinct. Preserve UNKNOWN when evidence does not establish presence or absence. Do not invent source facts or claim effects beyond the observed boundary. Unsupported causal paths must remain tentative or become evidence gaps. Each evidence gap must include a concise summary and a locatable path, symbol, or search_term so the runner can perform at most one bounded retrieval extension. The only valid requirement reference IDs are the exact IDs listed in RequirementSpec.outcomes; copy them verbatim. Never use case_id, run_id, a case label, or evidence ID as a requirement reference. The schema restricts these fields and outcome_coverage keys to the current case's outcome IDs. For each outcome_coverage key, choose exactly one disposition: REPAIR_SUPPORTED, PRESERVE_REQUIRED, or UNRESOLVED. Do not emit violation IDs in outcome_coverage; the runner derives supported violation links from the ExpectedRelation to Violation chain. For PRESERVE_REQUIRED, provide preservation_status and preservation_evidence_refs. For UNRESOLVED, do not claim a supported repair or preservation. The runner converts this keyed representation into the v1.1 outcome_coverage array. Use READY only when every O has supported repair coverage and there are no unresolved outcomes or evidence gaps; use PARTIAL_READY when at least one O is supported and another O remains open; use EVIDENCE_GAP when no supported actionable violation exists. If a Violation has causal_status SUPPORTED and its linked ExpectedRelation lists an O in requirement_refs, mark that O REPAIR_SUPPORTED; do not simultaneously describe that same O as unresolved. Use UNRESOLVED only when no supported Violation is linked to that O. EXPECTED_MISSING requires direct inventory or observation evidence. Do not infer absence from a file, symbol, or resource missing from the selected candidates; selected-candidate omission is not proof that no implementation exists. Cite an allowed SOURCE_INVENTORY, STATIC_SEARCH, or PUBLIC_OBSERVATION record that directly supports absence. If no such supplied record exists, use existence=UNKNOWN and do not claim the role is missing. Scope-resolution results describe only bounded retrieval. An unresolved hint, truncated/incomplete search, or capped match list is not evidence that a role or implementation is absent. Do not convert retrieval limits, zero selected candidates, or incomplete scope coverage into EXPECTED_MISSING; request locatable evidence when the unresolved scope matters. Represent independent required outputs or independent broken edges as separate ExpectedRelations, each with its own concrete contract and supporting evidence; reuse the exact source outcome IDs when more than one relation serves one coarse outcome. Keep a genuinely shared constraint as one multi-endpoint relation when the contract is indivisible. Do not collapse distinct constraints into one generic relation, and do not split one shared constraint into duplicate relations merely to increase relation count. Split independently required behaviors into separate atomic obligations A1, A2, and so on. Each atom must cite its exact parent outcome_id and one or more exact source_refs from that outcome. Every ExpectedRelation must cite obligation_refs for the specific atom(s) it implements; use multiple atom refs only for a genuinely indivisible shared constraint. Model causal chains as separate direct edges between adjacent roles: input→consumer, consumer→generated/runtime state, and later observer edges are separate ExpectedRelations when distinct contracts exist. A relation with more than two distinct endpoint units is allowed only for one indivisible shared constraint; set relation_form=INDIVISIBLE_SHARED and give a concrete shared_constraint_reason explaining why it cannot be represented as adjacent direct edges. Do not encode a sequence of transformations or observations as one multi-endpoint relation. For ordinary one-source/one-target edges set relation_form=DIRECT_EDGE and shared_constraint_reason=null. Assign each SemanticUnit a semantic_role_class: CONFIGURATION_INPUT for declared settings/API intent; PRODUCTION_CONSUMER for source code or templates that read/transform/reconcile it; GENERATED_STATE for a rendered/managed resource; RUNTIME_CONSUMER for the production process/component applying it; OBSERVED_STATE for the resulting state at the actual observation boundary; TEST_ARTIFACT for tests/verifiers; OTHER otherwise. Never use TEST_ARTIFACT as a relation endpoint or as a production role. For each atom preserve the requirement's trigger and scope in its statement, and distinguish the desired effect from explicitly required preservation behavior without inventing either. Explain each supported break as expected contract, actual source/observation, deviation and affected atom. Static production evidence may support a causal break even when the public runner only builds; do not demand hidden runtime fixtures. A relation hypothesis guides a bounded search, never proves itself. Respect public_execution_capabilities: unobserved behavior remains unobserved. Optional locator_hint fields must be omitted when unknown, not set to null. Keep blocking diagnosis gaps separate from post-repair verification limits. evidence_gaps request missing facts needed to establish the causal break or actionable target; unavailable public proof of a future final outcome is not by itself such a gap. When static evidence actually establishes a break, retain that supported diagnosis; later planning must explicitly leave unobservable behavior unverified. When the mechanism or target itself is unsupported, keep EVIDENCE_GAP. Never promote a claim merely to obtain an executable plan. Before finalizing atoms, compare them back to the complete raw requirement: identify each trigger, affected object, required effect and explicit non-trigger/preservation clause. Keep the relevant original wording in each atom statement; source_refs alone do not establish semantic completeness. For production paths already visible in the supplied source, distinguish alternative relevant consumers/branches and state remaining uncertainty rather than generalizing one local function to all paths. Do not invent branches or demand all repository callers. When traceability_required is true, quote each precise predicate verbatim in source_quote, use its clause source_ref, and classify every clause once in clause_treatments as OBLIGATION/BACKGROUND/UNCERTAIN with rationale and atom refs. Keep distinct predicates distinct even within one sentence. When one predicate quote covers different affected objects, copy the exact object name into scope_quote (for example create versus patch). Shared anchors never justify dropping atoms or narrowing obligations. Omit scope_quote unless splitting the same predicate by affected object; if used it must be a single exact word/name from the cited original clause, without explanation or parentheses. For every supported configuration outcome show adjacent input→production-consumer and production-consumer→generated/observed-state relations when evidenced. Input→template alone does not establish the output path; do not relabel code as observed state or invent an unsupported edge. Stable identity is runner-owned; never invent stable keys. A BACKGROUND label is a semantic claim requiring explanation, not automatic completeness proof. If prior_obligation_lineage exists, use explicit CONTINUE/REANCHOR/SPLIT/MERGE events for changed identity mappings. If the prior derived interpretation is itself disputed by the original public requirement, use interpretation_disputed=true only on CONTINUE/REANCHOR and explain the source-grounded disagreement. This retains history and an unresolved raw requirement; it does not establish semantic equivalence, erase checks, waive the requirement or grant satisfaction. production_path_frontier lists lexical sibling consumers from source actually supplied, not verified causal edges. Compare each against the raw scope, represent relevant branches in semantic roles/evidence and the production path, and retain uncertainty for unrelated or missing paths. A path through one branch does not establish coverage of a sibling. Never infer causality from matching names alone. Prior obligation IDs are immutable. Use lineage_events CONTINUE or REANCHOR with parent_ids and current atom_refs to preserve identity across changed prose/quotes. SPLIT records one parent and at least two children; MERGE records a conjunction view, never erases parents. Leave events empty for initial registration or exact unchanged anchors. Original definitions and unresolved residuals remain live; do not assert equivalence solely from wording."
+    },
+    {
+      "role": "user",
+      "content": "{\"allowed_evidence_ids\": [\"SRC-CU-5c5caa728669d5fe\", \"SRC-CU-7e4d235001260b67\", \"SRC-CU-88a1ded120726e2b\", \"SRC-CU-ca13c859c487856f\", \"SRC-CU-6195b86dcb4293a7\", \"SRC-CU-79be7d9601895605\", \"SRC-CU-b426c37ab39dc03b\", \"OBS1\", \"OBS2\"], \"candidate_set\": {\"context_tokens\": 53974, \"dropped_ids\": [\"CU-d289b3aa2cdb105d\", \"CU-2e09dffe9da40ea9\", \"CU-d65aba842421cd1b\", \"CU-2e835d900c7df4a2\", \"CU-7fc635fd35e0cc40\", \"CU-095c933c2135ae3c\", \"CU-7f8b01914f89d1a0\", \"CU-985d28f5b4ded076\", \"CU-819f38ba25ebf7c2\", \"CU-1195d3e549660174\", \"CU-ed8a1a3c6fa455b9\", \"CU-6e261a49b2ed7f5e\", \"CU-14647a333787b689\", \"CU-2bc1d5038af8cae8\", \"CU-4bcb68797d4260a9\", \"CU-001bce30ec49fb97\", \"CU-159d277031f7c261\", \"CU-249b04249f693405\", \"CU-8142745e66f35f6a\", \"CU-da8fb3ecf5de8318\", \"CU-bbb9eb74d443256a\", \"CU-d165f91108eb07af\", \"CU-84f33394a20626dc\", \"CU-fa84b213eb681d13\", \"CU-6f072ac094ed9daa\", \"CU-366877f4354ac296\", \"CU-0d4ed2c717d76041\", \"CU-486f01c0b892a906\", \"CU-7005f97b2ac17f7f\", \"CU-58129a427dd71f72\", \"CU-630857af1a8edeba\", \"CU-1c754864f78db37c\", \"CU-b8e669a1b248a132\", \"CU-f01eb3e40fc02230\", \"CU-eef5c440a4e5c35c\", \"CU-bacac746404d74f4\", \"CU-d6ef913f18e02717\", \"CU-4dad16d68e51346c\", \"CU-38ae2c2ac17ea04e\", \"CU-338ce37b2171433e\", \"CU-848cc3cfd63e63ab\", \"CU-942a1641ebe74f29\", \"CU-cdf3bcfed877c6b9\", \"CU-34798c77d0a36ab8\", \"CU-fb6b54285a7cfcdf\", \"CU-8cf58507a586d6fd\", \"CU-542fe522d23a0bf6\", \"CU-7e73bb415fa6f4b9\", \"CU-ac752c28a71a879a\", \"CU-ffdac7e9e3130396\", \"CU-fad9c929a8e31a03\", \"CU-93256040ed0225e5\", \"CU-b5cf0e754b7d31af\", \"CU-858049ecc240f5ae\", \"CU-6ce672ff885f2509\", \"CU-f6643b749563711e\", \"CU-e9981e05f14c7721\", \"CU-8122512b50143f72\", \"CU-d1adc249c53cf43b\", \"CU-62658eb603a896ba\", \"CU-0da01258a9498d39\", \"CU-b4de000397cfe0a2\", \"CU-aa95e292d4af4270\", \"CU-e64609ee3be8726d\", \"CU-3f6b1965768997d2\", \"CU-4fb8d7d642c5d680\", \"CU-6333bf2e6aefb0d8\", \"CU-cdec7662e3a0612d\", \"CU-bb5abe0c4e834b14\", \"CU-72ee29aa3d0c456a\", \"CU-f1e842120ca2bb11\", \"CU-0f9b0def0d13370b\", \"CU-36b6e319932c3386\", \"CU-3a1d8862cf2d493a\", \"CU-7ca6b535826e7a19\", \"CU-0cd1b304de977209\", \"CU-e14039c66230558a\", \"CU-05ef56223b951887\", \"CU-ad0fc4507488143d\", \"CU-fcfa43ccb9222cbf\", \"CU-4d037e82d56ee19c\", \"CU-af7ab961b86911ed\", \"CU-f4871040ed6e8434\", \"CU-ff6ad35dafab2e09\", \"CU-6e596e01b737b664\", \"CU-aefb97be3662a2a7\", \"CU-c9ffc839344837a0\", \"CU-1b17068c64d7e80b\", \"CU-ec76a1f50eb0316c\", \"CU-a3867a1cf4320e32\", \"CU-655e70a90b14fc2e\", \"CU-cdb4891729b7e0d7\", \"CU-f9e5aabb25fdd63e\", \"CU-a47d4ebd6a580fc6\", \"CU-cbdca28ad8a2068e\", \"CU-be913d30b8b1afa0\", \"CU-2da357aab8f4cc95\", \"CU-5dbadd55e87956c5\", \"CU-8ebf7a71b9e4b8f7\", \"CU-44b3d84071a09a13\", \"CU-0d2b98f5648d088b\", \"CU-43dcfeee405e2c4e\"], \"selected_candidates\": [{\"declared_symbols\": [\"ProcessItem\"], \"evidence_ref_id\": \"SRC-CU-5c5caa728669d5fe\", \"id\": \"CU-5c5caa728669d5fe\", \"kind\": \"FUNCTION_OR_TYPE\", \"parser_kind\": \"GO_LEXICAL_DECLARATION\", \"path\": \"pkg/controller/certificates/keymanager/keymanager_controller.go\", \"references\": [\"CertificateHasCondition\", \"Certificates\", \"DecodePrivateKeyBytes\", \"DeepCopy\", \"Deref\", \"Error\", \"Eventf\", \"FromContext\", \"Get\", \"Info\", \"IsNotFound\", \"ListSecretsMatchingPredicates\", \"NewContext\", \"PrivateKeyMatchesSpec\", \"Secrets\", \"SetRuntimeDefaults_Certificate\", \"V\", \"WithRelatedResource\", \"WithValues\", \"createAndSetNextPrivateKey\", \"createNextPrivateKeyRotationPolicyNever\", \"deleteSecretResources\", \"func\", \"len\", \"setNextPrivateKeySecretName\"], \"symbol\": \"ProcessItem\", \"truncated\": false}, {\"declared_symbols\": [\"ProcessItem\"], \"evidence_ref_id\": \"SRC-CU-7e4d235001260b67\", \"id\": \"CU-7e4d235001260b67\", \"kind\": \"FUNCTION_OR_TYPE\", \"parser_kind\": \"GO_LEXICAL_DECLARATION\", \"path\": \"pkg/controller/certificates/issuing/issuing_controller.go\", \"references\": [\"After\", \"Before\", \"CertificateHasCondition\", \"CertificateRequestHasInvalidRequest\", \"CertificateRequestIsDenied\", \"CertificateRequestRevision\", \"CertificateRequests\", \"Certificates\", \"DecodeX509CertificateBytes\", \"DecodeX509CertificateRequestBytes\", \"Error\", \"Format\", \"FromContext\", \"Get\", \"GetCertificateCondition\", \"GetCertificateRequestCondition\", \"Info\", \"IsNotFound\", \"Issued\", \"ListCertificateRequestsMatchingPredicates\", \"NewContext\", \"Now\", \"ParseTLSKeyFromSecret\", \"PrivateKeyMatchesSpec\", \"Public\", \"PublicKeyMatchesCSR\", \"PublicKeysEqual\", \"RequestMatchesSpec\", \"Secrets\", \"Sprintf\", \"True\", \"V\", \"WithResource\", \"WithTimeout\", \"WithValues\", \"cancel\", \"certificate\", \"delay\", \"ensureSecretData\", \"ensureTemporaryCertificate\", \"failIssueCertificate\", \"func\", \"issueCertificate\", \"issuer\", \"len\", \"nothing\"], \"symbol\": \"ProcessItem\", \"truncated\": false}, {\"declared_symbols\": [\"ProcessItem\"], \"evidence_ref_id\": \"SRC-CU-88a1ded120726e2b\", \"id\": \"CU-88a1ded120726e2b\", \"kind\": \"FUNCTION_OR_TYPE\", \"parser_kind\": \"GO_LEXICAL_DECLARATION\", \"path\": \"pkg/controller/certificates/requestmanager/requestmanager_controller.go\", \"references\": [\"CertificateHasCondition\", \"CertificateRequests\", \"Certificates\", \"DecodePrivateKeyBytes\", \"Error\", \"FromContext\", \"Get\", \"Info\", \"IsNotFound\", \"ListCertificateRequestsMatchingPredicates\", \"NewContext\", \"Public\", \"Secrets\", \"V\", \"WithValues\", \"createNewCertificateRequest\", \"deleteCurrentFailedRequests\", \"deleteRequestsNotMatchingSpec\", \"deleteRequestsWithoutRevision\", \"func\", \"len\", \"requestsWithRevision\"], \"symbol\": \"ProcessItem\", \"truncated\": false}, {\"declared_symbols\": [\"TestDataForCertificate\"], \"evidence_ref_id\": \"SRC-CU-ca13c859c487856f\", \"id\": \"CU-ca13c859c487856f\", \"kind\": \"FUNCTION_OR_TYPE\", \"parser_kind\": \"GO_LEXICAL_DECLARATION\", \"path\": \"internal/controller/certificates/policies/gatherer_test.go\", \"references\": [\"AddCertificateRequestAnnotations\", \"AddCertificateRequestOwnerReferences\", \"AddEventHandler\", \"Certificate\", \"CertificateRef\", \"CertificateRequest\", \"CertificateRequests\", \"Certmanager\", \"CertmanagerV1\", \"CheckAndFinish\", \"Context\", \"DataForCertificate\", \"Equal\", \"EqualError\", \"Fatalf\", \"Informer\", \"Init\", \"Lister\", \"NOTE\", \"New\", \"NewContext\", \"NewFakeClock\", \"NoError\", \"Parse\", \"Register\", \"Run\", \"Secrets\", \"SetCertificateNamespace\", \"SetCertificateRequestNamespace\", \"SetCertificateRevision\", \"SetCertificateSecretName\", \"SetCertificateUID\", \"Start\", \"V1\", \"WithResource\", \"and\", \"argument\", \"called\", \"cr\", \"func\", \"otherwise\", \"turnOnKlogIfVerboseTest\", \"with\"], \"symbol\": \"TestDataForCertificate\", \"truncated\": true}, {\"declared_symbols\": [\"TestIssuingController_ServerSideApplyFailedIssuanceAttempts\"], \"evidence_ref_id\": \"SRC-CU-6195b86dcb4293a7\", \"id\": \"CU-6195b86dcb4293a7\", \"kind\": \"FUNCTION_OR_TYPE\", \"parser_kind\": \"GO_LEXICAL_DECLARATION\", \"path\": \"pkg/controller/certificates/issuing/issuing_controller_test.go\", \"references\": [\"AddCertificateRequestAnnotations\", \"Certificate\", \"CertificateFrom\", \"CertificateRequestFrom\", \"CheckAndFinish\", \"Cleanup\", \"Context\", \"DeepCopy\", \"Equal\", \"Errorf\", \"False\", \"Falsef\", \"GetPatch\", \"GetPatchOptions\", \"GetPatchType\", \"GetSubresource\", \"Helper\", \"InitWithRESTConfig\", \"Len\", \"MustCreateCryptoBundle\", \"NewCustomMatch\", \"NewPatchSubresourceActionWithOptions\", \"NewTime\", \"NoError\", \"NotNil\", \"ProcessItem\", \"Register\", \"Run\", \"SetCertificateDNSNames\", \"SetCertificateGeneration\", \"SetCertificateIssuanceAttempts\", \"SetCertificateIssuer\", \"SetCertificateLastFailureTime\", \"SetCertificateNextPrivateKeySecretName\", \"SetCertificateRenewBefore\", \"SetCertificateRequestStatusCondition\", \"SetCertificateRevision\", \"SetCertificateSecretName\", \"SetCertificateStatusCondition\", \"SetFeatureGateDuringTest\", \"SetTime\", \"Start\", \"Stop\", \"Truef\", \"Unmarshal\", \"WithResource\", \"applyStatusFieldMap\", \"assertApplyStatus\", \"byte\", \"func\", \"testLocalTemporarySignerFn\"], \"symbol\": \"TestIssuingController_ServerSideApplyFailedIssuanceAttempts\", \"truncated\": false}, {\"declared_symbols\": [\"createNewCertificateRequest\"], \"evidence_ref_id\": \"SRC-CU-79be7d9601895605\", \"id\": \"CU-79be7d9601895605\", \"kind\": \"FUNCTION_OR_TYPE\", \"parser_kind\": \"GO_LEXICAL_DECLARATION\", \"path\": \"pkg/controller/certificates/requestmanager/requestmanager_controller.go\", \"references\": [\"BuildAnnotationsToCopy\", \"Bytes\", \"CertificateRequests\", \"CertmanagerV1\", \"ComputeSecureUniqueDeterministicNameFromData\", \"Create\", \"DNSSafeShortenTo52Characters\", \"Enabled\", \"Encode\", \"EncodeCSR\", \"Error\", \"Errorf\", \"Eventf\", \"FromContext\", \"GenerateCSR\", \"Itoa\", \"NewBuffer\", \"NewControllerRef\", \"Sprintf\", \"WithEncodeBasicConstraintsInRequest\", \"WithNameConstraints\", \"WithOtherNames\", \"WithUseLiteralSubject\", \"func\", \"waitForCertificateRequestToExist\"], \"symbol\": \"createNewCertificateRequest\", \"truncated\": false}, {\"declared_symbols\": [\"FuzzProcessItem\"], \"evidence_ref_id\": \"SRC-CU-b426c37ab39dc03b\", \"id\": \"CU-b426c37ab39dc03b\", \"kind\": \"FUNCTION_OR_TYPE\", \"parser_kind\": \"GO_LEXICAL_DECLARATION\", \"path\": \"pkg/controller/certificates/requestmanager/fuzz_test.go\", \"references\": [\"CertificateFrom\", \"Context\", \"Fuzz\", \"GenerateStruct\", \"Init\", \"NewConsumer\", \"NewFakeClock\", \"NewTime\", \"Now\", \"ProcessItem\", \"Register\", \"SetCertificateNextPrivateKeySecretName\", \"SetCertificateStatusCondition\", \"SetFeatureGateDuringTest\", \"Start\", \"Stop\", \"append\", \"func\", \"len\", \"make\", \"panic\"], \"symbol\": \"FuzzProcessItem\", \"truncated\": true}], \"selected_ids\": [\"CU-5c5caa728669d5fe\", \"CU-7e4d235001260b67\", \"CU-88a1ded120726e2b\", \"CU-ca13c859c487856f\", \"CU-6195b86dcb4293a7\", \"CU-79be7d9601895605\", \"CU-b426c37ab39dc03b\"]}, \"evidence_catalog\": [{\"content_digest\": \"8b408d297a67ebcc30704fcad7abd613afe931053da7d444db7728af6ee8e4f6\", \"excerpt\": \"func (c *controller) ProcessItem(ctx context.Context, key types.NamespacedName) error {\\n\\tlog := logf.FromContext(ctx).WithValues(\\\"key\\\", key)\\n\\tctx = logf.NewContext(ctx, log)\\n\\n\\tnamespace, name := key.Namespace, key.Name\\n\\n\\tcrt, err := c.certificateLister.Certificates(namespace).Get(name)\\n\\tif err != nil && !apierrors.IsNotFound(err) {\\n\\t\\treturn err\\n\\t}\\n\\tif crt == nil || crt.DeletionTimestamp != nil {\\n\\t\\t// If the Certificate object was/ is being deleted, we don't want to create any\\n\\t\\t// new Secret resources.\\n\\t\\treturn nil\\n\\t}\\n\\n\\t// Apply runtime defaults to apply default values that are governed by\\n\\t// controller feature gates, such as DefaultPrivateKeyRotationPolicyAlways.\\n\\t// We deep copy the object to avoid mutating the client-go cache.\\n\\tcrt = crt.DeepCopy()\\n\\tcminternal.SetRuntimeDefaults_Certificate(crt)\\n\\n\\t// Discover all 'owned' secrets that have the `next-private-key` label\\n\\tsecrets, err := certificates.ListSecretsMatchingPredicates(c.secretLister.Secrets(crt.Namespace), isNextPrivateKeyLabelSelector, predicate.ResourceOwnedBy[*corev1.Secret](crt))\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\tif !apiutil.CertificateHasCondition(crt, cmapi.CertificateCondition{\\n\\t\\tType:   cmapi.CertificateConditionIssuing,\\n\\t\\tStatus: cmmeta.ConditionTrue,\\n\\t}) {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"Cleaning up Secret resources and unsetting nextPrivateKeySecretName as issuance is no longer in progress\\\")\\n\\t\\tif err := c.deleteSecretResources(ctx, secrets); err != nil {\\n\\t\\t\\treturn err\\n\\t\\t}\\n\\t\\treturn c.setNextPrivateKeySecretName(ctx, crt, nil)\\n\\t}\\n\\n\\t// if there is no existing Secret resource, create a new one\\n\\tif len(secrets) == 0 {\\n\\t\\t// PrivateKey is a pointer, but it will never be nil because we called\\n\\t\\t// the SetRuntimeDefaults function at the start of this function.\\n\\t\\trotationPolicy := crt.Spec.PrivateKey.RotationPolicy\\n\\t\\tswitch rotationPolicy {\\n\\t\\tcase cmapi.RotationPolicyNever:\\n\\t\\t\\treturn c.createNextPrivateKeyRotationPolicyNever(ctx, crt)\\n\\t\\tcase cmapi.RotationPolicyAlways:\\n\\t\\t\\tlog.V(logf.DebugLevel).Info(\\\"Creating new nextPrivateKeySecretName Secret because no existing Secret found\\\")\\n\\t\\t\\treturn c.createAndSetNextPrivateKey(ctx, crt)\\n\\t\\tdefault:\\n\\t\\t\\tlog.V(logf.WarnLevel).Info(\\\"Certificate with unknown certificate.spec.privateKey.rotationPolicy value\\\", \\\"rotation_policy\\\", rotationPolicy)\\n\\t\\t\\treturn nil\\n\\t\\t}\\n\\t}\\n\\t// always clean up if multiple are found\\n\\tif len(secrets) > 1 {\\n\\t\\t// Delete all secrets, optionally skipping the one specified in nextPrivateKeySecretName\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"Cleaning up Secret resources as multiple nextPrivateKeySecretName candidates found\\\", \\\"total_secrets\\\", len(secrets))\\n\\n\\t\\t// Use ptr.Deref to get the value or empty string if nil\\n\\t\\treturn c.deleteSecretResources(ctx, secrets, ptr.Deref(crt.Status.NextPrivateKeySecretName, \\\"\\\"))\\n\\t}\\n\\n\\tsecret := secrets[0]\\n\\tlog = logf.WithRelatedResource(log, secret)\\n\\tctx = logf.NewContext(ctx, log)\\n\\n\\tif crt.Status.NextPrivateKeySecretName == nil {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"Adopting existing private key Secret\\\")\\n\\t\\treturn c.setNextPrivateKeySecretName(ctx, crt, &secret.Name)\\n\\t}\\n\\tif *crt.Status.NextPrivateKeySecretName != secrets[0].Name {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"Deleting existing private key secret as name does not match status.nextPrivateKeySecretName\\\")\\n\\t\\treturn c.deleteSecretResources(ctx, secrets)\\n\\t}\\n\\n\\tif secret.Data == nil || len(secret.Data[corev1.TLSPrivateKeyKey]) == 0 {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"Deleting Secret resource as it contains no data\\\")\\n\\t\\treturn c.deleteSecretResources(ctx, secrets)\\n\\t}\\n\\tpkData := secret.Data[corev1.TLSPrivateKeyKey]\\n\\tpk, err := pki.DecodePrivateKeyBytes(pkData)\\n\\tif err != nil {\\n\\t\\tlog.Error(err, \\\"Deleting existing private key secret due to error decoding data\\\")\\n\\t\\treturn c.deleteSecretResources(ctx, secrets)\\n\\t}\\n\\n\\tviolations := pki.PrivateKeyMatchesSpec(pk, crt.Spec)\\n\\tif len(violations) > 0 {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"Regenerating private key due to change in fields\\\", \\\"violations\\\", violations)\\n\\t\\tc.recorder.Eventf(crt, corev1.EventTypeNormal, reasonDeleted, \\\"Regenerating private key due to change in fields: %v\\\", violations)\\n\\t\\treturn c.deleteSecretResources(ctx, secrets)\\n\\t}\\n\\n\\treturn nil\\n}\\n\", \"id\": \"SRC-CU-5c5caa728669d5fe\", \"kind\": \"SOURCE_SPAN\", \"locator\": {\"column_start\": 1, \"end_line\": 246, \"path\": \"pkg/controller/certificates/keymanager/keymanager_controller.go\", \"start_line\": 150}, \"origin\": \"selected candidate CU-5c5caa728669d5fe\", \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}, {\"content_digest\": \"21ddd173b93d18720a2ec13d3b7394f3f40add609075586ffbd38d9b7474a61d\", \"excerpt\": \"func (c *controller) ProcessItem(ctx context.Context, key types.NamespacedName) error {\\n\\t// TODO: Change to globals.DefaultControllerContextTimeout as part of a wider effort to ensure we have\\n\\t// failsafe timeouts in every controller\\n\\tctx, cancel := context.WithTimeout(ctx, time.Second*10)\\n\\tdefer cancel()\\n\\n\\tlog := logf.FromContext(ctx).WithValues(\\\"key\\\", key)\\n\\n\\tnamespace, name := key.Namespace, key.Name\\n\\n\\tcrt, err := c.certificateLister.Certificates(namespace).Get(name)\\n\\tif err != nil && !apierrors.IsNotFound(err) {\\n\\t\\treturn err\\n\\t}\\n\\tif crt == nil || crt.DeletionTimestamp != nil {\\n\\t\\t// If the Certificate object was/ is being deleted, we don't want to update its status or\\n\\t\\t// create/ update any Secret resources.\\n\\t\\treturn nil\\n\\t}\\n\\n\\tlog = logf.WithResource(log, crt)\\n\\tctx = logf.NewContext(ctx, log)\\n\\n\\tif !apiutil.CertificateHasCondition(crt, cmapi.CertificateCondition{\\n\\t\\tType:   cmapi.CertificateConditionIssuing,\\n\\t\\tStatus: cmmeta.ConditionTrue,\\n\\t}) {\\n\\t\\t// If Certificate doesn't have Issuing=true condition then we should check\\n\\t\\t// to ensure all non-issuing related SecretData is correct on the\\n\\t\\t// Certificate's secret.\\n\\t\\treturn c.ensureSecretData(ctx, log, crt)\\n\\t}\\n\\n\\tif crt.Status.NextPrivateKeySecretName == nil ||\\n\\t\\tlen(*crt.Status.NextPrivateKeySecretName) == 0 {\\n\\t\\t// Do nothing if the next private key secret name is not set\\n\\t\\treturn nil\\n\\t}\\n\\n\\t// Fetch and parse the 'next private key secret'\\n\\tnextPrivateKeySecret, err := c.secretLister.Secrets(crt.Namespace).Get(*crt.Status.NextPrivateKeySecretName)\\n\\tif apierrors.IsNotFound(err) {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"Next private key secret does not exist, waiting for keymanager controller\\\")\\n\\t\\t// If secret does not exist, do nothing (keymanager will handle this).\\n\\t\\treturn nil\\n\\t}\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\tif nextPrivateKeySecret.Data == nil || len(nextPrivateKeySecret.Data[corev1.TLSPrivateKeyKey]) == 0 {\\n\\t\\tlogf.WithResource(log, nextPrivateKeySecret).Info(\\\"Next private key secret does not contain any private key data, waiting for keymanager controller\\\")\\n\\t\\treturn nil\\n\\t}\\n\\tpk, _, err := utilkube.ParseTLSKeyFromSecret(nextPrivateKeySecret, corev1.TLSPrivateKeyKey)\\n\\tif err != nil {\\n\\t\\t// If the private key cannot be parsed here, do nothing as the key manager will handle this.\\n\\t\\tlogf.WithResource(log, nextPrivateKeySecret).Error(err, \\\"failed to parse next private key, waiting for keymanager controller\\\")\\n\\t\\treturn nil\\n\\t}\\n\\tpkViolations := utilpki.PrivateKeyMatchesSpec(pk, crt.Spec)\\n\\tif len(pkViolations) > 0 {\\n\\t\\tlogf.WithResource(log, nextPrivateKeySecret).Info(\\\"stored next private key does not match requirements on Certificate resource, waiting for keymanager controller\\\", \\\"violations\\\", pkViolations)\\n\\t\\treturn nil\\n\\t}\\n\\n\\t// CertificateRequest revisions begin from 1. If no revision is set on the\\n\\t// status then assume no revision yet set.\\n\\tnextRevision := 1\\n\\tif crt.Status.Revision != nil {\\n\\t\\tnextRevision = *crt.Status.Revision + 1\\n\\t}\\n\\n\\treqs, err := certificates.ListCertificateRequestsMatchingPredicates(\\n\\t\\tc.certificateRequestLister.CertificateRequests(crt.Namespace),\\n\\t\\tpredicate.CertificateRequestRevision(nextRevision),\\n\\t\\tpredicate.ResourceOwnedBy[*cmapi.CertificateRequest](crt),\\n\\t)\\n\\tif err != nil || len(reqs) != 1 {\\n\\t\\t// If error return.\\n\\t\\t// if no error but none exist do nothing.\\n\\t\\t// If no error but multiple exist, then leave to requestmanager controller\\n\\t\\t// to clean up.\\n\\t\\treturn err\\n\\t}\\n\\n\\treq := reqs[0]\\n\\tlog = logf.WithResource(log, req)\\n\\n\\t// Verify the CSR options match what is requested in certificate.spec.\\n\\t// If there are violations in the spec, then the requestmanager will handle this.\\n\\trequestViolations, err := utilpki.RequestMatchesSpec(req, crt.Spec)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\tif len(requestViolations) > 0 {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"CertificateRequest does not match Certificate, waiting for keymanager controller\\\")\\n\\t\\treturn nil\\n\\t}\\n\\n\\tcertIssuingCond := apiutil.GetCertificateCondition(crt, cmapi.CertificateConditionIssuing)\\n\\tcrReadyCond := apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady)\\n\\tif certIssuingCond == nil {\\n\\t\\t// This should never happen\\n\\t\\tlog.V(logf.ErrorLevel).Info(\\\"Certificate does not have an issuing condition\\\")\\n\\t\\treturn nil\\n\\t}\\n\\t// If the CertificateRequest for this revision failed before the\\n\\t// Issuing condition was last updated on the Certificate, then it must be a\\n\\t// failed CertificateRequest from the previous issuance for the same\\n\\t// revision. Leave it to the certificate-requests controller to delete the\\n\\t// CertificateRequest and create a new one.\\n\\tif req.Status.FailureTime != nil &&\\n\\t\\treq.Status.FailureTime.Before(certIssuingCond.LastTransitionTime) && crReadyCond.Reason == cmapi.CertificateRequestReasonFailed {\\n\\t\\tlog.V(logf.InfoLevel).Info(\\\"Found a failed CertificateRequest from previous issuance, waiting for it to be deleted...\\\")\\n\\t\\treturn nil\\n\\t}\\n\\n\\t// Now check if CertificateRequest is in any of the final states so that\\n\\t// this issuance can be completed as either succeeded or failed. Failed\\n\\t// issuance will be retried with a delay (the logic for that lives in\\n\\t// certificates-trigger controller). Final states are: Denied condition\\n\\t// with status True => fail issuance InvalidRequest  condition with\\n\\t// status True => fail issuance Ready condition with reason Failed =>\\n\\t// fail issuance Ready condition with reason Issued => finalize issuance\\n\\t// as succeeded.\\n\\n\\t// In case of a non-compliant issuer, a CertificateRequest can have both\\n\\t// Denied status True (set by an approver) and Ready condition with\\n\\t// reason Issued (set by the issuer). In this case, we prioritize the\\n\\t// Denied condition and fail the issuance. This is done for consistency\\n\\t// and also to avoid race conditions between the non-compliant issuer\\n\\t// and this control loop.\\n\\n\\t// If the certificate request was denied, set the last failure time to\\n\\t// now, bump the issuance attempts and set the Issuing status condition\\n\\t// to False.\\n\\tif apiutil.CertificateRequestIsDenied(req) {\\n\\t\\treturn c.failIssueCertificate(ctx, log, crt, apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionDenied))\\n\\t}\\n\\n\\t// If the certificate request is invalid, set the last failure time to\\n\\t// now, bump the issuance attempts and set the Issuing status condition\\n\\t// to False.\\n\\tif apiutil.CertificateRequestHasInvalidRequest(req) {\\n\\t\\treturn c.failIssueCertificate(ctx, log, crt, apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionInvalidRequest))\\n\\t}\\n\\n\\tif crReadyCond == nil {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"CertificateRequest does not have Ready condition, waiting...\\\")\\n\\t\\treturn nil\\n\\t}\\n\\n\\t// If the certificate request has failed, set the last failure time to\\n\\t// now, bump the issuance attempts and set the Issuing status condition\\n\\t// to False.\\n\\tif crReadyCond.Reason == cmapi.CertificateRequestReasonFailed {\\n\\t\\treturn c.failIssueCertificate(ctx, log, crt, apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady))\\n\\t}\\n\\n\\t// If public key does not match, do nothing (requestmanager will handle this).\\n\\tcsr, err := utilpki.DecodeX509CertificateRequestBytes(req.Spec.Request)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\tpublicKeyMatchesCSR, err := utilpki.PublicKeyMatchesCSR(pk.Public(), csr)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\tif !publicKeyMatchesCSR {\\n\\t\\tlogf.WithResource(log, nextPrivateKeySecret).Info(\\\"next private key does not match CSR public key, waiting for requestmanager controller\\\")\\n\\t\\treturn nil\\n\\t}\\n\\n\\t// If the CertificateRequest is valid and ready, verify its status and issue\\n\\t// accordingly.\\n\\tif crReadyCond.Reason == cmapi.CertificateRequestReasonIssued {\\n\\t\\t// Verify the signed certificate's public key matches the CSR's public key.\\n\\t\\t// If not, fail with backoff to prevent infinite re-issuance loops.\\n\\t\\tx509Cert, err := utilpki.DecodeX509CertificateBytes(req.Status.Certificate)\\n\\t\\tif err != nil {\\n\\t\\t\\treturn c.failIssueCertificate(ctx, log, crt, &cmapi.CertificateRequestCondition{\\n\\t\\t\\t\\tType:    cmapi.CertificateRequestConditionReady,\\n\\t\\t\\t\\tStatus:  cmmeta.ConditionFalse,\\n\\t\\t\\t\\tReason:  \\\"InvalidCertificate\\\",\\n\\t\\t\\t\\tMessage: fmt.Sprintf(\\\"Issuer returned an invalid certificate: failed to decode: %v\\\", err),\\n\\t\\t\\t})\\n\\t\\t}\\n\\t\\tcertMatchesCSR, err := utilpki.PublicKeysEqual(x509Cert.PublicKey, csr.PublicKey)\\n\\t\\tif err != nil {\\n\\t\\t\\treturn c.failIssueCertificate(ctx, log, crt, &cmapi.CertificateRequestCondition{\\n\\t\\t\\t\\tType:    cmapi.CertificateRequestConditionReady,\\n\\t\\t\\t\\tStatus:  cmmeta.ConditionFalse,\\n\\t\\t\\t\\tReason:  \\\"InvalidCertificate\\\",\\n\\t\\t\\t\\tMessage: fmt.Sprintf(\\\"Failed to compare certificate and CSR public keys: %v\\\", err),\\n\\t\\t\\t})\\n\\t\\t}\\n\\t\\tif !certMatchesCSR {\\n\\t\\t\\treturn c.failIssueCertificate(ctx, log, crt, &cmapi.CertificateRequestCondition{\\n\\t\\t\\t\\tType:    cmapi.CertificateRequestConditionReady,\\n\\t\\t\\t\\tStatus:  cmmeta.ConditionFalse,\\n\\t\\t\\t\\tReason:  \\\"InvalidCertificate\\\",\\n\\t\\t\\t\\tMessage: \\\"Issuer returned a certificate with a public key that does not match the CSR. This usually indicates a misconfigured issuer.\\\",\\n\\t\\t\\t})\\n\\t\\t}\\n\\n\\t\\t// Check that the certificate is not already expired before storing it.\\n\\t\\t// This prevents infinite re-issuance loops when an issuer (e.g. Vault\\n\\t\\t// with leaf_not_after_behavior=truncate and an expired CA) returns\\n\\t\\t// already-expired certificates.\\n\\t\\tif c.clock.Now().After(x509Cert.NotAfter) {\\n\\t\\t\\treturn c.failIssueCertificate(ctx, log, crt, &cmapi.CertificateRequestCondition{\\n\\t\\t\\t\\tType:    cmapi.CertificateRequestConditionReady,\\n\\t\\t\\t\\tStatus:  cmmeta.ConditionFalse,\\n\\t\\t\\t\\tReason:  \\\"InvalidCertificate\\\",\\n\\t\\t\\t\\tMessage: fmt.Sprintf(\\\"Issuer returned an already expired certificate (notAfter: %s). This usually indicates an expired CA certificate in the issuer.\\\", x509Cert.NotAfter.Format(time.RFC3339)),\\n\\t\\t\\t})\\n\\t\\t}\\n\\n\\t\\treturn c.issueCertificate(ctx, nextRevision, crt, req, pk)\\n\\t}\\n\\n\\t// Issue temporary certificate if needed. If a certificate was issued, then\\n\\t// return early - we will sync again since the target Secret has been\\n\\t// updated.\\n\\tif issued, err := c.ensureTemporaryCertificate(ctx, crt, pk); err != nil || issued {\\n\\t\\treturn err\\n\\t}\\n\\n\\t// CertificateRequest is not in a final state so do nothing.\\n\\tlog.V(logf.DebugLevel).Info(\\\"CertificateRequest not in final state, waiting...\\\", \\\"reason\\\", crReadyCond.Reason)\\n\\treturn nil\\n}\\n\", \"id\": \"SRC-CU-7e4d235001260b67\", \"kind\": \"SOURCE_SPAN\", \"locator\": {\"column_start\": 1, \"end_line\": 406, \"path\": \"pkg/controller/certificates/issuing/issuing_controller.go\", \"start_line\": 175}, \"origin\": \"selected candidate CU-7e4d235001260b67\", \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}, {\"content_digest\": \"4a3b0e80d9a3e6e348ce86e039099bee0f408ffc468faa4e8e078b85404377f8\", \"excerpt\": \"func (c *controller) ProcessItem(ctx context.Context, key types.NamespacedName) error {\\n\\tlog := logf.FromContext(ctx).WithValues(\\\"key\\\", key)\\n\\n\\tctx = logf.NewContext(ctx, log)\\n\\tnamespace, name := key.Namespace, key.Name\\n\\n\\tcrt, err := c.certificateLister.Certificates(namespace).Get(name)\\n\\tif err != nil && !apierrors.IsNotFound(err) {\\n\\t\\treturn err\\n\\t}\\n\\tif crt == nil || crt.DeletionTimestamp != nil {\\n\\t\\t// If the Certificate object was/ is being deleted, we don't want to create any\\n\\t\\t// new CertificateRequests objects\\n\\t\\treturn nil\\n\\t}\\n\\n\\tif !apiutil.CertificateHasCondition(crt, cmapi.CertificateCondition{\\n\\t\\tType:   cmapi.CertificateConditionIssuing,\\n\\t\\tStatus: cmmeta.ConditionTrue,\\n\\t}) {\\n\\t\\treturn nil\\n\\t}\\n\\n\\t// Check for and fetch the 'status.nextPrivateKeySecretName' secret\\n\\tif crt.Status.NextPrivateKeySecretName == nil {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"status.nextPrivateKeySecretName not yet set, waiting for keymanager before processing certificate\\\")\\n\\t\\treturn nil\\n\\t}\\n\\tnextPrivateKeySecret, err := c.secretLister.Secrets(crt.Namespace).Get(*crt.Status.NextPrivateKeySecretName)\\n\\tif apierrors.IsNotFound(err) {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"nextPrivateKeySecretName Secret resource does not exist, waiting for keymanager to create it before continuing\\\")\\n\\t\\treturn nil\\n\\t}\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\tif nextPrivateKeySecret.Data == nil || len(nextPrivateKeySecret.Data[corev1.TLSPrivateKeyKey]) == 0 {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"Next private key secret does not contain any valid data, waiting for keymanager before processing certificate\\\")\\n\\t\\treturn nil\\n\\t}\\n\\tpk, err := pki.DecodePrivateKeyBytes(nextPrivateKeySecret.Data[corev1.TLSPrivateKeyKey])\\n\\tif err != nil {\\n\\t\\tlog.Error(err, \\\"Failed to decode next private key secret data, waiting for keymanager before processing certificate\\\")\\n\\t\\treturn nil\\n\\t}\\n\\n\\t// Discover all 'owned' CertificateRequests\\n\\trequests, err := certificates.ListCertificateRequestsMatchingPredicates(\\n\\t\\tc.certificateRequestLister.CertificateRequests(crt.Namespace),\\n\\t\\tpredicate.ResourceOwnedBy[*cmapi.CertificateRequest](crt),\\n\\t)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\t// delete any existing CertificateRequest resources that do not have a\\n\\t// revision annotation\\n\\tif requests, err = c.deleteRequestsWithoutRevision(ctx, requests...); err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\tcurrentCertificateRevision := 0\\n\\tif crt.Status.Revision != nil {\\n\\t\\tcurrentCertificateRevision = *crt.Status.Revision\\n\\t}\\n\\tnextRevision := currentCertificateRevision + 1\\n\\n\\trequests, err = requestsWithRevision(requests, nextRevision)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\trequests, err = c.deleteRequestsNotMatchingSpec(ctx, crt, pk.Public(), requests...)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\trequests, err = c.deleteCurrentFailedRequests(ctx, crt, requests...)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\tif len(requests) > 1 {\\n\\t\\t// TODO: we should handle this case better, but for now do nothing to\\n\\t\\t//  avoid getting into loops where we keep creating multiple requests\\n\\t\\t//  and deleting them again.\\n\\t\\tlog.V(logf.ErrorLevel).Info(\\\"Multiple matching CertificateRequest resources exist, delete one of them. This is likely an error and should be reported on the issue tracker!\\\")\\n\\t\\treturn nil\\n\\t}\\n\\n\\tif len(requests) == 1 {\\n\\t\\t// Nothing to do as we've already verified that the CertificateRequest\\n\\t\\t// is up to date above.\\n\\t\\treturn nil\\n\\t}\\n\\n\\treturn c.createNewCertificateRequest(ctx, crt, pk, nextRevision, nextPrivateKeySecret.Name)\\n}\\n\", \"id\": \"SRC-CU-88a1ded120726e2b\", \"kind\": \"SOURCE_SPAN\", \"locator\": {\"column_start\": 1, \"end_line\": 237, \"path\": \"pkg/controller/certificates/requestmanager/requestmanager_controller.go\", \"start_line\": 140}, \"origin\": \"selected candidate CU-88a1ded120726e2b\", \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}, {\"content_digest\": \"3f68798997349db8171732dafb4cc02ba65de902bb6a62c2da1151fc2c925bb4\", \"excerpt\": \"func TestDataForCertificate(t *testing.T) {\\n\\tcr := func(crName, ownerCertUID string, annot map[string]string) *cmapi.CertificateRequest {\\n\\t\\treturn gen.CertificateRequest(crName, gen.SetCertificateRequestNamespace(\\\"ns-1\\\"),\\n\\t\\t\\tgen.AddCertificateRequestOwnerReferences(gen.CertificateRef(\\\"some-cert-name-that-does-not-matter\\\", ownerCertUID)),\\n\\t\\t\\tgen.AddCertificateRequestAnnotations(annot),\\n\\t\\t)\\n\\t}\\n\\n\\ttests := map[string]struct {\\n\\t\\tbuilder    *testpkg.Builder\\n\\t\\tgivenCert  *cmapi.Certificate\\n\\t\\twantCurCR  *cmapi.CertificateRequest\\n\\t\\twantNextCR *cmapi.CertificateRequest\\n\\t\\twantSecret *corev1.Secret\\n\\t\\twantErr    string\\n\\t}{\\n\\t\\t\\\"when no secret is found, the returned secret is nil\\\": {\\n\\t\\t\\tgivenCert: gen.Certificate(\\\"cert-1\\\", gen.SetCertificateNamespace(\\\"default-unit-test-ns\\\"),\\n\\t\\t\\t\\tgen.SetCertificateSecretName(\\\"secret-1\\\"),\\n\\t\\t\\t\\tgen.SetCertificateUID(\\\"uid-1\\\"),\\n\\t\\t\\t),\\n\\t\\t\\tbuilder:    &testpkg.Builder{},\\n\\t\\t\\twantSecret: nil,\\n\\t\\t},\\n\\t\\t\\\"when neither current nor next CRs exist, the returned cur and next CRs should be nil\\\": {\\n\\t\\t\\tgivenCert: gen.Certificate(\\\"cert-1\\\", gen.SetCertificateNamespace(\\\"default-unit-test-ns\\\"),\\n\\t\\t\\t\\tgen.SetCertificateSecretName(\\\"secret-1\\\"),\\n\\t\\t\\t\\tgen.SetCertificateUID(\\\"uid-1\\\"),\\n\\t\\t\\t),\\n\\t\\t\\tbuilder:   &testpkg.Builder{},\\n\\t\\t\\twantCurCR: nil,\\n\\t\\t},\\n\\t\\t\\\"when cert revision=1 and no owned CRs, the returned cur and next CRs should be nil\\\": {\\n\\t\\t\\tgivenCert: gen.Certificate(\\\"cert-1\\\", gen.SetCertificateNamespace(\\\"ns-1\\\"),\\n\\t\\t\\t\\tgen.SetCertificateUID(\\\"cert-1-uid\\\"),\\n\\t\\t\\t\\tgen.SetCertificateRevision(1),\\n\\t\\t\\t),\\n\\t\\t\\tbuilder: &testpkg.Builder{CertManagerObjects: []runtime.Object{\\n\\t\\t\\t\\tcr(\\\"cr-unknown-rev1\\\", \\\"unknown-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"1\\\"}),\\n\\t\\t\\t\\tcr(\\\"cr-unknown-rev2\\\", \\\"unknown-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"2\\\"}),\\n\\t\\t\\t}},\\n\\t\\t\\twantCurCR:  nil,\\n\\t\\t\\twantNextCR: nil,\\n\\t\\t},\\n\\t\\t\\\"when cert revision=nil, should only return the next CR with revision=1\\\": {\\n\\t\\t\\tgivenCert: gen.Certificate(\\\"cert-1\\\", gen.SetCertificateNamespace(\\\"ns-1\\\"),\\n\\t\\t\\t\\tgen.SetCertificateUID(\\\"cert-1-uid\\\"),\\n\\t\\t\\t),\\n\\t\\t\\tbuilder: &testpkg.Builder{CertManagerObjects: []runtime.Object{\\n\\t\\t\\t\\tcr(\\\"cr-1-rev1\\\", \\\"cert-1-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"1\\\"}),\\n\\t\\t\\t\\tcr(\\\"cr-1-rev2\\\", \\\"cert-1-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"2\\\"}),\\n\\n\\t\\t\\t\\t// Edge cases.\\n\\t\\t\\t\\tcr(\\\"cr-1-norev\\\", \\\"cert-1-uid\\\", nil),\\n\\t\\t\\t\\tcr(\\\"cr-1-empty\\\", \\\"cert-1-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"\\\"}),\\n\\t\\t\\t\\tcr(\\\"cr-unrelated-rev1\\\", \\\"cert-unrelated-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"1\\\"}),\\n\\t\\t\\t\\tcr(\\\"cr-unrelated-rev2\\\", \\\"cert-unrelated-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"2\\\"}),\\n\\t\\t\\t}},\\n\\t\\t\\twantCurCR:  nil,\\n\\t\\t\\twantNextCR: cr(\\\"cr-1-rev1\\\", \\\"cert-1-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"1\\\"}),\\n\\t\\t},\\n\\t\\t\\\"when cert revision=1, should return the current CR with revision=1 and the next CR with revision=2\\\": {\\n\\t\\t\\tgivenCert: gen.Certificate(\\\"cert-1\\\", gen.SetCertificateNamespace(\\\"ns-1\\\"),\\n\\t\\t\\t\\tgen.SetCertificateUID(\\\"cert-1-uid\\\"),\\n\\t\\t\\t\\tgen.SetCertificateRevision(1),\\n\\t\\t\\t),\\n\\t\\t\\tbuilder: &testpkg.Builder{CertManagerObjects: []runtime.Object{\\n\\t\\t\\t\\tcr(\\\"cr-1-rev1\\\", \\\"cert-1-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"1\\\"}),\\n\\t\\t\\t\\tcr(\\\"cr-1-rev2\\\", \\\"cert-1-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"2\\\"}),\\n\\t\\t\\t\\tcr(\\\"cr-1-rev3\\\", \\\"cert-1-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"3\\\"}),\\n\\n\\t\\t\\t\\t// Edge cases.\\n\\t\\t\\t\\tcr(\\\"cr-1-no-revision\\\", \\\"cert-1-uid\\\", nil),\\n\\t\\t\\t\\tcr(\\\"cr-1-empty\\\", \\\"cert-1-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"\\\"}),\\n\\t\\t\\t\\tcr(\\\"cr-2-rev1\\\", \\\"cert-2-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"1\\\"}),\\n\\t\\t\\t\\tcr(\\\"cr-unrelated-rev1\\\", \\\"cert-unrelated-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"1\\\"}),\\n\\t\\t\\t\\tcr(\\\"cr-unrelated-rev2\\\", \\\"cert-unrelated-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"2\\\"}),\\n\\t\\t\\t\\tcr(\\\"cr-unrelated-rev3\\\", \\\"cert-unrelated-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"3\\\"}),\\n\\t\\t\\t}},\\n\\t\\t\\twantCurCR:  cr(\\\"cr-1-rev1\\\", \\\"cert-1-uid\\\", map[string]string{\\\"cert-manager.io/certificate-revision\\\": \\\"1\\\"}),\\n\", \"id\": \"SRC-CU-ca13c859c487856f\", \"kind\": \"SOURCE_SPAN\", \"locator\": {\"column_start\": 1, \"end_line\": 118, \"path\": \"internal/controller/certificates/policies/gatherer_test.go\", \"start_line\": 39}, \"origin\": \"selected candidate CU-ca13c859c487856f\", \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}, {\"content_digest\": \"5faaf1e28c6d5d63959a42276b09b36b5339970b5ef63041292080da43c3ed1c\", \"excerpt\": \"func TestIssuingController_ServerSideApplyFailedIssuanceAttempts(t *testing.T) {\\n\\tfeaturegatetesting.SetFeatureGateDuringTest(t, utilfeature.DefaultFeatureGate, feature.ServerSideApply, true)\\n\\n\\tnextPrivateKeySecretName := \\\"next-private-key\\\"\\n\\tbaseCert := gen.Certificate(\\\"test\\\",\\n\\t\\tgen.SetCertificateIssuer(cmmeta.IssuerReference{Name: \\\"ca-issuer\\\", Kind: \\\"Issuer\\\", Group: \\\"foo.io\\\"}),\\n\\t\\tgen.SetCertificateGeneration(3),\\n\\t\\tgen.SetCertificateSecretName(\\\"output\\\"),\\n\\t\\tgen.SetCertificateRenewBefore(&metav1.Duration{Duration: time.Hour * 36}),\\n\\t\\tgen.SetCertificateDNSNames(\\\"example.com\\\"),\\n\\t\\tgen.SetCertificateRevision(1),\\n\\t\\tgen.SetCertificateNextPrivateKeySecretName(nextPrivateKeySecretName),\\n\\t)\\n\\texampleBundle := testcrypto.MustCreateCryptoBundle(t, baseCert.DeepCopy(), fixedClock)\\n\\tmetaFixedClockStart := metav1.NewTime(fixedClockStart)\\n\\n\\tissuingCert := gen.CertificateFrom(baseCert.DeepCopy(),\\n\\t\\tgen.SetCertificateStatusCondition(cmapi.CertificateCondition{\\n\\t\\t\\tType:               cmapi.CertificateConditionIssuing,\\n\\t\\t\\tStatus:             cmmeta.ConditionTrue,\\n\\t\\t\\tObservedGeneration: 3,\\n\\t\\t\\tLastTransitionTime: &metaFixedClockStart,\\n\\t\\t}),\\n\\t)\\n\\n\\tnextPrivateKeySecret := &corev1.Secret{\\n\\t\\tObjectMeta: metav1.ObjectMeta{\\n\\t\\t\\tName:      nextPrivateKeySecretName,\\n\\t\\t\\tNamespace: exampleBundle.Certificate.Namespace,\\n\\t\\t},\\n\\t\\tData: map[string][]byte{\\n\\t\\t\\tcorev1.TLSPrivateKeyKey: exampleBundle.PrivateKeyBytes,\\n\\t\\t},\\n\\t}\\n\\n\\ttype testT struct {\\n\\t\\tbuilder                 *testpkg.Builder\\n\\t\\tcertificate             *cmapi.Certificate\\n\\t\\texpSecretUpdateDataCall *internal.SecretData\\n\\t\\tassertApplyStatus       func(t *testing.T, patch []byte)\\n\\t}\\n\\n\\ttests := map[string]testT{\\n\\t\\t\\\"failure ApplyStatus includes failedIssuanceAttempts\\\": {\\n\\t\\t\\tcertificate: exampleBundle.Certificate,\\n\\t\\t\\tbuilder: &testpkg.Builder{\\n\\t\\t\\t\\tCertManagerObjects: []runtime.Object{\\n\\t\\t\\t\\t\\tgen.CertificateFrom(issuingCert),\\n\\t\\t\\t\\t\\tgen.CertificateRequestFrom(exampleBundle.CertificateRequestFailed,\\n\\t\\t\\t\\t\\t\\tgen.AddCertificateRequestAnnotations(map[string]string{\\n\\t\\t\\t\\t\\t\\t\\tcmapi.CertificateRequestRevisionAnnotationKey: \\\"2\\\",\\n\\t\\t\\t\\t\\t\\t}),\\n\\t\\t\\t\\t\\t\\tgen.SetCertificateRequestStatusCondition(cmapi.CertificateRequestCondition{\\n\\t\\t\\t\\t\\t\\t\\tType:    cmapi.CertificateRequestConditionReady,\\n\\t\\t\\t\\t\\t\\t\\tStatus:  cmmeta.ConditionFalse,\\n\\t\\t\\t\\t\\t\\t\\tReason:  cmapi.CertificateRequestReasonFailed,\\n\\t\\t\\t\\t\\t\\t\\tMessage: \\\"The certificate request failed because of reasons\\\",\\n\\t\\t\\t\\t\\t\\t}),\\n\\t\\t\\t\\t\\t),\\n\\t\\t\\t\\t},\\n\\t\\t\\t\\tKubeObjects: []runtime.Object{nextPrivateKeySecret},\\n\\t\\t\\t\\tExpectedEvents: []string{\\n\\t\\t\\t\\t\\t\\\"Warning Failed The certificate request has failed to complete and will be retried: The certificate request failed because of reasons\\\",\\n\\t\\t\\t\\t},\\n\\t\\t\\t},\\n\\t\\t\\tassertApplyStatus: func(t *testing.T, patch []byte) {\\n\\t\\t\\t\\tt.Helper()\\n\\t\\t\\t\\tvar applied cmapi.Certificate\\n\\t\\t\\t\\trequire.NoError(t, json.Unmarshal(patch, &applied))\\n\\t\\t\\t\\trequire.NotNil(t, applied.Status.FailedIssuanceAttempts)\\n\\t\\t\\t\\tassert.Equal(t, 1, *applied.Status.FailedIssuanceAttempts)\\n\\t\\t\\t\\trequire.NotNil(t, applied.Status.LastFailureTime)\\n\\t\\t\\t\\trequire.NotNil(t, applied.Status.Revision)\\n\\t\\t\\t\\tassert.Equal(t, 1, *applied.Status.Revision)\\n\\t\\t\\t\\trequire.Len(t, applied.Status.Conditions, 1)\\n\\t\\t\\t\\tassert.Equal(t, cmapi.CertificateConditionIssuing, applied.Status.Conditions[0].Type)\\n\\t\\t\\t\\tassert.Equal(t, cmmeta.ConditionFalse, applied.Status.Conditions[0].Status)\\n\\t\\t\\t\\tassert.Equal(t, \\\"Failed\\\", applied.Status.Conditions[0].Reason)\\n\\n\\t\\t\\t\\tstatus := applyStatusFieldMap(t, patch)\\n\\t\\t\\t\\tfor _, key := range []string{\\\"failedIssuanceAttempts\\\", \\\"lastFailureTime\\\", \\\"revision\\\", \\\"conditions\\\"} {\\n\\t\\t\\t\\t\\t_, ok := status[key]\\n\\t\\t\\t\\t\\tassert.Truef(t, ok, \\\"expected status.%s present in ApplyStatus patch\\\", key)\\n\\t\\t\\t\\t}\\n\\t\\t\\t\\t_, ok := status[\\\"nextPrivateKeySecretName\\\"]\\n\\t\\t\\t\\tassert.False(t, ok, \\\"expected status.nextPrivateKeySecretName absent from ApplyStatus patch\\\")\\n\\t\\t\\t},\\n\\t\\t},\\n\\t\\t\\\"success ApplyStatus omits failedIssuanceAttempts and lastFailureTime\\\": {\\n\\t\\t\\tcertificate: exampleBundle.Certificate,\\n\\t\\t\\tbuilder: &testpkg.Builder{\\n\\t\\t\\t\\tCertManagerObjects: []runtime.Object{\\n\\t\\t\\t\\t\\tgen.CertificateFrom(issuingCert,\\n\\t\\t\\t\\t\\t\\tgen.SetCertificateLastFailureTime(metaFixedClockStart),\\n\\t\\t\\t\\t\\t\\tgen.SetCertificateIssuanceAttempts(new(4)),\\n\\t\\t\\t\\t\\t),\\n\\t\\t\\t\\t\\tgen.CertificateRequestFrom(exampleBundle.CertificateRequestReady,\\n\\t\\t\\t\\t\\t\\tgen.AddCertificateRequestAnnotations(map[string]string{\\n\\t\\t\\t\\t\\t\\t\\tcmapi.CertificateRequestRevisionAnnotationKey: \\\"2\\\",\\n\\t\\t\\t\\t\\t\\t}),\\n\\t\\t\\t\\t\\t),\\n\\t\\t\\t\\t},\\n\\t\\t\\t\\tKubeObjects: []runtime.Object{\\n\\t\\t\\t\\t\\tnextPrivateKeySecret,\\n\\t\\t\\t\\t\\t&corev1.Secret{\\n\\t\\t\\t\\t\\t\\tObjectMeta: metav1.ObjectMeta{\\n\\t\\t\\t\\t\\t\\t\\tNamespace: exampleBundle.Certificate.Namespace,\\n\\t\\t\\t\\t\\t\\t\\tName:      \\\"output\\\",\\n\\t\\t\\t\\t\\t\\t\\tAnnotations: map[string]string{\\n\\t\\t\\t\\t\\t\\t\\t\\t\\\"my-custom\\\": \\\"annotation\\\",\\n\\t\\t\\t\\t\\t\\t\\t},\\n\\t\\t\\t\\t\\t\\t\\tLabels: map[string]string{},\\n\\t\\t\\t\\t\\t\\t},\\n\\t\\t\\t\\t\\t\\tType: corev1.SecretTypeTLS,\\n\\t\\t\\t\\t\\t},\\n\\t\\t\\t\\t},\\n\\t\\t\\t\\tExpectedEvents: []string{\\n\\t\\t\\t\\t\\t\\\"Normal Issuing The certificate has been successfully issued\\\",\\n\\t\\t\\t\\t},\\n\\t\\t\\t},\\n\\t\\t\\texpSecretUpdateDataCall: &internal.SecretData{\\n\\t\\t\\t\\tCertificate:     exampleBundle.CertificateRequestReady.Status.Certificate,\\n\\t\\t\\t\\tPrivateKey:      exampleBundle.PrivateKeyBytes,\\n\\t\\t\\t\\tCA:              nil,\\n\\t\\t\\t\\tCertificateName: \\\"test\\\",\\n\\t\\t\\t\\tIssuerName:      \\\"ca-issuer\\\",\\n\\t\\t\\t\\tIssuerKind:      \\\"Issuer\\\",\\n\\t\\t\\t\\tIssuerGroup:     \\\"foo.io\\\",\\n\\t\\t\\t},\\n\\t\\t\\tassertApplyStatus: func(t *testing.T, patch []byte) {\\n\\t\\t\\t\\tt.Helper()\\n\\t\\t\\t\\tvar applied cmapi.Certificate\\n\\t\\t\\t\\trequire.NoError(t, json.Unmarshal(patch, &applied))\\n\\t\\t\\t\\trequire.NotNil(t, applied.Status.Revision)\\n\\t\\t\\t\\tassert.Equal(t, 2, *applied.Status.Revision)\\n\\t\\t\\t\\trequire.Len(t, applied.Status.Conditions, 1)\\n\\t\\t\\t\\tassert.Equal(t, cmapi.CertificateConditionIssuing, applied.Status.Conditions[0].Type)\\n\\t\\t\\t\\tassert.Equal(t, cmmeta.ConditionFalse, applied.Status.Conditions[0].Status)\\n\\t\\t\\t\\tassert.Equal(t, \\\"Issued\\\", applied.Status.Conditions[0].Reason)\\n\\n\\t\\t\\t\\tstatus := applyStatusFieldMap(t, patch)\\n\\t\\t\\t\\tfor _, key := range []string{\\\"revision\\\", \\\"conditions\\\"} {\\n\\t\\t\\t\\t\\t_, ok := status[key]\\n\\t\\t\\t\\t\\tassert.Truef(t, ok, \\\"expected status.%s present in ApplyStatus patch\\\", key)\\n\\t\\t\\t\\t}\\n\\t\\t\\t\\tfor _, key := range []string{\\\"failedIssuanceAttempts\\\", \\\"lastFailureTime\\\", \\\"nextPrivateKeySecretName\\\"} {\\n\\t\\t\\t\\t\\t_, ok := status[key]\\n\\t\\t\\t\\t\\tassert.Falsef(t, ok, \\\"expected status.%s absent from ApplyStatus patch\\\", key)\\n\\t\\t\\t\\t}\\n\\t\\t\\t},\\n\\t\\t},\\n\\t}\\n\\n\\tfor name, test := range tests {\\n\\t\\tt.Run(name, func(t *testing.T) {\\n\\t\\t\\tfixedClock.SetTime(fixedClockStart)\\n\\t\\t\\ttest.builder.Clock = fixedClock\\n\\t\\t\\ttest.builder.T = t\\n\\n\\t\\t\\ttest.builder.ExpectedActions = []testpkg.Action{\\n\\t\\t\\t\\ttestpkg.NewCustomMatch(\\n\\t\\t\\t\\t\\tcoretesting.NewPatchSubresourceActionWithOptions(\\n\\t\\t\\t\\t\\t\\tcmapi.SchemeGroupVersion.WithResource(\\\"certificates\\\"),\\n\\t\\t\\t\\t\\t\\texampleBundle.Certificate.Namespace,\\n\\t\\t\\t\\t\\t\\texampleBundle.Certificate.Name,\\n\\t\\t\\t\\t\\t\\ttypes.ApplyPatchType,\\n\\t\\t\\t\\t\\t\\t[]byte(`{}`),\\n\\t\\t\\t\\t\\t\\tmetav1.PatchOptions{Force: new(true), FieldManager: testpkg.FieldManager},\\n\\t\\t\\t\\t\\t\\t\\\"status\\\",\\n\\t\\t\\t\\t\\t),\\n\\t\\t\\t\\t\\tfunc(_, actual coretesting.Action) error {\\n\\t\\t\\t\\t\\t\\tpatchAction, ok := actual.(coretesting.PatchAction)\\n\\t\\t\\t\\t\\t\\tif !ok {\\n\\t\\t\\t\\t\\t\\t\\treturn fmt.Errorf(\\\"expected PatchAction, got %T\\\", actual)\\n\\t\\t\\t\\t\\t\\t}\\n\\t\\t\\t\\t\\t\\tif patchAction.GetPatchType() != types.ApplyPatchType {\\n\\t\\t\\t\\t\\t\\t\\treturn fmt.Errorf(\\\"expected ApplyPatchType, got %q\\\", patchAction.GetPatchType())\\n\\t\\t\\t\\t\\t\\t}\\n\\t\\t\\t\\t\\t\\tif patchAction.GetSubresource() != \\\"status\\\" {\\n\\t\\t\\t\\t\\t\\t\\treturn fmt.Errorf(\\\"expected status subresource, got %q\\\", patchAction.GetSubresource())\\n\\t\\t\\t\\t\\t\\t}\\n\\t\\t\\t\\t\\t\\toptsGetter, ok := actual.(interface{ GetPatchOptions() metav1.PatchOptions })\\n\\t\\t\\t\\t\\t\\tif !ok {\\n\\t\\t\\t\\t\\t\\t\\treturn fmt.Errorf(\\\"expected GetPatchOptions on action, got %T\\\", actual)\\n\\t\\t\\t\\t\\t\\t}\\n\\t\\t\\t\\t\\t\\topts := optsGetter.GetPatchOptions()\\n\\t\\t\\t\\t\\t\\tif opts.FieldManager != testpkg.FieldManager {\\n\\t\\t\\t\\t\\t\\t\\treturn fmt.Errorf(\\\"expected FieldManager %q, got %q\\\", testpkg.FieldManager, opts.FieldManager)\\n\\t\\t\\t\\t\\t\\t}\\n\\t\\t\\t\\t\\t\\tif opts.Force == nil || !*opts.Force {\\n\\t\\t\\t\\t\\t\\t\\treturn fmt.Errorf(\\\"expected Force=true, got %v\\\", opts.Force)\\n\\t\\t\\t\\t\\t\\t}\\n\\t\\t\\t\\t\\t\\ttest.assertApplyStatus(t, patchAction.GetPatch())\\n\\t\\t\\t\\t\\t\\treturn nil\\n\\t\\t\\t\\t\\t},\\n\\t\\t\\t\\t),\\n\\t\\t\\t}\\n\\n\\t\\t\\ttest.builder.InitWithRESTConfig()\\n\\t\\t\\tdefer test.builder.Stop()\\n\\n\\t\\t\\tw := controllerWrapper{}\\n\\t\\t\\t_, _, err := w.Register(test.builder.Context)\\n\\t\\t\\trequire.NoError(t, err)\\n\\t\\t\\tw.controller.localTemporarySigner = testLocalTemporarySignerFn(exampleBundle.LocalTemporaryCertificateBytes)\\n\\n\\t\\t\\tvar secretsUpdateDataCalled bool\\n\\t\\t\\tw.controller.secretsUpdateData = func(_ context.Context, _ *cmapi.Certificate, secretData internal.SecretData) error {\\n\\t\\t\\t\\tsecretsUpdateDataCalled = true\\n\\t\\t\\t\\tassert.Equal(t, *test.expSecretUpdateDataCall, secretData)\\n\\t\\t\\t\\treturn nil\\n\\t\\t\\t}\\n\\t\\t\\tt.Cleanup(func() {\\n\\t\\t\\t\\twantsSecretUpdateDataCall := test.expSecretUpdateDataCall != nil\\n\\t\\t\\t\\tassert.Equal(t, wantsSecretUpdateDataCall, secretsUpdateDataCalled)\\n\\t\\t\\t})\\n\\n\\t\\t\\ttest.builder.Start()\\n\\n\\t\\t\\terr = w.controller.ProcessItem(t.Context(), types.NamespacedName{\\n\\t\\t\\t\\tNamespace: test.certificate.Namespace,\\n\\t\\t\\t\\tName:      test.certificate.Name,\\n\\t\\t\\t})\\n\\t\\t\\trequire.NoError(t, err)\\n\\t\\t\\ttest.builder.CheckAndFinish(err)\\n\\t\\t})\\n\\t}\\n}\\n\", \"id\": \"SRC-CU-6195b86dcb4293a7\", \"kind\": \"SOURCE_SPAN\", \"locator\": {\"column_start\": 1, \"end_line\": 1754, \"path\": \"pkg/controller/certificates/issuing/issuing_controller_test.go\", \"start_line\": 1527}, \"origin\": \"selected candidate CU-6195b86dcb4293a7\", \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}, {\"content_digest\": \"e4610d2c0aaaf0129cac3812e7abb8c6adcbe31e4a18fe998dcb16c3b30a2d57\", \"excerpt\": \"func (c *controller) createNewCertificateRequest(ctx context.Context, crt *cmapi.Certificate, pk crypto.Signer, nextRevision int, nextPrivateKeySecretName string) error {\\n\\tlog := logf.FromContext(ctx)\\n\\n\\tx509CSR, err := pki.GenerateCSR(\\n\\t\\tcrt,\\n\\t\\tpki.WithUseLiteralSubject(utilfeature.DefaultMutableFeatureGate.Enabled(feature.LiteralCertificateSubject)),\\n\\t\\tpki.WithEncodeBasicConstraintsInRequest(utilfeature.DefaultMutableFeatureGate.Enabled(feature.UseCertificateRequestBasicConstraints)),\\n\\t\\tpki.WithNameConstraints(utilfeature.DefaultMutableFeatureGate.Enabled(feature.NameConstraints)),\\n\\t\\tpki.WithOtherNames(utilfeature.DefaultMutableFeatureGate.Enabled(feature.OtherNames)),\\n\\t)\\n\\tif err != nil {\\n\\t\\tlog.Error(err, \\\"Failed to generate CSR - will not retry\\\")\\n\\t\\treturn nil\\n\\t}\\n\\tcsrDER, err := pki.EncodeCSR(x509CSR, pk)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\tcsrPEM := bytes.NewBuffer([]byte{})\\n\\terr = pem.Encode(csrPEM, &pem.Block{Type: \\\"CERTIFICATE REQUEST\\\", Bytes: csrDER})\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\tannotations := controllerpkg.BuildAnnotationsToCopy(crt.Annotations, c.copiedAnnotationPrefixes)\\n\\tannotations[cmapi.CertificateRequestRevisionAnnotationKey] = strconv.Itoa(nextRevision)\\n\\tannotations[cmapi.CertificateRequestPrivateKeyAnnotationKey] = nextPrivateKeySecretName\\n\\tannotations[cmapi.CertificateNameKey] = crt.Name\\n\\n\\tcr := &cmapi.CertificateRequest{\\n\\t\\tObjectMeta: metav1.ObjectMeta{\\n\\t\\t\\tNamespace: crt.Namespace,\\n\\t\\t\\t// We limit the GenerateName to 52 + 1 characters to stay within the 63 - 5 character limit that\\n\\t\\t\\t// is used in Kubernetes when generating names.\\n\\t\\t\\t// see https://github.com/kubernetes/apiserver/blob/696768606f546f71a1e90546613be37d1aa37f64/pkg/storage/names/generate.go\\n\\t\\t\\tGenerateName:    apiutil.DNSSafeShortenTo52Characters(crt.Name) + \\\"-\\\",\\n\\t\\t\\tAnnotations:     annotations,\\n\\t\\t\\tLabels:          crt.Labels,\\n\\t\\t\\tOwnerReferences: []metav1.OwnerReference{*metav1.NewControllerRef(crt, certificateGvk)},\\n\\t\\t},\\n\\t\\tSpec: cmapi.CertificateRequestSpec{\\n\\t\\t\\tDuration:  crt.Spec.Duration,\\n\\t\\t\\tIssuerRef: crt.Spec.IssuerRef,\\n\\t\\t\\tRequest:   csrPEM.Bytes(),\\n\\t\\t\\tIsCA:      crt.Spec.IsCA,\\n\\t\\t\\tUsages:    crt.Spec.Usages,\\n\\t\\t},\\n\\t}\\n\\n\\tif utilfeature.DefaultFeatureGate.Enabled(feature.StableCertificateRequestName) {\\n\\t\\tcr.ObjectMeta.GenerateName = \\\"\\\"\\n\\n\\t\\t// The CertificateRequest name is limited to 253 characters, assuming the nextRevision and hyphen\\n\\t\\t// can be represented using 20 characters, we can directly accept certificate names up to 233\\n\\t\\t// characters. Certificate names that are longer than this will be hashed to a shorter name. We want\\n\\t\\t// to make crafting two Certificates with the same truncated name as difficult as possible, so we\\n\\t\\t// use a cryptographic hash function to hash the full certificate name to 64 characters.\\n\\t\\t// Finally, for Certificates with a name longer than 233 characters, we build the CertificateRequest\\n\\t\\t// name as follows: <first-168-chars-of-certificate-name>-<64-char-hash>-<19-char-nextRevision>\\n\\t\\tcrName, err := apiutil.ComputeSecureUniqueDeterministicNameFromData(crt.Name, 233)\\n\\t\\tif err != nil {\\n\\t\\t\\treturn err\\n\\t\\t}\\n\\n\\t\\tcr.ObjectMeta.Name = fmt.Sprintf(\\\"%s-%d\\\", crName, nextRevision)\\n\\t}\\n\\n\\tcr, err = c.client.CertmanagerV1().CertificateRequests(cr.Namespace).Create(ctx, cr, metav1.CreateOptions{FieldManager: c.fieldManager})\\n\\tif err != nil {\\n\\t\\tc.recorder.Eventf(crt, corev1.EventTypeWarning, reasonRequestFailed, \\\"Failed to create CertificateRequest: %s\\\", err.Error())\\n\\t\\treturn err\\n\\t}\\n\\n\\tc.recorder.Eventf(crt, corev1.EventTypeNormal, reasonRequested, \\\"Created new CertificateRequest resource %q\\\", cr.Name)\\n\\n\\t// If the StableCertificateRequestName feature gate is enabled, skip waiting for our informer cache/lister to\\n\\t// observe the creation event and instead rely on an AlreadyExists error being returned if we do attempt a\\n\\t// CREATE for the same CertificateRequest name again early.\\n\\tif utilfeature.DefaultFeatureGate.Enabled(feature.StableCertificateRequestName) {\\n\\t\\treturn nil\\n\\t}\\n\\n\\tif err := c.waitForCertificateRequestToExist(ctx, cr.Namespace, cr.Name); err != nil {\\n\\t\\treturn fmt.Errorf(\\\"failed whilst waiting for CertificateRequest to exist - this may indicate an apiserver running slowly. Request will be retried. %w\\\", err)\\n\\t}\\n\\treturn nil\\n}\\n\", \"id\": \"SRC-CU-79be7d9601895605\", \"kind\": \"SOURCE_SPAN\", \"locator\": {\"column_start\": 1, \"end_line\": 454, \"path\": \"pkg/controller/certificates/requestmanager/requestmanager_controller.go\", \"start_line\": 367}, \"origin\": \"selected candidate CU-79be7d9601895605\", \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}, {\"content_digest\": \"7c6e830fc4cf782ddaa95fc190dca0f4927962ec524f2500e1e2c194c257368c\", \"excerpt\": \"func FuzzProcessItem(f *testing.F) {\\n\\tf.Fuzz(func(t *testing.T, data []byte,\\n\\t\\tnumberOfRequests int,\\n\\t\\tuseStableCertificateRequestName,\\n\\t\\trandomizeCertificate,\\n\\t\\trandomizeSecret bool) {\\n\\t\\tfdp := gfh.NewConsumer(data)\\n\\n\\t\\t// Create up to 10 random certificate requests\\n\\t\\trequests := make([]runtime.Object, 0)\\n\\t\\tfor range numberOfRequests % 10 {\\n\\t\\t\\trequest := &cmapiv1.CertificateRequest{}\\n\\t\\t\\terr := fdp.GenerateStruct(request)\\n\\t\\t\\tif err != nil {\\n\\t\\t\\t\\tif len(requests) == 0 {\\n\\t\\t\\t\\t\\treturn\\n\\t\\t\\t\\t}\\n\\t\\t\\t\\tbreak\\n\\t\\t\\t}\\n\\t\\t\\trequests = append(requests, request)\\n\\t\\t}\\n\\n\\t\\t// Create a certificate and a secret\\n\\t\\t// The certificate can be entirely random, or the fuzzer\\n\\t\\t// can generate one from the global bundle.\\n\\t\\tvar certificate *cmapiv1.Certificate\\n\\t\\tvar secret *corev1.Secret\\n\\t\\tif randomizeCertificate {\\n\\t\\t\\tcertificate = &cmapiv1.Certificate{}\\n\\t\\t\\terr := fdp.GenerateStruct(certificate)\\n\\t\\t\\tif err != nil {\\n\\t\\t\\t\\treturn\\n\\t\\t\\t}\\n\\t\\t\\tsecret = &corev1.Secret{\\n\\t\\t\\t\\tObjectMeta: metav1.ObjectMeta{Namespace: certificate.Namespace, Name: \\\"secret\\\"},\\n\\t\\t\\t\\tData:       map[string][]byte{corev1.TLSPrivateKeyKey: globalBundle.privateKeyBytes},\\n\\t\\t\\t}\\n\\t\\t} else {\\n\\t\\t\\tcertificate = gen.CertificateFrom(globalBundle.certificate,\\n\\t\\t\\t\\tgen.SetCertificateNextPrivateKeySecretName(\\\"secret\\\"),\\n\\t\\t\\t\\tgen.SetCertificateStatusCondition(cmapiv1.CertificateCondition{Type: cmapiv1.CertificateConditionIssuing, Status: cmmeta.ConditionTrue}))\\n\\t\\t\\tsecret = &corev1.Secret{\\n\\t\\t\\t\\tObjectMeta: metav1.ObjectMeta{Namespace: globalBundle.certificate.Namespace, Name: \\\"secret\\\"},\\n\\t\\t\\t\\tData:       map[string][]byte{corev1.TLSPrivateKeyKey: globalBundle.privateKeyBytes},\\n\\t\\t\\t}\\n\\t\\t}\\n\\n\\t\\t// At this point, the fuzzer has created a valid secret.\\n\\t\\t// To allow it to test for invalid edge cases too, we\\n\\t\\t// give it the option to create a new, possibly invalid\\n\\t\\t// secret which is entirely random. If the fuzzer fails\\n\\t\\t// to randomize the secret here, it uses the valid secret\\n\\t\\t// instead.\\n\\t\\tif randomizeSecret {\\n\\t\\t\\trandomSecret := &corev1.Secret{}\\n\\t\\t\\terr := fdp.GenerateStruct(randomSecret)\\n\\t\\t\\tif err == nil {\\n\\t\\t\\t\\tsecret = randomSecret\\n\\t\\t\\t}\\n\\t\\t}\\n\\t\\tsecrets := []runtime.Object{secret}\\n\\t\\tfixedNow := metav1.NewTime(time.Now())\\n\\t\\tfixedClock := fakeclock.NewFakeClock(fixedNow.Time)\\n\\n\\t\\t// Create the builder\\n\\t\\tbuilder := &testpkg.Builder{\\n\\t\\t\\tT:               t,\\n\\t\\t\\tStringGenerator: func(i int) string { return \\\"notrandom\\\" },\\n\\t\\t\\tClock:           fixedClock,\\n\\t\\t}\\n\\n\\t\\t// Add the created objects to the builder\\n\\t\\tbuilder.CertManagerObjects = append(builder.CertManagerObjects, certificate)\\n\\t\\tbuilder.KubeObjects = append(builder.KubeObjects, secrets...)\\n\\t\\tbuilder.CertManagerObjects = append(builder.CertManagerObjects, requests...)\\n\\n\\t\\tbuilder.Init()\\n\\t\\tw := &controllerWrapper{}\\n\\t\\t_, _, err := w.Register(builder.Context)\\n\\t\\tif err != nil {\\n\", \"id\": \"SRC-CU-b426c37ab39dc03b\", \"kind\": \"SOURCE_SPAN\", \"locator\": {\"column_start\": 1, \"end_line\": 144, \"path\": \"pkg/controller/certificates/requestmanager/fuzz_test.go\", \"start_line\": 65}, \"origin\": \"selected candidate CU-b426c37ab39dc03b\", \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}, {\"content_digest\": \"cda7280aff95efa046ff24b6a29709306ee96d3eba13758b0a05029e114425a0\", \"evidence_kind\": \"EXECUTION_ONLY\", \"excerpt\": \"{\\\"case_id\\\": \\\"RW-CERTMANAGER-9116\\\", \\\"status\\\": \\\"EXECUTION_PASS\\\", \\\"hidden_semantic_evaluation\\\": \\\"NOT_RUN\\\", \\\"private_materials_loaded\\\": false, \\\"scenarios\\\": [{\\\"scenario\\\": \\\"public-issuing-controller-build\\\", \\\"exit_code\\\": 0, \\\"elapsed_seconds\\\": 188.38389141857624, \\\"timed_out\\\": false, \\\"output_limited\\\": false}]}\\n\", \"id\": \"OBS1\", \"kind\": \"PUBLIC_OBSERVATION\", \"locator\": {\"copied_bytes\": 303, \"file_sha256\": \"cda7280aff95efa046ff24b6a29709306ee96d3eba13758b0a05029e114425a0\", \"path\": \"launcher/tool.stdout\", \"start_byte\": 0, \"truncated\": false, \"whole_file_read\": true}, \"origin\": \"Frozen public launcher; exact raw/derived public output, no hidden oracle\", \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}, {\"content_digest\": \"a2e58337aaaa0573bd0f2a06c172c17d554f66d74c152fe70a5f1ae174d7e09d\", \"evidence_kind\": \"EXECUTION_ONLY\", \"excerpt\": \"{\\n  \\\"case_id\\\": \\\"RW-CERTMANAGER-9116\\\",\\n  \\\"status\\\": \\\"EXECUTION_PASS\\\",\\n  \\\"hidden_semantic_evaluation\\\": \\\"NOT_RUN\\\",\\n  \\\"private_materials_loaded\\\": false,\\n  \\\"scenarios\\\": [\\n    {\\n      \\\"scenario\\\": \\\"public-issuing-controller-build\\\",\\n      \\\"exit_code\\\": 0,\\n      \\\"elapsed_seconds\\\": 188.38389141857624,\\n      \\\"timed_out\\\": false,\\n      \\\"output_limited\\\": false\\n    }\\n  ]\\n}\\n\", \"id\": \"OBS2\", \"kind\": \"PUBLIC_OBSERVATION\", \"locator\": {\"copied_bytes\": 359, \"file_sha256\": \"a2e58337aaaa0573bd0f2a06c172c17d554f66d74c152fe70a5f1ae174d7e09d\", \"path\": \"raw/public_execution.json\", \"start_byte\": 0, \"truncated\": false, \"whole_file_read\": true}, \"origin\": \"Frozen public launcher; exact raw/derived public output, no hidden oracle\", \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}], \"failed_public_predicates\": [], \"method_input\": {\"case_id\": \"RW-CERTMANAGER-9116\", \"declared_artifacts\": [], \"public_evidence\": [{\"id\": \"OBS1\"}, {\"id\": \"OBS2\"}], \"public_observable_text\": \"Check the stated controller decision only; no downstream cluster convergence is implied.\", \"release_id\": \"ContractEdge-benchmark150-v1-20261019\", \"requirement_text\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\", \"scope_hints\": [{\"kind\": \"concept\", \"origin_ref\": \"public.requirement\", \"raw_text\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\", \"value\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\"}]}, \"operation_facts\": [], \"output_contract\": \"Return only a DiagnosisPacket v1.1 JSON object; no markdown fences.\", \"output_schema\": {\"additionalProperties\": false, \"properties\": {\"clause_treatments\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"disposition\": {\"enum\": [\"OBLIGATION\", \"BACKGROUND\", \"UNCERTAIN\"]}, \"obligation_refs\": {\"items\": {\"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"type\": \"array\"}, \"rationale\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"source_ref\": {\"enum\": [\"requirement_text:0:231\"], \"maxLength\": 600, \"type\": \"string\"}}, \"required\": [\"source_ref\", \"disposition\", \"obligation_refs\", \"rationale\"], \"type\": \"object\"}, \"maxItems\": 32, \"type\": \"array\"}, \"evidence_gaps\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"id\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"locator_hint\": {\"additionalProperties\": false, \"properties\": {\"path\": {\"maxLength\": 600, \"type\": \"string\"}, \"search_term\": {\"maxLength\": 600, \"type\": \"string\"}, \"symbol\": {\"maxLength\": 600, \"type\": \"string\"}}, \"type\": \"object\"}, \"summary\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}}, \"required\": [\"id\", \"summary\", \"locator_hint\"], \"type\": \"object\"}, \"maxItems\": 4, \"type\": \"array\"}, \"evidence_refs\": {\"items\": {\"enum\": [\"OBS1\", \"OBS2\", \"SRC-CU-5c5caa728669d5fe\", \"SRC-CU-6195b86dcb4293a7\", \"SRC-CU-79be7d9601895605\", \"SRC-CU-7e4d235001260b67\", \"SRC-CU-88a1ded120726e2b\", \"SRC-CU-b426c37ab39dc03b\", \"SRC-CU-ca13c859c487856f\"], \"type\": \"string\"}, \"type\": \"array\"}, \"expected_relations\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"condition\": {\"type\": [\"string\", \"null\"]}, \"expected_contract\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"id\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"mechanism\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"obligation_refs\": {\"items\": {\"maxLength\": 600, \"pattern\": \"^A[1-9][0-9]*$\", \"type\": \"string\"}, \"maxItems\": 32, \"minItems\": 1, \"type\": \"array\"}, \"relation_form\": {\"enum\": [\"DIRECT_EDGE\", \"INDIVISIBLE_SHARED\"]}, \"requirement_refs\": {\"items\": {\"enum\": [\"O1\"], \"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"type\": \"array\"}, \"shared_constraint_reason\": {\"type\": [\"string\", \"null\"]}, \"source_unit_ids\": {\"items\": {\"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"minItems\": 1, \"type\": \"array\"}, \"support_refs\": {\"items\": {\"enum\": [\"OBS1\", \"OBS2\", \"SRC-CU-5c5caa728669d5fe\", \"SRC-CU-6195b86dcb4293a7\", \"SRC-CU-79be7d9601895605\", \"SRC-CU-7e4d235001260b67\", \"SRC-CU-88a1ded120726e2b\", \"SRC-CU-b426c37ab39dc03b\", \"SRC-CU-ca13c859c487856f\"], \"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"type\": \"array\"}, \"target_unit_ids\": {\"items\": {\"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"minItems\": 1, \"type\": \"array\"}}, \"required\": [\"id\", \"source_unit_ids\", \"target_unit_ids\", \"relation_form\", \"shared_constraint_reason\", \"mechanism\", \"condition\", \"expected_contract\", \"requirement_refs\", \"obligation_refs\", \"support_refs\"], \"type\": \"object\"}, \"maxItems\": 12, \"type\": \"array\"}, \"inferred_causal_path\": {\"items\": {\"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 8, \"type\": \"array\"}, \"lineage_events\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"atom_refs\": {\"items\": {\"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"minItems\": 1, \"type\": \"array\", \"uniqueItems\": true}, \"interpretation_disputed\": {\"type\": \"boolean\"}, \"kind\": {\"enum\": [\"CONTINUE\", \"REANCHOR\", \"SPLIT\", \"MERGE\"]}, \"parent_ids\": {\"items\": {\"enum\": [\"OB-2ac55d40408c2e6df4a141ed\", \"OB-af99a9da4582d6a340b9072d\"], \"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"minItems\": 1, \"type\": \"array\", \"uniqueItems\": true}, \"rationale\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}}, \"required\": [\"kind\", \"parent_ids\", \"atom_refs\", \"rationale\"], \"type\": \"object\"}, \"maxItems\": 32, \"type\": \"array\"}, \"obligation_atoms\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"id\": {\"maxLength\": 600, \"pattern\": \"^A[1-9][0-9]*$\", \"type\": \"string\"}, \"outcome_id\": {\"enum\": [\"O1\"], \"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"scope_quote\": {\"enum\": [\"CSR\", \"Certificate\", \"CertificateRequest\", \"NextPrivateKey\", \"Secret\", \"The\", \"a\", \"acting\", \"before\", \"built\", \"compare\", \"controller\", \"current\", \"fail\", \"from\", \"issuance\", \"issuing\", \"key\", \"must\", \"not\", \"on\", \"replaced\", \"request\", \"stale\", \"states\", \"terminal\", \"the\", \"with\"], \"maxLength\": 1000, \"type\": \"string\"}, \"source_quote\": {\"maxLength\": 6000, \"minLength\": 1, \"type\": \"string\"}, \"source_refs\": {\"items\": {\"enum\": [\"requirement_text:0:231\"], \"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"minItems\": 1, \"type\": \"array\"}, \"statement\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"support\": {\"enum\": [\"EXPLICIT\", \"DERIVED\"]}}, \"required\": [\"id\", \"outcome_id\", \"statement\", \"source_refs\", \"support\", \"source_quote\"], \"type\": \"object\"}, \"maxItems\": 32, \"minItems\": 1, \"type\": \"array\"}, \"observed_boundary\": {\"maxLength\": 600, \"type\": \"string\"}, \"operation_assessments\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"contract_quote\": {\"maxLength\": 600, \"type\": \"string\"}, \"contract_ref\": {\"maxLength\": 600, \"type\": \"string\"}, \"disposition\": {\"enum\": [\"REQUIRES_SUCCESS\", \"EXPECTED_EXCEPTION\", \"UNRELATED\", \"UNKNOWN\"]}, \"exception_type\": {\"maxLength\": 600, \"type\": \"string\"}, \"operation_id\": {\"maxLength\": 600, \"type\": \"string\"}, \"outcome_refs\": {\"items\": {\"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"type\": \"array\"}, \"rationale\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"satisfaction\": {\"enum\": [\"SATISFIED\", \"UNSATISFIED\", \"UNKNOWN\"]}, \"scenario\": {\"maxLength\": 600, \"type\": \"string\"}, \"scope_evidence_refs\": {\"items\": {\"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"type\": \"array\"}}, \"required\": [\"operation_id\", \"disposition\", \"outcome_refs\", \"rationale\"], \"type\": \"object\"}, \"maxItems\": 256, \"type\": \"array\"}, \"outcome_coverage\": {\"additionalProperties\": false, \"properties\": {\"O1\": {\"additionalProperties\": false, \"properties\": {\"disposition\": {\"enum\": [\"REPAIR_SUPPORTED\", \"PRESERVE_REQUIRED\", \"UNRESOLVED\"], \"type\": \"string\"}, \"preservation_evidence_refs\": {\"items\": {\"enum\": [\"OBS1\", \"OBS2\", \"SRC-CU-5c5caa728669d5fe\", \"SRC-CU-6195b86dcb4293a7\", \"SRC-CU-79be7d9601895605\", \"SRC-CU-7e4d235001260b67\", \"SRC-CU-88a1ded120726e2b\", \"SRC-CU-b426c37ab39dc03b\", \"SRC-CU-ca13c859c487856f\"], \"type\": \"string\"}, \"maxItems\": 32, \"type\": \"array\"}, \"preservation_status\": {\"enum\": [\"NOT_APPLICABLE\", \"OBSERVED\", \"INFERRED\", \"UNKNOWN\"], \"type\": \"string\"}}, \"required\": [\"disposition\", \"preservation_status\", \"preservation_evidence_refs\"], \"type\": \"object\"}}, \"required\": [\"O1\"], \"type\": \"object\"}, \"requirement_horizon\": {\"items\": {\"enum\": [\"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\"], \"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 16, \"type\": \"array\"}, \"status\": {\"enum\": [\"READY\", \"EVIDENCE_GAP\", \"NO_SUPPORTED_VIOLATION\", \"INVALID_OUTPUT\"]}, \"units\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"existence\": {\"enum\": [\"PRESENT\", \"UNKNOWN\"]}, \"id\": {\"maxLength\": 600, \"minLength\": 1, \"pattern\": \"^U[1-9][0-9]*$\", \"type\": \"string\"}, \"kind\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"locator_refs\": {\"items\": {\"enum\": [\"OBS1\", \"OBS2\", \"SRC-CU-5c5caa728669d5fe\", \"SRC-CU-6195b86dcb4293a7\", \"SRC-CU-79be7d9601895605\", \"SRC-CU-7e4d235001260b67\", \"SRC-CU-88a1ded120726e2b\", \"SRC-CU-b426c37ab39dc03b\", \"SRC-CU-ca13c859c487856f\"], \"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"type\": \"array\"}, \"requirement_refs\": {\"items\": {\"enum\": [\"O1\"], \"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"type\": \"array\"}, \"role\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"semantic_role_class\": {\"enum\": [\"CONFIGURATION_INPUT\", \"PRODUCTION_CONSUMER\", \"GENERATED_STATE\", \"RUNTIME_CONSUMER\", \"OBSERVED_STATE\", \"TEST_ARTIFACT\", \"OTHER\"]}}, \"required\": [\"id\", \"role\", \"kind\", \"semantic_role_class\", \"existence\", \"locator_refs\", \"requirement_refs\"], \"type\": \"object\"}, \"maxItems\": 16, \"type\": \"array\"}, \"unverified_outcomes\": {\"items\": {\"enum\": [\"O1\"], \"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 16, \"type\": \"array\"}, \"violations\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"broken_behavior\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"causal_explanation\": {\"maxLength\": 600, \"type\": \"string\"}, \"causal_status\": {\"enum\": [\"SUPPORTED\", \"TENTATIVE\"]}, \"evidence_refs\": {\"items\": {\"enum\": [\"OBS1\", \"OBS2\", \"SRC-CU-5c5caa728669d5fe\", \"SRC-CU-6195b86dcb4293a7\", \"SRC-CU-79be7d9601895605\", \"SRC-CU-7e4d235001260b67\", \"SRC-CU-88a1ded120726e2b\", \"SRC-CU-b426c37ab39dc03b\", \"SRC-CU-ca13c859c487856f\"], \"maxLength\": 600, \"type\": \"string\"}, \"maxItems\": 32, \"type\": \"array\"}, \"id\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"relation_id\": {\"maxLength\": 600, \"minLength\": 1, \"type\": \"string\"}, \"support_basis\": {\"enum\": [\"OBSERVED_AND_STATIC\", \"STATIC_INFERENCE\", \"OBSERVED_ONLY\"]}}, \"required\": [\"id\", \"relation_id\", \"broken_behavior\", \"causal_explanation\", \"evidence_refs\", \"support_basis\", \"causal_status\"], \"type\": \"object\"}, \"maxItems\": 12, \"type\": \"array\"}}, \"required\": [\"requirement_horizon\", \"observed_boundary\", \"inferred_causal_path\", \"unverified_outcomes\", \"obligation_atoms\", \"units\", \"expected_relations\", \"violations\", \"outcome_coverage\", \"evidence_refs\", \"evidence_gaps\", \"status\", \"clause_treatments\"], \"type\": \"object\"}, \"production_path_frontier\": [{\"association\": \"LEXICAL_SIBLING_CANDIDATE; relevance and causal role require explicit review\", \"content_digest\": \"4a3b0e80d9a3e6e348ce86e039099bee0f408ffc468faa4e8e078b85404377f8\", \"locator\": {\"column_start\": 1, \"end_line\": 237, \"start_line\": 140}, \"path\": \"pkg/controller/certificates/requestmanager/requestmanager_controller.go\", \"shared_calls\": [\"CertificateRequests\", \"FromContext\", \"func\"], \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\", \"source_evidence_id\": \"SRC-CU-88a1ded120726e2b\", \"symbol\": \"ProcessItem\", \"text\": \"func (c *controller) ProcessItem(ctx context.Context, key types.NamespacedName) error {\\n\\tlog := logf.FromContext(ctx).WithValues(\\\"key\\\", key)\\n\\n\\tctx = logf.NewContext(ctx, log)\\n\\tnamespace, name := key.Namespace, key.Name\\n\\n\\tcrt, err := c.certificateLister.Certificates(namespace).Get(name)\\n\\tif err != nil && !apierrors.IsNotFound(err) {\\n\\t\\treturn err\\n\\t}\\n\\tif crt == nil || crt.DeletionTimestamp != nil {\\n\\t\\t// If the Certificate object was/ is being deleted, we don't want to create any\\n\\t\\t// new CertificateRequests objects\\n\\t\\treturn nil\\n\\t}\\n\\n\\tif !apiutil.CertificateHasCondition(crt, cmapi.CertificateCondition{\\n\\t\\tType:   cmapi.CertificateConditionIssuing,\\n\\t\\tStatus: cmmeta.ConditionTrue,\\n\\t}) {\\n\\t\\treturn nil\\n\\t}\\n\\n\\t// Check for and fetch the 'status.nextPrivateKeySecretName' secret\\n\\tif crt.Status.NextPrivateKeySecretName == nil {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"status.nextPrivateKeySecretName not yet set, waiting for keymanager before processing certificate\\\")\\n\\t\\treturn nil\\n\\t}\\n\\tnextPrivateKeySecret, err := c.secretLister.Secrets(crt.Namespace).Get(*crt.Status.NextPrivateKeySecretName)\\n\\tif apierrors.IsNotFound(err) {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"nextPrivateKeySecretName Secret resource does not exist, waiting for keymanager to create it before continuing\\\")\\n\\t\\treturn nil\\n\\t}\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\tif nextPrivateKeySecret.Data == nil || len(nextPrivateKeySecret.Data[corev1.TLSPrivateKeyKey]) == 0 {\\n\\t\\tlog.V(logf.DebugLevel).Info(\\\"Next private key secret does not contain any valid data, waiting for keymanager before processing certificate\\\")\\n\\t\\treturn nil\\n\\t}\\n\\tpk, err := pki.DecodePrivateKeyBytes(nextPrivateKeySecret.Data[corev1.TLSPrivateKeyKey])\\n\\tif err != nil {\\n\\t\\tlog.Error(err, \\\"Failed to decode next private key secret data, waiting for keymanager before processing certificate\\\")\\n\\t\\treturn nil\\n\\t}\\n\\n\\t// Discover all 'owned' CertificateRequests\\n\\trequests, err := certificates.ListCertificateRequestsMatchingPredicates(\\n\\t\\tc.certificateRequestLister.CertificateRequests(crt.Namespace),\\n\\t\\tpredicate.ResourceOwnedBy[*cmapi.CertificateRequest](crt),\\n\\t)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\t// delete any existing CertificateRequest resources that do not have a\\n\\t// revision annotation\\n\\tif requests, err = c.deleteRequestsWithoutRevision(ctx, requests...); err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\tcurrentCertificateRevision := 0\\n\\tif crt.Status.Revision != nil {\\n\\t\\tcurrentCertificateRevision = *crt.Status.Revision\\n\\t}\\n\\tnextRevision := currentCertificateRevision + 1\\n\\n\\trequests, err = requestsWithRevision(requests, nextRevision)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\trequests, err = c.deleteRequestsNotMatchingSpec(ctx, crt, pk.Public(), requests...)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\trequests, err = c.deleteCurrentFailedRequests(ctx, crt, requests...)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\tif len(requests) > 1 {\\n\\t\\t// TODO: we should handle this case better, but for now do nothing to\\n\\t\\t//  avoid getting into loops where we keep creating multiple requests\\n\\t\\t//  and deleting them again.\\n\\t\\tlog.V(logf.ErrorLevel).Info(\\\"Multiple matching CertificateRequest resources exist, delete one of them. This is likely an error and should be reported on the issue tracker!\\\")\\n\\t\\treturn nil\\n\\t}\\n\\n\\tif len(requests) == 1 {\\n\\t\\t// Nothing to do as we've already verified that the CertificateRequest\\n\\t\\t// is up to date above.\\n\\t\\treturn nil\\n\\t}\\n\\n\\treturn c.createNewCertificateRequest(ctx, crt, pk, nextRevision, nextPrivateKeySecret.Name)\\n}\\n\", \"truncated\": false}, {\"association\": \"LEXICAL_SIBLING_CANDIDATE; relevance and causal role require explicit review\", \"content_digest\": \"e4610d2c0aaaf0129cac3812e7abb8c6adcbe31e4a18fe998dcb16c3b30a2d57\", \"locator\": {\"column_start\": 1, \"end_line\": 454, \"start_line\": 367}, \"path\": \"pkg/controller/certificates/requestmanager/requestmanager_controller.go\", \"shared_calls\": [\"CertificateRequests\", \"FromContext\", \"func\"], \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\", \"source_evidence_id\": \"SRC-CU-79be7d9601895605\", \"symbol\": \"createNewCertificateRequest\", \"text\": \"func (c *controller) createNewCertificateRequest(ctx context.Context, crt *cmapi.Certificate, pk crypto.Signer, nextRevision int, nextPrivateKeySecretName string) error {\\n\\tlog := logf.FromContext(ctx)\\n\\n\\tx509CSR, err := pki.GenerateCSR(\\n\\t\\tcrt,\\n\\t\\tpki.WithUseLiteralSubject(utilfeature.DefaultMutableFeatureGate.Enabled(feature.LiteralCertificateSubject)),\\n\\t\\tpki.WithEncodeBasicConstraintsInRequest(utilfeature.DefaultMutableFeatureGate.Enabled(feature.UseCertificateRequestBasicConstraints)),\\n\\t\\tpki.WithNameConstraints(utilfeature.DefaultMutableFeatureGate.Enabled(feature.NameConstraints)),\\n\\t\\tpki.WithOtherNames(utilfeature.DefaultMutableFeatureGate.Enabled(feature.OtherNames)),\\n\\t)\\n\\tif err != nil {\\n\\t\\tlog.Error(err, \\\"Failed to generate CSR - will not retry\\\")\\n\\t\\treturn nil\\n\\t}\\n\\tcsrDER, err := pki.EncodeCSR(x509CSR, pk)\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\tcsrPEM := bytes.NewBuffer([]byte{})\\n\\terr = pem.Encode(csrPEM, &pem.Block{Type: \\\"CERTIFICATE REQUEST\\\", Bytes: csrDER})\\n\\tif err != nil {\\n\\t\\treturn err\\n\\t}\\n\\n\\tannotations := controllerpkg.BuildAnnotationsToCopy(crt.Annotations, c.copiedAnnotationPrefixes)\\n\\tannotations[cmapi.CertificateRequestRevisionAnnotationKey] = strconv.Itoa(nextRevision)\\n\\tannotations[cmapi.CertificateRequestPrivateKeyAnnotationKey] = nextPrivateKeySecretName\\n\\tannotations[cmapi.CertificateNameKey] = crt.Name\\n\\n\\tcr := &cmapi.CertificateRequest{\\n\\t\\tObjectMeta: metav1.ObjectMeta{\\n\\t\\t\\tNamespace: crt.Namespace,\\n\\t\\t\\t// We limit the GenerateName to 52 + 1 characters to stay within the 63 - 5 character limit that\\n\\t\\t\\t// is used in Kubernetes when generating names.\\n\\t\\t\\t// see https://github.com/kubernetes/apiserver/blob/696768606f546f71a1e90546613be37d1aa37f64/pkg/storage/names/generate.go\\n\\t\\t\\tGenerateName:    apiutil.DNSSafeShortenTo52Characters(crt.Name) + \\\"-\\\",\\n\\t\\t\\tAnnotations:     annotations,\\n\\t\\t\\tLabels:          crt.Labels,\\n\\t\\t\\tOwnerReferences: []metav1.OwnerReference{*metav1.NewControllerRef(crt, certificateGvk)},\\n\\t\\t},\\n\\t\\tSpec: cmapi.CertificateRequestSpec{\\n\\t\\t\\tDuration:  crt.Spec.Duration,\\n\\t\\t\\tIssuerRef: crt.Spec.IssuerRef,\\n\\t\\t\\tRequest:   csrPEM.Bytes(),\\n\\t\\t\\tIsCA:      crt.Spec.IsCA,\\n\\t\\t\\tUsages:    crt.Spec.Usages,\\n\\t\\t},\\n\\t}\\n\\n\\tif utilfeature.DefaultFeatureGate.Enabled(feature.StableCertificateRequestName) {\\n\\t\\tcr.ObjectMeta.GenerateName = \\\"\\\"\\n\\n\\t\\t// The CertificateRequest name is limited to 253 characters, assuming the nextRevision and hyphen\\n\\t\\t// can be represented using 20 characters, we can directly accept certificate names up to 233\\n\\t\\t// characters. Certificate names that are longer than this will be hashed to a shorter name. We want\\n\\t\\t// to make crafting two Certificates with the same truncated name as difficult as possible, so we\\n\\t\\t// use a cryptographic hash function to hash the full certificate name to 64 characters.\\n\\t\\t// Finally, for Certificates with a name longer than 233 characters, we build the CertificateRequest\\n\\t\\t// name as follows: <first-168-chars-of-certificate-name>-<64-char-hash>-<19-char-nextRevision>\\n\\t\\tcrName, err := apiutil.ComputeSecureUniqueDeterministicNameFromData(crt.Name, 233)\\n\\t\\tif err != nil {\\n\\t\\t\\treturn err\\n\\t\\t}\\n\\n\\t\\tcr.ObjectMeta.Name = fmt.Sprintf(\\\"%s-%d\\\", crName, nextRevision)\\n\\t}\\n\\n\\tcr, err = c.client.CertmanagerV1().CertificateRequests(cr.Namespace).Create(ctx, cr, metav1.CreateOptions{FieldManager: c.fieldManager})\\n\\tif err != nil {\\n\\t\\tc.recorder.Eventf(crt, corev1.EventTypeWarning, reasonRequestFailed, \\\"Failed to create CertificateRequest: %s\\\", err.Error())\\n\\t\\treturn err\\n\\t}\\n\\n\\tc.recorder.Eventf(crt, corev1.EventTypeNormal, reasonRequested, \\\"Created new CertificateRequest resource %q\\\", cr.Name)\\n\\n\\t// If the StableCertificateRequestName feature gate is enabled, skip waiting for our informer cache/lister to\\n\\t// observe the creation event and instead rely on an AlreadyExists error being returned if we do attempt a\\n\\t// CREATE for the same CertificateRequest name again early.\\n\\tif utilfeature.DefaultFeatureGate.Enabled(feature.StableCertificateRequestName) {\\n\\t\\treturn nil\\n\\t}\\n\\n\\tif err := c.waitForCertificateRequestToExist(ctx, cr.Namespace, cr.Name); err != nil {\\n\\t\\treturn fmt.Errorf(\\\"failed whilst waiting for CertificateRequest to exist - this may indicate an apiserver running slowly. Request will be retried. %w\\\", err)\\n\\t}\\n\\treturn nil\\n}\\n\", \"truncated\": false}], \"public_execution_capabilities\": {\"build_entrypoint\": null, \"candidate_command\": null, \"consumer_id\": \"contractedge.topomen_source_consumer.v1\", \"editable_policy\": {\"allowed_paths\": [\"pkg/*.go\", \"internal/*.go\"], \"forbidden_paths\": [\"**/*test*\", \"**/contractedge*\", \"private/**\", \"verifier/**\", \"evaluator/**\", \"oracle/**\", \"go.mod\", \"go.sum\", \"**/go.mod\", \"**/go.sum\", \".contractedge-deps/**\"], \"policy_status\": \"DECLARED\"}, \"environment_observation_limit\": \"Production issuing controller package build; private request/key fixtures and oracle are not exposed\", \"execution_backend\": \"topomen_agent\", \"expected_artifact\": null, \"interpretation\": \"Declared public execution/observation only. Build success is not behavioral success; unavailable behavior stays UNKNOWN. No additional execution or edit permission.\", \"method_behavior_probes\": [], \"native_input_boundary\": null, \"network\": \"none\", \"observation_boundary\": null, \"public_runner\": null, \"public_scope\": null, \"scenarios\": [{\"argv\": [\"sh\", \"/work/.contractedge-deps/setup/build.sh\"], \"name\": \"public-issuing-controller-build\"}], \"schema_version\": \"ce.public_execution_capabilities.v1\", \"source\": {\"path\": \"environment.json\", \"sha256\": \"377db8923c5a14d6732c45e9dc40860dac1cd915e7c006945fad363fdc948c15\", \"task_observation_limit_source\": \"task.yaml:observation_limit\"}, \"supported_operations\": [\"MODIFY\", \"CREATE\"], \"task_observation_limit\": \"Check the stated controller decision only; no downstream cluster convergence is implied.\"}, \"requirement_spec\": {\"clauses\": [{\"id\": \"Q1\", \"source_ref\": \"requirement_text:0:231\", \"text\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\"}], \"constraints\": [], \"intent_summary\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\", \"lineage_required\": true, \"operation_consistency_required\": true, \"outcomes\": [{\"condition\": null, \"id\": \"O1\", \"source_refs\": [\"requirement_text:0:231\"], \"statement\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\", \"support\": \"EXPLICIT\"}], \"prior_obligation_lineage\": {\"bindings\": {\"A1\": \"OB-2ac55d40408c2e6df4a141ed\", \"A2\": \"OB-af99a9da4582d6a340b9072d\"}, \"events\": [{\"atom_refs\": [\"A1\"], \"id\": \"LE-0635f097c83a7741a6723cd6\", \"kind\": \"REGISTER\", \"parent_ids\": [], \"rationale\": \"Exact runner-bound source identity; original semantics retained\", \"resolved_ids\": {\"A1\": \"OB-2ac55d40408c2e6df4a141ed\"}, \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}, {\"atom_refs\": [\"A2\"], \"id\": \"LE-14be460b22d8a4277facd2f4\", \"kind\": \"REGISTER\", \"parent_ids\": [], \"rationale\": \"Exact runner-bound source identity; original semantics retained\", \"resolved_ids\": {\"A2\": \"OB-af99a9da4582d6a340b9072d\"}, \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}], \"input_digest\": \"0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c\", \"nodes\": {\"OB-2ac55d40408c2e6df4a141ed\": {\"aliases\": [], \"children\": [], \"definition\": {\"id\": \"A1\", \"outcome_id\": \"O1\", \"source_quote\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states\", \"source_refs\": [\"requirement_text:0:231\"], \"stable_obligation_key\": \"OB-2ac55d40408c2e6df4a141ed\", \"statement\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.\", \"support\": \"EXPLICIT\"}, \"id\": \"OB-2ac55d40408c2e6df4a141ed\", \"kind\": \"OBLIGATION\", \"parents\": [], \"residual\": null, \"sources\": [{\"scope_quote\": null, \"source_quote\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states\", \"source_refs\": [\"requirement_text:0:231\"]}]}, \"OB-af99a9da4582d6a340b9072d\": {\"aliases\": [], \"children\": [], \"definition\": {\"id\": \"A2\", \"outcome_id\": \"O1\", \"source_quote\": \"a stale request built from a replaced key must not fail the current Certificate issuance.\", \"source_refs\": [\"requirement_text:0:231\"], \"stable_obligation_key\": \"OB-af99a9da4582d6a340b9072d\", \"statement\": \"A stale request built from a replaced key must not fail the current Certificate issuance.\", \"support\": \"EXPLICIT\"}, \"id\": \"OB-af99a9da4582d6a340b9072d\", \"kind\": \"OBLIGATION\", \"parents\": [], \"residual\": null, \"sources\": [{\"scope_quote\": null, \"source_quote\": \"a stale request built from a replaced key must not fail the current Certificate issuance.\", \"source_refs\": [\"requirement_text:0:231\"]}]}}, \"requirement_digest\": \"d4dd65c54bbcc64f5a7884e7ed19a2a3064ebbe07e98a3660520e2d84d40a10d\", \"schema_version\": \"ce.obligation_lineage.v1\", \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}, \"raw_text\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\", \"schema_version\": \"ce.requirement_spec.v1_1\", \"status\": \"READY\", \"traceability_required\": true, \"trigger\": null, \"unknowns\": []}, \"run_context\": {\"case_id\": \"RW-CERTMANAGER-9116\", \"input_digest\": \"0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c\", \"run_id\": \"73066a8a-6d6d-4d19-9567-fcd365721199\", \"snapshot_id\": \"f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba\"}, \"schema_version\": \"ce.diagnosis_packet.v1_1\", \"scope_resolution\": {\"extension_paths\": [\"cmd/cainjector/app/controller.go\", \"cmd/cainjector/app/options/options.go\", \"cmd/startupapicheck/pkg/check/api/api.go\", \"cmd/startupapicheck/pkg/factory/factory.go\", \"cmd/webhook/app/webhook.go\", \"internal/apis/acme/install/install.go\", \"internal/apis/acme/types_challenge.go\", \"internal/apis/acme/v1/conversion.go\", \"internal/apis/acme/zz_generated.deepcopy.go\", \"internal/apis/certmanager/generic_issuer.go\", \"internal/apis/certmanager/install/install.go\", \"internal/apis/certmanager/types_certificaterequest.go\", \"internal/apis/certmanager/v1/defaults.go\", \"internal/apis/certmanager/validation/issuer.go\", \"internal/apis/config/cainjector/install/install.go\", \"internal/apis/config/cainjector/scheme/scheme.go\"], \"extension_paths_preview_truncated\": false, \"resolved_seed_path_count\": 64, \"resolved_seed_paths_preview\": [\"internal/generated/openapi/zz_generated.openapi.go\", \"deploy/charts/cert-manager/templates/crd-cert-manager.io_clusterissuers.yaml\", \"deploy/charts/cert-manager/templates/crd-cert-manager.io_issuers.yaml\", \"deploy/crds/cert-manager.io_clusterissuers.yaml\", \"deploy/crds/cert-manager.io_issuers.yaml\", \"design/20221205-memory-management.md\", \"internal/apis/certmanager/types_certificate.go\", \"pkg/apis/certmanager/v1/types_certificate.go\", \"deploy/charts/cert-manager/templates/crd-cert-manager.io_certificates.yaml\", \"deploy/crds/cert-manager.io_certificates.yaml\", \"deploy/charts/cert-manager/templates/crd-acme.cert-manager.io_challenges.yaml\", \"deploy/charts/cert-manager/values.schema.json\", \"deploy/crds/acme.cert-manager.io_challenges.yaml\", \"internal/vault/vault_test.go\", \"pkg/acme/webhook/openapi/zz_generated.openapi.go\", \"pkg/client/applyconfigurations/certmanager/v1/certificatestatus.go\", \"deploy/charts/cert-manager/README.template.md\", \"design/acme-orders-challenges-crd.md\", \"make/e2e-setup.mk\", \"cmd/controller/app/options/options.go\", \"deploy/charts/cert-manager/values.yaml\", \"internal/apis/certmanager/types_issuer.go\", \"internal/controller/feature/features.go\", \"internal/vault/vault.go\", \"pkg/apis/certmanager/v1/types_issuer.go\", \"pkg/client/applyconfigurations/certmanager/v1/certificatespec.go\", \"internal/apis/acme/types_issuer.go\", \"internal/apis/certmanager/zz_generated.deepcopy.go\", \"pkg/apis/acme/v1/types_issuer.go\", \"pkg/apis/certmanager/v1/zz_generated.deepcopy.go\", \"pkg/client/applyconfigurations/internal/internal.go\", \"pkg/issuer/venafi/client/venaficlient.go\"], \"resolved_seed_paths_preview_truncated\": true, \"search_audit\": [{\"bytes_inspected\": 14046320, \"coverage_incomplete\": true, \"files_inspected\": 1085, \"indexed_bytes_total\": 12803942, \"indexed_files_total\": 1085, \"kind\": \"concept\", \"match_cap_applied\": true, \"match_mode\": \"CONCEPT_TERMS\", \"matched_path_count\": 64, \"matched_paths_preview\": [\"internal/generated/openapi/zz_generated.openapi.go\", \"deploy/charts/cert-manager/templates/crd-cert-manager.io_clusterissuers.yaml\", \"deploy/charts/cert-manager/templates/crd-cert-manager.io_issuers.yaml\", \"deploy/crds/cert-manager.io_clusterissuers.yaml\", \"deploy/crds/cert-manager.io_issuers.yaml\", \"design/20221205-memory-management.md\", \"internal/apis/certmanager/types_certificate.go\", \"pkg/apis/certmanager/v1/types_certificate.go\"], \"matched_paths_preview_truncated\": true, \"matches_total\": 944, \"origin_ref\": \"public.requirement\", \"query\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\", \"query_terms\": [\"acting\", \"built\", \"certificate\", \"compare\", \"controller\", \"csr\", \"current\", \"fail\", \"issuance\", \"issuing\", \"key\", \"must\", \"next\", \"not\", \"private\", \"replaced\", \"request\", \"secret\", \"stale\", \"states\", \"terminal\"], \"search_complete\": true, \"truncated\": false}], \"unresolved_hints\": [{\"kind\": \"concept\", \"matched_path_count\": 64, \"matches_total\": 944, \"origin_ref\": \"public.requirement\", \"raw_text\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\", \"results_capped\": true, \"search_complete\": true, \"truncated\": false, \"value\": \"The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance.\"}]}}"
+    }
+  ],
+  "max_output_tokens": 16384,
+  "temperature": 0.0,
+  "metadata": {
+    "run_id": "73066a8a-6d6d-4d19-9567-fcd365721199",
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+    "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+    "schema_in_prompt": true,
+    "selected_ids": [
+      "CU-5c5caa728669d5fe",
+      "CU-7e4d235001260b67",
+      "CU-88a1ded120726e2b",
+      "CU-ca13c859c487856f",
+      "CU-6195b86dcb4293a7",
+      "CU-79be7d9601895605",
+      "CU-b426c37ab39dc03b"
+    ],
+    "dropped_ids": [
+      "CU-d289b3aa2cdb105d",
+      "CU-2e09dffe9da40ea9",
+      "CU-d65aba842421cd1b",
+      "CU-2e835d900c7df4a2",
+      "CU-7fc635fd35e0cc40",
+      "CU-095c933c2135ae3c",
+      "CU-7f8b01914f89d1a0",
+      "CU-985d28f5b4ded076",
+      "CU-819f38ba25ebf7c2",
+      "CU-1195d3e549660174",
+      "CU-ed8a1a3c6fa455b9",
+      "CU-6e261a49b2ed7f5e",
+      "CU-14647a333787b689",
+      "CU-2bc1d5038af8cae8",
+      "CU-4bcb68797d4260a9",
+      "CU-001bce30ec49fb97",
+      "CU-159d277031f7c261",
+      "CU-249b04249f693405",
+      "CU-8142745e66f35f6a",
+      "CU-da8fb3ecf5de8318",
+      "CU-bbb9eb74d443256a",
+      "CU-d165f91108eb07af",
+      "CU-84f33394a20626dc",
+      "CU-fa84b213eb681d13",
+      "CU-6f072ac094ed9daa",
+      "CU-366877f4354ac296",
+      "CU-0d4ed2c717d76041",
+      "CU-486f01c0b892a906",
+      "CU-7005f97b2ac17f7f",
+      "CU-58129a427dd71f72",
+      "CU-630857af1a8edeba",
+      "CU-1c754864f78db37c",
+      "CU-b8e669a1b248a132",
+      "CU-f01eb3e40fc02230",
+      "CU-eef5c440a4e5c35c",
+      "CU-bacac746404d74f4",
+      "CU-d6ef913f18e02717",
+      "CU-4dad16d68e51346c",
+      "CU-38ae2c2ac17ea04e",
+      "CU-338ce37b2171433e",
+      "CU-848cc3cfd63e63ab",
+      "CU-942a1641ebe74f29",
+      "CU-cdf3bcfed877c6b9",
+      "CU-34798c77d0a36ab8",
+      "CU-fb6b54285a7cfcdf",
+      "CU-8cf58507a586d6fd",
+      "CU-542fe522d23a0bf6",
+      "CU-7e73bb415fa6f4b9",
+      "CU-ac752c28a71a879a",
+      "CU-ffdac7e9e3130396",
+      "CU-fad9c929a8e31a03",
+      "CU-93256040ed0225e5",
+      "CU-b5cf0e754b7d31af",
+      "CU-858049ecc240f5ae",
+      "CU-6ce672ff885f2509",
+      "CU-f6643b749563711e",
+      "CU-e9981e05f14c7721",
+      "CU-8122512b50143f72",
+      "CU-d1adc249c53cf43b",
+      "CU-62658eb603a896ba",
+      "CU-0da01258a9498d39",
+      "CU-b4de000397cfe0a2",
+      "CU-aa95e292d4af4270",
+      "CU-e64609ee3be8726d",
+      "CU-3f6b1965768997d2",
+      "CU-4fb8d7d642c5d680",
+      "CU-6333bf2e6aefb0d8",
+      "CU-cdec7662e3a0612d",
+      "CU-bb5abe0c4e834b14",
+      "CU-72ee29aa3d0c456a",
+      "CU-f1e842120ca2bb11",
+      "CU-0f9b0def0d13370b",
+      "CU-36b6e319932c3386",
+      "CU-3a1d8862cf2d493a",
+      "CU-7ca6b535826e7a19",
+      "CU-0cd1b304de977209",
+      "CU-e14039c66230558a",
+      "CU-05ef56223b951887",
+      "CU-ad0fc4507488143d",
+      "CU-fcfa43ccb9222cbf",
+      "CU-4d037e82d56ee19c",
+      "CU-af7ab961b86911ed",
+      "CU-f4871040ed6e8434",
+      "CU-ff6ad35dafab2e09",
+      "CU-6e596e01b737b664",
+      "CU-aefb97be3662a2a7",
+      "CU-c9ffc839344837a0",
+      "CU-1b17068c64d7e80b",
+      "CU-ec76a1f50eb0316c",
+      "CU-a3867a1cf4320e32",
+      "CU-655e70a90b14fc2e",
+      "CU-cdb4891729b7e0d7",
+      "CU-f9e5aabb25fdd63e",
+      "CU-a47d4ebd6a580fc6",
+      "CU-cbdca28ad8a2068e",
+      "CU-be913d30b8b1afa0",
+      "CU-2da357aab8f4cc95",
+      "CU-5dbadd55e87956c5",
+      "CU-8ebf7a71b9e4b8f7",
+      "CU-44b3d84071a09a13",
+      "CU-0d2b98f5648d088b",
+      "CU-43dcfeee405e2c4e"
+    ],
+    "gap_delivery": {
+      "status": "DELIVERED",
+      "records": [],
+      "missing_required_ids": [],
+      "interpretation": "Exact endpoint excerpts delivered; does not prove causal relevance or resolve gaps"
+    },
+    "context_audit": [
+      {
+        "request_tokens_before": 136170,
+        "limit": 120000,
+        "removed_ids": [
+          "CU-5dbadd55e87956c5"
+        ],
+        "removed_reference_edges": 0,
+        "interpretation": "Bounded reference bundle removed; no causal correctness claim"
+      },
+      {
+        "request_tokens_before": 133339,
+        "limit": 120000,
+        "removed_ids": [
+          "CU-8ebf7a71b9e4b8f7"
+        ],
+        "removed_reference_edges": 0,
+        "interpretation": "Bounded reference bundle removed; no causal correctness claim"
+      },
+      {
+        "request_tokens_before": 131560,
+        "limit": 120000,
+        "removed_ids": [
+          "CU-44b3d84071a09a13"
+        ],
+        "removed_reference_edges": 0,
+        "interpretation": "Bounded reference bundle removed; no causal correctness claim"
+      },
+      {
+        "request_tokens_before": 126595,
+        "limit": 120000,
+        "removed_ids": [
+          "CU-0d2b98f5648d088b",
+          "CU-43dcfeee405e2c4e"
+        ],
+        "removed_reference_edges": 1,
+        "interpretation": "Bounded reference bundle removed; no causal correctness claim"
+      },
+      {
+        "request_tokens": 96239,
+        "input_limit": 120000,
+        "reserved_output_tokens": 16384,
+        "context_stage": "INITIAL_DIAGNOSIS",
+        "total_context_limit": 220000,
+        "selected_ids": [
+          "CU-5c5caa728669d5fe",
+          "CU-7e4d235001260b67",
+          "CU-88a1ded120726e2b",
+          "CU-ca13c859c487856f",
+          "CU-6195b86dcb4293a7",
+          "CU-79be7d9601895605",
+          "CU-b426c37ab39dc03b"
+        ],
+        "surviving_reference_edges": 7,
+        "drop_reasons": {
+          "CU-d289b3aa2cdb105d": "TOP_N_LIMIT",
+          "CU-2e09dffe9da40ea9": "TOP_N_LIMIT",
+          "CU-d65aba842421cd1b": "TOP_N_LIMIT",
+          "CU-2e835d900c7df4a2": "TOP_N_LIMIT",
+          "CU-7fc635fd35e0cc40": "TOP_N_LIMIT",
+          "CU-095c933c2135ae3c": "TOP_N_LIMIT",
+          "CU-7f8b01914f89d1a0": "TOP_N_LIMIT",
+          "CU-985d28f5b4ded076": "TOP_N_LIMIT",
+          "CU-819f38ba25ebf7c2": "TOP_N_LIMIT",
+          "CU-1195d3e549660174": "TOP_N_LIMIT",
+          "CU-ed8a1a3c6fa455b9": "TOP_N_LIMIT",
+          "CU-6e261a49b2ed7f5e": "TOP_N_LIMIT",
+          "CU-14647a333787b689": "TOP_N_LIMIT",
+          "CU-2bc1d5038af8cae8": "TOP_N_LIMIT",
+          "CU-4bcb68797d4260a9": "TOP_N_LIMIT",
+          "CU-001bce30ec49fb97": "TOP_N_LIMIT",
+          "CU-159d277031f7c261": "TOP_N_LIMIT",
+          "CU-249b04249f693405": "TOP_N_LIMIT",
+          "CU-8142745e66f35f6a": "TOP_N_LIMIT",
+          "CU-da8fb3ecf5de8318": "TOP_N_LIMIT",
+          "CU-bbb9eb74d443256a": "TOP_N_LIMIT",
+          "CU-d165f91108eb07af": "TOP_N_LIMIT",
+          "CU-84f33394a20626dc": "TOP_N_LIMIT",
+          "CU-fa84b213eb681d13": "TOP_N_LIMIT",
+          "CU-6f072ac094ed9daa": "TOP_N_LIMIT",
+          "CU-366877f4354ac296": "TOP_N_LIMIT",
+          "CU-0d4ed2c717d76041": "TOP_N_LIMIT",
+          "CU-486f01c0b892a906": "TOP_N_LIMIT",
+          "CU-7005f97b2ac17f7f": "TOP_N_LIMIT",
+          "CU-58129a427dd71f72": "TOP_N_LIMIT",
+          "CU-630857af1a8edeba": "TOP_N_LIMIT",
+          "CU-1c754864f78db37c": "TOP_N_LIMIT",
+          "CU-b8e669a1b248a132": "TOP_N_LIMIT",
+          "CU-f01eb3e40fc02230": "TOP_N_LIMIT",
+          "CU-eef5c440a4e5c35c": "TOP_N_LIMIT",
+          "CU-bacac746404d74f4": "TOP_N_LIMIT",
+          "CU-d6ef913f18e02717": "TOP_N_LIMIT",
+          "CU-4dad16d68e51346c": "TOP_N_LIMIT",
+          "CU-38ae2c2ac17ea04e": "TOP_N_LIMIT",
+          "CU-338ce37b2171433e": "TOP_N_LIMIT",
+          "CU-848cc3cfd63e63ab": "TOP_N_LIMIT",
+          "CU-942a1641ebe74f29": "TOP_N_LIMIT",
+          "CU-cdf3bcfed877c6b9": "TOP_N_LIMIT",
+          "CU-34798c77d0a36ab8": "TOP_N_LIMIT",
+          "CU-fb6b54285a7cfcdf": "TOP_N_LIMIT",
+          "CU-8cf58507a586d6fd": "TOP_N_LIMIT",
+          "CU-542fe522d23a0bf6": "TOP_N_LIMIT",
+          "CU-7e73bb415fa6f4b9": "TOP_N_LIMIT",
+          "CU-ac752c28a71a879a": "TOP_N_LIMIT",
+          "CU-ffdac7e9e3130396": "TOP_N_LIMIT",
+          "CU-fad9c929a8e31a03": "TOP_N_LIMIT",
+          "CU-93256040ed0225e5": "TOP_N_LIMIT",
+          "CU-b5cf0e754b7d31af": "TOP_N_LIMIT",
+          "CU-858049ecc240f5ae": "TOP_N_LIMIT",
+          "CU-6ce672ff885f2509": "TOP_N_LIMIT",
+          "CU-f6643b749563711e": "TOP_N_LIMIT",
+          "CU-e9981e05f14c7721": "TOP_N_LIMIT",
+          "CU-8122512b50143f72": "TOP_N_LIMIT",
+          "CU-d1adc249c53cf43b": "TOP_N_LIMIT",
+          "CU-62658eb603a896ba": "TOP_N_LIMIT",
+          "CU-0da01258a9498d39": "TOP_N_LIMIT",
+          "CU-b4de000397cfe0a2": "TOP_N_LIMIT",
+          "CU-aa95e292d4af4270": "TOP_N_LIMIT",
+          "CU-e64609ee3be8726d": "TOP_N_LIMIT",
+          "CU-3f6b1965768997d2": "TOP_N_LIMIT",
+          "CU-4fb8d7d642c5d680": "TOP_N_LIMIT",
+          "CU-6333bf2e6aefb0d8": "TOP_N_LIMIT",
+          "CU-cdec7662e3a0612d": "TOP_N_LIMIT",
+          "CU-bb5abe0c4e834b14": "TOP_N_LIMIT",
+          "CU-72ee29aa3d0c456a": "TOP_N_LIMIT",
+          "CU-f1e842120ca2bb11": "TOP_N_LIMIT",
+          "CU-0f9b0def0d13370b": "TOP_N_LIMIT",
+          "CU-36b6e319932c3386": "TOP_N_LIMIT",
+          "CU-3a1d8862cf2d493a": "TOP_N_LIMIT",
+          "CU-7ca6b535826e7a19": "TOP_N_LIMIT",
+          "CU-0cd1b304de977209": "TOP_N_LIMIT",
+          "CU-e14039c66230558a": "TOP_N_LIMIT",
+          "CU-05ef56223b951887": "TOP_N_LIMIT",
+          "CU-ad0fc4507488143d": "TOP_N_LIMIT",
+          "CU-fcfa43ccb9222cbf": "TOP_N_LIMIT",
+          "CU-4d037e82d56ee19c": "TOP_N_LIMIT",
+          "CU-af7ab961b86911ed": "TOP_N_LIMIT",
+          "CU-f4871040ed6e8434": "TOP_N_LIMIT",
+          "CU-ff6ad35dafab2e09": "TOP_N_LIMIT",
+          "CU-6e596e01b737b664": "TOP_N_LIMIT",
+          "CU-aefb97be3662a2a7": "TOP_N_LIMIT",
+          "CU-c9ffc839344837a0": "TOP_N_LIMIT",
+          "CU-1b17068c64d7e80b": "TOP_N_LIMIT",
+          "CU-ec76a1f50eb0316c": "TOP_N_LIMIT",
+          "CU-a3867a1cf4320e32": "TOP_N_LIMIT",
+          "CU-655e70a90b14fc2e": "TOP_N_LIMIT",
+          "CU-cdb4891729b7e0d7": "TOP_N_LIMIT",
+          "CU-f9e5aabb25fdd63e": "TOP_N_LIMIT",
+          "CU-a47d4ebd6a580fc6": "TOP_N_LIMIT",
+          "CU-cbdca28ad8a2068e": "TOP_N_LIMIT",
+          "CU-be913d30b8b1afa0": "TOP_N_LIMIT",
+          "CU-2da357aab8f4cc95": "TOP_N_LIMIT",
+          "CU-5dbadd55e87956c5": "FULL_REQUEST_CONTEXT_BUNDLE",
+          "CU-8ebf7a71b9e4b8f7": "FULL_REQUEST_CONTEXT_BUNDLE",
+          "CU-44b3d84071a09a13": "FULL_REQUEST_CONTEXT_BUNDLE",
+          "CU-43dcfeee405e2c4e": "FULL_REQUEST_CONTEXT_BUNDLE",
+          "CU-0d2b98f5648d088b": "FULL_REQUEST_CONTEXT_BUNDLE"
+        }
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "requirement_horizon",
+      "observed_boundary",
+      "inferred_causal_path",
+      "unverified_outcomes",
+      "obligation_atoms",
+      "units",
+      "expected_relations",
+      "violations",
+      "outcome_coverage",
+      "evidence_refs",
+      "evidence_gaps",
+      "status",
+      "clause_treatments"
+    ],
+    "properties": {
+      "requirement_horizon": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "maxLength": 600,
+          "enum": [
+            "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states; a stale request built from a replaced key must not fail the current Certificate issuance."
+          ]
+        },
+        "maxItems": 16
+      },
+      "observed_boundary": {
+        "type": "string",
+        "maxLength": 600
+      },
+      "inferred_causal_path": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "maxLength": 600
+        },
+        "maxItems": 8
+      },
+      "unverified_outcomes": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "maxLength": 600,
+          "enum": [
+            "O1"
+          ]
+        },
+        "maxItems": 16
+      },
+      "obligation_atoms": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "outcome_id",
+            "statement",
+            "source_refs",
+            "support",
+            "source_quote"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^A[1-9][0-9]*$",
+              "maxLength": 600
+            },
+            "outcome_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600,
+              "enum": [
+                "O1"
+              ]
+            },
+            "statement": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "source_refs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "maxLength": 600,
+                "enum": [
+                  "requirement_text:0:231"
+                ]
+              },
+              "maxItems": 32
+            },
+            "support": {
+              "enum": [
+                "EXPLICIT",
+                "DERIVED"
+              ]
+            },
+            "source_quote": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 6000
+            },
+            "scope_quote": {
+              "type": "string",
+              "maxLength": 1000,
+              "enum": [
+                "CSR",
+                "Certificate",
+                "CertificateRequest",
+                "NextPrivateKey",
+                "Secret",
+                "The",
+                "a",
+                "acting",
+                "before",
+                "built",
+                "compare",
+                "controller",
+                "current",
+                "fail",
+                "from",
+                "issuance",
+                "issuing",
+                "key",
+                "must",
+                "not",
+                "on",
+                "replaced",
+                "request",
+                "stale",
+                "states",
+                "terminal",
+                "the",
+                "with"
+              ]
+            }
+          }
+        },
+        "maxItems": 32
+      },
+      "units": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "role",
+            "kind",
+            "semantic_role_class",
+            "existence",
+            "locator_refs",
+            "requirement_refs"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600,
+              "pattern": "^U[1-9][0-9]*$"
+            },
+            "role": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "kind": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "semantic_role_class": {
+              "enum": [
+                "CONFIGURATION_INPUT",
+                "PRODUCTION_CONSUMER",
+                "GENERATED_STATE",
+                "RUNTIME_CONSUMER",
+                "OBSERVED_STATE",
+                "TEST_ARTIFACT",
+                "OTHER"
+              ]
+            },
+            "existence": {
+              "enum": [
+                "PRESENT",
+                "UNKNOWN"
+              ]
+            },
+            "locator_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 600,
+                "enum": [
+                  "OBS1",
+                  "OBS2",
+                  "SRC-CU-5c5caa728669d5fe",
+                  "SRC-CU-6195b86dcb4293a7",
+                  "SRC-CU-79be7d9601895605",
+                  "SRC-CU-7e4d235001260b67",
+                  "SRC-CU-88a1ded120726e2b",
+                  "SRC-CU-b426c37ab39dc03b",
+                  "SRC-CU-ca13c859c487856f"
+                ]
+              },
+              "maxItems": 32
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 600,
+                "enum": [
+                  "O1"
+                ]
+              },
+              "maxItems": 32
+            }
+          }
+        },
+        "maxItems": 16
+      },
+      "expected_relations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "source_unit_ids",
+            "target_unit_ids",
+            "relation_form",
+            "shared_constraint_reason",
+            "mechanism",
+            "condition",
+            "expected_contract",
+            "requirement_refs",
+            "obligation_refs",
+            "support_refs"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "source_unit_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "maxLength": 600
+              },
+              "maxItems": 32
+            },
+            "target_unit_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "maxLength": 600
+              },
+              "maxItems": 32
+            },
+            "relation_form": {
+              "enum": [
+                "DIRECT_EDGE",
+                "INDIVISIBLE_SHARED"
+              ]
+            },
+            "shared_constraint_reason": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "mechanism": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "condition": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expected_contract": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 600,
+                "enum": [
+                  "O1"
+                ]
+              },
+              "maxItems": 32
+            },
+            "obligation_refs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^A[1-9][0-9]*$",
+                "maxLength": 600
+              },
+              "maxItems": 32
+            },
+            "support_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 600,
+                "enum": [
+                  "OBS1",
+                  "OBS2",
+                  "SRC-CU-5c5caa728669d5fe",
+                  "SRC-CU-6195b86dcb4293a7",
+                  "SRC-CU-79be7d9601895605",
+                  "SRC-CU-7e4d235001260b67",
+                  "SRC-CU-88a1ded120726e2b",
+                  "SRC-CU-b426c37ab39dc03b",
+                  "SRC-CU-ca13c859c487856f"
+                ]
+              },
+              "maxItems": 32
+            }
+          }
+        },
+        "maxItems": 12
+      },
+      "violations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "relation_id",
+            "broken_behavior",
+            "causal_explanation",
+            "evidence_refs",
+            "support_basis",
+            "causal_status"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "relation_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "broken_behavior": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "causal_explanation": {
+              "type": "string",
+              "maxLength": 600
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 600,
+                "enum": [
+                  "OBS1",
+                  "OBS2",
+                  "SRC-CU-5c5caa728669d5fe",
+                  "SRC-CU-6195b86dcb4293a7",
+                  "SRC-CU-79be7d9601895605",
+                  "SRC-CU-7e4d235001260b67",
+                  "SRC-CU-88a1ded120726e2b",
+                  "SRC-CU-b426c37ab39dc03b",
+                  "SRC-CU-ca13c859c487856f"
+                ]
+              },
+              "maxItems": 32
+            },
+            "support_basis": {
+              "enum": [
+                "OBSERVED_AND_STATIC",
+                "STATIC_INFERENCE",
+                "OBSERVED_ONLY"
+              ]
+            },
+            "causal_status": {
+              "enum": [
+                "SUPPORTED",
+                "TENTATIVE"
+              ]
+            }
+          }
+        },
+        "maxItems": 12
+      },
+      "outcome_coverage": {
+        "type": "object",
+        "properties": {
+          "O1": {
+            "type": "object",
+            "required": [
+              "disposition",
+              "preservation_status",
+              "preservation_evidence_refs"
+            ],
+            "properties": {
+              "disposition": {
+                "type": "string",
+                "enum": [
+                  "REPAIR_SUPPORTED",
+                  "PRESERVE_REQUIRED",
+                  "UNRESOLVED"
+                ]
+              },
+              "preservation_status": {
+                "type": "string",
+                "enum": [
+                  "NOT_APPLICABLE",
+                  "OBSERVED",
+                  "INFERRED",
+                  "UNKNOWN"
+                ]
+              },
+              "preservation_evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "OBS1",
+                    "OBS2",
+                    "SRC-CU-5c5caa728669d5fe",
+                    "SRC-CU-6195b86dcb4293a7",
+                    "SRC-CU-79be7d9601895605",
+                    "SRC-CU-7e4d235001260b67",
+                    "SRC-CU-88a1ded120726e2b",
+                    "SRC-CU-b426c37ab39dc03b",
+                    "SRC-CU-ca13c859c487856f"
+                  ]
+                },
+                "maxItems": 32
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "O1"
+        ],
+        "additionalProperties": false
+      },
+      "evidence_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "OBS1",
+            "OBS2",
+            "SRC-CU-5c5caa728669d5fe",
+            "SRC-CU-6195b86dcb4293a7",
+            "SRC-CU-79be7d9601895605",
+            "SRC-CU-7e4d235001260b67",
+            "SRC-CU-88a1ded120726e2b",
+            "SRC-CU-b426c37ab39dc03b",
+            "SRC-CU-ca13c859c487856f"
+          ]
+        }
+      },
+      "evidence_gaps": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "summary",
+            "locator_hint"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "summary": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "locator_hint": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "search_term": {
+                  "type": "string",
+                  "maxLength": 600
+                },
+                "path": {
+                  "type": "string",
+                  "maxLength": 600
+                },
+                "symbol": {
+                  "type": "string",
+                  "maxLength": 600
+                }
+              }
+            }
+          }
+        },
+        "maxItems": 4
+      },
+      "status": {
+        "enum": [
+          "READY",
+          "EVIDENCE_GAP",
+          "NO_SUPPORTED_VIOLATION",
+          "INVALID_OUTPUT"
+        ]
+      },
+      "clause_treatments": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source_ref",
+            "disposition",
+            "obligation_refs",
+            "rationale"
+          ],
+          "properties": {
+            "source_ref": {
+              "type": "string",
+              "maxLength": 600,
+              "enum": [
+                "requirement_text:0:231"
+              ]
+            },
+            "disposition": {
+              "enum": [
+                "OBLIGATION",
+                "BACKGROUND",
+                "UNCERTAIN"
+              ]
+            },
+            "obligation_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 600
+              },
+              "maxItems": 32
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            }
+          }
+        },
+        "maxItems": 32
+      },
+      "lineage_events": {
+        "type": "array",
+        "maxItems": 32,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "parent_ids",
+            "atom_refs",
+            "rationale"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "CONTINUE",
+                "REANCHOR",
+                "SPLIT",
+                "MERGE"
+              ]
+            },
+            "parent_ids": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "maxLength": 600,
+                "enum": [
+                  "OB-2ac55d40408c2e6df4a141ed",
+                  "OB-af99a9da4582d6a340b9072d"
+                ]
+              },
+              "maxItems": 32
+            },
+            "atom_refs": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "maxLength": 600
+              },
+              "maxItems": 32
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "interpretation_disputed": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "operation_assessments": {
+        "type": "array",
+        "maxItems": 256,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "operation_id",
+            "disposition",
+            "outcome_refs",
+            "rationale"
+          ],
+          "properties": {
+            "operation_id": {
+              "type": "string",
+              "maxLength": 600
+            },
+            "disposition": {
+              "enum": [
+                "REQUIRES_SUCCESS",
+                "EXPECTED_EXCEPTION",
+                "UNRELATED",
+                "UNKNOWN"
+              ]
+            },
+            "outcome_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 600
+              },
+              "maxItems": 32
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "satisfaction": {
+              "enum": [
+                "SATISFIED",
+                "UNSATISFIED",
+                "UNKNOWN"
+              ]
+            },
+            "exception_type": {
+              "type": "string",
+              "maxLength": 600
+            },
+            "contract_ref": {
+              "type": "string",
+              "maxLength": 600
+            },
+            "contract_quote": {
+              "type": "string",
+              "maxLength": 600
+            },
+            "scenario": {
+              "type": "string",
+              "maxLength": 600
+            },
+            "scope_evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 600
+              },
+              "maxItems": 32
+            }
+          }
+        }
+      }
+    }
+  },
+  "thinking": null
+}

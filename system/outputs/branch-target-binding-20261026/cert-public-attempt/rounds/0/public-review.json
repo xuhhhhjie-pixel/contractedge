@@ -1,0 +1,74 @@
+{
+  "checks": [
+    {
+      "id": "P1",
+      "status": "UNKNOWN",
+      "rationale": "The only public evidence is a build execution pass. The check is a source-structure ordering check over ProcessItem, but no public observation shows the actual source content or ordering after edits. The execution_mapping literal_edits are explicitly scope-review material, not observed source evidence, and cannot substitute for a quoted public output. Build success alone does not prove that PublicKeyMatchesCSR occurs after loading pk and before the Denied, InvalidRequest, or Ready=Failed branches, nor that mismatch returns nil without failIssueCertificate. Therefore P1 is not established.",
+      "evidence": [
+        {
+          "observation_id": "OBS1",
+          "quote": "\"status\": \"EXECUTION_PASS\", \"hidden_semantic_evaluation\": \"NOT_RUN\", \"private_materials_loaded\": false"
+        },
+        {
+          "observation_id": "OBS1",
+          "quote": "\"scenario\": \"public-issuing-controller-build\", \"exit_code\": 0"
+        }
+      ]
+    },
+    {
+      "id": "open:OO-1",
+      "status": "UNKNOWN",
+      "rationale": "OO-1 is declared NOT_PUBLICLY_OBSERVABLE and requires controller runtime behavior with a stale CertificateRequest whose CSR public key does not match the current NextPrivateKey Secret. The public observation boundary exposes only the production issuing controller package build; private request/key fixtures and oracle are not exposed. The public output records hidden_semantic_evaluation as NOT_RUN and private_materials_loaded false, so it cannot show return before failIssueCertificate or absence of Issuing=False/FailedIssuanceAttempts changes. No public runtime observation is sufficient; OO-1 remains UNKNOWN.",
+      "evidence": [
+        {
+          "observation_id": "OBS1",
+          "quote": "\"status\": \"EXECUTION_PASS\", \"hidden_semantic_evaluation\": \"NOT_RUN\", \"private_materials_loaded\": false"
+        },
+        {
+          "observation_id": "OBS2",
+          "quote": "\"hidden_semantic_evaluation\": \"NOT_RUN\",\n  \"private_materials_loaded\": false"
+        }
+      ]
+    }
+  ],
+  "failure_kind": "UNKNOWN",
+  "rationale": "The public observations establish only that the public build scenario completed with exit code 0. They do not expose the edited source structure, controller runtime behavior, stale CSR handling, or issuance status outcomes. Because the observations are insufficient for both the structural P1 check and the NOT_PUBLICLY_OBSERVABLE OO-1 obligation, no failure attribution to EXECUTION, PLAN, or DIAGNOSIS is supported; the appropriate classification is UNKNOWN.",
+  "decision": "UNKNOWN",
+  "method": "MODEL_PUBLIC_REVIEW",
+  "independent_hidden_evaluation": false,
+  "response_metadata": {
+    "output_mode_requested": "json_object",
+    "output_mode_effective": "json_object",
+    "output_fallback_reason": null,
+    "application_validation_required": true,
+    "endpoint_schema_support": "UNKNOWN",
+    "model_identity_policy": "require_match",
+    "requested_output_schema_sha256": "8c2c26eccab7c724360e71ec941a6bc87fd1863369020016dd37b6e3938a2cfc",
+    "wire_output_schema_sha256": null,
+    "provider": "openai-compatible",
+    "prompt_version": "public-postcondition-review.v2",
+    "adapter_class": "contractedge.model.provider.OpenAICompatibleProvider",
+    "strict_schema": false,
+    "effective_thinking": "enabled",
+    "effective_reasoning_effort": "low",
+    "requested_model": "deepseek-v4.1-flash",
+    "reported_model": "deepseek-v4.1-flash",
+    "model": "deepseek-v4.1-flash",
+    "model_identity_status": "MATCH",
+    "model_identity_verified": true,
+    "usage": {
+      "prompt_tokens": 4698,
+      "completion_tokens": 1790,
+      "total_tokens": 6488,
+      "completion_tokens_details": {
+        "reasoning_tokens": 1257
+      },
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "request_id": "bffe6ccf-87fa-4942-83fa-1e074dbde206",
+    "finish_reason": "stop",
+    "money_usage_identity_verified": true
+  }
+}

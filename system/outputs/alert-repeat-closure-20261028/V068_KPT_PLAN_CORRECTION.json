@@ -1,0 +1,31 @@
+{
+  "scope": "Planning-only controlled correction; no candidate edit, no independent score, not a fixed46 slot",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "freeze_sha256": "fda82e2cbd90dea3bc1be3a03379fbfd452a06748a01fa88aea4e7bf782d998c",
+  "archived_calls_sha256": "6c2677a65766e8b498e463624f5f977b1e3f77919c0cf2f821d726c402ea8d4c",
+  "preceding_draft_sha256": "94e9a5c8ce72d3ad9fda343cbbda84136b3b33ab99a23a1542554fbf244d4b84",
+  "request_sha256": "4177e2315e3c8e49fb0dcc7437531cb9986b76561f6c4aea903407805786c19a",
+  "original_errors": [
+    {
+      "code": "PRECONDITION_ESTABLISHMENT_INVALID",
+      "path": "precondition_review[2].establishment.source_quote",
+      "message": "Quote for HELPER-bf52db689d494726 does not bind the delivered current source. Copy one short exact source line; do not paraphrase code or double-escape newlines/tabs. The quote must belong to this source_evidence_ref, including for PLANNED_CHANGE; a caller quote cannot stand in for the referenced helper. Describe caller changes in mechanism/change_refs. A source quote is not proof of the asserted semantic guarantee. Current-source binding hints (identity only): {\"referenced_source\": {\"id\": \"HELPER-bf52db689d494726\", \"locator\": {\"end_line\": 124, \"path\": \"pkg/fn/runtime/utils.go\", \"start_line\": 112}, \"exact_quote_example\": \"func SetResourceIDs(input []*yaml.RNode) error {\"}}"
+    },
+    {
+      "code": "PRECONDITION_ESTABLISHMENT_INVALID",
+      "path": "precondition_review[3].establishment.source_quote",
+      "message": "Quote for HELPER-222efe5087442853 does not bind the delivered current source. Copy one short exact source line; do not paraphrase code or double-escape newlines/tabs. The quote must belong to this source_evidence_ref, including for PLANNED_CHANGE; a caller quote cannot stand in for the referenced helper. Describe caller changes in mechanism/change_refs. A source quote is not proof of the asserted semantic guarantee. Current-source binding hints (identity only): {\"referenced_source\": {\"id\": \"HELPER-222efe5087442853\", \"locator\": {\"end_line\": 135, \"path\": \"pkg/fn/runtime/utils.go\", \"start_line\": 126}, \"exact_quote_example\": \"func DeleteResourceIDs(input []*yaml.RNode) error {\"}}"
+    }
+  ],
+  "original_draft_unchanged": true,
+  "max_new_model_calls": 1,
+  "automatic_retry": false,
+  "status": "PASS_PLAN_CORRECTION",
+  "errors": [],
+  "model_calls_added": 1,
+  "new_cost_upper_bound_cny": 0.147964,
+  "model_identity_verified": true,
+  "reported_model": "deepseek-flash",
+  "behavior_repair_proven": false,
+  "formal_ready": false
+}

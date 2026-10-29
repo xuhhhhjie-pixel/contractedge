@@ -1,0 +1,135 @@
+{
+  "status": "PASS",
+  "scope": "Saved public source/request binding and legacy-plan rejection only; not repair effectiveness",
+  "model_calls_added": 0,
+  "hidden_feedback_read": false,
+  "results": [
+    {
+      "label": "Alert-success",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "round": "0",
+      "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "trace": {
+        "path": "/home/xhj/contractedge-fixed46-source061-20261028/runs/methods/fixed46-v061-20261028-7e110f10f2707f003c394c2c/RW-ALERTMANAGER-4705/rounds/0/front.trace.json",
+        "sha256": "15b232f29f510b3409c29b6d7040a4ece39bdd43e0347ab07c333221dcd0cb25"
+      },
+      "support_records": 15,
+      "prerequisites": 12,
+      "same_exact_current_source_support": true,
+      "establishment_required": true,
+      "final_request_sha256": "f6334131afa0d45820d31a7823b9c76d7893d9feb1042393fe14aaf3b59c721b",
+      "prompt_version": "changeset.v1.1.15",
+      "legacy_plan_valid": true,
+      "new_plan_valid": false,
+      "new_errors": [
+        "PRECONDITION_ESTABLISHMENT_MISSING"
+      ]
+    },
+    {
+      "label": "Alert-failure",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "round": "0",
+      "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+      "trace": {
+        "path": "/home/xhj/contractedge-fixed46-source061-20261028/runs/methods/fixed46-v061-20261028-c1cec2a408efc5e10c83fb8e/RW-ALERTMANAGER-4705/rounds/0/front.trace.json",
+        "sha256": "b85c3838a85fe48cd3cd8d2624d05a921150abbd87b4d6a067b4e3881acfef86"
+      },
+      "support_records": 15,
+      "prerequisites": 12,
+      "same_exact_current_source_support": true,
+      "establishment_required": true,
+      "final_request_sha256": "c580d7116c3c02a327a5f094a3e42f9b44c4798572996930871840b4ad57c1f1",
+      "prompt_version": "changeset.v1.1.15",
+      "legacy_plan_valid": true,
+      "new_plan_valid": false,
+      "new_errors": [
+        "PRECONDITION_ESTABLISHMENT_MISSING"
+      ]
+    },
+    {
+      "label": "Alert-rediagnosis",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "round": "1",
+      "snapshot_id": "46f113fe0f69324bda3c04de46ee0a1c70e151b06b5563bfa85fe464505ad997",
+      "trace": {
+        "path": "/home/xhj/contractedge-fixed46-source061-20261028/runs/methods/fixed46-v061-20261028-c1cec2a408efc5e10c83fb8e/RW-ALERTMANAGER-4705/rounds/1/front.trace.json",
+        "sha256": "eab15af9b5c2ef291ada97e28c1582b2f164e8c43515f37025d5d7e23881a24b"
+      },
+      "support_records": 20,
+      "prerequisites": 12,
+      "same_exact_current_source_support": true,
+      "establishment_required": true,
+      "final_request_sha256": "dec837cb0e36b6de685bf96ba7e959090dba58e0268e3909a939679a75b060c9",
+      "prompt_version": "changeset.v1.1.15",
+      "legacy_plan_valid": true,
+      "new_plan_valid": false,
+      "new_errors": [
+        "PRECONDITION_ESTABLISHMENT_MISSING"
+      ]
+    },
+    {
+      "label": "KPT-control",
+      "case_id": "R3-KPT-4673",
+      "round": "0",
+      "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "trace": {
+        "path": "/home/xhj/contractedge-fixed46-source061-20261028/runs/methods/fixed46-v061-20261028-f30e0215f0d113880a6411c5/R3-KPT-4673/rounds/0/front.trace.json",
+        "sha256": "734529ee746425e303b3561309ac51867257cc9bf56a52aef0e1d95878ecf79f"
+      },
+      "support_records": 8,
+      "prerequisites": 8,
+      "same_exact_current_source_support": true,
+      "establishment_required": true,
+      "final_request_sha256": "869b24bba68e38cbe31128f7bccdb9bca2ad2af1e3f329eccfa695c4b58a00bb",
+      "prompt_version": "changeset.v1.1.15",
+      "legacy_plan_valid": true,
+      "new_plan_valid": false,
+      "new_errors": [
+        "PRECONDITION_ESTABLISHMENT_MISSING"
+      ]
+    },
+    {
+      "label": "ACK-control",
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "round": "0",
+      "snapshot_id": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+      "trace": {
+        "path": "/home/xhj/contractedge-fixed46-source061-20261028/runs/methods/fixed46-v061-20261028-bcd9a8d56a4e00f2f902f406/R4-ACK-CLOUDWATCH-2985/rounds/0/front.trace.json",
+        "sha256": "8a72ba8855492a3b86742f4aedc2cc8603543005b6ab61bd03502405d4a2d77e"
+      },
+      "support_records": 12,
+      "prerequisites": 1,
+      "same_exact_current_source_support": true,
+      "establishment_required": true,
+      "final_request_sha256": "a93c18bf5e7e2eae57ad2cc8784a9cfefbe3273e4cc999ca6a8ac553698be450",
+      "prompt_version": "changeset.v1.1.15",
+      "legacy_plan_valid": true,
+      "new_plan_valid": false,
+      "new_errors": [
+        "PRECONDITION_ESTABLISHMENT_MISSING"
+      ]
+    },
+    {
+      "label": "KOPF-control",
+      "case_id": "R3-KOPF-726",
+      "round": "0",
+      "snapshot_id": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+      "trace": {
+        "path": "/home/xhj/contractedge-fixed46-source061-20261028/runs/methods/fixed46-v061-20261028-a23cab1ffd94f2c287355ce8/R3-KOPF-726/rounds/0/front.trace.json",
+        "sha256": "13558681372e8b4279f1b329c312497ec34e39538a3587ef9501b4dd7889d51d"
+      },
+      "support_records": 3,
+      "prerequisites": 1,
+      "same_exact_current_source_support": true,
+      "establishment_required": true,
+      "final_request_sha256": "9c9746710585703bdc08df11fc7ab9b90f525955f799b54442cf5e9c01993526",
+      "prompt_version": "changeset.v1.1.15",
+      "legacy_plan_valid": true,
+      "new_plan_valid": false,
+      "new_errors": [
+        "PRECONDITION_ESTABLISHMENT_MISSING"
+      ]
+    }
+  ],
+  "formal_ready": false
+}

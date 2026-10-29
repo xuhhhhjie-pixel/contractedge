@@ -1,0 +1,311 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-10-25T14:25:04.455052+00:00",
+  "scope": "Zero-call replay of saved045 public inputs; no046 repair success or independent score claimed",
+  "new_model_calls": 0,
+  "formal_ready": false,
+  "cases": [
+    {
+      "case_id": "R3-KPT-4673",
+      "source_directory": "/home/xhj/contractedge-fixed46-20261025/runs-v045/methods/fixed46-v045-isolated-20261025-v1-f30e0215f0d113880a6411c5/R3-KPT-4673/rounds/0",
+      "input_sha256": {
+        "public-review-plan.json": "88f0c344bd3082b2197439282288427fee656f371bb16c5d4330873790136f24",
+        "public-observation.json": "6b3aa02048afa9ab5f0dbb969f02fcb9b1e24080ff6379eba9bfe3a19015b33d",
+        "public-review.json": "3685d82606091617b779b41117850ba4c3717112ea87623cac4a25348cda9b82"
+      },
+      "original_decision": "UNKNOWN",
+      "replayed_decision": "UNKNOWN",
+      "identical_per_condition_verdicts": true,
+      "checks": [
+        {
+          "id": "P1",
+          "status": "PASS",
+          "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+          "evidence": [
+            {
+              "observation_id": "OBS4",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/3/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS15",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/2/observed\",\"raw_source\":\"stdout\"}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        },
+        {
+          "id": "P2",
+          "status": "PASS",
+          "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+          "evidence": [
+            {
+              "observation_id": "OBS5",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.owner_excludes_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\"]},\"statement\":\"owning function ordinary input excludes config resource and contains workload\",\"raw_observation_pointer\":\"/checks/12/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS18",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/11/observed\",\"raw_source\":\"stdout\"}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        },
+        {
+          "id": "preserve:PC-A1",
+          "status": "UNKNOWN",
+          "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. Failure of any owner_binding check would disprove this preserved behavior in that scenario, but success of these four checks does not exhaust all possible pipelines.",
+          "evidence": [
+            {
+              "observation_id": "OBS15",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/2/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS18",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/11/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS21",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/22/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS24",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.owner_binding\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"function_config\":\"settings\"},\"statement\":\"configPath resource is supplied as owning functionConfig\",\"raw_observation_pointer\":\"/checks/31/observed\",\"raw_source\":\"stdout\"}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        },
+        {
+          "id": "preserve:PC-A3",
+          "status": "UNKNOWN",
+          "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. Failed workload transformation or retention checks would disprove this preserved behavior in those mutator scenarios, but these checks do not exhaust all possible functions or pipelines.",
+          "evidence": [
+            {
+              "observation_id": "OBS16",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/8/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS22",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/28/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS25",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.workload_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Owning mutator transforms the intended workload\",\"raw_observation_pointer\":\"/checks/37/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS28",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/6/observed\",\"raw_source\":\"stdout\"}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        },
+        {
+          "id": "preserve:PC-A4",
+          "status": "UNKNOWN",
+          "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. Failed later-sees or later-transform checks would disprove this preserved behavior in those scenarios, but these checks do not exhaust all later-pipeline possibilities.",
+          "evidence": [
+            {
+              "observation_id": "OBS1",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"workload\",\"settings\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/4/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS2",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"settings\",\"workload\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/24/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS3",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.later_sees_config\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"ordinary_inputs\":[\"demo\",\"settings\",\"workload\"]},\"statement\":\"after the owning mutator, a later mutator still sees the config resource\",\"raw_observation_pointer\":\"/checks/33/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS10",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/7/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS11",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/15/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS12",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/27/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS13",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.config_transformed\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"A later function transformation of config is retained in final output\",\"raw_observation_pointer\":\"/checks/36/observed\",\"raw_source\":\"stdout\"}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        },
+        {
+          "id": "preserve:PC-A5",
+          "status": "UNKNOWN",
+          "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. Failed resource-inventory or retained-resource checks would disprove this preserved final-package behavior in those scenarios, but these checks do not exhaust all render variants.",
+          "evidence": [
+            {
+              "observation_id": "OBS14",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/0/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS17",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/9/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS20",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/20/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS23",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.resource_inventory\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"error\":\"\",\"identities\":{\"kpt.dev/v1/Kptfile/<nil>/demo\":true,\"v1/ConfigMap/<nil>/settings\":true,\"v1/ConfigMap/<nil>/workload\":true},\"identity_annotation_count\":0,\"resource_count\":3},\"statement\":\"The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource\",\"raw_observation_pointer\":\"/checks/29/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS27",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/5/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS28",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/6/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS30",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/13/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS31",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"validator.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/14/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS34",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/25/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS35",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_selector.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/26/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS37",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.config_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"settings\",\"exists\":true,\"data\":{\"initial\":\"config\",\"later\":\"observed\"}},\"statement\":\"Final config settings resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/34/observed\",\"raw_source\":\"stdout\"}\n"
+            },
+            {
+              "observation_id": "OBS38",
+              "quote": "{\"probe_id\":\"kpt-configpath-v4\",\"id\":\"mutator_exclusion.workload_retained\",\"status\":\"PASS\",\"observed\":{\"render_error\":\"<nil>\",\"resource\":\"workload\",\"exists\":true,\"data\":{\"initial\":\"workload\",\"owner\":\"observed\"}},\"statement\":\"Final workload resource retains the declared data.initial field\",\"raw_observation_pointer\":\"/checks/35/observed\",\"raw_source\":\"stdout\"}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        }
+      ],
+      "model_calls": 0,
+      "historical_files_unchanged": true
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "source_directory": "/home/xhj/contractedge-fixed46-20261025/runs-v045-scoring-r2/methods/fixed46-v045-isolated-20261025-v1-bcd9a8d56a4e00f2f902f406/R4-ACK-CLOUDWATCH-2985/rounds/0",
+      "input_sha256": {
+        "public-review-plan.json": "b782049c9182f2fdcb5ff64be43535815bf64795605e90e77c28f838f3ecf385",
+        "public-observation.json": "423e6ed65f85dfe946a7e7bbe439588d1293e1173698889dbf817cec5193b62e",
+        "public-review.json": "f94e58dc579030dfa147e65526dd11d826b09b81fdfc474bff88407963f62b52"
+      },
+      "original_decision": "UNKNOWN",
+      "replayed_decision": "UNKNOWN",
+      "identical_per_condition_verdicts": true,
+      "checks": [
+        {
+          "id": "PC1",
+          "status": "PASS",
+          "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+          "evidence": [
+            {
+              "observation_id": "OBS1",
+              "quote": "{\n  \"probe_id\": \"cloudwatch-tags-v2\",\n  \"probe_sha256\": \"b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f\",\n  \"snapshot_id\": \"19a60931df9f09938ec85cc2c7c9a74309b1cb1b4b4b9251ed60ee57fd67cf9d\",\n  \"boundary\": \"Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof; explicit existing ARN and target-checked local service; direct Update inputs, not full ReadOne/reconciler\",\n  \"id\": \"value_change\",\n  \"observed\": {\n    \"desired\": {\n      \"env\": \"stage\"\n    },\n    \"error\": \"<nil>\",\n    \"external_after\": {\n      \"env\": \"stage\"\n    },\n    \"external_before\": {\n      \"env\": \"prod\"\n    },\n    \"latest\": {\n      \"env\": \"prod\"\n    },\n    \"other_field_changed\": false,\n    \"sdk_operations\": [\n      \"PutMetricAlarm\",\n      \"TagResource\"\n    ],\n    \"tag_writes\": 1,\n    \"wrong_target_request\": \"\"\n  },\n  \"status\": \"PASS\",\n  \"statement\": \"Changed declared tag values replace the external values\"\n}\n"
+            },
+            {
+              "observation_id": "OBS3",
+              "quote": "{\n  \"probe_id\": \"cloudwatch-tags-v2\",\n  \"probe_sha256\": \"b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f\",\n  \"snapshot_id\": \"19a60931df9f09938ec85cc2c7c9a74309b1cb1b4b4b9251ed60ee57fd67cf9d\",\n  \"boundary\": \"Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof; explicit existing ARN and target-checked local service; direct Update inputs, not full ReadOne/reconciler\",\n  \"id\": \"remove_all\",\n  \"observed\": {\n    \"desired\": {},\n    \"error\": \"<nil>\",\n    \"external_after\": {},\n    \"external_before\": {\n      \"env\": \"prod\"\n    },\n    \"latest\": {\n      \"env\": \"prod\"\n    },\n    \"other_field_changed\": false,\n    \"sdk_operations\": [\n      \"PutMetricAlarm\",\n      \"UntagResource\"\n    ],\n    \"tag_writes\": 1,\n    \"wrong_target_request\": \"\"\n  },\n  \"status\": \"PASS\",\n  \"statement\": \"An explicitly empty changed declaration removes the previous declared tags\"\n}\n"
+            },
+            {
+              "observation_id": "OBS5",
+              "quote": "{\n  \"probe_id\": \"cloudwatch-tags-v2\",\n  \"probe_sha256\": \"b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f\",\n  \"snapshot_id\": \"19a60931df9f09938ec85cc2c7c9a74309b1cb1b4b4b9251ed60ee57fd67cf9d\",\n  \"boundary\": \"Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof; explicit existing ARN and target-checked local service; direct Update inputs, not full ReadOne/reconciler\",\n  \"id\": \"addition\",\n  \"observed\": {\n    \"desired\": {\n      \"env\": \"prod\",\n      \"owner\": \"team\"\n    },\n    \"error\": \"<nil>\",\n    \"external_after\": {\n      \"env\": \"prod\",\n      \"owner\": \"team\"\n    },\n    \"external_before\": {\n      \"env\": \"prod\"\n    },\n    \"latest\": {\n      \"env\": \"prod\"\n    },\n    \"other_field_changed\": false,\n    \"sdk_operations\": [\n      \"PutMetricAlarm\",\n      \"TagResource\"\n    ],\n    \"tag_writes\": 1,\n    \"wrong_target_request\": \"\"\n  },\n  \"status\": \"PASS\",\n  \"statement\": \"Changed declared tags add a key to the external alarm tag set\"\n}\n"
+            },
+            {
+              "observation_id": "OBS6",
+              "quote": "{\n  \"probe_id\": \"cloudwatch-tags-v2\",\n  \"probe_sha256\": \"b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f\",\n  \"snapshot_id\": \"19a60931df9f09938ec85cc2c7c9a74309b1cb1b4b4b9251ed60ee57fd67cf9d\",\n  \"boundary\": \"Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof; explicit existing ARN and target-checked local service; direct Update inputs, not full ReadOne/reconciler\",\n  \"id\": \"removal\",\n  \"observed\": {\n    \"desired\": {\n      \"env\": \"prod\"\n    },\n    \"error\": \"<nil>\",\n    \"external_after\": {\n      \"env\": \"prod\"\n    },\n    \"external_before\": {\n      \"env\": \"prod\",\n      \"old\": \"remove\"\n    },\n    \"latest\": {\n      \"env\": \"prod\",\n      \"old\": \"remove\"\n    },\n    \"other_field_changed\": false,\n    \"sdk_operations\": [\n      \"PutMetricAlarm\",\n      \"UntagResource\"\n    ],\n    \"tag_writes\": 1,\n    \"wrong_target_request\": \"\"\n  },\n  \"status\": \"PASS\",\n  \"statement\": \"Changed declared tags remove a previously declared key\"\n}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        },
+        {
+          "id": "PC2",
+          "status": "UNKNOWN",
+          "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. addition is a required instance for A2; its failure disproves additions, but one added key does not exhaust every possible addition mode.",
+          "evidence": [
+            {
+              "observation_id": "OBS5",
+              "quote": "{\n  \"probe_id\": \"cloudwatch-tags-v2\",\n  \"probe_sha256\": \"b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f\",\n  \"snapshot_id\": \"19a60931df9f09938ec85cc2c7c9a74309b1cb1b4b4b9251ed60ee57fd67cf9d\",\n  \"boundary\": \"Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof; explicit existing ARN and target-checked local service; direct Update inputs, not full ReadOne/reconciler\",\n  \"id\": \"addition\",\n  \"observed\": {\n    \"desired\": {\n      \"env\": \"prod\",\n      \"owner\": \"team\"\n    },\n    \"error\": \"<nil>\",\n    \"external_after\": {\n      \"env\": \"prod\",\n      \"owner\": \"team\"\n    },\n    \"external_before\": {\n      \"env\": \"prod\"\n    },\n    \"latest\": {\n      \"env\": \"prod\"\n    },\n    \"other_field_changed\": false,\n    \"sdk_operations\": [\n      \"PutMetricAlarm\",\n      \"TagResource\"\n    ],\n    \"tag_writes\": 1,\n    \"wrong_target_request\": \"\"\n  },\n  \"status\": \"PASS\",\n  \"statement\": \"Changed declared tags add a key to the external alarm tag set\"\n}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        },
+        {
+          "id": "PC3",
+          "status": "UNKNOWN",
+          "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. value_change is a required instance for A3; its failure disproves value changes, but one replacement does not exhaust every possible value-change mode.",
+          "evidence": [
+            {
+              "observation_id": "OBS1",
+              "quote": "{\n  \"probe_id\": \"cloudwatch-tags-v2\",\n  \"probe_sha256\": \"b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f\",\n  \"snapshot_id\": \"19a60931df9f09938ec85cc2c7c9a74309b1cb1b4b4b9251ed60ee57fd67cf9d\",\n  \"boundary\": \"Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof; explicit existing ARN and target-checked local service; direct Update inputs, not full ReadOne/reconciler\",\n  \"id\": \"value_change\",\n  \"observed\": {\n    \"desired\": {\n      \"env\": \"stage\"\n    },\n    \"error\": \"<nil>\",\n    \"external_after\": {\n      \"env\": \"stage\"\n    },\n    \"external_before\": {\n      \"env\": \"prod\"\n    },\n    \"latest\": {\n      \"env\": \"prod\"\n    },\n    \"other_field_changed\": false,\n    \"sdk_operations\": [\n      \"PutMetricAlarm\",\n      \"TagResource\"\n    ],\n    \"tag_writes\": 1,\n    \"wrong_target_request\": \"\"\n  },\n  \"status\": \"PASS\",\n  \"statement\": \"Changed declared tag values replace the external values\"\n}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        },
+        {
+          "id": "PC4",
+          "status": "UNKNOWN",
+          "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. removal covers removing one declared key alongside a retained key; remove_all covers an explicitly empty changed declaration. Together they cover the public removal modes for A4.",
+          "evidence": [
+            {
+              "observation_id": "OBS3",
+              "quote": "{\n  \"probe_id\": \"cloudwatch-tags-v2\",\n  \"probe_sha256\": \"b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f\",\n  \"snapshot_id\": \"19a60931df9f09938ec85cc2c7c9a74309b1cb1b4b4b9251ed60ee57fd67cf9d\",\n  \"boundary\": \"Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof; explicit existing ARN and target-checked local service; direct Update inputs, not full ReadOne/reconciler\",\n  \"id\": \"remove_all\",\n  \"observed\": {\n    \"desired\": {},\n    \"error\": \"<nil>\",\n    \"external_after\": {},\n    \"external_before\": {\n      \"env\": \"prod\"\n    },\n    \"latest\": {\n      \"env\": \"prod\"\n    },\n    \"other_field_changed\": false,\n    \"sdk_operations\": [\n      \"PutMetricAlarm\",\n      \"UntagResource\"\n    ],\n    \"tag_writes\": 1,\n    \"wrong_target_request\": \"\"\n  },\n  \"status\": \"PASS\",\n  \"statement\": \"An explicitly empty changed declaration removes the previous declared tags\"\n}\n"
+            },
+            {
+              "observation_id": "OBS6",
+              "quote": "{\n  \"probe_id\": \"cloudwatch-tags-v2\",\n  \"probe_sha256\": \"b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f\",\n  \"snapshot_id\": \"19a60931df9f09938ec85cc2c7c9a74309b1cb1b4b4b9251ed60ee57fd67cf9d\",\n  \"boundary\": \"Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof; explicit existing ARN and target-checked local service; direct Update inputs, not full ReadOne/reconciler\",\n  \"id\": \"removal\",\n  \"observed\": {\n    \"desired\": {\n      \"env\": \"prod\"\n    },\n    \"error\": \"<nil>\",\n    \"external_after\": {\n      \"env\": \"prod\"\n    },\n    \"external_before\": {\n      \"env\": \"prod\",\n      \"old\": \"remove\"\n    },\n    \"latest\": {\n      \"env\": \"prod\",\n      \"old\": \"remove\"\n    },\n    \"other_field_changed\": false,\n    \"sdk_operations\": [\n      \"PutMetricAlarm\",\n      \"UntagResource\"\n    ],\n    \"tag_writes\": 1,\n    \"wrong_target_request\": \"\"\n  },\n  \"status\": \"PASS\",\n  \"statement\": \"Changed declared tags remove a previously declared key\"\n}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        },
+        {
+          "id": "PC5",
+          "status": "UNKNOWN",
+          "rationale": "All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. tag_error is a required failure instance for tag mutations; success would disprove error propagation for that injected failure but does not exhaust all failure modes.",
+          "evidence": [
+            {
+              "observation_id": "OBS8",
+              "quote": "{\n  \"probe_id\": \"cloudwatch-tags-v2\",\n  \"probe_sha256\": \"b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f\",\n  \"snapshot_id\": \"19a60931df9f09938ec85cc2c7c9a74309b1cb1b4b4b9251ed60ee57fd67cf9d\",\n  \"boundary\": \"Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof; explicit existing ARN and target-checked local service; direct Update inputs, not full ReadOne/reconciler\",\n  \"id\": \"tag_error\",\n  \"observed\": {\n    \"desired\": {\n      \"env\": \"stage\"\n    },\n    \"error\": \"operation error CloudWatch: TagResource, https response error StatusCode: 400, RequestID: , InternalServiceFault: public probe injected TagResource failure\",\n    \"external_after\": {\n      \"env\": \"prod\"\n    },\n    \"external_before\": {\n      \"env\": \"prod\"\n    },\n    \"latest\": {\n      \"env\": \"prod\"\n    },\n    \"other_field_changed\": false,\n    \"sdk_operations\": [\n      \"PutMetricAlarm\",\n      \"TagResource\"\n    ],\n    \"tag_writes\": 0,\n    \"wrong_target_request\": \"\"\n  },\n  \"status\": \"PASS\",\n  \"statement\": \"A failed tag mutation propagates its error rather than reporting successful update\"\n}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        },
+        {
+          "id": "preserve:PR1",
+          "status": "PASS",
+          "rationale": "Deterministic aggregation of predeclared ALL_OF check bindings; semantic coverage remains declared, not independently proven.",
+          "evidence": [
+            {
+              "observation_id": "OBS2",
+              "quote": "{\n  \"probe_id\": \"cloudwatch-tags-v2\",\n  \"probe_sha256\": \"b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f\",\n  \"snapshot_id\": \"19a60931df9f09938ec85cc2c7c9a74309b1cb1b4b4b9251ed60ee57fd67cf9d\",\n  \"boundary\": \"Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof; explicit existing ARN and target-checked local service; direct Update inputs, not full ReadOne/reconciler\",\n  \"id\": \"unchanged_other_field\",\n  \"observed\": {\n    \"desired\": {\n      \"env\": \"prod\"\n    },\n    \"error\": \"<nil>\",\n    \"external_after\": {\n      \"env\": \"prod\",\n      \"external\": \"retain\"\n    },\n    \"external_before\": {\n      \"env\": \"prod\",\n      \"external\": \"retain\"\n    },\n    \"latest\": {\n      \"env\": \"prod\"\n    },\n    \"other_field_changed\": true,\n    \"sdk_operations\": [\n      \"PutMetricAlarm\"\n    ],\n    \"tag_writes\": 0,\n    \"wrong_target_request\": \"\"\n  },\n  \"status\": \"PASS\",\n  \"statement\": \"A non-tag update with equal desired/latest tags preserves the existing external tag set, including a separately present key\"\n}\n"
+            },
+            {
+              "observation_id": "OBS4",
+              "quote": "{\n  \"probe_id\": \"cloudwatch-tags-v2\",\n  \"probe_sha256\": \"b20864b11535e4e33269c924f29160be64634616e8192f6cd5e17b96a319409f\",\n  \"snapshot_id\": \"19a60931df9f09938ec85cc2c7c9a74309b1cb1b4b4b9251ed60ee57fd67cf9d\",\n  \"boundary\": \"Production Update/sdkUpdate and real SDK serialization with in-memory HTTP transport; fixed local tag scenarios only, no real AWS authorization, remote convergence or independent grading; candidate shares test process and is not tamper-proof; explicit existing ARN and target-checked local service; direct Update inputs, not full ReadOne/reconciler\",\n  \"id\": \"unchanged\",\n  \"observed\": {\n    \"desired\": {\n      \"env\": \"prod\"\n    },\n    \"error\": \"<nil>\",\n    \"external_after\": {\n      \"env\": \"prod\"\n    },\n    \"external_before\": {\n      \"env\": \"prod\"\n    },\n    \"latest\": {\n      \"env\": \"prod\"\n    },\n    \"other_field_changed\": true,\n    \"sdk_operations\": [\n      \"PutMetricAlarm\"\n    ],\n    \"tag_writes\": 0,\n    \"wrong_target_request\": \"\"\n  },\n  \"status\": \"PASS\",\n  \"statement\": \"Equal desired/latest tags keep equal external tags intact\"\n}\n"
+            }
+          ],
+          "decision_method": "BOUND_CHECK_AGGREGATION"
+        },
+        {
+          "id": "open:OO1",
+          "status": "UNKNOWN",
+          "rationale": "Outside the declared public observation boundary",
+          "evidence": []
+        }
+      ],
+      "model_calls": 0,
+      "historical_files_unchanged": true
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "status": "DEFAULT_FULL_PUBLIC_EVIDENCE_ALIGNMENT_RECORDED",
+  "source_sha256": "7b5d07480e61e83d440250c6503af2dd48a6f2b3e7b9714460fbea0f893ef0d5",
+  "planning_helper_records": 8,
+  "planning_prerequisites": 8,
+  "merge_body_in_actual_planning_request": true,
+  "recovery_thinking": "enabled",
+  "recovery_current_source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "historical_failed_snapshot": "c2d919400bdc4f329ea0e2ff84ee2e7e1f80a7babdb0a8e820730a8208d1326b",
+  "historical_failed_predicates_delivered": 8,
+  "phase_observations": [
+    {
+      "artifact": "broken-public/observation.json",
+      "snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+      "checks": 38,
+      "passed": 35,
+      "failed": 3,
+      "route": null
+    },
+    {
+      "artifact": "rounds/0/feedback.json",
+      "snapshot": "c2d919400bdc4f329ea0e2ff84ee2e7e1f80a7babdb0a8e820730a8208d1326b",
+      "checks": 38,
+      "passed": 26,
+      "failed": 12,
+      "route": "EXECUTE"
+    },
+    {
+      "artifact": "rounds/1/feedback.json",
+      "snapshot": "22f2dd7d22ef1e2836d58cb83d9ec7353fbd8229ec8b8f96bd47e89a6cdf0d29",
+      "checks": 38,
+      "passed": 38,
+      "failed": 0,
+      "route": "STOP"
+    }
+  ],
+  "independent_status": "PASS",
+  "public_review_status": "UNKNOWN",
+  "formal_ready": false,
+  "limitation": "One default development episode, not a paired improvement/generalization or original46 result; finite allPASS does not resolve broad UNKNOWN."
+}

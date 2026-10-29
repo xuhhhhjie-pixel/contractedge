@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections import Counter
 from pathlib import PurePosixPath
 from pathlib import Path
 from typing import Any, Mapping
@@ -9,6 +10,7 @@ from typing import Any, Mapping
 from jsonschema import Draft202012Validator
 
 from .evidence import static_search_content_digest, supports_expected_missing_evidence
+from .pointers import JSON_POINTER_GUIDANCE
 from .models import (
     ContractError,
     DiagnosisPacket,
@@ -46,15 +48,36 @@ def _load_schema(version: str) -> dict[str, Any]:
         raise ContractError("SCHEMA_UNAVAILABLE", filename, str(exc)) from exc
 
 
+def _schema_error_message(error) -> str:
+    """Report the violated constraint without echoing a potentially huge value."""
+    if error.validator in {'maxItems','minItems'} and isinstance(error.instance,list):
+        direction='maximum' if error.validator=='maxItems' else 'minimum'
+        message=f'Array has {len(error.instance)} items; {direction} is {error.validator_value}.'
+        if list(error.absolute_path)[-1:]==['precondition_review']:
+            refs=[r.get('source_evidence_ref') for r in error.instance if isinstance(r,Mapping)
+                and isinstance(r.get('source_evidence_ref'),str)]
+            repeated=[f'{ref[:100]} ({count})' for ref,count in Counter(refs).items() if count>1]
+            if repeated:
+                message+=' Duplicate source_evidence_ref: '+', '.join(repeated[:8])+'.'
+                message+=' Consolidate all conditions for each source into one review, preserving every condition and check reference.'
+        return message
+    if error.validator in {'maxLength','minLength'} and isinstance(error.instance,str):
+        return f'String length is {len(error.instance)}; {error.validator} is {error.validator_value}.'
+    return error.message if len(error.message)<=600 else error.message[:600]+' [value echo omitted; consult the supplied schema]'
+
+
 def _check_schema(payload: Any, version: str) -> None:
     schema = _load_schema(version)
     errors = sorted(Draft202012Validator(schema).iter_errors(payload), key=lambda e: tuple(str(x) for x in e.absolute_path))
     if errors:
         error = errors[0]
         path = ".".join(str(part) for part in error.absolute_path)
-        additional = ["SCHEMA_INVALID at " + '.'.join(map(str, e.absolute_path)) + ': ' + e.message[:220]
+        additional = ["SCHEMA_INVALID at " + '.'.join(map(str, e.absolute_path)) + ': ' + _schema_error_message(e)[:220]
                       for e in errors[1:12]]
-        raise ContractError("SCHEMA_INVALID", path, error.message +
+        pointer_hint = ('; ' + JSON_POINTER_GUIDANCE if any(
+            e.validator == 'pattern' and list(e.absolute_path)[-1:] in [['input_pointer'], ['output_pointer']]
+            for e in errors) else '')
+        raise ContractError("SCHEMA_INVALID", path, _schema_error_message(error) + pointer_hint +
                             ('; additional independent errors: ' + '; '.join(additional) if additional else ''))
 
 
@@ -633,8 +656,13 @@ def validate_changeset(
         issues.append(_issue('STATUS_INCONSISTENT', 'evidence_gaps', 'READY cannot contain unresolved planning evidence gaps'))
     if payload["status"] in {"READY", "READY_PARTIAL"} and not planned:
         issues.append(_issue("STATUS_INCONSISTENT", "planned_violation_ids", "ready plans require a supported planned violation"))
-    if payload["status"] == "NEEDS_EVIDENCE" and (planned or payload["changes"]):
-        issues.append(_issue("STATUS_INCONSISTENT", "status", "NEEDS_EVIDENCE plans cannot contain executable changes"))
+    if payload["status"] == "NEEDS_EVIDENCE":
+        if planned:
+            issues.append(_issue("STATUS_INCONSISTENT", "planned_violation_ids",
+                "NEEDS_EVIDENCE: planned_violation_ids must be empty; supported diagnosis violations are not yet executable repairs. Keep unsupported repair obligations open and name the missing evidence; do not invent changes to cover these IDs."))
+        if payload["changes"]:
+            issues.append(_issue("STATUS_INCONSISTENT", "changes",
+                "NEEDS_EVIDENCE: changes must be empty. Retain unresolved obligations and evidence gaps, or use a ready status only when the existing evidence supports an executable plan."))
 
     return ValidationResult(not issues, tuple(issues), dict(payload))
 

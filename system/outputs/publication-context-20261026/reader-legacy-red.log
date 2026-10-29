@@ -1,0 +1,15 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_unmarked_historical_source_does_not_retroactively_create_ready_requirements _
+
+    def test_unmarked_historical_source_does_not_retroactively_create_ready_requirements():
+>       assert required_source_prerequisites(SimpleNamespace(candidates=units()))==[]
+E       assert [{'source_evi...mission."}]'}] == []
+E         
+E         Left contains one more item: {'source_evidence_ref': 'SRC-CU-19fbfa1cb575f587', 'reason': 'Review source-supported initialization, readiness and st...nce publication. Not verified invocation, same-scope alias proof, runtime readiness, causality or edit permission."}]'}
+E         Use -v to get more diff
+
+tests/test_reader_reference_context.py:162: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_reader_reference_context.py::test_unmarked_historical_source_does_not_retroactively_create_ready_requirements
+1 failed, 27 deselected in 0.40s

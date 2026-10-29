@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 import math
+import hashlib
 from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Sequence
 
@@ -54,8 +55,39 @@ def literal_identifiers(requirement: str) -> set[str]:
 
 def _identity(candidate: Mapping[str, Any]) -> tuple[str, str, str]:
     locator = candidate.get("locator", {})
+    text = str(candidate.get('text', ''))
+    declaration = candidate.get('declaration_locator')
+    if isinstance(locator, Mapping) and isinstance(declaration, Mapping):
+        a, b = locator.get('start_line'), locator.get('end_line')
+        start, end = declaration.get('start_line'), declaration.get('end_line')
+        if (all(type(v) is int for v in (a, b, start, end)) and a <= start <= end <= b
+                and hashlib.sha256(text.encode()).hexdigest() == candidate.get('content_digest')):
+            body = ''.join(text.splitlines(keepends=True)[start-a:end-a+1])
+            if hashlib.sha256(body.encode()).hexdigest() == candidate.get('declaration_content_digest'):
+                locator, text = declaration, body
+    # Producers may omit the default first column; byte content and line
+    # identity must still agree. Non-default columns remain distinct.
+    if isinstance(locator, Mapping):
+        locator = {k:v for k,v in locator.items() if not (k == 'column_start' and v == 1)}
     return (str(candidate.get("snapshot_id", "")), str(candidate.get("path", "")),
-            repr(sorted(locator.items())) if isinstance(locator, Mapping) else repr(locator))
+            repr((sorted(locator.items()) if isinstance(locator, Mapping) else locator,
+                  hashlib.sha256(text.encode()).hexdigest())) )
+
+
+def requires_gap_delivery(unit: Mapping[str, Any]) -> bool:
+    """Keep real/legacy required roles; nonmatching lexical context is optional.
+
+    An exact anchor or explicit requirement always wins when identities merge.
+    """
+    roles = unit.get("gap_role_keys", [])
+    return bool(unit.get("required_for_gap_delivery") or (roles and (
+        unit.get("optional_gap_context") is not True or any(role.endswith(":anchor") for role in roles))))
+
+
+def merge_gap_context_optional(*units: Mapping[str, Any]) -> bool:
+    """A merged role is optional only if every role contribution is optional."""
+    contributors = [unit for unit in units if unit.get("gap_role_keys")]
+    return bool(contributors) and all(not requires_gap_delivery(unit) for unit in contributors)
 
 
 def _rank(candidates: Sequence[Mapping[str, Any]], requirement: str, observable: str | None):
@@ -69,12 +101,26 @@ def _rank(candidates: Sequence[Mapping[str, Any]], requirement: str, observable:
             unique[identity] = candidate
         else:
             previous = unique[identity]
-            unique[identity] = {**previous, **candidate,
+            # Retain a complete excerpt and its real locator/ID. Adjacent API
+            # comments add source contracts, not a second declaration slot.
+            winner = max((candidate, previous), key=lambda u:(
+                not u.get('truncated', False), len(str(u.get('text', '')))))
+            unique[identity] = {**previous, **candidate, **winner,
                 'anchor_priority': max(previous.get('anchor_priority', 0), candidate.get('anchor_priority', 0)),
                 'gap_role_keys': sorted(set(previous.get('gap_role_keys',[]))|set(candidate.get('gap_role_keys',[]))),
-                'evidence_gap_refs': sorted(set(previous.get('evidence_gap_refs', [])) | set(candidate.get('evidence_gap_refs', [])))}
+                'evidence_gap_refs': sorted(set(previous.get('evidence_gap_refs', [])) | set(candidate.get('evidence_gap_refs', []))),
+                'references': sorted(set(previous.get('references', [])) | set(candidate.get('references', []))),
+                'declared_symbols': sorted(set(previous.get('declared_symbols', [])) | set(candidate.get('declared_symbols', []))),
+                'superseded_unit_ids': sorted((set(previous.get('superseded_unit_ids', []))
+                    | set(candidate.get('superseded_unit_ids', [])) | {previous['id'], candidate['id']}) - {winner['id']})}
+            if 'optional_gap_context' in previous or 'optional_gap_context' in candidate:
+                unique[identity]['optional_gap_context'] = merge_gap_context_optional(previous, candidate)
             if previous.get('required_for_gap_delivery') or candidate.get('required_for_gap_delivery'):
                 unique[identity]={**unique[identity],'required_for_gap_delivery':True}
+            if previous.get('precondition_review_required') or candidate.get('precondition_review_required'):
+                unique[identity]={**unique[identity],'precondition_review_required':True}
+            if previous.get('same_receiver_callee_support') or candidate.get('same_receiver_callee_support'):
+                unique[identity]={**unique[identity],'same_receiver_callee_support':True}
     from contractedge.retrieval.frontier import production_frontier
     sibling_ids = {r['source_evidence_id'].removeprefix('SRC-')
                    for r in production_frontier(list(unique.values()), requirement)}
@@ -160,7 +206,13 @@ def _select(ordered, features, edges, *, top_n: int, max_context_tokens: int,
         # it must not silently demote already required lifecycle evidence.
         mandatory=[u for u in remaining if u.get('required_for_gap_delivery')
                    or any(role.endswith(':anchor') for role in u.get('gap_role_keys',[]))]
-        pool=mandatory or ((primary or uncovered) if uncovered and reserved<min(6,top_n) else remaining)
+        # After required endpoints, prefer the at-most-two bodies reached by
+        # explicit same-receiver calls over unconnected lexical matches. They
+        # still consume ordinary Top-N/token space and may be dropped for cost.
+        dependencies=[u for u in remaining
+                      if u.get('same_receiver_callee_support')]
+        pool=mandatory or ((primary or uncovered) if uncovered and reserved<min(6,top_n)
+                           else dependencies or remaining)
         candidate = max(pool, key=marginal)
         remaining.remove(candidate)
         cid = str(candidate["id"])
@@ -184,11 +236,16 @@ def _select(ordered, features, edges, *, top_n: int, max_context_tokens: int,
         required_roles.update(candidate.get('gap_role_keys',[]))
         total += cost
     selected_set = set(selected)
-    valid_edges = tuple(dict(edge) for edge in edges
+    aliases = {alias:u['id'] for u in selected_payload for alias in u.get('superseded_unit_ids', [])}
+    remapped = [{**edge, 'source':aliases.get(edge.get('source'),edge.get('source')),
+                'target':aliases.get(edge.get('target'),edge.get('target'))} for edge in edges]
+    valid_edges = tuple(edge for edge in remapped
                         if edge.get("source") in selected_set and edge.get("target") in selected_set
+                        and edge.get('source') != edge.get('target')
                         and edge.get("edge_kind") in {"SYNTACTIC", "INFERRED"})
     return CandidateSet(tuple(selected_payload), tuple(selected), tuple(dropped), features, valid_edges,
                         total, max_context_tokens, top_n, extension_used, reasons)
+
 
 
 def trim_context_bundle(candidate_set: CandidateSet, *, request_tokens: int, limit: int) -> CandidateSet:
@@ -216,13 +273,13 @@ def trim_context_bundle(candidate_set: CandidateSet, *, request_tokens: int, lim
     if not groups:
         return candidate_set
     positions = {str(c['id']): i for i, c in enumerate(selected)}
-    protected={str(c['id']) for c in selected if c.get('gap_role_keys')}
+    protected={str(c['id']) for c in selected if requires_gap_delivery(c)} | set(candidate_set.required_endpoint_ids)
     unprotected=[g for g in groups if not g&protected]
     removed = max(unprotected or groups, key=lambda g: (min(positions[k] for k in g), sorted(g)))
-    if len(removed)==len(selected) and len(selected)>1:
-        # All source may form a single lexical component. It is a retrieval
-        # hint, not an indivisible semantic proof. Drop redundant scaffolding
-        # before discarding every evidenced production branch at once.
+    if (removed & protected or len(removed)==len(selected)) and len(selected)>1:
+        # A lexical component is not an indivisible semantic proof. Even when
+        # there are several components, remove optional scaffolding before
+        # sacrificing a required source endpoint in any of them.
         removable=[c for c in selected if str(c['id']) not in protected]
         ordinary=[c for c in removable if not candidate_set.ranking_features.get(str(c['id']),{}).get('lexical_sibling_candidate')]
         if ordinary or removable:

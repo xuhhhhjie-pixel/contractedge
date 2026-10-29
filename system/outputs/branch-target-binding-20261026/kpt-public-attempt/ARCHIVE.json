@@ -1,0 +1,24 @@
+{
+  "status": "PUBLIC_METHOD_ARCHIVE_ONLY",
+  "case_id": "R3-KPT-4673",
+  "files": {
+    "method_input.json": "2237eb2997a1ee565660379b0b7c826bf60fcb836b7dcf33c176c8eac6ed6251",
+    "model_calls.json": "a9908fc806109619cd6a47a26e4ea3a20734f048fc3e9291c4b94c928aeda07b",
+    "repair.trace.json": "4a3c377f2be42816ab695db7f7bfec30ebaf5fdd5b6a03ac3ebcaf94fddb4683",
+    "candidate.patch": "caa1beb5d17b9b6e00365edcc296c64dd4150f879b3b19410225477d8fd76e4f",
+    "initial-public-observation.json": "3068434e70d3819b752f4356c34957f74ecff4d4edac982278222bd350afe300",
+    "rounds/0/front.method_input.json": "2237eb2997a1ee565660379b0b7c826bf60fcb836b7dcf33c176c8eac6ed6251",
+    "rounds/0/front.config.json": "5ed0d60cbd7dfea04c1d4b096d528753a855e0c65d64ddafe43743c4c430eb67",
+    "rounds/0/front.public_observations.json": "97b7400124c8c00185c204e463f5537fee83d7761762d718adaf55390fa96c8e",
+    "rounds/0/front.trace.json": "4afe1869461024d0b2bd488fe0111cce99722c34842a79988e21b0ee2c8eb8f0",
+    "rounds/0/plan.json": "26eea555ed327c8a6d2db18dc88bc4e19e22defbdf3835a523ed48d7fa112d93",
+    "rounds/0/execution.json": "d41a9ae649502c13e4cc5e65aff7430209c20b8b7df2d385899f9071527922cb",
+    "rounds/0/feedback.json": "131c8c0e8b8b89b50e0e659f08c4bd58cf630d098ff13ebe17ecc1f4107097b0",
+    "rounds/0/public/observation.json": "ea1d40027b00b1e130dd5203e085dfb7a93aaaaeb15f3a06693dded5f8d8c8a7",
+    "rounds/0/public-review.json": "f7b0c335d50ebf8196522af88bd8e00dd257e3ab2f590204e9750daf026b9d5b",
+    "selected-candidate.json": "14944d8edd487a826a3dfce3f24fc2d9d5c89c1fb8dff6754b776c98b50b4690"
+  },
+  "independent_result_reference": "../KPT_TARGET_RESULT.json",
+  "hidden_evaluator_files_included": false,
+  "formal_ready": false
+}

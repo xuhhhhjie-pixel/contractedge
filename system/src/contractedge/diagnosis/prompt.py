@@ -10,7 +10,7 @@ from typing import Any, Mapping
 
 from contractedge.contracts.models import MethodInput, RunContext
 from contractedge.contracts.evidence import supports_expected_missing_evidence
-from contractedge.diagnosis.evidence import field_contract_contexts, build_evidence_catalog
+from contractedge.diagnosis.evidence import field_contract_contexts, reader_reference_contexts, build_evidence_catalog
 from contractedge.model.provider import ModelRequest
 from contractedge.model.schema import constrained_output_schema
 
@@ -60,7 +60,19 @@ def _case_output_schema(requirement: Mapping[str, Any], evidence_catalog: list[M
         properties.pop('operation_assessments',None)
     if not requirement.get('lineage_required'):
         properties.pop('lineage_events',None)
+    else:
+        parents = sorted(requirement.get('prior_obligation_lineage', {}).get('nodes', {}))
+        if parents:
+            properties['lineage_events']['items']['properties']['parent_ids']['items']['enum'] = parents
+        else:
+            properties['lineage_events']['maxItems'] = 0
     if outcome_ids:
+        # Keyed model coverage chooses one disposition per outcome. With one
+        # outcome it cannot express supported work AND a distinct unresolved
+        # outcome, which canonical PARTIAL_READY requires. Preserve the general
+        # protocol; constrain only this impossible model-facing alternative.
+        if len(outcome_ids)==1:
+            properties['status']['enum']=[v for v in properties['status']['enum'] if v!='PARTIAL_READY']
         statements = sorted({str(item["statement"]) for item in outcomes
                              if isinstance(item, Mapping) and isinstance(item.get("statement"), str)})
         if statements:
@@ -217,6 +229,14 @@ def build_diagnosis_request(method_input: MethodInput, requirement: Mapping[str,
     if requirement.get('lineage_required'):
         system_prompt += ' Prior obligation IDs are immutable. Use lineage_events CONTINUE or REANCHOR with parent_ids and current atom_refs to preserve identity across changed prose/quotes. SPLIT records one parent and at least two children; MERGE records a conjunction view, never erases parents. Leave events empty for initial registration or exact unchanged anchors. Original definitions and unresolved residuals remain live; do not assert equivalence solely from wording.'
     contracts = field_contract_contexts(selected, method_input.requirement_text)
+    readers = reader_reference_contexts(selected)
+    if readers:
+        public['source_reader_reference_contexts'] = readers
+        system_prompt += (' Review the supplied exact callback read/reassignment windows. Determine which current '
+            'reference the public consumer reads and when it is replaced; publication to readers is distinct from '
+            'old-object retirement. Starting or waiting on a replacement after publication does not establish '
+            'that earlier reads were ready. These lexical hints do not prove invocation, cause or edit permission; '
+            'keep unsupported relationships tentative and use actual source/observations for any supported violation.')
     if contracts:
         public['source_field_contract_contexts'] = contracts
         public['source_contract_review_instruction'] = 'Review these exact field/API comments before inferring consumer effects. Producing a request field does not prove the consumer applies it. Recheck applicability, update restrictions and ignored inputs; these excerpts are not runtime observations or an automatic verdict.'

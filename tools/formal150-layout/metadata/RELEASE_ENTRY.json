@@ -1,0 +1,67 @@
+{
+  "schema_version": "contractedge.scoped_local_release.v1",
+  "version": "ContractEdge-benchmark150-v1-20261019",
+  "status": "FROZEN_LOCAL_SUPPORTED_PLATFORM_RELEASE",
+  "scope": "150 selected repair tasks, exactly30perclass; preserves previous147 release",
+  "selected_cases": 150,
+  "by_class": {
+    "R1": 30,
+    "R2": 30,
+    "R3": 30,
+    "R4": 30,
+    "R5": 30
+  },
+  "parent_release": {
+    "version": "ContractEdge-benchmark147-v1-20261019",
+    "release_entry_sha256": "3f395d66f2b0c43fa1719fc74e902d4e876cf6347b2b2bc0129fb0b5b95d23a4",
+    "root_sha256sums_sha256": "ea467b3535a4d8b09649fbcb504b0b00343af98edb713acb60aa4cc9e3c4d9af"
+  },
+  "resource_standard": "CURRENT_TAXONOMY_SOURCE_PAIR_GT_TRIGGER_CONTROL_AND_BEHAVIOR_EVIDENCE_CLOSED",
+  "executable_standard": "PUBLIC_TASK_EDITABLE_BROKEN_PATCH_PROTOCOL_AND_PINNED_PRIVATE_EVALUATOR;147EXACT_RETAINED_ROUTE_IDENTITIES_PLUS3NEW_NATIVE_AND_RELOCATED_CALLS",
+  "public_manifest_sha256": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+  "evaluation_manifest_sha256": "c3c93eb008adbbaadc32ddc2a7f701c0e803307ae1209bf589dbdc94819ab31e",
+  "taxonomy": {
+    "path": "evaluation/release_rules/taxonomy-v2.json",
+    "sha256": "773776b21bf9286b91392b1e5a038029d0bbf31d2900728249195e004b99f427",
+    "authority": "Project operational definitions; not an external R1-R5 standard"
+  },
+  "supported_platform": {
+    "os": "Linux",
+    "architecture": "amd64",
+    "docker": "29.5.3 rootless, containerd store validated",
+    "python": "3.10+ with tarfile data filter support; vendored pure Python YAML;3.12+ recommended",
+    "host_tools": [
+      "git",
+      "Docker"
+    ],
+    "runtime_images": "runtime/manifest.json;16 fixed offline archives",
+    "network": "none during native candidate execution",
+    "resources": "Per-task contract; serialize native compilation with a shared lock; some Go cases require20GiB available RAM and owned per-user tmpfs scratch"
+  },
+  "evidence": {
+    "case_audit": "evidence/current-case-audit.jsonl",
+    "structure": "evidence/final-structure-check.json",
+    "calibration": "evidence/calibration/index.jsonl",
+    "route_composition": "evidence/accepted-summary.json",
+    "retained147_identity": "evidence/retained147-identity-composition.json",
+    "family_partition": "partition/summary.json",
+    "public_producers": "evidence/public-launcher-qualification-index.json"
+  },
+  "new_cases": [
+    "RW-ARGO-ROLLOUTS-4604",
+    "RW-HAPROXY-REDIRECT-QS-001",
+    "RW-HAPROXY-HASH-NUMERIC-001"
+  ],
+  "R1_reserves": 27,
+  "historical_3plus3_replays_added": 0,
+  "new_source_bound_calibration_cases": 3,
+  "model_baselines_run": false,
+  "limits": [
+    "Each case has a bounded task-specific semantic oracle; no claim that all cases verify live cluster or real-cloud final convergence.",
+    "No model repair-rate or baseline performance results have been run. Agentless/SWE-agent/OpenHands need the documented public workspace/patch interface adaptation.",
+    "No independent physical-computer execution of all150 is claimed. Portability is supported by pinned assets, relative paths, native execution-family qualification and explicit route identity composition.",
+    "Public historical training exposure is UNKNOWN; development/validation/blind labels and repository/repair-family grouping are preserved. All150 are not unseen blind tests.",
+    "New Rollouts score protocol is normalized by a trusted wrapper preserving native-score bytes; native semantics unchanged. HAProxy public symlink identity correction is documented; failed pre-build attempt retained."
+  ],
+  "frozen_at": "2026-10-19T14:33:06.967061+08:00"
+}

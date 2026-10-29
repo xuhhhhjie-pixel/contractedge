@@ -1,0 +1,3 @@
+# Frozen ContractEdge0.5.5 baseline
+
+71 original runtime files, unchanged; source digest in SOURCE_REFERENCE.json. This is system implementation code, not benchmark target code or ground truth. Use the common main system virtual environment, vendored TopoMen digest and explicit --method-root pointing at this directory; do not install a different baseline environment. The isolated runner mounts only the selected method src. Original resource/model policy and baseline probe capabilities remain separately registered. Current v6 seed protocol requires compatibility proof for both variants. No historical score is inherited.

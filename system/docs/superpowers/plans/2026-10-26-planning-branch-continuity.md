@@ -1,0 +1,12 @@
+# Planning branch concerns survive same-snapshot re-diagnosis
+
+Continue the approved evidence-continuity root-cause plan. Source055 KPT control failed independently: first plan explicitly recognized validator ordinary-input failure, requested shared helper evidence, then same-snapshot re-diagnosis received only prior supported diagnosis claims and helper gaps. It lost the planner's branch concern. Final partial plan changed mutator only and left validator unresolved; second edit restored four regressed mutator predicates but validator remained FAIL. No formal46 paid admission.
+
+Minimal design: extend existing diagnosis_continuity in orchestration/runner.py with optional planning_context. Only same run/input/snapshot, existing UNRESOLVED production_path_review rows, valid referenced open obligations, and exact current canonical SOURCE_SPAN anchors may be carried. At most four complete records/8000 UTF-8 bytes. Include declared rationale/open predicates plus canonical evidence ID/digest, not new facts or source reads. The model must reassess scope/causality/roles from current evidence; no auto units, violations or edit permissions. Source055 initial diagnosis and execution requests remain identical when no planning context exists. Existing extension/call/context limits unchanged.
+
+1. RED generic renamed branch concerns, stale/cross-input/run/digest, unknown source/open refs, irrelevant disposition, bounds; legacy continuity unchanged without context.
+2. Wire only existing planning evidence-extension fit_diagnosis call. Capture a synthetic real front loop through NEEDS_EVIDENCE and format correction to prove actual final requests retain the concern, not just helper output.
+3. Replay saved KPT planning request and next diagnosis request with current public evidence. Verify exact lost validator concern becomes visible, old semantic output remains unmodified/failed, no model/grader calls. Frozen source055 cross-case cohort remains immutable.
+4. Relevant/full regression, new source/config/tool freeze, actual isolation/sandbox. Only then predeclare a single new KPT development validation; Cert control from source055 cannot be inherited as effect score.
+
+Ruling: no requirement that every lexical sibling becomes a repair. The handoff is an untrusted planning hypothesis requiring review. Missing, stale or out-of-budget records remain explicitly uncarried; never invent a cause or weaken UNKNOWN to meet coverage.

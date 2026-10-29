@@ -1,0 +1,13 @@
+{
+  "status": "CORRECTED_BINDING_CONTRACT_FIXTURE_READY_AND_EXECUTION_REQUEST_BUILT",
+  "source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "fixture_responses": 6,
+  "real_model_calls": 0,
+  "grader_calls": 0,
+  "source_unchanged": true,
+  "automatic_semantic_units_created_by_engine": 0,
+  "required_source_support": 12,
+  "open_obligations_retained": true,
+  "formal_ready": false,
+  "scope": "Explicit simulated correction validates contracts and continuity only; no autonomous repair result"
+}

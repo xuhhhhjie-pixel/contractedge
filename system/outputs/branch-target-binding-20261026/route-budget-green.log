@@ -1,0 +1,29 @@
+..F.......................................................               [100%]
+=================================== FAILURES ===================================
+______________ test_followup_reserves_output_within_model_window _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-586/test_followup_reserves_output_0')
+
+    def test_followup_reserves_output_within_model_window(tmp_path):
+        value, template = front_fixture(tmp_path)
+        config = dict(model={"model": "fixture"}, max_context_tokens=220000,
+            max_output_tokens=1024, max_total_tokens=4000000, gap_role_delivery_enabled=True)
+        control = CapturingGapProvider(template)
+        baseline = run_front_half(value, tmp_path, control, config, utf8_byte_token_bound)
+        assert baseline.status == "READY", baseline.errors
+        diag = [r for r in control.requests if str(r.prompt_version).startswith("diagnosis.")]
+        first, second = [r.metadata["context_audit"][-1]["request_tokens"] for r in diag]
+        assert second - first > 128
+        provider = CapturingGapProvider(template)
+        trace = run_front_half(value, tmp_path, provider,
+            {**config, "model_context_tokens": first + 1024 + 128}, utf8_byte_token_bound)
+        assert trace.status in {"BUDGET_EXHAUSTED", "EVIDENCE_GAP"}, trace.errors
+>       assert len(provider.requests) == 2
+E       assert 1 == 2
+E        +  where 1 = len([ModelRequest(model='fixture', prompt_version='diagnosis.v1.1.24', messages=({'role': 'system', 'content': "You produc...tems': 4}, 'status': {'enum': ['READY', 'EVIDENCE_GAP', 'NO_SUPPORTED_VIOLATION', 'INVALID_OUTPUT']}}}, thinking=None)])
+E        +    where [ModelRequest(model='fixture', prompt_version='diagnosis.v1.1.24', messages=({'role': 'system', 'content': "You produc...tems': 4}, 'status': {'enum': ['READY', 'EVIDENCE_GAP', 'NO_SUPPORTED_VIOLATION', 'INVALID_OUTPUT']}}}, thinking=None)] = <tests.test_evidence_rediagnosis_budget.CapturingGapProvider object at 0x7f0c121791e0>.requests
+
+tests/test_evidence_rediagnosis_budget.py:70: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_evidence_rediagnosis_budget.py::test_followup_reserves_output_within_model_window
+1 failed, 57 passed in 2.30s

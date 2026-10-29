@@ -1,0 +1,36 @@
+[
+  {
+    "id": "OBS1",
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+    "kind": "PUBLIC_OBSERVATION",
+    "evidence_kind": "EXECUTION_ONLY",
+    "locator": {
+      "path": "launcher/tool.stdout",
+      "file_sha256": "35a5580d167f6af6f2a59d7f0607f37414cf658ab4bb4bf7aa0db5d1e69107ae",
+      "start_byte": 0,
+      "copied_bytes": 302,
+      "truncated": false,
+      "whole_file_read": true
+    },
+    "content_digest": "35a5580d167f6af6f2a59d7f0607f37414cf658ab4bb4bf7aa0db5d1e69107ae",
+    "excerpt": "{\"case_id\": \"RW-CERTMANAGER-9116\", \"status\": \"EXECUTION_PASS\", \"hidden_semantic_evaluation\": \"NOT_RUN\", \"private_materials_loaded\": false, \"scenarios\": [{\"scenario\": \"public-issuing-controller-build\", \"exit_code\": 0, \"elapsed_seconds\": 190.3888957388699, \"timed_out\": false, \"output_limited\": false}]}\n",
+    "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+  },
+  {
+    "id": "OBS2",
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+    "kind": "PUBLIC_OBSERVATION",
+    "evidence_kind": "EXECUTION_ONLY",
+    "locator": {
+      "path": "raw/public_execution.json",
+      "file_sha256": "ba56d7a3ec1d9515d6561a78ad417cbd1be8a6aa45ee93ce43e8fb5c46700609",
+      "start_byte": 0,
+      "copied_bytes": 358,
+      "truncated": false,
+      "whole_file_read": true
+    },
+    "content_digest": "ba56d7a3ec1d9515d6561a78ad417cbd1be8a6aa45ee93ce43e8fb5c46700609",
+    "excerpt": "{\n  \"case_id\": \"RW-CERTMANAGER-9116\",\n  \"status\": \"EXECUTION_PASS\",\n  \"hidden_semantic_evaluation\": \"NOT_RUN\",\n  \"private_materials_loaded\": false,\n  \"scenarios\": [\n    {\n      \"scenario\": \"public-issuing-controller-build\",\n      \"exit_code\": 0,\n      \"elapsed_seconds\": 190.3888957388699,\n      \"timed_out\": false,\n      \"output_limited\": false\n    }\n  ]\n}\n",
+    "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+  }
+]

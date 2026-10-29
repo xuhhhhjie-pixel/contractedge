@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "contractedge-system"
-version = "0.6.27"
+dynamic = ["version"]
 description = "Snapshot-bound requirement, diagnosis, semantic planning, repair and public feedback for ContractEdge"
 requires-python = ">=3.10"
 dependencies = [
-  "PyYAML==5.4.1",
+  "PyYAML>=5.4.1,<7",
   "jsonschema==4.26.0",
 ]
 
@@ -21,6 +21,9 @@ contractedge = "contractedge.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "contractedge.__version__"}
 
 [tool.setuptools.package-data]
 "contractedge.contracts" = ["schema/*.json"]

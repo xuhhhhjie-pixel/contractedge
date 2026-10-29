@@ -1,0 +1,254 @@
+................................................................... [  7%]
+..................................................................... [ 16%]
+..................................................................... [ 24%]
+......................................................................................................................................... [ 40%]
+...................................................................... [ 48%]
+....................................................................F..F [ 57%]
+F.F.FF..F............................................................... [ 65%]
+........................................................................ [ 74%]
+........................................................................ [ 82%]
+........................................................................ [ 91%]
+...................................................................... [ 99%]
+.....                                                                    [100%]
+=================================== FAILURES ===================================
+__ OrchestrationTests.test_changeset_format_failure_gets_one_revision_attempt __
+
+self = <tests.test_orchestration.OrchestrationTests testMethod=test_changeset_format_failure_gets_one_revision_attempt>
+
+    def test_changeset_format_failure_gets_one_revision_attempt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "templates/serviceaccount.yaml"
+            source.parent.mkdir()
+            source.write_text("apiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: default\n", encoding="utf-8")
+            PipelineFixtureProvider._snapshot_digests = {"templates/serviceaccount.yaml": hashlib.sha256(source.read_bytes()).hexdigest()}
+            method = valid_method_input()
+            method["requirement_text"] = "When enabled, render the selected ServiceAccount."
+            method["public_observable_text"] = "The rendered ServiceAccount name is default instead of selected."
+            method["scope_hints"] = [{"kind": "path", "value": "templates/serviceaccount.yaml",
+                                      "raw_text": "templates/serviceaccount.yaml", "origin_ref": "artifact_scope[0]"}]
+            method["initial_snapshot_id"] = compute_snapshot(root).snapshot_id
+            method["public_evidence"] = [{"id": "PUB1", "snapshot_id": method["initial_snapshot_id"],
+                "kind": "PUBLIC_OBSERVATION", "locator": {"path": "evidence/PUB1.json"},
+                "content_digest": hashlib.sha256(b"public observation").hexdigest(),
+                "excerpt": method["public_observable_text"], "origin": "fixture"}]
+            method.pop("input_digest", None)
+            method["input_digest"] = canonical_digest(method)
+            provider = OneChangeSetRevisionProvider()
+            trace = run_front_half(method, root, provider,
+                {"run_id": "run-revision", "model": {"model": "fixture"}, "top_n": 12,
+                 "max_context_tokens": 5000}, token_counter=lambda text: len(text.split()))
+>       self.assertEqual(trace.status, "READY", f"{trace.errors}")
+E       AssertionError: 'BUDGET_EXHAUSTED' != 'READY'
+E       - BUDGET_EXHAUSTED
+E       + READY
+E        : ('complete diagnosis request exceeds the context, token, or time budget',)
+
+../contractedge-github-delivery-20261022/system/tests/test_orchestration.py:719: AssertionError
+__ OrchestrationTests.test_evidence_gap_runs_one_bounded_diagnosis_extension ___
+
+self = <tests.test_orchestration.OrchestrationTests testMethod=test_evidence_gap_runs_one_bounded_diagnosis_extension>
+
+    def test_evidence_gap_runs_one_bounded_diagnosis_extension(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "templates/serviceaccount.yaml"
+            source.parent.mkdir()
+            source.write_text("apiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: default\n", encoding="utf-8")
+            PipelineFixtureProvider._snapshot_digests = {"templates/serviceaccount.yaml": hashlib.sha256(source.read_bytes()).hexdigest()}
+            method = valid_method_input()
+            method["requirement_text"] = "When enabled, render the selected ServiceAccount."
+            method["public_observable_text"] = "The rendered ServiceAccount name is default instead of selected."
+            method["scope_hints"] = [{"kind": "path", "value": "templates/serviceaccount.yaml",
+                                      "raw_text": "templates/serviceaccount.yaml", "origin_ref": "artifact_scope[0]"}]
+            method["initial_snapshot_id"] = compute_snapshot(root).snapshot_id
+            method["public_evidence"] = [{"id": "PUB1", "snapshot_id": method["initial_snapshot_id"],
+                "kind": "PUBLIC_OBSERVATION", "locator": {"path": "evidence/PUB1.json"},
+                "content_digest": hashlib.sha256(b"public observation").hexdigest(),
+                "excerpt": method["public_observable_text"], "origin": "fixture"}]
+            method.pop("input_digest", None)
+            method["input_digest"] = canonical_digest(method)
+            provider = InvalidExtensionThenCorrectedProvider()
+            trace = run_front_half(method, root, provider,
+                {"run_id": "run-extension", "model": {"model": "fixture"}, "top_n": 1,
+                 "max_context_tokens": 5000, "max_format_retries": 1},
+                token_counter=lambda text: len(text.split()))
+>       self.assertEqual(trace.status, "READY", f"{trace.errors}")
+E       AssertionError: 'BUDGET_EXHAUSTED' != 'READY'
+E       - BUDGET_EXHAUSTED
+E       + READY
+E        : ('complete diagnosis request exceeds the context, token, or time budget',)
+
+../contractedge-github-delivery-20261022/system/tests/test_orchestration.py:649: AssertionError
+_ OrchestrationTests.test_evidence_gap_searches_a_query_matched_direct_source_neighbor _
+
+self = <tests.test_orchestration.OrchestrationTests testMethod=test_evidence_gap_searches_a_query_matched_direct_source_neighbor>
+
+    def test_evidence_gap_searches_a_query_matched_direct_source_neighbor(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            controller = root / "src/controller.go"
+            service = root / "src/service.go"
+            controller.parent.mkdir()
+            controller.write_text("package app\nfunc Reconcile() { ensureService() }\n", encoding="utf-8")
+            service.write_text("package app\nfunc ensureService() { buildService() }\n", encoding="utf-8")
+            PipelineFixtureProvider._snapshot_digests = {
+                "src/service.go": hashlib.sha256(service.read_bytes()).hexdigest()}
+            method = valid_method_input()
+            method["public_observable_text"] = "The controller does not reach ensureService."
+            method["scope_hints"] = [{"kind": "path", "value": "src/controller.go",
+                                      "raw_text": "src/controller.go", "origin_ref": "scope"}]
+            method["initial_snapshot_id"] = compute_snapshot(root).snapshot_id
+            evidence_payload = {"id": "PUB1", "kind": "PUBLIC_OBSERVATION",
+                                "excerpt": method["public_observable_text"], "origin": "fixture"}
+            evidence_bytes = (json.dumps(evidence_payload, sort_keys=True, indent=2) + "\n").encode()
+            method["public_evidence"] = [{"id": "PUB1", "snapshot_id": method["initial_snapshot_id"],
+                "kind": "PUBLIC_OBSERVATION", "locator": {"path": "evidence/PUB1.json"},
+                "content_digest": hashlib.sha256(evidence_bytes).hexdigest(),
+                "excerpt": method["public_observable_text"], "origin": "fixture"}]
+            method.pop("input_digest", None)
+            method["input_digest"] = canonical_digest(method)
+            provider = NeighborExtensionProvider()
+    
+            trace = run_front_half(method, root, provider,
+                {"run_id": "run-neighbor-extension", "model": {"model": "fixture"},
+                 "top_n": 1, "max_units": 8, "max_extension_files": 0,
+                 "max_context_tokens": 5000}, token_counter=lambda text: len(text.split()))
+    
+>       self.assertEqual(trace.status, "READY", f"{trace.errors}; selected={[u['path'] for u in trace.candidate_set.candidates]}; plan={trace.changeset}")
+E       AssertionError: 'BUDGET_EXHAUSTED' != 'READY'
+E       - BUDGET_EXHAUSTED
+E       + READY
+E        : ('complete diagnosis request exceeds the context, token, or time budget',); selected=[]; plan=None
+
+../contractedge-github-delivery-20261022/system/tests/test_orchestration.py:692: AssertionError
+_ OrchestrationTests.test_malformed_model_json_is_not_reported_as_infrastructure_failure _
+
+self = <tests.test_orchestration.OrchestrationTests testMethod=test_malformed_model_json_is_not_reported_as_infrastructure_failure>
+
+    def test_malformed_model_json_is_not_reported_as_infrastructure_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "main.go"
+            source.write_text("package main\nfunc render() {}\n", encoding="utf-8")
+            method = valid_method_input()
+            method["scope_hints"] = [{"kind": "path", "value": "main.go", "raw_text": "main.go", "origin_ref": "scope"}]
+            method["input_digest"] = DIGEST
+            method["initial_snapshot_id"] = compute_snapshot(root).snapshot_id
+            method.pop("input_digest", None)
+            method["input_digest"] = canonical_digest(method)
+            trace = run_front_half(method, root, InvalidOutputProvider(),
+                                   {"run_id": "run-invalid", "max_context_tokens": 5000},
+                                   token_counter=lambda text: len(text.split()))
+>           self.assertEqual(trace.status, "INVALID_OUTPUT")
+E           AssertionError: 'BUDGET_EXHAUSTED' != 'INVALID_OUTPUT'
+E           - BUDGET_EXHAUSTED
+E           + INVALID_OUTPUT
+
+../contractedge-github-delivery-20261022/system/tests/test_orchestration.py:552: AssertionError
+_ OrchestrationTests.test_requirement_diagnosis_and_changeset_run_in_one_bounded_trace _
+
+self = <tests.test_orchestration.OrchestrationTests testMethod=test_requirement_diagnosis_and_changeset_run_in_one_bounded_trace>
+
+    def test_requirement_diagnosis_and_changeset_run_in_one_bounded_trace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "templates/serviceaccount.yaml"
+            source.parent.mkdir()
+            source.write_text("apiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: default\n", encoding="utf-8")
+            digest = hashlib.sha256(source.read_bytes()).hexdigest()
+            PipelineFixtureProvider._snapshot_digests = {"templates/serviceaccount.yaml": digest}
+            method = valid_method_input()
+            method["requirement_text"] = "When enabled, render the selected ServiceAccount."
+            method["public_observable_text"] = "The rendered ServiceAccount name is default instead of selected."
+            method["scope_hints"] = [{"kind": "path", "value": "templates/serviceaccount.yaml",
+                                      "raw_text": "templates/serviceaccount.yaml", "origin_ref": "artifact_scope[0]"}]
+            method["input_digest"] = DIGEST
+            method["initial_snapshot_id"] = compute_snapshot(root).snapshot_id
+            excerpt = method["public_observable_text"]
+            evidence_payload = {"id": "PUB1", "kind": "PUBLIC_OBSERVATION", "excerpt": excerpt,
+                                "origin": "public fixture"}
+            evidence_bytes = (json.dumps(evidence_payload, sort_keys=True, indent=2) + "\n").encode()
+            method["public_evidence"] = [{"id": "PUB1", "snapshot_id": method["initial_snapshot_id"],
+                "kind": "PUBLIC_OBSERVATION", "locator": {"path": "evidence/PUB1.json"},
+                "content_digest": hashlib.sha256(evidence_bytes).hexdigest(), "excerpt": excerpt,
+                "origin": "public fixture"}]
+            method.pop("input_digest", None)
+            method["input_digest"] = canonical_digest(method)
+            provider = WrappedDiagnosisOnceProvider()
+            reviews = []
+    
+            def semantic_reviewer(review_input):
+                reviews.append(review_input)
+                return {"decision": "ACCEPT", "method": "independent_fixture_review",
+                        "reviewer_id": "reviewer-fixture-01", "independent": True,
+                        "rationale": "The cited source and observation support the proposed relation and target."}
+    
+            trace = run_front_half(method, root, provider, {"run_id": "run-test", "model": {"model": "fixture"},
+                "top_n": 12, "max_context_tokens": 5000,
+                "max_scope_search_files": 123, "max_scope_search_bytes": 4567,
+                "max_scope_search_file_bytes": 890, "max_scope_matches_per_hint": 9},
+                token_counter=lambda text: len(text.split()),
+                semantic_reviewer=semantic_reviewer)
+>           self.assertEqual(trace.status, "READY", f"{trace.errors}")
+E           AssertionError: 'BUDGET_EXHAUSTED' != 'READY'
+E           - BUDGET_EXHAUSTED
+E           + READY
+E            : ('complete diagnosis request exceeds the context, token, or time budget',)
+
+../contractedge-github-delivery-20261022/system/tests/test_orchestration.py:509: AssertionError
+_ OrchestrationTests.test_retry_timeout_retains_snapshot_and_failed_call_stage _
+
+self = <tests.test_orchestration.OrchestrationTests testMethod=test_retry_timeout_retains_snapshot_and_failed_call_stage>
+
+    def test_retry_timeout_retains_snapshot_and_failed_call_stage(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "main.go"
+            source.write_text("package main\nfunc render() {}\n", encoding="utf-8")
+            method = valid_method_input()
+            method["scope_hints"] = [{"kind": "path", "value": "main.go", "raw_text": "main.go", "origin_ref": "scope"}]
+            method["initial_snapshot_id"] = compute_snapshot(root).snapshot_id
+            method.pop("input_digest", None)
+            method["input_digest"] = canonical_digest(method)
+            trace = run_front_half(method, root, TimeoutOnRetryProvider(),
+                {"run_id": "run-timeout", "model": {"model": "fixture"}, "max_context_tokens": 5000},
+                token_counter=lambda text: len(text.split()))
+>       self.assertEqual(trace.status, "INFRASTRUCTURE_ERROR")
+E       AssertionError: 'BUDGET_EXHAUSTED' != 'INFRASTRUCTURE_ERROR'
+E       - BUDGET_EXHAUSTED
+E       + INFRASTRUCTURE_ERROR
+
+../contractedge-github-delivery-20261022/system/tests/test_orchestration.py:425: AssertionError
+_ OrchestrationTests.test_truncated_generation_is_reported_as_budget_exhaustion _
+
+self = <tests.test_orchestration.OrchestrationTests testMethod=test_truncated_generation_is_reported_as_budget_exhaustion>
+
+    def test_truncated_generation_is_reported_as_budget_exhaustion(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "main.go"
+            source.write_text("package main\nfunc render() {}\n", encoding="utf-8")
+            method = valid_method_input()
+            method["scope_hints"] = [{"kind": "path", "value": "main.go", "raw_text": "main.go", "origin_ref": "scope"}]
+            method["initial_snapshot_id"] = compute_snapshot(root).snapshot_id
+            method.pop("input_digest", None)
+            method["input_digest"] = canonical_digest(method)
+            provider = InvalidOutputProvider(finish_reason="length")
+            trace = run_front_half(method, root, provider,
+                {"run_id": "run-truncated", "model": {"model": "fixture"}, "max_context_tokens": 5000},
+                token_counter=lambda text: len(text.split()))
+        self.assertEqual(trace.status, "BUDGET_EXHAUSTED")
+>       self.assertEqual(provider.calls, 1)
+E       AssertionError: 0 != 1
+
+../contractedge-github-delivery-20261022/system/tests/test_orchestration.py:467: AssertionError
+=========================== short test summary info ============================
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_orchestration.py::OrchestrationTests::test_changeset_format_failure_gets_one_revision_attempt
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_orchestration.py::OrchestrationTests::test_evidence_gap_runs_one_bounded_diagnosis_extension
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_orchestration.py::OrchestrationTests::test_evidence_gap_searches_a_query_matched_direct_source_neighbor
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_orchestration.py::OrchestrationTests::test_malformed_model_json_is_not_reported_as_infrastructure_failure
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_orchestration.py::OrchestrationTests::test_requirement_diagnosis_and_changeset_run_in_one_bounded_trace
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_orchestration.py::OrchestrationTests::test_retry_timeout_retains_snapshot_and_failed_call_stage
+FAILED ../contractedge-github-delivery-20261022/system/tests/test_orchestration.py::OrchestrationTests::test_truncated_generation_is_reported_as_budget_exhaustion
+7 failed, 840 passed, 22 subtests passed in 67.58s (0:01:07)

@@ -1,0 +1,100 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_next_slot_cannot_silently_use_a_different_common_environment[python_environment] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-487/test_next_slot_cannot_silently0')
+field = 'python_environment'
+
+    @pytest.mark.parametrize('field',list(ENVIRONMENT))
+    def test_next_slot_cannot_silently_use_a_different_common_environment(tmp_path,field):
+        panel,path,_=fixture(tmp_path);slot=panel['slots'][0];identity=slot_identity(panel,slot)
+        identity[field]={'changed':'after panel freeze'}
+        record={**identity,'role':'ISOLATED_FIXED_PANEL_SLOT','allow_paid':True,'counts_in_46_slot_panel':True,
+                'panel_registration_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'panel_slot_id':slot['slot_id']}
+>       with pytest.raises(ValueError,match='environment'):load().validate_slot_registration(record,identity,path)
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_fixed_panel.py:126: Failed
+_ test_next_slot_cannot_silently_use_a_different_common_environment[dependency_files] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-487/test_next_slot_cannot_silently1')
+field = 'dependency_files'
+
+    @pytest.mark.parametrize('field',list(ENVIRONMENT))
+    def test_next_slot_cannot_silently_use_a_different_common_environment(tmp_path,field):
+        panel,path,_=fixture(tmp_path);slot=panel['slots'][0];identity=slot_identity(panel,slot)
+        identity[field]={'changed':'after panel freeze'}
+        record={**identity,'role':'ISOLATED_FIXED_PANEL_SLOT','allow_paid':True,'counts_in_46_slot_panel':True,
+                'panel_registration_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'panel_slot_id':slot['slot_id']}
+>       with pytest.raises(ValueError,match='environment'):load().validate_slot_registration(record,identity,path)
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_fixed_panel.py:126: Failed
+_ test_next_slot_cannot_silently_use_a_different_common_environment[public_tool_files] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-487/test_next_slot_cannot_silently2')
+field = 'public_tool_files'
+
+    @pytest.mark.parametrize('field',list(ENVIRONMENT))
+    def test_next_slot_cannot_silently_use_a_different_common_environment(tmp_path,field):
+        panel,path,_=fixture(tmp_path);slot=panel['slots'][0];identity=slot_identity(panel,slot)
+        identity[field]={'changed':'after panel freeze'}
+        record={**identity,'role':'ISOLATED_FIXED_PANEL_SLOT','allow_paid':True,'counts_in_46_slot_panel':True,
+                'panel_registration_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'panel_slot_id':slot['slot_id']}
+>       with pytest.raises(ValueError,match='environment'):load().validate_slot_registration(record,identity,path)
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_fixed_panel.py:126: Failed
+_ test_next_slot_cannot_silently_use_a_different_common_environment[public_release_files] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-487/test_next_slot_cannot_silently3')
+field = 'public_release_files'
+
+    @pytest.mark.parametrize('field',list(ENVIRONMENT))
+    def test_next_slot_cannot_silently_use_a_different_common_environment(tmp_path,field):
+        panel,path,_=fixture(tmp_path);slot=panel['slots'][0];identity=slot_identity(panel,slot)
+        identity[field]={'changed':'after panel freeze'}
+        record={**identity,'role':'ISOLATED_FIXED_PANEL_SLOT','allow_paid':True,'counts_in_46_slot_panel':True,
+                'panel_registration_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'panel_slot_id':slot['slot_id']}
+>       with pytest.raises(ValueError,match='environment'):load().validate_slot_registration(record,identity,path)
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_fixed_panel.py:126: Failed
+_ test_next_slot_cannot_silently_use_a_different_common_environment[harness_files] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-487/test_next_slot_cannot_silently4')
+field = 'harness_files'
+
+    @pytest.mark.parametrize('field',list(ENVIRONMENT))
+    def test_next_slot_cannot_silently_use_a_different_common_environment(tmp_path,field):
+        panel,path,_=fixture(tmp_path);slot=panel['slots'][0];identity=slot_identity(panel,slot)
+        identity[field]={'changed':'after panel freeze'}
+        record={**identity,'role':'ISOLATED_FIXED_PANEL_SLOT','allow_paid':True,'counts_in_46_slot_panel':True,
+                'panel_registration_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'panel_slot_id':slot['slot_id']}
+>       with pytest.raises(ValueError,match='environment'):load().validate_slot_registration(record,identity,path)
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_fixed_panel.py:126: Failed
+_ test_next_slot_cannot_silently_use_a_different_common_environment[coordinator_code_files] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-487/test_next_slot_cannot_silently5')
+field = 'coordinator_code_files'
+
+    @pytest.mark.parametrize('field',list(ENVIRONMENT))
+    def test_next_slot_cannot_silently_use_a_different_common_environment(tmp_path,field):
+        panel,path,_=fixture(tmp_path);slot=panel['slots'][0];identity=slot_identity(panel,slot)
+        identity[field]={'changed':'after panel freeze'}
+        record={**identity,'role':'ISOLATED_FIXED_PANEL_SLOT','allow_paid':True,'counts_in_46_slot_panel':True,
+                'panel_registration_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'panel_slot_id':slot['slot_id']}
+>       with pytest.raises(ValueError,match='environment'):load().validate_slot_registration(record,identity,path)
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_fixed_panel.py:126: Failed
+=========================== short test summary info ============================
+FAILED tests/test_fixed_panel.py::test_next_slot_cannot_silently_use_a_different_common_environment[python_environment]
+FAILED tests/test_fixed_panel.py::test_next_slot_cannot_silently_use_a_different_common_environment[dependency_files]
+FAILED tests/test_fixed_panel.py::test_next_slot_cannot_silently_use_a_different_common_environment[public_tool_files]
+FAILED tests/test_fixed_panel.py::test_next_slot_cannot_silently_use_a_different_common_environment[public_release_files]
+FAILED tests/test_fixed_panel.py::test_next_slot_cannot_silently_use_a_different_common_environment[harness_files]
+FAILED tests/test_fixed_panel.py::test_next_slot_cannot_silently_use_a_different_common_environment[coordinator_code_files]
+6 failed, 18 deselected in 0.62s

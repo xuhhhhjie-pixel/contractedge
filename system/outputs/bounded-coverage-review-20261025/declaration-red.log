@@ -1,0 +1,110 @@
+FFF....FF                                                                [100%]
+=================================== FAILURES ===================================
+___ test_commented_helper_and_exact_endpoint_share_one_required_slot[False] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-513/test_commented_helper_and_exac0')
+reverse = False
+
+    @pytest.mark.parametrize('reverse', [False, True])
+    def test_commented_helper_and_exact_endpoint_share_one_required_slot(tmp_path, reverse):
+        _,helper,direct=setup_source(tmp_path)
+        direct.update(gap_role_keys=['G:anchor'],required_for_gap_delivery=True)
+        other={**direct,'id':'OTHER','path':'consumer.go','text':'consumer contract',
+               'content_digest':hashlib.sha256(b'consumer contract').hexdigest(),
+               'gap_role_keys':['H:anchor']}
+        units=[direct,helper] if reverse else [helper,direct]
+        result=build_candidate_set('Run consumer',None,[*units,other],[],top_n=2,
+            max_context_tokens=12000,token_counter=len)
+        assert set(result.selected_ids)=={helper['id'],'OTHER'}
+        selected=next(u for u in result.candidates if u['id']==helper['id'])
+        assert selected['text']==helper['text'] and selected['locator']==helper['locator']
+>       assert set(selected['gap_role_keys'])==set(helper['gap_role_keys'])|{'G:anchor'}
+E       AssertionError: assert {'PUBLIC_LIFE...daf1d823c57c'} == {'G:anchor', ...daf1d823c57c'}
+E         
+E         Extra items in the right set:
+E         'G:anchor'
+E         Use -v to get more diff
+
+tests/test_source_declaration_coalescing.py:46: AssertionError
+____ test_commented_helper_and_exact_endpoint_share_one_required_slot[True] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-513/test_commented_helper_and_exac1')
+reverse = True
+
+    @pytest.mark.parametrize('reverse', [False, True])
+    def test_commented_helper_and_exact_endpoint_share_one_required_slot(tmp_path, reverse):
+        _,helper,direct=setup_source(tmp_path)
+        direct.update(gap_role_keys=['G:anchor'],required_for_gap_delivery=True)
+        other={**direct,'id':'OTHER','path':'consumer.go','text':'consumer contract',
+               'content_digest':hashlib.sha256(b'consumer contract').hexdigest(),
+               'gap_role_keys':['H:anchor']}
+        units=[direct,helper] if reverse else [helper,direct]
+        result=build_candidate_set('Run consumer',None,[*units,other],[],top_n=2,
+            max_context_tokens=12000,token_counter=len)
+        assert set(result.selected_ids)=={helper['id'],'OTHER'}
+        selected=next(u for u in result.candidates if u['id']==helper['id'])
+        assert selected['text']==helper['text'] and selected['locator']==helper['locator']
+>       assert set(selected['gap_role_keys'])==set(helper['gap_role_keys'])|{'G:anchor'}
+E       AssertionError: assert {'PUBLIC_LIFE...daf1d823c57c'} == {'G:anchor', ...daf1d823c57c'}
+E         
+E         Extra items in the right set:
+E         'G:anchor'
+E         Use -v to get more diff
+
+tests/test_source_declaration_coalescing.py:46: AssertionError
+__ test_actual_same_body_different_optional_column_metadata_is_not_duplicated __
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-513/test_actual_same_body_differen0')
+
+    def test_actual_same_body_different_optional_column_metadata_is_not_duplicated(tmp_path):
+        _,_,direct=setup_source(tmp_path)
+        alias=deepcopy(direct);alias['id']='COLUMN-ALIAS';alias['locator'].pop('column_start',None)
+        result=build_candidate_set('Run',None,[direct,alias],[],top_n=12,
+            max_context_tokens=12000,token_counter=len)
+>       assert result.selected_count==1
+E       AssertionError: assert 2 == 1
+E        +  where 2 = CandidateSet(candidates=({'id': 'CU-c017bbde78e2fa20', 'kind': 'FUNCTION_OR_TYPE', 'path': 'worker/worker.go', 'locato... top_n=12, extension_used=False, drop_reasons={}, supplemental_evidence=(), context_audit=(), required_endpoint_ids=()).selected_count
+
+tests/test_source_declaration_coalescing.py:56: AssertionError
+_________ test_extension_keeps_old_lifecycle_identity_and_new_gap_role _________
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-513/test_extension_keeps_old_lifec0')
+
+    def test_extension_keeps_old_lifecycle_identity_and_new_gap_role(tmp_path):
+        _,helper,direct=setup_source(tmp_path)
+        first=build_candidate_set('Run',None,[helper],[],top_n=2,
+            max_context_tokens=12000,token_counter=len)
+        direct.update(gap_role_keys=['G:anchor'],required_for_gap_delivery=True)
+        result=extend_once(first,[{'id':'G','locator_hint':{'symbol':'Run'}}],[direct],
+            max_context_tokens=12000,token_counter=len)
+>       assert result.selected_ids==(helper['id'],)
+E       AssertionError: assert ('CU-HELPER-4...bbde78e2fa20') == ('CU-HELPER-4...af1d823c57c',)
+E         
+E         Left contains one more item: 'CU-c017bbde78e2fa20'
+E         Use -v to get more diff
+
+tests/test_source_declaration_coalescing.py:80: AssertionError
+____ test_reference_edges_follow_a_verified_alias_to_the_retained_identity _____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-513/test_reference_edges_follow_a_0')
+
+    def test_reference_edges_follow_a_verified_alias_to_the_retained_identity(tmp_path):
+        _,helper,direct=setup_source(tmp_path)
+        caller={**direct,'id':'CALLER','path':'consumer.go','text':'uses Run',
+                'content_digest':hashlib.sha256(b'uses Run').hexdigest()}
+        edge={'source':'CALLER','target':direct['id'],'edge_kind':'INFERRED'}
+        result=build_candidate_set('Run',None,[caller,direct,helper],[edge],top_n=2,
+            max_context_tokens=12000,token_counter=len)
+>       assert len(result.edges)==1
+E       AssertionError: assert 0 == 1
+E        +  where 0 = len(())
+E        +    where () = CandidateSet(candidates=({'id': 'CU-HELPER-4530daf1d823c57c', 'path': 'worker/worker.go', 'locator': {'start_line': 4,...p_reasons={'CU-c017bbde78e2fa20': 'TOP_N_LIMIT'}, supplemental_evidence=(), context_audit=(), required_endpoint_ids=()).edges
+
+tests/test_source_declaration_coalescing.py:92: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_source_declaration_coalescing.py::test_commented_helper_and_exact_endpoint_share_one_required_slot[False]
+FAILED tests/test_source_declaration_coalescing.py::test_commented_helper_and_exact_endpoint_share_one_required_slot[True]
+FAILED tests/test_source_declaration_coalescing.py::test_actual_same_body_different_optional_column_metadata_is_not_duplicated
+FAILED tests/test_source_declaration_coalescing.py::test_extension_keeps_old_lifecycle_identity_and_new_gap_role
+FAILED tests/test_source_declaration_coalescing.py::test_reference_edges_follow_a_verified_alias_to_the_retained_identity
+5 failed, 4 passed in 8.55s

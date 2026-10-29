@@ -1,0 +1,117 @@
+FFFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness[namespace-value0] _
+
+field = 'namespace', value = []
+
+    @pytest.mark.parametrize('field,value',[('namespace',[]),('kind',{}),('namespace',''),('namespace','  ')])
+    def test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness(field,value):
+        item=inventory();operation=failed();operation.update(id='OP',scenario='control',
+            resource_identity={'kind':'Job','name':'child','namespace':'team-a'})
+        operation['resource_identity'][field]=value
+>       assert support_error(obligation(),claim(item),[item,operation])=='OPERATION_SUCCESS_CONFLICT'
+E       assert None == 'OPERATION_SUCCESS_CONFLICT'
+E        +  where None = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}, {'id': 'OP', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'locator': {'path': 'raw/trigger.pod-spec-0000.json'}, ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}} = obligation()
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:114: AssertionError
+_ test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness[kind-value1] _
+
+field = 'kind', value = {}
+
+    @pytest.mark.parametrize('field,value',[('namespace',[]),('kind',{}),('namespace',''),('namespace','  ')])
+    def test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness(field,value):
+        item=inventory();operation=failed();operation.update(id='OP',scenario='control',
+            resource_identity={'kind':'Job','name':'child','namespace':'team-a'})
+        operation['resource_identity'][field]=value
+>       assert support_error(obligation(),claim(item),[item,operation])=='OPERATION_SUCCESS_CONFLICT'
+E       assert None == 'OPERATION_SUCCESS_CONFLICT'
+E        +  where None = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}, {'id': 'OP', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'locator': {'path': 'raw/trigger.pod-spec-0000.json'}, ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}} = obligation()
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:114: AssertionError
+_ test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness[namespace-] _
+
+field = 'namespace', value = ''
+
+    @pytest.mark.parametrize('field,value',[('namespace',[]),('kind',{}),('namespace',''),('namespace','  ')])
+    def test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness(field,value):
+        item=inventory();operation=failed();operation.update(id='OP',scenario='control',
+            resource_identity={'kind':'Job','name':'child','namespace':'team-a'})
+        operation['resource_identity'][field]=value
+>       assert support_error(obligation(),claim(item),[item,operation])=='OPERATION_SUCCESS_CONFLICT'
+E       assert None == 'OPERATION_SUCCESS_CONFLICT'
+E        +  where None = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}, {'id': 'OP', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'locator': {'path': 'raw/trigger.pod-spec-0000.json'}, ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}} = obligation()
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:114: AssertionError
+_ test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness[namespace-  ] _
+
+field = 'namespace', value = '  '
+
+    @pytest.mark.parametrize('field,value',[('namespace',[]),('kind',{}),('namespace',''),('namespace','  ')])
+    def test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness(field,value):
+        item=inventory();operation=failed();operation.update(id='OP',scenario='control',
+            resource_identity={'kind':'Job','name':'child','namespace':'team-a'})
+        operation['resource_identity'][field]=value
+>       assert support_error(obligation(),claim(item),[item,operation])=='OPERATION_SUCCESS_CONFLICT'
+E       assert None == 'OPERATION_SUCCESS_CONFLICT'
+E        +  where None = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}, {'id': 'OP', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'locator': {'path': 'raw/trigger.pod-spec-0000.json'}, ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}} = obligation()
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:114: AssertionError
+_ test_empty_effective_namespace_does_not_prove_explicit_namespace_enumeration[] _
+
+namespace = ''
+
+    @pytest.mark.parametrize('namespace',['','  '])
+    def test_empty_effective_namespace_does_not_prove_explicit_namespace_enumeration(namespace):
+        item=inventory();body=json.loads(item['excerpt']);body['resources'][0]['namespace']=namespace
+        item['excerpt']=json.dumps(body);item['content_digest']=hashlib.sha256(item['excerpt'].encode()).hexdigest()
+>       assert support_error(obligation(),claim(item),[item]) is not None
+E       assert None is not None
+E        +  where None = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...", "kind": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": ""}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}} = obligation()
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...", "kind": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": ""}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:121: AssertionError
+_ test_empty_effective_namespace_does_not_prove_explicit_namespace_enumeration[  ] _
+
+namespace = '  '
+
+    @pytest.mark.parametrize('namespace',['','  '])
+    def test_empty_effective_namespace_does_not_prove_explicit_namespace_enumeration(namespace):
+        item=inventory();body=json.loads(item['excerpt']);body['resources'][0]['namespace']=namespace
+        item['excerpt']=json.dumps(body);item['content_digest']=hashlib.sha256(item['excerpt'].encode()).hexdigest()
+>       assert support_error(obligation(),claim(item),[item]) is not None
+E       assert None is not None
+E        +  where None = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2... "kind": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "  "}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}} = obligation()
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2... "kind": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "  "}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:121: AssertionError
+______ test_collection_cannot_fallback_to_object_identity_when_truncated _______
+
+    def test_collection_cannot_fallback_to_object_identity_when_truncated():
+        item=inventory();item['locator']['truncated']=True
+        item['resource_identity']=obligation()['verification_scope']['resource']
+>       assert support_error(obligation(),claim(item),[item]) is not None
+E       assert None is not None
+E        +  where None = support_error({'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}}, {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]}, [{'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...}])
+E        +    where {'verification_kind': 'PUBLIC_STRUCTURE', 'verification_scope': {'scenario': 'control', 'resource': {'kind': 'Job', 'name': None, 'namespace': 'team-a'}}} = obligation()
+E        +    and   {'status': 'PASS', 'evidence': [{'observation_id': 'INV', 'quote': '{"source_file": "raw/control.stdout", "source_sha2...nd": "Job", "complete_inventory": true, "resources": [{"kind": "Job", "name": "other-job", "namespace": "team-a"}]}'}]} = claim({'id': 'INV', 'kind': 'PUBLIC_OBSERVATION', 'snapshot_id': 'S1', 'scenario': 'control', ...})
+
+tests/test_public_inventory_scope.py:127: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_public_inventory_scope.py::test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness[namespace-value0]
+FAILED tests/test_public_inventory_scope.py::test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness[kind-value1]
+FAILED tests/test_public_inventory_scope.py::test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness[namespace-]
+FAILED tests/test_public_inventory_scope.py::test_malformed_operation_identity_is_unknown_not_proof_of_unrelatedness[namespace-  ]
+FAILED tests/test_public_inventory_scope.py::test_empty_effective_namespace_does_not_prove_explicit_namespace_enumeration[]
+FAILED tests/test_public_inventory_scope.py::test_empty_effective_namespace_does_not_prove_explicit_namespace_enumeration[  ]
+FAILED tests/test_public_inventory_scope.py::test_collection_cannot_fallback_to_object_identity_when_truncated
+7 failed, 26 deselected in 0.22s

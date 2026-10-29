@@ -1,0 +1,9 @@
+{
+  "status": "SEALED_BEFORE_FIRST_CLAIM",
+  "preparation_driver_sha256": "6efeafba559a5ef856ac8847c5015f544fae69dcc13a8e1e7bfeea6e8e70614a",
+  "execution_driver_sha256": "0b6a012ef9e08484ee9cc7e946335825e8bda7cae0c168336dde8d0b61f2894b",
+  "source_plan_request_unchanged": true,
+  "probe_frozen_before_edit": true,
+  "rejected_trial_restore_before_grading": true,
+  "new_model_calls": 0
+}

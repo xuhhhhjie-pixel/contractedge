@@ -1,0 +1,27 @@
+{
+  "scope": "Saved public raw render, replayed trusted producer and scoped review only; not full fresh repair or independent score",
+  "old_resource_gate": "OBSERVATION_RESOURCE_MISMATCH",
+  "new_resource_gate": null,
+  "review_decision": "PASS",
+  "new_model_calls": 0,
+  "fixture_responses": 1,
+  "HTTP_calls": 0,
+  "producer_adapter": "contractedge.render-inventory.v1",
+  "snapshot_id": "c5c896a488876d935874ff5b95329c143051e9343f014cad14f4d762e4b082d5",
+  "public_source_sha256": "ca657d52603d6e67893e29f1e49cfdb05acb6af000bf0694f2049a1bd4e00241",
+  "inventory_excerpt_sha256": "10e0a172e465ca474875fa34dd6b7bd26741368d587b746f5894d65ab7cbcedd",
+  "resources": [
+    {
+      "kind": "Job",
+      "name": "ct-vela-core-admission-create",
+      "namespace": "contractedge"
+    },
+    {
+      "kind": "Job",
+      "name": "ct-vela-core-admission-patch",
+      "namespace": "contractedge"
+    }
+  ],
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false
+}

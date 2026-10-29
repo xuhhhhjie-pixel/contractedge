@@ -1,0 +1,31 @@
+{
+  "status": "ZERO_CALL_QUALIFICATION_PASS_REQUIRES_NEW_DIAGNOSTIC_REGISTRATION",
+  "stages": [
+    {
+      "stage": "verify-after-full",
+      "exit": 0
+    },
+    {
+      "stage": "actual-eight",
+      "exit": 0
+    },
+    {
+      "stage": "public-sandbox",
+      "exit": 0
+    },
+    {
+      "stage": "verify-after-sandbox",
+      "exit": 0
+    }
+  ],
+  "model_calls_added": 0,
+  "formal_ready": false,
+  "B_opened": false,
+  "full_tests": 1939,
+  "subtests": 91,
+  "active_stage": null,
+  "actual8": "/home/xhj/contractedge-source050-v2-qualification-20261026/actual-eight/summary.json",
+  "sandbox_receipt": "/home/xhj/contractedge-source050-v2-qualification-20261026/candidate/.isolated-9fb968e85fae4293a14a04e9f1d19bc7/receipt.json",
+  "sandbox_receipt_sha256": "1fdce2b8658a1d0a42632e9c9831a101da6206ed178a18c1c8c2a49f1fba7a5f",
+  "scope": "Zero paid calls; frozen current-source actual8 and public sandbox, no repair-effectiveness conclusion"
+}

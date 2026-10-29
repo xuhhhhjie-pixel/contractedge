@@ -1,0 +1,306 @@
+.................FFF..F.                                                 [100%]
+=================================== FAILURES ===================================
+______________ test_conventional_diagnosis_envelope_is_supported _______________
+
+    def test_conventional_diagnosis_envelope_is_supported():
+        messages, draft = fixture()
+>       assert inventory(retry(messages, {'diagnosis': draft}))['source_anchored_consumers']
+E       assert []
+
+tests/test_grounded_graph_correction.py:117: AssertionError
+_______ test_malformed_semantic_role_never_breaks_error_reporting[role0] _______
+
+role = []
+
+    @pytest.mark.parametrize('role', [[], {}, 42, None])
+    def test_malformed_semantic_role_never_breaks_error_reporting(role):
+        messages, draft = fixture(); draft['units'][1]['semantic_role_class'] = role
+>       assert inventory(retry(messages, draft))['configurations']
+
+tests/test_grounded_graph_correction.py:123: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_grounded_graph_correction.py:29: in retry
+    return _append_diagnosis_retry_turn(messages, json.dumps(draft), feedback)
+src/contractedge/orchestration/runner.py:288: in _append_diagnosis_retry_turn
+    validation_feedback += _configuration_graph_feedback(messages, response_content)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+messages = [{'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "... reconcilePolicy() { consumeSelection() }\\n", "locator": {"path": "policy.go", "start_line": 20, "end_line": 20}}]}'}]
+response_content = '{"units": [{"id": "configuration", "semantic_role_class": "CONFIGURATION_INPUT", "existence": "PRESENT", "locator_ref...[{"id": "bypass", "source_unit_ids": ["configuration"], "target_unit_ids": ["result"], "requirement_refs": ["goal"]}]}'
+
+    def _configuration_graph_feedback(messages, response_content: str) -> str:
+        """Inventory a rejected graph; canonical source anchors do not prove its edges."""
+        try:
+            draft = parse_json_response(response_content)
+        except (TypeError, ValueError):
+            return ''
+        if not isinstance(draft, Mapping):
+            return ''
+        request = {}
+        for message in reversed(messages):
+            if not isinstance(message, Mapping) or message.get('role') != 'user':
+                continue
+            try:
+                value = json.loads(message.get('content', ''))
+            except (TypeError, ValueError):
+                continue
+            if isinstance(value, Mapping) and 'run_context' in value and 'evidence_catalog' in value:
+                request = value
+                break
+        context = request.get('run_context')
+        snapshot = context.get('snapshot_id') if isinstance(context, Mapping) else None
+        catalog = request.get('evidence_catalog')
+        catalog = catalog if isinstance(catalog, list) else []
+        records = {}
+        for record in catalog:
+            if isinstance(record, Mapping) and isinstance(record.get('id'), str):
+                records.setdefault(record['id'], []).append(record)
+        sources = {}
+        for identity, matches in records.items():
+            if len(matches) != 1:
+                continue
+            record = matches[0]; excerpt = record.get('excerpt'); locator = record.get('locator')
+            if (not isinstance(snapshot, str) or not snapshot or record.get('snapshot_id') != snapshot
+                    or record.get('kind') != 'SOURCE_SPAN' or not isinstance(excerpt, str)
+                    or hashlib.sha256(excerpt.encode()).hexdigest() != record.get('content_digest')
+                    or not isinstance(locator, Mapping) or not isinstance(locator.get('path'), str)):
+                continue
+            sources[identity] = dict(id=identity, locator=dict(locator), content_digest=record['content_digest'])
+        units = draft.get('units'); units = units if isinstance(units, list) else []
+        units_by_id = {}
+        for unit in units:
+            if isinstance(unit, Mapping) and isinstance(unit.get('id'), str):
+                units_by_id.setdefault(unit['id'], []).append(unit)
+        candidates = dict(configurations=[], source_anchored_consumers=[], unanchored_consumers=[],
+                          terminals=[], relations=[], current_source_spans=[], ambiguous_unit_ids=[])
+        cited_sources = set()
+        for identity, matches in units_by_id.items():
+            if len(matches) != 1:
+                candidates['ambiguous_unit_ids'].append(identity)
+                continue
+            unit = matches[0]; refs = unit.get('requirement_refs'); locators = unit.get('locator_refs')
+            if not isinstance(refs, list) or not all(isinstance(ref, str) for ref in refs):
+                continue
+            row = dict(unit_id=identity, requirement_refs=list(refs))
+            role = unit.get('semantic_role_class')
+            if role == 'CONFIGURATION_INPUT':
+                candidates['configurations'].append(row)
+            elif role == 'PRODUCTION_CONSUMER' and unit.get('existence') == 'PRESENT':
+                source_refs = list(dict.fromkeys(ref for ref in locators if isinstance(ref, str) and ref in sources)) if isinstance(locators, list) else []
+                if source_refs:
+                    row['source_refs'] = source_refs
+                    cited_sources.update(source_refs)
+                    candidates['source_anchored_consumers'].append(row)
+                else:
+                    candidates['unanchored_consumers'].append(row)
+>           elif role in {'GENERATED_STATE', 'RUNTIME_CONSUMER', 'OBSERVED_STATE'}:
+E           TypeError: unhashable type: 'list'
+
+src/contractedge/orchestration/runner.py:241: TypeError
+_______ test_malformed_semantic_role_never_breaks_error_reporting[role1] _______
+
+role = {}
+
+    @pytest.mark.parametrize('role', [[], {}, 42, None])
+    def test_malformed_semantic_role_never_breaks_error_reporting(role):
+        messages, draft = fixture(); draft['units'][1]['semantic_role_class'] = role
+>       assert inventory(retry(messages, draft))['configurations']
+
+tests/test_grounded_graph_correction.py:123: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_grounded_graph_correction.py:29: in retry
+    return _append_diagnosis_retry_turn(messages, json.dumps(draft), feedback)
+src/contractedge/orchestration/runner.py:288: in _append_diagnosis_retry_turn
+    validation_feedback += _configuration_graph_feedback(messages, response_content)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+messages = [{'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "... reconcilePolicy() { consumeSelection() }\\n", "locator": {"path": "policy.go", "start_line": 20, "end_line": 20}}]}'}]
+response_content = '{"units": [{"id": "configuration", "semantic_role_class": "CONFIGURATION_INPUT", "existence": "PRESENT", "locator_ref...[{"id": "bypass", "source_unit_ids": ["configuration"], "target_unit_ids": ["result"], "requirement_refs": ["goal"]}]}'
+
+    def _configuration_graph_feedback(messages, response_content: str) -> str:
+        """Inventory a rejected graph; canonical source anchors do not prove its edges."""
+        try:
+            draft = parse_json_response(response_content)
+        except (TypeError, ValueError):
+            return ''
+        if not isinstance(draft, Mapping):
+            return ''
+        request = {}
+        for message in reversed(messages):
+            if not isinstance(message, Mapping) or message.get('role') != 'user':
+                continue
+            try:
+                value = json.loads(message.get('content', ''))
+            except (TypeError, ValueError):
+                continue
+            if isinstance(value, Mapping) and 'run_context' in value and 'evidence_catalog' in value:
+                request = value
+                break
+        context = request.get('run_context')
+        snapshot = context.get('snapshot_id') if isinstance(context, Mapping) else None
+        catalog = request.get('evidence_catalog')
+        catalog = catalog if isinstance(catalog, list) else []
+        records = {}
+        for record in catalog:
+            if isinstance(record, Mapping) and isinstance(record.get('id'), str):
+                records.setdefault(record['id'], []).append(record)
+        sources = {}
+        for identity, matches in records.items():
+            if len(matches) != 1:
+                continue
+            record = matches[0]; excerpt = record.get('excerpt'); locator = record.get('locator')
+            if (not isinstance(snapshot, str) or not snapshot or record.get('snapshot_id') != snapshot
+                    or record.get('kind') != 'SOURCE_SPAN' or not isinstance(excerpt, str)
+                    or hashlib.sha256(excerpt.encode()).hexdigest() != record.get('content_digest')
+                    or not isinstance(locator, Mapping) or not isinstance(locator.get('path'), str)):
+                continue
+            sources[identity] = dict(id=identity, locator=dict(locator), content_digest=record['content_digest'])
+        units = draft.get('units'); units = units if isinstance(units, list) else []
+        units_by_id = {}
+        for unit in units:
+            if isinstance(unit, Mapping) and isinstance(unit.get('id'), str):
+                units_by_id.setdefault(unit['id'], []).append(unit)
+        candidates = dict(configurations=[], source_anchored_consumers=[], unanchored_consumers=[],
+                          terminals=[], relations=[], current_source_spans=[], ambiguous_unit_ids=[])
+        cited_sources = set()
+        for identity, matches in units_by_id.items():
+            if len(matches) != 1:
+                candidates['ambiguous_unit_ids'].append(identity)
+                continue
+            unit = matches[0]; refs = unit.get('requirement_refs'); locators = unit.get('locator_refs')
+            if not isinstance(refs, list) or not all(isinstance(ref, str) for ref in refs):
+                continue
+            row = dict(unit_id=identity, requirement_refs=list(refs))
+            role = unit.get('semantic_role_class')
+            if role == 'CONFIGURATION_INPUT':
+                candidates['configurations'].append(row)
+            elif role == 'PRODUCTION_CONSUMER' and unit.get('existence') == 'PRESENT':
+                source_refs = list(dict.fromkeys(ref for ref in locators if isinstance(ref, str) and ref in sources)) if isinstance(locators, list) else []
+                if source_refs:
+                    row['source_refs'] = source_refs
+                    cited_sources.update(source_refs)
+                    candidates['source_anchored_consumers'].append(row)
+                else:
+                    candidates['unanchored_consumers'].append(row)
+>           elif role in {'GENERATED_STATE', 'RUNTIME_CONSUMER', 'OBSERVED_STATE'}:
+E           TypeError: unhashable type: 'dict'
+
+src/contractedge/orchestration/runner.py:241: TypeError
+________ test_invalid_unicode_record_does_not_break_bounded_correction _________
+
+    def test_invalid_unicode_record_does_not_break_bounded_correction():
+        messages, draft = fixture(); draft['units'][1]['id'] = '\ud800'
+>       assert inventory(retry(messages, draft))['configurations']
+
+tests/test_grounded_graph_correction.py:128: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_grounded_graph_correction.py:29: in retry
+    return _append_diagnosis_retry_turn(messages, json.dumps(draft), feedback)
+src/contractedge/orchestration/runner.py:288: in _append_diagnosis_retry_turn
+    validation_feedback += _configuration_graph_feedback(messages, response_content)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+messages = [{'role': 'system', 'content': 'contract'}, {'role': 'user', 'content': '{"run_context": {"snapshot_id": "current"}, "... reconcilePolicy() { consumeSelection() }\\n", "locator": {"path": "policy.go", "start_line": 20, "end_line": 20}}]}'}]
+response_content = '{"units": [{"id": "configuration", "semantic_role_class": "CONFIGURATION_INPUT", "existence": "PRESENT", "locator_ref...[{"id": "bypass", "source_unit_ids": ["configuration"], "target_unit_ids": ["result"], "requirement_refs": ["goal"]}]}'
+
+    def _configuration_graph_feedback(messages, response_content: str) -> str:
+        """Inventory a rejected graph; canonical source anchors do not prove its edges."""
+        try:
+            draft = parse_json_response(response_content)
+        except (TypeError, ValueError):
+            return ''
+        if not isinstance(draft, Mapping):
+            return ''
+        request = {}
+        for message in reversed(messages):
+            if not isinstance(message, Mapping) or message.get('role') != 'user':
+                continue
+            try:
+                value = json.loads(message.get('content', ''))
+            except (TypeError, ValueError):
+                continue
+            if isinstance(value, Mapping) and 'run_context' in value and 'evidence_catalog' in value:
+                request = value
+                break
+        context = request.get('run_context')
+        snapshot = context.get('snapshot_id') if isinstance(context, Mapping) else None
+        catalog = request.get('evidence_catalog')
+        catalog = catalog if isinstance(catalog, list) else []
+        records = {}
+        for record in catalog:
+            if isinstance(record, Mapping) and isinstance(record.get('id'), str):
+                records.setdefault(record['id'], []).append(record)
+        sources = {}
+        for identity, matches in records.items():
+            if len(matches) != 1:
+                continue
+            record = matches[0]; excerpt = record.get('excerpt'); locator = record.get('locator')
+            if (not isinstance(snapshot, str) or not snapshot or record.get('snapshot_id') != snapshot
+                    or record.get('kind') != 'SOURCE_SPAN' or not isinstance(excerpt, str)
+                    or hashlib.sha256(excerpt.encode()).hexdigest() != record.get('content_digest')
+                    or not isinstance(locator, Mapping) or not isinstance(locator.get('path'), str)):
+                continue
+            sources[identity] = dict(id=identity, locator=dict(locator), content_digest=record['content_digest'])
+        units = draft.get('units'); units = units if isinstance(units, list) else []
+        units_by_id = {}
+        for unit in units:
+            if isinstance(unit, Mapping) and isinstance(unit.get('id'), str):
+                units_by_id.setdefault(unit['id'], []).append(unit)
+        candidates = dict(configurations=[], source_anchored_consumers=[], unanchored_consumers=[],
+                          terminals=[], relations=[], current_source_spans=[], ambiguous_unit_ids=[])
+        cited_sources = set()
+        for identity, matches in units_by_id.items():
+            if len(matches) != 1:
+                candidates['ambiguous_unit_ids'].append(identity)
+                continue
+            unit = matches[0]; refs = unit.get('requirement_refs'); locators = unit.get('locator_refs')
+            if not isinstance(refs, list) or not all(isinstance(ref, str) for ref in refs):
+                continue
+            row = dict(unit_id=identity, requirement_refs=list(refs))
+            role = unit.get('semantic_role_class')
+            if role == 'CONFIGURATION_INPUT':
+                candidates['configurations'].append(row)
+            elif role == 'PRODUCTION_CONSUMER' and unit.get('existence') == 'PRESENT':
+                source_refs = list(dict.fromkeys(ref for ref in locators if isinstance(ref, str) and ref in sources)) if isinstance(locators, list) else []
+                if source_refs:
+                    row['source_refs'] = source_refs
+                    cited_sources.update(source_refs)
+                    candidates['source_anchored_consumers'].append(row)
+                else:
+                    candidates['unanchored_consumers'].append(row)
+            elif role in {'GENERATED_STATE', 'RUNTIME_CONSUMER', 'OBSERVED_STATE'}:
+                candidates['terminals'].append(row)
+        relations = draft.get('expected_relations')
+        for relation in relations if isinstance(relations, list) else []:
+            if (not isinstance(relation, Mapping) or not isinstance(relation.get('id'), str)
+                    or any(not isinstance(relation.get(key), list) or not all(isinstance(ref, str) for ref in relation[key])
+                           for key in ('source_unit_ids', 'target_unit_ids', 'requirement_refs'))):
+                continue
+            candidates['relations'].append({key: relation[key] for key in
+                ('id', 'source_unit_ids', 'target_unit_ids', 'requirement_refs')})
+        candidates['current_source_spans'] = [record for identity, record in sources.items() if identity in cited_sources]
+        prefix = ('\nNaming a function in mechanism text does not route an edge through its unit. '
+                  'Inspect the existing units and actual directed endpoints against supplied excerpts. '
+                  'Source anchoring proves availability, not the claimed role or causality. Do not invent '
+                  'edges, new consumers or source citations to satisfy validation; retain unresolved gaps when needed. '
+                  'Rejected graph inventory (not verified causality): ')
+        result = {key: [] for key in candidates}
+        result['omitted'] = {key: len(rows) for key, rows in candidates.items()}
+        def serialize():
+            return prefix + json.dumps(result, ensure_ascii=False, separators=(',', ':'))
+        # Round robin keeps one large category from starving all endpoint categories.
+        for index in range(max(map(len, candidates.values()), default=0)):
+            for key, rows in candidates.items():
+                if index >= len(rows) or len(result[key]) >= 8:
+                    continue
+                result[key].append(rows[index]); result['omitted'][key] -= 1
+>               if len(serialize().encode()) > 4096:
+E               UnicodeEncodeError: 'utf-8' codec can't encode character '\ud800' in position 517: surrogates not allowed
+
+src/contractedge/orchestration/runner.py:267: UnicodeEncodeError
+=========================== short test summary info ============================
+FAILED tests/test_grounded_graph_correction.py::test_conventional_diagnosis_envelope_is_supported
+FAILED tests/test_grounded_graph_correction.py::test_malformed_semantic_role_never_breaks_error_reporting[role0]
+FAILED tests/test_grounded_graph_correction.py::test_malformed_semantic_role_never_breaks_error_reporting[role1]
+FAILED tests/test_grounded_graph_correction.py::test_invalid_unicode_record_does_not_break_bounded_correction
+4 failed, 20 passed in 0.53s

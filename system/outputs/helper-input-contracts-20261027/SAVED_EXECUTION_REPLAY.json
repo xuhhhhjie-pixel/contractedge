@@ -1,0 +1,21 @@
+{
+  "status": "SAVED_EXECUTION_INPUT_CONTRACT_REPLAY_PASS",
+  "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "original_plan_and_targets_unchanged": true,
+  "all_other_payload_fields_unchanged": true,
+  "original_support_records": 5,
+  "final_support_records": 8,
+  "selector_type_delivered": true,
+  "empty_predicate_delivered": true,
+  "matching_helper_delivered": true,
+  "final_support_bytes": 4500,
+  "request_total_bound": 161645,
+  "context_cap": 220000,
+  "adapter_body_verified": true,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "source_unchanged": true,
+  "original_failure_unchanged": true,
+  "formal_ready": false,
+  "limitation": "Input contract delivery only; no new edit or repair-quality claim."
+}

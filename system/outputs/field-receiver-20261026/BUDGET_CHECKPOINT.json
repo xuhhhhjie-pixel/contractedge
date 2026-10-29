@@ -1,0 +1,8 @@
+{
+  "limit_cny": 150,
+  "occupied_including_reservations_cny": 118.906088,
+  "remaining_upper_bound_cny": 31.093912000000003,
+  "new_calls": 6,
+  "new_occupied_cny": 0.8227,
+  "uncertainty_retained": true
+}

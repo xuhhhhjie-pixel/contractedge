@@ -50,9 +50,11 @@
   "review_truncation_retry": "disable_thinking",
   "planning_truncation_separate_allowance": true,
   "production_path_review_enabled": true,
+  "seed_planning_snapshot": "CURRENT_CANDIDATE",
   "method_probe_profiles": [
     "kpt-configpath-v4",
-    "alertmanager-reload-v3"
+    "alertmanager-reload-v4",
+    "cloudwatch-tags-v2"
   ],
   "diagnosis_format_retry_per_context": true,
   "execution_helper_support_enabled": true,
@@ -65,5 +67,13 @@
   "gap_role_delivery_enabled": true,
   "helper_preconditions_enabled": true,
   "writeback_context_enabled": true,
-  "execution_reasoning_policy": "complex_plan"
+  "execution_reasoning_policy": "failed_trial_only",
+  "model_identity_policy": "require_match",
+  "output_mode": "json_object",
+  "runtime_preflight": {
+    "cpus": 2,
+    "memory_mib": 2048,
+    "verify_image": "golang:1.26.8-bookworm@sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+    "timeout_seconds": 20
+  }
 }

@@ -1,0 +1,348 @@
+{
+  "schema_version": "ce.execution_feedback.v1",
+  "case_id": "RW-CERTMANAGER-9116",
+  "run_id": "d2277d11-edb0-436f-ae50-c927fc1b7bd4",
+  "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+  "round_id": 0,
+  "from_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "to_snapshot": "da155d856f99d504d8e61d2d271701087ab2bc5243acd01618ad6ccf61c13b88",
+  "patch_digest": "7c211f1d803b3a1b9ac58daf233c00bf61d4a449d4afe06ec5a720c6d30ce120",
+  "build_state": "PASSED",
+  "semantic_outcome": "UNKNOWN",
+  "public_observations": [
+    {
+      "id": "OBS1",
+      "snapshot_id": "da155d856f99d504d8e61d2d271701087ab2bc5243acd01618ad6ccf61c13b88",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "EXECUTION_ONLY",
+      "locator": {
+        "path": "launcher/tool.stdout",
+        "file_sha256": "a897d782b7582a71e42b332177b6a5146f2fe61d68b1f93b33cd391e9606cca5",
+        "start_byte": 0,
+        "copied_bytes": 303,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "a897d782b7582a71e42b332177b6a5146f2fe61d68b1f93b33cd391e9606cca5",
+      "excerpt": "{\"case_id\": \"RW-CERTMANAGER-9116\", \"status\": \"EXECUTION_PASS\", \"hidden_semantic_evaluation\": \"NOT_RUN\", \"private_materials_loaded\": false, \"scenarios\": [{\"scenario\": \"public-issuing-controller-build\", \"exit_code\": 0, \"elapsed_seconds\": 191.44061981514096, \"timed_out\": false, \"output_limited\": false}]}\n",
+      "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+    },
+    {
+      "id": "OBS2",
+      "snapshot_id": "da155d856f99d504d8e61d2d271701087ab2bc5243acd01618ad6ccf61c13b88",
+      "kind": "PUBLIC_OBSERVATION",
+      "evidence_kind": "EXECUTION_ONLY",
+      "locator": {
+        "path": "raw/public_execution.json",
+        "file_sha256": "9de2c4837d84e15b946c19cdd77615ea2945b3f403b795a7ae4b4c4c39f197ba",
+        "start_byte": 0,
+        "copied_bytes": 359,
+        "truncated": false,
+        "whole_file_read": true
+      },
+      "content_digest": "9de2c4837d84e15b946c19cdd77615ea2945b3f403b795a7ae4b4c4c39f197ba",
+      "excerpt": "{\n  \"case_id\": \"RW-CERTMANAGER-9116\",\n  \"status\": \"EXECUTION_PASS\",\n  \"hidden_semantic_evaluation\": \"NOT_RUN\",\n  \"private_materials_loaded\": false,\n  \"scenarios\": [\n    {\n      \"scenario\": \"public-issuing-controller-build\",\n      \"exit_code\": 0,\n      \"elapsed_seconds\": 191.44061981514096,\n      \"timed_out\": false,\n      \"output_limited\": false\n    }\n  ]\n}\n",
+      "origin": "Frozen public launcher; exact raw/derived public output, no hidden oracle"
+    }
+  ],
+  "public_check_results": [
+    {
+      "id": "P1",
+      "status": "UNKNOWN",
+      "rationale": "Outside the declared public observation boundary",
+      "evidence": []
+    },
+    {
+      "id": "open:O1-R1",
+      "status": "UNKNOWN",
+      "rationale": "Outside the declared public observation boundary",
+      "evidence": []
+    }
+  ],
+  "retained_constraints": [],
+  "pending_obligations": [
+    {
+      "kind": "POSTCONDITION",
+      "id": "P1",
+      "statement": "When a Certificate is in Issuing state and a CertificateRequest for the next revision exists, if the request CSR public key does not match the current NextPrivateKey Secret, the issuing controller does not process the request terminal conditions and returns without setting Issuing=False or lastFailureTime.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "relation_refs": [
+        "R1",
+        "R2",
+        "R3"
+      ],
+      "planned_check": "No public behavioral probe is available; the public runner only builds the issuing controller package (OBS1/OBS2). Source review must confirm the new guard precedes terminal handling, and the package build must pass.",
+      "check_scope": "pkg/controller/certificates/issuing/issuing_controller.go decision loop before terminal CertificateRequest condition handling; public observation limited to package build.",
+      "verification_kind": "NOT_PUBLICLY_OBSERVABLE",
+      "stable_obligation_keys": [
+        "OB-2ac55d40408c2e6df4a141ed",
+        "OB-af99a9da4582d6a340b9072d"
+      ],
+      "reason_category": "NOT_PUBLICLY_OBSERVABLE",
+      "verification_gap": {
+        "predicate": "When a Certificate is in Issuing state and a CertificateRequest for the next revision exists, if the request CSR public key does not match the current NextPrivateKey Secret, the issuing controller does not process the request terminal conditions and returns without setting Issuing=False or lastFailureTime.",
+        "scenario": null,
+        "required_check_refs": [],
+        "coverage": "UNDECLARED",
+        "remaining_scope": null,
+        "action": "STOP_UNOBSERVABLE"
+      }
+    },
+    {
+      "kind": "OPEN",
+      "id": "open:O1-R1",
+      "outcome_id": "O1",
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "statement": "Behavioral verification that a stale CertificateRequest built from a replaced key is ignored by the issuing controller before terminal-state handling is not publicly observable.",
+      "reason": "Public execution capability is limited to building the issuing controller package. No controller decision or cluster convergence was executed, so the planned production relation remains unverified beyond source-level inference and build success.",
+      "verification_kind": "NOT_PUBLICLY_OBSERVABLE",
+      "stable_obligation_keys": [
+        "OB-2ac55d40408c2e6df4a141ed",
+        "OB-af99a9da4582d6a340b9072d"
+      ],
+      "reason_category": "NOT_PUBLICLY_OBSERVABLE",
+      "verification_gap": {
+        "predicate": "Behavioral verification that a stale CertificateRequest built from a replaced key is ignored by the issuing controller before terminal-state handling is not publicly observable.",
+        "scenario": null,
+        "required_check_refs": [],
+        "coverage": "UNDECLARED",
+        "remaining_scope": null,
+        "action": "STOP_UNOBSERVABLE"
+      }
+    }
+  ],
+  "failure_kind": "UNKNOWN",
+  "route": "STOP",
+  "route_confidence": "LOW",
+  "rationale": "Public raw execution does not establish task correctness; retain open checks.",
+  "hidden_evaluation": "NOT_AVAILABLE_TO_METHOD",
+  "coordination_links": [
+    {
+      "check_id": "P1",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "historical_obligation_refs": [],
+      "relation_refs": [
+        "R1",
+        "R2",
+        "R3"
+      ],
+      "violation_refs": [
+        "V1"
+      ],
+      "change_refs": [
+        "C1"
+      ],
+      "diagnosis_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+      "observation_snapshot": "da155d856f99d504d8e61d2d271701087ab2bc5243acd01618ad6ccf61c13b88",
+      "observation_refs": [],
+      "status": "UNKNOWN",
+      "interpretation": "Traceable association, not independent proof of causal attribution"
+    },
+    {
+      "check_id": "open:O1-R1",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "historical_obligation_refs": [],
+      "relation_refs": [],
+      "violation_refs": [],
+      "change_refs": [],
+      "diagnosis_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+      "observation_snapshot": "da155d856f99d504d8e61d2d271701087ab2bc5243acd01618ad6ccf61c13b88",
+      "observation_refs": [],
+      "status": "UNKNOWN",
+      "interpretation": "Traceable association, not independent proof of causal attribution"
+    }
+  ],
+  "observation_diagnostics": [],
+  "next_action": "STOP_UNOBSERVABLE",
+  "public_execution_capabilities": {
+    "schema_version": "ce.public_execution_capabilities.v1",
+    "source": {
+      "path": "environment.json",
+      "sha256": "377db8923c5a14d6732c45e9dc40860dac1cd915e7c006945fad363fdc948c15",
+      "task_observation_limit_source": "task.yaml:observation_limit"
+    },
+    "task_observation_limit": "Check the stated controller decision only; no downstream cluster convergence is implied.",
+    "environment_observation_limit": "Production issuing controller package build; private request/key fixtures and oracle are not exposed",
+    "observation_boundary": null,
+    "public_scope": null,
+    "native_input_boundary": null,
+    "candidate_command": null,
+    "build_entrypoint": null,
+    "public_runner": null,
+    "expected_artifact": null,
+    "scenarios": [
+      {
+        "name": "public-issuing-controller-build",
+        "argv": [
+          "sh",
+          "/work/.contractedge-deps/setup/build.sh"
+        ]
+      }
+    ],
+    "editable_policy": {
+      "allowed_paths": [
+        "pkg/*.go",
+        "internal/*.go"
+      ],
+      "forbidden_paths": [
+        "**/*test*",
+        "**/contractedge*",
+        "private/**",
+        "verifier/**",
+        "evaluator/**",
+        "oracle/**",
+        "go.mod",
+        "go.sum",
+        "**/go.mod",
+        "**/go.sum",
+        ".contractedge-deps/**"
+      ],
+      "policy_status": "DECLARED"
+    },
+    "network": "none",
+    "interpretation": "Declared public execution/observation only. Build success is not behavioral success; unavailable behavior stays UNKNOWN. No additional execution or edit permission.",
+    "consumer_id": "contractedge.topomen_source_consumer.v1",
+    "execution_backend": "topomen_agent",
+    "supported_operations": [
+      "MODIFY",
+      "CREATE"
+    ],
+    "method_behavior_probes": []
+  },
+  "obligation_lineage": {
+    "schema_version": "ce.obligation_lineage.v1",
+    "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+    "requirement_digest": "d4dd65c54bbcc64f5a7884e7ed19a2a3064ebbe07e98a3660520e2d84d40a10d",
+    "nodes": {
+      "OB-2ac55d40408c2e6df4a141ed": {
+        "id": "OB-2ac55d40408c2e6df4a141ed",
+        "definition": {
+          "id": "A1",
+          "outcome_id": "O1",
+          "statement": "Before acting on terminal CertificateRequest states, the issuing controller must compare the CertificateRequest's CSR with the current NextPrivateKey Secret.",
+          "source_refs": [
+            "requirement_text:0:231"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+          "stable_obligation_key": "OB-2ac55d40408c2e6df4a141ed"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-af99a9da4582d6a340b9072d": {
+        "id": "OB-af99a9da4582d6a340b9072d",
+        "definition": {
+          "id": "A2",
+          "outcome_id": "O1",
+          "statement": "A stale CertificateRequest built from a replaced key must not fail the current Certificate issuance.",
+          "source_refs": [
+            "requirement_text:0:231"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance.",
+          "stable_obligation_key": "OB-af99a9da4582d6a340b9072d"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance.",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      }
+    },
+    "events": [
+      {
+        "kind": "REGISTER",
+        "id": "LE-0635f097c83a7741a6723cd6",
+        "parent_ids": [],
+        "atom_refs": [
+          "A1"
+        ],
+        "resolved_ids": {
+          "A1": "OB-2ac55d40408c2e6df4a141ed"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-14be460b22d8a4277facd2f4",
+        "parent_ids": [],
+        "atom_refs": [
+          "A2"
+        ],
+        "resolved_ids": {
+          "A2": "OB-af99a9da4582d6a340b9072d"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      }
+    ],
+    "bindings": {
+      "A1": "OB-2ac55d40408c2e6df4a141ed",
+      "A2": "OB-af99a9da4582d6a340b9072d"
+    },
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba"
+  },
+  "obligation_coverage": {
+    "OB-2ac55d40408c2e6df4a141ed": {
+      "status": "UNKNOWN",
+      "snapshot_id": "da155d856f99d504d8e61d2d271701087ab2bc5243acd01618ad6ccf61c13b88",
+      "residual": null,
+      "reason": "Missing sufficient current evidence"
+    },
+    "OB-af99a9da4582d6a340b9072d": {
+      "status": "UNKNOWN",
+      "snapshot_id": "da155d856f99d504d8e61d2d271701087ab2bc5243acd01618ad6ccf61c13b88",
+      "residual": null,
+      "reason": "Missing sufficient current evidence"
+    }
+  },
+  "helper_preconditions": {
+    "schema_version": "ce.helper_preconditions.v1",
+    "checks": [],
+    "interpretation": "Finite registered syntax relation only; behavior probes remain required, no general control-flow or alias proof"
+  }
+}

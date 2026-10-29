@@ -1,0 +1,187 @@
+{
+  "provider": "openai_compatible",
+  "base_url": "https://api.chatanywhere.tech/v1",
+  "model": {
+    "model": "deepseek-v4.1-flash",
+    "provider": "openai_compatible",
+    "schema_in_prompt": true
+  },
+  "tokenizer": "contractedge.tokenizers:utf8_byte_token_bound",
+  "tokenizer_revision": "UTF8-byte-upper-bound-v1",
+  "max_context_tokens": 220000,
+  "model_context_tokens": 262144,
+  "schema_in_prompt": true,
+  "initial_diagnosis_context_tokens": 120000,
+  "max_output_tokens": 16384,
+  "execution_max_output_tokens": 16384,
+  "review_max_output_tokens": 8192,
+  "max_total_tokens": 2000000,
+  "max_elapsed_seconds": 8833.911812111735,
+  "max_model_calls": 12,
+  "timeout_seconds": 240,
+  "public_timeout_seconds": 2400,
+  "max_format_retries": 1,
+  "max_rounds": 2,
+  "top_n": 12,
+  "observe_broken": true,
+  "lock_root": "/home/xhj/contractedge-latest-integration-20261024/.superpowers/sdd/2026-10-24-latest-main-integration/locks-v044",
+  "development_only": true,
+  "execution_backend": "topomen_agent",
+  "topomen_source_root": "/home/xhj/contractedge-latest-integration-20261024/system/vendor/topomen",
+  "topomen_source_sha256": "3dfc43754d4bae6dbc99051ed607d4cc756b26049b79b7f5cc2f9865ee17b2dd",
+  "api_key_env": "CONTRACTEDGE_API_KEY",
+  "money_budget": null,
+  "thinking": "enabled",
+  "max_public_evidence_tokens": 16000,
+  "max_review_evidence_tokens": 36000,
+  "expected_case_count": 150,
+  "expected_public_manifest_sha256": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+  "reasoning_effort": "low",
+  "keep_workspaces": false,
+  "min_free_work_disk_bytes": 25769803776,
+  "execution_empty_reasoning_retry": "disable_thinking",
+  "expected_partition_manifest_sha256": "aa32b07dc8cd2f3c946cb54e42385bded2ccbdf3cdd31b2b358a999480146aea",
+  "max_execution_support_bytes": 48000,
+  "planning_truncation_retry": "disable_thinking",
+  "execution_format_retry_in_round": true,
+  "execution_truncation_retry": "disable_thinking",
+  "review_truncation_retry": "disable_thinking",
+  "planning_truncation_separate_allowance": true,
+  "production_path_review_enabled": true,
+  "method_probe_profiles": [
+    "kpt-configpath-v4",
+    "alertmanager-reload-v4",
+    "cloudwatch-tags-v2"
+  ],
+  "diagnosis_format_retry_per_context": true,
+  "execution_helper_support_enabled": true,
+  "execution_thinking": "disabled",
+  "requirement_traceability_enabled": true,
+  "configuration_consumer_lookup_enabled": true,
+  "obligation_lineage_enabled": true,
+  "operation_consistency_enabled": true,
+  "candidate_guard_enabled": true,
+  "gap_role_delivery_enabled": true,
+  "helper_preconditions_enabled": true,
+  "writeback_context_enabled": true,
+  "execution_reasoning_policy": "failed_trial_only",
+  "model_identity_policy": "require_match",
+  "output_mode": "json_object",
+  "runtime_preflight": null,
+  "seed_planning_snapshot": "CURRENT_CANDIDATE",
+  "public_execution_capabilities": {
+    "schema_version": "ce.public_execution_capabilities.v1",
+    "source": {
+      "path": "environment.json",
+      "sha256": "d26753f2cbb2ba5a7aad33615229a0a9c1d0ce93a47730576999ec50b1dd9cda",
+      "task_observation_limit_source": "task.yaml:observation_limit"
+    },
+    "task_observation_limit": "Production transformation/generated artifact or schema contract only; no live convergence assertion.",
+    "environment_observation_limit": "Actual production Kpt Renderer package build; private function fixtures and oracle excluded",
+    "observation_boundary": null,
+    "public_scope": null,
+    "native_input_boundary": null,
+    "candidate_command": null,
+    "build_entrypoint": null,
+    "public_runner": null,
+    "expected_artifact": null,
+    "scenarios": [
+      {
+        "name": "public-kpt-render-production-package-build",
+        "argv": [
+          "sh",
+          "/work/.contractedge-deps/setup/build.sh"
+        ]
+      }
+    ],
+    "editable_policy": {
+      "allowed_paths": [
+        "internal/*.go",
+        "pkg/*.go",
+        "api/*.go",
+        "commands/*.go"
+      ],
+      "forbidden_paths": [
+        "**/*test*",
+        "**/contractedge*",
+        "private/**",
+        "verifier/**",
+        "evaluator/**",
+        "oracle/**",
+        "go.mod",
+        "go.sum",
+        "**/go.mod",
+        "**/go.sum",
+        ".contractedge-deps/**"
+      ],
+      "policy_status": "DECLARED"
+    },
+    "network": "none",
+    "interpretation": "Declared public execution/observation only. Build success is not behavioral success; unavailable behavior stays UNKNOWN. No additional execution or edit permission.",
+    "consumer_id": "contractedge.topomen_source_consumer.v1",
+    "execution_backend": "topomen_agent",
+    "supported_operations": [
+      "MODIFY",
+      "CREATE"
+    ],
+    "method_behavior_probes": [
+      {
+        "id": "kpt-configpath-v4",
+        "sha256": "bd243dd521c62110da69e5162459c6ad8b4b11c4dce6a684660892e4298da843",
+        "checks": {
+          "mutator.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "mutator.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "validator.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "validator.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "mutator.later_sees_config": "after the owning mutator, a later mutator still sees the config resource",
+          "control.ordinary_inputs": "without configPath both resources remain ordinary inputs",
+          "control.final_resources": "without configPath both resources keep their declared data",
+          "mutator.config_retained": "Final config settings resource retains the declared data.initial field",
+          "mutator.workload_retained": "Final workload resource retains the declared data.initial field",
+          "mutator.config_transformed": "A later function transformation of config is retained in final output",
+          "validator.config_retained": "Final config settings resource retains the declared data.initial field",
+          "validator.workload_retained": "Final workload resource retains the declared data.initial field",
+          "validator.config_transformed": "A later function transformation of config is retained in final output",
+          "mutator.workload_transformed": "Owning mutator transforms the intended workload",
+          "mutator_selector.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "mutator_selector.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "mutator_selector.later_sees_config": "after the owning mutator, a later mutator still sees the config resource",
+          "mutator_selector.config_retained": "Final config settings resource retains the declared data.initial field",
+          "mutator_selector.workload_retained": "Final workload resource retains the declared data.initial field",
+          "mutator_selector.config_transformed": "A later function transformation of config is retained in final output",
+          "mutator_selector.workload_transformed": "Owning mutator transforms the intended workload",
+          "mutator_exclusion.owner_binding": "configPath resource is supplied as owning functionConfig",
+          "mutator_exclusion.owner_excludes_config": "owning function ordinary input excludes config resource and contains workload",
+          "mutator_exclusion.later_sees_config": "after the owning mutator, a later mutator still sees the config resource",
+          "mutator_exclusion.config_retained": "Final config settings resource retains the declared data.initial field",
+          "mutator_exclusion.workload_retained": "Final workload resource retains the declared data.initial field",
+          "mutator_exclusion.config_transformed": "A later function transformation of config is retained in final output",
+          "mutator_exclusion.workload_transformed": "Owning mutator transforms the intended workload",
+          "mutator.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "mutator.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "validator.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "validator.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "control.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "control.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "mutator_selector.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "mutator_selector.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource",
+          "mutator_exclusion.identity_annotations_cleaned": "Internal resource identity annotations are removed after production rendering",
+          "mutator_exclusion.resource_inventory": "The fixed public scenario retains exactly three uniquely identified resources and no unexpected resource"
+        },
+        "scenario": "method-kpt-configpath-v4",
+        "api_entrypoints": [
+          {
+            "package": "pkg/lib/kptops",
+            "symbol": "Renderer"
+          },
+          {
+            "package": "pkg/fn",
+            "symbol": "FunctionRuntime"
+          }
+        ],
+        "boundary": "Local public Renderer API using function runtime stand-ins; candidate code and probe share a process, stdout is not tamper-proof; no external container/WASM or remote service guarantee"
+      }
+    ]
+  },
+  "run_id": "323c9db0-589a-43ea-ba58-8d55d420e7a2"
+}

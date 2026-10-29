@@ -1,0 +1,7 @@
+....................................................... [  2%]
+........................................................................ [  6%]
+....................................................
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/home/xhj/contractedge-branch-review-20261026/system/src/contractedge/orchestration/recorder.py:129: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+179 passed, 17 subtests passed in 28.68s

@@ -1,0 +1,19 @@
+{
+  "status": "PUBLIC_PLANNING_BRANCH_HANDOFF_REPLAY_PASS",
+  "snapshot_id": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "initial_request_changed": false,
+  "existing_supported_claims_unchanged": true,
+  "selected_evidence_ids_unchanged": true,
+  "current_source_digests_unchanged": true,
+  "carried_branch_refs": [
+    "SRC-CU-883e2cb2727d395a",
+    "SRC-CU-60d3496476d58093"
+  ],
+  "validator_concern_present": true,
+  "new_model_calls": 0,
+  "new_grader_calls": 0,
+  "old_diagnosis_response_preserved_sha256": "7ab53ef80d1e9635c56cb4daf9963a82a98029a0e002a52ed5f0ad7ae605b253",
+  "old_failed_result_changed": false,
+  "interpretation": "Counterfactual current serialized input only. Does not show that a new model diagnoses or repairs the missing branch.",
+  "formal_ready": false
+}

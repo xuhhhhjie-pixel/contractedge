@@ -1,0 +1,68 @@
+{
+  "schema_version": "ce.clean_clone_operational_replay.v1",
+  "status": "PASS",
+  "executed_at": "2026-10-28T10:51:55.980135+00:00",
+  "clone_commit": "edba55f336cf393106a0de7654c0df54ba4f3daf",
+  "installed_module": "/home/xhj/contractedge-clean-delivery-official-v068-20261028/system/src/contractedge/__init__.py",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "case_id": "RW-CAND-130",
+  "sealed_input": {
+    "original_slot": "fixed46-official-v068-20261028-60944716e7069c9f5423fb67",
+    "original_trace_sha256": "38e913d60ad2c0b1bd9291c9f3573cc2d66e84b878b10f1353b6043cca4b2a97",
+    "sealed_patch_path": "/home/xhj/contractedge-fixed46-official-v068-20261028/methods/fixed46-official-v068-20261028-60944716e7069c9f5423fb67/RW-CAND-130/candidate.patch",
+    "sealed_patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+    "original_snapshot": "f44e75768af304334eff5fb7c49cc596b12218dbf83efdf95639691b167063f5",
+    "candidate_snapshot": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d"
+  },
+  "public_status": "EXECUTION_PASS",
+  "public_observation": "/home/xhj/contractedge-clean-delivery-official-v068-20261028-results/producer/observation-b7c39902c109494f8ef8f4ac57d42a36",
+  "export": {
+    "patch_path": "/home/xhj/contractedge-clean-delivery-official-v068-20261028-results/producer/e99d67e7b166485cb2c7ef6565f44336.patch",
+    "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+    "patch_bytes": 1474,
+    "tool": {
+      "argv": [
+        "/home/xhj/contractedge-clean-delivery-official-v068-20261028-venv/bin/python",
+        "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019/tools/collect_patch.py",
+        "--workspace",
+        "/home/xhj/contractedge-clean-delivery-official-v068-20261028-results/producer/workspace",
+        "--output",
+        "/home/xhj/contractedge-clean-delivery-official-v068-20261028-results/producer/e99d67e7b166485cb2c7ef6565f44336.patch"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "stdout_sha256": "760e2ee20702579559244fa275ced5647532b4186ccd92162112a614036123a4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "independent_status": "PASS",
+  "source_swap_real_process_exit": 73,
+  "source_recovery": {
+    "status": "ROLLED_BACK",
+    "restored_snapshot": "f44e75768af304334eff5fb7c49cc596b12218dbf83efdf95639691b167063f5",
+    "automatic_method_resume": false,
+    "candidate_exported": false,
+    "budget_reset": false
+  },
+  "recovery_second_call": {
+    "status": "NO_PENDING_SOURCE_SWITCH",
+    "automatic_method_resume": false
+  },
+  "completed_score_finalize_twice": true,
+  "score_dispatches": 1,
+  "score_checkpoint_sha256": "f900dc7dbd4bbac6a8775d9d79fe9518d02969276ff1fce26ddeedfa8b03b817",
+  "new_model_http_calls": 0,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "ledger_before": {
+    "calls": 1460,
+    "limit_micro_cny": 200000000
+  },
+  "ledger_after": {
+    "calls": 1460,
+    "limit_micro_cny": 200000000
+  },
+  "scope": "Same-server clean GitHub clone and fresh venv, real public benchmark candidate reconstruction/execution/export/independent scoring plus source crash and score finalization recovery. Uses a sealed existing candidate; not a fresh model repair, another-host certification, or a fixed46 result.",
+  "concurrent_panel_note": "The shared ledger can advance because of the separately registered panel. This operational replay has no credentials/model provider and adds zero model calls."
+}

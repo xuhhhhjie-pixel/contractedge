@@ -1,0 +1,35 @@
+{
+  "schema_version": "ce.minimal_root_cause_diagnostic.v1",
+  "source_sha256": "c0399ed2a0e48574ef096024f40dcad5bfa30756440ca11c8060327653f90984",
+  "freeze_sha256": "95a860d4936548f94ac12ca0824e7d69328bcfd39c4394abe62b6ffb04e85685",
+  "qualification_sha256": "9b2d85e0d2fd47523c67c317a67d08d70b65bcc885b5b23f588e62409a362abb",
+  "driver_sha256": "0465bb2c45c9e42f3af53bad16a0422862943da3dc4e396f2be6209296b5097b",
+  "attempts": [
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "attempt_id": "diagnostic-source053-v1-20261026-rw-alertmanager-4705",
+      "output": "/home/xhj/contractedge-diagnostic-source053-v1-20261026/methods/RW-ALERTMANAGER-4705/RW-ALERTMANAGER-4705",
+      "registration": "/home/xhj/contractedge-diagnostic-source053-v1-20261026/registrations/RW-ALERTMANAGER-4705.json",
+      "registration_sha256": "f25e3dc734315dc113186728878c03f7515ca965a8295c32d5836190e66d0737"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "attempt_id": "diagnostic-source053-v1-20261026-r3-kpt-4673",
+      "output": "/home/xhj/contractedge-diagnostic-source053-v1-20261026/methods/R3-KPT-4673/R3-KPT-4673",
+      "registration": "/home/xhj/contractedge-diagnostic-source053-v1-20261026/registrations/R3-KPT-4673.json",
+      "registration_sha256": "ff91de040009b9464a448d7222add554d23fffa8d08085c1065e803d9379f60c"
+    }
+  ],
+  "once_per_case": true,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "cumulative_api_limit_cny": 150,
+  "predecessor_v052_outcomes": "ALERT_INVALID_PLAN_EMPTY_SEMANTIC_FAIL_KPT_NOT_RUN_PRESERVED",
+  "hypotheses": [
+    "Model separates outcome IDs from plan preservation IDs without extra calls or automatic semantic rewriting",
+    "Explicit empty-set schema and exact correction differences prevent the observed identity mismatch",
+    "Once-only Alert independently repairs behavior before KPT cross-case control; formatting alone is insufficient"
+  ],
+  "success_gate": "Alert independent PASS/public not FAIL before KPT control; once each, all results retained, no inheritance into fixed46",
+  "transient_workspace_policy": "RETIRE_CLOSED_SCORED_PUBLIC_WORKSPACE"
+}

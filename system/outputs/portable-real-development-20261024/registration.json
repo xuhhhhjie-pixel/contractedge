@@ -1,0 +1,28 @@
+{
+  "role": "SINGLE_CLEAN_CLONE_OPERATIONAL_VALIDATION",
+  "method_version": "0.6.38",
+  "source_digest": "5f9e90c459b95e703b0c9f32b9f9d70fff1eb859f90e95489f0083c632f422fe",
+  "clone_commit": "8625d0744ceb0cda7911fc60af6aa97ca9c1f9ba",
+  "case_id": "RW-CAND-130",
+  "partition": "development",
+  "fresh_venv": true,
+  "config_sha256": "3148a36a81b22b1ceb38c27653b6d2e1563d35d0ea452a072a3e504acf9c4009",
+  "base_config_sha256": "59eab60214714aafb25ebb7962a9c768c74dcf06b32e6defde029876d5166a78",
+  "script_sha256": "b897aab16f76ab6f8873485ce5aebc8ced25bcfad97d55a32c4c335df4d0fab4",
+  "changed_config_keys": [
+    "run_id",
+    "topomen_source_root",
+    "lock_root",
+    "money_budget.path"
+  ],
+  "max_model_calls": 12,
+  "max_edit_rounds": 2,
+  "shared_money_limit_cny": 150,
+  "counts_in_46_slot_panel": false,
+  "counts_as_generalization_result": false,
+  "retry_if_failed": false,
+  "pre_dispatch_recovery": "Partition+Release metadata corrections after zero-request startup rejection. Original INTERRUPTED batch retained, new operationalv2; no model response or candidate retried",
+  "source_roots_masked": true,
+  "G3_accepted": false,
+  "scope": "Existing pinned public150 release mounted at new paths; clean installed CLI and vendoredTopoMen. Source/docs/tests/history/originalevaluation masked; Docker socket remains available, so not strong G3 isolation. Parent independently scores only after method subprocess exits."
+}

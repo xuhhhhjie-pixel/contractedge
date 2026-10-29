@@ -1,0 +1,157 @@
+{
+  "version": "0.6.37",
+  "scope": "Public method trace only; full violation objects retained for audit, not independent behavior proof or generic causality",
+  "private_materials_loaded": false,
+  "rows": [
+    {
+      "round": 0,
+      "trace_sha256": "b5007cd4c36d29048877ceadec889fac8c9413ebd3f432865eda929d71af0617",
+      "source_snapshot": "f0f23bd8c7370148c86b4c2b98ad67d240a958f95c6a448a158c7308f7bccf60",
+      "diagnosis_status": "READY",
+      "diagnosed_violations": [
+        {
+          "id": "V1",
+          "relation_id": "R3",
+          "broken_behavior": "Changed declared tags (additions, value changes, removals) do not update the external alarm tag set.",
+          "causal_explanation": "The update path serializes Spec.Tags into PutMetricAlarmInput.Tags, but the provider ignores Tags when updating an existing alarm and no TagResource/UntagResource call is invoked (tag_writes=0), so external tags keep their prior values.",
+          "evidence_refs": [
+            "SRC-CU-99686d29bed27b32",
+            "SRC-CU-be754c069fb990ae",
+            "OBS1",
+            "OBS3",
+            "OBS5",
+            "OBS6"
+          ],
+          "support_basis": "OBSERVED_AND_STATIC",
+          "causal_status": "SUPPORTED"
+        }
+      ],
+      "plan_status": "READY",
+      "plan_changes": [
+        {
+          "id": "C1",
+          "semantic_action": "In the production MetricAlarm update path in pkg/resource/metric_alarm/sdk.go, after a successful PutMetricAlarm call, reconcile the external alarm tag set from r.ko.Spec.Tags against the observed/latest tags: invoke CloudWatch TagResource for added or value-changed keys and UntagResource for removed keys using the managed alarm identity available to the update path; skip tag mutation when desired tags equal latest. Keep create-time PutMetricAlarm tag behavior unchanged.",
+          "intent": "Restore V1 for changed declared tags (A1-A4) by adding the provider tag operations that PutMetricAlarm update ignores, while preserving A5 by making no tag mutation when desired tags are unchanged.",
+          "violation_refs": [
+            "V1"
+          ]
+        }
+      ],
+      "preconditions": [
+        {
+          "source_evidence_ref": "SRC-CU-99686d29bed27b32",
+          "condition": "The MetricAlarm Spec.Tags source contract states that tags supplied to PutMetricAlarm for an existing alarm are ignored and that TagResource or UntagResource must be used to change tags of an existing alarm.",
+          "disposition": "REQUIRED",
+          "verification_refs": [
+            "P1",
+            "P2",
+            "PC1",
+            "PC2"
+          ],
+          "open_obligation_refs": [],
+          "rationale": "This source-local contract is the required production condition for restoring A1-A4: the update path cannot rely on PutMetricAlarm.Tags and must add provider tag operations. The plan binds the changed-tag outcome to public behavior checks and retains the unchanged-tags and failed-update preservation checks."
+        }
+      ],
+      "preservation_impact": [
+        {
+          "preserve_id": "PC1",
+          "scope": "CHANGES",
+          "change_refs": [
+            "C1"
+          ],
+          "rationale": "C1 gates tag mutation on a desired-vs-latest tag delta, so when desired tags are unchanged it makes no TagResource or UntagResource calls and preserves the existing external set."
+        },
+        {
+          "preserve_id": "PC2",
+          "scope": "CHANGES",
+          "change_refs": [
+            "C1"
+          ],
+          "rationale": "C1 triggers tag mutation only after PutMetricAlarm succeeds, so a failed alarm update still returns its error without tag mutation."
+        }
+      ],
+      "preserve_count": 2,
+      "execution_status": "APPLIED",
+      "candidate_snapshot": "5005dd7693e66fbb79403d8031c44a81c2b8fcac67918358d02f72ba5bf09b00",
+      "changed_paths": [
+        "pkg/resource/metric_alarm/sdk.go"
+      ],
+      "candidate_patch_sha256": "e48b5cea193f8def9caee560c8bc58265fc5e68b19dbb4fcd5fe7919a3c82baf",
+      "feedback": {
+        "route": "DIAGNOSIS",
+        "semantic_outcome": "PUBLIC_REVIEW_FAIL",
+        "build_state": "PASSED"
+      }
+    },
+    {
+      "round": 1,
+      "trace_sha256": "714a3eb5592c395ab5930a631a524fc7b04ce7e9c96fad5185423d33a047a9d8",
+      "source_snapshot": "5005dd7693e66fbb79403d8031c44a81c2b8fcac67918358d02f72ba5bf09b00",
+      "diagnosis_status": "READY",
+      "diagnosed_violations": [
+        {
+          "id": "V1",
+          "relation_id": "R3",
+          "broken_behavior": "Tag additions, value changes and removals do not take effect on the external alarm.",
+          "causal_explanation": "syncTags sets ResourceARN to the alarm name (desired.ko.Spec.Name) rather than the alarm ARN from Status.ACKResourceMetadata; TagResource/UntagResource are rejected as the wrong alarm identity, tag_writes stays 0 and the external tag set is unchanged.",
+          "evidence_refs": [
+            "OBS1",
+            "OBS2",
+            "OBS4",
+            "OBS5",
+            "OBS7",
+            "SRC-CU-823544562abb5b34",
+            "SRC-CU-72a2de27bdc7b95f"
+          ],
+          "support_basis": "OBSERVED_AND_STATIC",
+          "causal_status": "SUPPORTED"
+        }
+      ],
+      "plan_status": "READY",
+      "plan_changes": [
+        {
+          "id": "C1",
+          "semantic_action": "In syncTags, bind the ResourceARN field passed to TagResource and UntagResource to the managed alarm ARN held in Status.ACKResourceMetadata (U5) instead of deriving it from Spec.Name; retain the existing desired/latest tag-map construction, toAdd/toRemove computation, early return for equal maps, and error propagation.",
+          "intent": "Restore V1 by targeting the existing managed alarm identity for tag mutations, while preserving the source-contract-required TagResource/UntagResource path and the A5 no-mutation behavior for unchanged tags.",
+          "violation_refs": [
+            "V1"
+          ]
+        }
+      ],
+      "preconditions": [
+        {
+          "source_evidence_ref": "SRC-CU-f7f79e4df432bb62",
+          "condition": "The selected Tags field source contract states that any tags specified in PutMetricAlarm for an existing alarm are ignored on update, and that TagResource or UntagResource must be used to change tags on an existing alarm.",
+          "disposition": "REQUIRED",
+          "verification_refs": [
+            "P1"
+          ],
+          "open_obligation_refs": [],
+          "rationale": "The planned C1 retains the existing TagResource/UntagResource calls in syncTags and only corrects the ResourceARN binding, so it respects this source contract. P1 verifies the tag mutation path under the method probe scenario."
+        }
+      ],
+      "preservation_impact": [
+        {
+          "preserve_id": "PC1",
+          "scope": "CHANGES",
+          "change_refs": [
+            "C1"
+          ],
+          "rationale": "C1 edits syncTags, the same function whose early return preserves external tags when desired equals latest; the ARN-binding change does not alter that branch but must be rechecked against PC1."
+        }
+      ],
+      "preserve_count": 1,
+      "execution_status": "APPLIED",
+      "candidate_snapshot": "88a30690562fa5f592fecc16895b916aea0ece9f61d64f67190bf35fad88b48d",
+      "changed_paths": [
+        "pkg/resource/metric_alarm/sdk.go"
+      ],
+      "candidate_patch_sha256": "c52869dbf9a2e0c3521c3e6212c736ee9241392f878b4341414d8adf93006f92",
+      "feedback": {
+        "route": "STOP",
+        "semantic_outcome": "UNKNOWN",
+        "build_state": "PASSED"
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+F
+=================================== FAILURES ===================================
+_ test_actual_ready_plan_with_required_delivery_metadata_reaches_consumer_preflight _
+
+    def test_actual_ready_plan_with_required_delivery_metadata_reaches_consumer_preflight():
+>       trace,method,source=saved_fixture()
+
+tests/test_ready_support_consistency.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ready_support_consistency.py:14: in saved_fixture
+    trace=json.loads((case/'rounds/0/front.trace.json').read_text())
+/usr/lib/python3.10/pathlib.py:1134: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/rounds/0/front.trace.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return self._accessor.open(self, mode, buffering, encoding, errors,
+                                   newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'outputs/reliability-closure-20261020/runs/delivery-0.6.13-A-RW-ALERTMANAGER-4705-0-candidate/cases/RW-ALERTMANAGER-4705/rounds/0/front.trace.json'
+
+/usr/lib/python3.10/pathlib.py:1119: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_ready_support_consistency.py::test_actual_ready_plan_with_required_delivery_metadata_reaches_consumer_preflight
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.25s

@@ -1,0 +1,55 @@
+{
+  "identity": {
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
+    "candidate_config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "records": {
+    "path": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/records.json",
+    "sha256": "c0d99709cff730da145de5b0f21a7083c6a46d452944bf237df9f03c4ec1ce36"
+  },
+  "registration": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/fixed46-isolated-panel-20261025/ORIGINAL_REGISTRATION_v038.json",
+    "sha256": "e24f0320987a15c9ed2867ebb6f55efb104c4e7ce4b6a9bccd1565a5d34e099b"
+  },
+  "evaluator": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/scripts/assess_reliability_delivery_v2.py",
+    "sha256": "79cf30f9d3567fdbf16e2c4dffd748cad6299f6b0999b886432251fa293e6d56"
+  },
+  "effect": {
+    "status": "ACCEPTED",
+    "observed_improvement": true,
+    "behavior_gates_passed": true,
+    "missing": [],
+    "regressions": [],
+    "historical_successes_preserved": true,
+    "critical_cases_pass_both_attempts": true,
+    "two_repository_recovery_pass_both_attempts": true,
+    "primary_counts": {
+      "baseline": 5,
+      "candidate": 10
+    },
+    "primary_denominator": 17,
+    "recovery_counts": {
+      "baseline": 0,
+      "candidate": 4
+    },
+    "effect_claim": "Observed paired improvement, not statistical significance",
+    "scope": "Behavior acceptance requires separately verified engineering closure. Fixed development panel and finite repetition only; no statistical significance or full150 guarantee Final delivery additionally requires the declared primary and B effect gates.",
+    "delivery_effect_gates_passed": true,
+    "paired_primary_improvement": true,
+    "B_counts": {
+      "baseline": 2,
+      "candidate": 3
+    },
+    "B_not_below_baseline": true,
+    "acceptance_policy": "Final design: all behavior gates, strictly more primary independent PASS, B not below baseline; recovery improvement alone is insufficient"
+  },
+  "prerequisite_gate": {
+    "open": true,
+    "missing": [],
+    "errors": []
+  },
+  "formal_ready": false
+}

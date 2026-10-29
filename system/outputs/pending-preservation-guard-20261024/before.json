@@ -1,0 +1,13 @@
+{
+  "scope": "Counterfactual only: old actual public PASS put_error changed to FAIL in-memory, current real candidate has not been observed regressing this check. No source edit/model call/behavior score.",
+  "label": "before",
+  "protected_check_ids": [
+    "cloudwatch-tags-v2:unchanged",
+    "cloudwatch-tags-v2:unchanged_other_field"
+  ],
+  "decision": "PROMOTE",
+  "regressions": [],
+  "old_whole_claim_retained_count": 0,
+  "new_model_preserve_constraints": 1,
+  "private_materials_loaded": false
+}

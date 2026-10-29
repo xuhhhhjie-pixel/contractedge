@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/full_method_control.py", line 68, in <module>
+    if __name__=='__main__':main()
+  File "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/planning-helper-contracts-20261027/full_method_control.py", line 53, in main
+    assert code==0,'Method infrastructure/admission stopped; no restart'
+AssertionError: Method infrastructure/admission stopped; no restart

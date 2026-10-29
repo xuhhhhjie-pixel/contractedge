@@ -1,0 +1,775 @@
+{
+  "schema_version": "ce.public150_input_preflight.v1",
+  "version": "0.6.42",
+  "release": {
+    "release_id": "ContractEdge-benchmark150-v1-20261019",
+    "release_entry_sha256": "6f0d200363dbe14595f2cb3c4cbbaab324b0cc62eb760acc4393d3fbe02a66ef",
+    "public_manifest_sha256": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+    "selected_cases": 150,
+    "by_class": {
+      "R1": 30,
+      "R2": 30,
+      "R3": 30,
+      "R4": 30,
+      "R5": 30
+    }
+  },
+  "checked": 150,
+  "errors": [],
+  "records": [
+    {
+      "case_id": "RW-CAND-067",
+      "input_digest": "67377e98524002e65d999663c69152055812c0642eeaf06329893a0c2c9102fd",
+      "source_sha256": "d15b19cedef67f778bb3c10ade425e7b0a68ceaf26c7d1a6e0bafd105a199e1f"
+    },
+    {
+      "case_id": "RW-CAND-068",
+      "input_digest": "eef0bc6c5fd8736479c80abc7f6e89d4957fbf093c306b22781ff4c8b4fa54bf",
+      "source_sha256": "7a2a983e06a257c9b731fd9e12e5f3eedec19d0a73f37547a3e8fb3f8f33deb4"
+    },
+    {
+      "case_id": "RW-CAND-070",
+      "input_digest": "37cb989eb24c517d18f4fb3b25db8c0576f0fafa0b8f6c8398622af5d9c0a538",
+      "source_sha256": "cdadec81607765800fd2e67ee048647b8fe9d6c215ad0905315b85018d3e7945"
+    },
+    {
+      "case_id": "RW-CAND-071",
+      "input_digest": "75476481bbf24707025ab007ce302b17352cdce00bf9947622566825d03d5bc1",
+      "source_sha256": "9f2ec86b4655ff7070293c7b77fc85370429e104465aaa405a507f00578601df"
+    },
+    {
+      "case_id": "RW-CAND-072",
+      "input_digest": "d2b2450aada8eef7f4b13d4d7a6316eb8176144f9e948f8fe435032607ed098b",
+      "source_sha256": "be0d975808b93bdc6b36abb2755ca622bc0754576551adc03563fa98d106cacd"
+    },
+    {
+      "case_id": "RW-CAND-073",
+      "input_digest": "f3d04364c701f3a7e2431a73cf6731661354856e5f75815319f1b8536c7ed6b5",
+      "source_sha256": "2b7ad90c864a2208c672ca3d95c29f2c5007067215b30c6bc27f16204789b2a2"
+    },
+    {
+      "case_id": "RW-CAND-076-AGGREGATE-VERIFIER-001",
+      "input_digest": "0ad07c04a93d79ed8dcd0bbe506a703e665d3c747894cc71f1d42608fe88a0d7",
+      "source_sha256": "942d79c62a654c8fbd9a3faedf733a41ca3d39f69db0627e157f097388972223"
+    },
+    {
+      "case_id": "RW-CAND-077",
+      "input_digest": "1e944a427f5c447fefd7f712b49962e10f5d11524312a739dcba2ff8ae64d13b",
+      "source_sha256": "2c6fd1918d0568eeeae7e043031f9c6e87f81592c2917648663ee35580a64f4d"
+    },
+    {
+      "case_id": "RW-CAND-081",
+      "input_digest": "7762230feceeae7047a1b609cb3b999e3b1a41b04937549c256b2a2052df7dee",
+      "source_sha256": "ef7a0fbefc1299186b4089548e6cd49c1718a55bd8d5731586c5cbc23175f1a5"
+    },
+    {
+      "case_id": "RW-CAND-086",
+      "input_digest": "bdf0832a9de96838eda95011aa1f0a0e8f30d9de14269699ce5099b78fb969a2",
+      "source_sha256": "91bf63697b17e70566f44a2a3fc7bcd2bbc3ec2160429523032706268beb61c2"
+    },
+    {
+      "case_id": "RW-CAND-091",
+      "input_digest": "aa182d052b4967cbe093d494fb930bc09baf09982281570d3c649962e81e62b7",
+      "source_sha256": "a5710ec45d44553307e36fba6217d82aa2856342e00fb3da8aeab811cf3a2b66"
+    },
+    {
+      "case_id": "RW-CAND-094",
+      "input_digest": "a3b257b01d62b3a726f1b107c93d424c88fdb2fc1449c5fa583093137c4fee43",
+      "source_sha256": "8b060e8995eb3874084f0dda1fcb7859754c83390444725f6a8190dcb9fcad49"
+    },
+    {
+      "case_id": "RW-CAND-095-AGGREGATE-VERIFIER-001",
+      "input_digest": "778153992fdc9b466a42661d39625b84b636b2929503b1e108b0b6a1ddee95e7",
+      "source_sha256": "02c56302733aa3f6fbfeb60e24088dc9f858dcddb34717282e60eae4ac18e091"
+    },
+    {
+      "case_id": "RW-CAND-102",
+      "input_digest": "7d93e815a1cdc71e3811d248428809e34f1c6bf26e04d2b6441a3558dbe00367",
+      "source_sha256": "b63ccdcbb1e70500fdd5878de3643abb15a8f69ec00f7f0cc74887829e6a6bc7"
+    },
+    {
+      "case_id": "RW-CAND-103",
+      "input_digest": "5f182531e539ad941e1eebeff9e39796329fb407509ade7360af68e6ac7d1bb4",
+      "source_sha256": "62a63e39a6c54465a0b72fad026024da452e78838149587beefdd70269cb2065"
+    },
+    {
+      "case_id": "RW-CAND-104",
+      "input_digest": "3f3b44dcfbf243c41d1f920b65e7333778f353400552e1275a75724d44470f82",
+      "source_sha256": "8686514ff3b0c93898c55297aa76b9f722e27eab4d14d23db08aa2b1d518c5b5"
+    },
+    {
+      "case_id": "RW-CAND-106",
+      "input_digest": "6143d99e110f6c1979366dc688e8fb7685ddf099f6d64335e4c1f3e0f2caacf4",
+      "source_sha256": "2549385e651f966478376df528637f1526062b0791d72b92987e971071af9b65"
+    },
+    {
+      "case_id": "RW-CAND-109",
+      "input_digest": "98a3859e2b84dae4c4bf6bc086908675607ff480ad5013f068174dd228b5361a",
+      "source_sha256": "ab2828201d4bbd6d9e2fdd7829e96a52cf736e510f5ecc992e7aac0d327794cf"
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "input_digest": "7929159cf99cb09b202dd1689f9b494efe3a9cacee0bcfbe435205556c95ff7c",
+      "source_sha256": "3568f7d916d2dae1d5b2c3fb68a76fd2958f67dfa65a2e053566c6baa218d051"
+    },
+    {
+      "case_id": "RW-CAND-118",
+      "input_digest": "b6eedd2fd9afd7f11918c144cd9456f57fa914f94b75c6cef371fe6633291ad9",
+      "source_sha256": "f841c81fcb866185d1f8b96c5d64a38c371e52e0057184bfc474819a80eeba87"
+    },
+    {
+      "case_id": "RW-CAND-120",
+      "input_digest": "de67c3aadae6619707964823525ab3e4bfcfcf6abbf9b100c05b655364ae4823",
+      "source_sha256": "acc330d3b03be84bff7c92e27f07ea3b776b4f6082a599099f7e05ce22336439"
+    },
+    {
+      "case_id": "RW-CAND-127",
+      "input_digest": "2e40dc51aa3f23d7846b1b9fa20afab5ac63f840e88acdfe639183f0417ea4ca",
+      "source_sha256": "99204e9a0346dfc392c8698a51cc09e63f44af978f7f0e6594ae377afba38eb1"
+    },
+    {
+      "case_id": "RW-CAND-128",
+      "input_digest": "9a1099bc0e12f0cfbac564d6cf92a24ff07500b4e351d16a9f493856374cc0cc",
+      "source_sha256": "71456afa00e7d82f57dd86adb1b46ad638ddc56e27ff552e8c79941132bc23b9"
+    },
+    {
+      "case_id": "RW-CAND-130",
+      "input_digest": "65190e26e2b2e7aedef7abd6a0f478dca0a9d8140a34b8d1cc9408621175359d",
+      "source_sha256": "4eb10ef4b81b9ddf338bde5bc983c64ab7f873003f40da31c04a14f54e369675"
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "input_digest": "d95e443ed42e95ef8f3496f3e0bd904c8e36454095ceca7813d994ea26def63d",
+      "source_sha256": "d271dd8d7fd5abe60d585fd98b2a9a91409c9aa19100f66813164d94aa160239"
+    },
+    {
+      "case_id": "RW-CAND-137",
+      "input_digest": "5bbd1598c09cec6ecc07136dbf10b49c48cebe14444710d735045755ea805e0d",
+      "source_sha256": "968299e9a930c1084812fa74229ef139a04c898e5021bcede47b12420c335db8"
+    },
+    {
+      "case_id": "RW-CAND-171",
+      "input_digest": "2380cd76a7ebb76eb2fffd327a28d209db66b1e9cbaf29089eac45ff7ba2d072",
+      "source_sha256": "2d79db2b4f6413253d813f278ed13557659b1dba17fc7ca0881341319397e442"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-HTTP-LOGGING-001",
+      "input_digest": "5f9f578c87c8d9ef78d8eb82347f2fc9180f9bfd026e5ac95e806d9603928da1",
+      "source_sha256": "f4db9f91e45f2433f1caec3197ad424b397f8c0051f6cd53264cef88c0b52eff"
+    },
+    {
+      "case_id": "RW-HELM-KEDA-RBAC-DISABLED-001",
+      "input_digest": "571b67126cdc09b8f15a81333bc0a3b7d3524536f067332887bd092d098b235c",
+      "source_sha256": "6776460164ea300eaf98dea32471c9794dca95f50ae1231c5f1e0b801a228319"
+    },
+    {
+      "case_id": "RW-HELM-PROM-KSM-EMPTY-HEADERS-001",
+      "input_digest": "6b8c44c7174f2476a4f218eff8ebcefa924375ecfa5a6916648dfb650d380f73",
+      "source_sha256": "76ad50ff66d11403c2ad062238ad846ef2aa4b4a8b3d3a9d8913e3622945b13d"
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "input_digest": "f6b578d68c32e9fd85a8a48cd9504d12fa516fb46011ffb11d446c0089283ae6",
+      "source_sha256": "32577cbb42230eb54736cd7158c59c0eef23e220e6165ce59e0806fc93937bf5"
+    },
+    {
+      "case_id": "R4-KEDA-8033",
+      "input_digest": "1c589f03c56e98fcc0965c6219cd0d624d707a0cdd10355782c5d1d50c0bf2a6",
+      "source_sha256": "76411b3120642bab7bcb8fb3f76138e76fbef9088fd79a213d33e642602368fc"
+    },
+    {
+      "case_id": "R4-KEDA-8227",
+      "input_digest": "ebeabbfaf416b7e6df2a1c720a45737a437cb1665b781ef70a2d2fe39c9b5c9c",
+      "source_sha256": "e43dec8a84a1590a1d4b70c18f00ca77918fd52c53fcc371b62ef0298021cc14"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "input_digest": "1ac44b45c7190dd61220a6677bab866c7bf7a9cdabb725c7016d4b0bae65a722",
+      "source_sha256": "a6ca9e6a0ac9664a45c27290da3f0f5f02f3e9c8dd0071461a7d7b557575b4c9"
+    },
+    {
+      "case_id": "RW-ARGO-CD-23823",
+      "input_digest": "a53f5b032eebd2da0cb227239b123544e1842fa455148170107f6483431fea9a",
+      "source_sha256": "279585c75849ec3f1fd28efeae8a57bb7d099f70b1ecbe459476f4b332157f9e"
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "input_digest": "0a07e40760576804ef503a612905abb18883e0ee00567beabbac154a47db5e57",
+      "source_sha256": "804895d7bd54db581614bd48cea73b5430ddb2d542d42f565aca319faefd4356"
+    },
+    {
+      "case_id": "RW-ARGO-CD-29827",
+      "input_digest": "a5c829ce8903851f4f8598bf9f8ac278b1c0a250e0570dcbc1f084f87916bf45",
+      "source_sha256": "59c9d4f01ddba913b211aeea06da888b03c43f1a9008d8ecc476f29a01cbfb87"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+      "source_sha256": "884a0d04adbc61933d0f5f80af9b2870050f3ae7bedfa2e032a38419de28776e"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9118",
+      "input_digest": "5ff4e481808b295c79f4f6956de9876300e62e15e34f4d1f8a2ce2570f204ae2",
+      "source_sha256": "c8d21ff62412cf2fdd3dedc84a6d4790d22a65a11099474252391b2330ef9126"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9128",
+      "input_digest": "9700af36d9b92830bce521fd024679963e14777e25fd5888d98af9181bae0ec5",
+      "source_sha256": "46b3258401a6eee782c4becb7d079c9231567491977ad7c67f3554493978f5f8"
+    },
+    {
+      "case_id": "RW-CLUSTER-API-12341",
+      "input_digest": "d0737aea13784094c134c37d188cb4e678a196169bdec4151468a983d3747d71",
+      "source_sha256": "ef209a31029ce7e39a5a3b8bd4674563199c36c6c95961320ba99af2f1bb2422"
+    },
+    {
+      "case_id": "RW-CLUSTER-API-13937",
+      "input_digest": "605bf9b416a0f3ffbb3ee36ce94ea98c7298af49bc61940cf7645fbbe9e928e8",
+      "source_sha256": "0ec24e12ea921919668ab7a7e5229e9170fcac41fdb098beb5f9e82a1c5098a6"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7733",
+      "input_digest": "f268df96839c792747283538fd12c78a6c66659bc074f3b4d91b97f8d418df9e",
+      "source_sha256": "77166a5740ad55db0731bed8d76cc2603d2b532c237f8ffe779bf7b1a84bfd94"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7789",
+      "input_digest": "c1dbbbdc0490df7dbd037092ebf03403fa6d054a53f409a4f85c9072208599b6",
+      "source_sha256": "c591be534197cc1120bda2e6659007c2cd63b2a7bf948bc19725787cceba224e"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7860",
+      "input_digest": "78cdc074d499f42acd3976141a0657934cb4fa8e65f605613200d387ec44e0ca",
+      "source_sha256": "ecf3671e961bfbc5d2d6291f912894a7e20861d292c512e36f64fc1c0776a343"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-RUNTIME-1088",
+      "input_digest": "012d306075939620f56262086b9fe4890cde2888a7a5295912c8598f19c47a30",
+      "source_sha256": "15dbeaa9adc952411bd1252c96ade5f9e504baa20fd03b16d3336090d92fdbd0"
+    },
+    {
+      "case_id": "RW-DAPR-10132",
+      "input_digest": "37ccd3f65d27cd61cb8041743a2c0e3f799153ffe7ba650f445d0ac2db47b6fa",
+      "source_sha256": "07afcbf8ed9b9c9732b9f861a8e8b2defcb4831d1311d3d58c7b676abdcccb35"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1411",
+      "input_digest": "a10eaca3212c233698c00499beb3b1eec5a425d037b206057ff026c11307aadd",
+      "source_sha256": "d4e63b257089db64430e7c7233b192301248fc2984d36ea4806c543ca2dce2b1"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1412",
+      "input_digest": "d8c37bd987e6441e39643cb59e9b4aeb24f29908a4899b982a7dc658ba31d76e",
+      "source_sha256": "3354f9b6008737c6da68ed4346a7cdf9369a18d3ee0b6918a51fb0d34553ae17"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "input_digest": "4de3aae62fbf3cbdc96894b89ad62e6aa8baaf44b9669964c329cfd4be354f16",
+      "source_sha256": "40d9431438baa508ff92afde33e99ab575592d6ca88dd25c2a41cb8fe1316910"
+    },
+    {
+      "case_id": "RW-IMAGE-REFLECTOR-824",
+      "input_digest": "513bcea07ab06519886a8c12d175eefc4074e439868999e9c7c4264cd174d8a9",
+      "source_sha256": "5aa854f47df37366ccdebf3055458317b2d9bb3826263c2e6e5fa502b8622d81"
+    },
+    {
+      "case_id": "RW-KEDA-7777",
+      "input_digest": "027a2dffe916a932356f67d8f8813d5e24fe5462e12d1a96564a28f25e309040",
+      "source_sha256": "71a9664ec33bac1535b7fcb2315b5055f9461a47ed30ccd0c845a5a8ce601214"
+    },
+    {
+      "case_id": "RW-KEDA-8125",
+      "input_digest": "df02d525629080d311a68ddc259189018f6d53d8e4cf8ca05fb5924640252576",
+      "source_sha256": "2e5df908f958af0f91b88d0fcd14d4bfe3d2e512db9b853dbc03921f91733f83"
+    },
+    {
+      "case_id": "RW-KUSTOMIZE-CONTROLLER-1614",
+      "input_digest": "96b7fc1a0fc3852f364a211b17ace570f27337bbefdbbc3d0a124b0cbf53bef0",
+      "source_sha256": "d8e054cd5031f56b4c82cffad3e9a9e1317f8236a761d2dc09159fab195ccda3"
+    },
+    {
+      "case_id": "RW-KYVERNO-17395",
+      "input_digest": "d7432b313b14b1341a26fc774c280c844b7d06dc31f91ea9b95061a08f381a3e",
+      "source_sha256": "c31e4969018a76c78cafbfd2d42bbd86b104421d59dfb3c9e0387441e3651b86"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8727",
+      "input_digest": "60462082ca069447f1c8c106b3e43b057a39c14df9021dc72400a6a31b07c8a2",
+      "source_sha256": "93d51659944da9c6a9d27c7e70fea1b2189ce468e46393d769e490709b83059f"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-OPERATOR-8739",
+      "input_digest": "5f8a4c08bca7d110cbeafa3d1663eb3bd86a3b40c6d8d25c7b65b8c9c6ed4138",
+      "source_sha256": "a98fc07cefbfafb0ae46f1323ed4a56f7367ee7e390faf5ad4d6b991926c9e5e"
+    },
+    {
+      "case_id": "RW-SOURCE-CONTROLLER-1904",
+      "input_digest": "912a8856b31768186b883b03d4d16918e26d910894eb6f74e194743a142447c2",
+      "source_sha256": "5ba712973a002ce9c04089c4235ab968cd487bf30f9be088e8ee162885002922"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-7523",
+      "input_digest": "832873ba505beb8946ca63cc27f91924ba845fbe61489ef28dce23fcf7b2a6e1",
+      "source_sha256": "8432237b084414098654d98a36ce3e4c56a7e257ac430db1b70326215df692ab"
+    },
+    {
+      "case_id": "R3-KUSTOMIZE-5940",
+      "input_digest": "723db4c49a204be1f08d0883b16d1fcfe524975a0a5947d9ae581f0fdee78348",
+      "source_sha256": "df9f866cda99dfeca76bdc7592f22691b0e2f3b8d5d092b78b3425b681c33c7d"
+    },
+    {
+      "case_id": "R3-KUSTOMIZE-6237",
+      "input_digest": "903df237aad22288963b11fcbad93ab74e037be1b9735965c2086fd55da10882",
+      "source_sha256": "7ded39d1ad22d95dc30d50540c621905c01ff02f5e71e2e624f8da187d926ed0"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "input_digest": "5e35ce63106f134d43e682afb42610724cf49f54661cae8d679fd4ffcd57b6a3",
+      "source_sha256": "2a5e761ae5f266f234ff9e3fe68ac1456017aa8e726ecfaef9560cdede645606"
+    },
+    {
+      "case_id": "R3-KOMPOSE-1887",
+      "input_digest": "c1b2e03b12dd91d910d8dcc3b53579d75466d4d66455482a88a0f3d8883974d7",
+      "source_sha256": "1111b2b938a6b87ef6f425a881748de1e00d9537bbba3bbde6c348264ed6854c"
+    },
+    {
+      "case_id": "R3-HELM-9175",
+      "input_digest": "c78a07ac61f0f440fc19bab033f608f029f3852a66bc8c2617f25efff66c4b8f",
+      "source_sha256": "0d99fdd86fecb3ab343377003b69566dcedc4338120499ef98291031619e217f"
+    },
+    {
+      "case_id": "R3-KUBESPAWNER-654",
+      "input_digest": "a0cfae11464e9ad127e49c611838b753846da3482df5887cd8ef15a6dc164e0b",
+      "source_sha256": "8b4a0a6b769c7d7939e0ed6ced2f8a8e7fe3bd5248535cc8bd58e85b735c5f76"
+    },
+    {
+      "case_id": "R3-PREFECT-7244",
+      "input_digest": "02df0b196e064be797bd50ecf89ac2d534a9a280684bda3d06c95b59f8d61b01",
+      "source_sha256": "0bc29e5f95a6e3c1cc8f84ad1ac6022b63fe38c20275ed37b0a0245bae6e3010"
+    },
+    {
+      "case_id": "R3-YTT-550",
+      "input_digest": "3233419571ea51bdf469c4bc0015d5b4448f4b8553a7af1c55b56facabb8f5cf",
+      "source_sha256": "ac795f12c26e30c25a7c9b2dfb7ba66d969061c6b3aec243311c168badd36380"
+    },
+    {
+      "case_id": "R3-CONTROLLER-TOOLS-1270",
+      "input_digest": "05958ac5c4fcb113535825bf88553365689b608382fa1ee874fc195ba0ef2efc",
+      "source_sha256": "8c614168824c58848f222ec0d720d6bafaeb2d4acf83671d09c492dfe3b4396b"
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5708",
+      "input_digest": "436d0491de1ea2c9848be6c7ec5cf9d04d9e42babdefebfac91a479f355cfed4",
+      "source_sha256": "a3ccef62432705eb9fb86980b0b120c26fb9da00d9f0f08bc1ffe2ef645ed225"
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "input_digest": "c633ddde8bf8ed172c4488d9261d7be5fb1e7d35f9720446866a4e196764982f",
+      "source_sha256": "ef69a8f3a7256074085c02ecfb4a2d8b5b86eb73992d3fb91d649baf72b47906"
+    },
+    {
+      "case_id": "R3-FLUX-KUSTOMIZE-1693",
+      "input_digest": "c0fc8584ae027ac8fedff981fd7fe2fe0681db3cd365c769afa6df83d9912332",
+      "source_sha256": "b122253104a42f53885dd2a5f9d43c01acf8d6a117bf1a6650283880499f29b0"
+    },
+    {
+      "case_id": "R3-HELM-31979",
+      "input_digest": "472087ab4b7ab02da92544ac7903a3d0d0c51e4cf3b9705174f201136530382a",
+      "source_sha256": "16d55b226ad0609afe924c93bd8788aa07b461f92f91b5e383c471445d56ca20"
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9892",
+      "input_digest": "b8172dfdfbdb8d7823a34dfe377b51e281213b3e9b537cc4c685c2813165ac97",
+      "source_sha256": "f71916322bd968c2317d98e92c07f09360f2d8312da93655d434efd258d8da64"
+    },
+    {
+      "case_id": "R3-UPJET-593",
+      "input_digest": "d14687d6ee1d51b13cdf2fa7bd1035fd38a5f3c46bea1b449819c98d60b2f343",
+      "source_sha256": "248cb9d030a5df25c23ac603323a862ff2c3538cbb0dda671099cc0e59328cc8"
+    },
+    {
+      "case_id": "R3-YTT-1000",
+      "input_digest": "b2d1dcf456910f310ffb35735bf02d54ac5f6412ee1a356b8090f15ff96032ac",
+      "source_sha256": "9e9167b3eee5e4f251831a1554606ed9e82f1e6f89edd47078b6594f54284cfc"
+    },
+    {
+      "case_id": "R3-CDK8S-327",
+      "input_digest": "abda153e0dfdb50331e67141b098a25bd5be4b4bb0fcd2a449e8f7b94fb058e1",
+      "source_sha256": "f0e10420154c75fd353956604032b254978dc45aeac7722baf3eba666614ff7e"
+    },
+    {
+      "case_id": "R3-PULUMI-KUBERNETES-4426",
+      "input_digest": "92be841a166cd01f33f9cef7674429d0fb222b213c6622d06a3c137f1d3810a7",
+      "source_sha256": "a2f8bb2fce1ae51f5b6549e4caf8c9c85de3b31898b32f2bb7fff3ece32a1b7a"
+    },
+    {
+      "case_id": "R3-KPT-4746",
+      "input_digest": "4e03c95b17aa7c9a7dd19828509e7b432cd58257dd9680391f9ec10e2259628b",
+      "source_sha256": "9db137c9d22965c48af8f975cbe4e37dd27827d3f893b2306e6e3e45fe02823b"
+    },
+    {
+      "case_id": "R3-GARDEN-6713",
+      "input_digest": "a638232e1e032bf06d2a696079ee6071f7d76d6bae90e2cbebfa7e285d2aba69",
+      "source_sha256": "dd0a3cea64f4231eb30bdff5da8d7856de6fd26fee4046614f9a5fe4ef06da76"
+    },
+    {
+      "case_id": "R3-KUBEVELA-7041",
+      "input_digest": "ff5f57bc77adad324b392ff6aaba48545d313fcd37ebb4b336b09683070df9a1",
+      "source_sha256": "303eb70c299cc12f7b4a622955d2c4b5ece6bd7c69fc611f07378cff26a9bfa3"
+    },
+    {
+      "case_id": "R3-KOMPOSE-2124",
+      "input_digest": "fed0d280bed8763d6d3cb352e0d58e618b123a4f90a7705e5fde675f92ecfbf2",
+      "source_sha256": "bfcc101e64a0597688f6c7400b71d41bba6d8b0f1a4a01dcabc08d2e0dd2d405"
+    },
+    {
+      "case_id": "R3-PULUMI-KUBERNETES-4293",
+      "input_digest": "9dabae425f303c915b354b55714b889148bfef734c69c36875bda48370ba57a1",
+      "source_sha256": "d4c88d84ca5a9519a289915da95d2927511e88406f1e0869309be90e18847d9b"
+    },
+    {
+      "case_id": "R3-KUBESPAWNER-451",
+      "input_digest": "d1827bf862d072e01de1cbe96a40636d721444ea27d7dab39e66e681184a58b0",
+      "source_sha256": "51be0d9057a257a34b833c05e185c943fd545c3ad5aaf7416b71e408e2045846"
+    },
+    {
+      "case_id": "R3-FLINK-OPERATOR-1152",
+      "input_digest": "cda5e366d1f4d64bc5e38eacdff5a330723be7fbcb872d2936c970d7fd740216",
+      "source_sha256": "4c1d204f6b9e2609b3a0c3c877918634a62e6a69a87aea03d0d5a5897ddd1d15"
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "input_digest": "aeb8c88b3d085a4a9b5f8136f85f6e24876eae8af2abc764a6d7884446bb9fae",
+      "source_sha256": "af9392e0682d280a6d169074fb9b7b58d6615a310b3c0b134019947cf27ad87d"
+    },
+    {
+      "case_id": "R3-HELMFILE-2531",
+      "input_digest": "0d02f6e5627dc8563984e8661bc899c8c46adda0e1463926eae498287e53e952",
+      "source_sha256": "7e2fa14736d5ce8b7943e0538db6b1df3579f877bdcc9d55c8f7a49074de3940"
+    },
+    {
+      "case_id": "R3-KUBEVELA-7383",
+      "input_digest": "107f0422b8fa81f359b6a0b6bdbda8a33863b0a7146073c43d0575ec12f03b18",
+      "source_sha256": "dd4dd70d9a4de4250327ec8e550deeb0710586917ad2980295274691b5961fbf"
+    },
+    {
+      "case_id": "R4-CLUSTER-API-OPENSTACK-3393",
+      "input_digest": "c79f6a2a9fd174f21fc55e4554429c29f78c3c926a8a8c98f173c922d8e7d65e",
+      "source_sha256": "ee7464bde03e167a8a1c3b74423119879834e1f482f8039629b88a3e8697af6a"
+    },
+    {
+      "case_id": "R4-OTEL-5594",
+      "input_digest": "811bc51b12849b15415dba7356feaa3f6ccce526d4dbdfa000fd70723525901f",
+      "source_sha256": "cf3a461c2783e984f31a02ba31bd86d3d02f3e283a2967244dfd9a9578451794"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "input_digest": "b0ec1187c6a3cc594ba5ccfd3b6c7b618b509e32ad4e6fbd5af08a422d967467",
+      "source_sha256": "50c36cd5d3b15c87e0ab22591306ab9e9ce29bd9fb4dde7207bc061897529182"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-5040",
+      "input_digest": "48e40afbb6df7191e3f567faa33506b42a97a581090067977f49064a8b809ee8",
+      "source_sha256": "6484787e39e61458f3179fb1be8a75c7487c9d2c5dd2239f3ae8eecf096f7577"
+    },
+    {
+      "case_id": "RW-ALLOY-6818",
+      "input_digest": "a4ff73cc8aaf08c2dbfe1a1f2be4d7baf5871bb093792d47b3e45d898e8bfd71",
+      "source_sha256": "36a79ad9bedd16b87003882fff8d18d4c533420f11db6f2fa634dc8aa3e159db"
+    },
+    {
+      "case_id": "CRI-O-7954",
+      "input_digest": "3835bc4309a6bc62cba9478154744ad1f9ffeab5d6681576f3700eda8a8ee468",
+      "source_sha256": "9de91356a94433aa5d9930b2fbbe5dc20a42c6fb2316432536a5338185d45ec2"
+    },
+    {
+      "case_id": "RW-COREDNS-7562",
+      "input_digest": "b1fa74cceab95a3d7123449bf0b100081507faea8711a63c36e7ebe81e1868fc",
+      "source_sha256": "449a0fd519135e8b96075332eabb0cb6a75f893f5adb5ab601113d209cc424f3"
+    },
+    {
+      "case_id": "RW-DAPR-10220",
+      "input_digest": "ef34b66a105cecf4fcccabf6d4cbd11d3081021854ed6146f1239c368b62ac32",
+      "source_sha256": "bd09fde66e4a5b90fab7374787e9b0e48682642f2a9f9e43b53c7ba174902ce8"
+    },
+    {
+      "case_id": "RW-DAPR-9173",
+      "input_digest": "9e32e6d68f0e3111c5272adc88113bc6fb0f91d38662beba90964e6fb80c01d4",
+      "source_sha256": "5dd04505e82e1280c0ce3f22a98ab339b4e7271dc5b09ea6ed0ca506cfc83031"
+    },
+    {
+      "case_id": "RW-DAPR-9612",
+      "input_digest": "e9fe37569d88eeeca761ed0a9a4ec8a7744eb47bc8af2561cd62f3367a072ffb",
+      "source_sha256": "11be644a31018627ef8fd1da9ca72678106ff3030b462dd6f9faebaab9f6dca4"
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-10720",
+      "input_digest": "2d0a1ebbf718a8bfa5c8603b219e7813874e24879b8ef5de1f3ccaa59ab4f559",
+      "source_sha256": "da06e4b30edadef939d4d90333e36a69f9f25c606c411b5065f62ff48ba6ad9e"
+    },
+    {
+      "case_id": "RW-FLUENT-BIT-12495",
+      "input_digest": "3bfa04c812c48296669a356616512b6d450b8f801be9fa832a43fadcfe380957",
+      "source_sha256": "f410ab1b6b2bdeabbe875554ff062d921468d2044fa69103562d2fb7c459dcaf"
+    },
+    {
+      "case_id": "RW-ISTIO-2944",
+      "input_digest": "8c7dbb8a9ee9c686bf8dbfed1860ca58dee41bcd3373750907a210c169b05ca5",
+      "source_sha256": "87e3ebd5c963b97e7e7957f91db0e1184825e5e6c5c09e8c0ae882b7d202f9e8"
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2918",
+      "input_digest": "380e74609204acce18a3bf96e2048a55b78568f28f390ed1937d184dadb6504f",
+      "source_sha256": "440ed08c894935175f68a078023ba4bff506a2fd652c4f238e596fac33c63a77"
+    },
+    {
+      "case_id": "RW-KUBE-STATE-METRICS-2955",
+      "input_digest": "cc6b9d6b95af6841b0ffce424742fb0f130a428abdef6d4342365146cc3f0f0b",
+      "source_sha256": "102ffbced6316e3666d6743c50932e01b79c3bb5ccf5070b9d12089e07f9d145"
+    },
+    {
+      "case_id": "RW-KYVERNO-17310",
+      "input_digest": "0feb7b68061d272b4ec4cf2e4f5d14dd8eb8c96228b5884ac643868469a7b18b",
+      "source_sha256": "1661e96ac6436ff23ffeb139a8b25efc5160e5bdf06ad356bad97e0ffc59e8f0"
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "input_digest": "c84ea2d8a10d7baf8c1557e94b1b81938089aea280dfe342c8db6c616b6f912d",
+      "source_sha256": "0a2f4775a91e1860f170d9384b28cd35fb4f936c02b440cd45a0fe72407c89df"
+    },
+    {
+      "case_id": "RW-OPENCLAW-111511",
+      "input_digest": "e655bf365a98564357e77b2613f9313122ff467a7dfbd4764157ee05402e26e1",
+      "source_sha256": "de126a583b7fcab0ceea84f6db390373696b1316602c1b4c8c8b960b5704dd85"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-10795",
+      "input_digest": "7e08a59d6574f5841ecdeb5ca82b2d990316648044ba2ecc8cae610376d93aed",
+      "source_sha256": "0e5f9217d338e1631aefa1eb00ae799fb98f90a36de0acffc5ab3d68ff4fffe4"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15572",
+      "input_digest": "56ec47e30d765edb6fad60a834e8402503ec3ed9e10b9af76455d8789a85088e",
+      "source_sha256": "d0a78385d15893f06ed6c17978d924087832d6f791f3405e45fea9077584851a"
+    },
+    {
+      "case_id": "RW-OTEL-COLLECTOR-15868",
+      "input_digest": "09850aefea895059394eb00c90a40eb778baeb637b7f365f0fa266d426943d68",
+      "source_sha256": "72fea4fe8adf56bbf2bdcc7f2108a42bf029f728c75648a4dd5d4b389d5dc622"
+    },
+    {
+      "case_id": "RW-OTEL-OPERATOR-2171",
+      "input_digest": "05006cc49b53b88508493390ae1228157ef9727a9e22b086a2fb9fe760c1cec6",
+      "source_sha256": "227d14ae17a9f2d2f110d1a9e4e2095817913bde7e434f84d596597a865ca99f"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-16340",
+      "input_digest": "ba9fec721b7aaa90d7d4f04bc03182e71bbcb326177dbbdc8a3cbb5ba74f7ad1",
+      "source_sha256": "469a670da936c065abd5d0f592b6818d4fbdb25d89f30c916fd5d8b7f3f936f3"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-17807",
+      "input_digest": "890758c6c36c37845f1ba827fb83b514f3a2ec9bb44fc305465a968fc3295e6d",
+      "source_sha256": "e44bcc1868d28d8159097b10cf177496847e49bd713ec7fb4b4ad6a77757b2fd"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "input_digest": "faaee70c62153c51a96ad65adf20f606f3ae3860f30e1b70da600b8ae7ee5895",
+      "source_sha256": "80bafc81ab3d65d3e77165410e584cae7f11677dc2b9bd25f5a666d352ada2fc"
+    },
+    {
+      "case_id": "RW-TEMPO-6435",
+      "input_digest": "0affb565e1955790d5e66ab900cae0cc0cc5a319616539df41c9fa9d81686f97",
+      "source_sha256": "d0846283536f6e288a7d70df340029bfd2fa1d1d306ee0be11f0346474b98bb9"
+    },
+    {
+      "case_id": "RW-TEMPO-6481",
+      "input_digest": "9f13633122f32b6b28b351452d41979a770434c5ca551d9adb5ab2033cf5d427",
+      "source_sha256": "158daa98aa27c34d8f96ee048e7ec1c62bbd4b1b1f9265880c430ab6fda46f62"
+    },
+    {
+      "case_id": "RW-TEMPO-6509",
+      "input_digest": "71fa8a5a227489b77687fadc1da55a9a80b3a333b253c333a1a0af3f40eb5642",
+      "source_sha256": "7e965d75752d6bb8f057f29fe00b0414f679648457637b9bd7c2c2581e604bbb"
+    },
+    {
+      "case_id": "RW-THANOS-6503",
+      "input_digest": "67f9be6e65ca19dc322bd307682b2abbad8a81611023ffa9cf1c4611b5ae9ed8",
+      "source_sha256": "a9d87679785b4ead97513c862abebdb50f119aea583735ee019b802f67bac2ff"
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "input_digest": "ec803df45cf09fe570dec3956e006145e531988c771cbd233a3ab3c4d78e638c",
+      "source_sha256": "4099dc909bea05ad42142b4b927529bd968933d2120b5c966ff99e556527627a"
+    },
+    {
+      "case_id": "R4-ACK-S3-2965",
+      "input_digest": "1eb02792959b23aefebc1a9f008041ed9a1cb152aadd001ea2f33c18cbe5a2dd",
+      "source_sha256": "dd12956b24ac0cae00bea00c54fdb5147ddabfc301d100e0c0d3abdb001bd35c"
+    },
+    {
+      "case_id": "R4-AWS-LBC-4847",
+      "input_digest": "aa8e28a6d9322259c0865a9fb91358c84db4ad5dcd369b47bfb002a24a11acf6",
+      "source_sha256": "9d6eddbd497e6a8635236047ee08d628417ba052a3651e05f7250661cb88050b"
+    },
+    {
+      "case_id": "R4-AWS-LBC-4876",
+      "input_digest": "c818b13deb10f3e87b9f2b72bc58a8adb5d35333a5b3d5ad2ec343376e3b95d5",
+      "source_sha256": "4c59f7854ae06fdeaef27546a80e2c8dfe86020549ab24d806e0c1ed5328e0c5"
+    },
+    {
+      "case_id": "R4-CAPA-5111",
+      "input_digest": "8bf88fff20ed5743b7b24df21a4785aa1d0ff5ae1a08828c7a0b667ad0f8ba2b",
+      "source_sha256": "659b2f40dbb87d22a936ddfaa31abefeb4413e9dc7aac2bdf59615a2d42be290"
+    },
+    {
+      "case_id": "R4-CERTMANAGER-9204",
+      "input_digest": "7eb0acba8bb089387cf482934ba4b98616ffb4e5bf533f5dfaf8c31907bb9014",
+      "source_sha256": "e9d5aed7e14654baead1c3e199eb19a346bf31b65688d8a127664f4d1cfc40a7"
+    },
+    {
+      "case_id": "R4-CLUSTER-API-OPENSTACK-3319",
+      "input_digest": "844484bd32446aa1c198f83051361147c31a0c8568420db4e455bccc89874a6c",
+      "source_sha256": "cff94aa7c5349f0253148c96b027a175e30b1fbe3262cf0d4b9e95b47e59412a"
+    },
+    {
+      "case_id": "R4-EXTERNAL-DNS-6082",
+      "input_digest": "10b73a9b9376c744f5017c82aa24bd7361722755cb7290a62a828f4c97234c79",
+      "source_sha256": "2e125cea7c47e48032a818c00827f69afde6456cbd5b3e6b91759378bbd5c2f1"
+    },
+    {
+      "case_id": "R4-EXTERNAL-DNS-6661",
+      "input_digest": "a02a9039af9ac443466b8987f7c5c068f4ebee98469504188261603c6b384427",
+      "source_sha256": "3a99a75a6797533fe709da41088c502e8a9c8eddbd974f36041574e3eb7aa557"
+    },
+    {
+      "case_id": "R4-EXTERNAL-SECRETS-6821",
+      "input_digest": "aacbf1e8b22b1ad3023f3a540b18e9c7691fd9af20ad995778062894cc355fc3",
+      "source_sha256": "4f1f3c57a3537164fa09d389ba87c799b030f8dcb944e63d15433a475f613585"
+    },
+    {
+      "case_id": "R4-EXTERNAL-SECRETS-6933",
+      "input_digest": "e97b60853f913cb83d0fa1b1ad42c951a9f38caa763603ec70364d112ef325c2",
+      "source_sha256": "12e5845f453b2996004faac206c09e6e6975b4f8c3db2ffe3e2dff45016888b8"
+    },
+    {
+      "case_id": "R4-FLINK-OPERATOR-1168",
+      "input_digest": "42ff4c3226380c18474415cf2fd92ce34e98bac1ca069afb218484fc7b28c2b3",
+      "source_sha256": "77fa7e15085f6acb97b2c267e40e3a1020cf138da157a38008c744ca51f2e3c0"
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2214",
+      "input_digest": "b5e465d828afd086f535fe42af5a57eec7f244707e70dbb93923ea9a1642fc77",
+      "source_sha256": "c7b3a18919a45a9add967a7abe2756bc68704e13f8ca48027fdedab751d2ea18"
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2339",
+      "input_digest": "d6ddbc839a0baa593b05793b169f50298283d0d345d890dc0f0d0581ae561e78",
+      "source_sha256": "78118551cd2567d86b908a206069ad67b74d8f8b9ac5c07e5367fc50fe75e19c"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-138",
+      "input_digest": "adc1ee97b9374bbb7a44e0365b7e3234754b55474e6d8f454cf777310aac64fc",
+      "source_sha256": "cbc00996b4235cc7dd72dec27e580424362c3f7e34fb2ae3dbb9211a30def143"
+    },
+    {
+      "case_id": "R4-PROVIDER-HTTP-153",
+      "input_digest": "617f5bd41d8977f82a6a5c9df99bd5b64aa860220ea55a6bfd714f2e57a08cdf",
+      "source_sha256": "1235a35ab011098d657be5a6455fd24d2c8b257aa7d29998e06a17478b5d4c24"
+    },
+    {
+      "case_id": "R4-PROVIDER-SQL-240-421",
+      "input_digest": "0543637c905a8aa31e2b063b1db8900250cbfe1892bdebfaf803b0c4a0e232b6",
+      "source_sha256": "8b64a8affe570deb9b9e2fba05826f37f747fc7cc71d4d5ae47c503901fe314e"
+    },
+    {
+      "case_id": "R4-PROVIDER-SQL-459",
+      "input_digest": "f2345c94ae2cde5c51472eb3192f187e0c1b3b5ccf8999604b388090940be4bb",
+      "source_sha256": "773b4ec2e42ed2854557423387de180185cead55c187cc0ffc54cd950aa82ca9"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AWS-2117",
+      "input_digest": "44d632a11e55e3c4adbfbe6e5bb19f4970f079f42f89ef67ca4e16c873432894",
+      "source_sha256": "5052f655f7d589f09728a8932a7807a48855af3d73b27a5cd0f76feede80aed2"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AWS-2182",
+      "input_digest": "2e070d1b2554eee54c0f8b0399a4eeceec2161fe1574cfabeb2b79a92404fc1e",
+      "source_sha256": "927d36cd26de20a12b7b9cf2d6df5066aaad9c93940098ace173284419da9ebb"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AZURE-1247",
+      "input_digest": "c41ce71afe80d25bb94d4d4551d66ab25331818c2e858d1dfa5d90bc8e14fdec",
+      "source_sha256": "069639ae51ba7e2457032da23bb244e37c3f26af281a4cf94e23880d095fd8fb"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-AZURE-1260",
+      "input_digest": "050f7864487b8d7cb8d1ea516be8d8d10208c434a530ecdad3ac17f39d5f10e1",
+      "source_sha256": "e7fd2b11eec3a9220b4ea5ceaf67063ec675ed7cd25f67a5b030b320ec89d8db"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-GCP-1015",
+      "input_digest": "5737d33e7f7f9de38a387186984e5e8aaaa2726b01018f280d5ed16ceb3b1ccf",
+      "source_sha256": "a65947fa357d998c2d01a1e159c35bed695e8372e1bf3ebdb543762babfe6051"
+    },
+    {
+      "case_id": "R4-PROVIDER-UPJET-GCP-875",
+      "input_digest": "5f4c1ec0b15fdac3e593d7394f7e34a15df6ec8406f020bd195f38629a9ef62b",
+      "source_sha256": "7b4c6fb867811ce71c03f81885d55809e5ef29f21fd9597052be854cf5d658b1"
+    },
+    {
+      "case_id": "R4-UPJET-564",
+      "input_digest": "6cb7555323e0fa306a5f82e73c5ece1c696c76d33b4ef074978499c0a0bbc1fa",
+      "source_sha256": "33dc462c57e253b23e77a32106898e8be7727e73c2ea8d03ba8f39c24c24f563"
+    },
+    {
+      "case_id": "R4-UPJET-640",
+      "input_digest": "d6805e10362c3d620c52a78f21ac55735e28ae708493f374678d073285696069",
+      "source_sha256": "d0a19da58ee5d5825249f88065bfd734dfcf81f14b1fd18d4d7517058373f231"
+    },
+    {
+      "case_id": "RW-CROSSPLANE-PROVIDER-AWS-2256",
+      "input_digest": "3feef508f689aa16e25b03b8788d67845cff8a2a44cfc44cb08475205d422768",
+      "source_sha256": "f2cbc65807d821b21ad091b18635cf385af6e7278b336db6fe966315ba303045"
+    },
+    {
+      "case_id": "RW-PROVIDER-AWS-2343",
+      "input_digest": "24b8c20c3e18392f7b57ea0cc7ba3d8bfd64db232174f475d28112dd075088e2",
+      "source_sha256": "fdd56a867399eed3cf5a31ade3453b9c9c8690c35f866b5845ec7cf4b329c768"
+    },
+    {
+      "case_id": "R4-UPJET-AWS-2137",
+      "input_digest": "f6c18f4f2e90f49e171c252d8491daa5a0419f33d55ae5bc371aa6e53517392a",
+      "source_sha256": "55f0c8a78a75d732446dfd505b507889a052c2d03276b99b03393e8a81b304f0"
+    },
+    {
+      "case_id": "R4-UPJET-GCP-1027",
+      "input_digest": "b6048d02ad15ffdafb4ceac69dde040a3c606bf2ed5b6e213f427834a44b7522",
+      "source_sha256": "60af4f8fc38f2996e346966c829f22c4bf437dd0c9f6e7618bab973e089db880"
+    },
+    {
+      "case_id": "RW-HAPROXY-0D540394",
+      "input_digest": "367cf0f6d4460bfae7d99398cc538d05dee2bc8edb5d0add42b0d43ac2485ea7",
+      "source_sha256": "9653e4e0bab83f57e46c33bb711b66f86fcb0fc4b6fd915d4ad28f4b3ac22142"
+    },
+    {
+      "case_id": "RW-ARGO-ROLLOUTS-4604",
+      "input_digest": "0a4314d3009125c803e7760f1ffde374a172b48c2448bd4c74df56c9170fa066",
+      "source_sha256": "7a92a4650a7c1dfcbbca51cd0b9c2153757a503b0de141b0c7b6747cbbf552c9"
+    },
+    {
+      "case_id": "RW-HAPROXY-REDIRECT-QS-001",
+      "input_digest": "373cbe5cea6730bdd55786a2662e0b832460d97802d3da9758f3b0f937c9c2ae",
+      "source_sha256": "03c2f39ca9ec92bcfe0408990a0ae1b995fe92fd94213533b6482a2794201dc5"
+    },
+    {
+      "case_id": "RW-HAPROXY-HASH-NUMERIC-001",
+      "input_digest": "14d37d6a1e1cb035b780be2aef2bc6bbd2eb3b6966383fab3a2d2be516b21174",
+      "source_sha256": "b36ce7c52a86ce534ee8832c0622dec19700cdd7fa03b1fc3d3278743e34d3f4"
+    }
+  ],
+  "private_materials_loaded": false,
+  "new_model_calls": 0,
+  "status": "PASS",
+  "formal_ready": false
+}

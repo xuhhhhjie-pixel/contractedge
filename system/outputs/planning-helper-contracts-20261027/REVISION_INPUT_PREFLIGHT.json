@@ -1,0 +1,10 @@
+{
+  "status": "PUBLIC_FAILURE_REVISION_ZERO_API_PASS",
+  "total_token_bound": 213612,
+  "request_digest": "5b03f75dbbd1475bd0c23afa021826a9ee8023b6637b9346af7bbd24c056a2a4",
+  "source_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+  "historical_failure_snapshot": "b8576ef125bd65adff2cf67e45439b620c2e4812e1faf65fc737bd7bda235bee",
+  "prior_plan_in_actual_messages": true,
+  "failed_predicates": 4,
+  "formal_ready": false
+}

@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "freeze_sha256": "fda82e2cbd90dea3bc1be3a03379fbfd452a06748a01fa88aea4e7bf782d998c",
+  "wheel_sha256": "e42800fc04b863147c6f3ff04f2f5f983c71f8c128075169460e059007aceee9",
+  "installed_source_files": 116,
+  "installed_source_set_exact": true,
+  "final_build": "PASS_PEP517_ISOLATED_BUILD",
+  "initial_metadata_name_assertion": "Expected wheel incorrectly used contractedge instead of declared contractedge_system; existing successful wheel retained and installed, build not repeated.",
+  "model_http_calls_added": 0,
+  "formal_ready": false
+}

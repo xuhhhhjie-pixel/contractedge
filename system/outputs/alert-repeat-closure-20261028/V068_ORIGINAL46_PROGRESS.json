@@ -1,0 +1,155 @@
+{
+  "status": "RUNNING_REMAINING_A_WITH_ACK_UNRESOLVED",
+  "checked_at": "2026-10-28T22:51:02.214240+08:00",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "panel_root": "/home/xhj/contractedge-fixed46-official-v068-20261028",
+  "runtime_state": "/home/xhj/contractedge-fixed46-official-v068-20261028/acceptance-state.json",
+  "registered_slots": 46,
+  "closed_slots": 12,
+  "active_slot": {
+    "case_id": "RW-CERTMANAGER-9116",
+    "group": "A",
+    "repeat": 0,
+    "slot_id": "fixed46-official-v068-20261028-f836a8138f6b34ea264edf20",
+    "variant": "baseline"
+  },
+  "records": [
+    {
+      "slot_id": "fixed46-official-v068-20261028-f5dd18212d66edb1ba9b9990",
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "variant": "baseline",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-60944716e7069c9f5423fb67",
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "variant": "candidate",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-f30e0215f0d113880a6411c5",
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "variant": "candidate",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-8963f561974092cbd6133317",
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "variant": "baseline",
+      "repeat": 0,
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "FAIL",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-5c9e2b9fddc23e694bc91412",
+      "case_id": "R3-KOPF-726",
+      "group": "A",
+      "variant": "baseline",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-a23cab1ffd94f2c287355ce8",
+      "case_id": "R3-KOPF-726",
+      "group": "A",
+      "variant": "candidate",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-109d1fbfb1987992a1ad4cea",
+      "case_id": "R4-PROVIDER-HELM-408",
+      "group": "A",
+      "variant": "baseline",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-613366258a101b1af27ecdab",
+      "case_id": "R4-PROVIDER-HELM-408",
+      "group": "A",
+      "variant": "candidate",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "PASS",
+      "method_status": "PUBLIC_REVIEW_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-a62911320d2450c09640ca1c",
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "group": "A",
+      "variant": "baseline",
+      "repeat": 0,
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "method_status": "INVALID_OUTPUT"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-7e110f10f2707f003c394c2c",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "A",
+      "variant": "candidate",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-5ece967e93e69ab025d7d758",
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "A",
+      "variant": "baseline",
+      "repeat": 0,
+      "status": "SEMANTIC_FAIL",
+      "public_decision": "UNKNOWN",
+      "method_status": "INVALID_OUTPUT"
+    },
+    {
+      "slot_id": "fixed46-official-v068-20261028-5b4e270cd9beb190997cb43f",
+      "case_id": "RW-CERTMANAGER-9116",
+      "group": "A",
+      "variant": "candidate",
+      "repeat": 0,
+      "status": "PASS",
+      "public_decision": "UNKNOWN",
+      "method_status": "PUBLIC_EXECUTION_COMPLETE"
+    }
+  ],
+  "effect_scores_inherited": false,
+  "extra_cases_added": 0,
+  "delivery_gate_evidence_checked": [
+    "G0",
+    "G1",
+    "G2",
+    "G6"
+  ],
+  "remaining_gate_scope": {
+    "G3": "Final all-attempt provenance closure; actual isolation matrix already PASS",
+    "G4": "Original registered success preservation, repetition and saved-failure recovery",
+    "G5": "Original complete same-source paired effect and exposure assessment"
+  },
+  "formal_ready": false,
+  "formal150_started": false,
+  "unresolved_slot": "fixed46-official-v068-20261028-bcd9a8d56a4e00f2f902f406",
+  "controlled_ack_continuation_counts_in_original46": false
+}

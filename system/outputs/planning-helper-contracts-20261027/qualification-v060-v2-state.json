@@ -1,0 +1,26 @@
+{
+  "status": "STOP_QUALIFICATION_NOT_PASSED",
+  "stages": [
+    {
+      "stage": "verify-after-full",
+      "exit": 0
+    },
+    {
+      "stage": "actual-eight",
+      "exit": 0
+    },
+    {
+      "stage": "public-sandbox",
+      "exit": 1
+    }
+  ],
+  "model_calls_added": 0,
+  "formal_ready": false,
+  "B_opened": false,
+  "qualification_driver_sha256": "3b9f6b4e96caa8f383072880138cd31fccaf8888136cdd75ef3aa66b07568287",
+  "full_tests": 2138,
+  "subtests": 91,
+  "full_process_receipt_sha256": "f59135c12874e052ef11ff4f9c86670e037c754c87ff07422a5c5c899e74d67d",
+  "active_stage": "public-sandbox",
+  "error": "RuntimeError: public-sandbox failed; no automatic retry"
+}

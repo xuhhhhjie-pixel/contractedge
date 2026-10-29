@@ -180,8 +180,9 @@ class BoundedExtractionTests(unittest.TestCase):
                 "package p\nfunc ensureService() { buildService() }\n", encoding="utf-8")
             (root / "unrelated.go").write_text(
                 "package p\nfunc reconcileDatabase() { migrate() }\n", encoding="utf-8")
-            snapshot = Snapshot("snap-gap", str(root), {
-                "controller.go": "a" * 64, "service.go": "b" * 64, "unrelated.go": "c" * 64})
+            # Retrieval revalidates bytes against the current snapshot; this
+            # positive location fixture must describe the files it created.
+            snapshot = compute_snapshot(root)
             seed = extract_units(snapshot, {"seed_paths": ("controller.go",)}, max_extension_files=0)
 
             extension, audit = extract_gap_extension_units(snapshot, ("controller.go",), seed, [

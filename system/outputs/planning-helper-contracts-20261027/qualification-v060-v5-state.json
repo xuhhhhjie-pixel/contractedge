@@ -1,0 +1,14 @@
+{
+  "status": "ZERO_CALL_SOURCE_QUALIFICATION_WITH_TARGETED_FIXTURE_RESUMPTION",
+  "source_sha256": "542509c7002fa920759cb80a0ace9d6fbc8d69bd21d9d9c99f15f091990b51ad",
+  "freeze_sha256": "13bb90325bbf110f840c7bd26ddbd97f3820342037af9e682d99660d3653c4ac",
+  "resumption_audit_sha256": "c07a9c2ab8596f47ee51c12365a0684423ca4945631edc5729b969411bfa9a8b",
+  "single_full_suite_pass": false,
+  "original_full_passed": 2170,
+  "original_full_subtests": 91,
+  "targeted_passed": 88,
+  "public_sandbox": "PASS",
+  "actual8": "PASS",
+  "model_calls_added": 0,
+  "formal_ready": false
+}

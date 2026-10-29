@@ -1,0 +1,25 @@
+{
+  "version": "0.6.36",
+  "method_status": "INVALID_PLAN",
+  "independent_status": "NO_CANDIDATE",
+  "model_calls": 6,
+  "patch_bytes": 0,
+  "scored": 1,
+  "not_run": 45,
+  "formal_ready": false,
+  "actual_failure_chain": [
+    "Planning NEEDS_EVIDENCE → bounded extension diagnosisREADY",
+    "Plan generation truncated → existing nonthinking recovery returns full READY draft",
+    "Recovered draft fails OBLIGATION_RELATION_MISMATCH at postconditions[2].obligation_refs",
+    "Correction request omits rejected draft; new model object omits status → SCHEMA_INVALID"
+  ],
+  "next_optimization": "Bind exact previous draft into same-context plan correction and current-plan feedback revision; no more retries or weaker schema",
+  "money": {
+    "limit_cny": 150,
+    "committed_including_uncertain_cny": 97.531772,
+    "remaining_upper_cny": 52.468228,
+    "uncertain_reservations": 3,
+    "new_calls_this_version": 6,
+    "new_cost_cny": 0.899896
+  }
+}

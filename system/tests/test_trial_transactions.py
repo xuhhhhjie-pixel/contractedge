@@ -357,7 +357,7 @@ class Provider(SyntheticExampleProvider):
    self.diagnoses+=1
    if self.diagnoses==2:os._exit(73)
   response=super().complete_json(request)
-  if request.prompt_version=='public-postcondition-review.v1':
+  if request.prompt_version in {'public-postcondition-review.v1','public-postcondition-review.v2'}:
    body=json.loads(response.content);body['failure_kind']='DIAGNOSIS';return ModelResponse(json.dumps(body),response.metadata)
   return response
 repair_case(public,root/'frozen-public','two-consumers',root/'run',Provider('two-consumers',runner),count_tokens,config,public_runner=runner)

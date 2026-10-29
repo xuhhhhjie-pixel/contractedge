@@ -1,0 +1,35 @@
+{
+  "schema_version": "ce.minimal_root_cause_diagnostic.v1",
+  "source_sha256": "827422caa8e1b7b0d331bd2fb6e23850581d5243751ea4e99d3806d466bce480",
+  "freeze_sha256": "c64f94ce6672f06aa44f44323a9781b4d59ddc10fe933fe60f1c3b873686a457",
+  "qualification_sha256": "2b04064e8afe37b60f97f3e7e98afced35187681e3e849dca112bc2ca634b34a",
+  "driver_sha256": "3e57effce351e64e07f678da50e065bce7b5a46ee1e6f8617fcee6fb0e4c0674",
+  "attempts": [
+    {
+      "case_id": "R3-KPT-4673",
+      "attempt_id": "diagnostic-source051-v2-20261026-r3-kpt-4673",
+      "output": "/home/xhj/contractedge-diagnostic-source051-v2-20261026/methods/R3-KPT-4673/R3-KPT-4673",
+      "registration": "/home/xhj/contractedge-diagnostic-source051-v2-20261026/registrations/R3-KPT-4673.json",
+      "registration_sha256": "6b1415ad6729247279eaec03548df63ba937de06f039572f60f3f974cb47a668"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "attempt_id": "diagnostic-source051-v2-20261026-rw-certmanager-9116",
+      "output": "/home/xhj/contractedge-diagnostic-source051-v2-20261026/methods/RW-CERTMANAGER-9116/RW-CERTMANAGER-9116",
+      "registration": "/home/xhj/contractedge-diagnostic-source051-v2-20261026/registrations/RW-CERTMANAGER-9116.json",
+      "registration_sha256": "0848755ac825923e08b40cfbab193c308a8fa535422d2cad1521e06d869522e1"
+    }
+  ],
+  "once_per_case": true,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "cumulative_api_limit_cny": 150,
+  "predecessor_v050_outcomes": "CERT_PASS_KPT_CONTROL_INVALID_PLAN_PRESERVED",
+  "hypotheses": [
+    "Missing evidenced branch targets reach existing once-only rediagnosis instead of impossible plan-text corrections",
+    "Corrected source binding reaches planning and execution within original context/call limits",
+    "KPT actual behavior and independent score pass; only then check Cert control"
+  ],
+  "success_gate": "KPT independent PASS/public not FAIL before Cert control; both required and no inheritance into fixed46",
+  "transient_workspace_policy": "RETIRE_CLOSED_SCORED_PUBLIC_WORKSPACE"
+}

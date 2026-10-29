@@ -1,0 +1,166 @@
+................FFFFFF                                                   [100%]
+=================================== FAILURES ===================================
+___ test_truncated_duplicate_still_prevents_arbitrary_contract_choice[type] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-653/test_truncated_duplicate_still0')
+kind = 'type'
+
+    @pytest.mark.parametrize('kind',['type','method','callee'])
+    def test_truncated_duplicate_still_prevents_arbitrary_contract_choice(tmp_path,kind):
+        targets,ops=fixture(tmp_path)
+        if kind=='type':
+            (tmp_path/'api/platform.go').write_text('package api\ntype Rule struct {\n'+''.join(f' F{i} string\n' for i in range(100))+'}\n')
+        elif kind=='method':
+            (tmp_path/'api/platform.go').write_text('package api\nfunc (r Rule) IsZero() bool {\n'+' _ = r\n'*100+' return false\n}\n')
+        else:
+            (tmp_path/'engine/platform.go').write_text('package engine\nfunc keep(items []string) []string {\n'+' _ = items\n'*100+' return items\n}\n')
+        records,_=local_go_helper_support(compute_snapshot(tmp_path),targets,ops)
+        text='\n'.join(r['excerpt'] for r in records)
+>       if kind=='type':assert 'type Rule struct' not in text
+E       assert 'type Rule struct' not in 'func Apply(...rn items }\n'
+E         
+E         'type Rule struct' is contained here:
+E            ignored.
+E           type Rule struct { Name string }
+E           
+E           func (r Rule) IsZero() bool { return r.Name == "" }
+E           
+E           func keep(items []string, rule policy.Rule) []string { return items }
+
+tests/test_helper_input_contracts.py:142: AssertionError
+__ test_truncated_duplicate_still_prevents_arbitrary_contract_choice[method] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-653/test_truncated_duplicate_still1')
+kind = 'method'
+
+    @pytest.mark.parametrize('kind',['type','method','callee'])
+    def test_truncated_duplicate_still_prevents_arbitrary_contract_choice(tmp_path,kind):
+        targets,ops=fixture(tmp_path)
+        if kind=='type':
+            (tmp_path/'api/platform.go').write_text('package api\ntype Rule struct {\n'+''.join(f' F{i} string\n' for i in range(100))+'}\n')
+        elif kind=='method':
+            (tmp_path/'api/platform.go').write_text('package api\nfunc (r Rule) IsZero() bool {\n'+' _ = r\n'*100+' return false\n}\n')
+        else:
+            (tmp_path/'engine/platform.go').write_text('package engine\nfunc keep(items []string) []string {\n'+' _ = items\n'*100+' return items\n}\n')
+        records,_=local_go_helper_support(compute_snapshot(tmp_path),targets,ops)
+        text='\n'.join(r['excerpt'] for r in records)
+        if kind=='type':assert 'type Rule struct' not in text
+>       elif kind=='method':assert 'func (r Rule) IsZero()' not in text
+E       assert 'func (r Rule) IsZero()' not in 'func Apply(...rn items }\n'
+E         
+E         'func (r Rule) IsZero()' is contained here:
+E           string }
+E           
+E           func (r Rule) IsZero() bool { return r.Name == "" }
+E           
+E           func keep(items []string, rule policy.Rule) []string { return items }
+
+tests/test_helper_input_contracts.py:143: AssertionError
+__ test_truncated_duplicate_still_prevents_arbitrary_contract_choice[callee] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-653/test_truncated_duplicate_still2')
+kind = 'callee'
+
+    @pytest.mark.parametrize('kind',['type','method','callee'])
+    def test_truncated_duplicate_still_prevents_arbitrary_contract_choice(tmp_path,kind):
+        targets,ops=fixture(tmp_path)
+        if kind=='type':
+            (tmp_path/'api/platform.go').write_text('package api\ntype Rule struct {\n'+''.join(f' F{i} string\n' for i in range(100))+'}\n')
+        elif kind=='method':
+            (tmp_path/'api/platform.go').write_text('package api\nfunc (r Rule) IsZero() bool {\n'+' _ = r\n'*100+' return false\n}\n')
+        else:
+            (tmp_path/'engine/platform.go').write_text('package engine\nfunc keep(items []string) []string {\n'+' _ = items\n'*100+' return items\n}\n')
+        records,_=local_go_helper_support(compute_snapshot(tmp_path),targets,ops)
+        text='\n'.join(r['excerpt'] for r in records)
+        if kind=='type':assert 'type Rule struct' not in text
+        elif kind=='method':assert 'func (r Rule) IsZero()' not in text
+>       else:assert 'func keep(' not in text
+E       assert 'func keep(' not in 'func Apply(...rn items }\n'
+E         
+E         'func keep(' is contained here:
+E            == "" }
+E           
+E           func keep(items []string, rule policy.Rule) []string { return items }
+E         ? ++++++++++
+
+tests/test_helper_input_contracts.py:144: AssertionError
+_ test_shadowed_callback_is_not_mistaken_for_package_implementation[parameter] _
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-653/test_shadowed_callback_is_not_0')
+binding = 'parameter'
+
+    @pytest.mark.parametrize('binding',['parameter','local','range'])
+    def test_shadowed_callback_is_not_mistaken_for_package_implementation(tmp_path,binding):
+        targets,ops=fixture(tmp_path)
+        signature='items []string, rules []policy.Rule'
+        if binding=='parameter':
+            signature+=', keep func([]string, policy.Rule) []string';body='return keep(items, rules[0])'
+        elif binding=='local':
+            body='keep := otherCallback; return keep(items, rules[0])'
+        else:
+            signature+=', callbacks []func([]string, policy.Rule) []string';body='for _, keep := range callbacks { return keep(items, rules[0]) }; return items'
+        (tmp_path/'engine/apply.go').write_text('package engine\nimport policy "example.org/typed/api"\n'+
+            f'func Apply({signature}) []string {{ {body} }}\n'+
+            'func keep(items []string, rule policy.Rule) []string { return items }\n')
+        records,_=local_go_helper_support(compute_snapshot(tmp_path),targets,ops)
+>       assert not any(r['excerpt'].lstrip().startswith('func keep(') for r in records)
+E       assert not True
+E        +  where True = any(<generator object test_shadowed_callback_is_not_mistaken_for_package_implementation.<locals>.<genexpr> at 0x7fc1569d1af0>)
+
+tests/test_helper_input_contracts.py:161: AssertionError
+___ test_shadowed_callback_is_not_mistaken_for_package_implementation[local] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-653/test_shadowed_callback_is_not_1')
+binding = 'local'
+
+    @pytest.mark.parametrize('binding',['parameter','local','range'])
+    def test_shadowed_callback_is_not_mistaken_for_package_implementation(tmp_path,binding):
+        targets,ops=fixture(tmp_path)
+        signature='items []string, rules []policy.Rule'
+        if binding=='parameter':
+            signature+=', keep func([]string, policy.Rule) []string';body='return keep(items, rules[0])'
+        elif binding=='local':
+            body='keep := otherCallback; return keep(items, rules[0])'
+        else:
+            signature+=', callbacks []func([]string, policy.Rule) []string';body='for _, keep := range callbacks { return keep(items, rules[0]) }; return items'
+        (tmp_path/'engine/apply.go').write_text('package engine\nimport policy "example.org/typed/api"\n'+
+            f'func Apply({signature}) []string {{ {body} }}\n'+
+            'func keep(items []string, rule policy.Rule) []string { return items }\n')
+        records,_=local_go_helper_support(compute_snapshot(tmp_path),targets,ops)
+>       assert not any(r['excerpt'].lstrip().startswith('func keep(') for r in records)
+E       assert not True
+E        +  where True = any(<generator object test_shadowed_callback_is_not_mistaken_for_package_implementation.<locals>.<genexpr> at 0x7fc1569d20a0>)
+
+tests/test_helper_input_contracts.py:161: AssertionError
+___ test_shadowed_callback_is_not_mistaken_for_package_implementation[range] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-xhj/pytest-653/test_shadowed_callback_is_not_2')
+binding = 'range'
+
+    @pytest.mark.parametrize('binding',['parameter','local','range'])
+    def test_shadowed_callback_is_not_mistaken_for_package_implementation(tmp_path,binding):
+        targets,ops=fixture(tmp_path)
+        signature='items []string, rules []policy.Rule'
+        if binding=='parameter':
+            signature+=', keep func([]string, policy.Rule) []string';body='return keep(items, rules[0])'
+        elif binding=='local':
+            body='keep := otherCallback; return keep(items, rules[0])'
+        else:
+            signature+=', callbacks []func([]string, policy.Rule) []string';body='for _, keep := range callbacks { return keep(items, rules[0]) }; return items'
+        (tmp_path/'engine/apply.go').write_text('package engine\nimport policy "example.org/typed/api"\n'+
+            f'func Apply({signature}) []string {{ {body} }}\n'+
+            'func keep(items []string, rule policy.Rule) []string { return items }\n')
+        records,_=local_go_helper_support(compute_snapshot(tmp_path),targets,ops)
+>       assert not any(r['excerpt'].lstrip().startswith('func keep(') for r in records)
+E       assert not True
+E        +  where True = any(<generator object test_shadowed_callback_is_not_mistaken_for_package_implementation.<locals>.<genexpr> at 0x7fc1569d1cb0>)
+
+tests/test_helper_input_contracts.py:161: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_helper_input_contracts.py::test_truncated_duplicate_still_prevents_arbitrary_contract_choice[type]
+FAILED tests/test_helper_input_contracts.py::test_truncated_duplicate_still_prevents_arbitrary_contract_choice[method]
+FAILED tests/test_helper_input_contracts.py::test_truncated_duplicate_still_prevents_arbitrary_contract_choice[callee]
+FAILED tests/test_helper_input_contracts.py::test_shadowed_callback_is_not_mistaken_for_package_implementation[parameter]
+FAILED tests/test_helper_input_contracts.py::test_shadowed_callback_is_not_mistaken_for_package_implementation[local]
+FAILED tests/test_helper_input_contracts.py::test_shadowed_callback_is_not_mistaken_for_package_implementation[range]
+6 failed, 16 passed in 0.31s

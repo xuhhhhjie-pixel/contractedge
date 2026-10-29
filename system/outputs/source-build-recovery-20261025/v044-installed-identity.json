@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "version": "0.6.44",
+  "runtime_files": 115,
+  "installed_source_exact": true,
+  "installation": "non-editable fresh venv",
+  "formal_ready": false
+}

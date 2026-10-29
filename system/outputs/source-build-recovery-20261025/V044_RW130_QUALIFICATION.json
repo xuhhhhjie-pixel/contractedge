@@ -1,0 +1,59 @@
+{
+  "version": "0.6.44",
+  "source_sha256": "b8e46f43a53387f62b6b343de2edf8bf21424eb9423586c35f56ee5f06f8926b",
+  "case_id": "RW-CAND-130",
+  "scope": "ORIGINAL_BROKEN_NO_SEED",
+  "method_status": "PUBLIC_REVIEW_COMPLETE",
+  "independent_status": "PASS",
+  "public_checks": [
+    {
+      "id": "P1",
+      "status": "PASS"
+    },
+    {
+      "id": "preserve:PC1",
+      "status": "PASS"
+    }
+  ],
+  "initial_snapshot": "f44e75768af304334eff5fb7c49cc596b12218dbf83efdf95639691b167063f5",
+  "final_snapshot": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+  "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+  "model_calls": 5,
+  "reserved_tokens": 446055,
+  "new_cost_micro_cny": 420320,
+  "money_after": {
+    "limit_micro_cny": 150000000,
+    "committed_micro_cny": 105571756,
+    "calls": 1051,
+    "reservation_rejected": false,
+    "pending_calls": 3
+  },
+  "native_agent": "topomen.collaboration.base_agent.DefaultAgent",
+  "native_trial_events": [
+    "BEGIN_COMMITTED",
+    "AUTHORITY_DURABLE",
+    "EDIT_INTENT",
+    "APPLIED",
+    "OBSERVED",
+    "SELECTION_INTENT",
+    "SELECTION_COMPLETED"
+  ],
+  "edit_intent_before_write_verified": true,
+  "terminal_validation": {
+    "classification": "METHOD_RESULT",
+    "method_status": "PUBLIC_REVIEW_COMPLETE",
+    "unknown_requests": 0,
+    "not_dispatched_requests": 0,
+    "candidate_verified": true,
+    "coordinator_policy_failures": [],
+    "recovery_failure": null,
+    "semantic_outcome_upgraded": false
+  },
+  "cleanup": {
+    "status": "OWNED_CONTAINERS_CLOSED",
+    "removed": []
+  },
+  "score_feedback_to_method": false,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

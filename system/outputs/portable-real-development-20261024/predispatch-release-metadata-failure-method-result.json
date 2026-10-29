@@ -1,0 +1,11 @@
+{
+  "role": "SINGLE_CLEAN_CLONE_OPERATIONAL_VALIDATION",
+  "returncode": 0,
+  "method_status": "INTERRUPTED",
+  "batch_sha256": "df3cfa50cdc7e4f78476b40fe9daddfffd4d3351247d5461517333c01b99bff1",
+  "candidate": null,
+  "source_unchanged": true,
+  "output": "/tmp/contractedge-v0638-development/runs/portable-RW-CAND-130",
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

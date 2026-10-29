@@ -1,0 +1,558 @@
+{
+  "schema_version": "contractedge.topomen_plan.v1",
+  "plan_id": "31bc101d1d8a455991716106d70a87ee308ddf24e0e562c3fb9a5402c4a934f4:3101dafe-e206-49d9-bb08-72adc8b3298b",
+  "run_id": "3101dafe-e206-49d9-bb08-72adc8b3298b",
+  "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+  "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+  "goal": "Restore V1 by ensuring the selected CertificateRequest CSR public key is compared with the current NextPrivateKey Secret before any terminal request state can call failIssueCertificate.",
+  "planned_violation_ids": [
+    "V1"
+  ],
+  "operations": [
+    {
+      "change_id": "CH-1",
+      "target": {
+        "kind": "EXISTING",
+        "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+        "locator": {
+          "start_line": 1,
+          "end_line": 439
+        },
+        "unit_refs": [
+          "U1",
+          "U2",
+          "U3",
+          "U4"
+        ],
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "content_digest": "33cfb3ab055a4a168ea6db02bd9ea93f7450ede34b02cc7e14be1189ac7b9233"
+      },
+      "operation": "MODIFY",
+      "semantic_action": "In ProcessItem, relocate the existing CSR decode (DecodeX509CertificateRequestBytes(req.Spec.Request)) and PublicKeyMatchesCSR(pk.Public(), csr) comparison from after the Ready=Failed branch to immediately after the certIssuingCond nil guard and failure-time guard, before the Denied, InvalidRequest, and Ready=Failed branches. Preserve existing parse-error return and mismatch early return nil. Keep csr in scope for the Ready=Issued branch and issueCertificate call. Leave failIssueCertificate behavior and temporary-certificate fallback unchanged.",
+      "intent": "Restore A1/A2: compare the selected CertificateRequest CSR with the current NextPrivateKey Secret before any terminal Denied/InvalidRequest/Ready=Failed branch can call failIssueCertificate, so a stale request from a replaced key cannot fail current issuance.",
+      "violation_refs": [
+        "V1"
+      ],
+      "postcondition_refs": [
+        "P1"
+      ],
+      "depends_on": []
+    }
+  ],
+  "postconditions": [
+    {
+      "id": "P1",
+      "statement": "ProcessItem evaluates PublicKeyMatchesCSR(pk.Public(), csr) for the selected CertificateRequest after loading/passing pk from the current NextPrivateKey Secret and before evaluating Denied, InvalidRequest, or Ready=Failed terminal states; on mismatch it returns nil without calling failIssueCertificate.\nAND PRESERVE: The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.",
+      "requirement_refs": [
+        "O1"
+      ],
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "relation_refs": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "planned_check": "Inspect pkg/controller/certificates/issuing/issuing_controller.go ProcessItem: pk is parsed from NextPrivateKeySecret before request listing; the CSR decode and PublicKeyMatchesCSR call appear after csr is decoded and before the Denied/InvalidRequest/Ready=Failed failIssueCertificate branches; build scenario public-issuing-controller-build compiles.",
+      "check_scope": "pkg/controller/certificates/issuing/issuing_controller.go ProcessItem terminal-state decision path",
+      "verification_kind": "PUBLIC_STRUCTURE",
+      "check_coverage": "NECESSARY_ONLY",
+      "coverage_rationale": "A single source-structure check verifies the concrete ordering: the CSR/NextPrivateKey comparison precedes all listed terminal failure branches. Runtime issuance behavior remains covered by the open obligation.",
+      "stable_obligation_keys": [
+        "OB-2ac55d40408c2e6df4a141ed",
+        "OB-40e358dc5bf545ece78146b1"
+      ],
+      "semantic_statements": [
+        "ProcessItem evaluates PublicKeyMatchesCSR(pk.Public(), csr) for the selected CertificateRequest after loading/passing pk from the current NextPrivateKey Secret and before evaluating Denied, InvalidRequest, or Ready=Failed terminal states; on mismatch it returns nil without calling failIssueCertificate.",
+        "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states."
+      ]
+    }
+  ],
+  "preserve_constraints": [],
+  "open_obligations": [
+    {
+      "id": "OO-1",
+      "outcome_id": "O1",
+      "obligation_refs": [
+        "A1",
+        "A2"
+      ],
+      "statement": "Under controller runtime with a stale CertificateRequest whose spec matches but whose CSR public key does not match the current NextPrivateKey Secret, ProcessItem returns before failIssueCertificate and does not set Issuing=False or increment FailedIssuanceAttempts.\nAND PRESERVE: The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.",
+      "reason": "Only the public build scenario is observed; no controller runtime request handling or issuance status outcome is publicly observable.",
+      "verification_kind": "NOT_PUBLICLY_OBSERVABLE",
+      "stable_obligation_keys": [
+        "OB-2ac55d40408c2e6df4a141ed",
+        "OB-40e358dc5bf545ece78146b1"
+      ],
+      "semantic_statements": [
+        "Under controller runtime with a stale CertificateRequest whose spec matches but whose CSR public key does not match the current NextPrivateKey Secret, ProcessItem returns before failIssueCertificate and does not set Issuing=False or increment FailedIssuanceAttempts.",
+        "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states."
+      ]
+    }
+  ],
+  "production_path_review": [
+    {
+      "source_evidence_id": "SRC-CU-aa41e29281734936",
+      "disposition": "MODIFY",
+      "rationale": "Contains the V1 ordering defect: Denied, InvalidRequest, and Ready=Failed call failIssueCertificate before the CSR/NextPrivateKey comparison. CH-1 relocates the existing comparison before those branches, preserving guards, the mismatch early return, csr scope for Ready=Issued, and temporary-certificate fallback.",
+      "change_refs": [
+        "CH-1"
+      ],
+      "open_obligation_refs": []
+    },
+    {
+      "source_evidence_id": "SRC-CU-144c7b2aca8b1b88",
+      "disposition": "PRESERVE",
+      "rationale": "issueCertificate is the success path reached only from Ready=Issued after the required comparison; the change does not alter its private key encoding, secret update, status revision, Issuing condition removal, or event behavior.",
+      "change_refs": [],
+      "open_obligation_refs": []
+    },
+    {
+      "source_evidence_id": "SRC-CU-eec6bf96632300bf",
+      "disposition": "PRESERVE",
+      "rationale": "failIssueCertificate's failure side effects are correct for genuinely terminal requests; V1 is the caller ordering. After CH-1, only requests whose CSR public key matches the current NextPrivateKey reach these failure calls.",
+      "change_refs": [],
+      "open_obligation_refs": []
+    }
+  ],
+  "status": "READY_PARTIAL",
+  "consumer_acceptance": "UNVERIFIED",
+  "preservation_impact": [],
+  "obligation_lineage": {
+    "schema_version": "ce.obligation_lineage.v1",
+    "input_digest": "0fbb130e9337e3094150e7a312f30d9800f39a3567b7d1f9ad13e46b9d0a6e9c",
+    "requirement_digest": "d4dd65c54bbcc64f5a7884e7ed19a2a3064ebbe07e98a3660520e2d84d40a10d",
+    "nodes": {
+      "OB-2ac55d40408c2e6df4a141ed": {
+        "id": "OB-2ac55d40408c2e6df4a141ed",
+        "definition": {
+          "id": "A1",
+          "outcome_id": "O1",
+          "statement": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states.",
+          "source_refs": [
+            "requirement_text:0:231"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+          "stable_obligation_key": "OB-2ac55d40408c2e6df4a141ed"
+        },
+        "aliases": [
+          "The issuing controller must compare a CertificateRequest CSR against the current NextPrivateKey Secret before acting on terminal request states."
+        ],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      },
+      "OB-40e358dc5bf545ece78146b1": {
+        "id": "OB-40e358dc5bf545ece78146b1",
+        "definition": {
+          "id": "A2",
+          "outcome_id": "O1",
+          "statement": "A stale request built from a replaced key must not fail the current Certificate issuance.",
+          "source_refs": [
+            "requirement_text:0:231"
+          ],
+          "support": "EXPLICIT",
+          "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance",
+          "stable_obligation_key": "OB-40e358dc5bf545ece78146b1"
+        },
+        "aliases": [],
+        "sources": [
+          {
+            "source_refs": [
+              "requirement_text:0:231"
+            ],
+            "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance",
+            "scope_quote": null
+          }
+        ],
+        "parents": [],
+        "children": [],
+        "residual": null,
+        "kind": "OBLIGATION"
+      }
+    },
+    "events": [
+      {
+        "kind": "REGISTER",
+        "id": "LE-0635f097c83a7741a6723cd6",
+        "parent_ids": [],
+        "atom_refs": [
+          "A1"
+        ],
+        "resolved_ids": {
+          "A1": "OB-2ac55d40408c2e6df4a141ed"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "REGISTER",
+        "id": "LE-42d6f2ec9ecbc41ecbf01089",
+        "parent_ids": [],
+        "atom_refs": [
+          "A2"
+        ],
+        "resolved_ids": {
+          "A2": "OB-40e358dc5bf545ece78146b1"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "CONTINUE",
+        "id": "LE-ff099ea3540099da77ddec29",
+        "parent_ids": [
+          "OB-2ac55d40408c2e6df4a141ed"
+        ],
+        "atom_refs": [
+          "A1"
+        ],
+        "resolved_ids": {
+          "A1": "OB-2ac55d40408c2e6df4a141ed"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      },
+      {
+        "kind": "CONTINUE",
+        "id": "LE-2c0fcc2faf5655135e7ff916",
+        "parent_ids": [
+          "OB-40e358dc5bf545ece78146b1"
+        ],
+        "atom_refs": [
+          "A2"
+        ],
+        "resolved_ids": {
+          "A2": "OB-40e358dc5bf545ece78146b1"
+        },
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "rationale": "Exact runner-bound source identity; original semantics retained"
+      }
+    ],
+    "bindings": {
+      "A1": "OB-2ac55d40408c2e6df4a141ed",
+      "A2": "OB-40e358dc5bf545ece78146b1"
+    },
+    "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba"
+  },
+  "coordination_context": {
+    "diagnosis_snapshot": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+    "obligation_atoms": [
+      {
+        "id": "A1",
+        "outcome_id": "O1",
+        "statement": "The issuing controller must compare a CertificateRequest CSR against the current NextPrivateKey Secret before acting on terminal request states.",
+        "source_refs": [
+          "requirement_text:0:231"
+        ],
+        "support": "EXPLICIT",
+        "source_quote": "The issuing controller must compare a CertificateRequest CSR with the current NextPrivateKey Secret before acting on terminal request states",
+        "stable_obligation_key": "OB-2ac55d40408c2e6df4a141ed"
+      },
+      {
+        "id": "A2",
+        "outcome_id": "O1",
+        "statement": "A stale request built from a replaced key must not fail the current Certificate issuance.",
+        "source_refs": [
+          "requirement_text:0:231"
+        ],
+        "support": "EXPLICIT",
+        "source_quote": "a stale request built from a replaced key must not fail the current Certificate issuance",
+        "stable_obligation_key": "OB-40e358dc5bf545ece78146b1"
+      }
+    ],
+    "expected_relations": [
+      {
+        "id": "R3",
+        "source_unit_ids": [
+          "U3"
+        ],
+        "target_unit_ids": [
+          "U4"
+        ],
+        "relation_form": "DIRECT_EDGE",
+        "shared_constraint_reason": null,
+        "mechanism": "ProcessItem invokes failIssueCertificate for Denied, InvalidRequest, and Ready=Failed branches.",
+        "condition": "Only when the CertificateRequest CSR public key has been confirmed to match the current NextPrivateKey",
+        "expected_contract": "failIssueCertificate must be reached only after the CSR public-key comparison against the current NextPrivateKey.",
+        "requirement_refs": [
+          "O1"
+        ],
+        "obligation_refs": [
+          "A1",
+          "A2"
+        ],
+        "support_refs": [
+          "SRC-CU-aa41e29281734936",
+          "SRC-CU-eec6bf96632300bf"
+        ]
+      }
+    ],
+    "violations": [
+      {
+        "id": "V1",
+        "relation_id": "R3",
+        "broken_behavior": "ProcessItem handles Denied, InvalidRequest, and Ready=Failed terminal states and calls failIssueCertificate before PublicKeyMatchesCSR compares the CSR with the current NextPrivateKey.",
+        "causal_explanation": "Expected contract requires the CSR/NextPrivateKey comparison before acting on terminal states; the actual code performs that comparison only after the failure branches, so a stale request with spec-matching options but a replaced key reaches failIssueCertificate and fails the current issuance.",
+        "evidence_refs": [
+          "SRC-CU-aa41e29281734936",
+          "SRC-CU-eec6bf96632300bf"
+        ],
+        "support_basis": "STATIC_INFERENCE",
+        "causal_status": "SUPPORTED"
+      }
+    ],
+    "source_support": [
+      {
+        "id": "SRC-CU-aa41e29281734936",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+          "start_line": 175,
+          "end_line": 406,
+          "column_start": 1
+        },
+        "content_digest": "21ddd173b93d18720a2ec13d3b7394f3f40add609075586ffbd38d9b7474a61d",
+        "excerpt": "func (c *controller) ProcessItem(ctx context.Context, key types.NamespacedName) error {\n\t// TODO: Change to globals.DefaultControllerContextTimeout as part of a wider effort to ensure we have\n\t// failsafe timeouts in every controller\n\tctx, cancel := context.WithTimeout(ctx, time.Second*10)\n\tdefer cancel()\n\n\tlog := logf.FromContext(ctx).WithValues(\"key\", key)\n\n\tnamespace, name := key.Namespace, key.Name\n\n\tcrt, err := c.certificateLister.Certificates(namespace).Get(name)\n\tif err != nil && !apierrors.IsNotFound(err) {\n\t\treturn err\n\t}\n\tif crt == nil || crt.DeletionTimestamp != nil {\n\t\t// If the Certificate object was/ is being deleted, we don't want to update its status or\n\t\t// create/ update any Secret resources.\n\t\treturn nil\n\t}\n\n\tlog = logf.WithResource(log, crt)\n\tctx = logf.NewContext(ctx, log)\n\n\tif !apiutil.CertificateHasCondition(crt, cmapi.CertificateCondition{\n\t\tType:   cmapi.CertificateConditionIssuing,\n\t\tStatus: cmmeta.ConditionTrue,\n\t}) {\n\t\t// If Certificate doesn't have Issuing=true condition then we should check\n\t\t// to ensure all non-issuing related SecretData is correct on the\n\t\t// Certificate's secret.\n\t\treturn c.ensureSecretData(ctx, log, crt)\n\t}\n\n\tif crt.Status.NextPrivateKeySecretName == nil ||\n\t\tlen(*crt.Status.NextPrivateKeySecretName) == 0 {\n\t\t// Do nothing if the next private key secret name is not set\n\t\treturn nil\n\t}\n\n\t// Fetch and parse the 'next private key secret'\n\tnextPrivateKeySecret, err := c.secretLister.Secrets(crt.Namespace).Get(*crt.Status.NextPrivateKeySecretName)\n\tif apierrors.IsNotFound(err) {\n\t\tlog.V(logf.DebugLevel).Info(\"Next private key secret does not exist, waiting for keymanager controller\")\n\t\t// If secret does not exist, do nothing (keymanager will handle this).\n\t\treturn nil\n\t}\n\tif err != nil {\n\t\treturn err\n\t}\n\tif nextPrivateKeySecret.Data == nil || len(nextPrivateKeySecret.Data[corev1.TLSPrivateKeyKey]) == 0 {\n\t\tlogf.WithResource(log, nextPrivateKeySecret).Info(\"Next private key secret does not contain any private key data, waiting for keymanager controller\")\n\t\treturn nil\n\t}\n\tpk, _, err := utilkube.ParseTLSKeyFromSecret(nextPrivateKeySecret, corev1.TLSPrivateKeyKey)\n\tif err != nil {\n\t\t// If the private key cannot be parsed here, do nothing as the key manager will handle this.\n\t\tlogf.WithResource(log, nextPrivateKeySecret).Error(err, \"failed to parse next private key, waiting for keymanager controller\")\n\t\treturn nil\n\t}\n\tpkViolations := utilpki.PrivateKeyMatchesSpec(pk, crt.Spec)\n\tif len(pkViolations) > 0 {\n\t\tlogf.WithResource(log, nextPrivateKeySecret).Info(\"stored next private key does not match requirements on Certificate resource, waiting for keymanager controller\", \"violations\", pkViolations)\n\t\treturn nil\n\t}\n\n\t// CertificateRequest revisions begin from 1. If no revision is set on the\n\t// status then assume no revision yet set.\n\tnextRevision := 1\n\tif crt.Status.Revision != nil {\n\t\tnextRevision = *crt.Status.Revision + 1\n\t}\n\n\treqs, err := certificates.ListCertificateRequestsMatchingPredicates(\n\t\tc.certificateRequestLister.CertificateRequests(crt.Namespace),\n\t\tpredicate.CertificateRequestRevision(nextRevision),\n\t\tpredicate.ResourceOwnedBy[*cmapi.CertificateRequest](crt),\n\t)\n\tif err != nil || len(reqs) != 1 {\n\t\t// If error return.\n\t\t// if no error but none exist do nothing.\n\t\t// If no error but multiple exist, then leave to requestmanager controller\n\t\t// to clean up.\n\t\treturn err\n\t}\n\n\treq := reqs[0]\n\tlog = logf.WithResource(log, req)\n\n\t// Verify the CSR options match what is requested in certificate.spec.\n\t// If there are violations in the spec, then the requestmanager will handle this.\n\trequestViolations, err := utilpki.RequestMatchesSpec(req, crt.Spec)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif len(requestViolations) > 0 {\n\t\tlog.V(logf.DebugLevel).Info(\"CertificateRequest does not match Certificate, waiting for keymanager controller\")\n\t\treturn nil\n\t}\n\n\tcertIssuingCond := apiutil.GetCertificateCondition(crt, cmapi.CertificateConditionIssuing)\n\tcrReadyCond := apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady)\n\tif certIssuingCond == nil {\n\t\t// This should never happen\n\t\tlog.V(logf.ErrorLevel).Info(\"Certificate does not have an issuing condition\")\n\t\treturn nil\n\t}\n\t// If the CertificateRequest for this revision failed before the\n\t// Issuing condition was last updated on the Certificate, then it must be a\n\t// failed CertificateRequest from the previous issuance for the same\n\t// revision. Leave it to the certificate-requests controller to delete the\n\t// CertificateRequest and create a new one.\n\tif req.Status.FailureTime != nil &&\n\t\treq.Status.FailureTime.Before(certIssuingCond.LastTransitionTime) && crReadyCond.Reason == cmapi.CertificateRequestReasonFailed {\n\t\tlog.V(logf.InfoLevel).Info(\"Found a failed CertificateRequest from previous issuance, waiting for it to be deleted...\")\n\t\treturn nil\n\t}\n\n\t// Now check if CertificateRequest is in any of the final states so that\n\t// this issuance can be completed as either succeeded or failed. Failed\n\t// issuance will be retried with a delay (the logic for that lives in\n\t// certificates-trigger controller). Final states are: Denied condition\n\t// with status True => fail issuance InvalidRequest  condition with\n\t// status True => fail issuance Ready condition with reason Failed =>\n\t// fail issuance Ready condition with reason Issued => finalize issuance\n\t// as succeeded.\n\n\t// In case of a non-compliant issuer, a CertificateRequest can have both\n\t// Denied status True (set by an approver) and Ready condition with\n\t// reason Issued (set by the issuer). In this case, we prioritize the\n\t// Denied condition and fail the issuance. This is done for consistency\n\t// and also to avoid race conditions between the non-compliant issuer\n\t// and this control loop.\n\n\t// If the certificate request was denied, set the last failure time to\n\t// now, bump the issuance attempts and set the Issuing status condition\n\t// to False.\n\tif apiutil.CertificateRequestIsDenied(req) {\n\t\treturn c.failIssueCertificate(ctx, log, crt, apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionDenied))\n\t}\n\n\t// If the certificate request is invalid, set the last failure time to\n\t// now, bump the issuance attempts and set the Issuing status condition\n\t// to False.\n\tif apiutil.CertificateRequestHasInvalidRequest(req) {\n\t\treturn c.failIssueCertificate(ctx, log, crt, apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionInvalidRequest))\n\t}\n\n\tif crReadyCond == nil {\n\t\tlog.V(logf.DebugLevel).Info(\"CertificateRequest does not have Ready condition, waiting...\")\n\t\treturn nil\n\t}\n\n\t// If the certificate request has failed, set the last failure time to\n\t// now, bump the issuance attempts and set the Issuing status condition\n\t// to False.\n\tif crReadyCond.Reason == cmapi.CertificateRequestReasonFailed {\n\t\treturn c.failIssueCertificate(ctx, log, crt, apiutil.GetCertificateRequestCondition(req, cmapi.CertificateRequestConditionReady))\n\t}\n\n\t// If public key does not match, do nothing (requestmanager will handle this).\n\tcsr, err := utilpki.DecodeX509CertificateRequestBytes(req.Spec.Request)\n\tif err != nil {\n\t\treturn err\n\t}\n\tpublicKeyMatchesCSR, err := utilpki.PublicKeyMatchesCSR(pk.Public(), csr)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif !publicKeyMatchesCSR {\n\t\tlogf.WithResource(log, nextPrivateKeySecret).Info(\"next private key does not match CSR public key, waiting for requestmanager controller\")\n\t\treturn nil\n\t}\n\n\t// If the CertificateRequest is valid and ready, verify its status and issue\n\t// accordingly.\n\tif crReadyCond.Reason == cmapi.CertificateRequestReasonIssued {\n\t\t// Verify the signed certificate's public key matches the CSR's public key.\n\t\t// If not, fail with backoff to prevent infinite re-issuance loops.\n\t\tx509Cert, err := utilpki.DecodeX509CertificateBytes(req.Status.Certificate)\n\t\tif err != nil {\n\t\t\treturn c.failIssueCertificate(ctx, log, crt, &cmapi.CertificateRequestCondition{\n\t\t\t\tType:    cmapi.CertificateRequestConditionReady,\n\t\t\t\tStatus:  cmmeta.ConditionFalse,\n\t\t\t\tReason:  \"InvalidCertificate\",\n\t\t\t\tMessage: fmt.Sprintf(\"Issuer returned an invalid certificate: failed to decode: %v\", err),\n\t\t\t})\n\t\t}\n\t\tcertMatchesCSR, err := utilpki.PublicKeysEqual(x509Cert.PublicKey, csr.PublicKey)\n\t\tif err != nil {\n\t\t\treturn c.failIssueCertificate(ctx, log, crt, &cmapi.CertificateRequestCondition{\n\t\t\t\tType:    cmapi.CertificateRequestConditionReady,\n\t\t\t\tStatus:  cmmeta.ConditionFalse,\n\t\t\t\tReason:  \"InvalidCertificate\",\n\t\t\t\tMessage: fmt.Sprintf(\"Failed to compare certificate and CSR public keys: %v\", err),\n\t\t\t})\n\t\t}\n\t\tif !certMatchesCSR {\n\t\t\treturn c.failIssueCertificate(ctx, log, crt, &cmapi.CertificateRequestCondition{\n\t\t\t\tType:    cmapi.CertificateRequestConditionReady,\n\t\t\t\tStatus:  cmmeta.ConditionFalse,\n\t\t\t\tReason:  \"InvalidCertificate\",\n\t\t\t\tMessage: \"Issuer returned a certificate with a public key that does not match the CSR. This usually indicates a misconfigured issuer.\",\n\t\t\t})\n\t\t}\n\n\t\t// Check that the certificate is not already expired before storing it.\n\t\t// This prevents infinite re-issuance loops when an issuer (e.g. Vault\n\t\t// with leaf_not_after_behavior=truncate and an expired CA) returns\n\t\t// already-expired certificates.\n\t\tif c.clock.Now().After(x509Cert.NotAfter) {\n\t\t\treturn c.failIssueCertificate(ctx, log, crt, &cmapi.CertificateRequestCondition{\n\t\t\t\tType:    cmapi.CertificateRequestConditionReady,\n\t\t\t\tStatus:  cmmeta.ConditionFalse,\n\t\t\t\tReason:  \"InvalidCertificate\",\n\t\t\t\tMessage: fmt.Sprintf(\"Issuer returned an already expired certificate (notAfter: %s). This usually indicates an expired CA certificate in the issuer.\", x509Cert.NotAfter.Format(time.RFC3339)),\n\t\t\t})\n\t\t}\n\n\t\treturn c.issueCertificate(ctx, nextRevision, crt, req, pk)\n\t}\n\n\t// Issue temporary certificate if needed. If a certificate was issued, then\n\t// return early - we will sync again since the target Secret has been\n\t// updated.\n\tif issued, err := c.ensureTemporaryCertificate(ctx, crt, pk); err != nil || issued {\n\t\treturn err\n\t}\n\n\t// CertificateRequest is not in a final state so do nothing.\n\tlog.V(logf.DebugLevel).Info(\"CertificateRequest not in final state, waiting...\", \"reason\", crReadyCond.Reason)\n\treturn nil\n}\n",
+        "origin": "selected candidate CU-aa41e29281734936",
+        "delivery_required": true
+      },
+      {
+        "id": "SRC-CU-eec6bf96632300bf",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+          "start_line": 412,
+          "end_line": 439,
+          "column_start": 1
+        },
+        "content_digest": "c457131e6ba05510d726cc47f20126588930ec3f4955c82164de245dcc140230",
+        "excerpt": "func (c *controller) failIssueCertificate(ctx context.Context, log logr.Logger, crt *cmapi.Certificate, condition *cmapi.CertificateRequestCondition) error {\n\tnowTime := metav1.NewTime(c.clock.Now())\n\tcrt.Status.LastFailureTime = &nowTime\n\n\tfailedIssuanceAttempts := 1\n\tif crt.Status.FailedIssuanceAttempts != nil {\n\t\tfailedIssuanceAttempts = *crt.Status.FailedIssuanceAttempts + 1\n\t}\n\tcrt.Status.FailedIssuanceAttempts = &failedIssuanceAttempts\n\n\tlog.V(logf.DebugLevel).Info(\"CertificateRequest in failed state so retrying issuance later\")\n\n\tvar reason, message string\n\treason = condition.Reason\n\tmessage = fmt.Sprintf(\"The certificate request has failed to complete and will be retried: %s\",\n\t\tcondition.Message)\n\n\tcrt = crt.DeepCopy()\n\tapiutil.SetCertificateCondition(crt, crt.Generation, cmapi.CertificateConditionIssuing, cmmeta.ConditionFalse, reason, message)\n\n\tif err := c.updateOrApplyStatus(ctx, crt, false); err != nil {\n\t\treturn err\n\t}\n\n\tc.recorder.Event(crt, corev1.EventTypeWarning, reason, message)\n\n\treturn nil\n}\n",
+        "origin": "selected candidate CU-eec6bf96632300bf",
+        "delivery_required": true
+      },
+      {
+        "id": "SRC-CU-e4b40d3cd971d178",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+          "start_line": 1,
+          "end_line": 88,
+          "column_start": 1
+        },
+        "content_digest": "f33f6db60c7f8d8ca5846bba35323e5169957bccf01b7c06fe467a6ae93baab8",
+        "excerpt": "/*\nCopyright 2020 The cert-manager Authors.\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n*/\n\npackage issuing\n\nimport (\n\t\"context\"\n\t\"crypto\"\n\t\"fmt\"\n\t\"time\"\n\n\t\"github.com/go-logr/logr\"\n\tcorev1 \"k8s.io/api/core/v1\"\n\tapierrors \"k8s.io/apimachinery/pkg/api/errors\"\n\tmetav1 \"k8s.io/apimachinery/pkg/apis/meta/v1\"\n\t\"k8s.io/apimachinery/pkg/types\"\n\t\"k8s.io/client-go/tools/cache\"\n\t\"k8s.io/client-go/tools/record\"\n\t\"k8s.io/client-go/util/workqueue\"\n\t\"k8s.io/utils/clock\"\n\n\tinternalcertificates \"github.com/cert-manager/cert-manager/internal/controller/certificates\"\n\t\"github.com/cert-manager/cert-manager/internal/controller/certificates/policies\"\n\t\"github.com/cert-manager/cert-manager/internal/controller/feature\"\n\tinternalinformers \"github.com/cert-manager/cert-manager/internal/informers\"\n\tapiutil \"github.com/cert-manager/cert-manager/pkg/api/util\"\n\tcmapi \"github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1\"\n\tcmmeta \"github.com/cert-manager/cert-manager/pkg/apis/meta/v1\"\n\tcmclient \"github.com/cert-manager/cert-manager/pkg/client/clientset/versioned\"\n\tcmlisters \"github.com/cert-manager/cert-manager/pkg/client/listers/certmanager/v1\"\n\tcontrollerpkg \"github.com/cert-manager/cert-manager/pkg/controller\"\n\t\"github.com/cert-manager/cert-manager/pkg/controller/certificates\"\n\t\"github.com/cert-manager/cert-manager/pkg/controller/certificates/issuing/internal\"\n\tlogf \"github.com/cert-manager/cert-manager/pkg/logs\"\n\tutilfeature \"github.com/cert-manager/cert-manager/pkg/util/feature\"\n\tutilkube \"github.com/cert-manager/cert-manager/pkg/util/kube\"\n\tutilpki \"github.com/cert-manager/cert-manager/pkg/util/pki\"\n\t\"github.com/cert-manager/cert-manager/pkg/util/predicate\"\n)\n\nconst (\n\tControllerName = \"certificates-issuing\"\n)\n\ntype localTemporarySignerFn func(crt *cmapi.Certificate, pk []byte) ([]byte, error)\n\n// This controller observes the state of the certificate's 'Issuing' condition,\n// which will then copy the signed certificates and private key to the target\n// Secret resource.\ntype controller struct {\n\tcertificateLister        cmlisters.CertificateLister\n\tcertificateRequestLister cmlisters.CertificateRequestLister\n\tsecretLister             internalinformers.SecretLister\n\trecorder                 record.EventRecorder\n\tclock                    clock.Clock\n\n\tclient cmclient.Interface\n\n\t// secretsUpdateData is used by the SecretTemplate controller for\n\t// re-reconciling Secrets where the SecretTemplate is not up to date with a\n\t// Certificate's secret.\n\tsecretsUpdateData func(context.Context, *cmapi.Certificate, internal.SecretData) error\n\n\t// postIssuancePolicyChain is the policies chain to ensure that all Secret\n\t// metadata and output formats are kept are present and correct.\n\tpostIssuancePolicyChain policies.Chain\n\n\t// fieldManager is the string which will be used as the Field Manager on\n\t// fields created or edited by the cert-manager Kubernetes client during\n\t// Apply API calls.\n\tfieldManager string\n\n\t// localTemporarySigner signs a certificate that is stored temporarily\n\tlocalTemporarySigner localTemporarySignerFn\n}\n",
+        "origin": "selected candidate CU-e4b40d3cd971d178",
+        "delivery_required": true
+      },
+      {
+        "id": "SRC-CU-88f9f5d1acf03a9b",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificates/trigger/trigger_controller.go",
+          "start_line": 158,
+          "end_line": 237,
+          "column_start": 1
+        },
+        "content_digest": "d674c1572b8bed5b2210e2dbf84aa4b9b2b3a906d473c36ea67bcb1698de3556",
+        "excerpt": "func (c *controller) ProcessItem(ctx context.Context, key types.NamespacedName) error {\n\tlog := logf.FromContext(ctx).WithValues(\"key\", key)\n\tctx = logf.NewContext(ctx, log)\n\tnamespace, name := key.Namespace, key.Name\n\n\tcrt, err := c.certificateLister.Certificates(namespace).Get(name)\n\tif err != nil && !k8sErrors.IsNotFound(err) {\n\t\treturn err\n\t}\n\tif crt == nil || crt.DeletionTimestamp != nil {\n\t\t// If the Certificate object was/ is being deleted, we don't want to start scheduling\n\t\t// renewals.\n\t\treturn nil\n\t}\n\n\tif apiutil.CertificateHasCondition(crt, cmapi.CertificateCondition{\n\t\tType:   cmapi.CertificateConditionIssuing,\n\t\tStatus: cmmeta.ConditionTrue,\n\t}) {\n\t\t// Do nothing if an issuance is already in progress.\n\t\treturn nil\n\t}\n\n\t// It is possible for multiple Certificates to reference the same Secret. In that case, without this check,\n\t// the duplicate Certificates would each be issued and store their version of the X.509 certificate in the\n\t// target Secret, triggering the re-issuance of the other Certificate resources whose spec no longer matches\n\t// what is in the Secret. This would cause a flood of re-issuance attempts and overloads the Kubernetes API\n\t// and the API server of the issuing CA.\n\tisOwner, duplicates, err := internalcertificates.CertificateOwnsSecret(ctx, c.certificateLister, c.secretLister, crt)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif !isOwner {\n\t\tlog.V(logf.DebugLevel).Info(\"Certificate.Spec.SecretName refers to the same Secret as other Certificates in the same namespace, skipping trigger.\", \"duplicates\", duplicates)\n\n\t\t// If the Certificate is not the owner of the Secret, we requeue the Certificate and wait for the\n\t\t// Certificate to become the owner of the Secret. This can happen if the Certificate is updated to\n\t\t// reference a different Secret, or if the conflicting Certificate is deleted or updated to no longer\n\t\t// reference the Secret.\n\t\tc.scheduledWorkQueue.Add(key, 3*time.Minute)\n\n\t\treturn nil\n\t}\n\n\tinput, err := c.dataForCertificate(ctx, crt)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\t// Don't trigger issuance if we need to back off due to previous failures and Certificate's spec has not changed.\n\tbackoff, delay := shouldBackoffReissuingOnFailure(log, c.clock, input.Certificate, input.NextRevisionRequest, c.certificateRequestMinimumBackoffDuration, c.certificateRequestMaximumBackoffDuration)\n\tif backoff {\n\t\tnextIssuanceRetry := c.clock.Now().Add(delay)\n\t\tmessage := fmt.Sprintf(\"Backing off from issuance due to previously failed issuance(s). Issuance will next be attempted at %v\", nextIssuanceRetry)\n\t\tlog.V(logf.InfoLevel).Info(message)\n\t\tc.scheduleRecheckOfCertificateIfRequired(log, key, delay)\n\t\treturn nil\n\t}\n\n\tif crt.Status.RenewalTime != nil {\n\t\t// ensure a resync is scheduled in the future so that we re-check\n\t\t// Certificate resources and trigger them near expiry time\n\t\tc.scheduleRecheckOfCertificateIfRequired(log, key, crt.Status.RenewalTime.Time.Sub(c.clock.Now()))\n\t}\n\n\treason, message, reissue := c.shouldReissue(input)\n\tif reason == policies.WindowError {\n\t\tc.recorder.Event(crt, corev1.EventTypeWarning, reason, fmt.Sprintf(\"Renewing certificate without satisfying renewal windows due to %s\", message))\n\t\tmessage = fmt.Sprintf(\"Renewing certificate without satisfying renewal windows at: %s\", crt.Status.RenewalTime)\n\t\treason = policies.Renewing\n\t}\n\n\tif !reissue {\n\t\treturn nil\n\t}\n\n\t// Although the below recorder.Event already logs the event, the log\n\t// line is quite unreadable (very long). Since this information is very\n\t// important for the user and the operator, we log the following\n\t// message.\n",
+        "origin": "selected candidate CU-88f9f5d1acf03a9b",
+        "delivery_required": true
+      },
+      {
+        "id": "SRC-CU-159d277031f7c261",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificates/trigger/trigger_controller_test.go",
+          "start_line": 41,
+          "end_line": 120,
+          "column_start": 1
+        },
+        "content_digest": "0806cf36d7c6637b460c82895efd2085001ec369e3987afb878d6b4e7f1c2ddd",
+        "excerpt": "func Test_controller_ProcessItem(t *testing.T) {\n\tfixedNow := metav1.NewTime(time.Now())\n\tfixedClock := fakeclock.NewFakeClock(fixedNow.Time)\n\n\t// We don't need to full bundle, just a simple CertificateRequest.\n\tcreateCertificateRequestOrPanic := func(crt *cmapi.Certificate) *cmapi.CertificateRequest {\n\t\treturn testcrypto.MustCreateCryptoBundle(t, crt, fixedClock).CertificateRequest\n\t}\n\n\ttests := map[string]struct {\n\t\t// key that should be passed to ProcessItem. If not set, the\n\t\t// 'namespace/name' of the 'Certificate' field will be used. If neither\n\t\t// is set, the key will be \"\".\n\t\tkey types.NamespacedName\n\n\t\t// Certificate to be synced for the test. If not set, the 'key' will be\n\t\t// passed to ProcessItem instead.\n\t\texistingCertificate        *cmapi.Certificate\n\t\texistingCertManagerObjects []runtime.Object\n\t\texistingKubeObjects        []runtime.Object\n\n\t\tmockDataForCertificateReturn    policies.Input\n\t\tmockDataForCertificateReturnErr error\n\t\twantDataForCertificateCalled    bool\n\n\t\tmockShouldReissue       func(t *testing.T) policies.Func\n\t\twantShouldReissueCalled bool\n\n\t\t// wantEvent, if set, is an 'event string' that is expected to be fired.\n\t\t// For example, \"Normal Issuing Re-issuance forced by unit test case\"\n\t\t// where 'Normal' is the event severity, 'Issuing' is the reason and the\n\t\t// remainder is the message.\n\t\twantEvent []string\n\n\t\t// wantConditions is the expected set of conditions on the Certificate\n\t\t// resource if an Update is made.\n\t\t// If nil, no update is expected.\n\t\t// If empty, an update to the empty set/nil is expected.\n\t\twantConditions []cmapi.CertificateCondition\n\n\t\t// wantErr is the expected error text returned by the controller, if any.\n\t\twantErr string\n\t}{\n\t\t\"do nothing if an empty 'key' is used\": {},\n\t\t\"do nothing if an invalid 'key' is used\": {\n\t\t\tkey: types.NamespacedName{\n\t\t\t\tNamespace: \"abc\",\n\t\t\t\tName:      \"def/ghi\",\n\t\t\t},\n\t\t},\n\t\t\"do nothing if a key references a Certificate that does not exist\": {\n\t\t\tkey: types.NamespacedName{\n\t\t\t\tNamespace: \"namespace\",\n\t\t\t\tName:      \"name\",\n\t\t\t},\n\t\t},\n\t\t\"should do nothing if Certificate already has 'Issuing' condition\": {\n\t\t\texistingCertificate: gen.Certificate(\"cert-1\", gen.SetCertificateNamespace(\"testns\"),\n\t\t\t\tgen.SetCertificateGeneration(42),\n\t\t\t\tgen.SetCertificateStatusCondition(cmapi.CertificateCondition{\n\t\t\t\t\tType:               \"Issuing\",\n\t\t\t\t\tStatus:             \"True\",\n\t\t\t\t\tObservedGeneration: 3,\n\t\t\t\t}),\n\t\t\t),\n\t\t},\n\t\t\"should call shouldReissue with the correct cert, secret and current CR\": {\n\t\t\texistingCertificate: gen.Certificate(\"cert-1\", gen.SetCertificateNamespace(\"testns\"),\n\t\t\t\tgen.SetCertificateSecretName(\"secret-1\"),\n\t\t\t\tgen.SetCertificateGeneration(42),\n\t\t\t\tgen.SetCertificateUID(\"cert-1-uid\"),\n\t\t\t\tgen.SetCertificateRevision(2),\n\t\t\t),\n\t\t\twantDataForCertificateCalled: true,\n\t\t\tmockDataForCertificateReturn: policies.Input{\n\t\t\t\tSecret: gen.Secret(\"secret-1\", gen.SetSecretNamespace(\"testns\")),\n\t\t\t\tCurrentRevisionRequest: gen.CertificateRequest(\"cr-1\", gen.SetCertificateRequestNamespace(\"testns\"),\n\t\t\t\t\tgen.AddCertificateRequestOwnerReferences(gen.CertificateRef(\"cert-1\", \"cert-1-uid\")),\n\t\t\t\t\tgen.SetCertificateRequestAnnotations(map[string]string{\"cert-manager.io/certificate-revision\": \"2\"}),\n\t\t\t\t),\n",
+        "origin": "selected candidate CU-159d277031f7c261",
+        "delivery_required": true
+      },
+      {
+        "id": "SRC-CU-73da76e43ecd4078",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificatesigningrequests/selfsigned/selfsigned_test.go",
+          "start_line": 97,
+          "end_line": 176,
+          "column_start": 1
+        },
+        "content_digest": "9addbddf30a0b0fff4a58e3551e5c835d813ff08d87ad2a474cfe24ac87b0dbc",
+        "excerpt": "func TestProcessItem(t *testing.T) {\n\tmetaFixedClockStart := metav1.NewTime(fixedClockStart)\n\tutil.Clock = fixedClock\n\n\tbaseIssuer := gen.Issuer(\"test-issuer\",\n\t\tgen.SetIssuerSelfSigned(cmapi.SelfSignedIssuer{}),\n\t\tgen.AddIssuerCondition(cmapi.IssuerCondition{\n\t\t\tType:   cmapi.IssuerConditionReady,\n\t\t\tStatus: cmmeta.ConditionTrue,\n\t\t}),\n\t)\n\n\tcsrBundle := mustCryptoBundle(t)\n\tbaseCSR := gen.CertificateSigningRequest(\"test-cr\",\n\t\tgen.SetCertificateSigningRequestRequest(csrBundle.csrPEM),\n\t\tgen.SetCertificateSigningRequestSignerName(\"issuers.cert-manager.io/default-unit-test-ns.\"+baseIssuer.Name),\n\t\tgen.SetCertificateSigningRequestDuration(\"1440h\"),\n\t\tgen.SetCertificateSigningRequestUsername(\"user-1\"),\n\t\tgen.SetCertificateSigningRequestGroups([]string{\"group-1\", \"group-2\"}),\n\t\tgen.SetCertificateSigningRequestUID(\"uid-1\"),\n\t\tgen.SetCertificateSigningRequestExtra(map[string]certificatesv1.ExtraValue{\n\t\t\t\"extra\": []string{\"1\", \"2\"},\n\t\t}),\n\t)\n\n\ttests := map[string]struct {\n\t\tbuilder     *testpkg.Builder\n\t\tcsr         *certificatesv1.CertificateSigningRequest\n\t\tsigningFn   signingFn\n\t\tfakeLister  *testlisters.FakeSecretLister\n\t\texpectedErr bool\n\t}{\n\t\t\"a CertificateSigningRequest without an approved condition should fire an event\": {\n\t\t\tcsr: gen.CertificateSigningRequestFrom(baseCSR),\n\t\t\tbuilder: &testpkg.Builder{\n\t\t\t\tCertManagerObjects: []runtime.Object{baseIssuer.DeepCopy()},\n\t\t\t\tExpectedEvents: []string{\n\t\t\t\t\t\"Normal WaitingApproval Waiting for the Approved condition before issuing\",\n\t\t\t\t},\n\t\t\t},\n\t\t},\n\t\t\"a CertificateSigningRequest with a denied condition should do nothing\": {\n\t\t\tcsr: gen.CertificateSigningRequestFrom(baseCSR,\n\t\t\t\tgen.SetCertificateSigningRequestStatusCondition(certificatesv1.CertificateSigningRequestCondition{\n\t\t\t\t\tType:   certificatesv1.CertificateDenied,\n\t\t\t\t\tStatus: corev1.ConditionTrue,\n\t\t\t\t}),\n\t\t\t),\n\t\t\tbuilder: &testpkg.Builder{\n\t\t\t\tCertManagerObjects: []runtime.Object{baseIssuer.DeepCopy()},\n\t\t\t\tExpectedEvents:     []string{},\n\t\t\t\tExpectedActions:    nil,\n\t\t\t},\n\t\t},\n\t\t\"an approved CSR without a private key reference should be marked as failed\": {\n\t\t\tcsr: gen.CertificateSigningRequestFrom(baseCSR,\n\t\t\t\tgen.SetCertificateSigningRequestStatusCondition(certificatesv1.CertificateSigningRequestCondition{\n\t\t\t\t\tType:   certificatesv1.CertificateApproved,\n\t\t\t\t\tStatus: corev1.ConditionTrue,\n\t\t\t\t}),\n\t\t\t),\n\t\t\tbuilder: &testpkg.Builder{\n\t\t\t\tCertManagerObjects: []runtime.Object{baseIssuer.DeepCopy()},\n\t\t\t\tExpectedEvents: []string{\n\t\t\t\t\t`Warning MissingAnnotation Missing private key reference annotation: \"experimental.cert-manager.io/private-key-secret-name\"`,\n\t\t\t\t},\n\n\t\t\t\tExpectedActions: []testpkg.Action{\n\t\t\t\t\ttestpkg.NewAction(coretesting.NewCreateAction(\n\t\t\t\t\t\tauthzv1.SchemeGroupVersion.WithResource(\"subjectaccessreviews\"),\n\t\t\t\t\t\t\"\",\n\t\t\t\t\t\t&authzv1.SubjectAccessReview{\n\t\t\t\t\t\t\tSpec: authzv1.SubjectAccessReviewSpec{\n\t\t\t\t\t\t\t\tUser:   \"user-1\",\n\t\t\t\t\t\t\t\tGroups: []string{\"group-1\", \"group-2\"},\n\t\t\t\t\t\t\t\tExtra: map[string]authzv1.ExtraValue{\n\t\t\t\t\t\t\t\t\t\"extra\": []string{\"1\", \"2\"},\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\tUID: \"uid-1\",\n\n",
+        "origin": "selected candidate CU-73da76e43ecd4078",
+        "delivery_required": true
+      },
+      {
+        "id": "SRC-CU-fe74c7e1f15c0cf5",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "internal/apis/certmanager/validation/util/conditions.go",
+          "start_line": 23,
+          "end_line": 30,
+          "column_start": 1
+        },
+        "content_digest": "57481f7685662dd773b0e1ed46639edcd79bb012f74c8c310fea61bca8507b8a",
+        "excerpt": "func GetCertificateRequestCondition(conds []cmapi.CertificateRequestCondition, conditionType cmapi.CertificateRequestConditionType) *cmapi.CertificateRequestCondition {\n\tfor _, cond := range conds {\n\t\tif cond.Type == conditionType {\n\t\t\treturn &cond\n\t\t}\n\t}\n\treturn nil\n}\n",
+        "origin": "selected candidate CU-fe74c7e1f15c0cf5",
+        "delivery_required": true
+      },
+      {
+        "id": "SRC-CU-144c7b2aca8b1b88",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificates/issuing/issuing_controller.go",
+          "start_line": 444,
+          "end_line": 491,
+          "column_start": 1
+        },
+        "content_digest": "7e8affa4d6b2d977465cae1ef0db653211083ff7a08b7aae81e1a8bc3b199880",
+        "excerpt": "func (c *controller) issueCertificate(ctx context.Context, nextRevision int, crt *cmapi.Certificate, req *cmapi.CertificateRequest, pk crypto.Signer) error {\n\tcrt = crt.DeepCopy()\n\tif crt.Spec.PrivateKey == nil {\n\t\tcrt.Spec.PrivateKey = &cmapi.CertificatePrivateKey{}\n\t}\n\n\tpkData, err := utilpki.EncodePrivateKey(pk, crt.Spec.PrivateKey.Encoding)\n\tif err != nil {\n\t\treturn err\n\t}\n\tsecretData := internal.SecretData{\n\t\tPrivateKey:      pkData,\n\t\tCertificate:     req.Status.Certificate,\n\t\tCA:              req.Status.CA,\n\t\tCertificateName: crt.Name,\n\t\tIssuerName:      req.Spec.IssuerRef.Name,\n\t\tIssuerKind:      req.Spec.IssuerRef.Kind,\n\t\tIssuerGroup:     req.Spec.IssuerRef.Group,\n\t}\n\n\tif err := c.secretsUpdateData(ctx, crt, secretData); err != nil {\n\t\treturn err\n\t}\n\n\t// Set status.revision to revision of the CertificateRequest\n\tcrt.Status.Revision = &nextRevision\n\n\t// Remove Issuing status condition\n\t// TODO @joshvanl: Once we move to only server-side apply API calls, this\n\t// should be changed to setting the Issuing condition to False.\n\tapiutil.RemoveCertificateCondition(crt, cmapi.CertificateConditionIssuing)\n\n\t// Clear status.failedIssuanceAttempts (if set)\n\tcrt.Status.FailedIssuanceAttempts = nil\n\n\t// Clear status.lastFailureTime (if set)\n\tcrt.Status.LastFailureTime = nil\n\n\tif err := c.updateOrApplyStatus(ctx, crt, true); err != nil {\n\t\treturn err\n\t}\n\n\tmessage := \"The certificate has been successfully issued\"\n\tc.recorder.Event(crt, corev1.EventTypeNormal, \"Issuing\", message)\n\n\treturn nil\n\n}\n",
+        "origin": "selected candidate CU-144c7b2aca8b1b88",
+        "delivery_required": true
+      },
+      {
+        "id": "SRC-CU-2954c9e7ca5d8dc1",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/util/pki/match_test.go",
+          "start_line": 61,
+          "end_line": 117,
+          "column_start": 1
+        },
+        "content_digest": "76e7c5a00311849f92dbff34233d6b168f68efa1eb7720a9ae30398da1e7cff6",
+        "excerpt": "func TestPrivateKeyMatchesSpec(t *testing.T) {\n\ttests := map[string]struct {\n\t\tkey          crypto.PrivateKey\n\t\texpectedAlgo cmapi.PrivateKeyAlgorithm\n\t\texpectedSize int\n\t\tviolations   []string\n\t}{\n\t\t\"should match if keySize and algorithm are correct (RSA)\": {\n\t\t\tkey:          mustGenerateRSA(t, 2048),\n\t\t\texpectedAlgo: cmapi.RSAKeyAlgorithm,\n\t\t\texpectedSize: 2048,\n\t\t},\n\t\t\"should not match if RSA keySize is incorrect\": {\n\t\t\tkey:          mustGenerateRSA(t, 2048),\n\t\t\texpectedAlgo: cmapi.RSAKeyAlgorithm,\n\t\t\texpectedSize: 4096,\n\t\t\tviolations:   []string{\"spec.privateKey.size\"},\n\t\t},\n\t\t\"should match if keySize and algorithm are correct (ECDSA)\": {\n\t\t\tkey:          mustGenerateECDSA(t, pki.ECCurve256),\n\t\t\texpectedAlgo: cmapi.ECDSAKeyAlgorithm,\n\t\t\texpectedSize: 256,\n\t\t},\n\t\t\"should not match if ECDSA keySize is incorrect\": {\n\t\t\tkey:          mustGenerateECDSA(t, pki.ECCurve256),\n\t\t\texpectedAlgo: cmapi.ECDSAKeyAlgorithm,\n\t\t\texpectedSize: pki.ECCurve521,\n\t\t\tviolations:   []string{\"spec.privateKey.size\"},\n\t\t},\n\t\t\"should not match if keyAlgorithm is incorrect\": {\n\t\t\tkey:          mustGenerateECDSA(t, pki.ECCurve256),\n\t\t\texpectedAlgo: cmapi.RSAKeyAlgorithm,\n\t\t\texpectedSize: 2048,\n\t\t\tviolations:   []string{\"spec.privateKey.algorithm\"},\n\t\t},\n\t\t\"should match if keySize and algorithm are correct (Ed25519)\": {\n\t\t\tkey:          mustGenerateEd25519(t),\n\t\t\texpectedAlgo: cmapi.Ed25519KeyAlgorithm,\n\t\t},\n\t}\n\tfor name, test := range tests {\n\t\tt.Run(name, func(t *testing.T) {\n\t\t\tviolations := pki.PrivateKeyMatchesSpec(\n\t\t\t\ttest.key,\n\t\t\t\tcmapi.CertificateSpec{\n\t\t\t\t\tPrivateKey: &cmapi.CertificatePrivateKey{\n\t\t\t\t\t\tAlgorithm: test.expectedAlgo,\n\t\t\t\t\t\tSize:      test.expectedSize,\n\t\t\t\t\t},\n\t\t\t\t},\n\t\t\t)\n\t\t\tif !reflect.DeepEqual(violations, test.violations) {\n\t\t\t\tt.Errorf(\"violations did not match, got=%s, exp=%s\", violations, test.violations)\n\t\t\t}\n\t\t})\n\t}\n}\n",
+        "origin": "selected candidate CU-2954c9e7ca5d8dc1",
+        "delivery_required": true
+      },
+      {
+        "id": "SRC-CU-e67f91e99a8d4124",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/util/pki/match.go",
+          "start_line": 44,
+          "end_line": 61,
+          "column_start": 1
+        },
+        "content_digest": "1923bbff58df489240f7d871fb4b710eba815a252dc61998470ba3499fcb842b",
+        "excerpt": "func PrivateKeyMatchesSpec(pk crypto.PrivateKey, spec cmapi.CertificateSpec) []string {\n\tspec = *spec.DeepCopy()\n\tif spec.PrivateKey == nil {\n\t\tspec.PrivateKey = &cmapi.CertificatePrivateKey{}\n\t}\n\tswitch spec.PrivateKey.Algorithm {\n\tcase \"\", cmapi.RSAKeyAlgorithm:\n\t\treturn rsaPrivateKeyMatchesSpec(pk, spec)\n\tcase cmapi.Ed25519KeyAlgorithm:\n\t\treturn ed25519PrivateKeyMatchesSpec(pk)\n\tcase cmapi.ECDSAKeyAlgorithm:\n\t\treturn ecdsaPrivateKeyMatchesSpec(pk, spec)\n\tdefault:\n\t\t// This should never happen as the CertificateSpec validation should\n\t\t// catch this before it reaches this point.\n\t\tpanic(fmt.Sprintf(\"[PROGRAMMING ERROR] unrecognised key algorithm type %q\", spec.PrivateKey.Algorithm))\n\t}\n}\n",
+        "origin": "selected candidate CU-e67f91e99a8d4124",
+        "delivery_required": true
+      },
+      {
+        "id": "SRC-CU-4449ae744e1aa78c",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/controller/certificates/requestmanager/requestmanager_controller.go",
+          "start_line": 326,
+          "end_line": 365,
+          "column_start": 1
+        },
+        "content_digest": "bea9a6788725a914f250271f00c8ea6775d97654edf151fc34c3a41ed31c414b",
+        "excerpt": "func (c *controller) deleteRequestsNotMatchingSpec(ctx context.Context, crt *cmapi.Certificate, publicKey crypto.PublicKey, reqs ...*cmapi.CertificateRequest) ([]*cmapi.CertificateRequest, error) {\n\tlog := logf.FromContext(ctx)\n\tvar remaining []*cmapi.CertificateRequest\n\tfor _, req := range reqs {\n\t\tlog := logf.WithRelatedResource(log, req)\n\t\tviolations, err := pki.RequestMatchesSpec(req, crt.Spec)\n\t\tif err != nil {\n\t\t\tlog.Error(err, \"Failed to check if CertificateRequest matches spec, deleting CertificateRequest\")\n\t\t\tif err := c.client.CertmanagerV1().CertificateRequests(req.Namespace).Delete(ctx, req.Name, metav1.DeleteOptions{}); err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t\tcontinue\n\t\t}\n\t\tif len(violations) > 0 {\n\t\t\tlog.V(logf.InfoLevel).WithValues(\"violations\", violations).Info(\"CertificateRequest does not match requirements on certificate.spec, deleting CertificateRequest\", \"violations\", violations)\n\t\t\tif err := c.client.CertmanagerV1().CertificateRequests(req.Namespace).Delete(ctx, req.Name, metav1.DeleteOptions{}); err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t\tcontinue\n\t\t}\n\t\tx509Req, err := pki.DecodeX509CertificateRequestBytes(req.Spec.Request)\n\t\tif err != nil {\n\t\t\t// this case cannot happen as RequestMatchesSpec would have returned an error too\n\t\t\treturn nil, err\n\t\t}\n\t\tmatches, err := pki.PublicKeyMatchesCSR(publicKey, x509Req)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tif !matches {\n\t\t\tlog.V(logf.DebugLevel).Info(\"CertificateRequest contains a CSR that does not have the same public key as the stored next private key secret, deleting CertificateRequest\")\n\t\t\tif err := c.client.CertmanagerV1().CertificateRequests(req.Namespace).Delete(ctx, req.Name, metav1.DeleteOptions{}); err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t\tcontinue\n\t\t}\n\t\tremaining = append(remaining, req)\n\t}\n\treturn remaining, nil\n}\n",
+        "origin": "selected candidate CU-4449ae744e1aa78c",
+        "delivery_required": true
+      },
+      {
+        "id": "SRC-CU-c42c25b363442177",
+        "snapshot_id": "f2e4cbf0ec9e5bf26dbdbf80abf87b34576609de70958af5a6ab3c8a2572d4ba",
+        "kind": "SOURCE_SPAN",
+        "locator": {
+          "path": "pkg/util/pki/match.go",
+          "start_line": 128,
+          "end_line": 207,
+          "column_start": 1
+        },
+        "content_digest": "928f0c0475f329d98cb5f097b0d168e21e7430d485766367d3a5761418637abf",
+        "excerpt": "func RequestMatchesSpec(req *cmapi.CertificateRequest, spec cmapi.CertificateSpec) ([]string, error) {\n\tx509req, err := DecodeX509CertificateRequestBytes(req.Spec.Request)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\t// It is safe to mutate top-level fields in `spec` as it is not a pointer\n\t// meaning changes will not affect the caller.\n\tif spec.Subject == nil {\n\t\tspec.Subject = &cmapi.X509Subject{}\n\t}\n\n\tvar violations []string\n\n\tif !ipSlicesMatch(x509req.IPAddresses, spec.IPAddresses) {\n\t\tviolations = append(violations, \"spec.ipAddresses\")\n\t}\n\n\tif !util.EqualUnsorted(URLsToString(x509req.URIs), spec.URIs) {\n\t\tviolations = append(violations, \"spec.uris\")\n\t}\n\n\tif !util.EqualUnsorted(x509req.EmailAddresses, spec.EmailAddresses) {\n\t\tviolations = append(violations, \"spec.emailAddresses\")\n\t}\n\n\tif !util.EqualUnsorted(x509req.DNSNames, spec.DNSNames) {\n\t\tviolations = append(violations, \"spec.dnsNames\")\n\t}\n\n\tif spec.OtherNames != nil {\n\t\tmatched, err := matchOtherNames(x509req.Extensions, spec.OtherNames)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tif !matched {\n\t\t\tviolations = append(violations, \"spec.otherNames\")\n\t\t}\n\t}\n\n\tif spec.LiteralSubject == \"\" {\n\t\t// Comparing Subject fields\n\t\tif x509req.Subject.CommonName != spec.CommonName {\n\t\t\tviolations = append(violations, \"spec.commonName\")\n\t\t}\n\t\tif x509req.Subject.SerialNumber != spec.Subject.SerialNumber {\n\t\t\tviolations = append(violations, \"spec.subject.serialNumber\")\n\t\t}\n\t\tif !util.EqualUnsorted(x509req.Subject.Organization, spec.Subject.Organizations) {\n\t\t\tviolations = append(violations, \"spec.subject.organizations\")\n\t\t}\n\t\tif !util.EqualUnsorted(x509req.Subject.Country, spec.Subject.Countries) {\n\t\t\tviolations = append(violations, \"spec.subject.countries\")\n\t\t}\n\t\tif !util.EqualUnsorted(x509req.Subject.Locality, spec.Subject.Localities) {\n\t\t\tviolations = append(violations, \"spec.subject.localities\")\n\t\t}\n\t\tif !util.EqualUnsorted(x509req.Subject.OrganizationalUnit, spec.Subject.OrganizationalUnits) {\n\t\t\tviolations = append(violations, \"spec.subject.organizationalUnits\")\n\t\t}\n\t\tif !util.EqualUnsorted(x509req.Subject.PostalCode, spec.Subject.PostalCodes) {\n\t\t\tviolations = append(violations, \"spec.subject.postCodes\")\n\t\t}\n\t\tif !util.EqualUnsorted(x509req.Subject.Province, spec.Subject.Provinces) {\n\t\t\tviolations = append(violations, \"spec.subject.provinces\")\n\t\t}\n\t\tif !util.EqualUnsorted(x509req.Subject.StreetAddress, spec.Subject.StreetAddresses) {\n\t\t\tviolations = append(violations, \"spec.subject.streetAddresses\")\n\t\t}\n\n\t} else {\n\t\t// we have a LiteralSubject, generate the RDNSequence and encode it to compare\n\t\t// with the request's subject\n\n\t\trdnSequenceFromCertificate, err := UnmarshalSubjectStringToRDNSequence(spec.LiteralSubject)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\n\t\tasn1Sequence, err := asn1.Marshal(rdnSequenceFromCertificate)\n",
+        "origin": "selected candidate CU-c42c25b363442177",
+        "delivery_required": true
+      }
+    ],
+    "interpretation": "Validated diagnosis context; historical after source changes. Not a new edit permission."
+  },
+  "public_execution_capabilities": {
+    "schema_version": "ce.public_execution_capabilities.v1",
+    "source": {
+      "path": "environment.json",
+      "sha256": "377db8923c5a14d6732c45e9dc40860dac1cd915e7c006945fad363fdc948c15",
+      "task_observation_limit_source": "task.yaml:observation_limit"
+    },
+    "task_observation_limit": "Check the stated controller decision only; no downstream cluster convergence is implied.",
+    "environment_observation_limit": "Production issuing controller package build; private request/key fixtures and oracle are not exposed",
+    "observation_boundary": null,
+    "public_scope": null,
+    "native_input_boundary": null,
+    "candidate_command": null,
+    "build_entrypoint": null,
+    "public_runner": null,
+    "expected_artifact": null,
+    "scenarios": [
+      {
+        "name": "public-issuing-controller-build",
+        "argv": [
+          "sh",
+          "/work/.contractedge-deps/setup/build.sh"
+        ]
+      }
+    ],
+    "editable_policy": {
+      "allowed_paths": [
+        "pkg/*.go",
+        "internal/*.go"
+      ],
+      "forbidden_paths": [
+        "**/*test*",
+        "**/contractedge*",
+        "private/**",
+        "verifier/**",
+        "evaluator/**",
+        "oracle/**",
+        "go.mod",
+        "go.sum",
+        "**/go.mod",
+        "**/go.sum",
+        ".contractedge-deps/**"
+      ],
+      "policy_status": "DECLARED"
+    },
+    "network": "none",
+    "interpretation": "Declared public execution/observation only. Build success is not behavioral success; unavailable behavior stays UNKNOWN. No additional execution or edit permission.",
+    "consumer_id": "contractedge.topomen_source_consumer.v1",
+    "execution_backend": "topomen_agent",
+    "supported_operations": [
+      "MODIFY",
+      "CREATE"
+    ],
+    "method_behavior_probes": []
+  }
+}

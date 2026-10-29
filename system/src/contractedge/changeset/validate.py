@@ -1,23 +1,158 @@
 from __future__ import annotations
 
+import hashlib
+import json
+from collections import Counter
 from typing import Any, Mapping
 
 from contractedge.contracts.models import DiagnosisPacket, Snapshot, ValidationResult, ValidationIssue
 from contractedge.contracts.validation import validate_changeset
 from contractedge.contracts.permissions import target_permission_error
-from contractedge.contracts.execution_capabilities import resolve_execution_capabilities, behavior_binding_error
+from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
+from contractedge.contracts.public_checks import public_check_catalog
+
+
+def _production_branch_unit_ids(diagnosis: DiagnosisPacket, branch: Mapping) -> list[str]:
+    """Apply the existing same-path/span coverage rule, without inferring roles."""
+    evidence = {e['id']: e for e in diagnosis.raw['evidence_refs']}
+    eligible = []
+    for unit in diagnosis.raw['units']:
+        for eid in unit.get('locator_refs', []):
+            record = evidence.get(eid, {})
+            loc = record.get('locator', {})
+            if (record.get('kind') == 'SOURCE_SPAN' and loc.get('path') == branch['path']
+                    and type(loc.get('start_line')) is int and type(loc.get('end_line')) is int
+                    and loc['start_line'] <= branch['locator']['end_line']
+                    and loc['end_line'] >= branch['locator']['start_line']):
+                eligible.append(unit['id'])
+                break
+    return sorted(eligible)
+
+
+def production_branch_rebinding_gaps(payload: Mapping, diagnosis: DiagnosisPacket,
+                                    frontier: list) -> list[dict]:
+    """Request reassessment of an unrepresentable edit, never create its unit.
+
+    Only an exact, current source record already supplied to diagnosis qualifies.
+    Wrong selectors with an available unit remain ordinary plan corrections.
+    """
+    changes = {c['id']: c for c in payload.get('changes', [])}
+    evidence = {e['id']: e for e in diagnosis.raw['evidence_refs']}
+    rows = payload.get('production_path_review', [])
+    gaps = []
+    for item in frontier:
+        reviews = [r for r in rows if r.get('source_evidence_id') == item['source_evidence_id']]
+        if len(reviews) != 1 or reviews[0].get('disposition') != 'MODIFY':
+            continue
+        refs = reviews[0].get('change_refs', [])
+        if not refs or _production_branch_unit_ids(diagnosis, item):
+            continue
+        if any(c not in changes or changes[c].get('target', {}).get('kind') != 'EXISTING'
+               or changes[c]['target'].get('path') != item['path'] for c in refs):
+            continue
+        record = evidence.get(item['source_evidence_id'], {})
+        loc = record.get('locator', {})
+        text = record.get('excerpt')
+        if (record.get('kind') != 'SOURCE_SPAN' or not isinstance(text, str)
+                or record.get('snapshot_id') != diagnosis.snapshot_id
+                or item.get('snapshot_id') != diagnosis.snapshot_id
+                or record.get('content_digest') != item.get('content_digest')
+                or hashlib.sha256(text.encode('utf-8')).hexdigest() != record.get('content_digest')
+                or text != item.get('text') or loc.get('path') != item['path']
+                or any(loc.get(k) != item['locator'].get(k) for k in ('start_line', 'end_line'))):
+            continue
+        hint = {'path': item['path']}
+        if item.get('symbol'):
+            hint['symbol'] = item['symbol']
+        gaps.append({'id': f'TARGET-BINDING-{len(gaps) + 1}',
+            'summary': f"The plan requests modification of {item['source_evidence_id']} "
+                f"({item['path']}:{loc['start_line']}-{loc['end_line']}), but no current diagnosis unit "
+                'locates that branch. Reassess whether the branch is relevant to the supported repair. '
+                'Only if justified, bind an appropriate semantic unit to its exact current source; '
+                'do not relabel a different branch, invent causality, or discard unresolved obligations.',
+            'locator_hint': hint})
+        if len(gaps) == 4:
+            break
+    return gaps
+
+
+def _prerequisite_input_issues(payload, diagnosis, prerequisites, source_support):
+    """Independent source identities/citations remain safe after a count error.
+
+    Cross-reference/edit/behavior semantics still wait for valid full shape.
+    Do not spend a correction fixing count only to expose an already-bad quote.
+    """
+    if prerequisites is None or not isinstance(payload,Mapping):return []
+    rows=payload.get('precondition_review',[])
+    if not isinstance(rows,list):return []
+    issues=[]
+    if all(isinstance(r,Mapping) and isinstance(r.get('source_evidence_ref'),str) for r in rows):
+        expected={r['source_evidence_ref'] for r in prerequisites};supplied=[r['source_evidence_ref'] for r in rows]
+        if set(supplied)!=expected or len(supplied)!=len(set(supplied)):
+            issues.append(ValidationIssue('PRECONDITION_REVIEW_INCOMPLETE','precondition_review',
+                'Review each source exactly once. Missing: '+', '.join(sorted(expected-set(supplied)))
+                +'; unexpected: '+', '.join(r[:100] for r in sorted(set(supplied)-expected))
+                +'; duplicate: '+', '.join(r[:100] for r,n in Counter(supplied).items() if n>1)
+                +'. Consolidate all conditions and check references for each canonical source into one review.'))
+    records={}
+    for record in source_support or []:records.setdefault(record.get('id'),[]).append(record)
+    seen=set()
+    for index,row in enumerate(rows):
+        if not isinstance(row,Mapping) or not isinstance(row.get('source_evidence_ref'),str):continue
+        entry=row.get('establishment')
+        if (not isinstance(entry,Mapping) or not isinstance(entry.get('mode'),str)
+                or entry['mode'] not in {'CURRENT_SOURCE','PLANNED_CHANGE'}):continue
+        quote=entry.get('source_quote')
+        if not isinstance(quote,str):continue  # Shape checker owns this error.
+        eid=row['source_evidence_ref'];sources=records.get(eid,[])
+        valid=bool(quote.strip()) and bool(sources)
+        for record in sources:
+            text=record.get('excerpt')
+            valid=valid and record.get('kind')=='SOURCE_SPAN' and record.get('snapshot_id')==diagnosis.snapshot_id and (
+                isinstance(text,str) and quote in text and hashlib.sha256(text.encode()).hexdigest()==record.get('content_digest'))
+        if not valid and (eid,quote) not in seen:
+            seen.add((eid,quote))
+            def current_source(record):
+                text=record.get('excerpt')
+                return (record.get('kind')=='SOURCE_SPAN'
+                    and record.get('snapshot_id')==diagnosis.snapshot_id and isinstance(text,str)
+                    and hashlib.sha256(text.encode()).hexdigest()==record.get('content_digest'))
+            hint={}
+            if (sources and all(current_source(r) for r in sources)
+                    and len({r['excerpt'] for r in sources})==1):
+                text=sources[0]['excerpt']
+                example=next((line.strip()[:200] for line in text.splitlines()
+                    if line.strip() and not line.strip().startswith(('//','/*','*'))),None)
+                hint['referenced_source']={'id':eid,'locator':sources[0].get('locator'),
+                    'exact_quote_example':example}
+            matches=[{'id':other,'locator':record.get('locator')} for other,items in records.items()
+                if other!=eid for record in items
+                if quote.strip() and current_source(record) and quote in record['excerpt']][:2]
+            if matches:hint['quote_found_in_different_delivered_source']=matches
+            issues.append(ValidationIssue('PRECONDITION_ESTABLISHMENT_INVALID',
+                f'precondition_review[{index}].establishment.source_quote',
+                f'Quote for {eid} does not bind the delivered current source. Copy one short exact source line; '
+                'do not paraphrase code or double-escape newlines/tabs. The quote must belong to this '
+                'source_evidence_ref, including for PLANNED_CHANGE; a caller quote cannot stand in for '
+                'the referenced helper. Describe caller changes in mechanism/change_refs. '
+                'A source quote is not proof of the asserted semantic guarantee. '
+                'Current-source binding hints (identity only): '+json.dumps(hint,ensure_ascii=False)))
+    return issues
 
 
 def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: DiagnosisPacket,
                                 snapshot: Snapshot | None, *, policy: Mapping | None = None,
                                 frontier: list | None = None,
-                                prerequisites: list | None = None, capabilities: Mapping | None = None) -> ValidationResult:
+                                prerequisites: list | None = None, capabilities: Mapping | None = None,
+                                source_support: list | None = None) -> ValidationResult:
     result = validate_changeset(payload, diagnosis, snapshot)
+    independent = _prerequisite_input_issues(payload,diagnosis,prerequisites,source_support)
     if result.value is None:
-        return result
-    issues = list(result.errors)
+        return ValidationResult(False,tuple([*result.errors,*independent]),None)
+    issues = [*result.errors,*independent]
     try:
         consumer = resolve_execution_capabilities(capabilities)
+        check_catalog = public_check_catalog(consumer)
     except ValueError as exc:
         issues.append(ValidationIssue('INVALID_EXECUTION_CAPABILITIES', 'public_execution_capabilities', str(exc)))
         return ValidationResult(False, tuple(issues), result.value)
@@ -26,14 +161,11 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
             issues.append(ValidationIssue('UNSUPPORTED_EXECUTION_OPERATION', f'changes[{index}].operation',
                 'Execution consumer supports only ' + ', '.join(consumer['supported_operations'])))
     if prerequisites is not None:
-        expected = {r['source_evidence_ref'] for r in prerequisites}
         rows = payload.get('precondition_review', [])
-        supplied = [r['source_evidence_ref'] for r in rows]
-        if set(supplied) != expected or len(supplied) != len(set(supplied)):
-            issues.append(ValidationIssue('PRECONDITION_REVIEW_INCOMPLETE', 'precondition_review',
-                'Review every supplied prerequisite source exactly once: '+', '.join(sorted(expected))))
         checks = {r['id']:r for kind in ('postconditions', 'preserve_constraints') for r in payload.get(kind, [])}
         opened = {r['id'] for r in payload.get('open_obligations', [])}
+        required_establishment = {r['source_evidence_ref'] for r in prerequisites if r.get('establishment_required') is True}
+        change_ids = {c['id'] for c in payload['changes']}
         for i, row in enumerate(rows):
             refs, unresolved = row['verification_refs'], row['open_obligation_refs']
             disposition = row['disposition']
@@ -48,6 +180,26 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
                     checks[r].get('verification_kind') in {'PUBLIC_BEHAVIOR', 'PUBLIC_STRUCTURE', 'DECLARED_INPUT_EQUALITY'} for r in refs):
                 issues.append(ValidationIssue('PRECONDITION_UNVERIFIED', f'precondition_review[{i}]',
                     'Build-only or unknown checks cannot verify runtime prerequisites; retain an open obligation'))
+            establishment = row.get('establishment')
+            if establishment is None:
+                if row['source_evidence_ref'] in required_establishment:
+                    issues.append(ValidationIssue('PRECONDITION_ESTABLISHMENT_MISSING', f'precondition_review[{i}]',
+                        'A future check does not establish its prerequisite. Identify CURRENT_SOURCE with an exact source quote, '
+                        'PLANNED_CHANGE with real change_refs and a concrete establishment mechanism, or keep it UNRESOLVED. '
+                        'Launching asynchronous work is not completion/readiness.'))
+                continue
+            mode = establishment['mode']
+            edits = establishment['change_refs']
+            modes = {'REQUIRED': {'CURRENT_SOURCE', 'PLANNED_CHANGE'},
+                     'UNRESOLVED': {'UNRESOLVED'}, 'NOT_APPLICABLE': {'NOT_APPLICABLE'}}
+            valid_establishment = mode in modes[disposition]
+            valid_establishment = valid_establishment and set(edits) <= change_ids
+            valid_establishment = valid_establishment and (bool(edits) if mode == 'PLANNED_CHANGE' else not edits)
+            if not valid_establishment:
+                issues.append(ValidationIssue('PRECONDITION_ESTABLISHMENT_INVALID', f'precondition_review[{i}].establishment',
+                    'Match establishment mode to disposition; PLANNED_CHANGE binds nonempty existing change IDs, other modes have none. '
+                    'CURRENT_SOURCE and PLANNED_CHANGE cite a nonempty verbatim quote from the same delivered current source. '
+                    'Describe completion/initialization before dependent use, rather than substituting launch or a future test for that mechanism.'))
     for index, change in enumerate(payload['changes']):
         target = change['target']
         path = target['path'] if target['kind'] == 'EXISTING' else target['proposed_path']
@@ -57,10 +209,21 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
                 'Source evidence is read-only unless public edit policy permits this target: ' + path))
     for kind in ('postconditions','preserve_constraints','open_obligations'):
         for i,item in enumerate(payload.get(kind, [])):
-            binding_error = behavior_binding_error(item, capabilities)
-            if binding_error:
-                issues.append(ValidationIssue(binding_error,kind+f'[{i}]',
-                    'Behavior bindings need explicit scope, coverage and rationale matching the available public checks'))
+            refs = item.get('behavior_check_refs', [])
+            path = kind + f'[{i}]'
+            if refs and (item.get('check_coverage') not in {'ALL_OF','NECESSARY_ONLY','SUPPORTING'} or not item.get('coverage_rationale')):
+                issues.append(ValidationIssue('CHECK_COVERAGE_REQUIRED', path,
+                    'Probe bindings must explicitly declare necessary/sufficient scope and rationale'))
+            # Legacy standalone validators may have no capability declaration.
+            # Actual declared contexts must not accept invented check IDs.
+            if 'registered_public_checks' in consumer or 'method_behavior_probes' in consumer:
+                for ref in refs:
+                    definition = check_catalog.get(ref)
+                    if definition is None:
+                        issues.append(ValidationIssue('UNREGISTERED_BEHAVIOR_CHECK', path, 'Unknown public check: ' + ref))
+                    elif definition['scenario'] is not None and (item.get('verification_scope') or {}).get('scenario') != definition['scenario']:
+                        issues.append(ValidationIssue('BEHAVIOR_CHECK_SCENARIO_MISMATCH', path,
+                            'Binding ' + ref + ' requires declared scenario ' + definition['scenario']))
     if diagnosis.raw.get('requirement_spec',{}).get('traceability_required'):
         if payload.get('preserve_constraints') and 'preservation_impact' not in payload:
             issues.append(ValidationIssue('PRESERVATION_IMPACT_INCOMPLETE','preservation_impact',
@@ -70,8 +233,14 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
         expected = {p['id'] for p in payload['preserve_constraints']}
         supplied = [r['preserve_id'] for r in rows]
         if set(supplied) != expected or len(supplied) != len(set(supplied)):
+            differences = dict(expected=sorted(expected), missing=sorted(expected-set(supplied)),
+                unexpected=sorted(set(supplied)-expected),
+                duplicate=sorted({ref for ref in supplied if supplied.count(ref)>1}))
             issues.append(ValidationIssue('PRESERVATION_IMPACT_INCOMPLETE','preservation_impact',
-                'Every preservation constraint needs exactly one impact scope'))
+                'Every preservation constraint needs exactly one impact scope. '
+                'preserve_id references this plan\'s preserve_constraints[].id, not outcome_id. '
+                + '; '.join(key+'='+json.dumps(value,ensure_ascii=False) for key,value in differences.items())
+                + '. An empty expected set requires preservation_impact=[]; do not invent or drop preservation obligations.'))
         changes = {c['id'] for c in payload['changes']}
         for row in rows:
             if (not set(row['change_refs']) <= changes or
@@ -94,25 +263,31 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
             path = f'production_path_review[{i}]'
             if row['disposition'] == 'MODIFY':
                 refs = row['change_refs']
+                eligible = _production_branch_unit_ids(diagnosis, item)
                 def covers(cid):
                     target = changes.get(cid, {}).get('target', {})
-                    branch = item['locator']
                     if target.get('kind') != 'EXISTING' or target.get('path') != item['path']:
                         return False
-                    units = {u['id']: u for u in diagnosis.raw['units']}
-                    evidence = {e['id']: e for e in diagnosis.raw['evidence_refs']}
-                    for uid in target.get('unit_refs', []):
-                        for eid in units.get(uid, {}).get('locator_refs', []):
-                            record = evidence.get(eid, {})
-                            loc = record.get('locator', {})
-                            if (record.get('kind') == 'SOURCE_SPAN' and loc.get('path') == item['path']
-                                and type(loc.get('start_line')) is int and type(loc.get('end_line')) is int
-                                and loc['start_line'] <= branch['end_line'] and loc['end_line'] >= branch['start_line']):
-                                return True
-                    return False
-                if not refs or not all(covers(c) for c in refs) or row['open_obligation_refs']:
+                    return bool(set(target.get('unit_refs', [])) & set(eligible))
+                if not refs or not all(covers(c) for c in refs):
+                    label = (f"{item['source_evidence_id']} {item['path']}:"
+                             f"{item['locator']['start_line']}-{item['locator']['end_line']}")
                     issues.append(ValidationIssue('PRODUCTION_BRANCH_CHANGE_INVALID', path,
-                        'MODIFY requires actual changes targeting this evidenced branch; file equality alone is insufficient'))
+                        'MODIFY requires actual changes targeting this evidenced branch; file equality alone is insufficient. '
+                        f'Branch {label}; eligible diagnosis unit_refs={eligible!r}; submitted change_refs={refs!r}.'))
+                    if not eligible:
+                        issues.append(ValidationIssue('PRODUCTION_BRANCH_TARGET_UNAVAILABLE', path,
+                            f'Branch {label} has no legal target unit in the current diagnosis. '
+                            'Request diagnosis reassessment before claiming this edit; changing semantic_action text or '
+                            'reusing a unit bound to another branch cannot repair this missing binding. '
+                            'Do not invent a unit, discard unresolved obligations or weaken branch coverage.'))
+                if row['open_obligation_refs']:
+                    issues.append(ValidationIssue('PRODUCTION_BRANCH_MODIFY_OPEN_REFS',
+                        path + '.open_obligation_refs',
+                        'MODIFY requires empty open_obligation_refs in this branch row. '
+                        'Keep unverified runtime behavior in the plan open_obligations and corresponding checks; '
+                        'do not delete those obligations or claim verification. If the repair intent for this branch '
+                        'itself is unresolved, use UNRESOLVED with real open_obligation_refs and no change_refs.'))
             elif row['disposition'] == 'UNRESOLVED':
                 refs = row['open_obligation_refs']
                 if not refs or not set(refs) <= opened or row['change_refs']:

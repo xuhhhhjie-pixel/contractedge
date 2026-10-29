@@ -1,0 +1,37 @@
+{
+  "status": "IMPORTANT_BOUNDARY_FINDINGS_CONFIRMED",
+  "source_sha256": "b5c5f9490893dd1366174e16abc16b464371d793b6d59bd03db6781e0b0d6fe6",
+  "critical": [],
+  "important": [
+    {
+      "id": "precise-per-unit-match",
+      "files": [
+        "src/contractedge/source/units.py:315",
+        "src/contractedge/source/units.py:442"
+      ],
+      "trigger": "A file has one exact public identifier and earlier declarations containing lowercase/substring variants. File-level precision leaks into per-unit casefold/substring matching; max_units=1 can drop the exact declaration.",
+      "required_fix": "Keep case-sensitive token matching through expansion, unit admission, labeling and gap binding."
+    },
+    {
+      "id": "stale-field-shared-budget",
+      "files": [
+        "src/contractedge/retrieval/gap_delivery.py:60"
+      ],
+      "trigger": "First local interface file is stale; failed read is not charged to file/byte budget, letting a second interface exceed the shared bound.",
+      "required_fix": "Charge attempted reads before digest validation and prevent invalid bytes from becoming parseable source."
+    }
+  ],
+  "minor": [],
+  "red_tests": {
+    "file": "review_boundary_tests.py (plan workspace)",
+    "failed": 4,
+    "log": "review-boundaries-v6-red.log"
+  },
+  "diagnostic_disposition": "Preserve already frozen attempts, audit actual units. Synthetic failures alone do not prove a trigger in live cases. Do not promote method until fixed in a new freeze.",
+  "declined_to_judge": [
+    "Live independent effectiveness",
+    "Formal readiness and other plan tasks",
+    "Pre-existing constructor/import locator limitations"
+  ],
+  "formal_ready": false
+}

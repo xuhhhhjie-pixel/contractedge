@@ -1,0 +1,35 @@
+{
+  "schema_version": "ce.public_text_correction_pair.v1",
+  "role": "COMPONENT_DIAGNOSTIC_ONLY",
+  "order": [
+    "control",
+    "treatment"
+  ],
+  "once_each": true,
+  "max_calls": 2,
+  "hypothesis": "Grounded inventory helps correct the same invalid configuration graph without inventing source consumers.",
+  "success": "Treatment passes unchanged diagnosis contracts with supported work; inspect both outputs. A single pair cannot establish repair efficacy or superiority.",
+  "frozen_inputs": {
+    "/home/xhj/contractedge-diagnostic-source056-v2-20261026/methods/R3-KPT-4673/R3-KPT-4673/model_calls.json": "3500eb373092429b72178bb1466946e555de5ec17004166efd30024cbd5f66a5",
+    "/home/xhj/contractedge-diagnostic-source056-v2-20261026/methods/R3-KPT-4673/R3-KPT-4673/method_input.json": "2237eb2997a1ee565660379b0b7c826bf60fcb836b7dcf33c176c8eac6ed6251",
+    "/home/xhj/contractedge-diagnostic-source056-v2-20261026/methods/R3-KPT-4673/R3-KPT-4673/rounds/0/front.trace.json": "7410189bd9e0fafa085f96ea72fe0626585f12c3df7ab0f90d8ded61ce313af6",
+    "/home/xhj/contractedge-graph-correction-pair-v057-20261026/control.request.json": "0e9822c8eecb52c65b015c2dfcc39d690b9d74d1f0eebc7bf0bb4bc6b951311d",
+    "/home/xhj/contractedge-graph-correction-pair-v057-20261026/treatment.request.json": "5c2d6fa7aa19eb8748666a143e7f123ab5c0dd2da39d23a6803fc3b562eeb4f5",
+    "/home/xhj/contractedge-planning-branch-continuity-20261026/system/configs/fixed46-candidate-v057-budget150.json": "bf8049c5f8d1b62a56db7d04984d4afa63d58dab8d5af8c48b1e137aea186334",
+    "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/grounded-graph-correction-20261026/correction_pair.py": "6cae6fa329d32a4d8cd6da6712ec76d31fc98be7c768e5678d4facb63ac31012"
+  },
+  "original_errors": [
+    {
+      "status": "CONTRACT_FAIL",
+      "error": "PRODUCTION_PATH_INCOMPLETE at expected_relations: supported configuration outcome O1 lacks an evidenced path through a production consumer to its generated/runtime/observed state"
+    },
+    {
+      "status": "CONTRACT_FAIL",
+      "error": "PRODUCTION_CONSUMER_UNEVIDENCED at units[8].locator_refs: a production consumer must cite a source span in the current snapshot"
+    }
+  ],
+  "formal_ready": false,
+  "counts_in_46_slot_panel": false,
+  "executable_outputs_allowed": false,
+  "constraint": "No candidate/hidden grader accesses; same public text and provider settings, no retry. Persistent150CNY ledger."
+}

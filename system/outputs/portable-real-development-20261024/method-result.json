@@ -1,0 +1,29 @@
+{
+  "role": "SINGLE_CLEAN_CLONE_OPERATIONAL_VALIDATION",
+  "returncode": 0,
+  "method_status": "PUBLIC_REVIEW_COMPLETE",
+  "batch_sha256": "72c2d89f897404bb6bf3e73531749cde18ad1b16967ffd8c19c132f9e36af004",
+  "candidate": {
+    "patch_path": "/tmp/contractedge-v0638-development/runs/portable-RW-CAND-130-v2/cases/RW-CAND-130/candidate.patch",
+    "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+    "patch_bytes": 1474,
+    "tool": {
+      "argv": [
+        "/tmp/contractedge-v0638-development/venv/bin/python",
+        "/tmp/contractedge-v0638-development/data/tools/collect_patch.py",
+        "--workspace",
+        "/tmp/contractedge-v0638-development/runs/portable-RW-CAND-130-v2/cases/RW-CAND-130/workspace",
+        "--output",
+        "/tmp/contractedge-v0638-development/runs/portable-RW-CAND-130-v2/cases/RW-CAND-130/candidate.patch"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "stdout_sha256": "8bdfa001bea3f7b7d31569c8c1685c5a06c2bcb16bb955c7adc1118b1dfc951e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "source_unchanged": true,
+  "output": "/tmp/contractedge-v0638-development/runs/portable-RW-CAND-130-v2",
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false
+}

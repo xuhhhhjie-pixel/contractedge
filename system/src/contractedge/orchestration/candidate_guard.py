@@ -34,6 +34,18 @@ def compare_candidate_checks(incumbent: dict, trial: dict, preservation_ids: lis
             values[key]=retained.get('latest_public_status','UNKNOWN')
         return values
     old,new=table(incumbent),table(trial); regressions=[];unknown=[]
+    # A failed production compile/start cannot be promoted merely because no
+    # semantic preservation check was registered. Keep it an execution blocker,
+    # not an inferred behavioral FAIL; the caller retains the last candidate
+    # and can use the source-bound diagnostic within its existing retry budget.
+    from contractedge.execution.public import has_candidate_execution_failure
+    if has_candidate_execution_failure(trial):
+        unknown.append(dict(check_id='production_execution',
+            reason='Source-bound production execution failed; trial is not eligible for promotion'))
+    if trial.get('method_probe_status') == 'PROBE_ERROR':
+        unknown.append(dict(check_id='method_probe_execution',
+            reason='Registered public probe did not complete; retain the incumbent. '
+                   'This is an observation blocker, not a semantic failure or source-cause attribution.'))
     for key,state in old.items():
         if key[0] not in preservation_ids or state!='PASS':continue
         if not key[3] or not key[4]:
@@ -98,6 +110,13 @@ def preservation_check_ids(plan, previous_feedback=None):
     from contractedge.requirement.lineage import disputed_obligation
     ledger=plan.get('obligation_lineage',{})
     retained=[p for p in (previous_feedback or {}).get('retained_constraints',[]) if not disputed_obligation(p,ledger)]
-    obligations=[p for p in [*plan.get('preserve_constraints',[]),*retained] if not disputed_obligation(p,ledger)]
+    # An unresolved broad preservation claim may still have passed necessary
+    # checks. Keep those local checks protected across re-planning without
+    # treating the whole claim as PASS or locking requested behavior changes.
+    pending_preservation=[p for p in (previous_feedback or {}).get('pending_obligations',[])
+                          if p.get('kind')=='PRESERVE'
+                          and p.get('check_coverage') in ('ALL_OF','NECESSARY_ONLY')]
+    obligations=[p for p in [*plan.get('preserve_constraints',[]),*retained,*pending_preservation]
+                 if not disputed_obligation(p,ledger)]
     return sorted({ref for item in obligations for ref in item.get('behavior_check_refs',[])} |
         {'obligation:'+item['retention_id'] for item in retained})

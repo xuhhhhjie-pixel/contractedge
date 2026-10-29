@@ -1,0 +1,66 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_correctly_targeted_edit_with_misplaced_open_ref_gets_specific_actionable_error _
+
+    def test_correctly_targeted_edit_with_misplaced_open_ref_gets_specific_actionable_error():
+        packet,plan,frontier=fixture();before=deepcopy(plan)
+        result=validate_semantic_changeset(plan,packet,None,frontier=frontier)
+        codes={e.code for e in result.errors}
+>       assert 'PRODUCTION_BRANCH_MODIFY_OPEN_REFS' in codes
+E       AssertionError: assert 'PRODUCTION_BRANCH_MODIFY_OPEN_REFS' in {'PRODUCTION_BRANCH_CHANGE_INVALID', 'STATUS_INCONSISTENT'}
+
+tests/test_branch_review_feedback.py:28: AssertionError
+______ test_fixing_branch_reference_does_not_discard_unverified_behavior _______
+
+    def test_fixing_branch_reference_does_not_discard_unverified_behavior():
+        packet,plan,frontier=fixture()
+        plan['production_path_review'][0]['open_obligation_refs']=[]
+        result=validate_semantic_changeset(plan,packet,None,frontier=frontier)
+>       assert result.valid,result.errors
+E       AssertionError: (ValidationIssue(code='STATUS_INCONSISTENT', path='status', message='READY_PARTIAL requires an unresolved outcome'),)
+E       assert False
+E        +  where False = ValidationResult(valid=False, errors=(ValidationIssue(code='STATUS_INCONSISTENT', path='status', message='READY_PARTIA... this concrete source branch; runtime coverage remains limited.', 'change_refs': ['C1'], 'open_obligation_refs': []}]}).valid
+
+tests/test_branch_review_feedback.py:40: AssertionError
+_ test_real_change_coverage_failure_remains_rejected_and_both_errors_reported[same_file_other_branch] _
+
+coverage = 'same_file_other_branch'
+
+    @pytest.mark.parametrize('coverage',['same_file_other_branch','unknown_change'])
+    def test_real_change_coverage_failure_remains_rejected_and_both_errors_reported(coverage):
+        packet,plan,frontier=fixture()
+        if coverage=='same_file_other_branch':frontier[0]['locator']=dict(start_line=100,end_line=110)
+        else:plan['production_path_review'][0]['change_refs']=['missing']
+        result=validate_semantic_changeset(plan,packet,None,frontier=frontier)
+        codes={e.code for e in result.errors}
+>       assert {'PRODUCTION_BRANCH_CHANGE_INVALID','PRODUCTION_BRANCH_MODIFY_OPEN_REFS'}<=codes
+E       AssertionError: assert {'PRODUCTION_...FY_OPEN_REFS'} <= {'PRODUCTION_...INCONSISTENT'}
+E         
+E         Extra items in the left set:
+E         'PRODUCTION_BRANCH_MODIFY_OPEN_REFS'
+
+tests/test_branch_review_feedback.py:52: AssertionError
+_ test_real_change_coverage_failure_remains_rejected_and_both_errors_reported[unknown_change] _
+
+coverage = 'unknown_change'
+
+    @pytest.mark.parametrize('coverage',['same_file_other_branch','unknown_change'])
+    def test_real_change_coverage_failure_remains_rejected_and_both_errors_reported(coverage):
+        packet,plan,frontier=fixture()
+        if coverage=='same_file_other_branch':frontier[0]['locator']=dict(start_line=100,end_line=110)
+        else:plan['production_path_review'][0]['change_refs']=['missing']
+        result=validate_semantic_changeset(plan,packet,None,frontier=frontier)
+        codes={e.code for e in result.errors}
+>       assert {'PRODUCTION_BRANCH_CHANGE_INVALID','PRODUCTION_BRANCH_MODIFY_OPEN_REFS'}<=codes
+E       AssertionError: assert {'PRODUCTION_...FY_OPEN_REFS'} <= {'PRODUCTION_...INCONSISTENT'}
+E         
+E         Extra items in the left set:
+E         'PRODUCTION_BRANCH_MODIFY_OPEN_REFS'
+
+tests/test_branch_review_feedback.py:52: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_branch_review_feedback.py::test_correctly_targeted_edit_with_misplaced_open_ref_gets_specific_actionable_error
+FAILED tests/test_branch_review_feedback.py::test_fixing_branch_reference_does_not_discard_unverified_behavior
+FAILED tests/test_branch_review_feedback.py::test_real_change_coverage_failure_remains_rejected_and_both_errors_reported[same_file_other_branch]
+FAILED tests/test_branch_review_feedback.py::test_real_change_coverage_failure_remains_rejected_and_both_errors_reported[unknown_change]
+4 failed in 0.14s

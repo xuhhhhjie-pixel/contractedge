@@ -1,0 +1,20 @@
+{
+  "status": "EXACT_EMPTY_PRESERVE_ID_MISMATCH_DELIVERED_IN_EXISTING_SINGLE_CORRECTION",
+  "snapshot_id": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+  "expected_preserve_ids": [],
+  "unexpected_impact_ids": [
+    "O1"
+  ],
+  "feedback": {
+    "code": "PRESERVATION_IMPACT_INCOMPLETE",
+    "message": "Every preservation constraint needs exactly one impact scope. preserve_id references this plan's preserve_constraints[].id, not outcome_id. expected=[]; missing=[]; unexpected=[\"O1\"]; duplicate=[]. An empty expected set requires preservation_impact=[]; do not invent or drop preservation obligations.",
+    "path": "preservation_impact"
+  },
+  "prior_draft_preserved": true,
+  "field_dependency_support_retained": true,
+  "schema_impact_max_items": 0,
+  "new_model_calls": 0,
+  "formal_ready": false,
+  "validator_sha256": "5f9c2e5ea847d5b8dcc696a59e46d32291f85befbfd8c66897f8878ad5792e3d",
+  "prompt_sha256": "9e5f9a75abd7ff2d10fde9c9cd650c9543d59d706580e74efc5238cf0f38a579"
+}

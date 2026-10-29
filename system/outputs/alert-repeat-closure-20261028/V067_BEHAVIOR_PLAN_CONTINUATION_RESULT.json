@@ -1,0 +1,257 @@
+{
+  "status": "PASS_CONTROLLED_BEHAVIOR_FAILURE_PLAN_REPAIR",
+  "completed_at": "2026-10-28T18:23:56.815791+08:00",
+  "case_id": "RW-ALERTMANAGER-4705",
+  "source_sha256": "5e1758b0ac0a306f089f9a1e2aacb58aff12739a803ac5544b44d95392bf3387",
+  "method_root": "/home/xhj/contractedge-clean-delivery-official-v067-20261028/system",
+  "scope": "Controlled continuation of archived v066 public failure using exact v067 route, official future responses, one remaining edit. Not original46, not fresh full-run repeat.",
+  "natural_fresh_run_interround_failure_demonstrated": false,
+  "existing_reassessment_entry_invoked": true,
+  "human_semantic_plan_or_candidate_edit": false,
+  "before_checks": [
+    {
+      "id": "alertmanager-reload-v4:groups.visible_during_reload",
+      "status": "FAIL",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 8,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 16,
+        "non_unique_samples": 0,
+        "samples": 252,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      },
+      "observation_id": "OBS1",
+      "snapshot_id": "17f1bdc5e533668d9d524c5121560e8e5c10778d6a1b3f5fbe5b49f34ae9c93d"
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.visible_after_reload",
+      "status": "PASS",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 8,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 16,
+        "non_unique_samples": 0,
+        "samples": 252,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      },
+      "observation_id": "OBS2",
+      "snapshot_id": "17f1bdc5e533668d9d524c5121560e8e5c10778d6a1b3f5fbe5b49f34ae9c93d"
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.visible_at_reload_return",
+      "status": "FAIL",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 8,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 16,
+        "non_unique_samples": 0,
+        "samples": 252,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      },
+      "observation_id": "OBS3",
+      "snapshot_id": "17f1bdc5e533668d9d524c5121560e8e5c10778d6a1b3f5fbe5b49f34ae9c93d"
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.unique_for_declared_route",
+      "status": "PASS",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 8,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 16,
+        "non_unique_samples": 0,
+        "samples": 252,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      },
+      "observation_id": "OBS4",
+      "snapshot_id": "17f1bdc5e533668d9d524c5121560e8e5c10778d6a1b3f5fbe5b49f34ae9c93d"
+    }
+  ],
+  "after_checks": [
+    {
+      "id": "alertmanager-reload-v4:groups.visible_during_reload",
+      "status": "PASS",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 0,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 0,
+        "non_unique_samples": 0,
+        "samples": 249,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      },
+      "observation_id": "OBS1",
+      "snapshot_id": "796c7aec1184036515f2911c45b61082a77f3b017d8c0940549b38595c508da8"
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.visible_after_reload",
+      "status": "PASS",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 0,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 0,
+        "non_unique_samples": 0,
+        "samples": 249,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      },
+      "observation_id": "OBS2",
+      "snapshot_id": "796c7aec1184036515f2911c45b61082a77f3b017d8c0940549b38595c508da8"
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.visible_at_reload_return",
+      "status": "PASS",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 0,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 0,
+        "non_unique_samples": 0,
+        "samples": 249,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      },
+      "observation_id": "OBS3",
+      "snapshot_id": "796c7aec1184036515f2911c45b61082a77f3b017d8c0940549b38595c508da8"
+    },
+    {
+      "id": "alertmanager-reload-v4:groups.unique_for_declared_route",
+      "status": "PASS",
+      "observed": {
+        "after_unique": true,
+        "after_visible": true,
+        "at_return_missing": 0,
+        "at_return_samples": 20,
+        "baseline_visible": true,
+        "injected_groups": 2048,
+        "missing_samples": 0,
+        "non_unique_samples": 0,
+        "samples": 249,
+        "sampling_interval_ms": 2,
+        "sampling_workers": 4,
+        "scope": "Local complete production process and HTTP API, twenty valid reloads with2048 groups and immediate reload-return samples; sampled continuity is not a proof of unsampled instants or distributed convergence",
+        "successful_reloads": 20
+      },
+      "observation_id": "OBS4",
+      "snapshot_id": "796c7aec1184036515f2911c45b61082a77f3b017d8c0940549b38595c508da8"
+    }
+  ],
+  "previous_plan_actions": [
+    {
+      "path": "cmd/alertmanager/main.go",
+      "semantic_action": "In the configCoordinator.Subscribe callback in cmd/alertmanager/main.go, replace the synchronous blocking wait `<-newDisp.Ready()` that currently sits between `go newDisp.Run(...)`/`go inhibitor.Run()` and the publication `oldDisp := disp; disp = newDisp; if oldDisp != nil { oldDisp.Stop() }` with a non-blocking goroutine that awaits newDisp.Ready() and only then performs the same publication-and-retire sequence (assign disp = newDisp, then oldDisp.Stop()). Keep the existing `go newDisp.Run(startTime.Add(*DispatchStartDelay))` and `go inhibitor.Run()` launches, keep the old dispatcher assigned to `disp` until the goroutine publishes, and keep the oldDisp.Stop() guard. The callback must return nil immediately after launching the waiter so Reload() returns and the HTTP server start is not deferred."
+    }
+  ],
+  "revised_plan_actions": [
+    {
+      "path": "dispatch/dispatch.go",
+      "semantic_action": "In Dispatcher.run, factor the existing alert receipt body (it.Err check, route.Match loop, processAlert, processingDuration metric) into a local closure. Before the main select loop, drain it.Next() with non-blocking receives until empty, processing each received alert through that closure; then call d.signalReady() once (also for an empty backlog) and clear initialBacklog. Remove the current pre-processing signalReady branch; leave startTimer, maintenance, ctx.Done, and subsequent live alert handling unchanged."
+    }
+  ],
+  "source_review": "New action and actual edit drain/process the synchronous initial queue before signalReady; empty-queue default signals Ready, subsequent live loop retains the processing closure. Source review supports this bounded mechanism, not universal concurrency correctness.",
+  "stage_delivery": [
+    {
+      "prompt_version": "diagnosis.v1.1.26",
+      "snapshot_id": "17f1bdc5e533668d9d524c5121560e8e5c10778d6a1b3f5fbe5b49f34ae9c93d",
+      "request_sha256": "216e5f8d3057180469756d056e3a3bbf7f6dedcb3725b7adbaee5a8e0aae8b08",
+      "response_sha256": "be2ca3857159ac0c9704524ad5c502684e7e0eb768b48c834c75b28ce7467dc6",
+      "reported_model": "deepseek-flash",
+      "model_identity_verified": true
+    },
+    {
+      "prompt_version": "changeset.v1.1.16",
+      "snapshot_id": "17f1bdc5e533668d9d524c5121560e8e5c10778d6a1b3f5fbe5b49f34ae9c93d",
+      "request_sha256": "e506484254fcd35264336030bdf02bf73021b4d5b7a5d90eea65aa5daf93f5b7",
+      "response_sha256": "b7797a8f9022009f75f1ba43aaaacfd51b6cc02bce85f2833b18ac6781e7d350",
+      "reported_model": "deepseek-flash",
+      "model_identity_verified": true
+    },
+    {
+      "prompt_version": "topomen-source-execution.v1",
+      "snapshot_id": "17f1bdc5e533668d9d524c5121560e8e5c10778d6a1b3f5fbe5b49f34ae9c93d",
+      "request_sha256": "4417a7c0dc6ffa4d7008eb6859187b8dbbad843a9b083f8e360957b94264ab6d",
+      "response_sha256": "2f76440e5073267eb9baf5d8ac4860202fb2f60448d7b3075be5267dd5d73b5d",
+      "reported_model": "deepseek-flash",
+      "model_identity_verified": true
+    }
+  ],
+  "independent_status": "PASS",
+  "public_semantic_status": "UNKNOWN",
+  "candidate_decision": {
+    "schema_version": "ce.candidate_decision.v1",
+    "decision": "PROMOTE",
+    "from_snapshot": "17f1bdc5e533668d9d524c5121560e8e5c10778d6a1b3f5fbe5b49f34ae9c93d",
+    "trial_snapshot": "796c7aec1184036515f2911c45b61082a77f3b017d8c0940549b38595c508da8",
+    "regressions": [],
+    "uncomparable": [],
+    "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness"
+  },
+  "new_model_calls": 3,
+  "inherited_prefix_calls": 5,
+  "combined_call_limit": 12,
+  "remaining_fresh_edits_used": 1,
+  "new_cost_upper_bound_cny": 0.434604,
+  "cumulative_cost_upper_bound_cny": 152.645482,
+  "remaining_budget_upper_bound_cny": 47.354518,
+  "historical_pending_reservations": 3,
+  "evidence": {
+    "/home/xhj/contractedge-public-failure-continuation-v067-20261028/plan.json": "848a50b398487f9ee8c25e45aa60986f18ae752d71ff9dcf389775f153c8e038",
+    "/home/xhj/contractedge-public-failure-continuation-v067-20261028/success-criteria.json": "af5a64db2721980614383cf073153eae11a0343f69ccccb87fa20328a43e225b",
+    "/home/xhj/contractedge-public-failure-continuation-v067-20261028/registration.json": "c86c783e7e57f5504bd83740ad7efd42e1bda75a4714d8b58ae418e4526fa4e3",
+    "/home/xhj/contractedge-public-failure-continuation-v067-20261028/result.json": "e5469f7ec14d8b72f45f6e88cffd8563cce724544ad9c6b689675e36578be4aa",
+    "/home/xhj/contractedge-public-failure-continuation-v067-20261028/case/RW-ALERTMANAGER-4705/failure-feedback.json": "e2fe3541126d1e5f3b1351dadd5a6f88cb4718fbf80ce464f00ae0ddbf6a67fc",
+    "/home/xhj/contractedge-public-failure-continuation-v067-20261028/case/RW-ALERTMANAGER-4705/rounds/0/plan-reassessment.trace.json": "de7e3358a2bd99e6912a034af1fe2b5182b1677307de1d0b18bd9d7cd16ec332",
+    "/home/xhj/contractedge-public-failure-continuation-v067-20261028/case/RW-ALERTMANAGER-4705/rounds/0/execution.json": "83ba31fa3b3574348dd6d2de3642d41c0796a0e48b3b6bf8ae4a1ffac7003bb2",
+    "/home/xhj/contractedge-public-failure-continuation-v067-20261028/case/RW-ALERTMANAGER-4705/rounds/0/feedback.json": "62741c02934fff199fc01b094482b9ec525672d257bb5600c4f1f296f09d2450",
+    "/home/xhj/contractedge-public-failure-continuation-v067-20261028/case/.isolated-25afc4794bf2446ba47c64a23f3bd605/parent-model-calls.json": "80b7030774c52cc7b1cce0fc6064433ff5b8b09bd2c017f47ed29b25a2e6a0b4",
+    "/home/xhj/contractedge-public-failure-continuation-v067-20261028/case/.isolated-25afc4794bf2446ba47c64a23f3bd605/receipt.json": "3779b4737ea459484834fb5961c7130279570c146a7d2480de3d526fb8c96471",
+    "/home/xhj/contractedge-public-failure-continuation-v067-20261028/independent/checkpoint.json": "c16730c4fab9a1974f6e8aed0fca3c70e1233d91c4e543ed77945f0150c18bbe"
+  },
+  "counts_in_original46": false,
+  "formal_ready": false,
+  "next_blocker": "Existing KPT plan helper/caller quote identity correction; replay first, then exact-source qualification and original same-version acceptance."
+}

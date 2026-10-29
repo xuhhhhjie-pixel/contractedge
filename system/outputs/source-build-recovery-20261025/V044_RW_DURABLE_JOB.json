@@ -1,0 +1,25 @@
+{
+  "method_returncode": 0,
+  "paid_retry": false,
+  "counts_in_46_slot_panel": false,
+  "formal_ready": false,
+  "receipt_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+  "terminal_validation": {
+    "classification": "METHOD_RESULT",
+    "method_status": "PUBLIC_REVIEW_COMPLETE",
+    "unknown_requests": 0,
+    "not_dispatched_requests": 0,
+    "candidate_verified": true,
+    "coordinator_policy_failures": [],
+    "recovery_failure": null,
+    "semantic_outcome_upgraded": false
+  },
+  "cleanup": {
+    "status": "OWNED_CONTAINERS_CLOSED",
+    "removed": []
+  },
+  "scorer_returncode": 0,
+  "independent_status": "PASS",
+  "native_score_status": "PASS",
+  "finished_utc": "2026-10-25T02:11:21.572415+00:00"
+}

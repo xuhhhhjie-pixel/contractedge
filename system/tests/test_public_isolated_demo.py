@@ -91,10 +91,7 @@ class BoundarySessions:
                             actual = {'modes': ['regressed'] * len(spec['scenarios'])}
                     else:
                         actual = dict(expected) if status == 'PASS' else {key: 'broken-fixture-value' for key in expected}
-                    # Mirror the frozen checker output from its trusted input
-                    # spec; this mock remains no evidence of actual isolation.
-                    checks.append({'id': identifier, 'status': status, 'actual': actual, 'expected': expected,
-                                   **spec['check_specs'][identifier]})
+                    checks.append({'id': identifier, 'status': status, 'actual': actual, 'expected': expected})
                 path = root / 'mock-observer.stdout'
                 path.write_text(json.dumps({'schema_version': 'ce.public_process_checks.v1',
                     'snapshot_id': spec['snapshot_id'], 'input_digest': spec['input_digest'], 'checks': checks}))
@@ -377,7 +374,7 @@ def test_candidate_cleanup_failure_skips_review_and_keeps_the_incumbent(tmp_path
     candidate = read(tmp_path / 'run/repair/rounds/0/public/observation.json')
     assert candidate['runtime']['close']['status'] == 'INFRASTRUCTURE_ERROR'
     assert len(dispatched) == 3  # real diagnosis, plan and concrete edit fixture calls
-    assert not any(r.prompt_version == 'public-postcondition-review.v1' for r in dispatched)
+    assert not any(r.prompt_version in {'public-postcondition-review.v1','public-postcondition-review.v2'} for r in dispatched)
     assert trace['final_snapshot_id'] == trace['initial_snapshot_id']
     selected = read(tmp_path / 'run/repair/selected-candidate.json')
     assert reviewed == []

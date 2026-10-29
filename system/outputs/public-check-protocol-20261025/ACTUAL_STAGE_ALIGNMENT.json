@@ -1,0 +1,31 @@
+{
+  "scope": "ACTUAL_RUNTIME_SYNTHETIC_NORMAL_FLOW_NOT_MODEL_EFFECTIVENESS",
+  "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df",
+  "model_http_calls": 0,
+  "status": "PASS",
+  "check_ids": [
+    "contractedge-public-process-v1:disabled",
+    "contractedge-public-process-v1:selected",
+    "contractedge-public-process-v1:stable"
+  ],
+  "stages": {
+    "initial_diagnosis": "explicit registry delivered",
+    "changeset": "same registry and bindable schema",
+    "execution": "model-authored fixture bindings preserved in actual accepted_plan",
+    "observation": "explicit frozen suite with finite member coverage",
+    "review": {
+      "method": "BOUND_CHECK_AGGREGATION",
+      "decision": "PASS"
+    },
+    "feedback": "same scenario and exact hashed observation excerpts preserved"
+  },
+  "raw_evidence_sha256": {
+    "model_calls.json": "abcaad31600525cd3a1c2226ba4a56581318dbc8596b7b02315b71d9cdd57618",
+    "rounds/0/public-review-plan.json": "9437e43bee78b0ad558f73d18fdf98b375ce20934686fe3c8ef28dfa9c3de468",
+    "rounds/0/public-observation.json": "41f0fcf1596c630d4d722cb1c656d2ca173892e9bc93dc59d611041079528171",
+    "rounds/0/public-review.json": "85a57894e93c0d2a198af7bb2905e7f78d35767100fd063073d5c1c5285528b5",
+    "selected-feedback.json": "0fc95f76013c8678f781b3547fa043b673221faab7e5d558551a88c2caf20fbc"
+  },
+  "raw_evidence_root": "/home/xhj/contractedge-v045-runtime-acceptance-20261025/actual8/topomen-native-normal/repair",
+  "limitation": "No actual re-diagnosis or model-driven repair-effect attribution in this normal synthetic flow; correction/revision and drift rejection covered by targeted tests."
+}

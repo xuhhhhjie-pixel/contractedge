@@ -108,17 +108,34 @@ def summarize_failure_tasks(value):
             group['affected_checks'].append(check['id']);group['observation_refs'].append(record['id'])
     runtime=[]
     for failure in value.get('observation_diagnostics',[]):
-        if (failure.get('kind')!='CANDIDATE_RUNTIME_FAILURE'
+        compile_failure = failure.get('kind') == 'CANDIDATE_BUILD_FAILURE'
+        from contractedge.execution.public import is_registered_readiness_failure
+        readiness_failure = failure.get('kind')=='CANDIDATE_RUNTIME_FAILURE' and is_registered_readiness_failure(failure)
+        if compile_failure:
+            from contractedge.execution.public import has_candidate_build_failure
+            if not has_candidate_build_failure(dict(status='EXECUTION_FAILED',
+                    snapshot_id=value.get('to_snapshot'), candidate_build_failures=[failure])):
+                continue
+        if (failure.get('kind') not in {'CANDIDATE_RUNTIME_FAILURE','CANDIDATE_BUILD_FAILURE'}
                 or failure.get('snapshot_id')!=value.get('to_snapshot')
-                or failure.get('operation')!='PRODUCTION_PROCESS_START'
-                or failure.get('status')!='FAILED' or not failure.get('source_locations')
+                or failure.get('operation')!=('PRODUCTION_COMPILE' if compile_failure else
+                    'PRODUCTION_PROCESS_READINESS' if readiness_failure else 'PRODUCTION_PROCESS_START')
+                or failure.get('status')!='FAILED' or not readiness_failure and not failure.get('source_locations')
                 or not isinstance(failure.get('stderr_excerpt'),str)):continue
         message=failure['stderr_excerpt']
-        runtime.append(dict(scenario=failure.get('scenario'),error_field='production_startup',
+        if readiness_failure:
+            message=('The registered wrapper built and started the process, but readiness was not observed '
+                'within 20 seconds before scenario alerts were injected. Implementation versus environment cause is unknown. '
+                'Inspect initialization with zero work, the first item and a full initial backlog; signal completion only after the required state exists. '
+                'Raw registered wrapper: '+message)
+        runtime.append(dict(scenario=failure.get('scenario'),error_field='production_compile' if compile_failure else
+            'production_readiness' if readiness_failure else 'production_startup',
             actual_error=message[:1500],error_truncated=len(message)>1500 or failure.get('stderr_truncated',False),
             source_locations=failure['source_locations'],stderr_sha256=failure.get('stderr_sha256'),
             affected_checks=[],observation_refs=[],snapshot_id=value['to_snapshot'],
-            interpretation='Registered production startup failed at this recorded snapshot; root cause remains unproven; compare its snapshot with current source before use'))
+            interpretation=('Registered source compilation failed' if compile_failure else
+                'Registered public readiness was not observed in its finite window' if readiness_failure else 'Registered production startup failed')
+                +' at this recorded snapshot; root cause remains unproven; compare its snapshot with current source before use'))
     errors=(runtime+list(groups.values()))[:4]
     conflicts=[c for c in (value.get('helper_preconditions') or {}).get('checks',[]) if c.get('status')=='CONFLICT'][:8]
     predicates,omitted=_failed_predicate_tasks(value)
@@ -560,11 +577,14 @@ def make_feedback(*, case_id: str, run_id: str, input_digest: str, round_id: int
             'status': statuses.get(check_id, 'UNKNOWN'),
             'interpretation': 'Traceable association, not independent proof of causal attribution'})
     runtime_errors = [dict(r) for r in observation_diagnostics if r.get('kind')=='CANDIDATE_RUNTIME_FAILURE']
+    build_errors = [dict(r) for r in observation_diagnostics if r.get('kind')=='CANDIDATE_BUILD_FAILURE']
     adapter_errors = [dict(r) for r in observation_diagnostics
-        if r.get('status') not in {'COMPLETE','NOT_APPLICABLE'} and r.get('kind')!='CANDIDATE_RUNTIME_FAILURE']
+        if r.get('status') not in {'COMPLETE','NOT_APPLICABLE'}
+        and r.get('kind') not in {'CANDIDATE_RUNTIME_FAILURE','CANDIDATE_BUILD_FAILURE'}]
     for pending_item in pending:
         check = next((c for c in checks if c['id']==pending_item['id']), {})
         pending_item['reason_category'] = ('OBSERVED_FAILURE' if check.get('status')=='FAIL' else
+            'EXECUTION_BLOCKED' if build_errors else
             'OBSERVATION_ADAPTER_ERROR' if adapter_errors else
             'NOT_PUBLICLY_OBSERVABLE' if pending_item.get('verification_kind') in {'NOT_PUBLICLY_OBSERVABLE','BUILD_ONLY'} else
             'CHECK_COVERAGE_INSUFFICIENT' if check.get('evidence_validation') else 'EVIDENCE_INSUFFICIENT')
@@ -575,9 +595,10 @@ def make_feedback(*, case_id: str, run_id: str, input_digest: str, round_id: int
             'coverage':pending_item.get('check_coverage','UNDECLARED'),
             'remaining_scope':'Original requirement beyond these finite checks remains unverified' if pending_item.get('check_coverage')=='NECESSARY_ONLY' else None,
             'action':'REPAIR_IMPLEMENTATION' if check.get('status')=='FAIL' else
+                'REPAIR_IMPLEMENTATION' if build_errors else
                 'MAINTAIN_ADAPTER' if adapter_errors else
                 'STOP_UNOBSERVABLE' if pending_item.get('verification_kind') in {'NOT_PUBLICLY_OBSERVABLE','BUILD_ONLY'} else 'OBTAIN_SUFFICIENT_PUBLIC_EVIDENCE'}
-    payload['observation_diagnostics'] = adapter_errors+runtime_errors
+    payload['observation_diagnostics'] = adapter_errors+runtime_errors+build_errors
     payload['next_action'] = ('REPAIR_OBSERVATION_ADAPTER' if adapter_errors and not any(c.get('status')=='FAIL' for c in checks)
         else route if route!='STOP' else 'STOP_UNOBSERVABLE' if pending and all(p.get('reason_category')=='NOT_PUBLICLY_OBSERVABLE' for p in pending)
         else 'STOP_UNCERTAIN' if pending else 'COMPLETE')

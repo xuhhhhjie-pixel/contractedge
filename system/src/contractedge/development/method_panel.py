@@ -104,8 +104,8 @@ class PanelProvider:
                 'planned_check': 'Run the fixed published requirement profile.',
                 'check_scope': 'Finite public candidate process outputs.',
                 'verification_kind': 'PUBLIC_BEHAVIOR',
-                'verification_scope': {'scenario': check['scenario']},
                 'behavior_check_refs': [PROBE_ID + ':' + check['id']],
+                'verification_scope': {'scenario': 'public-requirement-panel'},
                 'check_coverage': 'ALL_OF',
                 'coverage_rationale': 'This authored condition is restricted to its exact finite public predicate.'}
                 for index, check in enumerate(self.case['checks'])]
@@ -126,7 +126,7 @@ class PanelProvider:
             edits = synthetic_edits(self.case['fixture_id'], self.mode, self.executions)
             payload = {'replacements': [{'key': row['change_id'], 'file': row['path'],
                 'before': row['old_text'], 'after': row['new_text']} for row in edits]}
-        elif version == 'public-postcondition-review.v1':
+        elif version in {'public-postcondition-review.v1','public-postcondition-review.v2'}:
             # Review is generated from this run's raw public records only.
             records = body['public_observations']
             checks = []
