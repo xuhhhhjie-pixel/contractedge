@@ -4,10 +4,10 @@
 
 ## 获取与安装
 
-从仓库交付分支获取，保存实际提交SHA；交付提交不等于默认main已经合并。
+从固定交付标签获取，保存实际提交SHA；后续协作分支为fix/planning-helper-contracts-20261027。交付提交不等于默认main已经合并。
 
 ```bash
-git clone --branch fix/planning-helper-contracts-20261027 https://github.com/xuhhhhjie-pixel/contractedge.git
+git clone --branch system-v0.6.68-qualified-20261029 https://github.com/xuhhhhjie-pixel/contractedge.git
 cd contractedge
 git rev-parse HEAD
 cd system
