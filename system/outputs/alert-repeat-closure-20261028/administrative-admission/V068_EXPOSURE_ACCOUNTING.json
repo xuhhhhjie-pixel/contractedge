@@ -1,0 +1,139 @@
+{
+  "identity": {
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
+    "candidate_config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "registration": {
+    "path": "/home/xhj/contractedge-planning-branch-continuity-20261026/system/outputs/fixed46-isolated-panel-20261025/ORIGINAL_REGISTRATION_v038.json",
+    "sha256": "e24f0320987a15c9ed2867ebb6f55efb104c4e7ce4b6a9bccd1565a5d34e099b"
+  },
+  "current_partition": {
+    "path": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019/partition/member_groups.jsonl",
+    "sha256": "aa32b07dc8cd2f3c946cb54e42385bded2ccbdf3cdd31b2b358a999480146aea"
+  },
+  "cases": [
+    {
+      "case_id": "RW-CAND-130",
+      "group": "A",
+      "actual_split": "development",
+      "registered_exposure": "DEVELOPMENT_EXPOSED",
+      "source_sha256": "4eb10ef4b81b9ddf338bde5bc983c64ab7f873003f40da31c04a14f54e369675"
+    },
+    {
+      "case_id": "R3-KPT-4673",
+      "group": "A",
+      "actual_split": "development",
+      "registered_exposure": "DEVELOPMENT_EXPOSED",
+      "source_sha256": "2a5e761ae5f266f234ff9e3fe68ac1456017aa8e726ecfaef9560cdede645606"
+    },
+    {
+      "case_id": "R3-KOPF-726",
+      "group": "A",
+      "actual_split": "development",
+      "registered_exposure": "DEVELOPMENT_EXPOSED",
+      "source_sha256": "32577cbb42230eb54736cd7158c59c0eef23e220e6165ce59e0806fc93937bf5"
+    },
+    {
+      "case_id": "R4-PROVIDER-HELM-408",
+      "group": "A",
+      "actual_split": "development",
+      "registered_exposure": "DEVELOPMENT_EXPOSED",
+      "source_sha256": "a6ca9e6a0ac9664a45c27290da3f0f5f02f3e9c8dd0071461a7d7b557575b4c9"
+    },
+    {
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "group": "A",
+      "actual_split": "development",
+      "registered_exposure": "DEVELOPMENT_EXPOSED",
+      "source_sha256": "4099dc909bea05ad42142b4b927529bd968933d2120b5c966ff99e556527627a"
+    },
+    {
+      "case_id": "RW-ALERTMANAGER-4705",
+      "group": "A",
+      "actual_split": "development",
+      "registered_exposure": "DEVELOPMENT_EXPOSED",
+      "source_sha256": "50c36cd5d3b15c87e0ab22591306ab9e9ce29bd9fb4dde7207bc061897529182"
+    },
+    {
+      "case_id": "RW-CERTMANAGER-9116",
+      "group": "A",
+      "actual_split": "development",
+      "registered_exposure": "DEVELOPMENT_EXPOSED",
+      "source_sha256": "884a0d04adbc61933d0f5f80af9b2870050f3ae7bedfa2e032a38419de28776e"
+    },
+    {
+      "case_id": "RW-CAND-114",
+      "group": "B",
+      "actual_split": "development",
+      "registered_exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "source_sha256": "3568f7d916d2dae1d5b2c3fb68a76fd2958f67dfa65a2e053566c6baa218d051"
+    },
+    {
+      "case_id": "RW-CAND-134",
+      "group": "B",
+      "actual_split": "development",
+      "registered_exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "source_sha256": "d271dd8d7fd5abe60d585fd98b2a9a91409c9aa19100f66813164d94aa160239"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1589",
+      "group": "B",
+      "actual_split": "development",
+      "registered_exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "source_sha256": "40d9431438baa508ff92afde33e99ab575592d6ca88dd25c2a41cb8fe1316910"
+    },
+    {
+      "case_id": "RW-ARGO-CD-27136",
+      "group": "B",
+      "actual_split": "development",
+      "registered_exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "source_sha256": "804895d7bd54db581614bd48cea73b5430ddb2d542d42f565aca319faefd4356"
+    },
+    {
+      "case_id": "R3-KUBEBUILDER-5119",
+      "group": "B",
+      "actual_split": "development",
+      "registered_exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "source_sha256": "af9392e0682d280a6d169074fb9b7b58d6615a310b3c0b134019947cf27ad87d"
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "group": "B",
+      "actual_split": "development",
+      "registered_exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "source_sha256": "ef69a8f3a7256074085c02ecfb4a2d8b5b86eb73992d3fb91d649baf72b47906"
+    },
+    {
+      "case_id": "R4-CAPA-5111",
+      "group": "B",
+      "actual_split": "development",
+      "registered_exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "source_sha256": "659b2f40dbb87d22a936ddfaa31abefeb4413e9dc7aac2bdf59615a2d42be290"
+    },
+    {
+      "case_id": "R4-PROVIDER-AWS-2339",
+      "group": "B",
+      "actual_split": "development",
+      "registered_exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "source_sha256": "78118551cd2567d86b908a206069ad67b74d8f8b9ac5c07e5367fc50fe75e19c"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "group": "B",
+      "actual_split": "development",
+      "registered_exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "source_sha256": "80bafc81ab3d65d3e77165410e584cae7f11677dc2b9bd25f5a666d352ada2fc"
+    },
+    {
+      "case_id": "RW-NATS-SERVER-6609",
+      "group": "B",
+      "actual_split": "development",
+      "registered_exposure": "NOT_USED_FOR_CURRENT_TUNING; HISTORICAL_UNEXPOSED_NOT_PROVEN",
+      "source_sha256": "0a2f4775a91e1860f170d9384b28cd35fb4f936c02b440cd45a0fe72407c89df"
+    }
+  ],
+  "scope": "All cases are development. A exposed; B not used to change this frozen method. Historical unexposed status is not proven. No validation/blind or statistical-significance claim.",
+  "formal_ready": false
+}

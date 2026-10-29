@@ -1,0 +1,74 @@
+{
+  "status": "PASS",
+  "checked_at": "2026-10-29T02:39:13.165170+00:00",
+  "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+  "reconstructed_files": 9090,
+  "cases": 150,
+  "public_tool_files_matched": 98,
+  "evaluator_registry_opaque_assets_hash_verified": 318,
+  "private_bodies_parsed": false,
+  "input_manifest_sha256": {
+    "public/manifest.jsonl": "469d2aea9ee8d7d9b00cddcbc7cdbb2816eb27b7b23f3cde92ec3032848f5492",
+    "evaluation/manifest.jsonl": "c3c93eb008adbbaadc32ddc2a7f701c0e803307ae1209bf589dbdc94819ab31e",
+    "partition/member_groups.jsonl": "aa32b07dc8cd2f3c946cb54e42385bded2ccbdf3cdd31b2b358a999480146aea"
+  },
+  "metadata_sha256": {
+    "RELEASE_ENTRY.json": "6f0d200363dbe14595f2cb3c4cbbaab324b0cc62eb760acc4393d3fbe02a66ef",
+    "runtime/manifest.json": "4f99d952194852c3dd4630e55ef7d3bd36e5cc8a383daa3d42e5eafcf5b8a03d",
+    "partition/summary.json": "f2395886ea27d8c1a57ed0523800352234b15471baacfc04034f2a7edd47256f",
+    "tools/verify_release150.py": "7a12e78ab9bede4f7a9b5655ed2f042e57e0277fc02b3676eb5ffef530847f9d",
+    "tools/verify_release147.py": "afb9a68a239ac703c82a22b73969a1871bd11bb838c8a65cd447640ead42b705",
+    "tools/public_runners/contract_v1/run_contract_public.py": "f43fcc8557a57db9b0472403d9a6b9cc0fbf7b8bbf6735385385d484bd252d0f"
+  },
+  "assembly": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_RELEASE_LAYOUT_ASSEMBLY.json",
+    "sha256": "9badab016a444bdeef72b13b8845eb4ffd424ea3c42fe8a23bcc2ac751adb2cd"
+  },
+  "assembler": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/tools/assemble_formal150.py",
+    "sha256": "cb953924de44eeded92528434806fe41dc42b9615838a54e50dd222a3942cbb2"
+  },
+  "inspected_method_identity": {
+    "path": "/home/xhj/contractedge-delivery-layout-inspect-v068-20261029.json",
+    "sha256": "d146dd387a44f483844d7c5c371934f77a17cd371906281e8e49e1d5deb1d163"
+  },
+  "public_smoke": {
+    "case_id": "RW-CAND-130",
+    "status": "EXECUTION_PASS",
+    "hidden_semantic_evaluation": "NOT_RUN",
+    "private_materials_loaded": false,
+    "scenarios": [
+      {
+        "scenario": "trigger",
+        "exit_code": 0,
+        "elapsed_seconds": 1.069376278668642,
+        "timed_out": false,
+        "output_limited": false
+      },
+      {
+        "scenario": "control",
+        "exit_code": 0,
+        "elapsed_seconds": 0.8178622014820576,
+        "timed_out": false,
+        "output_limited": false
+      }
+    ]
+  },
+  "public_smoke_record": {
+    "path": "/home/xhj/contractedge-delivery-layout-smoke-v068-20261029-public.json",
+    "sha256": "fe90d144e54ce2aeead931f80f7408f5d3e9720b5114d373703780aa709cf667"
+  },
+  "smoke_uses_existing_sealed_patch": true,
+  "new_model_calls": 0,
+  "new_independent_grade_calls": 0,
+  "counts_in_46_slot_panel": false,
+  "formal150_started": false,
+  "scope": "Actual new independent-copy directory reconstructed from published five class payloads; exact registered manifests and98 public tool identities;150 evaluator registry assets checked by hash only; one real public trigger/control replay. Not a new model repair, new independent grade, all150 native execution or another-host certification.",
+  "public_inputs_verified": 150,
+  "public_input_record": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/V068_RELEASE_LAYOUT_PUBLIC150.json",
+    "sha256": "4276be89981c2d6244d936b93fa0899763000e3a30b309ac1bedfb365ee974d7"
+  },
+  "temporary_assembled_directory_retired_after_verification": true,
+  "work_disk_free_bytes_after_cleanup": 53503672320
+}

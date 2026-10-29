@@ -1,6 +1,6 @@
 {
   "schema_version": "ce.current_system_status.v1",
-  "as_of": "2026-10-29T03:19:31.226717+08:00",
+  "as_of": "2026-10-29T10:48:50.737406+08:00",
   "dataset": {
     "schema_version": "ce.experiment_dataset_binding.v1",
     "benchmark_root": "/home/xhj/contractedge/benchmark-ready-export/benchmark/ContractEdge-benchmark150-v1-20261019",
@@ -993,10 +993,24 @@
     "outstanding_delivery_work": []
   },
   "final_delivery_readiness": {
-    "version": "0.6.38",
-    "status": "ISOLATION_QUALIFIED_FINAL_PANEL_PENDING",
-    "formal_ready": false,
-    "audit": "outputs/reliability-closure-20261020/COMPLETION_AUDIT.md"
+    "status": "READY",
+    "formal_ready": true,
+    "report": "outputs/alert-repeat-closure-20261028/administrative-admission/V068_FINAL_ADMISSION.json",
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "gates": {
+      "G0": "PASS",
+      "G1": "PASS",
+      "G2": "PASS",
+      "G3": "PASS",
+      "G4": "PASS",
+      "G5": "PASS",
+      "G6": "PASS"
+    },
+    "as_of_records": 46,
+    "serial_only": true,
+    "administratively_recovered_ack_slots": 1,
+    "formal150_started": false,
+    "scope": "Evidence admission for one frozen candidate; not a guarantee of all-case repair success or formal experiment funding"
   },
   "historical_real_api_experiment_pre_final_optimization": {
     "scope": "Bounded development; formal150/ablations deferred",
@@ -1274,11 +1288,11 @@
     "report": "outputs/final-optimization-20261020/readiness.json",
     "effect_acceptance_passed": false
   },
-  "version": "0.6.64",
-  "status": "TARGETED_RECOVERY_QUALIFICATION_REGISTERED",
-  "repair_reliability_accepted": false,
-  "implementation_completed_claim": false,
-  "formal_ready": false,
+  "version": "0.6.68",
+  "status": "V068_QUALIFIED_DELIVERY_COMPLETE",
+  "repair_reliability_accepted": true,
+  "implementation_completed_claim": true,
+  "formal_ready": true,
   "formal150_started": false,
   "registration": "outputs/declared-comparison-closure-20261024/REGISTERED_QUALIFICATION.json",
   "freeze": "outputs/declared-comparison-closure-20261024/frozen-method-v0.6.40.json",
@@ -1295,126 +1309,7 @@
     "red_failures": 51,
     "red_existing_passes": 14
   },
-  "active_frozen_panels": {
-    "v040_qualification": {
-      "schema_version": "ce.fixed_development_qualification.v1",
-      "version": "0.6.40",
-      "method_digest": "2d117c40ac2c45eb25e440ec33b347da6e25733d5ac300bb4f760d8045246742",
-      "registered_cases": [
-        "RW-CAND-130",
-        "R3-KOPF-726",
-        "RW-ALERTMANAGER-4705"
-      ],
-      "counts_in_46_slot_panel": false,
-      "formal_ready": false,
-      "records": [
-        {
-          "case_id": "RW-CAND-130",
-          "registration_sha256": "21fdeced860e196a4869426113cf0b053ad91db7cbd9acd53f418c2e92d9555b",
-          "receipt_sha256": "76854400bad318307dc133b972b79cad1b397a6f8556a72ea2b454f5ba8cf18b",
-          "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
-          "method_status": "PUBLIC_REVIEW_COMPLETE",
-          "public_reviews": [
-            {
-              "round_id": 0,
-              "decision": "PASS",
-              "method": "MODEL_PUBLIC_REVIEW",
-              "checks": [
-                {
-                  "id": "P1",
-                  "status": "PASS",
-                  "evidence_validation": null
-                },
-                {
-                  "id": "P2",
-                  "status": "PASS",
-                  "evidence_validation": null
-                },
-                {
-                  "id": "preserve:PC1",
-                  "status": "PASS",
-                  "evidence_validation": null
-                }
-              ]
-            }
-          ],
-          "model_calls": 5,
-          "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
-          "final_snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
-          "independent_status": "PASS",
-          "independent_result_sha256": "2271c8ef0d542f5628d64e6603fe2fc499731a2ac9b9838ce9ff26cf2b4d76a0"
-        },
-        {
-          "case_id": "R3-KOPF-726",
-          "registration_sha256": "84ca5cdc55673b8de88445c137c1fd8de86d03dad9cb2e8f9f112a5a74556987",
-          "receipt_sha256": "7c3bd816a5b0668d2cf3c83d4c472e22ec121d4178ff0f8f080418ed9e71438f",
-          "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
-          "method_status": "PUBLIC_REVIEW_COMPLETE",
-          "public_reviews": [
-            {
-              "round_id": 0,
-              "decision": "PASS",
-              "method": "MODEL_PUBLIC_REVIEW",
-              "checks": [
-                {
-                  "id": "P1",
-                  "status": "PASS",
-                  "evidence_validation": null
-                },
-                {
-                  "id": "P2",
-                  "status": "PASS",
-                  "evidence_validation": null
-                }
-              ]
-            }
-          ],
-          "model_calls": 5,
-          "patch_sha256": "184fbb09510ebb9c1190dfdf7ff62a50dd6b209889c27e1ad1415f6660b4ad21",
-          "final_snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
-          "independent_status": "PASS",
-          "independent_result_sha256": "db2063e6403e51c5313f9fab6a5a5f7d670d85dd182e11c17607386935c6f8a4"
-        },
-        {
-          "case_id": "RW-ALERTMANAGER-4705",
-          "registration_sha256": "292b70927323f20b9f2d1041970e8812bfdb723f5f126ab88cedeffc04cde65b",
-          "receipt_sha256": "f801a7c36bdb0555deba50d33c377d46273bff0d7b754e8ba3b0897c3c050912",
-          "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
-          "method_status": "PUBLIC_EXECUTION_COMPLETE",
-          "public_reviews": [
-            {
-              "round_id": 0,
-              "decision": "UNKNOWN",
-              "method": "MODEL_PUBLIC_REVIEW",
-              "checks": [
-                {
-                  "id": "P1",
-                  "status": "UNKNOWN",
-                  "evidence_validation": null
-                },
-                {
-                  "id": "open:OB1",
-                  "status": "UNKNOWN",
-                  "evidence_validation": null
-                }
-              ]
-            }
-          ],
-          "model_calls": 5,
-          "patch_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
-          "final_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
-          "independent_status": "PASS",
-          "independent_result_sha256": "120111d648e4c061e180b51519d4c173a362d7ef66f5505262e4d528a3f1fe70"
-        }
-      ],
-      "updated_at": "2026-10-24T14:15:22.194331+00:00",
-      "status": "COMPLETE"
-    },
-    "original46": {
-      "current_protocol_status": "PENDING_MIGRATION",
-      "historical_results_transferred": false
-    }
-  },
+  "active_frozen_panels": {},
   "optimization_reset": {
     "as_of": "2026-10-24T12:09:47.694861+00:00",
     "gate": "ISOLATED_DEVELOPMENT_PASSED_CLEAN_REPRO_AND_FIXED_PANEL_PENDING",
@@ -1424,223 +1319,27 @@
     "method_version": "0.6.38",
     "source_changed": false
   },
-  "latest_live_result": [
-    {
-      "case_id": "RW-CAND-130",
-      "registration_sha256": "21fdeced860e196a4869426113cf0b053ad91db7cbd9acd53f418c2e92d9555b",
-      "receipt_sha256": "76854400bad318307dc133b972b79cad1b397a6f8556a72ea2b454f5ba8cf18b",
-      "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
-      "method_status": "PUBLIC_REVIEW_COMPLETE",
-      "public_reviews": [
-        {
-          "round_id": 0,
-          "decision": "PASS",
-          "method": "MODEL_PUBLIC_REVIEW",
-          "checks": [
-            {
-              "id": "P1",
-              "status": "PASS",
-              "evidence_validation": null
-            },
-            {
-              "id": "P2",
-              "status": "PASS",
-              "evidence_validation": null
-            },
-            {
-              "id": "preserve:PC1",
-              "status": "PASS",
-              "evidence_validation": null
-            }
-          ]
-        }
-      ],
-      "model_calls": 5,
-      "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
-      "final_snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
-      "independent_status": "PASS",
-      "independent_result_sha256": "2271c8ef0d542f5628d64e6603fe2fc499731a2ac9b9838ce9ff26cf2b4d76a0"
-    },
-    {
-      "case_id": "R3-KOPF-726",
-      "registration_sha256": "84ca5cdc55673b8de88445c137c1fd8de86d03dad9cb2e8f9f112a5a74556987",
-      "receipt_sha256": "7c3bd816a5b0668d2cf3c83d4c472e22ec121d4178ff0f8f080418ed9e71438f",
-      "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
-      "method_status": "PUBLIC_REVIEW_COMPLETE",
-      "public_reviews": [
-        {
-          "round_id": 0,
-          "decision": "PASS",
-          "method": "MODEL_PUBLIC_REVIEW",
-          "checks": [
-            {
-              "id": "P1",
-              "status": "PASS",
-              "evidence_validation": null
-            },
-            {
-              "id": "P2",
-              "status": "PASS",
-              "evidence_validation": null
-            }
-          ]
-        }
-      ],
-      "model_calls": 5,
-      "patch_sha256": "184fbb09510ebb9c1190dfdf7ff62a50dd6b209889c27e1ad1415f6660b4ad21",
-      "final_snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
-      "independent_status": "PASS",
-      "independent_result_sha256": "db2063e6403e51c5313f9fab6a5a5f7d670d85dd182e11c17607386935c6f8a4"
-    },
-    {
-      "case_id": "RW-ALERTMANAGER-4705",
-      "registration_sha256": "292b70927323f20b9f2d1041970e8812bfdb723f5f126ab88cedeffc04cde65b",
-      "receipt_sha256": "f801a7c36bdb0555deba50d33c377d46273bff0d7b754e8ba3b0897c3c050912",
-      "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
-      "method_status": "PUBLIC_EXECUTION_COMPLETE",
-      "public_reviews": [
-        {
-          "round_id": 0,
-          "decision": "UNKNOWN",
-          "method": "MODEL_PUBLIC_REVIEW",
-          "checks": [
-            {
-              "id": "P1",
-              "status": "UNKNOWN",
-              "evidence_validation": null
-            },
-            {
-              "id": "open:OB1",
-              "status": "UNKNOWN",
-              "evidence_validation": null
-            }
-          ]
-        }
-      ],
-      "model_calls": 5,
-      "patch_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
-      "final_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
-      "independent_status": "PASS",
-      "independent_result_sha256": "120111d648e4c061e180b51519d4c173a362d7ef66f5505262e4d528a3f1fe70"
-    }
-  ],
-  "current_experiment": {
-    "schema_version": "ce.fixed_development_qualification.v1",
-    "version": "0.6.40",
-    "method_digest": "2d117c40ac2c45eb25e440ec33b347da6e25733d5ac300bb4f760d8045246742",
-    "registered_cases": [
-      "RW-CAND-130",
-      "R3-KOPF-726",
-      "RW-ALERTMANAGER-4705"
-    ],
-    "counts_in_46_slot_panel": false,
-    "formal_ready": false,
-    "records": [
-      {
-        "case_id": "RW-CAND-130",
-        "registration_sha256": "21fdeced860e196a4869426113cf0b053ad91db7cbd9acd53f418c2e92d9555b",
-        "receipt_sha256": "76854400bad318307dc133b972b79cad1b397a6f8556a72ea2b454f5ba8cf18b",
-        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
-        "method_status": "PUBLIC_REVIEW_COMPLETE",
-        "public_reviews": [
-          {
-            "round_id": 0,
-            "decision": "PASS",
-            "method": "MODEL_PUBLIC_REVIEW",
-            "checks": [
-              {
-                "id": "P1",
-                "status": "PASS",
-                "evidence_validation": null
-              },
-              {
-                "id": "P2",
-                "status": "PASS",
-                "evidence_validation": null
-              },
-              {
-                "id": "preserve:PC1",
-                "status": "PASS",
-                "evidence_validation": null
-              }
-            ]
-          }
-        ],
-        "model_calls": 5,
-        "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
-        "final_snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
-        "independent_status": "PASS",
-        "independent_result_sha256": "2271c8ef0d542f5628d64e6603fe2fc499731a2ac9b9838ce9ff26cf2b4d76a0"
-      },
-      {
-        "case_id": "R3-KOPF-726",
-        "registration_sha256": "84ca5cdc55673b8de88445c137c1fd8de86d03dad9cb2e8f9f112a5a74556987",
-        "receipt_sha256": "7c3bd816a5b0668d2cf3c83d4c472e22ec121d4178ff0f8f080418ed9e71438f",
-        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
-        "method_status": "PUBLIC_REVIEW_COMPLETE",
-        "public_reviews": [
-          {
-            "round_id": 0,
-            "decision": "PASS",
-            "method": "MODEL_PUBLIC_REVIEW",
-            "checks": [
-              {
-                "id": "P1",
-                "status": "PASS",
-                "evidence_validation": null
-              },
-              {
-                "id": "P2",
-                "status": "PASS",
-                "evidence_validation": null
-              }
-            ]
-          }
-        ],
-        "model_calls": 5,
-        "patch_sha256": "184fbb09510ebb9c1190dfdf7ff62a50dd6b209889c27e1ad1415f6660b4ad21",
-        "final_snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
-        "independent_status": "PASS",
-        "independent_result_sha256": "db2063e6403e51c5313f9fab6a5a5f7d670d85dd182e11c17607386935c6f8a4"
-      },
-      {
-        "case_id": "RW-ALERTMANAGER-4705",
-        "registration_sha256": "292b70927323f20b9f2d1041970e8812bfdb723f5f126ab88cedeffc04cde65b",
-        "receipt_sha256": "f801a7c36bdb0555deba50d33c377d46273bff0d7b754e8ba3b0897c3c050912",
-        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
-        "method_status": "PUBLIC_EXECUTION_COMPLETE",
-        "public_reviews": [
-          {
-            "round_id": 0,
-            "decision": "UNKNOWN",
-            "method": "MODEL_PUBLIC_REVIEW",
-            "checks": [
-              {
-                "id": "P1",
-                "status": "UNKNOWN",
-                "evidence_validation": null
-              },
-              {
-                "id": "open:OB1",
-                "status": "UNKNOWN",
-                "evidence_validation": null
-              }
-            ]
-          }
-        ],
-        "model_calls": 5,
-        "patch_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
-        "final_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
-        "independent_status": "PASS",
-        "independent_result_sha256": "120111d648e4c061e180b51519d4c173a362d7ef66f5505262e4d528a3f1fe70"
-      }
-    ],
-    "updated_at": "2026-10-24T14:15:22.194331+00:00",
-    "status": "COMPLETE"
+  "latest_live_result": {
+    "status": "ALL46_TERMINAL",
+    "closed_slots": 46,
+    "certificate": "outputs/alert-repeat-closure-20261028/administrative-admission/V068_FINAL_ADMISSION.json",
+    "primary_candidate_pass": 10,
+    "primary_baseline_pass": 5,
+    "primary_cases": 17,
+    "formal150_started": false
   },
-  "G4": "REQUIRED_SAME_VERSION_REPEAT_AND_FRESH_RECOVERY_PENDING",
-  "G5": "ISOLATED_46_SLOT_DRIVER_AND_REGISTRATION_PENDING",
-  "B_opened": false,
+  "current_experiment": {
+    "status": "REGISTERED_DEVELOPMENT_ACCEPTANCE_COMPLETE",
+    "version": "0.6.68",
+    "closed_slots": 46,
+    "registered_slots": 46,
+    "primary_cases": 17,
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "formal150_started": false
+  },
+  "G4": "PASS_ORIGINAL_SUCCESS_REPEAT_AND_REGISTERED_RECOVERY",
+  "G5": "PASS_ALL46_AND_ORIGINAL_PAIRED_EFFECT_GATES",
+  "B_opened": true,
   "engineering_tests": 1767,
   "budget_snapshot": {
     "limit_cny": 150,
@@ -1651,26 +1350,21 @@
     "as_of": "2026-10-24T14:22:24.933177+00:00",
     "remaining_upper_bound_cny": 46.344968
   },
-  "staged_revision": "0.6.42",
+  "staged_revision": "0.6.68",
   "subtests": 91,
   "frozen_method": "outputs/declared-comparison-closure-20261024/frozen-method-v0.6.40.json",
-  "same_version_candidate_independent_pass_so_far": 0,
+  "same_version_candidate_independent_pass_so_far": 16,
   "staged_optimization": {
-    "status": "MERGED_PENDING_REGRESSION",
-    "source_branch_base": "43c3589",
-    "upstream_main": "89b97f5",
-    "upstream_frozen_package_version": "0.6.27",
-    "scope": "Preserve both architecture phases A-D2 and verified reliability .28-.41 mechanisms",
-    "paid_validation_for_integrated_source": "NOT_RUN",
-    "formal_ready": false
+    "status": "QUALIFIED_DELIVERY_COMPLETE",
+    "version": "0.6.68",
+    "formal_ready": true,
+    "formal150_started": false
   },
   "current_development_revision": {
-    "version": "0.6.45",
-    "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df",
-    "upstream_commit": "89b97f5",
-    "is_original_v0627_freeze": false,
-    "benchmark_effectiveness": "NOT_RUN_FOR_V045",
-    "counts_in_46_slot_panel": false
+    "version": "0.6.68",
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "benchmark_effectiveness": "ORIGINAL46_ACCEPTED",
+    "counts_in_46_slot_panel": true
   },
   "budget_current": {
     "limit_cny": 150,
@@ -3297,37 +2991,26 @@
     }
   },
   "current_development": {
-    "status": "V068_A_REPEAT_RECOVERY_COMPLETE_B_RUNNING",
+    "status": "V068_QUALIFIED_DELIVERY_COMPLETE",
     "planned_version": "0.6.68",
     "base_commit": "b2308e297b524932729ef058982adf7e2c34874f",
     "snapshot": "docs/development/quote-binding-v068-20261028.snapshot.json",
     "planned_snapshot": "docs/development/quote-binding-v068-20261028.snapshot.json",
     "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
-    "formal_ready": false,
-    "paid_dispatch_allowed": true,
+    "formal_ready": true,
+    "paid_dispatch_allowed": false,
     "integration_requires_new_qualification": false,
     "full_new_source_qualification": true,
     "budget_cny": 200,
-    "report": "outputs/alert-repeat-closure-20261028/COMPLETION_AUDIT.md",
+    "report": "outputs/alert-repeat-closure-20261028/FINAL_DELIVERY_AUDIT.md",
     "active_experiment": {
-      "status": "RUNNING",
-      "group": "B",
-      "active_slot": {
-        "case_id": "R3-SKAFFOLD-9732",
-        "group": "B",
-        "repeat": 0,
-        "slot_id": "fixed46-official-v068-20261028-dd301a3401b0a414fdc5a6aa",
-        "variant": "baseline"
-      },
-      "owner_pid": 3661213,
-      "closed_slots": 36,
-      "completed_groups": [
-        "A",
-        "repeat",
-        "recovery"
-      ],
-      "at": "2026-10-29T03:14:25.828456+08:00",
-      "formal_ready": false
+      "status": "REGISTERED_DEVELOPMENT_ACCEPTANCE_COMPLETE",
+      "version": "0.6.68",
+      "closed_slots": 46,
+      "registered_slots": 46,
+      "primary_cases": 17,
+      "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+      "formal150_started": false
     },
     "prior_cohort": {
       "root": "/home/xhj/contractedge-fixed46-source061-20261028",
@@ -3337,11 +3020,10 @@
       "scores_inherited": false
     },
     "next_actions": [
-      "Continue only remaining original B20 slots using the live qualified parent controller; A, repeat and recovery are complete. Do not restart closed slots or add cases.",
-      "After all46 terminals close, let the existing zero-dispatch follower collect registered effects, costs and G0-G6 admission evidence; retain all failures and UNKNOWN.",
-      "Audit final evidence and publish one current-version delivery handoff. Do not start formal150 or change the frozen method during this cohort."
+      "Use the qualified frozen v068 delivery and current runbook; original46 acceptance is complete.",
+      "Before formal150 dispatch, separately register formal protocol, local configuration/environment, exposure strata, budget and serial stop/recovery policy."
     ],
-    "paid_dispatch_scope": "Remaining originally registered B slots only, following verified A/repeat/recovery prerequisites. No replay of closed slots, additional cases or formal150 dispatch.",
+    "paid_dispatch_scope": "No pending registered slots; new formal experiments require separate registration.",
     "full_regression": "outputs/alert-repeat-closure-20261028/V068_FULL_REGRESSION.json",
     "latest_targeted_result": "outputs/alert-repeat-closure-20261028/V067_TARGETED_VALIDATION.json",
     "prior_targeted_failure": "outputs/alert-repeat-closure-20261028/V064_TARGETED_VALIDATION.json",
@@ -3481,31 +3163,30 @@
     "formal_ready": false
   },
   "next_actions": [
-    "Continue only remaining original B20 slots using the live qualified parent controller; A, repeat and recovery are complete. Do not restart closed slots or add cases.",
-    "After all46 terminals close, let the existing zero-dispatch follower collect registered effects, costs and G0-G6 admission evidence; retain all failures and UNKNOWN.",
-    "Audit final evidence and publish one current-version delivery handoff. Do not start formal150 or change the frozen method during this cohort."
+    "Use the qualified frozen v068 delivery and current runbook; original46 acceptance is complete.",
+    "Before formal150 dispatch, separately register formal protocol, local configuration/environment, exposure strata, budget and serial stop/recovery policy."
   ],
   "fixed46_development": {
-    "method_source_version": "0.6.45",
+    "method_source_version": "0.6.68",
     "baseline_source_version": "0.5.5",
     "planned_slots": 46,
-    "scored_slots": 14,
-    "status": "CLOSED_A_EFFECT_GATE_FAILED",
-    "B_opened": false,
-    "counts_from_older_qualifications": 0,
-    "formal_ready": false
+    "scored_slots": 46,
+    "status": "COMPLETE_ACCEPTED",
+    "B_opened": true,
+    "formal_ready": true,
+    "primary_candidate_pass": 10,
+    "primary_baseline_pass": 5,
+    "primary_cases": 17
   },
   "fixed46_execution": {
-    "status": "CLOSED_A_EFFECT_GATE_FAILED",
+    "status": "COMPLETE_ACCEPTED",
     "registered_slots": 46,
-    "verified_completed_slots": 14,
-    "checkpoint": "outputs/fixed46-isolated-panel-20261025/EXECUTION_CHECKPOINT.json",
-    "audit": "outputs/fixed46-isolated-panel-20261025/COMPLETION_AUDIT.md",
-    "formal_ready": false,
-    "method_version": "0.6.45",
-    "scope": "External original worktree045; never counts as046 results",
-    "remaining_slots": 32,
-    "remaining_status": "NOT_RUN_PREREQUISITE_FAILED"
+    "verified_completed_slots": 46,
+    "remaining_slots": 0,
+    "method_version": "0.6.68",
+    "formal_ready": true,
+    "audit": "outputs/alert-repeat-closure-20261028/FINAL_DELIVERY_AUDIT.md",
+    "scope": "Same frozen method with explicit one-slot administrative financial recovery."
   },
   "active_fixed46_execution_worktree": "/home/xhj/contractedge-alert-closure-20261028",
   "historical_ci_binding_verification": {
@@ -3536,42 +3217,41 @@
     "scope": "Offline only; no046 effectiveness or formal admission"
   },
   "current_fixed46_registration": {
-    "status": "RUNNING",
+    "status": "COMPLETE_ACCEPTED",
     "panel": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/panel.json",
     "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
     "original_registration_sha256": "e24f0320987a15c9ed2867ebb6f55efb104c4e7ce4b6a9bccd1565a5d34e099b",
     "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
     "registered_slots": 46,
-    "closed_slots": 36,
+    "closed_slots": 46,
     "scores_inherited": false,
     "extra_cases_added": 0,
     "early_gate_reuses_original_necessary_conditions": true,
     "controller_necessary_failure_checks": 5,
-    "formal_ready": false,
+    "formal_ready": true,
     "method_version": "0.6.68",
     "administrative_amendment": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/amendment.json",
     "original_slot_ids_preserved": true
   },
   "final_delivery_admission": {
-    "status": "NOT_READY_V068_REPETITION_RECOVERY_B_PENDING",
-    "formal_ready": false,
-    "report": "outputs/alert-repeat-closure-20261028/administrative-admission",
-    "current_progress_report": "outputs/alert-repeat-closure-20261028/V068_ADMINISTRATIVE_RECOVERY.md",
-    "as_of_records": 36,
+    "status": "READY",
+    "formal_ready": true,
+    "report": "outputs/alert-repeat-closure-20261028/administrative-admission/V068_FINAL_ADMISSION.json",
     "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
     "gates": {
-      "G0": "PASS_STATIC150",
-      "G1": "PASS_IMPLEMENTATION_MAPPING_NOT_INDEPENDENT_EFFECT_CERTIFICATION",
-      "G2": "PASS_EXACT_SOURCE_ENGINEERING",
-      "G3": "PENDING_COMPLETE_COHORT_PROVENANCE",
-      "G4": "PENDING_REGISTERED_REPETITION_AND_RECOVERY",
-      "G5": "PENDING_FIXED_SAME_SOURCE_PANEL",
-      "G6": "PASS_SAME_SERVER_CLEAN_CLONE_OPERATIONAL_REPLAY"
+      "G0": "PASS",
+      "G1": "PASS",
+      "G2": "PASS",
+      "G3": "PASS",
+      "G4": "PASS",
+      "G5": "PASS",
+      "G6": "PASS"
     },
+    "as_of_records": 46,
     "serial_only": true,
-    "controlled_ack_continuation_counts_in_original46": false,
+    "administratively_recovered_ack_slots": 1,
     "formal150_started": false,
-    "scope": "Current v068 evidence only; all original thresholds retained. Historical aggregates moved to an explicitly historical field."
+    "scope": "Evidence admission for one frozen candidate; not a guarantee of all-case repair success or formal experiment funding"
   },
   "active_provider": {
     "provider_config": "/home/xhj/contractedge-alert-closure-20261028/system/configs/development-deepseek-official-budget200.json",
@@ -3611,5 +3291,451 @@
     "current_parent_qualification": "79tests+2subtests; saved211465input/16384output RPC oldUNKNOWN/newDONE with0HTTP; real ACK once-running",
     "scope": "Prior aggregate is historical evidence only; current v068 effect/admission aggregation not yet complete"
   },
-  "active_fixed46_parent_root": "/home/xhj/contractedge-parent402-v068-20261028/system"
+  "active_fixed46_parent_root": "/home/xhj/contractedge-parent402-v068-20261028/system",
+  "historical_pre_v068_final_delivery": {
+    "version": "0.6.64",
+    "status": "TARGETED_RECOVERY_QUALIFICATION_REGISTERED",
+    "formal_ready": false,
+    "repair_reliability_accepted": false,
+    "implementation_completed_claim": false,
+    "current_experiment": {
+      "schema_version": "ce.fixed_development_qualification.v1",
+      "version": "0.6.40",
+      "method_digest": "2d117c40ac2c45eb25e440ec33b347da6e25733d5ac300bb4f760d8045246742",
+      "registered_cases": [
+        "RW-CAND-130",
+        "R3-KOPF-726",
+        "RW-ALERTMANAGER-4705"
+      ],
+      "counts_in_46_slot_panel": false,
+      "formal_ready": false,
+      "records": [
+        {
+          "case_id": "RW-CAND-130",
+          "registration_sha256": "21fdeced860e196a4869426113cf0b053ad91db7cbd9acd53f418c2e92d9555b",
+          "receipt_sha256": "76854400bad318307dc133b972b79cad1b397a6f8556a72ea2b454f5ba8cf18b",
+          "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+          "method_status": "PUBLIC_REVIEW_COMPLETE",
+          "public_reviews": [
+            {
+              "round_id": 0,
+              "decision": "PASS",
+              "method": "MODEL_PUBLIC_REVIEW",
+              "checks": [
+                {
+                  "id": "P1",
+                  "status": "PASS",
+                  "evidence_validation": null
+                },
+                {
+                  "id": "P2",
+                  "status": "PASS",
+                  "evidence_validation": null
+                },
+                {
+                  "id": "preserve:PC1",
+                  "status": "PASS",
+                  "evidence_validation": null
+                }
+              ]
+            }
+          ],
+          "model_calls": 5,
+          "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+          "final_snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+          "independent_status": "PASS",
+          "independent_result_sha256": "2271c8ef0d542f5628d64e6603fe2fc499731a2ac9b9838ce9ff26cf2b4d76a0"
+        },
+        {
+          "case_id": "R3-KOPF-726",
+          "registration_sha256": "84ca5cdc55673b8de88445c137c1fd8de86d03dad9cb2e8f9f112a5a74556987",
+          "receipt_sha256": "7c3bd816a5b0668d2cf3c83d4c472e22ec121d4178ff0f8f080418ed9e71438f",
+          "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+          "method_status": "PUBLIC_REVIEW_COMPLETE",
+          "public_reviews": [
+            {
+              "round_id": 0,
+              "decision": "PASS",
+              "method": "MODEL_PUBLIC_REVIEW",
+              "checks": [
+                {
+                  "id": "P1",
+                  "status": "PASS",
+                  "evidence_validation": null
+                },
+                {
+                  "id": "P2",
+                  "status": "PASS",
+                  "evidence_validation": null
+                }
+              ]
+            }
+          ],
+          "model_calls": 5,
+          "patch_sha256": "184fbb09510ebb9c1190dfdf7ff62a50dd6b209889c27e1ad1415f6660b4ad21",
+          "final_snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
+          "independent_status": "PASS",
+          "independent_result_sha256": "db2063e6403e51c5313f9fab6a5a5f7d670d85dd182e11c17607386935c6f8a4"
+        },
+        {
+          "case_id": "RW-ALERTMANAGER-4705",
+          "registration_sha256": "292b70927323f20b9f2d1041970e8812bfdb723f5f126ab88cedeffc04cde65b",
+          "receipt_sha256": "f801a7c36bdb0555deba50d33c377d46273bff0d7b754e8ba3b0897c3c050912",
+          "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+          "method_status": "PUBLIC_EXECUTION_COMPLETE",
+          "public_reviews": [
+            {
+              "round_id": 0,
+              "decision": "UNKNOWN",
+              "method": "MODEL_PUBLIC_REVIEW",
+              "checks": [
+                {
+                  "id": "P1",
+                  "status": "UNKNOWN",
+                  "evidence_validation": null
+                },
+                {
+                  "id": "open:OB1",
+                  "status": "UNKNOWN",
+                  "evidence_validation": null
+                }
+              ]
+            }
+          ],
+          "model_calls": 5,
+          "patch_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
+          "final_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
+          "independent_status": "PASS",
+          "independent_result_sha256": "120111d648e4c061e180b51519d4c173a362d7ef66f5505262e4d528a3f1fe70"
+        }
+      ],
+      "updated_at": "2026-10-24T14:15:22.194331+00:00",
+      "status": "COMPLETE"
+    },
+    "latest_live_result": [
+      {
+        "case_id": "RW-CAND-130",
+        "registration_sha256": "21fdeced860e196a4869426113cf0b053ad91db7cbd9acd53f418c2e92d9555b",
+        "receipt_sha256": "76854400bad318307dc133b972b79cad1b397a6f8556a72ea2b454f5ba8cf18b",
+        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "public_reviews": [
+          {
+            "round_id": 0,
+            "decision": "PASS",
+            "method": "MODEL_PUBLIC_REVIEW",
+            "checks": [
+              {
+                "id": "P1",
+                "status": "PASS",
+                "evidence_validation": null
+              },
+              {
+                "id": "P2",
+                "status": "PASS",
+                "evidence_validation": null
+              },
+              {
+                "id": "preserve:PC1",
+                "status": "PASS",
+                "evidence_validation": null
+              }
+            ]
+          }
+        ],
+        "model_calls": 5,
+        "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+        "final_snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+        "independent_status": "PASS",
+        "independent_result_sha256": "2271c8ef0d542f5628d64e6603fe2fc499731a2ac9b9838ce9ff26cf2b4d76a0"
+      },
+      {
+        "case_id": "R3-KOPF-726",
+        "registration_sha256": "84ca5cdc55673b8de88445c137c1fd8de86d03dad9cb2e8f9f112a5a74556987",
+        "receipt_sha256": "7c3bd816a5b0668d2cf3c83d4c472e22ec121d4178ff0f8f080418ed9e71438f",
+        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+        "method_status": "PUBLIC_REVIEW_COMPLETE",
+        "public_reviews": [
+          {
+            "round_id": 0,
+            "decision": "PASS",
+            "method": "MODEL_PUBLIC_REVIEW",
+            "checks": [
+              {
+                "id": "P1",
+                "status": "PASS",
+                "evidence_validation": null
+              },
+              {
+                "id": "P2",
+                "status": "PASS",
+                "evidence_validation": null
+              }
+            ]
+          }
+        ],
+        "model_calls": 5,
+        "patch_sha256": "184fbb09510ebb9c1190dfdf7ff62a50dd6b209889c27e1ad1415f6660b4ad21",
+        "final_snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
+        "independent_status": "PASS",
+        "independent_result_sha256": "db2063e6403e51c5313f9fab6a5a5f7d670d85dd182e11c17607386935c6f8a4"
+      },
+      {
+        "case_id": "RW-ALERTMANAGER-4705",
+        "registration_sha256": "292b70927323f20b9f2d1041970e8812bfdb723f5f126ab88cedeffc04cde65b",
+        "receipt_sha256": "f801a7c36bdb0555deba50d33c377d46273bff0d7b754e8ba3b0897c3c050912",
+        "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+        "method_status": "PUBLIC_EXECUTION_COMPLETE",
+        "public_reviews": [
+          {
+            "round_id": 0,
+            "decision": "UNKNOWN",
+            "method": "MODEL_PUBLIC_REVIEW",
+            "checks": [
+              {
+                "id": "P1",
+                "status": "UNKNOWN",
+                "evidence_validation": null
+              },
+              {
+                "id": "open:OB1",
+                "status": "UNKNOWN",
+                "evidence_validation": null
+              }
+            ]
+          }
+        ],
+        "model_calls": 5,
+        "patch_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
+        "final_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
+        "independent_status": "PASS",
+        "independent_result_sha256": "120111d648e4c061e180b51519d4c173a362d7ef66f5505262e4d528a3f1fe70"
+      }
+    ],
+    "next_actions": [
+      "Continue only remaining original B20 slots using the live qualified parent controller; A, repeat and recovery are complete. Do not restart closed slots or add cases.",
+      "After all46 terminals close, let the existing zero-dispatch follower collect registered effects, costs and G0-G6 admission evidence; retain all failures and UNKNOWN.",
+      "Audit final evidence and publish one current-version delivery handoff. Do not start formal150 or change the frozen method during this cohort."
+    ],
+    "final_delivery_admission": {
+      "status": "NOT_READY_V068_REPETITION_RECOVERY_B_PENDING",
+      "formal_ready": false,
+      "report": "outputs/alert-repeat-closure-20261028/administrative-admission",
+      "current_progress_report": "outputs/alert-repeat-closure-20261028/V068_ADMINISTRATIVE_RECOVERY.md",
+      "as_of_records": 36,
+      "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+      "gates": {
+        "G0": "PASS_STATIC150",
+        "G1": "PASS_IMPLEMENTATION_MAPPING_NOT_INDEPENDENT_EFFECT_CERTIFICATION",
+        "G2": "PASS_EXACT_SOURCE_ENGINEERING",
+        "G3": "PENDING_COMPLETE_COHORT_PROVENANCE",
+        "G4": "PENDING_REGISTERED_REPETITION_AND_RECOVERY",
+        "G5": "PENDING_FIXED_SAME_SOURCE_PANEL",
+        "G6": "PASS_SAME_SERVER_CLEAN_CLONE_OPERATIONAL_REPLAY"
+      },
+      "serial_only": true,
+      "controlled_ack_continuation_counts_in_original46": false,
+      "formal150_started": false,
+      "scope": "Current v068 evidence only; all original thresholds retained. Historical aggregates moved to an explicitly historical field."
+    },
+    "current_fixed46_registration": {
+      "status": "COMPLETE_ACCEPTED",
+      "panel": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/panel.json",
+      "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
+      "original_registration_sha256": "e24f0320987a15c9ed2867ebb6f55efb104c4e7ce4b6a9bccd1565a5d34e099b",
+      "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+      "registered_slots": 46,
+      "closed_slots": 46,
+      "scores_inherited": false,
+      "extra_cases_added": 0,
+      "early_gate_reuses_original_necessary_conditions": true,
+      "controller_necessary_failure_checks": 5,
+      "formal_ready": true,
+      "method_version": "0.6.68",
+      "administrative_amendment": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028/amendment.json",
+      "original_slot_ids_preserved": true
+    },
+    "current_development_revision": {
+      "version": "0.6.45",
+      "source_sha256": "df177bfcc7b18a2715851a901e39f10e6ad3879790473fc5f120c66cd3e695df",
+      "upstream_commit": "89b97f5",
+      "is_original_v0627_freeze": false,
+      "benchmark_effectiveness": "NOT_RUN_FOR_V045",
+      "counts_in_46_slot_panel": false
+    },
+    "fixed46_development": {
+      "method_source_version": "0.6.45",
+      "baseline_source_version": "0.5.5",
+      "planned_slots": 46,
+      "scored_slots": 14,
+      "status": "CLOSED_A_EFFECT_GATE_FAILED",
+      "B_opened": false,
+      "counts_from_older_qualifications": 0,
+      "formal_ready": false
+    },
+    "fixed46_execution": {
+      "status": "CLOSED_A_EFFECT_GATE_FAILED",
+      "registered_slots": 46,
+      "verified_completed_slots": 14,
+      "checkpoint": "outputs/fixed46-isolated-panel-20261025/EXECUTION_CHECKPOINT.json",
+      "audit": "outputs/fixed46-isolated-panel-20261025/COMPLETION_AUDIT.md",
+      "formal_ready": false,
+      "method_version": "0.6.45",
+      "scope": "External original worktree045; never counts as046 results",
+      "remaining_slots": 32,
+      "remaining_status": "NOT_RUN_PREREQUISITE_FAILED"
+    },
+    "G4": "REQUIRED_SAME_VERSION_REPEAT_AND_FRESH_RECOVERY_PENDING",
+    "G5": "ISOLATED_46_SLOT_DRIVER_AND_REGISTRATION_PENDING",
+    "active_frozen_panels": {
+      "v040_qualification": {
+        "schema_version": "ce.fixed_development_qualification.v1",
+        "version": "0.6.40",
+        "method_digest": "2d117c40ac2c45eb25e440ec33b347da6e25733d5ac300bb4f760d8045246742",
+        "registered_cases": [
+          "RW-CAND-130",
+          "R3-KOPF-726",
+          "RW-ALERTMANAGER-4705"
+        ],
+        "counts_in_46_slot_panel": false,
+        "formal_ready": false,
+        "records": [
+          {
+            "case_id": "RW-CAND-130",
+            "registration_sha256": "21fdeced860e196a4869426113cf0b053ad91db7cbd9acd53f418c2e92d9555b",
+            "receipt_sha256": "76854400bad318307dc133b972b79cad1b397a6f8556a72ea2b454f5ba8cf18b",
+            "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+            "method_status": "PUBLIC_REVIEW_COMPLETE",
+            "public_reviews": [
+              {
+                "round_id": 0,
+                "decision": "PASS",
+                "method": "MODEL_PUBLIC_REVIEW",
+                "checks": [
+                  {
+                    "id": "P1",
+                    "status": "PASS",
+                    "evidence_validation": null
+                  },
+                  {
+                    "id": "P2",
+                    "status": "PASS",
+                    "evidence_validation": null
+                  },
+                  {
+                    "id": "preserve:PC1",
+                    "status": "PASS",
+                    "evidence_validation": null
+                  }
+                ]
+              }
+            ],
+            "model_calls": 5,
+            "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+            "final_snapshot_id": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+            "independent_status": "PASS",
+            "independent_result_sha256": "2271c8ef0d542f5628d64e6603fe2fc499731a2ac9b9838ce9ff26cf2b4d76a0"
+          },
+          {
+            "case_id": "R3-KOPF-726",
+            "registration_sha256": "84ca5cdc55673b8de88445c137c1fd8de86d03dad9cb2e8f9f112a5a74556987",
+            "receipt_sha256": "7c3bd816a5b0668d2cf3c83d4c472e22ec121d4178ff0f8f080418ed9e71438f",
+            "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+            "method_status": "PUBLIC_REVIEW_COMPLETE",
+            "public_reviews": [
+              {
+                "round_id": 0,
+                "decision": "PASS",
+                "method": "MODEL_PUBLIC_REVIEW",
+                "checks": [
+                  {
+                    "id": "P1",
+                    "status": "PASS",
+                    "evidence_validation": null
+                  },
+                  {
+                    "id": "P2",
+                    "status": "PASS",
+                    "evidence_validation": null
+                  }
+                ]
+              }
+            ],
+            "model_calls": 5,
+            "patch_sha256": "184fbb09510ebb9c1190dfdf7ff62a50dd6b209889c27e1ad1415f6660b4ad21",
+            "final_snapshot_id": "8bd65ac5f3eb463d29e2376820786f890df1f77a875a2515cd026f362a8e0736",
+            "independent_status": "PASS",
+            "independent_result_sha256": "db2063e6403e51c5313f9fab6a5a5f7d670d85dd182e11c17607386935c6f8a4"
+          },
+          {
+            "case_id": "RW-ALERTMANAGER-4705",
+            "registration_sha256": "292b70927323f20b9f2d1041970e8812bfdb723f5f126ab88cedeffc04cde65b",
+            "receipt_sha256": "f801a7c36bdb0555deba50d33c377d46273bff0d7b754e8ba3b0897c3c050912",
+            "isolation_status": "METHOD_COMPLETE_PENDING_INDEPENDENT_SCORING",
+            "method_status": "PUBLIC_EXECUTION_COMPLETE",
+            "public_reviews": [
+              {
+                "round_id": 0,
+                "decision": "UNKNOWN",
+                "method": "MODEL_PUBLIC_REVIEW",
+                "checks": [
+                  {
+                    "id": "P1",
+                    "status": "UNKNOWN",
+                    "evidence_validation": null
+                  },
+                  {
+                    "id": "open:OB1",
+                    "status": "UNKNOWN",
+                    "evidence_validation": null
+                  }
+                ]
+              }
+            ],
+            "model_calls": 5,
+            "patch_sha256": "945381a3ecb3ac2bb200b36afd8fa39a42c66385dda9fb2a093a653b693b2b5d",
+            "final_snapshot_id": "23ec4cc893461c1a696f6178afaeec7656792407cc5a7d011442af5eea93e5b2",
+            "independent_status": "PASS",
+            "independent_result_sha256": "120111d648e4c061e180b51519d4c173a362d7ef66f5505262e4d528a3f1fe70"
+          }
+        ],
+        "updated_at": "2026-10-24T14:15:22.194331+00:00",
+        "status": "COMPLETE"
+      },
+      "original46": {
+        "current_protocol_status": "PENDING_MIGRATION",
+        "historical_results_transferred": false
+      }
+    },
+    "final_delivery_readiness": {
+      "version": "0.6.38",
+      "status": "ISOLATION_QUALIFIED_FINAL_PANEL_PENDING",
+      "formal_ready": false,
+      "audit": "outputs/reliability-closure-20261020/COMPLETION_AUDIT.md"
+    },
+    "same_version_candidate_independent_pass_so_far": 0,
+    "staged_revision": "0.6.42",
+    "staged_optimization": {
+      "status": "MERGED_PENDING_REGRESSION",
+      "source_branch_base": "43c3589",
+      "upstream_main": "89b97f5",
+      "upstream_frozen_package_version": "0.6.27",
+      "scope": "Preserve both architecture phases A-D2 and verified reliability .28-.41 mechanisms",
+      "paid_validation_for_integrated_source": "NOT_RUN",
+      "formal_ready": false
+    }
+  },
+  "repair_reliability_scope": "Original finite development acceptance passed; not all-case repair reliability or full150 success guarantee.",
+  "delivery": {
+    "version": "0.6.68",
+    "status": "COMPLETE",
+    "runbook": "docs/handoff/v068-qualified-delivery.md",
+    "audit": "outputs/alert-repeat-closure-20261028/FINAL_DELIVERY_AUDIT.md",
+    "review": "outputs/alert-repeat-closure-20261028/FINAL_DELIVERY_REVIEW.json",
+    "github_branch": "fix/planning-helper-contracts-20261027",
+    "github_pr": "https://github.com/xuhhhhjie-pixel/contractedge/pull/32",
+    "default_main_merged": false,
+    "runtime_deployed": false,
+    "formal150_started": false
+  }
 }

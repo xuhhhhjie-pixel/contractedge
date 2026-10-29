@@ -43,8 +43,10 @@ GitHub Release单个附件必须小于2GiB，本项目较大的包会分卷。�
 
 第三方源码和镜像的原始许可证随对应归档保留，见[来源与许可说明](THIRD_PARTY_NOTICES.md)。
 
-## ContractEdge 修复系统（开发交接版）
+## ContractEdge 修复系统（0.6.68获准入冻结版）
 
-当前系统源码、测试、TopoMen运行源码、配置和设计文档见 [system/](system/README.md)。请先读 [当前验收与恢复报告](system/outputs/alert-repeat-closure-20261028/V068_ADMINISTRATIVE_RECOVERY.md) 和 [正式实验准入与最终优化实施计划](system/docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md)。当前候选为 **0.6.68**，精确源码摘要以 [CURRENT_STATUS.json](system/CURRENT_STATUS.json) 和冻结单为准；它尚未通过正式实验准入，现有运行目录仍保留0.6.40。正在完成原登记的同版开发验收，正式150条尚未启动；开发成绩不代表150条正式结果。Benchmark冻结资源与系统开发状态分别管理。
+当前交付方法为 **0.6.68**：原46槽开发验收完成，G0—G6全部PASS，最终证书READY。请先读[最终交付复核](system/outputs/alert-repeat-closure-20261028/FINAL_DELIVERY_AUDIT.md)和[安装、数据还原及隔离运行手册](system/docs/handoff/v068-qualified-delivery.md)。方法身份以[冻结单](system/docs/development/quote-binding-v068-20261028.snapshot.json)与[最终证书](system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_FINAL_ADMISSION.json)为准。
 
-系统目录中冻结的README、AGENTS及历史报告保留各自记录时的状态；当前验收进度请以上述报告和CURRENT_STATUS为准。账户中断的行政恢复已单独标注，不能作为自然连续运行成绩。源码、运行方式、已验证环境和恢复范围均须按交付证据理解，不能仅凭下载仓库就假定所有外部数据、镜像和凭据已经配置。
+17个主面板开发案例候选10个独立PASS、基线5个，5改善0回退；B组候选3/10、基线2/10，7个候选失败完整保留。规定重复2/2、保存失败续修4/4通过。有限开发改善不代表150条总体保证，正式150与消融尚未启动。当前服务器历史运行目录仍为0.6.40，不因Git发布自动替换。
+
+五分类数据包下载后使用`tools/assemble_formal150.py`恢复统一运行视图；说明和实际校验记录见运行手册。冻结的system/README、AGENTS及旧报告保留各自状态，当前交付入口以上述手册和CURRENT_STATUS.json为准。ACK一次已知账户中断恢复单列，不算自然连续运行；原隐藏评分载荷、私有凭据、venv及运行工作区不进入Git。外部输入、镜像和本地配置仍需按当前机器核验。

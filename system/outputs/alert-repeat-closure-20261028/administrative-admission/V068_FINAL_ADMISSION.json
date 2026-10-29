@@ -1,0 +1,179 @@
+{
+  "schema_version": "ce.formal_readiness.v1",
+  "status": "READY",
+  "formal_ready": true,
+  "checked_at": "2026-10-28T21:09:16.767310+00:00",
+  "checker": {
+    "path": "/home/xhj/contractedge-parent402-v068-20261028/system/scripts/assess_formal_readiness.py",
+    "sha256": "54e9c43e7a88d276c28a1d37ad2ab0c3813d492feabea3b387f1f7bb1f920cc7"
+  },
+  "new_model_http_calls": 0,
+  "formal150_started": false,
+  "gates": {
+    "G0": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G0_EVIDENCE.json",
+        "sha256": "0448778ecc8d933c0bfef4d3f89f6ce7be2a793054edd17a80dbe752f492478a"
+      },
+      "required_checks": [
+        "membership150",
+        "public_evaluation_mapping",
+        "archive_grader_partition_integrity",
+        "release_layout_mapping",
+        "resource_preflight150"
+      ]
+    },
+    "G1": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G1_EVIDENCE.json",
+        "sha256": "78a9379180d4629f3e9e26544412c63ddf51af46c329a5c52f59725bd44c80c4"
+      },
+      "required_checks": [
+        "obligation_lineage",
+        "operation_fact_consistency",
+        "helper_prerequisites",
+        "bounded_gap_delivery",
+        "candidate_preservation",
+        "feedback_unknown_reasons"
+      ]
+    },
+    "G2": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G2_EVIDENCE.json",
+        "sha256": "a413c727325682ae0f6c3ea7cf0015d16fb1fc5cb6c61306d4c69a97179b8d88"
+      },
+      "required_checks": [
+        "exact_source_full_suite",
+        "current_cross_stage_delivery",
+        "supported_environment_ci"
+      ]
+    },
+    "G3": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G3_FINAL_EVIDENCE.json",
+        "sha256": "8c8382a497b73d9071b4da36173e51398256b5a83d9f08664307e5c2c97474d8"
+      },
+      "required_checks": [
+        "method_filesystem_isolation",
+        "per_attempt_source_config_data_patch_score_identity"
+      ]
+    },
+    "G4": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G4_FINAL_EVIDENCE.json",
+        "sha256": "a57cfc250e42a3860f361950dfc263f8cd0c7a1736608f25ae7eff0cefea95fe"
+      },
+      "required_checks": [
+        "original_successes_preserved",
+        "registered_repetition",
+        "registered_seeded_recovery"
+      ]
+    },
+    "G5": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G5_FINAL_EVIDENCE.json",
+        "sha256": "b9ffed47866aa163f4a0922ddb26d842c2ad4f15eb157769e3a4519f9f137e75"
+      },
+      "required_checks": [
+        "complete_original_panel",
+        "declared_paired_effect_gates",
+        "exposure_accounting"
+      ]
+    },
+    "G6": {
+      "status": "PASS",
+      "errors": [],
+      "report": {
+        "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_G6_EVIDENCE.json",
+        "sha256": "b9ab881a695e0ddf5cd8c9c13bb5dab9df02c1689b6e4ab0b3376feb744784ee"
+      },
+      "required_checks": [
+        "clean_clone_real_roundtrip",
+        "durable_crash_recovery",
+        "resource_and_drift_checks",
+        "declared_serial_execution"
+      ]
+    }
+  },
+  "errors": [],
+  "scope": "Evidence admission for one frozen candidate; not a guarantee of all-case repair success or formal experiment funding",
+  "manifest": {
+    "path": "/home/xhj/contractedge-alert-closure-20261028/system/outputs/alert-repeat-closure-20261028/administrative-admission/V068_FINAL_ADMISSION_MANIFEST.json",
+    "sha256": "a77304a2402e250057bb04e1bc003182dccb07d80fdff0cf193c10fcb2dac485"
+  },
+  "snapshot_verification": {
+    "schema_version": "ce.development_snapshot_verification.v1",
+    "development_snapshot_id": "quote-binding-v068-20261028",
+    "status": "PASS",
+    "formal_ready": false,
+    "coverage": {
+      "source": 116,
+      "configuration": 77,
+      "fixture": 217,
+      "tooling_files": 289,
+      "repository_files": 1
+    },
+    "unbound_legacy_fixture_files": [],
+    "errors": []
+  },
+  "identity": {
+    "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
+    "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
+    "candidate_config_sha256": "1af46d26b913747d710b3b70763ce90d4f7c0a616f3b0aa6b3e006d20a93d9cb",
+    "data_files_sha256": "f8acb42c04bd5b9b26d82048f8d55ff3168b8d094c8d34cb9207d752c1b63add"
+  },
+  "panel": {
+    "closed_slots": 46,
+    "expected_slots": 46,
+    "complete": true,
+    "formal_effect_pass": true,
+    "effect": {
+      "status": "ACCEPTED",
+      "observed_improvement": true,
+      "behavior_gates_passed": true,
+      "missing": [],
+      "regressions": [],
+      "historical_successes_preserved": true,
+      "critical_cases_pass_both_attempts": true,
+      "two_repository_recovery_pass_both_attempts": true,
+      "primary_counts": {
+        "baseline": 5,
+        "candidate": 10
+      },
+      "primary_denominator": 17,
+      "recovery_counts": {
+        "baseline": 0,
+        "candidate": 4
+      },
+      "effect_claim": "Observed paired improvement, not statistical significance",
+      "scope": "Behavior acceptance requires separately verified engineering closure. Fixed development panel and finite repetition only; no statistical significance or full150 guarantee Final delivery additionally requires the declared primary and B effect gates.",
+      "delivery_effect_gates_passed": true,
+      "paired_primary_improvement": true,
+      "B_counts": {
+        "baseline": 2,
+        "candidate": 3
+      },
+      "B_not_below_baseline": true,
+      "acceptance_policy": "Final design: all behavior gates, strictly more primary independent PASS, B not below baseline; recovery improvement alone is insufficient"
+    },
+    "all_terminal_gate": {
+      "open": true,
+      "missing": [],
+      "errors": []
+    },
+    "public_unknown_retained": 33,
+    "record_identity_policy": "Existing verify_panel/verified_records and independent finalize; no model or new score dispatch"
+  }
+}

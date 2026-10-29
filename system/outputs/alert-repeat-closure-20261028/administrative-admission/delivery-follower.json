@@ -1,0 +1,11 @@
+{
+  "status": "EVIDENCE_COLLECTION_CLOSED",
+  "admission_status": "READY",
+  "formal_ready": true,
+  "scope": "Certificate collected only; root completion audit, final publication and deployment are separate. No formal150 dispatch.",
+  "at": "2026-10-28T21:09:19.538392+00:00",
+  "owner_pid": 3881771,
+  "model_dispatches": 0,
+  "grade_dispatches": 0,
+  "formal150_started": false
+}

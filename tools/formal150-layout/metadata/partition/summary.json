@@ -1,0 +1,38 @@
+{
+  "status": "150_SELECTION_REPOSITORY_AND_REPAIR_GROUPS_CLOSED",
+  "selected": 150,
+  "r1_reserves_not_in_denominator": 27,
+  "selected_splits": {
+    "development": 115,
+    "validation": 18,
+    "blind_test": 17
+  },
+  "repository_split_conflicts": [],
+  "repair_group_split_conflicts": [],
+  "source_index": {
+    "schema_version": "contractedge.current_partition_indexes.v1",
+    "version": "final-three-181-v1-20261019",
+    "indexes": {
+      "case_identity.jsonl": {
+        "path": "evaluation/partition_candidate/versions/final-three-181-v1-20261019/case_identity.jsonl",
+        "sha256": "03f1775d711481b25c0f3627902f8d15b6b7571c9e9b2c3463be128279103bf2"
+      },
+      "repair_changes.jsonl": {
+        "path": "evaluation/partition_candidate/versions/final-three-181-v1-20261019/repair_changes.jsonl",
+        "sha256": "d3d89fab903baf9cf231969e67c682e016638114d4fae477ae6b2a453b3a89f9"
+      },
+      "group_ledger.jsonl": {
+        "path": "evaluation/partition_candidate/versions/final-three-181-v1-20261019/group_ledger.jsonl",
+        "sha256": "3f98419e52120fe01e94adc9cc966aff9a26d1e333eeac91f3b4e99c82c0f987"
+      }
+    },
+    "pool_count": 181,
+    "selected_count": 150,
+    "R1_reserve_count": 27,
+    "deferred_nonmember_count": 4,
+    "formal_unified_release": false,
+    "integration_journal": "execution/final-three-integration-20261019/journal.json"
+  },
+  "new_three_split": "development; construction inspected; same HAProxy repository colocated",
+  "exposure": "Public historical training exposure UNKNOWN; do not describe development cases as blind."
+}

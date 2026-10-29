@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-10-29T03:19:31.226717+08:00",
-  "status": "A_REPEAT_RECOVERY_COMPLETE_B_RUNNING",
+  "checked_at": "2026-10-29T10:36:41.715684+08:00",
+  "status": "ALL46_COMPLETE_ADMISSION_READY",
   "source_sha256": "c73764051dd244529be00a5cfe8969f547d421b82caa404705f9f43cd699676d",
   "panel_root": "/home/xhj/contractedge-fixed46-official-v068-resumed-20261028",
   "panel_sha256": "04b3fc97175bf49d433edcb0ec7f3d9b52ddb91ffccd298f853a79c2d3846a8d",
   "registered_slots": 46,
-  "closed_slots": 36,
+  "closed_slots": 46,
   "A_pairs": 7,
   "candidate_A_pass": 7,
   "baseline_A_pass": 3,
@@ -16,27 +16,19 @@
   "new_case_members_added": 0,
   "scores_from_other_method_versions_inherited": false,
   "current_state": {
-    "status": "RUNNING",
-    "group": "B",
-    "active_slot": {
-      "case_id": "R3-SKAFFOLD-9732",
-      "group": "B",
-      "repeat": 0,
-      "slot_id": "fixed46-official-v068-20261028-dd301a3401b0a414fdc5a6aa",
-      "variant": "baseline"
-    },
-    "owner_pid": 3661213,
-    "closed_slots": 36,
+    "status": "ORIGINAL46_CLOSED_PENDING_FINAL_EFFECT_AND_DELIVERY_ASSESSMENT",
+    "closed_slots": 46,
     "completed_groups": [
       "A",
       "repeat",
-      "recovery"
+      "recovery",
+      "B"
     ],
-    "at": "2026-10-29T03:14:25.828456+08:00",
+    "at": "2026-10-29T05:09:01.912691+08:00",
     "formal_ready": false
   },
-  "formal_ready": false,
-  "scope": "Development acceptance only. Original13 raw records retained; one same assigned ACK slot bound by explicit known-rejection administrative recovery. Original uninterrupted wall scope not claimed. Repeat/recovery/B requirements remain.",
+  "formal_ready": true,
+  "scope": "Original46 development acceptance complete with explicit one-slot administrative recovery; frozen method admission only, formal150 not started.",
   "candidate_seeded_recovery": [
     {
       "case_id": "R3-KPT-4673",
@@ -327,14 +319,14 @@
     }
   ],
   "B_as_of_summary": {
-    "closed_slots": 10,
-    "complete_pairs": 5,
+    "closed_slots": 20,
+    "complete_pairs": 10,
     "registered_pairs": 10,
     "candidate_pass": 3,
     "baseline_pass": 2,
     "paired_wins": 1,
     "paired_regressions": 0,
-    "both_failed_pairs": 2
+    "both_failed_pairs": 7
   },
   "B_failure_analysis": [
     {
@@ -438,5 +430,11 @@
       "root_cause_status": "UNDETERMINED",
       "scope": "Current registered public capabilities do not verify generated ServiceMonitor naming and TLS serverName. This does not claim those properties are intrinsically unobservable. No hidden grading content inspected; no method tuning or retry."
     }
-  ]
+  ],
+  "final_evidence": {
+    "certificate": "administrative-admission/V068_FINAL_ADMISSION.json",
+    "full46_index": "administrative-admission/V068_VERIFIED_TERMINALS.json",
+    "metrics": "administrative-admission/FINAL_ACCEPTANCE_METRICS.json",
+    "audit": "FINAL_DELIVERY_AUDIT.md"
+  }
 }
