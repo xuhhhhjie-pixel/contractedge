@@ -38,6 +38,45 @@ def test_delivery_checks_decoded_catalog_and_detects_dropped_body():
     assert api().audit_gap_delivery([], [unit], clipped)['status']=='INCOMPLETE'
 
 
+def test_gap_receipt_distinguishes_found_but_not_selected_from_not_found():
+    required = 'C-required'
+    found = api().audit_gap_delivery(
+        [{'required_unit_ids': [required], 'available_unit_ids': [required]}],
+        [], json.dumps({'evidence_catalog': []}))
+    assert found['status'] == 'INCOMPLETE'
+    assert found['records'] == [{
+        'unit_id': required, 'roles': [], 'found': True, 'selected': False,
+        'delivered': False, 'cited': None, 'drop_reason': 'FOUND_NOT_SELECTED'}]
+
+    missing = api().audit_gap_delivery(
+        [{'required_unit_ids': [required], 'available_unit_ids': []}],
+        [], json.dumps({'evidence_catalog': []}))
+    assert missing['records'][0]['drop_reason'] == 'NOT_FOUND'
+    assert missing['failure_codes'] == ['NOT_FOUND']
+
+
+def test_gap_receipt_marks_selected_clipped_and_model_citation():
+    unit = dict(id='C2', text='exact body',
+                content_digest=hashlib.sha256(b'exact body').hexdigest(),
+                gap_role_keys=['G1:anchor'])
+    clipped = api().audit_gap_delivery(
+        [{'required_unit_ids': ['C2'], 'available_unit_ids': ['C2']}], [unit],
+        json.dumps({'evidence_catalog': [{'id': 'SRC-C2', 'excerpt': 'prefix',
+                                          'content_digest': unit['content_digest']}]}))
+    assert clipped['records'][0]['drop_reason'] == 'NOT_DELIVERED'
+
+    delivered = api().audit_gap_delivery(
+        [{'required_unit_ids': ['C2'], 'available_unit_ids': ['C2']}], [unit],
+        json.dumps({'evidence_catalog': [{'id': 'SRC-C2', 'excerpt': unit['text'],
+                                          'content_digest': unit['content_digest']}]}))
+    cited = api().annotate_gap_delivery_citations(delivered, {'evidence_refs': ['SRC-C2']})
+    assert cited['model_citation_status'] == 'CITED'
+    assert cited['records'][0]['cited'] is True
+    not_cited = api().annotate_gap_delivery_citations(delivered, {'evidence_refs': []})
+    assert not_cited['model_citation_status'] == 'NOT_CITED'
+    assert not_cited['records'][0]['cited'] is False
+
+
 def test_config_template_gap_does_not_require_an_api_or_writer(tmp_path):
     (tmp_path/'template.yaml').write_text('kind: Job\nmetadata:\n  name: selected\n')
     units,audit=api().locate_gap_roles(compute_snapshot(tmp_path),[dict(id='G1',summary='Find Job template',locator_hint={'path':'template.yaml','search_term':'Job'})],{})

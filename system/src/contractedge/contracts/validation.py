@@ -33,6 +33,65 @@ SCHEMA_FILES = {
 }
 
 
+# Validation is intentionally grouped in the control plane.  These are not
+# model labels and are not part of any output contract.
+VALIDATION_LAYERS = ("schema", "evidence", "semantic")
+
+
+def validation_layer(code: str | None, path: str = "") -> str:
+    """Classify a validation code for bounded correction feedback."""
+    value = str(code or "").upper()
+    location = str(path or "").casefold()
+    if (value.startswith(("SCHEMA", "INVALID_JSON", "OBJECT_REQUIRED", "DUPLICATE_ID"))
+            or value in {"SCHEMA_VERSION_UNSUPPORTED", "SCHEMA_VERSION_MISMATCH", "INVALID_MODEL_PLAN"}
+            or "json" in location):
+        return "schema"
+    if (value.startswith(("EVIDENCE", "SNAPSHOT", "INPUT_", "REQUIREMENT_", "REFERENCE_", "ARTIFACT_", "SOURCE_", "DELIVERY_"))
+            or value.endswith(("_NOT_IN_INPUT", "_NOT_IN_CANDIDATES", "_DIGEST_MISMATCH"))
+            or any(token in value for token in ("IDENTITY", "LOCATOR", "QUOTE"))):
+        return "evidence"
+    return "semantic"
+
+
+def compact_validation_feedback(issues, *, max_per_layer: int = 8,
+                                max_total: int = 12) -> list[dict[str, str]]:
+    """Return only the active validation layer for the next correction.
+
+    Shape errors block evidence and semantic checks, and evidence identity
+    errors block semantic interpretation.  Keeping those later layers out of
+    the same prompt prevents a correction from spending its allowance on
+    errors that cannot yet be validated.  Existing issue codes and paths stay
+    intact for traceability.
+    """
+    rows = []
+    for issue in issues or ():
+        if isinstance(issue, Mapping):
+            code, path, message = issue.get("code"), issue.get("path", ""), issue.get("message", "")
+        else:
+            code = getattr(issue, "code", None)
+            path = getattr(issue, "path", "")
+            message = getattr(issue, "message", str(issue))
+        if not isinstance(code, str) or not code:
+            code = "VALIDATION_ERROR"
+        row = {"code": code, "path": str(path or ""), "message": str(message or "")[:1800]}
+        row["layer"] = validation_layer(code, row["path"])
+        rows.append(row)
+    if not rows:
+        return []
+    # Preserve validator order while removing exact duplicates.
+    unique = []
+    seen = set()
+    for row in rows:
+        key = (row["code"], row["path"], row["message"])
+        if key not in seen:
+            seen.add(key)
+            unique.append(row)
+    active = next((layer for layer in VALIDATION_LAYERS
+                   if any(row["layer"] == layer for row in unique)), "semantic")
+    result = [row for row in unique if row["layer"] == active][:max(0, int(max_per_layer))]
+    return result[:max(0, int(max_total))]
+
+
 def canonical_digest(value: Mapping[str, Any]) -> str:
     encoded = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()

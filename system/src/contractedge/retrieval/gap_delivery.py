@@ -6,6 +6,7 @@ import hashlib
 import json
 import re
 from pathlib import Path, PurePosixPath
+from typing import Mapping
 from contractedge.retrieval.candidates import _terms, merge_gap_context_optional
 from contractedge.source.parsers import parse_source_units, _unit
 
@@ -465,14 +466,53 @@ def audit_gap_delivery(gaps: list[dict], selected: list[dict], serialized_reques
         elif isinstance(item,list):
             for v in item:collect(v)
     collect(value);rows=[]
+    selected_ids={str(unit.get('id')) for unit in selected if isinstance(unit, dict) and unit.get('id') is not None}
+    # The bounded retrieval stage can provide IDs that were found but dropped;
+    # legacy callers omit that pool and expose only their selected candidates.
+    available_ids={str(i) for gap in gaps for i in gap.get('available_unit_ids', ())}
+    if not available_ids:
+        available_ids=set(selected_ids)
     for unit in selected:
         if not unit.get('gap_role_keys'):continue
         r=catalog.get('SRC-'+unit['id'],{})
         delivered=(r.get('excerpt')==unit['text'] and r.get('content_digest')==unit['content_digest']
             and hashlib.sha256(unit['text'].encode()).hexdigest()==unit['content_digest'])
-        rows.append(dict(unit_id=unit['id'],roles=unit['gap_role_keys'],selected=True,delivered=delivered))
+        rows.append(dict(unit_id=unit['id'],roles=unit['gap_role_keys'],found=True,
+                         selected=True,delivered=delivered,cited=None,
+                         drop_reason=None if delivered else 'NOT_DELIVERED'))
     required={i for gap in gaps for i in gap.get('required_unit_ids',[])}
     delivered_ids={r['unit_id'] for r in rows if r['delivered']}
-    return dict(status='DELIVERED' if all(r['delivered'] for r in rows) and required<=delivered_ids else 'INCOMPLETE',records=rows,
-        missing_required_ids=sorted(required-delivered_ids),
-        interpretation='Exact endpoint excerpts delivered; does not prove causal relevance or resolve gaps')
+    for unit_id in sorted(required-selected_ids):
+        found=unit_id in available_ids
+        rows.append(dict(unit_id=unit_id,roles=[],found=found,selected=False,
+                         delivered=False,cited=None,
+                         drop_reason='FOUND_NOT_SELECTED' if found else 'NOT_FOUND'))
+    missing=sorted(required-delivered_ids)
+    failures=sorted({row['drop_reason'] for row in rows if row.get('drop_reason')})
+    return dict(status='DELIVERED' if all(r['delivered'] for r in rows) and not missing else 'INCOMPLETE',records=rows,
+        missing_required_ids=missing, failure_codes=failures, model_citation_status='NOT_AVAILABLE',
+        interpretation='Found, selection and exact request delivery are recorded separately; delivery does not prove causal relevance')
+
+
+def annotate_gap_delivery_citations(receipt: Mapping, diagnosis: Mapping | None) -> dict:
+    """Record whether the accepted diagnosis cited delivered gap evidence."""
+    cited=set()
+    if isinstance(diagnosis, Mapping):
+        for item in diagnosis.get('evidence_refs', ()):
+            if isinstance(item, Mapping):
+                cited.update(str(value) for value in (item.get('id'), item.get('unit_id')) if value is not None)
+            elif isinstance(item, str):
+                cited.add(item)
+    result=dict(receipt);rows=[]
+    for row in receipt.get('records', ()):
+        row=dict(row)
+        if row.get('delivered'):
+            row['cited']=str(row.get('unit_id')) in cited or 'SRC-'+str(row.get('unit_id')) in cited
+        rows.append(row)
+    result['records']=rows
+    result['model_citation_status']=('CITED' if any(row.get('cited') for row in rows)
+                                     else 'NOT_CITED' if rows else 'NOT_AVAILABLE')
+    result['receipt_digest']=hashlib.sha256(json.dumps(
+        {key:value for key,value in result.items() if key!='receipt_digest'},
+        ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+    return result

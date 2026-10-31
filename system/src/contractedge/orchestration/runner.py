@@ -18,7 +18,8 @@ from contractedge.changeset.validate import validate_semantic_changeset, product
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
 from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset_envelope
 from contractedge.contracts.models import ContractError, MethodInput, RunContext, ValidationResult, ValidationIssue
-from contractedge.contracts.validation import parse_method_input, canonical_digest
+from contractedge.contracts.validation import (parse_method_input, canonical_digest,
+    compact_validation_feedback, validation_layer)
 from contractedge.diagnosis.parse import parse_diagnosis_response, parse_json_response
 from contractedge.diagnosis.evidence import bind_evidence_ids, build_evidence_catalog, field_contract_contexts
 from contractedge.diagnosis.prompt import build_diagnosis_request
@@ -62,7 +63,29 @@ def _output_was_truncated(response: Any) -> bool:
     return reason in {"length", "max_tokens", "token_limit"}
 
 
+def _annotate_gap_delivery_call(call: dict, diagnosis: Mapping[str, Any]) -> None:
+    """Persist found/selected/delivered/cited facts after a valid diagnosis."""
+    metadata = call.get("request_metadata")
+    if not isinstance(metadata, Mapping) or not isinstance(metadata.get("gap_delivery"), Mapping):
+        return
+    from contractedge.retrieval.gap_delivery import annotate_gap_delivery_citations
+    receipt = annotate_gap_delivery_citations(metadata["gap_delivery"], diagnosis)
+    call["gap_delivery"] = receipt
+    call["request_metadata"] = {**dict(metadata), "gap_delivery": receipt}
+
+
 def _format_validation_feedback(error: Exception, payload: Mapping[str, Any]) -> str:
+    """Add a bounded active-layer marker to the existing correction prose."""
+    code = getattr(error, "code", None)
+    if not isinstance(code, str):
+        match = re.search(r"\b([A-Z][A-Z0-9_]{3,})\b", str(error))
+        code = match.group(1) if match else "VALIDATION_ERROR"
+    layer = validation_layer(code, getattr(error, "path", ""))
+    body = _format_validation_feedback_body(error, payload)
+    return f"Validation layer: {layer}. Correct only the currently actionable {layer} errors; preserve unresolved later-layer facts.\n" + body
+
+
+def _format_validation_feedback_body(error: Exception, payload: Mapping[str, Any]) -> str:
     """Give a bounded structural correction without selecting semantic labels for the model."""
     message = str(error)
     if 'CAUSAL_CLAIM_UNSUPPORTED' in message:
@@ -170,6 +193,9 @@ def _changeset_retry_feedback(error: Exception) -> list[dict[str, str]]:
     message = str(error)
     match = re.match(r"^([A-Z][A-Z0-9_]+):", message)
     code = match.group(1) if match else "INVALID_JSON"
+    # Preserve the established wire shape for a single parse/adapter error;
+    # layer grouping is applied once a validator has produced independent
+    # issues.  This keeps replay compatibility for old correction ledgers.
     return [{"code": code, "message": message[:1200]}]
 
 
@@ -1065,7 +1091,10 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             if count <= first_limit:
                 if config.get('gap_role_delivery_enabled'):
                     from contractedge.retrieval.gap_delivery import audit_gap_delivery
-                    receipt=audit_gap_delivery([{'required_unit_ids':required_endpoint_ids}],list(fitted.candidates),
+                    receipt=audit_gap_delivery([{'required_unit_ids':required_endpoint_ids,
+                                                 'available_unit_ids': list(dict.fromkeys(
+                                                     [*fitted.selected_ids, *fitted.dropped_ids]))}],
+                        list(fitted.candidates),
                         json.dumps([dict(m) for m in request.messages],ensure_ascii=False))
                     request=replace(request,metadata={**request.metadata,'gap_delivery':receipt})
                     if receipt['status']=='INCOMPLETE':
@@ -1311,6 +1340,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             diagnosis = validate_diagnosis(diagnosis_payload, run_input, context, candidate_set)
             diagnosis_wire = diagnosis.raw
             calls[-1]["runner_binding"] = runner_binding
+            _annotate_gap_delivery_call(calls[-1], diagnosis.raw)
         except (ValueError, ContractError) as exc:
             validation_error: Exception = exc
             while True:
@@ -1358,6 +1388,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     diagnosis = validate_diagnosis(diagnosis_payload, run_input, context, candidate_set)
                     diagnosis_wire = diagnosis.raw
                     calls[-1]["runner_binding"] = runner_binding
+                    _annotate_gap_delivery_call(calls[-1], diagnosis.raw)
                     break
                 except (ValueError, ContractError) as retry_exc:
                     validation_error = retry_exc
@@ -1450,6 +1481,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     diagnosis = validate_diagnosis(diagnosis_payload, run_input, context, candidate_set)
                     diagnosis_wire = diagnosis.raw
                     calls[-1]["runner_binding"] = runner_binding
+                    _annotate_gap_delivery_call(calls[-1], diagnosis.raw)
                 except (ValueError, ContractError) as exc:
                     # This response was generated after the one explicit source
                     # extension. An optional, separate single correction belongs
@@ -1509,6 +1541,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                         diagnosis = validate_diagnosis(diagnosis_payload, run_input, context, candidate_set)
                         diagnosis_wire = diagnosis.raw
                         calls[-1]["runner_binding"] = runner_binding
+                        _annotate_gap_delivery_call(calls[-1], diagnosis.raw)
                     except (ValueError, ContractError) as retry_exc:
                         return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
                                         "INVALID_OUTPUT", requirement, scope, candidate_set, None, None,
@@ -1626,8 +1659,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     frontier=context.retrieval_config.get('production_path_frontier'),
                     prerequisites=context.retrieval_config.get('source_prerequisites'), capabilities=consumer_capabilities,
                     source_support=context.retrieval_config.get('necessary_source_support'))
-            feedback = [{"code": issue.code, "path": issue.path, "message": issue.message}
-                        for issue in validation.errors]
+            feedback = compact_validation_feedback(validation.errors)
             if feedback:
                 calls[-1]['validation_feedback'] = feedback
             planning_gaps = _safe_planning_gaps(changeset_payload)
@@ -1712,6 +1744,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                         diagnosis = validate_diagnosis(body, run_input, context, candidate_set)
                         diagnosis_wire = diagnosis.raw
                         calls[-1]['runner_binding'] = binding
+                        _annotate_gap_delivery_call(calls[-1], diagnosis.raw)
                         break
                     except (ValueError, ContractError) as exc:
                         allowance_used=(planning_context_corrections if per_evidence_context_correction else format_retries_used)
@@ -1748,8 +1781,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 continue
             if validation.valid:
                 break
-            feedback = [{"code": issue.code, "path": issue.path, "message": issue.message}
-                        for issue in validation.errors]
+            feedback = compact_validation_feedback(validation.errors)
         assert validation is not None and changeset_payload is not None
         semantic_review = _semantic_review_result(semantic_reviewer, parsed, requirement,
                                                   diagnosis.raw, changeset_payload, candidate_set)
