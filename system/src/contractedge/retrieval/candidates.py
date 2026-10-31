@@ -28,6 +28,8 @@ class CandidateSet:
     supplemental_evidence: tuple[Mapping[str, Any], ...] = ()
     context_audit: tuple[Mapping[str, Any], ...] = ()
     required_endpoint_ids: tuple[str, ...] = ()
+    # Engine-only facts: selection and final request delivery are distinct.
+    delivery_audit: tuple[Mapping[str, Any], ...] = ()
 
     @property
     def selected_count(self) -> int:
@@ -172,6 +174,7 @@ def _select(ordered, features, edges, *, top_n: int, max_context_tokens: int,
     reasons: dict[str, str] = {}
     total = 0
     selected_payload: list[Mapping[str, Any]] = []
+    delivery_audit: list[Mapping[str, Any]] = []
     remaining = list(ordered)
     required_roles=set()
     while remaining:
@@ -219,6 +222,8 @@ def _select(ordered, features, edges, *, top_n: int, max_context_tokens: int,
         if len(selected) >= top_n:
             dropped.append(cid)
             reasons[cid] = "TOP_N_LIMIT"
+            delivery_audit.append({'id': cid, 'selected': False, 'delivered': False,
+                                   'cited': None, 'drop_reason': 'TOP_N_LIMIT'})
             continue
         cost = int(token_counter(str(candidate.get("text", ""))))
         if cost < 0:
@@ -226,6 +231,8 @@ def _select(ordered, features, edges, *, top_n: int, max_context_tokens: int,
         if total + cost > max_context_tokens:
             dropped.append(cid)
             reasons[cid] = "CONTEXT_BUDGET"
+            delivery_audit.append({'id': cid, 'selected': False, 'delivered': False,
+                                   'cited': None, 'drop_reason': 'CONTEXT_BUDGET'})
             continue
         selected.append(cid)
         features[cid] = {**features[cid], 'selection_step': len(selected),
@@ -233,6 +240,8 @@ def _select(ordered, features, edges, *, top_n: int, max_context_tokens: int,
                             {g for p in selected_payload for g in p.get('evidence_gap_refs', [])}),
                          'max_overlap_percent': int(100 * max((_overlap(candidate, p) for p in selected_payload), default=0))}
         selected_payload.append(candidate)
+        delivery_audit.append({'id': cid, 'selected': True, 'delivered': True,
+                               'cited': None, 'drop_reason': None})
         required_roles.update(candidate.get('gap_role_keys',[]))
         total += cost
     selected_set = set(selected)
@@ -244,7 +253,8 @@ def _select(ordered, features, edges, *, top_n: int, max_context_tokens: int,
                         and edge.get('source') != edge.get('target')
                         and edge.get("edge_kind") in {"SYNTACTIC", "INFERRED"})
     return CandidateSet(tuple(selected_payload), tuple(selected), tuple(dropped), features, valid_edges,
-                        total, max_context_tokens, top_n, extension_used, reasons)
+                        total, max_context_tokens, top_n, extension_used, reasons,
+                        delivery_audit=tuple(delivery_audit))
 
 
 
@@ -287,12 +297,18 @@ def trim_context_bundle(candidate_set: CandidateSet, *, request_tokens: int, lim
             removed={str(item['id'])}
     kept = tuple(c for c in selected if str(c['id']) not in removed)
     edges = tuple(e for e in candidate_set.edges if str(e['source']) not in removed and str(e['target']) not in removed)
+    kept_ids = {str(c['id']) for c in kept}
+    audit = tuple({**row, 'delivered': str(row.get('id')) in kept_ids,
+                   'drop_reason': (row.get('drop_reason') or 'FULL_REQUEST_CONTEXT_BUNDLE')
+                   if str(row.get('id')) in removed else row.get('drop_reason')}
+                  for row in candidate_set.delivery_audit)
     return replace(candidate_set, candidates=kept, selected_ids=tuple(str(c['id']) for c in kept),
         dropped_ids=tuple(dict.fromkeys([*candidate_set.dropped_ids, *sorted(removed)])), edges=edges,
         drop_reasons={**(candidate_set.drop_reasons or {}), **{k: 'FULL_REQUEST_CONTEXT_BUNDLE' for k in removed}},
         context_audit=candidate_set.context_audit + ({'request_tokens_before': request_tokens, 'limit': limit,
             'removed_ids': sorted(removed), 'removed_reference_edges': len(candidate_set.edges) - len(edges),
-            'interpretation': 'Bounded reference bundle removed; no causal correctness claim'},))
+            'interpretation': 'Bounded reference bundle removed; no causal correctness claim'},),
+        delivery_audit=audit)
 
 
 def build_candidate_set(requirement: str, observable: str | None, units: Sequence[Mapping[str, Any]],

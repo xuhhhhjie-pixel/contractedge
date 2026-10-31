@@ -11,6 +11,7 @@ from contractedge.contracts.validation import canonical_digest
 from contractedge.dataset.benchmark import file_sha, read_members
 from contractedge.dataset.admission import development_case_ids
 from contractedge.orchestration.repair import write_json
+from contractedge.contracts.failures import classify_exception, make_failure
 
 
 def _method_digest():
@@ -113,8 +114,13 @@ def run_batch(public_root, output, config, execute_case, *, case_ids=None, max_n
                     record.update(status=result['status'],trace=str(trace.relative_to(out)),trace_sha256=file_sha(trace))
                     if result.get('candidate'):
                         record['candidate']=dict(result['candidate'])
+                    for key in ('failure', 'failure_records', 'primary_failure'):
+                        if result.get(key) is not None:
+                            record[key] = result[key]
                 else:
                     record['status']='INTERRUPTED'
+                    record['failure']=make_failure('batch-recovery', 'INTERRUPTED',
+                        message='A running case has no committed repair trace; dispatch outcome is unknown.')
                 if record['status']!='INTERRUPTED':
                     retire_workspace(record,directory)
                 save()
@@ -134,9 +140,15 @@ def run_batch(public_root, output, config, execute_case, *, case_ids=None, max_n
                 candidate=result.get('candidate')
                 if candidate:
                     record['candidate']=dict(candidate)
+                for key in ('failure', 'failure_records', 'primary_failure'):
+                    if result.get(key) is not None:
+                        record[key] = result[key]
             except Exception as exc:
-                # Never replay a possibly billed interrupted case automatically.
-                record.update(status='INTERRUPTED',error=type(exc).__name__+': '+str(exc))
+                # Never replay a possibly billed case automatically.  Preserve
+                # deterministic method, budget and transport failures so the
+                # cohort matrix remains useful for recovery and evaluation.
+                status, failure = classify_exception(exc, stage='batch')
+                record.update(status=status, error=type(exc).__name__+': '+str(exc), failure=failure)
             save()
             if record['status']!='INTERRUPTED':
                 retire_workspace(record,directory)

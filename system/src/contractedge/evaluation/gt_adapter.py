@@ -148,8 +148,49 @@ def normalize_gt(private_case: Mapping[str, Any], release_id: str, *,
     }
 
 
+def project_statuses(run_trace: Mapping[str, Any]) -> dict[str, str]:
+    """Keep method, execution, public and independent-score states separate."""
+    status = str(run_trace.get("status") or "NOT_RUN")
+    feedback = run_trace.get("last_feedback") or run_trace.get("feedback") or {}
+    semantic = run_trace.get("public_semantic_status")
+    if semantic is None:
+        semantic = feedback.get("semantic_outcome")
+    build = feedback.get("build_state")
+    if status in {"INFRASTRUCTURE_ERROR", "ENVIRONMENT_ERROR", "RESPONSE_UNKNOWN"}:
+        execution = "ERROR"
+    elif build == "PASSED" or status in {"PUBLIC_EXECUTION_COMPLETE", "PUBLIC_REVIEW_COMPLETE", "COMPLETE"}:
+        execution = "COMPLETE"
+    elif status == "NOT_RUN":
+        execution = "NOT_RUN"
+    else:
+        execution = "INCOMPLETE"
+    if semantic == "PUBLIC_REVIEW_PASS":
+        public = "PASS"
+    elif semantic == "PUBLIC_REVIEW_FAIL" or status == "BEHAVIOR_FAIL":
+        public = "FAIL"
+    elif status in {"PUBLIC_EXECUTION_COMPLETE", "PUBLIC_REVIEW_COMPLETE", "COMPLETE", "ROUND_LIMIT",
+                    "EVIDENCE_GAP", "DELIVERY_INCOMPLETE", "OBSERVATION_INSUFFICIENT"} or semantic == "UNKNOWN":
+        public = "UNKNOWN"
+    else:
+        public = "NOT_APPLICABLE"
+    if status in {"INVALID_OUTPUT", "FORMAT_INVALID"}:
+        method = "INVALID_OUTPUT"
+    elif status in {"INVALID_PLAN", "PLAN_INVALID"}:
+        method = "INVALID_PLAN"
+    elif status in {"BUDGET_EXHAUSTED", "INFRASTRUCTURE_ERROR", "ENVIRONMENT_ERROR", "RESPONSE_UNKNOWN"}:
+        method = status
+    elif public == "UNKNOWN" and execution == "COMPLETE":
+        method = "SEMANTIC_UNKNOWN"
+    else:
+        method = status
+    independent = str(run_trace.get("independent_score_status") or "NOT_RUN")
+    return {"method_status": method, "execution_status": execution,
+            "public_status": public, "independent_score_status": independent}
+
+
 def score_run(run_trace: Mapping[str, Any], normalized_gt: Mapping[str, Any]) -> dict[str, Any]:
     status = run_trace.get("status")
+    projection = project_statuses(run_trace)
     precision_eligible = normalized_gt.get("precision_eligible")
     recall_eligible = normalized_gt.get("recall_eligible")
     record: dict[str, Any] = {
@@ -160,6 +201,7 @@ def score_run(run_trace: Mapping[str, Any], normalized_gt: Mapping[str, Any]) ->
         "oracle_boundary": normalized_gt.get("oracle_boundary"),
         "oracle_limit": normalized_gt.get("oracle_limit"),
         "status": status, "denominator_included": True, "failure_kind": None,
+        **projection,
         "precision": None, "recall": None,
         "expected_relation_precision": None, "expected_relation_recall": None,
         "violation_precision": None, "violation_recall": None,
@@ -174,9 +216,16 @@ def score_run(run_trace: Mapping[str, Any], normalized_gt: Mapping[str, Any]) ->
     if status == "BUDGET_EXHAUSTED":
         record["failure_kind"] = "BUDGET"
         return record
-    if status in {"INVALID_OUTPUT", "INVALID_PLAN"}:
+    if status in {"INVALID_OUTPUT", "INVALID_PLAN", "FORMAT_INVALID", "PLAN_INVALID"}:
         record["failure_kind"] = "METHOD_OUTPUT"
-    diagnosis = run_trace.get("diagnosis") or {}
+        record["scoring_status"] = "METHOD_FAILURE"
+        return record
+    if (projection["method_status"] in {"SEMANTIC_UNKNOWN", "EVIDENCE_GAP", "DELIVERY_INCOMPLETE",
+                                          "ROUND_LIMIT", "OBSERVATION_INSUFFICIENT"}
+            or projection["public_status"] == "UNKNOWN"):
+        record["scoring_status"] = "SEMANTIC_UNKNOWN"
+        record["failure_kind"] = record["failure_kind"] or "SEMANTIC_UNKNOWN"
+        return record
     diagnosis = run_trace.get("diagnosis") or {}
     predicted_relations = [item for item in diagnosis.get("expected_relations", [])
                            if isinstance(item, Mapping) and item.get("id")]

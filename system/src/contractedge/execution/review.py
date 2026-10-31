@@ -13,6 +13,31 @@ from contractedge.execution.support import support_error, deterministic_check_re
 from contractedge.contracts.pointers import JSON_POINTER_SCHEMA, JSON_POINTER_GUIDANCE
 
 
+class PublicReviewFormatError(ValueError):
+    """A review response was received but failed the public review contract."""
+
+    def __init__(self, message: str, *, code: str = 'REVIEW_FORMAT_INVALID',
+                 issues=(), attempt: int | None = None, response_metadata=None):
+        super().__init__(message)
+        self.code = code
+        self.issues = tuple(str(issue)[:600] for issue in issues)[:12]
+        self.attempt = attempt
+        self.response_metadata = dict(response_metadata or {})
+
+
+def _review_failure_code(message: str) -> str:
+    value = str(message).casefold()
+    if 'fabricated' in value or 'quote' in value:
+        return 'QUOTE_INVALID'
+    if 'cover every check' in value or 'exactly once' in value:
+        return 'CHECK_COVERAGE_INVALID'
+    if 'schema invalid' in value or 'json' in value:
+        return 'SCHEMA_INVALID'
+    if 'comparison' in value or 'pointer' in value:
+        return 'COMPARISON_INVALID'
+    return 'REVIEW_FORMAT_INVALID'
+
+
 class ModelPublicReviewer:
     def __init__(self, provider, token_counter, config: Mapping):
         self.provider, self.token_counter, self.config = provider, token_counter, dict(config)
@@ -40,8 +65,16 @@ class ModelPublicReviewer:
         else:
             try:
                 body=self._review_model(requirement,remaining,observation)
+            except PublicReviewFormatError as exc:
+                body={'checks':[],'failure_kind':'UNKNOWN','method':'PUBLIC_REVIEW_INVALID',
+                      'review_failure_code': exc.code,
+                      'review_failure_attempt': exc.attempt,
+                      'review_failure_issues': list(exc.issues),
+                      'rationale':str(exc)}
             except (ValueError,KeyError) as exc:
-                body={'checks':[],'failure_kind':'UNKNOWN','method':'PUBLIC_REVIEW_INVALID','rationale':str(exc)}
+                body={'checks':[],'failure_kind':'UNKNOWN','method':'PUBLIC_REVIEW_INVALID',
+                      'review_failure_code': _review_failure_code(str(exc)),
+                      'review_failure_issues': [str(exc)[:600]], 'rationale':str(exc)}
         results={c['id']:c for c in body.get('checks',[])};results.update(mechanical)
         checks=[results.get(cid,{'id':cid,'status':'UNKNOWN','evidence':[],'rationale':'Unresolved public review'}) for cid,_ in original]
         return {**body,'checks':checks,'decision':'FAIL' if any(c['status']=='FAIL' for c in checks) else
@@ -175,7 +208,11 @@ class ModelPublicReviewer:
                 break
             except ValueError as exc:
                 if attempt >= int(self.config.get('max_format_retries', 0)):
-                    raise
+                    if isinstance(exc, PublicReviewFormatError):
+                        raise
+                    raise PublicReviewFormatError(str(exc), code=_review_failure_code(str(exc)),
+                        issues=(str(exc),), attempt=attempt,
+                        response_metadata=getattr(response, 'metadata', {})) from exc
                 thinking, retry_metadata = request.thinking, {}
                 usage = response.metadata.get('usage') or {}
                 completion = usage.get('completion_tokens', 0)

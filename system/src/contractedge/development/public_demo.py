@@ -324,9 +324,18 @@ def _method_source_identity():
 
 
 def _runtime_identity():
-    from importlib.metadata import version
+    from importlib.metadata import version, PackageNotFoundError
+    packages = {}
+    for name in ['PyYAML', 'jsonschema', 'pydantic', 'rich', 'python-dotenv', 'jinja2']:
+        try:
+            packages[name] = version(name)
+        except PackageNotFoundError:
+            # Metadata can be absent in a source checkout even when the
+            # dependency is importable.  Record that fact without preventing
+            # the deterministic development panel from starting.
+            packages[name] = 'NOT_INSTALLED'
     return {'python': sys.version, 'executable': sys.executable,
-            'packages': {name: version(name) for name in ['PyYAML', 'jsonschema', 'pydantic', 'rich', 'python-dotenv', 'jinja2']}}
+            'packages': packages}
 
 
 def _provider(config, case, runner):

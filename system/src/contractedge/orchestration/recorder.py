@@ -24,6 +24,7 @@ from contractedge.contracts.validation import canonical_digest
 
 _SETTLEMENT_FIELDS = {
     "response_content", "response_metadata", "provider_error_metadata", "error", "elapsed_seconds",
+    "dispatch_state",
 }
 
 

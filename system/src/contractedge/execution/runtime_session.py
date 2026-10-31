@@ -26,6 +26,7 @@ from contractedge.contracts.runtime import (
     FrozenInvocation, RuntimeRejected, RuntimeSpec, canonical_digest, no_symlink_path,
 )
 from contractedge.source.snapshot import compute_snapshot
+from contractedge.contracts.failures import make_failure, project_terminal_status
 
 
 _OWNER = 'contractedge-runtime-v1'
@@ -564,19 +565,52 @@ class RuntimeSession:
                 pending_id = directory / 'container.cid'
                 if pending_id.is_file() and re.fullmatch(r'[0-9a-f]{64}', pending_id.read_text().strip()):
                     run['container_id'] = pending_id.read_text().strip()
+            # Preserve the candidate process result before cleanup.  Cleanup
+            # is a separate observation and must not erase a timeout, non-zero
+            # exit, output limit or source-integrity failure.
+            primary_status = run.get('status')
+            primary_failure = None
+            if primary_status not in {'EXECUTION_PASS', None}:
+                primary_failure = make_failure(
+                    'candidate_process' if role == 'candidate' else 'observer_process',
+                    str(primary_status),
+                    failure_class=('execution' if primary_status in {
+                        'EXECUTION_FAILED', 'TIMEOUT', 'OUTPUT_LIMIT', 'INVALID_OBSERVATION'}
+                        else 'infrastructure'),
+                    dispatch_state='response_known', message=run.get('error'))
             run['cleanup'] = self._cleanup_run(run)
-            if run['cleanup']['status'] != 'CONFIRMED':
-                run['status'] = 'INFRASTRUCTURE_ERROR'
             run['phase'] = 'FINISHED'
             if role == 'candidate' and run.get('source_root'):
                 try:
                     run['source_after_snapshot_id'] = compute_snapshot(run['source_root']).snapshot_id
                     run['source_unchanged'] = run['source_after_snapshot_id'] == run['snapshot_id']
                     if not run['source_unchanged']:
-                        run['status'], run['error'] = 'INFRASTRUCTURE_ERROR', 'Original source changed during isolated runtime'
+                        primary_failure = make_failure('source_integrity', 'SOURCE_CHANGED',
+                            failure_class='infrastructure', dispatch_state='response_known',
+                            message='Original source changed during isolated runtime')
+                        run['status'], run['error'] = 'INFRASTRUCTURE_ERROR', primary_failure['message']
                 except Exception as exc:
+                    primary_failure = make_failure('source_integrity', 'SOURCE_INTEGRITY_UNVERIFIED',
+                        failure_class='infrastructure', dispatch_state='response_known',
+                        message='Original source integrity could not be verified: ' + str(exc))
                     run['status'], run['source_unchanged'] = 'INFRASTRUCTURE_ERROR', False
-                    run['error'] = 'Original source integrity could not be verified: ' + str(exc)
+                    run['error'] = primary_failure['message']
+            cleanup_failure = None
+            if run['cleanup']['status'] != 'CONFIRMED':
+                cleanup_failure = make_failure('cleanup', 'CLEANUP_UNCONFIRMED',
+                    failure_class='infrastructure', dispatch_state='response_known',
+                    message='; '.join(run['cleanup'].get('errors') or ()) or 'Runtime cleanup was not confirmed',
+                    secondary=True)
+            if primary_failure is None and run.get('status') not in {'EXECUTION_PASS', None}:
+                primary_failure = make_failure('runtime', str(run['status']),
+                    failure_class='infrastructure', dispatch_state='response_known', message=run.get('error'))
+            run['primary_failure'] = primary_failure
+            run['cleanup_failure'] = cleanup_failure
+            run['terminal_status'] = project_terminal_status(primary_failure, cleanup_failure,
+                default=str(run.get('status') or 'INFRASTRUCTURE_ERROR'))
+            # A cleanup-only failure is infrastructure; an existing process
+            # failure remains the terminal status and is never overwritten.
+            run['status'] = run['terminal_status']
             for channel in ('stdout', 'stderr'):
                 path = directory / (channel + '.bin')
                 run[channel + '_bytes'] = path.stat().st_size
@@ -624,7 +658,16 @@ class RuntimeSession:
             for run in self.runs:
                 cleanup = self._cleanup_run(run, deadline=deadline)
                 if cleanup['status'] != 'CONFIRMED' or run['cleanup']['status'] != 'CONFIRMED':
-                    run['status'] = 'INFRASTRUCTURE_ERROR'
+                    run['close_cleanup_failure'] = make_failure('close_cleanup', 'CLEANUP_UNCONFIRMED',
+                        failure_class='infrastructure', dispatch_state='response_known',
+                        message='; '.join(cleanup.get('errors') or ()) or 'Runtime close cleanup was not confirmed',
+                        secondary=True)
+                    # Keep any process root cause when one already exists;
+                    # cleanup remains secondary when the process itself passed.
+                    run['terminal_status'] = project_terminal_status(run.get('primary_failure'),
+                        run.get('close_cleanup_failure'),
+                        default=str(run.get('status') or 'INFRASTRUCTURE_ERROR'))
+                    run['status'] = run['terminal_status']
                 run['close_cleanup'] = cleanup
             self.closed = True
             self.manifest['status'] = ('CLOSED' if all(run['cleanup']['status'] == 'CONFIRMED'

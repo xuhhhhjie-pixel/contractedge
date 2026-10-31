@@ -26,17 +26,18 @@ from contractedge.contracts.validation import canonical_digest, parse_method_inp
 from contractedge.dataset.benchmark import execution_contract, editable_policy, file_sha, method_input_from_task, public_task
 from contractedge.diagnosis.validate import validate_diagnosis
 from contractedge.execution.public import BenchmarkPublicRunner
-from contractedge.execution.review import ModelPublicReviewer
+from contractedge.execution.review import ModelPublicReviewer, PublicReviewFormatError
 from contractedge.contracts.repair_intent import SemanticChangeSetIntent
 from contractedge.execution.consumer import (ConsumerContext, BudgetPort, build_consumer,
     validate_consumer, execution_review_mapping, PlanRejected)
 from contractedge.model.budget import BudgetedProvider, BudgetExceeded
 from contractedge.model.admission import quote_request, context_fits, complete_quoted
-from contractedge.orchestration.evidence_delivery import select_observations_delivery
+from contractedge.orchestration.evidence_delivery import select_observations_delivery, annotate_delivery_citations
 from contractedge.orchestration.front_delivery import build_front_delivery
 from contractedge.orchestration.recorder import RunRecorder, ProviderJournal, preserve_error
 from contractedge.orchestration.semantic_delivery import SemanticDeliveryError, delivery_context, install_monitor
 from contractedge.contracts.stages import StageResult, front_status, feedback_status, stop_status
+from contractedge.contracts.failures import classify_exception, make_failure
 from contractedge.orchestration.state import RepairEngine
 from contractedge.orchestration.trial import TrialSession, initialize_recovery
 
@@ -441,6 +442,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
     retry_restored_candidate = False
     source_integrity_verified = True
     rounds, errors = [], []
+    failure_records = []
     primary_error = None
     status = 'STARTING'
     source = None
@@ -903,14 +905,24 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                             review = reviewer.review(method_input.requirement_text, review_plan, review_observation)
                     except SemanticDeliveryError:
                         raise
+                    except PublicReviewFormatError as exc:
+                        review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
+                                  'method': 'PUBLIC_REVIEW_INVALID',
+                                  'review_failure_code': exc.code,
+                                  'review_failure_attempt': exc.attempt,
+                                  'review_failure_issues': list(exc.issues),
+                                  'rationale': str(exc)}
                     except (ValueError, KeyError) as exc:
                         review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
-                                  'method': 'PUBLIC_REVIEW_INVALID', 'rationale': str(exc)}
+                                  'method': 'PUBLIC_REVIEW_INVALID',
+                                  'review_failure_code': 'REVIEW_FORMAT_INVALID',
+                                  'review_failure_issues': [str(exc)[:600]], 'rationale': str(exc)}
                 from contractedge.execution.public_observer import enforce_public_profile
                 review = enforce_public_profile(review, current_observation,
                     required=requires_public_profile)
                 if hasattr(runner, 'enforce_requirement_profile'):
                     review = runner.enforce_requirement_profile(review, current_observation)
+                review_delivery = annotate_delivery_citations(review_delivery, review)
                 write_json(directory / 'public-review.json', review)
                 record_stage('review', snapshot_id=compute_snapshot(source).snapshot_id,
                     status=review['decision'], call_start=review_call_start,
@@ -1054,39 +1066,74 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             if (config.get('execution_format_retry_in_round', False) and rejection_kind == 'EXECUTION' and before == after):
                 status = 'INVALID_OUTPUT'
                 errors.append('Concrete generation could not produce an accepted edit within its existing correction allowance')
+                failure_records.append(make_failure('execution', 'INVALID_OUTPUT',
+                    failure_class='model_format', message=errors[-1]))
                 break
             if feedback_decision.action == 'STOP':
                 status = stop_status(feedback)
                 break
             status = 'ROUND_LIMIT'
+    except PublicReviewFormatError as exc:
+        primary_error = exc
+        status = 'INVALID_OUTPUT'
+        errors.append(str(exc))
+        failure_records.append(make_failure('review', exc.code,
+            failure_class='model_format', dispatch_state='response_known',
+            message=str(exc), details={'attempt': exc.attempt, 'issues': list(exc.issues)}))
+        preserve_error(exc, lambda: engine.step(StageResult('failure', 'FORMAT_INVALID',
+            journal.latest.get('review') or journal.latest.get('observe') or journal.latest.get('execute'),
+            snapshot_id=compute_snapshot(source).snapshot_id if source else initial_snapshot,
+            call_refs=journal.refs(max(0, len(budget.calls)-1))
+                if budget.calls and budget.calls[-1].get('error') else (),
+            failure_class='model_format', dispatch_state='response_known', error_code=exc.code)))
     except SemanticDeliveryError as exc:
         primary_error = exc
         status = 'EVIDENCE_DELIVERY_INCOMPLETE'
         errors.append(str(exc))
+        failure_records.append(make_failure('delivery', 'EVIDENCE_DELIVERY_INCOMPLETE',
+            failure_class='evidence', message=str(exc)))
     except BudgetExceeded as exc:
         primary_error = exc
         status = 'BUDGET_EXHAUSTED'
         errors.append(str(exc))
+        failure_records.append(make_failure('orchestration', 'BUDGET_EXHAUSTED',
+            failure_class='infrastructure', message=str(exc)))
         preserve_error(exc, lambda: engine.step(StageResult('failure', 'BUDGET_EXHAUSTED',
             journal.latest.get('execute') or journal.latest.get('front'),
             snapshot_id=compute_snapshot(source).snapshot_id if source else initial_snapshot,
             call_refs=journal.refs(max(0, len(budget.calls)-1))
-                if budget.calls and budget.calls[-1].get('error') else ())))
+                if budget.calls and budget.calls[-1].get('error') else (),
+            failure_class='infrastructure', dispatch_state='response_known',
+            error_code='BUDGET_EXHAUSTED')))
     except Exception as exc:
         primary_error = exc
+        errors.append(type(exc).__name__ + ': ' + str(exc))
+        mapped_status, failure = classify_exception(exc, stage='orchestration',
+            dispatch_state='response_unknown' if budget.calls and budget.calls[-1].get('error')
+            and 'response_content' not in budget.calls[-1] else None)
+        failure_records.append(failure)
         if budget.remaining_seconds <= 0:
             status = 'BUDGET_EXHAUSTED'
-        elif status not in {'INFRA_ERROR', 'INVALID_OBSERVATION', 'BUDGET_EXCEEDED'}:
-            status = 'INFRASTRUCTURE_ERROR'
-        errors.append(type(exc).__name__ + ': ' + str(exc))
-        failure_status = ('PLAN_INVALID' if isinstance(exc, PlanRejected) else
-            'RESPONSE_UNKNOWN' if budget.calls and budget.calls[-1].get('error')
-                and 'response_content' not in budget.calls[-1] else 'ENVIRONMENT_ERROR')
+            failure_status = 'BUDGET_EXHAUSTED'
+        elif mapped_status == 'INVALID_PLAN':
+            status, failure_status = 'INVALID_OUTPUT', 'PLAN_INVALID'
+        elif mapped_status == 'INVALID_OUTPUT':
+            status, failure_status = 'INVALID_OUTPUT', 'FORMAT_INVALID'
+        elif mapped_status == 'RESPONSE_UNKNOWN':
+            status, failure_status = 'INFRASTRUCTURE_ERROR', 'RESPONSE_UNKNOWN'
+        elif mapped_status == 'INFRASTRUCTURE_ERROR':
+            status, failure_status = 'INFRASTRUCTURE_ERROR', 'ENVIRONMENT_ERROR'
+        else:
+            # A truly unclassified exception remains an infrastructure stop,
+            # while its internal failure record retains INTERRUPTED.
+            status, failure_status = 'INFRASTRUCTURE_ERROR', 'ENVIRONMENT_ERROR'
         preserve_error(exc, lambda: engine.step(StageResult('failure', failure_status,
             journal.latest.get('execute') or journal.latest.get('front'),
             snapshot_id=compute_snapshot(source).snapshot_id if source else initial_snapshot,
             call_refs=journal.refs(max(0, len(budget.calls)-1))
-                if budget.calls and budget.calls[-1].get('error') else ())))
+                if budget.calls and budget.calls[-1].get('error') else (),
+            failure_class=failure.get('failure_class'),
+            dispatch_state=failure.get('dispatch_state'), error_code=failure.get('code'))))
     if active_checkpoint is not None and source is not None:
         # Transport errors, budget exits and failed observations must not bypass
         # promotion. The previous candidate is selected until a trial completes.
@@ -1118,12 +1165,25 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
               'initial_snapshot_id': initial_snapshot,
               'final_snapshot_id': compute_snapshot(source).snapshot_id if source else None,
               'status': status, 'candidate': final_patch, 'rounds': rounds,
+              # These projections keep execution completion distinct from the
+              # uncertain public semantic verdict in exported repair traces.
+              'method_status': status,
+              'execution_status': ('COMPLETE' if (feedback or {}).get('build_state') == 'PASSED'
+                                   or (current_observation or {}).get('status') == 'EXECUTION_PASS'
+                                   else 'ERROR' if status == 'INFRASTRUCTURE_ERROR' else
+                                   'NOT_RUN' if not current_observation else 'INCOMPLETE'),
+              'public_status': ('PASS' if (feedback or {}).get('semantic_outcome') == 'PUBLIC_REVIEW_PASS'
+                                else 'FAIL' if (feedback or {}).get('semantic_outcome') == 'PUBLIC_REVIEW_FAIL'
+                                else 'UNKNOWN'),
+              'independent_score_status': 'NOT_RUN',
               'candidate_selection': {'rejected_trials':len(rejected_trials),'decisions':rejected_trials},
               'last_feedback': feedback, 'budget': budget.summary(), 'errors': errors,
               'exportable': final_patch is not None,
               'public_semantic_status': (feedback or {}).get('semantic_outcome', 'UNKNOWN'),
               'preservation_comparison': selected_comparison,
               'execution_format_corrections_used': execution_format_corrections,
+              'failure_records': failure_records,
+              'primary_failure': next((f for f in failure_records if not f.get('secondary')), None),
               'hidden_evaluation': 'NOT_RUN; final patch must be scored in an independent evaluator process',
               'scope': 'Public repair execution. A public review is an uncertain method signal, not a benchmark PASS.'}
     if initial_trace:

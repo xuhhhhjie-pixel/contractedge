@@ -58,6 +58,7 @@ class BudgetedProvider:
             raise BudgetExceeded('Global model token/time/call budget exhausted')
         record = {'prompt_version': request.prompt_version, 'prompt_tokens_reserved': prompt_tokens,
                   'output_tokens_reserved': quote.output_tokens,
+                  'dispatch_state': 'not_sent',
                   'messages': [dict(m) for m in request.messages], 'model': request.model}
         # Preserve every final provider-boundary parameter for exact offline replay.
         # Older ledgers remain readable but cannot certify absent parameters.
@@ -84,8 +85,15 @@ class BudgetedProvider:
                 raise BudgetExceeded('Global deadline expired during provider request preparation')
             if previous_timeout is not None:
                 self.provider.timeout_seconds = min(previous_timeout, remaining)
+            # The reservation is durable before dispatch.  Once transport is
+            # entered, a missing response is ``response_unknown`` and must not
+            # be automatically replayed by an upper stage.
+            record['dispatch_state'] = 'response_unknown'
+            if self.on_update:
+                self.on_update(self.calls)
             response = _dispatch_quoted(self.provider, request, inner)
             record.update(response_content=response.content, response_metadata=dict(response.metadata))
+            record['dispatch_state'] = 'response_known'
             record['elapsed_seconds'] = time.monotonic() - self.started
             if self.remaining_seconds <= 0:
                 raise BudgetExceeded('Model response exceeded the global time budget')
@@ -94,6 +102,7 @@ class BudgetedProvider:
             received = getattr(exc, 'response', None)
             if isinstance(received, ModelResponse):
                 record.update(response_content=received.content, response_metadata=dict(received.metadata))
+                record['dispatch_state'] = 'response_known'
             if getattr(exc, 'provider_metadata', None) is not None:
                 record['provider_error_metadata'] = dict(exc.provider_metadata)
             record['elapsed_seconds'] = time.monotonic() - self.started
