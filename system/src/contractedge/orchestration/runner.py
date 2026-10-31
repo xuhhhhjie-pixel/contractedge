@@ -20,6 +20,7 @@ from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset
 from contractedge.contracts.models import ContractError, MethodInput, RunContext, ValidationResult, ValidationIssue
 from contractedge.contracts.validation import (parse_method_input, canonical_digest,
     compact_validation_feedback, validation_layer)
+from contractedge.contracts.failures import classify_exception, make_failure
 from contractedge.diagnosis.parse import parse_diagnosis_response, parse_json_response
 from contractedge.diagnosis.evidence import bind_evidence_ids, build_evidence_catalog, field_contract_contexts
 from contractedge.diagnosis.prompt import build_diagnosis_request
@@ -559,6 +560,11 @@ class RunTrace:
     semantic_review: Mapping[str, Any] | None = None
     retrieval_rounds: tuple[Mapping[str, Any], ...] = ()
     run_context: Mapping[str, Any] | None = None
+    # Engine-only facts.  These are persisted in the trace but never added to
+    # the model output contract.
+    failure_records: tuple[Mapping[str, Any], ...] = ()
+    primary_failure: Mapping[str, Any] | None = None
+    secondary_failure: Mapping[str, Any] | None = None
 
     def to_wire(self) -> dict[str, Any]:
         payload = asdict(self)
@@ -566,7 +572,78 @@ class RunTrace:
         payload["model_calls"] = list(self.model_calls)
         payload["retrieval_rounds"] = list(self.retrieval_rounds)
         payload["errors"] = list(self.errors)
+        payload["failure_records"] = list(self.failure_records)
         return payload
+
+
+def _front_failure_projection(trace: RunTrace, journal=None, dispatch_start: int = 0) -> RunTrace:
+    """Persist one bounded engine failure for a non-successful front trace.
+
+    The front-half implementation has many deliberate early returns.  Keeping
+    this projection at the boundary avoids duplicating failure bookkeeping in
+    every return path while retaining the original public status and errors.
+    """
+    if trace.failure_records:
+        if journal is None:
+            return trace
+        refs = []
+        for _, receipt in journal.dispatches[dispatch_start:]:
+            refs.extend(receipt.call_refs)
+        if not refs or all(record.get("call_ref") for record in trace.failure_records):
+            return trace
+        ref = refs[-1]
+        call_ref = f"{ref.run_id}:{ref.segment_index}:{ref.absolute_call_index}"
+        records = tuple({**dict(record), "call_ref": record.get("call_ref") or call_ref}
+                        for record in trace.failure_records)
+        primary = ({**dict(trace.primary_failure), "call_ref": trace.primary_failure.get("call_ref") or call_ref}
+                   if trace.primary_failure else records[0])
+        secondary = ({**dict(trace.secondary_failure), "call_ref": trace.secondary_failure.get("call_ref") or call_ref}
+                     if trace.secondary_failure else None)
+        return replace(trace, failure_records=records, primary_failure=primary,
+                       secondary_failure=secondary)
+    if trace.status in {
+            "READY", "PARTIAL_READY", "READY_PARTIAL", "UNDER_SPECIFIED",
+            "NO_SUPPORTED_VIOLATION"}:
+        return trace
+    status = str(trace.status or "UNKNOWN")
+    message = "; ".join(str(error) for error in trace.errors[:4])
+    if status == "BUDGET_EXHAUSTED":
+        code, failure_class, stage = "BUDGET_EXHAUSTED", "infrastructure", "orchestration"
+    elif status in {"INVALID_OUTPUT", "FORMAT_INVALID"}:
+        code, failure_class, stage = "INVALID_OUTPUT", "model_format", "front"
+    elif status in {"INVALID_PLAN", "PLAN_INVALID"}:
+        code, failure_class, stage = "INVALID_PLAN", "model_format", "planning"
+    elif status in {"EVIDENCE_DELIVERY_INCOMPLETE", "DELIVERY_INCOMPLETE"} or any(
+            token in message for token in ("REQUIRED_SOURCE_NOT_DELIVERED", "delivery", "DELIVERY")):
+        code, failure_class, stage = "EVIDENCE_DELIVERY_INCOMPLETE", "evidence", "delivery"
+    elif status == "EVIDENCE_GAP":
+        code, failure_class, stage = "EVIDENCE_GAP", "evidence", "retrieval"
+    elif status in {"RESPONSE_UNKNOWN"}:
+        code, failure_class, stage = "RESPONSE_UNKNOWN", "unknown", "provider"
+    elif status in {"INFRASTRUCTURE_ERROR", "ENVIRONMENT_ERROR"}:
+        code, failure_class, stage = "INFRASTRUCTURE_ERROR", "infrastructure", "orchestration"
+    else:
+        return trace
+
+    calls = [call for call in trace.model_calls if isinstance(call, Mapping)]
+    latest = calls[-1] if calls else {}
+    dispatch = latest.get("dispatch_state")
+    if dispatch not in {"not_sent", "response_known", "response_unknown"}:
+        dispatch = "response_unknown" if latest.get("error") and "response_content" not in latest else "not_sent"
+    if dispatch == "response_unknown" and status not in {"BUDGET_EXHAUSTED", "EVIDENCE_GAP"}:
+        code, failure_class, stage = "RESPONSE_UNKNOWN", "unknown", "provider"
+    call_ref = None
+    if journal is not None:
+        refs = []
+        for _, receipt in journal.dispatches[dispatch_start:]:
+            refs.extend(receipt.call_refs)
+        if refs:
+            ref = refs[-1]
+            call_ref = f"{ref.run_id}:{ref.segment_index}:{ref.absolute_call_index}"
+    record = make_failure(stage, code, failure_class=failure_class,
+        dispatch_state=dispatch, message=message or code, call_ref=call_ref,
+        snapshot_id=trace.snapshot_id, details={"status": status})
+    return replace(trace, failure_records=(record,), primary_failure=record)
 
 
 
@@ -823,6 +900,7 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
     trace = _run_front_half_impl(method_input, workspace, provider, config, token_counter,
         semantic_reviewer=semantic_reviewer, execution_feedback=execution_feedback,
         public_observations=public_observations, journal=journal, attempt_id=attempt_id)
+    trace = _front_failure_projection(trace, journal, dispatch_start)
     if journal is not None:
         from contractedge.orchestration.recorder import preserve_error
         def record_final_front():
@@ -1792,9 +1870,18 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
     except Exception as exc:
         if journal is not None:
             journal.primary_error = exc
+        dispatch_state = ("response_unknown" if calls and calls[-1].get("error")
+                          and "response_content" not in calls[-1] else None)
+        mapped_status, failure = classify_exception(exc, stage="front",
+            dispatch_state=dispatch_state)
+        # Keep the established front public terminal for transport/runtime
+        # failures, while retaining the more precise engine failure record.
+        status = mapped_status if mapped_status in {
+            "BUDGET_EXHAUSTED", "INVALID_OUTPUT", "INVALID_PLAN",
+            "EVIDENCE_DELIVERY_INCOMPLETE"} else "INFRASTRUCTURE_ERROR"
         return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot_id,
-                        "EVIDENCE_DELIVERY_INCOMPLETE" if isinstance(exc, SemanticDeliveryError) else
-                        "BUDGET_EXHAUSTED" if isinstance(exc, BudgetExceeded) else "INFRASTRUCTURE_ERROR",
+                        status,
                         requirement, scope, candidate_set, diagnosis_wire, changeset_payload,
                         tuple(calls), (f"{type(exc).__name__}: {exc}",),
-                        run_context=run_context_wire)
+                        run_context=run_context_wire, failure_records=(failure,),
+                        primary_failure=failure)

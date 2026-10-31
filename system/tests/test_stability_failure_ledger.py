@@ -1,12 +1,14 @@
 import json
 
 from contractedge.contracts.failures import classify_exception, make_failure, project_terminal_status
+from contractedge.contracts.validation import validate_run_trace
 from contractedge.orchestration.semantic_delivery import SemanticDeliveryError
 from contractedge.evaluation.gt_adapter import project_statuses, score_run
 from contractedge.model.budget import BudgetExceeded
 from contractedge.model.budget import BudgetedProvider
 from contractedge.model.provider import ModelRequest
 from contractedge.retrieval.candidates import build_candidate_set, trim_context_bundle
+from contractedge.orchestration.runner import RunTrace, _front_failure_projection
 
 
 def test_known_failures_are_not_collapsed_into_interruptions():
@@ -61,3 +63,16 @@ def test_candidate_delivery_audit_distinguishes_drop_from_delivery():
     trimmed = trim_context_bundle(candidates, request_tokens=101, limit=100)
     assert any(row["drop_reason"] == "FULL_REQUEST_CONTEXT_BUNDLE"
                for row in trimmed.delivery_audit if not row["delivered"])
+
+
+def test_front_trace_persists_failure_record_and_unknown_dispatch():
+    trace = RunTrace('run', 'case', 'a' * 64, 'b' * 64, 'INFRASTRUCTURE_ERROR',
+                     None, None, None, None, None,
+                     ({'stage': 'DIAGNOSIS', 'dispatch_state': 'response_unknown',
+                       'error': 'TimeoutError: no response'},),
+                     ('provider timed out',))
+    wire = _front_failure_projection(trace).to_wire()
+    assert wire['failure_records'][0]['code'] == 'RESPONSE_UNKNOWN'
+    assert wire['failure_records'][0]['dispatch_state'] == 'response_unknown'
+    assert wire['primary_failure']['snapshot_id'] == 'b' * 64
+    assert validate_run_trace(wire)['failure_records'][0]['stage'] == 'provider'

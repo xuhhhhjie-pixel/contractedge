@@ -917,6 +917,19 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                                   'method': 'PUBLIC_REVIEW_INVALID',
                                   'review_failure_code': 'REVIEW_FORMAT_INVALID',
                                   'review_failure_issues': [str(exc)[:600]], 'rationale': str(exc)}
+                if review.get('review_failure_code'):
+                    # The reviewer already spent its configured correction
+                    # allowance.  Keep the public decision UNKNOWN, but make
+                    # the exhausted format correction explicit in the engine
+                    # ledger so it cannot be routed as an execution failure.
+                    failure_records.append(make_failure(
+                        'review', str(review['review_failure_code']),
+                        failure_class='model_format',
+                        dispatch_state='response_known',
+                        message=str(review.get('rationale') or review['review_failure_code']),
+                        snapshot_id=compute_snapshot(source).snapshot_id,
+                        details={'attempt': review.get('review_failure_attempt'),
+                                 'issues': list(review.get('review_failure_issues') or ())}))
                 from contractedge.execution.public_observer import enforce_public_profile
                 review = enforce_public_profile(review, current_observation,
                     required=requires_public_profile)
