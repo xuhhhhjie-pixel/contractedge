@@ -131,7 +131,9 @@ class BudgetedAdmissionTests(unittest.TestCase):
         self.assertEqual((budget.reserved_tokens, len(budget.calls)), (11, 1))
         self.assertEqual(budget.calls[0]['prompt_tokens_reserved'], 8)
         self.assertEqual(budget.calls[0]['transport_schema_tokens_reserved'], 6)
-        self.assertEqual(updates, [1, 1])
+        # The reservation, the pre-dispatch unknown marker and the final
+        # response settlement are each durable callback points.
+        self.assertEqual(updates, [1, 1, 1])
 
     def test_legacy_complete_json_uses_the_same_quote_path(self):
         provider = PreparedPort()
@@ -184,9 +186,10 @@ class BudgetedAdmissionTests(unittest.TestCase):
         with self.assertRaises(TimeoutError):
             complete_quoted(budget, value, quote)
         self.assertEqual((provider.prepares, provider.dispatches, budget.reserved_tokens), (1, 1, 11))
-        self.assertEqual(len(snapshots), 2)
+        self.assertEqual(len(snapshots), 3)
         self.assertNotIn('error', snapshots[0][0])
-        self.assertIn('TimeoutError', snapshots[1][0]['error'])
+        self.assertEqual(snapshots[1][0]['dispatch_state'], 'response_unknown')
+        self.assertIn('TimeoutError', snapshots[2][0]['error'])
         self.assertIn('transport_request', snapshots[0][0])
 
 
