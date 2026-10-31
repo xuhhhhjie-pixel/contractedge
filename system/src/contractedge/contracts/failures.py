@@ -6,6 +6,7 @@ and an infrastructure failure cannot be folded into one ``UNKNOWN`` value.
 """
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any, Mapping
 
 
@@ -15,6 +16,48 @@ FAILURE_CLASSES = frozenset({
 DISPATCH_STATES = frozenset({
     "not_sent", "response_known", "response_unknown",
 })
+
+
+@dataclass(frozen=True)
+class FailureRecord:
+    """Engine-only failure fact; never part of a model output contract."""
+
+    stage: str
+    code: str
+    failure_class: str = "unknown"
+    dispatch_state: str = "not_sent"
+    snapshot_id: str | None = None
+    call_ref: str | None = None
+    retryable: bool = False
+    secondary: bool = False
+    message: str | None = None
+    details: Mapping[str, Any] | None = None
+
+    def __post_init__(self):
+        if self.failure_class not in FAILURE_CLASSES:
+            raise ValueError("unsupported failure class: " + str(self.failure_class))
+        if self.dispatch_state not in DISPATCH_STATES:
+            raise ValueError("unsupported dispatch state: " + str(self.dispatch_state))
+
+    @property
+    def primary(self) -> bool:
+        return not self.secondary
+
+    def to_wire(self) -> dict[str, Any]:
+        record: dict[str, Any] = {
+            "stage": str(self.stage), "code": str(self.code),
+            "failure_class": self.failure_class, "dispatch_state": self.dispatch_state,
+            "retryable": bool(self.retryable), "secondary": bool(self.secondary),
+        }
+        if self.message:
+            record["message"] = str(self.message)[:2000]
+        if self.call_ref is not None:
+            record["call_ref"] = str(self.call_ref)
+        if self.snapshot_id is not None:
+            record["snapshot_id"] = str(self.snapshot_id)
+        if self.details:
+            record["details"] = dict(self.details)
+        return record
 
 
 def make_failure(
@@ -36,24 +79,10 @@ def make_failure(
     only categorical dimensions.  More specific information belongs in
     ``code`` or bounded details and is not added to the model protocol.
     """
-    if failure_class not in FAILURE_CLASSES:
-        raise ValueError("unsupported failure class: " + str(failure_class))
-    if dispatch_state not in DISPATCH_STATES:
-        raise ValueError("unsupported dispatch state: " + str(dispatch_state))
-    record: dict[str, Any] = {
-        "stage": str(stage), "code": str(code),
-        "failure_class": failure_class, "dispatch_state": dispatch_state,
-        "retryable": bool(retryable), "secondary": bool(secondary),
-    }
-    if message:
-        record["message"] = str(message)[:2000]
-    if call_ref is not None:
-        record["call_ref"] = str(call_ref)
-    if snapshot_id is not None:
-        record["snapshot_id"] = str(snapshot_id)
-    if details:
-        record["details"] = dict(details)
-    return record
+    return FailureRecord(stage=stage, code=code, failure_class=failure_class,
+        dispatch_state=dispatch_state, retryable=retryable, secondary=secondary,
+        message=message, call_ref=call_ref, snapshot_id=snapshot_id,
+        details=details).to_wire()
 
 
 def classify_exception(exc: BaseException, *, stage: str = "unknown",

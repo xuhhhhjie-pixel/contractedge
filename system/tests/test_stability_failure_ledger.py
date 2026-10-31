@@ -1,6 +1,6 @@
 import json
 
-from contractedge.contracts.failures import classify_exception, make_failure, project_terminal_status
+from contractedge.contracts.failures import FailureRecord, classify_exception, make_failure, project_terminal_status
 from contractedge.contracts.validation import validate_run_trace
 from contractedge.orchestration.semantic_delivery import SemanticDeliveryError
 from contractedge.evaluation.gt_adapter import project_statuses, score_run
@@ -17,6 +17,16 @@ def test_known_failures_are_not_collapsed_into_interruptions():
     assert classify_exception(TimeoutError("provider did not answer"), stage="review")[0] == "RESPONSE_UNKNOWN"
     assert classify_exception(RuntimeError("unclassified crash"), stage="execute")[0] == "INTERRUPTED"
     assert classify_exception(SemanticDeliveryError("missing evidence"), stage="review")[0] == "EVIDENCE_DELIVERY_INCOMPLETE"
+
+
+def test_failure_record_is_engine_only_and_preserves_primary_secondary_fact():
+    primary = FailureRecord('execute', 'TIMEOUT', failure_class='execution', snapshot_id='a' * 64)
+    secondary = FailureRecord('cleanup', 'CLEANUP_UNCONFIRMED', failure_class='infrastructure',
+                              secondary=True)
+    assert primary.primary is True and secondary.primary is False
+    assert primary.to_wire()['snapshot_id'] == 'a' * 64
+    assert make_failure('cleanup', 'CLEANUP_UNCONFIRMED', failure_class='infrastructure',
+                        secondary=True)['secondary'] is True
 
 
 def test_provider_ledger_marks_unknown_dispatch_without_replaying():
