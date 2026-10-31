@@ -270,7 +270,8 @@ def validate_diagnosis(
         first, *rest = issues
         raise ContractError(first.code, first.path, first.message +
                             ('; additional independent errors: ' + '; '.join(
-                                f'{i.code} at {i.path}: {i.message}' for i in rest) if rest else ''))
+                                f'{i.code} at {i.path}: {i.message}' for i in rest) if rest else ''),
+                            issues=issues)
     _check_schema(payload, version)
     if payload["input_digest"] != method_input.input_digest:
         raise ContractError("INPUT_DIGEST_MISMATCH", "input_digest", "diagnosis does not belong to this public input")

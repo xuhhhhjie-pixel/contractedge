@@ -89,6 +89,15 @@ def _format_validation_feedback(error: Exception, payload: Mapping[str, Any]) ->
 def _format_validation_feedback_body(error: Exception, payload: Mapping[str, Any]) -> str:
     """Give a bounded structural correction without selecting semantic labels for the model."""
     message = str(error)
+    structured = compact_validation_feedback(getattr(error, "issues", ()))
+    if structured:
+        # ContractError.__str__ may contain later-layer issues in a compact
+        # diagnostic suffix.  Replace it with only the active layer so a
+        # correction cannot spend its allowance on blocked downstream errors.
+        code = getattr(error, "code", "VALIDATION_ERROR")
+        path = getattr(error, "path", "")
+        message = (f"{code} at {path or '<root>'}: active issues="
+                   + json.dumps(structured, ensure_ascii=False, separators=(",", ":")))
     if 'CAUSAL_CLAIM_UNSUPPORTED' in message:
         return ('An observed failure and its timing establish the failed behavior, not its production cause. '
             'A SUPPORTED violation needs actual SOURCE_SPAN evidence of the mechanism and an explanation connecting '

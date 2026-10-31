@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 from typing import Any, Mapping
 
-from contractedge.contracts.models import ContractError, DiagnosisPacket, MethodInput, RunContext
+from contractedge.contracts.models import ContractError, DiagnosisPacket, MethodInput, RunContext, ValidationIssue
 from contractedge.contracts.validation import validate_diagnosis as validate_contract_diagnosis
 from contractedge.retrieval.candidates import CandidateSet
 
@@ -20,7 +20,11 @@ def validate_diagnosis(payload: Mapping[str, Any], method_input: MethodInput,
         issues.extend(validate_public_check_claims(payload,method_input.public_evidence,run_context.snapshot_id))
         if issues:
             first=issues[0]
-            raise ContractError(first['code'],'operation_assessments',str(issues))
+            structured = tuple(ValidationIssue(str(issue.get('code', 'VALIDATION_ERROR')),
+                                                str(issue.get('path', 'operation_assessments')),
+                                                str(issue.get('message', issue)))
+                               for issue in issues if isinstance(issue, Mapping))
+            raise ContractError(first['code'], 'operation_assessments', str(issues), issues=structured)
     candidate_by_id = {str(item["id"]): item for item in candidate_set.candidates}
     selected_paths = {str(item.get("path", "")) for item in candidate_set.candidates}
     public_by_digest = {}

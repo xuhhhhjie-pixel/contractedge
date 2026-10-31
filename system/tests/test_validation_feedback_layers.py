@@ -1,4 +1,5 @@
 from contractedge.contracts.validation import compact_validation_feedback
+from contractedge.contracts.models import ContractError, ValidationIssue
 from contractedge.orchestration.runner import _format_validation_feedback
 
 
@@ -26,3 +27,15 @@ def test_diagnosis_feedback_declares_active_layer():
         ValueError("CAUSAL_CLAIM_UNSUPPORTED at violations"), {})
     assert message.startswith("Validation layer: semantic.")
     assert "Return the full corrected Diagnosis body" in message
+
+
+def test_structured_diagnosis_errors_hide_blocked_later_layers():
+    error = ContractError("SCHEMA_INVALID", "units", "shape is invalid", issues=(
+        ValidationIssue("SCHEMA_INVALID", "units", "shape is invalid"),
+        ValidationIssue("EVIDENCE_DIGEST_NOT_IN_CANDIDATES", "evidence_refs", "stale"),
+        ValidationIssue("CAUSAL_CLAIM_UNSUPPORTED", "violations", "unsupported"),
+    ))
+    message = _format_validation_feedback(error, {})
+    assert 'SCHEMA_INVALID' in message
+    assert 'EVIDENCE_DIGEST_NOT_IN_CANDIDATES' not in message
+    assert 'CAUSAL_CLAIM_UNSUPPORTED' not in message
