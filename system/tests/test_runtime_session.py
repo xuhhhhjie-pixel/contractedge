@@ -220,3 +220,80 @@ def test_created_id_is_durable_before_start_and_execution(tmp_path, monkeypatch)
     assert actual['status'] == 'EXECUTION_PASS'
     assert actual['cleanup']['status'] == 'CONFIRMED'
     assert steps == ['create', 'start', 'exec', 'rm']
+
+
+def test_process_failure_remains_primary_when_source_and_cleanup_fail(tmp_path, monkeypatch):
+    from contractedge.source.snapshot import compute_snapshot
+    from contractedge.execution import runtime_session as runtime_module
+
+    session = RuntimeSession.open(spec(tmp_path), deadline=time.monotonic() + 10)
+    session._api_version = '1.43'
+    invocation = FrozenInvocation.freeze(('/usr/bin/python3', '-c', 'print("fixture")'))
+    source = tmp_path / 'source'
+    source.mkdir(); (source / 'app.py').write_text('print("fixture")\n')
+    cid = 'c' * 64
+
+    def result(stdout=b'', stderr=b'', exit_code=0):
+        return {'reason': 'COMPLETE', 'exit_code': exit_code,
+                'stdout': stdout, 'stderr': stderr}
+
+    def docker(args, **kwargs):
+        if args[:2] == ['image', 'inspect']:
+            return result(json.dumps([{'Id': IMAGE, 'Config': {}}]).encode())
+        if args[0] == 'create':
+            Path(args[args.index('--cidfile') + 1]).write_text(cid)
+            return result(cid.encode())
+        if args[0] == 'start':
+            return result(cid.encode())
+        pytest.fail('Unexpected Docker action: ' + repr(args))
+
+    def capture(argv, **kwargs):
+        Path(kwargs['stdout_path']).write_bytes(b'failed')
+        Path(kwargs['stderr_path']).write_bytes(b'error')
+        # Simulate an external edit after the process has returned.
+        (source / 'app.py').write_text('print("changed")\n')
+        return {'reason': 'COMPLETE', 'exit_code': 7, 'truncated': False}
+
+    monkeypatch.setattr(session, '_docker', docker)
+    monkeypatch.setattr(session, '_inspect', lambda *a, **k: {'Id': cid})
+    monkeypatch.setattr(session, '_validate_inspect', lambda *a: {'container_id': cid})
+    monkeypatch.setattr(session, '_kernel_attestation', lambda *a: {'uid': 10001})
+    monkeypatch.setattr(session, '_cleanup_run', lambda *a, **k: {
+        'status': 'FAILED', 'container_id': cid, 'errors': ['cleanup unavailable']})
+    monkeypatch.setattr(runtime_module, '_capture', capture)
+
+    run = session.run_candidate(invocation, compute_snapshot(source))
+    assert run['status'] == 'EXECUTION_FAILED'
+    assert run['primary_failure']['code'] == 'EXECUTION_FAILED'
+    assert [item['code'] for item in run['secondary_failures']] == [
+        'SOURCE_CHANGED', 'CLEANUP_UNCONFIRMED']
+    assert run['failure_records'][0] == run['primary_failure']
+    receipt = json.loads((session.root / 'run-0-candidate' / 'receipt.json').read_text())
+    assert receipt['status'] == 'EXECUTION_FAILED'
+    assert receipt['primary_failure']['code'] == 'EXECUTION_FAILED'
+
+
+def test_close_persists_close_cleanup_failure_without_replacing_process_root(tmp_path, monkeypatch):
+    from contractedge.contracts.failures import make_failure
+    session = RuntimeSession.open(spec(tmp_path), deadline=time.monotonic() + 10)
+    run_dir = session.root / 'run-0-candidate'
+    run_dir.mkdir()
+    primary = make_failure('candidate_process', 'TIMEOUT', failure_class='execution',
+                           dispatch_state='response_known')
+    run = {'run_id': '0', 'role': 'candidate', 'status': 'TIMEOUT',
+           'cleanup': {'status': 'CONFIRMED', 'errors': []},
+           'primary_failure': primary, 'secondary_failures': [],
+           'failure_records': [primary]}
+    (run_dir / 'receipt.json').write_text(json.dumps(run))
+    session.runs.append(run)
+    monkeypatch.setattr(session, '_cleanup_run', lambda *a, **k: {
+        'status': 'FAILED', 'errors': ['close cleanup unavailable']})
+
+    session.close()
+    assert run['status'] == 'TIMEOUT'
+    assert run['primary_failure']['code'] == 'TIMEOUT'
+    assert run['close_cleanup_failure']['code'] == 'CLEANUP_UNCONFIRMED'
+    saved = json.loads((run_dir / 'receipt.json').read_text())
+    assert saved['status'] == 'TIMEOUT'
+    assert saved['failure_records'][0]['code'] == 'TIMEOUT'
+    assert saved['failure_records'][1]['code'] == 'CLEANUP_UNCONFIRMED'

@@ -447,7 +447,9 @@ class RuntimeSession:
             'status': 'PREPARING', 'phase': 'PREPARING', 'container_id': None,
             'planned_container_name': 'ce-' + self.token + '-' + run_id,
             'stdout_path': str(directory / 'stdout.bin'), 'stderr_path': str(directory / 'stderr.bin'),
-            'cleanup': {'status': 'PENDING', 'errors': []}}
+            'cleanup': {'status': 'PENDING', 'errors': []},
+            'failure_records': [], 'primary_failure': None,
+            'secondary_failures': []}
         for name in ('stdout.bin', 'stderr.bin'):
             (directory / name).write_bytes(b'')
         self.runs.append(run)
@@ -585,27 +587,43 @@ class RuntimeSession:
                     run['source_after_snapshot_id'] = compute_snapshot(run['source_root']).snapshot_id
                     run['source_unchanged'] = run['source_after_snapshot_id'] == run['snapshot_id']
                     if not run['source_unchanged']:
-                        primary_failure = make_failure('source_integrity', 'SOURCE_CHANGED',
+                        integrity_failure = make_failure('source_integrity', 'SOURCE_CHANGED',
                             failure_class='infrastructure', dispatch_state='response_known',
-                            message='Original source changed during isolated runtime')
-                        run['status'], run['error'] = 'INFRASTRUCTURE_ERROR', primary_failure['message']
+                            message='Original source changed during isolated runtime',
+                            secondary=primary_failure is not None)
+                        if primary_failure is None:
+                            primary_failure = integrity_failure
+                            run['status'], run['error'] = 'INFRASTRUCTURE_ERROR', integrity_failure['message']
+                        else:
+                            run.setdefault('secondary_failures', []).append(integrity_failure)
                 except Exception as exc:
-                    primary_failure = make_failure('source_integrity', 'SOURCE_INTEGRITY_UNVERIFIED',
+                    integrity_failure = make_failure('source_integrity', 'SOURCE_INTEGRITY_UNVERIFIED',
                         failure_class='infrastructure', dispatch_state='response_known',
-                        message='Original source integrity could not be verified: ' + str(exc))
-                    run['status'], run['source_unchanged'] = 'INFRASTRUCTURE_ERROR', False
-                    run['error'] = primary_failure['message']
+                        message='Original source integrity could not be verified: ' + str(exc),
+                        secondary=primary_failure is not None)
+                    if primary_failure is None:
+                        primary_failure = integrity_failure
+                        run['status'], run['error'] = 'INFRASTRUCTURE_ERROR', integrity_failure['message']
+                    else:
+                        run.setdefault('secondary_failures', []).append(integrity_failure)
+                    run['source_unchanged'] = False
             cleanup_failure = None
             if run['cleanup']['status'] != 'CONFIRMED':
                 cleanup_failure = make_failure('cleanup', 'CLEANUP_UNCONFIRMED',
                     failure_class='infrastructure', dispatch_state='response_known',
                     message='; '.join(run['cleanup'].get('errors') or ()) or 'Runtime cleanup was not confirmed',
                     secondary=True)
+                run.setdefault('secondary_failures', []).append(cleanup_failure)
             if primary_failure is None and run.get('status') not in {'EXECUTION_PASS', None}:
                 primary_failure = make_failure('runtime', str(run['status']),
                     failure_class='infrastructure', dispatch_state='response_known', message=run.get('error'))
             run['primary_failure'] = primary_failure
             run['cleanup_failure'] = cleanup_failure
+            # Preserve one canonical ordered journal: the primary process or
+            # integrity fact first, followed by cleanup/integrity side facts.
+            secondary = list(run.get('secondary_failures') or ())
+            run['secondary_failures'] = secondary
+            run['failure_records'] = ([primary_failure] if primary_failure else []) + secondary
             run['terminal_status'] = project_terminal_status(primary_failure, cleanup_failure,
                 default=str(run.get('status') or 'INFRASTRUCTURE_ERROR'))
             # A cleanup-only failure is infrastructure; an existing process
@@ -657,11 +675,15 @@ class RuntimeSession:
             deadline = time.monotonic() + self.spec.cleanup_seconds
             for run in self.runs:
                 cleanup = self._cleanup_run(run, deadline=deadline)
-                if cleanup['status'] != 'CONFIRMED' or run['cleanup']['status'] != 'CONFIRMED':
+                # ``cleanup`` is the result of this close attempt.  An earlier
+                # failed in-run cleanup remains in the failure journal, but a
+                # successful close must not manufacture a second close failure.
+                if cleanup['status'] != 'CONFIRMED':
                     run['close_cleanup_failure'] = make_failure('close_cleanup', 'CLEANUP_UNCONFIRMED',
                         failure_class='infrastructure', dispatch_state='response_known',
                         message='; '.join(cleanup.get('errors') or ()) or 'Runtime close cleanup was not confirmed',
                         secondary=True)
+                    run.setdefault('secondary_failures', []).append(run['close_cleanup_failure'])
                     # Keep any process root cause when one already exists;
                     # cleanup remains secondary when the process itself passed.
                     run['terminal_status'] = project_terminal_status(run.get('primary_failure'),
@@ -669,6 +691,10 @@ class RuntimeSession:
                         default=str(run.get('status') or 'INFRASTRUCTURE_ERROR'))
                     run['status'] = run['terminal_status']
                 run['close_cleanup'] = cleanup
+                run['failure_records'] = ([run['primary_failure']] if run.get('primary_failure') else []) + list(run.get('secondary_failures') or ())
+                receipt = self.root / ('run-' + str(run['run_id']) + '-' + str(run['role'])) / 'receipt.json'
+                if receipt.is_file():
+                    _atomic_json(receipt, run)
             self.closed = True
             self.manifest['status'] = ('CLOSED' if all(run['cleanup']['status'] == 'CONFIRMED'
                 and run.get('close_cleanup', {}).get('status') == 'CONFIRMED' for run in self.runs)

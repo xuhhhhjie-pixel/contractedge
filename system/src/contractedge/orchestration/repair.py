@@ -37,7 +37,7 @@ from contractedge.orchestration.front_delivery import build_front_delivery
 from contractedge.orchestration.recorder import RunRecorder, ProviderJournal, preserve_error
 from contractedge.orchestration.semantic_delivery import SemanticDeliveryError, delivery_context, install_monitor
 from contractedge.contracts.stages import StageResult, front_status, feedback_status, stop_status
-from contractedge.contracts.failures import classify_exception, make_failure
+from contractedge.contracts.failures import ObservationRejected, classify_exception, make_failure
 from contractedge.orchestration.state import RepairEngine
 from contractedge.orchestration.trial import TrialSession, initialize_recovery
 
@@ -617,7 +617,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 stage='observe_initial', attempt_id='broken', predecessor=('begin',))
             if current_observation['status'] in {'INFRA_ERROR', 'INVALID_OBSERVATION', 'BUDGET_EXCEEDED'}:
                 status = current_observation['status']
-                raise ValueError('Initial public observation could not be produced')
+                raise ObservationRejected('Initial public observation could not be produced')
         for round_id in range(max_rounds):
             if budget.remaining_seconds <= 0:
                 raise BudgetExceeded('Global wall-clock budget exhausted')
@@ -1134,6 +1134,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             status, failure_status = 'INVALID_OUTPUT', 'FORMAT_INVALID'
         elif mapped_status == 'RESPONSE_UNKNOWN':
             status, failure_status = 'INFRASTRUCTURE_ERROR', 'RESPONSE_UNKNOWN'
+        elif mapped_status == 'INVALID_OBSERVATION':
+            status, failure_status = 'INVALID_OBSERVATION', 'INVALID_OBSERVATION'
         elif mapped_status == 'INFRASTRUCTURE_ERROR':
             status, failure_status = 'INFRASTRUCTURE_ERROR', 'ENVIRONMENT_ERROR'
         else:

@@ -46,7 +46,8 @@ def test_gap_receipt_distinguishes_found_but_not_selected_from_not_found():
     assert found['status'] == 'INCOMPLETE'
     assert found['records'] == [{
         'unit_id': required, 'roles': [], 'found': True, 'selected': False,
-        'delivered': False, 'cited': None, 'drop_reason': 'FOUND_NOT_SELECTED'}]
+        'delivered': False, 'cited': None, 'drop_reason': 'FOUND_NOT_SELECTED',
+        'status': 'FOUND_NOT_SELECTED'}]
 
     missing = api().audit_gap_delivery(
         [{'required_unit_ids': [required], 'available_unit_ids': []}],
@@ -64,6 +65,7 @@ def test_gap_receipt_marks_selected_clipped_and_model_citation():
         json.dumps({'evidence_catalog': [{'id': 'SRC-C2', 'excerpt': 'prefix',
                                           'content_digest': unit['content_digest']}]}))
     assert clipped['records'][0]['drop_reason'] == 'NOT_DELIVERED'
+    assert clipped['records'][0]['status'] == 'NOT_DELIVERED'
 
     delivered = api().audit_gap_delivery(
         [{'required_unit_ids': ['C2'], 'available_unit_ids': ['C2']}], [unit],
@@ -75,6 +77,36 @@ def test_gap_receipt_marks_selected_clipped_and_model_citation():
     not_cited = api().annotate_gap_delivery_citations(delivered, {'evidence_refs': []})
     assert not_cited['model_citation_status'] == 'NOT_CITED'
     assert not_cited['records'][0]['cited'] is False
+    assert not_cited['records'][0]['status'] == 'MODEL_DID_NOT_USE_EVIDENCE'
+
+
+def test_gap_receipt_preserves_selector_drop_reason():
+    receipt = api().audit_gap_delivery(
+        [{'required_unit_ids': ['C-required'], 'available_unit_ids': ['C-required']}],
+        [], json.dumps({'evidence_catalog': []}),
+        drop_reasons={'C-required': 'TOP_N_LIMIT'})
+    assert receipt['records'][0]['drop_reason'] == 'TOP_N_LIMIT'
+    assert receipt['records'][0]['status'] == 'TOP_N_LIMIT'
+
+
+def test_gap_receipt_marks_selected_delivery_without_model_citation():
+    unit = dict(id='C3', text='exact body',
+                content_digest=hashlib.sha256(b'exact body').hexdigest(),
+                gap_role_keys=['G1:anchor'])
+    receipt = api().audit_gap_delivery(
+        [{'required_unit_ids': ['C3'], 'available_unit_ids': ['C3']}], [unit],
+        json.dumps({'evidence_catalog': [{'id': 'SRC-C3', 'excerpt': unit['text'],
+                                          'content_digest': unit['content_digest']}]}),
+        model_citations=[])
+    assert receipt['status'] == 'INCOMPLETE'
+    assert receipt['records'][0]['status'] == 'MODEL_DID_NOT_USE_EVIDENCE'
+    cited = api().audit_gap_delivery(
+        [{'required_unit_ids': ['C3'], 'available_unit_ids': ['C3']}], [unit],
+        json.dumps({'evidence_catalog': [{'id': 'SRC-C3', 'excerpt': unit['text'],
+                                          'content_digest': unit['content_digest']}]}),
+        model_citations=['SRC-C3'])
+    assert cited['status'] == 'DELIVERED'
+    assert cited['records'][0]['cited'] is True
 
 
 def test_config_template_gap_does_not_require_an_api_or_writer(tmp_path):

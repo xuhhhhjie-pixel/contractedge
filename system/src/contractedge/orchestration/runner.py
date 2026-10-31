@@ -1182,7 +1182,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                                                  'available_unit_ids': list(dict.fromkeys(
                                                      [*fitted.selected_ids, *fitted.dropped_ids]))}],
                         list(fitted.candidates),
-                        json.dumps([dict(m) for m in request.messages],ensure_ascii=False))
+                        json.dumps([dict(m) for m in request.messages],ensure_ascii=False),
+                        drop_reasons=dict(fitted.drop_reasons or {}))
                     request=replace(request,metadata={**request.metadata,'gap_delivery':receipt})
                     if receipt['status']=='INCOMPLETE':
                         fitted=replace(fitted,context_audit=fitted.context_audit+({'gap_delivery':receipt},))

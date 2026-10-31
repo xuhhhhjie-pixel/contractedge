@@ -156,7 +156,9 @@ def project_statuses(run_trace: Mapping[str, Any]) -> dict[str, str]:
     if semantic is None:
         semantic = feedback.get("semantic_outcome")
     build = feedback.get("build_state")
-    if status in {"INFRASTRUCTURE_ERROR", "ENVIRONMENT_ERROR", "RESPONSE_UNKNOWN"}:
+    if status in {"INFRASTRUCTURE_ERROR", "INFRA_ERROR", "ENVIRONMENT_ERROR", "RESPONSE_UNKNOWN",
+                  "UNKNOWN_RESPONSE", "INVALID_OBSERVATION", "EXECUTION_FAILED", "TIMEOUT",
+                  "OUTPUT_LIMIT", "REJECTED", "INTERRUPTED"}:
         execution = "ERROR"
     elif build == "PASSED" or status in {"PUBLIC_EXECUTION_COMPLETE", "PUBLIC_REVIEW_COMPLETE", "COMPLETE"}:
         execution = "COMPLETE"
@@ -169,7 +171,10 @@ def project_statuses(run_trace: Mapping[str, Any]) -> dict[str, str]:
     elif semantic == "PUBLIC_REVIEW_FAIL" or status == "BEHAVIOR_FAIL":
         public = "FAIL"
     elif status in {"PUBLIC_EXECUTION_COMPLETE", "PUBLIC_REVIEW_COMPLETE", "COMPLETE", "ROUND_LIMIT",
-                    "EVIDENCE_GAP", "DELIVERY_INCOMPLETE", "OBSERVATION_INSUFFICIENT"} or semantic == "UNKNOWN":
+                    "EVIDENCE_GAP", "DELIVERY_INCOMPLETE", "OBSERVATION_INSUFFICIENT",
+                    "INVALID_OBSERVATION", "EXECUTION_FAILED", "TIMEOUT", "OUTPUT_LIMIT",
+                    "REJECTED", "INTERRUPTED", "EVIDENCE_DELIVERY_INCOMPLETE",
+                    "DELIVERY_INCOMPLETE"} or semantic == "UNKNOWN":
         public = "UNKNOWN"
     else:
         public = "NOT_APPLICABLE"
@@ -177,7 +182,13 @@ def project_statuses(run_trace: Mapping[str, Any]) -> dict[str, str]:
         method = "INVALID_OUTPUT"
     elif status in {"INVALID_PLAN", "PLAN_INVALID"}:
         method = "INVALID_PLAN"
-    elif status in {"BUDGET_EXHAUSTED", "INFRASTRUCTURE_ERROR", "ENVIRONMENT_ERROR", "RESPONSE_UNKNOWN"}:
+    elif status in {"BUDGET_EXHAUSTED", "BUDGET_EXCEEDED", "INFRASTRUCTURE_ERROR", "INFRA_ERROR",
+                    "ENVIRONMENT_ERROR", "RESPONSE_UNKNOWN", "UNKNOWN_RESPONSE", "REJECTED",
+                    "INTERRUPTED"}:
+        method = status
+    elif status in {"TIMEOUT", "OUTPUT_LIMIT", "EXECUTION_FAILED"}:
+        method = status
+    elif status in {"EVIDENCE_DELIVERY_INCOMPLETE", "DELIVERY_INCOMPLETE"}:
         method = status
     elif public == "UNKNOWN" and execution == "COMPLETE":
         method = "SEMANTIC_UNKNOWN"
@@ -210,15 +221,48 @@ def score_run(run_trace: Mapping[str, Any], normalized_gt: Mapping[str, Any]) ->
         "scoring_status": "SCORED",
         "ambiguous_relation_matches": [],
     }
-    if status == "INFRASTRUCTURE_ERROR":
+    # These are terminal execution/transport/evidence facts.  They must stay
+    # in the case denominator, but a diagnosis left on a partial trace must
+    # never be matched against GT relations as if the method reached a
+    # scoreable semantic boundary.
+    unscored = {
+        "INFRASTRUCTURE_ERROR": ("INFRASTRUCTURE", "NOT_SCORED_INFRASTRUCTURE"),
+        "INFRA_ERROR": ("INFRASTRUCTURE", "NOT_SCORED_INFRASTRUCTURE"),
+        "ENVIRONMENT_ERROR": ("INFRASTRUCTURE", "NOT_SCORED_INFRASTRUCTURE"),
+        "REJECTED": ("INFRASTRUCTURE", "NOT_SCORED_INFRASTRUCTURE"),
+        "INTERRUPTED": ("INTERRUPTED", "NOT_SCORED_INTERRUPTED"),
+        "RESPONSE_UNKNOWN": ("RESPONSE_UNKNOWN", "NOT_SCORED_RESPONSE_UNKNOWN"),
+        "UNKNOWN_RESPONSE": ("RESPONSE_UNKNOWN", "NOT_SCORED_RESPONSE_UNKNOWN"),
+        "BUDGET_EXHAUSTED": ("BUDGET", "NOT_SCORED_BUDGET"),
+        "BUDGET_EXCEEDED": ("BUDGET", "NOT_SCORED_BUDGET"),
+        "EXECUTION_FAILED": ("EXECUTION", "NOT_SCORED_EXECUTION"),
+        "TIMEOUT": ("EXECUTION", "NOT_SCORED_EXECUTION"),
+        "OUTPUT_LIMIT": ("EXECUTION", "NOT_SCORED_EXECUTION"),
+        "INVALID_OUTPUT": ("METHOD_OUTPUT", "METHOD_FAILURE"),
+        "INVALID_PLAN": ("METHOD_OUTPUT", "METHOD_FAILURE"),
+        "FORMAT_INVALID": ("METHOD_OUTPUT", "METHOD_FAILURE"),
+        "PLAN_INVALID": ("METHOD_OUTPUT", "METHOD_FAILURE"),
+        "EVIDENCE_DELIVERY_INCOMPLETE": ("EVIDENCE", "NOT_SCORED_EVIDENCE"),
+        "DELIVERY_INCOMPLETE": ("EVIDENCE", "NOT_SCORED_EVIDENCE"),
+        "INVALID_OBSERVATION": ("OBSERVATION", "NOT_SCORED_OBSERVATION"),
+    }
+    if status in unscored:
+        record["failure_kind"], record["scoring_status"] = unscored[status]
+        return record
+    # A partial trace may retain the old public terminal status while its
+    # engine journal proves that dispatch was unknown or the runtime failed.
+    # Never let that stale semantic payload enter relation matching.
+    failures = [run_trace.get("primary_failure") or {}]
+    failures.extend(run_trace.get("failure_records") or [])
+    if any(isinstance(item, Mapping) and item.get("dispatch_state") == "response_unknown"
+           for item in failures):
+        record["failure_kind"] = "RESPONSE_UNKNOWN"
+        record["scoring_status"] = "NOT_SCORED_RESPONSE_UNKNOWN"
+        return record
+    if any(isinstance(item, Mapping) and item.get("failure_class") == "infrastructure"
+           for item in failures):
         record["failure_kind"] = "INFRASTRUCTURE"
-        return record
-    if status == "BUDGET_EXHAUSTED":
-        record["failure_kind"] = "BUDGET"
-        return record
-    if status in {"INVALID_OUTPUT", "INVALID_PLAN", "FORMAT_INVALID", "PLAN_INVALID"}:
-        record["failure_kind"] = "METHOD_OUTPUT"
-        record["scoring_status"] = "METHOD_FAILURE"
+        record["scoring_status"] = "NOT_SCORED_INFRASTRUCTURE"
         return record
     if (projection["method_status"] in {"SEMANTIC_UNKNOWN", "EVIDENCE_GAP", "DELIVERY_INCOMPLETE",
                                           "ROUND_LIMIT", "OBSERVATION_INSUFFICIENT"}

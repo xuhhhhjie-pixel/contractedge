@@ -454,7 +454,17 @@ def locate_gap_roles(snapshot, gaps: list[dict], limits: dict):
         truncated=len(scanned)>=max_files or used>=max_bytes)
 
 
-def audit_gap_delivery(gaps: list[dict], selected: list[dict], serialized_request: str):
+def audit_gap_delivery(gaps: list[dict], selected: list[dict], serialized_request: str, *,
+                       drop_reasons: Mapping[str, str] | None = None,
+                       model_citations=None):
+    """Record the bounded evidence path from retrieval to model input.
+
+    ``available_unit_ids`` and ``drop_reasons`` are engine facts from the
+    selector.  They are deliberately separate from the serialized request so
+    a required unit that was found but clipped cannot be mistaken for a unit
+    that was never found.  ``model_citations`` is optional because it only
+    exists after a response has been validated.
+    """
     value=json.loads(serialized_request); catalog={}
     def collect(item):
         if isinstance(item,dict):
@@ -467,30 +477,40 @@ def audit_gap_delivery(gaps: list[dict], selected: list[dict], serialized_reques
             for v in item:collect(v)
     collect(value);rows=[]
     selected_ids={str(unit.get('id')) for unit in selected if isinstance(unit, dict) and unit.get('id') is not None}
+    explicit_drop_reasons = {str(key): str(value) for key, value in (drop_reasons or {}).items()}
     # The bounded retrieval stage can provide IDs that were found but dropped;
     # legacy callers omit that pool and expose only their selected candidates.
     available_ids={str(i) for gap in gaps for i in gap.get('available_unit_ids', ())}
     if not available_ids:
         available_ids=set(selected_ids)
+    cited_ids = None if model_citations is None else {str(item) for item in model_citations}
     for unit in selected:
         if not unit.get('gap_role_keys'):continue
         r=catalog.get('SRC-'+unit['id'],{})
         delivered=(r.get('excerpt')==unit['text'] and r.get('content_digest')==unit['content_digest']
             and hashlib.sha256(unit['text'].encode()).hexdigest()==unit['content_digest'])
+        cited = None if cited_ids is None else (
+            str(unit['id']) in cited_ids or 'SRC-' + str(unit['id']) in cited_ids)
+        drop_reason = None if delivered else 'NOT_DELIVERED'
         rows.append(dict(unit_id=unit['id'],roles=unit['gap_role_keys'],found=True,
-                         selected=True,delivered=delivered,cited=None,
-                         drop_reason=None if delivered else 'NOT_DELIVERED'))
+                         selected=True,delivered=delivered,cited=cited,
+                         drop_reason=drop_reason,
+                         status=(('NOT_DELIVERED' if not delivered else
+                                  'MODEL_DID_NOT_USE_EVIDENCE' if cited is False else 'DELIVERED'))))
     required={i for gap in gaps for i in gap.get('required_unit_ids',[])}
     delivered_ids={r['unit_id'] for r in rows if r['delivered']}
     for unit_id in sorted(required-selected_ids):
         found=unit_id in available_ids
+        reason = explicit_drop_reasons.get(unit_id, 'FOUND_NOT_SELECTED' if found else 'NOT_FOUND')
         rows.append(dict(unit_id=unit_id,roles=[],found=found,selected=False,
-                         delivered=False,cited=None,
-                         drop_reason='FOUND_NOT_SELECTED' if found else 'NOT_FOUND'))
+                         delivered=False,cited=None,drop_reason=reason,status=reason))
     missing=sorted(required-delivered_ids)
-    failures=sorted({row['drop_reason'] for row in rows if row.get('drop_reason')})
-    return dict(status='DELIVERED' if all(r['delivered'] for r in rows) and not missing else 'INCOMPLETE',records=rows,
-        missing_required_ids=missing, failure_codes=failures, model_citation_status='NOT_AVAILABLE',
+    failures=sorted({row['status'] for row in rows if row.get('status') not in {None, 'DELIVERED'}})
+    return dict(status='DELIVERED' if all(r['delivered'] for r in rows) and not missing and
+                not any(r.get('cited') is False for r in rows) else 'INCOMPLETE',records=rows,
+        missing_required_ids=missing, failure_codes=failures,
+        model_citation_status=('CITED' if cited_ids is not None and any(r.get('cited') for r in rows)
+                               else 'NOT_CITED' if cited_ids is not None and rows else 'NOT_AVAILABLE'),
         interpretation='Found, selection and exact request delivery are recorded separately; delivery does not prove causal relevance')
 
 
@@ -508,6 +528,13 @@ def annotate_gap_delivery_citations(receipt: Mapping, diagnosis: Mapping | None)
         row=dict(row)
         if row.get('delivered'):
             row['cited']=str(row.get('unit_id')) in cited or 'SRC-'+str(row.get('unit_id')) in cited
+            row['status']='DELIVERED' if row['cited'] else 'MODEL_DID_NOT_USE_EVIDENCE'
+        elif row.get('found') and not row.get('selected'):
+            row['status']=row.get('drop_reason') or 'FOUND_NOT_SELECTED'
+        elif not row.get('found'):
+            row['status']='NOT_FOUND'
+        else:
+            row['status']=row.get('drop_reason') or 'NOT_DELIVERED'
         rows.append(row)
     result['records']=rows
     result['model_citation_status']=('CITED' if any(row.get('cited') for row in rows)

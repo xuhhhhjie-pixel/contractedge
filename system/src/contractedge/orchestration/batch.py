@@ -114,13 +114,16 @@ def run_batch(public_root, output, config, execute_case, *, case_ids=None, max_n
                     record.update(status=result['status'],trace=str(trace.relative_to(out)),trace_sha256=file_sha(trace))
                     if result.get('candidate'):
                         record['candidate']=dict(result['candidate'])
-                    for key in ('failure', 'failure_records', 'primary_failure'):
+                    for key in ('failure', 'failure_records', 'primary_failure', 'secondary_failures'):
                         if result.get(key) is not None:
                             record[key] = result[key]
                 else:
                     record['status']='INTERRUPTED'
-                    record['failure']=make_failure('batch-recovery', 'INTERRUPTED',
+                    failure=make_failure('batch-recovery', 'INTERRUPTED',
+                        dispatch_state='response_unknown',
                         message='A running case has no committed repair trace; dispatch outcome is unknown.')
+                    record.update(failure=failure, failure_records=[failure], primary_failure=failure,
+                                  secondary_failures=[])
                 if record['status']!='INTERRUPTED':
                     retire_workspace(record,directory)
                 save()
@@ -140,7 +143,7 @@ def run_batch(public_root, output, config, execute_case, *, case_ids=None, max_n
                 candidate=result.get('candidate')
                 if candidate:
                     record['candidate']=dict(candidate)
-                for key in ('failure', 'failure_records', 'primary_failure'):
+                for key in ('failure', 'failure_records', 'primary_failure', 'secondary_failures'):
                     if result.get(key) is not None:
                         record[key] = result[key]
             except Exception as exc:
@@ -148,7 +151,9 @@ def run_batch(public_root, output, config, execute_case, *, case_ids=None, max_n
                 # deterministic method, budget and transport failures so the
                 # cohort matrix remains useful for recovery and evaluation.
                 status, failure = classify_exception(exc, stage='batch')
-                record.update(status=status, error=type(exc).__name__+': '+str(exc), failure=failure)
+                record.update(status=status, error=type(exc).__name__+': '+str(exc), failure=failure,
+                              failure_records=[failure],
+                              primary_failure=failure, secondary_failures=[])
             save()
             if record['status']!='INTERRUPTED':
                 retire_workspace(record,directory)

@@ -1,6 +1,7 @@
 import json
 
-from contractedge.contracts.failures import FailureRecord, classify_exception, make_failure, project_terminal_status
+from contractedge.contracts.failures import (FailureRecord, ObservationRejected,
+    classify_exception, make_failure, project_terminal_status)
 from contractedge.contracts.validation import validate_run_trace
 from contractedge.orchestration.semantic_delivery import SemanticDeliveryError
 from contractedge.evaluation.gt_adapter import project_statuses, score_run
@@ -20,6 +21,8 @@ def test_known_failures_are_not_collapsed_into_interruptions():
     assert classify_exception(TimeoutError("provider did not answer"), stage="review")[0] == "RESPONSE_UNKNOWN"
     assert classify_exception(RuntimeError("unclassified crash"), stage="execute")[0] == "INTERRUPTED"
     assert classify_exception(SemanticDeliveryError("missing evidence"), stage="review")[0] == "EVIDENCE_DELIVERY_INCOMPLETE"
+    assert classify_exception(ObservationRejected("observer incomplete"), stage="observe")[0] == "INVALID_OBSERVATION"
+    assert classify_exception(ValueError("Unknown execution backend: bad"), stage="front")[0] == "INFRASTRUCTURE_ERROR"
 
 
 def test_eight_failure_classes_keep_their_engine_layer_and_dispatch_fact():
@@ -83,6 +86,24 @@ def test_public_execution_complete_unknown_is_not_semantically_scored():
                                "precision_eligible": True, "recall_eligible": True})
     assert result["scoring_status"] == "SEMANTIC_UNKNOWN"
     assert result["precision"] is None and result["recall"] is None
+
+
+def test_execution_and_delivery_failures_never_enter_relation_matching():
+    gt = {"case_id": "C", "expected_relations": [{"id": "E1", "source": "A", "target": "B"}],
+          "violations": [{"relation_id": "E1"}], "precision_eligible": True,
+          "recall_eligible": True}
+    diagnosis = {"units": [{"id": "A"}, {"id": "B"}],
+                 "expected_relations": [{"id": "P1", "source_unit_ids": ["A"],
+                                         "target_unit_ids": ["B"]}],
+                 "violations": [{"relation_id": "P1"}]}
+    for status, kind in (("EXECUTION_FAILED", "EXECUTION"),
+                         ("TIMEOUT", "EXECUTION"),
+                         ("OUTPUT_LIMIT", "EXECUTION"),
+                         ("EVIDENCE_DELIVERY_INCOMPLETE", "EVIDENCE")):
+        result = score_run({"status": status, "diagnosis": diagnosis}, gt)
+        assert result["failure_kind"] == kind
+        assert result["precision"] is None and result["recall"] is None
+        assert "expected_relation_counts" not in result
 
 
 def test_candidate_delivery_audit_distinguishes_drop_from_delivery():

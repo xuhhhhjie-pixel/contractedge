@@ -18,6 +18,15 @@ DISPATCH_STATES = frozenset({
 })
 
 
+class ObservationRejected(ValueError):
+    """The trusted observation boundary produced no usable observation.
+
+    This is an engine control exception.  It is intentionally separate from
+    a model-format ``ValueError`` so the orchestration and evaluator cannot
+    report a runtime/observer failure as an invalid model response.
+    """
+
+
 @dataclass(frozen=True)
 class FailureRecord:
     """Engine-only failure fact; never part of a model output contract."""
@@ -105,6 +114,9 @@ def classify_exception(exc: BaseException, *, stage: str = "unknown",
     if name in {"BudgetExceeded", "MoneyBudgetExceeded"} or "budget" in lower and "exceed" in lower:
         return "BUDGET_EXHAUSTED", make_failure(stage, "BUDGET_EXHAUSTED",
             failure_class="infrastructure", dispatch_state=dispatch, message=message)
+    if name in {"ObservationRejected", "InvalidObservation"}:
+        return "INVALID_OBSERVATION", make_failure(stage, "INVALID_OBSERVATION",
+            failure_class="infrastructure", dispatch_state=dispatch, message=message)
     if name in {"PlanRejected", "ContractError", "SemanticDeliveryError"}:
         if name == "PlanRejected":
             return "INVALID_PLAN", make_failure(stage, "INVALID_PLAN",
@@ -115,6 +127,9 @@ def classify_exception(exc: BaseException, *, stage: str = "unknown",
         return "INVALID_OUTPUT", make_failure(stage, "INVALID_CONTRACT",
             failure_class="model_format", dispatch_state=dispatch, message=message)
     if name in {"ProviderResponseError", "TimeoutError", "ConnectionError", "HTTPError"}:
+        if name == "ProviderResponseError" and "identity" in lower:
+            return "INFRASTRUCTURE_ERROR", make_failure(stage, "INFRASTRUCTURE_ERROR",
+                failure_class="infrastructure", dispatch_state="response_known", message=message)
         unknown = dispatch == "response_unknown" or name in {"TimeoutError", "ConnectionError"}
         status = "RESPONSE_UNKNOWN" if unknown else "INVALID_OUTPUT"
         return status, make_failure(stage, status, failure_class="unknown" if unknown else "model_format",
@@ -124,6 +139,10 @@ def classify_exception(exc: BaseException, *, stage: str = "unknown",
             failure_class="infrastructure", dispatch_state=dispatch, message=message)
     if name == "RuntimeError" and any(token in lower for token in
                                       ("unavailable", "install the ", "docker", "runtime dependency", "no such file")):
+        return "INFRASTRUCTURE_ERROR", make_failure(stage, "INFRASTRUCTURE_ERROR",
+            failure_class="infrastructure", dispatch_state=dispatch, message=message)
+    if (isinstance(exc, ValueError) and any(token in lower for token in
+            ("unknown execution backend", "execution capabilities", "public check capabilities"))):
         return "INFRASTRUCTURE_ERROR", make_failure(stage, "INFRASTRUCTURE_ERROR",
             failure_class="infrastructure", dispatch_state=dispatch, message=message)
     if isinstance(exc, ValueError) or name in {"TypeError", "KeyError", "JSONDecodeError", "UnicodeDecodeError"}:
