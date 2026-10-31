@@ -126,7 +126,7 @@ def classify_exception(exc: BaseException, *, stage: str = "unknown",
                                       ("unavailable", "install the ", "docker", "runtime dependency", "no such file")):
         return "INFRASTRUCTURE_ERROR", make_failure(stage, "INFRASTRUCTURE_ERROR",
             failure_class="infrastructure", dispatch_state=dispatch, message=message)
-    if name in {"ValueError", "TypeError", "KeyError", "JSONDecodeError", "UnicodeDecodeError"}:
+    if isinstance(exc, ValueError) or name in {"TypeError", "KeyError", "JSONDecodeError", "UnicodeDecodeError"}:
         return "INVALID_OUTPUT", make_failure(stage, "INVALID_OUTPUT",
             failure_class="model_format", dispatch_state=dispatch, message=message)
     return "INTERRUPTED", make_failure(stage, "INTERRUPTED", failure_class="unknown",

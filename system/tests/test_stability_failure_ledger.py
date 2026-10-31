@@ -9,6 +9,9 @@ from contractedge.model.budget import BudgetedProvider
 from contractedge.model.provider import ModelRequest
 from contractedge.retrieval.candidates import build_candidate_set, trim_context_bundle
 from contractedge.orchestration.runner import RunTrace, _front_failure_projection
+from contractedge.contracts.runtime import RuntimeRejected
+from contractedge.execution.review import PublicReviewFormatError
+from contractedge.orchestration.repair import PlanRejected
 
 
 def test_known_failures_are_not_collapsed_into_interruptions():
@@ -17,6 +20,26 @@ def test_known_failures_are_not_collapsed_into_interruptions():
     assert classify_exception(TimeoutError("provider did not answer"), stage="review")[0] == "RESPONSE_UNKNOWN"
     assert classify_exception(RuntimeError("unclassified crash"), stage="execute")[0] == "INTERRUPTED"
     assert classify_exception(SemanticDeliveryError("missing evidence"), stage="review")[0] == "EVIDENCE_DELIVERY_INCOMPLETE"
+
+
+def test_eight_failure_classes_keep_their_engine_layer_and_dispatch_fact():
+    cases = [
+        (ValueError('bad JSON'), 'INVALID_OUTPUT', 'model_format'),
+        (PlanRejected('plan boundary'), 'INVALID_PLAN', 'model_format'),
+        (BudgetExceeded('cap'), 'BUDGET_EXHAUSTED', 'infrastructure'),
+        (SemanticDeliveryError('required source missing'), 'EVIDENCE_DELIVERY_INCOMPLETE', 'evidence'),
+        (TimeoutError('response unknown'), 'RESPONSE_UNKNOWN', 'unknown'),
+        (RuntimeRejected('runtime admission'), 'INFRASTRUCTURE_ERROR', 'infrastructure'),
+        (PublicReviewFormatError('invalid quote', code='QUOTE_INVALID'), 'INVALID_OUTPUT', 'model_format'),
+    ]
+    for error, code, failure_class in cases:
+        status, record = classify_exception(error, stage='test', dispatch_state='response_known')
+        assert status == code and record['failure_class'] == failure_class
+    execution = make_failure('candidate_process', 'EXECUTION_FAILED', failure_class='execution',
+                             dispatch_state='response_known')
+    cleanup = make_failure('cleanup', 'CLEANUP_UNCONFIRMED', failure_class='infrastructure',
+                           dispatch_state='response_known', secondary=True)
+    assert execution['failure_class'] == 'execution' and cleanup['secondary'] is True
 
 
 def test_failure_record_is_engine_only_and_preserves_primary_secondary_fact():
