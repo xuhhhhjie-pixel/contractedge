@@ -96,6 +96,17 @@ class RepairBatchTests(unittest.TestCase):
             self.assertEqual(report['case_count'],1)
             self.assertEqual(report['records'][0]['status'],'INTERRUPTED')
 
+    def test_deterministic_case_error_is_recorded_as_method_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); public,_=make_public_fixture(root/'data')
+            def deterministic_error(case_id, directory):
+                raise ValueError('deterministic contract bug')
+            report=run_batch(public, root/'batch', {}, deterministic_error)
+            record=report['records'][0]
+            self.assertEqual(record['status'], 'INVALID_OUTPUT')
+            self.assertEqual(record['failure']['code'], 'INVALID_OUTPUT')
+            self.assertEqual(record['failure']['failure_class'], 'model_format')
+
     def test_terminal_workspace_can_be_rebuilt_from_retained_patch_and_frozen_inputs(self):
         import hashlib
         with tempfile.TemporaryDirectory() as tmp:
