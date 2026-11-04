@@ -813,6 +813,9 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 'snapshot_id': compute_snapshot(source).snapshot_id,
                 'action': round_decision.action, 'reason': round_decision.reason,
                 'route': next_route, 'review_prerequisites': routing['review_prerequisites']})
+            if round_decision.action == 'STOP':
+                status = stop_status(feedback) if feedback else 'STOPPED_UNCERTAIN'
+                break
             if mode in {'without_relation', 'direct'} and (
                     trace is None or round_decision.action != 'EXECUTE'):
                 with semantic_monitor.scope(semantic_context_for('DIRECT_PLAN_ROUND_' + str(round_id),
@@ -1159,6 +1162,11 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 fixed_requirement_profile=hasattr(runner, 'enforce_requirement_profile'),
                 operation_consistency_enabled=config.get('operation_consistency_enabled', False),
                 round_id=round_id, max_rounds=max_rounds)
+            # Record the same decision consumed at the next round. Selection
+            # may later restore another snapshot, whose feedback is resolved
+            # separately; a rejected trial never becomes current evidence.
+            resolved = resolve_repair_route(trace, feedback, current_snapshot=after, mode=mode)
+            feedback = resolved['feedback']
             # Raw observations remain in the recorded public result and feed
             # deterministic checks. Carry the chosen stage material forward,
             # plus complete support for final checks, rather than reselecting

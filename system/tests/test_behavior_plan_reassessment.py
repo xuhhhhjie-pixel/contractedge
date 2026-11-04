@@ -8,7 +8,8 @@ from tests.test_necessary_coverage_review import obligation
 
 
 def values():
-    plan=dict(postconditions=[obligation()],precondition_review=[{'disposition':'REQUIRED'}])
+    plan=dict(postconditions=[obligation()],precondition_review=[{
+        'disposition':'REQUIRED', 'verification_refs':[obligation()['id']]}])
     records=[obs('a','FAIL'),obs('b','PASS')]
     for row in records:
         key=row['id'];status=row['behavior_check']['status']

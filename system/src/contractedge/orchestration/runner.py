@@ -1048,10 +1048,14 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
         install_monitor(provider, journal)
         journal.primary_error = None
     products = {}
+    retrieval_rounds = []
     trace = _run_front_half_impl(method_input, workspace, provider, config, token_counter,
         semantic_reviewer=semantic_reviewer, execution_feedback=execution_feedback,
         public_observations=public_observations, journal=journal, attempt_id=attempt_id,
-        products=products, inherited_source_context=inherited_source_context)
+        products=products, inherited_source_context=inherited_source_context, retrieval_rounds=retrieval_rounds)
+    # One final projection covers every deliberate early return as well as
+    # exceptions. Do not make each validation branch copy acquisition history.
+    trace = replace(trace, retrieval_rounds=tuple(retrieval_rounds))
     trace = _front_failure_projection(trace, journal, dispatch_start)
     if journal is not None:
         from contractedge.orchestration.recorder import preserve_error
@@ -1071,7 +1075,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                    provider: ModelProvider, config: Mapping[str, Any],
                    token_counter: Callable[[str], int] | None, *,
                    semantic_reviewer=None, execution_feedback=None,
-                   public_observations=(), journal=None, attempt_id="front", products=None, inherited_source_context=None) -> RunTrace:
+                   public_observations=(), journal=None, attempt_id="front", products=None,
+                   inherited_source_context=None, retrieval_rounds=None) -> RunTrace:
     started = time.monotonic()
     parsed = method_input if isinstance(method_input, MethodInput) else parse_method_input(method_input)
     run_id = str(config.get("run_id") or uuid.uuid4())
@@ -1080,7 +1085,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
     products = {} if products is None else products
 
     call_annotations = {}
-    retrieval_rounds: list[Mapping[str, Any]] = []
+    retrieval_rounds = [] if retrieval_rounds is None else retrieval_rounds
 
     def front_calls():
         # Stage annotations are a view over immutable canonical call facts,
@@ -1835,7 +1840,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     token_counter=token_counter)
                 candidate_set = replace(candidate_set,
                     required_endpoint_ids=tuple(u['id'] for u in necessary_units))
-        retrieval_rounds = [{
+        retrieval_rounds[:] = [{
             "round_id": 1, "seed_paths": list(scope.seed_paths),
             "probe_entrypoint_resolution": entrypoint_audit,
             "selected_ids": list(candidate_set.selected_ids), "dropped_ids": list(candidate_set.dropped_ids),

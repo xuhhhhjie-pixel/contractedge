@@ -146,7 +146,12 @@
                 "type": "string"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "anyOf": [
+              {"required": ["path"], "properties": {"path": {"type": "string", "pattern": "\\S"}}},
+              {"required": ["symbol"], "properties": {"symbol": {"type": "string", "pattern": "\\S"}}},
+              {"required": ["search_term"], "properties": {"search_term": {"type": "string", "pattern": "\\S"}}}
+            ]
           }
         }
       }

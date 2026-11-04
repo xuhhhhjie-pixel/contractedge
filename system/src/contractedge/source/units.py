@@ -61,7 +61,8 @@ def materialize_complete_units(snapshot: Snapshot, units, *, artifacts=(), adopt
         # read_text in historical discovery normalizes CRLF; accept only that
         # known representation difference, never a same-name unrelated body.
         if (hashlib.sha256(unit['text'].encode()).hexdigest() != unit['content_digest']
-                or not full['text'].replace('\r\n', '\n').startswith(unit['text'].replace('\r\n', '\n'))):
+                or not (full['text'].startswith(unit['text'])
+                    or full['text'].replace('\r\n', '\n').startswith(unit['text'].replace('\r\n', '\n')))):
             raise ValueError('Complete declaration prefix differs from original source')
         full = {**unit, **full, 'expanded_from_unit_id': unit['id']}
         if artifact_id is not None:

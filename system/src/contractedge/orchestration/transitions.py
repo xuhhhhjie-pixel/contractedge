@@ -66,7 +66,9 @@ def transition(state: RepairState, result: StageResult) -> TransitionDecision:
             reason = "DIAGNOSIS_NOT_READY"
     elif result.stage == "round_start":
         next_state = replace(next_state, current_snapshot=result.snapshot_id)
-        if result.route == "DIAGNOSIS":
+        if result.route == "STOP":
+            action = "STOP"
+        elif result.route == "DIAGNOSIS":
             action = "DIAGNOSE"
         elif result.route == "CHANGESET":
             action = "REVISE_PLAN" if state.diagnosis_snapshot == result.snapshot_id else "REDIAGNOSE"
@@ -148,17 +150,19 @@ def plan_reassessment_required(plan: Mapping, current_snapshot: str, previous: M
 
 
 def behavior_plan_reassessment_required(plan: Mapping, current_snapshot: str, feedback: Mapping | None) -> bool:
-    """A bound necessary failure can question intent even when startup succeeds."""
+    """Only a failed verification of an actual required prerequisite questions it."""
     if (not feedback or feedback.get('to_snapshot') != current_snapshot
             or feedback.get('semantic_outcome') != 'PUBLIC_REVIEW_FAIL'
             or not any(p.get('disposition') == 'REQUIRED' for p in plan.get('precondition_review', []))):
         return False
     from contractedge.execution.support import deterministic_check_result
+    verification_ids = {ref for row in plan.get('precondition_review', [])
+                        if row.get('disposition') == 'REQUIRED' for ref in row.get('verification_refs', [])}
     return any((result := deterministic_check_result(condition, feedback.get('public_observations', []),
         snapshot_id=current_snapshot, capabilities=feedback.get('public_execution_capabilities')))
         and result['status'] == 'FAIL'
         for kind in ('postconditions', 'preserve_constraints', 'open_obligations')
-        for condition in plan.get(kind, []))
+        for condition in plan.get(kind, []) if condition.get('id') in verification_ids)
 
 
 def prerequisite_review_feedback(feedback: Mapping) -> dict:
@@ -172,4 +176,3 @@ def prerequisite_review_feedback(feedback: Mapping) -> dict:
         'and rationale; do not treat that historical instruction as the current action.'}
     result.pop('routing_policy', None)
     return result
-

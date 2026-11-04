@@ -1,6 +1,7 @@
 """Public synthetic boundary counterexamples; no model service or hidden data."""
 import json
 from unittest.mock import patch
+import pytest
 
 from contractedge.contracts.status import project_statuses
 from contractedge.orchestration.runner import run_front_half
@@ -46,7 +47,8 @@ def test_exception_after_selection_preserves_retrieval_history(tmp_path):
     assert trace.retrieval_rounds[0]['round_id'] == 1
 
 
-def test_actual_benchmark_runner_enables_incumbent_protection(tmp_path, monkeypatch):
+@pytest.mark.parametrize('fixed_catalog', [False, True])
+def test_actual_benchmark_runner_enables_incumbent_protection(tmp_path, monkeypatch, fixed_catalog):
     from contractedge.orchestration import repair
     from contractedge.execution.public import BenchmarkPublicRunner
     from tests.test_candidate_regression_guard import test_real_loop_exports_incumbent_and_its_feedback_after_regression
@@ -62,8 +64,37 @@ def test_actual_benchmark_runner_enables_incumbent_protection(tmp_path, monkeypa
         runner = BenchmarkPublicRunner(public, tool_root, lock_root=tmp_path / 'locks')
         for name in ('prepare', 'observe', 'export'):
             setattr(runner, name, getattr(delegate, name))
+        if fixed_catalog:
+            # The model never mentions this public task check. Protection must
+            # come from the registered catalog, not the model's preserve list.
+            monkeypatch.setattr('contractedge.execution.probe_specs.select_probes', lambda *a: [dict(
+                id='fixture', sha256='a'*64, checks={'retain': 'Public task requires stable metadata'})])
+            observe = runner.observe
+            def fixed_observe(workspace, output):
+                report = observe(workspace, output)
+                first = report['observations'][0]
+                report['observations'].append({**first, 'id': 'PUBLIC-FIXED',
+                    'behavior_check': dict(id='fixture:retain', probe_sha256='a'*64,
+                        status='FAIL' if 'regressed' in first['excerpt'] else 'PASS')})
+                return report
+            runner.observe = fixed_observe
+            review = kwargs['reviewer'].review
+            def same_local_results(*args):
+                observed = args[-1]
+                result = review(*args[:-1], {**observed, 'observations': [
+                    row for row in observed['observations'] if row['id'] != 'PUBLIC-FIXED']})
+                for check in result['checks']:
+                    check['status'] = 'PASS' if check['id'] == 'P1' else 'FAIL'
+                return result
+            kwargs['reviewer'].review = same_local_results
+            config = {**config, 'method_probe_profiles': ['fixture']}
         kwargs['public_runner'] = runner
         return original(public, tools, case, out, provider, counter,
                         {k: v for k, v in config.items() if k != 'candidate_guard_enabled'}, **kwargs)
     monkeypatch.setattr(repair, 'repair_case', real_entry)
     test_real_loop_exports_incumbent_and_its_feedback_after_regression(tmp_path, False)
+    assert json.loads((tmp_path / 'run/rounds/1/next-action.json').read_text())['action'] == 'EXECUTE'
+    if fixed_catalog:
+        decision = json.loads((tmp_path / 'run/rounds/1/candidate-decision.json').read_text())
+        assert 'fixture:retain' in decision['protected_check_ids']
+        assert [r['check_id'] for r in decision['regressions']] == ['fixture:retain']

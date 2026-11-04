@@ -680,7 +680,7 @@ def finalize_feedback(feedback, *, review, execution_result, rejection_kind,
                     'PUBLIC_REVIEW_FAIL' if verdict == 'FAIL' else 'UNKNOWN',
                 failure_kind='NONE' if verdict == 'PASS' else 'UNKNOWN', route='STOP',
                 rationale='Fixed requirement-level public profile: ' + verdict,
-                next_action='COMPLETE' if verdict == 'PASS' else 'STOP_UNCERTAIN')
+                next_action='COMPLETE' if verdict == 'PASS' and not feedback['pending_obligations'] else 'STOP_UNCERTAIN')
             if verdict == 'FAIL' and round_id == 0 and before != after and max_rounds > 1:
                 feedback.update(route='EXECUTE', routing_policy='BOUNDED_ACCEPTED_INTENT_RETRY',
                     next_action='EXECUTE', rationale='Bounded retry of this mode\'s accepted intent using only fresh fixed public failures; semantic attribution remains UNKNOWN.')
@@ -688,6 +688,7 @@ def finalize_feedback(feedback, *, review, execution_result, rejection_kind,
     if rejection_kind:
         feedback.update(build_state='NOT_RUN', failure_kind=rejection_kind,
             route='CHANGESET' if rejection_kind == 'PLAN' else 'EXECUTE',
+            next_action='CHANGESET' if rejection_kind == 'PLAN' else 'EXECUTE',
             route_confidence='HIGH', rationale=execution_result['error'])
         validate_feedback(feedback, case_id=feedback['case_id'], input_digest=feedback['input_digest'], to_snapshot=after)
     if execution_result.get('helper_preconditions'):
