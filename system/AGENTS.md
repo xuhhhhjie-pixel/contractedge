@@ -1,6 +1,8 @@
 # Current implementation instructions
 
-Read docs/implementation/20261104/IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md and STATUS.json first. The user authorized all four work packages, real validation within the existing cumulative CNY100 ledger, and GitHub publication. Earlier plans and reports are historical; do not use their superseded budgets or scopes.
+For successor front-half work, read docs/implementation/20261105/FRONT_HALF_REDESIGN_IMPLEMENTATION_SPEC.md first. It is the current implementation design: a read-only locator, unified source tools, intact adopted bodies, corrected Diagnosis interfaces, and one request/budget lifecycle. The new path replaces permanent candidate truncation and independent evidence count/byte/two-extension gates; do not reintroduce those superseded proposals from older reports. Integrated real comparison is allowed; per-mechanism model ablations are not required. The design is not yet implemented or empirically validated.
+
+Read docs/implementation/20261104/STATUS.json and IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md for the frozen 15141 baseline and historical four-package results, not as evidence that the successor is complete. The existing cumulative CNY100 authorization and GitHub publication authorization remain; check the actual remaining ledger before real calls, never reset it for the locator. Preserve the historical status and reports.
 
 Preserve Diagnosis → ChangeSet → TopoMen. Implement shared mechanisms, not case exceptions or prompt-only patches. Keep all adopted/referenced evidence bodies and immutable identities. Preserve baseline freezes, original tests, historical failures and ledgers. No credentials, hidden evaluators, golden fixes, caches or runtime workspaces in Git or model context. Preserve benchmark/ and tools/.
 

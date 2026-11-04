@@ -1,10 +1,12 @@
-# 当前系统实施入口（2026-11-04）
+# 当前系统实施入口（2026-11-05）
+
+**后继前半程优化以[完整实施规格](docs/implementation/20261105/FRONT_HALF_REDESIGN_IMPLEMENTATION_SPEC.md)为准。** 该文档给出五点设计、实际代码入口、旧机制退出范围、分批实施与工程／真实模型验收。新方案尚未实施，本次只更新文档；以下结果均属于冻结基线。
 
 本轮代码修改、工程检查和32槽真实验证已经结束，包标称版本为 **0.6.68**、生产源码固定为 `15141db3`，对照基线为 `e6784c10`。同版回归3384项通过、4项跳过、90个子测试通过，原生9项及六组公开流程模拟通过。12个案例的同容量对照中新旧版均4/12通过，一例改善、一例退步；新版调用和费用更高，尚未证明整体收益。完整声明与补证额度等剩余缺口见最终报告。**`formal_ready=false`**。
 
 - [当前系统版本与统一问题清单](docs/implementation/20261104/CURRENT_SYSTEM_ISSUES_AND_VERSION.md)
 - [四步实施与完整真实结果](docs/implementation/20261104/FINAL_IMPLEMENTATION_REPORT.md)
-- [最新实施与真实验证状态](docs/implementation/20261104/STATUS.json)
+- [上一轮冻结实施与真实验证状态](docs/implementation/20261104/STATUS.json)
 - [逐项问题、修改文件与验收边界](docs/implementation/20261104/ISSUE_CLOSURE_MATRIX.md)
 - [真实对照中的发现与保留失败](docs/implementation/20261104/REAL_VALIDATION_FINDINGS.md)
 - [剩余失败对应的具体代码与后继验收](docs/implementation/20261104/REMAINING_FAILURES_AND_NEXT_CHANGES.md)
@@ -13,7 +15,7 @@
 - [四个工作包计划](docs/implementation/20261104/IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md)
 - [给老师的实施前进展报告](docs/implementation/20261104/CONTRACTEDGE_PROGRESS_REPORT_FOR_ADVISOR_20261104.md)
 
-协作以本目录当前源码及上述状态文件为准。基线标签为`system-e6784-pre-consolidation-20261104`，候选标签为`system-15141-fourstep-candidate-20261104`；后续文档提交未改变该候选的生产源码。报告中的服务器绝对路径是历史证据索引，不保证克隆后可用。凭据、原始模型记录与费用账本留在运行环境。下面的旧开发说明保留为历史资料，其旧状态字段和默认快照校验不能作为当前候选的验收证书。
+源码起点与历史结果以本目录当前源码及上述冻结状态为准，后继前半程设计以20261105实施规格为准。旧版对照标签为`system-e6784-pre-consolidation-20261104`，当前候选标签为`system-15141-fourstep-candidate-20261104`；文档提交未改变该候选的生产源码。报告中的服务器绝对路径是历史证据索引，不保证克隆后可用。凭据、原始模型记录与费用账本留在运行环境。下面的旧开发说明保留为历史资料，其旧状态字段和默认快照校验不能作为当前候选的验收证书。
 
 ---
 

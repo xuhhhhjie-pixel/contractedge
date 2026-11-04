@@ -1,4 +1,6 @@
-> 2026-11-04 系统协作更新：[当前版本与统一问题清单](system/docs/implementation/20261104/CURRENT_SYSTEM_ISSUES_AND_VERSION.md) · [32槽验证报告](system/docs/implementation/20261104/FINAL_IMPLEMENTATION_REPORT.md)。开发候选为0.6.68／源码15141db3，安装副本仍为063d12e2；当前 `formal_ready=false`。
+> 2026-11-05 前半程协作入口：[重构设计、代码修改与验收规格](system/docs/implementation/20261105/FRONT_HALF_REDESIGN_IMPLEMENTATION_SPEC.md)。定位助手、统一查阅、完整交付、Diagnosis接口与统一预算的实施以此为准；设计待实现、效果待验证。
+>
+> 冻结基线：[当前版本与统一问题清单](system/docs/implementation/20261104/CURRENT_SYSTEM_ISSUES_AND_VERSION.md) · [32槽验证报告](system/docs/implementation/20261104/FINAL_IMPLEMENTATION_REPORT.md)。开发候选为0.6.68／源码15141db3，安装副本仍为063d12e2；当前 `formal_ready=false`。
 
 # ContractEdge
 
@@ -47,4 +49,4 @@ GitHub Release单个附件必须小于2GiB，本项目较大的包会分卷。�
 
 ## ContractEdge 修复系统（开发交接版）
 
-当前系统源码、测试、TopoMen运行源码、配置和设计文档见 [system/](system/README.md)。请先读 [四步实施与验收清单](system/docs/implementation/20261104/IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md) 和 [当前状态](system/docs/implementation/20261104/STATUS.json)。旧计划保留供追溯，当前候选尚未通过正式实验准入；历史开发成绩不代表150条正式结果。Benchmark冻结资源与系统开发状态分别管理。
+当前系统源码、测试、TopoMen运行源码、配置和设计文档见 [system/](system/README.md)。后继前半程优化请先读 [20261105实施规格](system/docs/implementation/20261105/FRONT_HALF_REDESIGN_IMPLEMENTATION_SPEC.md)，再核对 [冻结基线状态](system/docs/implementation/20261104/STATUS.json)。[上一轮四步清单](system/docs/implementation/20261104/IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md)保留供追溯，其已被替代的前半程建议不控制新实现。当前候选尚未通过正式实验准入；历史开发成绩不代表150条正式结果。Benchmark冻结资源与系统开发状态分别管理。
