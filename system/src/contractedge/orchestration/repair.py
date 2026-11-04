@@ -43,10 +43,12 @@ from contractedge.contracts.stages import StageResult, front_status, feedback_st
 from contractedge.contracts.failures import ObservationRejected, classify_exception, make_failure
 from contractedge.contracts.status import project_statuses
 from contractedge.orchestration.state import RepairEngine
+from contractedge.orchestration.transitions import (plan_reassessment_required,
+    behavior_plan_reassessment_required, prerequisite_review_feedback, resolve_repair_route)
 from contractedge.orchestration.trial import TrialSession, initialize_recovery, recorded_execution_facts
 
 from contractedge.orchestration.feedback import (make_feedback, validate_feedback,
-    review_plan_with_retained, feedback_prompt_view, select_feedback_observations)
+    review_plan_with_retained, feedback_prompt_view, select_feedback_observations, finalize_feedback)
 from contractedge.orchestration.runner import run_front_half, required_planning_source_support, required_source_prerequisites
 from contractedge.retrieval.candidates import CandidateSet
 from contractedge.source.snapshot import compute_snapshot
@@ -310,60 +312,6 @@ def canonical_text_digest(text):
     import hashlib
     return hashlib.sha256(text.encode()).hexdigest()
 
-
-def plan_reassessment_required(plan: Mapping, current_snapshot: str, previous: Mapping | None) -> bool:
-    """Request a prerequisite review, without attributing the runtime failure.
-
-    Compiler errors and unrelated/unknown probe errors keep the existing edit
-    route. A verified readiness failure questions whether a required runtime
-    prerequisite was established; the planner may retain or revise its intent.
-    """
-    if not any(p.get('disposition') == 'REQUIRED' for p in plan.get('precondition_review', [])):
-        return False
-    previous = previous or {}
-    trial = previous.get('rejected_trial') or {}
-    decision = trial.get('decision') or trial.get('candidate_decision') or {}
-    if trial.get('decision') and trial.get('candidate_decision') and trial['decision'] != trial['candidate_decision']:
-        return False
-    historical = trial.get('feedback') or {}
-    if not (previous.get('source_snapshot') == current_snapshot
-            and decision.get('decision') == 'UNCOMPARABLE'
-            and decision.get('from_snapshot') == current_snapshot
-            and trial.get('snapshot_id') and trial['snapshot_id'] != current_snapshot
-            and decision.get('trial_snapshot') == trial['snapshot_id'] == historical.get('to_snapshot')
-            and historical.get('build_state') == 'FAILED'):
-        return False
-    from contractedge.execution.public import is_registered_readiness_failure
-    return any(isinstance(f, Mapping) and f.get('kind') == 'CANDIDATE_RUNTIME_FAILURE'
-        and f.get('snapshot_id') == trial['snapshot_id'] and is_registered_readiness_failure(f)
-        for f in historical.get('observation_diagnostics', []))
-
-
-def behavior_plan_reassessment_required(plan: Mapping, current_snapshot: str, feedback: Mapping | None) -> bool:
-    """A bound necessary failure can question intent even when startup succeeds."""
-    if (not feedback or feedback.get('to_snapshot') != current_snapshot
-            or feedback.get('semantic_outcome') != 'PUBLIC_REVIEW_FAIL'
-            or not any(p.get('disposition') == 'REQUIRED' for p in plan.get('precondition_review', []))):
-        return False
-    from contractedge.execution.support import deterministic_check_result
-    return any((result := deterministic_check_result(condition, feedback.get('public_observations', []),
-        snapshot_id=current_snapshot, capabilities=feedback.get('public_execution_capabilities')))
-        and result['status'] == 'FAIL'
-        for kind in ('postconditions', 'preserve_constraints', 'open_obligations')
-        for condition in plan.get(kind, []))
-
-
-def prerequisite_review_feedback(feedback: Mapping) -> dict:
-    """Use the existing uncertain diagnosis-stage route, not a causal verdict."""
-    result = {**feedback, 'route': 'DIAGNOSIS', 'next_action': 'DIAGNOSIS',
-        'failure_kind': 'DIAGNOSIS', 'route_confidence': 'LOW',
-        'rationale': 'A current necessary behavior failed under prerequisite-dependent intent. Reassess current '
-        'source and accepted assumptions before another edit; this route is not proof that the plan caused it. '
-        'DIAGNOSIS selects the work stage at LOW confidence, not proven source blame. This review instruction '
-        'supersedes the old execution-first instruction. The unchanged original feedback retains its attribution '
-        'and rationale; do not treat that historical instruction as the current action.'}
-    result.pop('routing_policy', None)
-    return result
 
 
 def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
@@ -849,37 +797,22 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                                   'errors': delivery.receipt['errors']}, ensure_ascii=False))
                 break
             observations = delivery.records
-            if (mode == 'full' and trace is not None and retry_restored_candidate
-                    and plan_reassessment_required(trace.get('changeset') or {},compute_snapshot(source).snapshot_id,
-                                                   last_execution_attempt)):
-                revision_call_start=journal.position()
-                trace=revise_plan(trace,method_input,source,feedback,budget,token_counter,config,
-                    rejected_trial=last_execution_attempt['rejected_trial'], source_context=active_source_context,
-                    recorder=journal.recorder,call_refs=ready_call_refs())
-                write_json(directory/'plan-reassessment.trace.json',trace)
-                revision_value=journal.recorder.capture_value(trace['changeset'],'FINAL_SEMANTIC_PLAN',
-                    snapshot_id=trace['snapshot_id'])
-                journal.record('planning',attempt_id='round-'+str(round_id)+'.prerequisite-reassessment',
-                    snapshot_id=trace['snapshot_id'],status=trace['status'],call_start=revision_call_start,
-                    input_refs=tuple(journal.latest[k] for k in ('planning','feedback') if k in journal.latest),
-                    output_refs=(revision_value,))
-                # Re-prepare the consumer with the revised intent. Rebinding the
-                # previous AcceptedInput would silently discard the new plan.
-                execution_input=None;last_applied_execution=None;plan=None
             if trace is not None and engine.state.diagnosis_snapshot is None and trace.get('diagnosis'):
                 imported = (journal.capture('initial-front.trace.json', 'IMPORTED_FRONT_TRACE',
                                            snapshot_id=trace['snapshot_id']) if initial_trace else journal.latest.get('front'))
                 engine.step(StageResult('diagnosis', front_status(trace['diagnosis']['status']), imported,
                     snapshot_id=trace['snapshot_id']))
-            behavior_reassessment = (mode == 'full' and trace is not None and
-                behavior_plan_reassessment_required(trace.get('changeset') or {},
-                    compute_snapshot(source).snapshot_id, feedback))
-            next_route = ('DIAGNOSIS' if behavior_reassessment else
-                          'EXECUTE' if retry_restored_candidate else feedback['route'] if feedback else
-                          'EXECUTE' if trace is not None else 'DIAGNOSIS')
+            routing = resolve_repair_route(trace, feedback, current_snapshot=compute_snapshot(source).snapshot_id,
+                mode=mode, retry_restored_candidate=retry_restored_candidate, previous_attempt=last_execution_attempt)
+            feedback = routing['feedback']
+            next_route = routing['route']
             round_decision = engine.start_round(StageResult('round_start', 'READY',
                 journal.latest.get('feedback') or journal.latest.get('front_import'),
                 snapshot_id=compute_snapshot(source).snapshot_id, route=next_route), repeated=round_id > 0)
+            write_json(directory / 'next-action.json', {
+                'snapshot_id': compute_snapshot(source).snapshot_id,
+                'action': round_decision.action, 'reason': round_decision.reason,
+                'route': next_route, 'review_prerequisites': routing['review_prerequisites']})
             if mode in {'without_relation', 'direct'} and (
                     trace is None or round_decision.action != 'EXECUTE'):
                 with semantic_monitor.scope(semantic_context_for('DIRECT_PLAN_ROUND_' + str(round_id),
@@ -899,8 +832,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                                           schema_in_prompt=config.get('schema_in_prompt', True))}
                 trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
                     budget, round_config, token_counter,
-                    execution_feedback=(prerequisite_review_feedback(feedback) if behavior_reassessment else feedback)
-                        if mode == 'full' else public_feedback(feedback),
+                    execution_feedback=feedback if mode == 'full' else public_feedback(feedback),
                     public_observations=observations, directory=directory, evidence_delivery=delivery.receipt,
                     journal=journal, attempt_id='round-' + str(round_id),
                     inherited_source_context=active_source_context).to_wire()
@@ -926,7 +858,11 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 if round_decision.action == 'REVISE_PLAN':
                     revision_call_start = journal.position()
                     trace = revise_plan(trace, method_input, source, feedback, budget, token_counter, config,
-                        source_context=active_source_context,recorder=journal.recorder,call_refs=ready_call_refs())
+                        source_context=active_source_context,recorder=journal.recorder,call_refs=ready_call_refs(),
+                        rejected_trial=(last_execution_attempt['rejected_trial']
+                            if routing['review_prerequisites'] else None))
+                    execution_input = None
+                    last_applied_execution = None
                     revision_value = journal.recorder.capture_value(trace['changeset'], 'FINAL_SEMANTIC_PLAN',
                                                                   snapshot_id=trace['snapshot_id'])
                     journal.record('planning', attempt_id='round-' + str(round_id) + '.revision',
@@ -936,9 +872,10 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     plan = None
                 else:
                     # Old source evidence cannot be relabelled as current solely to reuse a diagnosis.
-                    feedback = (prerequisite_review_feedback(feedback) if behavior_reassessment else
-                        {**feedback, 'route': 'DIAGNOSIS', 'failure_kind': 'DIAGNOSIS',
-                         'rationale': 'Plan feedback requires rediagnosis because source evidence is stale.'})
+                    feedback = ({**feedback, 'route': 'DIAGNOSIS', 'next_action': 'DIAGNOSIS',
+                        'failure_kind': 'DIAGNOSIS',
+                        'rationale': 'Plan feedback requires rediagnosis because source evidence is stale.'}
+                        if feedback else None)
                     trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
                         budget, {**dict(config), 'run_id': run_id,
                             'model': model_config(config.get('model'),
@@ -1216,33 +1153,12 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 patch_digest=patch_info['patch_sha256'], execution_status=execution_status,
                 observations=fresh, plan=review_plan, review=review, diagnosis=trace.get('diagnosis'),
                 observation_diagnostics=public_failure_diagnostics(current_observation or {}))
-            if rejection_kind is None and hasattr(runner, 'enforce_requirement_profile'):
-                if review.get('requirement_profile_valid') is True:
-                    fixed = review['public_requirement_checks']
-                    verdict = review['requirement_profile_decision']
-                    feedback.update(public_check_results=fixed,
-                        semantic_outcome='PUBLIC_REVIEW_PASS' if verdict == 'PASS' and not feedback['pending_obligations'] else
-                            'PUBLIC_REVIEW_FAIL' if verdict == 'FAIL' else 'UNKNOWN',
-                        failure_kind='NONE' if verdict == 'PASS' else 'UNKNOWN', route='STOP',
-                        rationale='Fixed requirement-level public profile: ' + verdict,
-                        next_action='COMPLETE' if verdict == 'PASS' else 'STOP_UNCERTAIN')
-                    if verdict == 'FAIL' and round_id == 0 and before != after and max_rounds > 1:
-                        feedback.update(route='EXECUTE', routing_policy='BOUNDED_ACCEPTED_INTENT_RETRY',
-                            next_action='EXECUTE', rationale='Bounded retry of this mode\'s accepted intent using only fresh fixed public failures; semantic attribution remains UNKNOWN.')
-                    validate_feedback(feedback,case_id=case_id,input_digest=method_input.input_digest,to_snapshot=after)
-            if rejection_kind:
-                feedback.update(build_state='NOT_RUN', failure_kind=rejection_kind,
-                    route='CHANGESET' if rejection_kind == 'PLAN' else 'EXECUTE',
-                    route_confidence='HIGH', rationale=execution_result['error'])
-                validate_feedback(feedback, case_id=case_id, input_digest=method_input.input_digest, to_snapshot=after)
-            if execution_result.get('helper_preconditions'):
-                feedback['helper_preconditions']=execution_result['helper_preconditions']
-                validate_feedback(feedback,case_id=case_id,input_digest=method_input.input_digest,to_snapshot=after)
-            if rejection_kind is None and config.get('operation_consistency_enabled'):
-                from contractedge.orchestration.feedback import reassess_unchanged_operations, reassess_failed_target_predicates
-                feedback=reassess_unchanged_operations(feedback,incumbent_observation,current_observation)
-                feedback=reassess_failed_target_predicates(feedback,incumbent_observation,current_observation,review_plan)
-                validate_feedback(feedback,case_id=case_id,input_digest=method_input.input_digest,to_snapshot=after)
+            feedback = finalize_feedback(feedback, review=review, execution_result=execution_result,
+                rejection_kind=rejection_kind, incumbent_observation=incumbent_observation,
+                current_observation=current_observation, review_plan=review_plan,
+                fixed_requirement_profile=hasattr(runner, 'enforce_requirement_profile'),
+                operation_consistency_enabled=config.get('operation_consistency_enabled', False),
+                round_id=round_id, max_rounds=max_rounds)
             # Raw observations remain in the recorded public result and feed
             # deterministic checks. Carry the chosen stage material forward,
             # plus complete support for final checks, rather than reselecting

@@ -662,3 +662,39 @@ def make_feedback(*, case_id: str, run_id: str, input_digest: str, round_id: int
         payload['obligation_coverage']=project_obligation_coverage(payload['obligation_lineage'],lineage_checks,
             dict(snapshot_id=to_snapshot,input_digest=input_digest))
     return validate_feedback(payload, case_id=case_id, input_digest=input_digest, to_snapshot=to_snapshot)
+
+
+def finalize_feedback(feedback, *, review, execution_result, rejection_kind,
+                      incumbent_observation, current_observation, review_plan,
+                      fixed_requirement_profile, operation_consistency_enabled,
+                      round_id, max_rounds):
+    """Build one feedback recommendation from public facts; no dispatch here."""
+    feedback = dict(feedback)
+    before, after = feedback['from_snapshot'], feedback['to_snapshot']
+    if rejection_kind is None and fixed_requirement_profile:
+        if review.get('requirement_profile_valid') is True:
+            fixed = review['public_requirement_checks']
+            verdict = review['requirement_profile_decision']
+            feedback.update(public_check_results=fixed,
+                semantic_outcome='PUBLIC_REVIEW_PASS' if verdict == 'PASS' and not feedback['pending_obligations'] else
+                    'PUBLIC_REVIEW_FAIL' if verdict == 'FAIL' else 'UNKNOWN',
+                failure_kind='NONE' if verdict == 'PASS' else 'UNKNOWN', route='STOP',
+                rationale='Fixed requirement-level public profile: ' + verdict,
+                next_action='COMPLETE' if verdict == 'PASS' else 'STOP_UNCERTAIN')
+            if verdict == 'FAIL' and round_id == 0 and before != after and max_rounds > 1:
+                feedback.update(route='EXECUTE', routing_policy='BOUNDED_ACCEPTED_INTENT_RETRY',
+                    next_action='EXECUTE', rationale='Bounded retry of this mode\'s accepted intent using only fresh fixed public failures; semantic attribution remains UNKNOWN.')
+            validate_feedback(feedback, case_id=feedback['case_id'], input_digest=feedback['input_digest'], to_snapshot=after)
+    if rejection_kind:
+        feedback.update(build_state='NOT_RUN', failure_kind=rejection_kind,
+            route='CHANGESET' if rejection_kind == 'PLAN' else 'EXECUTE',
+            route_confidence='HIGH', rationale=execution_result['error'])
+        validate_feedback(feedback, case_id=feedback['case_id'], input_digest=feedback['input_digest'], to_snapshot=after)
+    if execution_result.get('helper_preconditions'):
+        feedback['helper_preconditions']=execution_result['helper_preconditions']
+        validate_feedback(feedback, case_id=feedback['case_id'], input_digest=feedback['input_digest'], to_snapshot=after)
+    if rejection_kind is None and operation_consistency_enabled:
+        feedback=reassess_unchanged_operations(feedback,incumbent_observation,current_observation)
+        feedback=reassess_failed_target_predicates(feedback,incumbent_observation,current_observation,review_plan)
+        validate_feedback(feedback, case_id=feedback['case_id'], input_digest=feedback['input_digest'], to_snapshot=after)
+    return feedback
