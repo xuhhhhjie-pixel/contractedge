@@ -16,6 +16,8 @@
 | 10 控制重复／候选退步 | 实际benchmark启用已有候选比较与恢复；公共注册检查和有效保持义务组成保护集合；统一反馈与下一动作入口，前提只关联自己的检查，仍保留快照新鲜度。 | execution/public.py；orchestration/repair.py、feedback.py、transitions.py | 两轮真实控制循环fixture验证候选恢复、允许目标变化、相关与无关前提、UNKNOWN未完成不能关单；next-action与实际派发一致。任务没有注册固定检查时依旧依靠有效保持义务，不冒称拥有全案检查集。 |
 | 11 TopoMen自主能力有限 | 本轮不扩大权限；仍是有界编辑，后续续修由ContractEdge控制。 | execution/topomen_agent.py、execution/consumers/topomen.py（保留边界） | 待真实面板确认共同瓶颈发生在执行后，再注册同预算的有限搜索／读源码／编译实验；不是这四个工作包的强制新增机制。 |
 
+真实验证补充：问题2仍有未关闭的共同取材缺口——Certmanager明确声明在40条候选池截取时丢失、Helm依赖查询入口过窄；有些组材料实际送达后仍未被正确使用。问题6的空定位反例已修，但Alertmanager新回放确认独立前提身份错误会被纠错反馈筛选漏掉。不能将这两项整体标记为全部关闭。具体反例、文件与后继验收见[剩余失败与后继修改](REMAINING_FAILURES_AND_NEXT_CHANGES.md)。
+
 ## 三个核心组件的实际分工
 
 ```mermaid

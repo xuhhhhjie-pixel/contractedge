@@ -3,7 +3,7 @@
   "date": "2026-11-04",
   "formal_ready": false,
   "implementation_baseline": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
-  "baseline_real_effect": "NOT_RUN",
+  "baseline_real_effect": "THIS_PANEL_OLD_CURRENT_RUNNING",
   "historical_real_panel": {
     "source_sha256": "806e29f8fe3851b502dfbd91c03783877d4c601033d11505a550d15f3557ed8c",
     "candidate_pass": 3,
@@ -19,7 +19,7 @@
     "4": "24_SLOT_REAL_VALIDATION_RUNNING"
   },
   "budget_authorization_cny": 100,
-  "latest_conservative_spend_cny": 82.1831,
+  "latest_conservative_spend_cny": 83.854204,
   "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
   "engineering": {
     "portable_passed": 3384,
@@ -38,7 +38,7 @@
     ],
     "status": "RUNNING",
     "formal_ready": false,
-    "completed_slots": 22,
+    "completed_slots": 23,
     "preliminary_independent_pass": {
       "old_current": 3,
       "new_current": 3,
@@ -47,7 +47,7 @@
     "preliminary_completed_slots_by_arm": {
       "old_current": 7,
       "new_current": 8,
-      "new_large": 7
+      "new_large": 8
     },
     "controller_recovery": {
       "document": "EXPERIMENT_SUPERVISION.md",
@@ -59,8 +59,19 @@
         23,
         24
       ]
-    }
+    },
+    "primary_scoring_errors": [
+      {
+        "slot": 23,
+        "case_id": "RW-ALERTMANAGER-4705",
+        "primary_independent_status": "SCORER_ERROR",
+        "cause": "Exact scorer image missing after public-only cache precheck",
+        "supplemental_independent_status": "PASS",
+        "supplemental_replaces_primary": false,
+        "method_replays": 0
+      }
+    ]
   },
-  "financial_observation_scope": "Completed-slot boundary after22 slots, excludes later in-flight reservations; cumulative100 authorization",
+  "financial_observation_scope": "Completed-slot boundary after23 methods; excludes later in-flight reservations; cumulative100 authorization",
   "real_findings": "REAL_VALIDATION_FINDINGS.md"
 }
