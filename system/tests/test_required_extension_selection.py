@@ -46,6 +46,6 @@ def test_missing_required_delivery_is_not_misreported_as_token_or_money_exhausti
     with patch('contractedge.retrieval.gap_delivery.audit_gap_delivery',return_value=dict(status='INCOMPLETE',missing_required_ids=['missing-source'],records=[])):
         trace=run_front_half(value,tmp_path,NoCalls(),dict(model={'model':'fixture'},max_context_tokens=24000,
             max_output_tokens=1024,max_total_tokens=100000,gap_role_delivery_enabled=True),lambda text:len(text.split()))
-    assert trace.status=='EVIDENCE_GAP'
+    assert trace.status=='EVIDENCE_DELIVERY_INCOMPLETE'
     assert 'missing-source' in trace.errors[0]
     assert not trace.model_calls

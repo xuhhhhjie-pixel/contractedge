@@ -23,20 +23,24 @@ def source_context_key(record):
 def source_extension_limits(context):
     """One frozen policy supplies selector and canonical cumulative bounds."""
     limits = context.get('limits', {'evidence_extensions': 1})
-    if (not isinstance(limits, Mapping) or set(limits) != {'evidence_extensions'}
+    if (not isinstance(limits, Mapping) or not {'evidence_extensions'} <= set(limits) <= {'evidence_extensions', 'initial_records'}
             or type(limits['evidence_extensions']) is not int
-            or not 1 <= limits['evidence_extensions'] <= 2):
+            or not 1 <= limits['evidence_extensions'] <= 2
+            or type(limits.get('initial_records', 12)) is not int
+            or limits.get('initial_records', 12) < 1):
         raise ValueError('Invalid frozen source limits')
     count, size = 12, 24000
     return count, size, count * limits['evidence_extensions'], size * limits['evidence_extensions']
 
 
-def source_context_new(binding: Mapping, *, evidence_extensions=1) -> dict:
+def source_context_new(binding: Mapping, *, evidence_extensions=1, initial_records=12) -> dict:
     if any(not isinstance(binding.get(k), str) or not binding[k]
            for k in ('run_id', 'case_id', 'input_digest', 'front_id')):
         raise ValueError('Source context requires its original work-chain binding')
     result = dict(version=1, binding=_source_copy(dict(binding)), records=[], targets=[],
                   producer_refs={}, candidate_ids=[], limits={'evidence_extensions': evidence_extensions})
+    if initial_records != 12:
+        result['limits']['initial_records'] = initial_records
     source_extension_limits(result)
     return result
 
@@ -104,13 +108,17 @@ def source_context_offer(active, records, *, producer, targets=(), candidate_ids
         refs.append(list(key))
     selected = [r for r in source_context_records(result, producer=producer) if r['kind'] != 'STATIC_SEARCH']
     _, _, extension_count, extension_bytes = source_extension_limits(result)
-    limits = {'initial':(12,None), 'extension': (extension_count, extension_bytes), 'planning_helper': (8, 24000),
+    limits = {'initial':(result.get('limits', {}).get('initial_records', 12),None),
+              'extension': (extension_count, extension_bytes), 'planning_helper': (8, 24000),
               'execution_helper': (8, None)}
     if producer in limits:
         count, byte_limit = limits[producer]
-        if len(selected) > count or (byte_limit is not None and
-                sum(len(r['excerpt'].encode()) for r in selected) > byte_limit):
-            raise BudgetExceeded('Cumulative ' + producer + ' source admission limit exceeded')
+        size = sum(len(r['excerpt'].encode()) for r in selected)
+        if len(selected) > count or (byte_limit is not None and size > byte_limit):
+            dimension = 'records' if len(selected) > count else 'bytes'
+            actual, bound = (len(selected), count) if dimension == 'records' else (size, byte_limit)
+            raise BudgetExceeded(f'Cumulative {producer} source admission limit exceeded: {actual} > {bound} {dimension}',
+                details={'dimension': producer + '_source_' + dimension, 'actual': actual, 'limit': bound})
     for identifier in candidate_ids:
         if not isinstance(identifier, str) or not identifier:
             raise ValueError('Candidate adoption requires a nonempty ID')
@@ -142,7 +150,8 @@ def source_context_commit(active, draft, dispatch_state):
 def source_context_continuation(active, draft):
     """Validate same-chain preservation without making a dispatch claim."""
     source_context_validate(draft)
-    if source_extension_limits(active) != source_extension_limits(draft):
+    if (source_extension_limits(active) != source_extension_limits(draft)
+            or active.get('limits', {}).get('initial_records', 12) != draft.get('limits', {}).get('initial_records', 12)):
         raise ValueError('Frozen source limits changed during continuation')
     if active.get('binding') != draft.get('binding') or active.get('version') != draft.get('version'):
         raise ValueError('Source context belongs to another work chain')
@@ -168,7 +177,8 @@ def source_context_validate(context):
     """Check recorded adoption, identity and cumulative bounds without reselection."""
     source_extension_limits(context)
     rebuilt = source_context_new(context['binding'],
-        evidence_extensions=context.get('limits', {}).get('evidence_extensions', 1))
+        evidence_extensions=context.get('limits', {}).get('evidence_extensions', 1),
+        initial_records=context.get('limits', {}).get('initial_records', 12))
     owners = {}
     for producer, refs in context['producer_refs'].items():
         for ref in refs:
@@ -213,14 +223,14 @@ def source_context_target_view(target):
                          'source_file_sha256':target['source_file_sha256']})
 
 
-def source_context_restart(active, binding, inherited_inputs, *, evidence_extensions=1):
+def source_context_restart(active, binding, inherited_inputs, *, evidence_extensions=1, initial_records=12):
     """Only the engine's explicit full-diagnosis route may replace the root.
 
     Exact references inherit their canonical bodies. An unqualified ID cannot
     choose the newest snapshot: retain every matching namespace conservatively.
     An unrelated discovery has no lifetime in the new work chain.
     """
-    result = source_context_new(binding, evidence_extensions=evidence_extensions)
+    result = source_context_new(binding, evidence_extensions=evidence_extensions, initial_records=initial_records)
     if active is None:
         return result
     source_context_validate(active)

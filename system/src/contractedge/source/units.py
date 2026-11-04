@@ -10,6 +10,68 @@ from contractedge.contracts.models import Snapshot
 from contractedge.source.parsers import parse_source_units, _unit
 
 
+def materialize_complete_units(snapshot: Snapshot, units, *, artifacts=(), adopted_ids=()):
+    """Complete newly offered declarations before selection, never mutate adoption.
+
+    Discovery windows remain windows. A declaration is recovered from its exact
+    source/line/parser identity, not its name. Whole-unit admission downstream
+    decides whether the body fits; this reader never truncates it again.
+    """
+    root = Path(snapshot.source_root).resolve(strict=True)
+    adopted = set(adopted_ids)
+    inputs = {a['id']: a for a in artifacts}
+    parsed = {}
+    result = []
+    for unit in units:
+        if (not unit.get('truncated') or unit['id'] in adopted
+                or 'FALLBACK' in str(unit.get('parser_kind', ''))
+                or unit.get('query_window')):
+            result.append(unit)
+            continue
+        if unit.get('snapshot_id') != snapshot.snapshot_id:
+            raise ValueError('Complete declaration snapshot mismatch')
+        artifact_id = unit.get('artifact_id') if unit.get('origin_kind') == 'DECLARED_ARTIFACT' else None
+        key = (artifact_id, unit['path'])
+        if key not in parsed:
+            if artifact_id is not None:
+                artifact = inputs.get(artifact_id)
+                if artifact is None or artifact['path'] != unit['path']:
+                    raise ValueError('Complete declaration has no matching declared artifact')
+                text = artifact['content']
+            else:
+                path = root / unit['path']
+                if (unit['path'] not in snapshot.file_digests
+                        or path.is_symlink() or not path.resolve().is_relative_to(root)):
+                    raise ValueError('Complete declaration is outside snapshot')
+                raw = path.read_bytes()
+                if hashlib.sha256(raw).hexdigest() != snapshot.file_digests.get(unit['path']):
+                    raise ValueError('Complete declaration source differs from snapshot')
+                # Preserve CRLF and Unicode coordinates in the original file.
+                text = raw.decode('utf-8')
+            parsed[key] = parse_source_units(unit['path'], text, snapshot.snapshot_id,
+                max_lines=text.count('\n') + 1, max_chars=max(1, len(text)))
+        matches = [u for u in parsed[key]
+                   if u['locator']['start_line'] == unit['locator']['start_line']
+                   and u.get('symbol') == unit.get('symbol')
+                   and u.get('node_path') == unit.get('node_path')
+                   and u['parser_kind'] == unit.get('parser_kind')]
+        if len(matches) != 1 or matches[0].get('truncated'):
+            raise ValueError('Complete declaration cannot be uniquely rebound to original source')
+        full = matches[0]
+        # read_text in historical discovery normalizes CRLF; accept only that
+        # known representation difference, never a same-name unrelated body.
+        if (hashlib.sha256(unit['text'].encode()).hexdigest() != unit['content_digest']
+                or not full['text'].replace('\r\n', '\n').startswith(unit['text'].replace('\r\n', '\n'))):
+            raise ValueError('Complete declaration prefix differs from original source')
+        full = {**unit, **full, 'expanded_from_unit_id': unit['id']}
+        if artifact_id is not None:
+            full['id'] = 'CU-INPUT-' + str(artifact_id) + '-' + full['id'].removeprefix('CU-')
+        for stale in ('declaration_locator', 'declaration_content_digest'):
+            full.pop(stale, None)
+        result.append(full)
+    return result
+
+
 def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: int = 80,
                   max_lines: int = 80, max_chars: int = 16_000,
                   max_extension_files: int = 24, query: str | None = None,

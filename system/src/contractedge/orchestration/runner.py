@@ -47,7 +47,8 @@ from contractedge.source.scopes import (
 )
 from contractedge.source.snapshot import compute_snapshot
 from contractedge.source.absence import collect_absence_search_evidence
-from contractedge.source.units import extract_declared_artifact_units, extract_gap_extension_units, extract_units
+from contractedge.source.units import (extract_declared_artifact_units, extract_gap_extension_units,
+                                       extract_units, materialize_complete_units)
 
 
 def _safe_planning_gaps(payload):
@@ -886,7 +887,9 @@ def required_source_prerequisites(candidate_set, *, helper_support=(), establish
         for row in rows:
             row['establishment_required'] = True
     if len(rows)>12:
-        raise BudgetExceeded('Planning prerequisite review exceeds the existing 12-record contract; no required contract was silently dropped')
+        raise BudgetExceeded('Planning prerequisite review exceeds the existing 12-record contract; '
+            f'{len(rows)} > 12 records; no required contract was silently dropped',
+            details={'dimension': 'prerequisite_records', 'actual': len(rows), 'limit': 12})
     return rows
 
 
@@ -1395,8 +1398,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
              'gap_role_keys': list(dict.fromkeys([*u.get('gap_role_keys', []),
                 *(('SOURCE_CONTRACT:'+u['id'],) if u['id'] in by_unit else ()),
                 *(('SOURCE_READER:'+u['id'],) if u['id'] in reader_ids else ())]))}
-            if u['id'] in contract_ids else u for u in fitted.candidates),
-            required_endpoint_ids=tuple(dict.fromkeys([*fitted.required_endpoint_ids, *sorted(contract_ids)])))
+            if u['id'] in contract_ids else u for u in fitted.candidates))
         required_endpoint_ids=list(dict.fromkeys([*fitted.required_endpoint_ids,
             *[c['id'] for c in fitted.candidates if requires_gap_delivery(c)]]))
         while True:
@@ -1557,6 +1559,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             round_record = {'round_id': acquisition + 1, 'extension_used': False,
                             'trigger': trigger, 'gap_search': audit}
             retrieval_rounds.append(round_record)
+            extra = materialize_complete_units(snapshot, extra, artifacts=parsed.declared_artifacts,
+                                               adopted_ids=active_sources['candidate_ids'])
             from contractedge.source.dependency import gap_dependency_support
             try:
                 # Normalize aliases and mandatory endpoints with the existing
@@ -1807,6 +1811,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 unit['anchor_priority'] = 1
                 seen_inputs.add(unit['artifact_id'])
         units.extend(input_units)
+        units = materialize_complete_units(snapshot, units, artifacts=parsed.declared_artifacts)
         scope = replace(scope, extension_paths=tuple(sorted({str(unit["path"]) for unit in units
                                                              if unit.get("scope_extension") == "DIRECT_REFERENCE"})))
         candidate_set = build_candidate_set(
@@ -1822,7 +1827,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 run_input.public_evidence, max_records=max(0, 6-len(lifecycle_units)),
                 max_files=max(0, 4-len({u['path'] for u in lifecycle_units})))
             entrypoint_audit['exception_source_lookup'] = exception_audit
-            necessary_units = [*lifecycle_units, *exception_units]
+            necessary_units = materialize_complete_units(snapshot, [*lifecycle_units, *exception_units])
             if necessary_units:
                 candidate_set = build_candidate_set(parsed.requirement_text, parsed.public_observable_text,
                     [*units, *necessary_units], build_direct_reference_edges([*units, *necessary_units]),
@@ -1877,7 +1882,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                                      "max_elapsed_seconds": max_elapsed_seconds})
         active_sources = source_context_restart(inherited_source_context,
             dict(run_id=run_id,case_id=parsed.case_id,input_digest=parsed.input_digest,front_id=attempt_id),
-            execution_feedback, evidence_extensions=policy.limit('evidence_extension'))
+            execution_feedback, evidence_extensions=policy.limit('evidence_extension'), initial_records=candidate_set.top_n)
         run_context_wire = asdict(context)
         if not candidate_set.selected_ids:
             return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id, "EVIDENCE_GAP",

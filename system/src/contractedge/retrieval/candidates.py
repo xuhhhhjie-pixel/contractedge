@@ -127,7 +127,8 @@ def requires_gap_delivery(unit: Mapping[str, Any]) -> bool:
 
     An exact anchor or explicit requirement always wins when identities merge.
     """
-    roles = unit.get("gap_role_keys", [])
+    roles = [role for role in unit.get("gap_role_keys", [])
+             if not role.startswith(('SOURCE_CONTRACT:', 'SOURCE_READER:'))]
     return bool(unit.get("required_for_gap_delivery") or (roles and (
         unit.get("optional_gap_context") is not True or any(role.endswith(":anchor") for role in roles))))
 
