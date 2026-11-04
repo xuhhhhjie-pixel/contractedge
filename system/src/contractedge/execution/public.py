@@ -288,6 +288,10 @@ def cleanup_owned_containers(roots):
 
 
 class BenchmarkPublicRunner:
+    # Real benchmark trials use the same incumbent protection as the isolated
+    # runner. This capability does not claim isolated observation support.
+    candidate_guard_enabled = True
+
     def __init__(self, public_root: str | Path, tools_root: str | Path, *,
                  lock_root: str | Path, timeout_seconds: float = 1200, query: str = '',
                  method_probe_profiles=()):

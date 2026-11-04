@@ -801,9 +801,12 @@ def _front_failure_projection(trace: RunTrace, journal=None, dispatch_start: int
         if refs:
             ref = refs[-1]
             call_ref = f"{ref.run_id}:{ref.segment_index}:{ref.absolute_call_index}"
+    admission = next((row['admission_failure'] for row in reversed(
+        trace.candidate_set.context_audit if trace.candidate_set else ())
+        if 'admission_failure' in row), None) if status == 'BUDGET_EXHAUSTED' else None
     record = make_failure(stage, code, failure_class=failure_class,
         dispatch_state=dispatch, message=message or code, call_ref=call_ref,
-        snapshot_id=trace.snapshot_id, details={"status": status})
+        snapshot_id=trace.snapshot_id, details={"status": status, **({"admission": admission} if admission else {})})
     return replace(trace, failure_records=(record,), primary_failure=record)
 
 
@@ -1074,6 +1077,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
     products = {} if products is None else products
 
     call_annotations = {}
+    retrieval_rounds: list[Mapping[str, Any]] = []
 
     def front_calls():
         # Stage annotations are a view over immutable canonical call facts,
@@ -1363,9 +1367,17 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
         dependency_bytes = sum(len(r['excerpt'].encode()) for r in
             source_context_records(draft, kind='PUBLIC_DEPENDENCY_DECLARATION')
             if r.get('current_source_snapshot') == current_context.snapshot_id)
-        if dependency_bytes + sum(len(r['excerpt'].encode()) for r in support) > int(config.get('max_execution_support_bytes',24000)):
-            raise BudgetExceeded('Adopted planning source exceeds execution support admission bound')
+        support_bytes = dependency_bytes + sum(len(r['excerpt'].encode()) for r in support)
+        support_limit = int(config.get('max_execution_support_bytes',24000))
+        if support_bytes > support_limit:
+            raise BudgetExceeded('Adopted planning source exceeds execution support admission bound: '
+                f'{support_bytes} > {support_limit} bytes', details={
+                    'dimension': 'execution_support_bytes', 'actual': support_bytes, 'limit': support_limit})
         return draft,helpers,audit,prerequisites,support
+
+    def admission_error(fitted):
+        return next((row['admission_failure']['message'] for row in reversed(fitted.context_audit)
+                     if 'admission_failure' in row), 'Complete diagnosis request cannot be admitted')
 
     def fit_diagnosis(candidate_set, method, requirement, context, *, prior=None, extension_gaps=(),
                       planning_context=None, source_reservations=()):
@@ -1435,10 +1447,13 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 try:
                     planning_source_draft(fitted, method, draft_context,
                         source_reservations=source_reservations)
-                except BudgetExceeded:
+                except BudgetExceeded as exc:
+                    fitted = replace(fitted, context_audit=fitted.context_audit + ({
+                        'admission_failure': {**exc.details, 'message': str(exc)}},))
                     before_ids = tuple(fitted.selected_ids)
                     fitted = trim_context_bundle(fitted,request_tokens=count,limit=first_limit,
-                        adopted_ids=active_sources['candidate_ids'],token_counter=token_counter)
+                        adopted_ids=active_sources['candidate_ids'],token_counter=token_counter,
+                        reason='EXECUTION_SUPPORT_CAPACITY')
                     if tuple(fitted.selected_ids) == before_ids:
                         return fitted,None,count
                     continue
@@ -1466,6 +1481,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                                  context_audit=fitted.context_audit + (audit,))
                 request = replace(request, metadata={**request.metadata, 'context_audit': list(fitted.context_audit)})
                 return fitted, request, count
+            fitted = replace(fitted, context_audit=fitted.context_audit + ({'admission_failure': {
+                'dimension': 'request_input_tokens', 'actual': count, 'limit': first_limit,
+                'message': f'Complete diagnosis input exceeds request allowance: {count} > {first_limit}'}},))
             if not fitted.candidates:
                 return fitted, None, count
             before_ids = tuple(fitted.selected_ids)
@@ -1486,7 +1504,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                         journal.recorder.capture_value(receipt, 'SOURCE_DELIVERY', snapshot_id=snapshot_id),
                         snapshot_id=snapshot_id))
                 return RunTrace(run_id,parsed.case_id,parsed.input_digest,snapshot.snapshot_id,
-                    'EVIDENCE_GAP',requirement,scope,fitted,diagnosis,changeset,tuple(front_calls()),
+                    'EVIDENCE_DELIVERY_INCOMPLETE',requirement,scope,fitted,diagnosis,changeset,tuple(front_calls()),
                     ('REQUIRED_SOURCE_NOT_DELIVERED: '+json.dumps(receipt,ensure_ascii=False),),
                     structural_validation,semantic_review,tuple(retrieval_rounds),run_context_wire)
         return None
@@ -1604,7 +1622,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             if failure is not None:
                 return diagnosis, failure, False
             if request is None:
-                return diagnosis, stop('BUDGET_EXHAUSTED', 'Evidence extension exceeds existing complete-request or execution-support bounds'), False
+                candidate_set = proposed
+                return diagnosis, stop('BUDGET_EXHAUSTED', admission_error(proposed)), False
             old_material = {material(r) for r in source_context_records(active_sources)}
             new_material = [r for r in source_context_records(request.metadata['source_context'])
                             if material(r) not in old_material]
@@ -1811,7 +1830,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     token_counter=token_counter)
                 candidate_set = replace(candidate_set,
                     required_endpoint_ids=tuple(u['id'] for u in necessary_units))
-        retrieval_rounds: list[Mapping[str, Any]] = [{
+        retrieval_rounds = [{
             "round_id": 1, "seed_paths": list(scope.seed_paths),
             "probe_entrypoint_resolution": entrypoint_audit,
             "selected_ids": list(candidate_set.selected_ids), "dropped_ids": list(candidate_set.dropped_ids),
@@ -1872,8 +1891,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
         if diagnosis_request is None:
             return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
                             "BUDGET_EXHAUSTED", requirement, scope, candidate_set, None, None,
-                            tuple(front_calls()), ("complete diagnosis request exceeds the context, token, or time budget",),
-                            run_context=run_context_wire)
+                            tuple(front_calls()), (admission_error(candidate_set),),
+                            retrieval_rounds=tuple(retrieval_rounds), run_context=run_context_wire)
         admit_front_request(diagnosis_request)
         diagnosis_response = complete_recorded(diagnosis_request, "DIAGNOSIS")
         record_call({"stage": "DIAGNOSIS", "prompt_version": diagnosis_request.prompt_version,
@@ -2134,5 +2153,5 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                         status,
                         requirement, scope, candidate_set, diagnosis_wire, changeset_payload,
                         tuple(front_calls()), (f"{type(exc).__name__}: {exc}",),
-                        run_context=run_context_wire, failure_records=(failure,),
+                        run_context=run_context_wire, retrieval_rounds=tuple(retrieval_rounds), failure_records=(failure,),
                         primary_failure=failure)

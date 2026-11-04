@@ -13,7 +13,9 @@ from contractedge.model.provider import (ModelRequest, ModelProvider, ModelRespo
 
 
 class BudgetExceeded(RuntimeError):
-    pass
+    def __init__(self, message, *, details=None):
+        super().__init__(message)
+        self.details = dict(details or {})
 
 
 def recorded_dispatch_state(record: Mapping) -> str:

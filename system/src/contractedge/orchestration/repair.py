@@ -799,6 +799,13 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             config['public_execution_capabilities'] = {**config['public_execution_capabilities'],
                 'registered_public_observation_adapters': adapters}
             write_json(out / 'public-observation-adapters.json', adapters)
+        guard_enabled = bool(requires_public_profile or getattr(runner, 'candidate_guard_enabled', False)
+                             or config.get('candidate_guard_enabled', False))
+        fixed_protected_checks = sorted(public_check_catalog(config.get('public_execution_capabilities')))
+        write_json(out / 'candidate-guard-policy.json', {
+            'enabled': guard_enabled, 'runner': type(runner).__name__,
+            'fixed_public_check_ids': fixed_protected_checks,
+            'dynamic_protection': 'Current preserve and undisputed retained/pending preservation obligations'})
         if initial_trace:
             validate_ready_trace(initial_trace, method_input, source, capabilities=config.get('public_execution_capabilities'),
                 recorder=journal.recorder,call_refs=ready_call_refs())
@@ -974,7 +981,6 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             retry_restored_candidate = False
             incumbent_observation, incumbent_feedback = current_observation, feedback
             incumbent_execution = last_applied_execution
-            guard_enabled = requires_public_profile or config.get('candidate_guard_enabled')
             from contractedge.orchestration.candidate_guard import checkpoint_candidate
             checkpoint = checkpoint_candidate(source,list(execution_input.target_paths),
                 directory/'incumbent-checkpoint.json')
@@ -1263,14 +1269,14 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             if guard_enabled and checkpoint and rejection_kind is None and incumbent_observation:
                 from contractedge.orchestration.candidate_guard import compare_candidate_checks, preservation_check_ids, restore_candidate
                 protected_checks = preservation_check_ids(review_plan, incumbent_feedback)
-                if requires_public_profile or getattr(runner, 'requires_requirement_profile', False):
-                    # Registered checks do not depend on which conditions a
-                    # model chooses to include. Every observed PASS is retained.
-                    protected_checks = sorted(set(protected_checks) | {
-                        row['behavior_check']['id'] for row in incumbent_observation.get('observations', [])
-                        if isinstance(row.get('behavior_check'), Mapping) and row['behavior_check'].get('id')})
+                # Protect applicable public task checks independently of model
+                # selection. Arbitrary historical PASS observations are not a
+                # task contract and must not freeze intended behavior changes.
+                protected_checks = sorted(set(protected_checks) | set(fixed_protected_checks))
                 decision = compare_candidate_checks({**incumbent_observation,'feedback':incumbent_feedback},
                     {**current_observation,'feedback':feedback}, protected_checks)
+                decision['protected_check_ids'] = protected_checks
+                decision['guard_enabled'] = bool(guard_enabled)
                 if requires_public_profile and not isolated_observation_complete(current_observation):
                     decision = {**decision, 'decision': 'UNCOMPARABLE',
                         'uncomparable': [*decision.get('uncomparable', []), {

@@ -113,7 +113,8 @@ def classify_exception(exc: BaseException, *, stage: str = "unknown",
 
     if name in {"BudgetExceeded", "MoneyBudgetExceeded"} or "budget" in lower and "exceed" in lower:
         return "BUDGET_EXHAUSTED", make_failure(stage, "BUDGET_EXHAUSTED",
-            failure_class="infrastructure", dispatch_state=dispatch, message=message)
+            failure_class="infrastructure", dispatch_state=dispatch, message=message,
+            details=getattr(exc, 'details', None))
     if name in {"ObservationRejected", "InvalidObservation"}:
         return "INVALID_OBSERVATION", make_failure(stage, "INVALID_OBSERVATION",
             failure_class="infrastructure", dispatch_state=dispatch, message=message)

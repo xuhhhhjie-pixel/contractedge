@@ -153,7 +153,7 @@ def test_local_evidence_still_too_large_remains_an_explicit_stop(tmp_path, monke
     result = run_front(tmp_path / 'impossible', monkeypatch,
                        support_limit=control['support_bytes'] - 1)
     trace = result['trace']
-    assert trace.status == 'EVIDENCE_GAP', trace.errors
+    assert trace.status == 'EVIDENCE_DELIVERY_INCOMPLETE', trace.errors
     assert any('REQUIRED_SOURCE_NOT_DELIVERED' in error for error in trace.errors)
     assert len(result['wires']) == len(result['lookups']) == len(result['searches']) == 1
     assert result['policy'] == [dict(policy='evidence_extension', scope='front', used=1, limit=1)]

@@ -369,7 +369,7 @@ def _select(ordered, features, edges, *, top_n: int, max_context_tokens: int,
 
 
 def trim_context_bundle(candidate_set: CandidateSet, *, request_tokens: int, limit: int,
-                        adopted_ids=(), token_counter=None) -> CandidateSet:
+                        adopted_ids=(), token_counter=None, reason='FULL_REQUEST_CONTEXT_BUNDLE') -> CandidateSet:
     """Remove the lowest-priority connected evidence bundle, recording lost edges.
 
     Reference edges are retrieval hints, not proven causal relations. Isolated
@@ -390,9 +390,9 @@ def trim_context_bundle(candidate_set: CandidateSet, *, request_tokens: int, lim
             context_tokens=(sum(int(token_counter(str(u.get('text','')))) for u in kept)
                 if token_counter is not None else candidate_set.context_tokens),
             dropped_ids=tuple(dict.fromkeys([*candidate_set.dropped_ids, removed_id])),
-            drop_reasons={**(candidate_set.drop_reasons or {}), removed_id:'FULL_REQUEST_CONTEXT_BUNDLE'},
+            drop_reasons={**(candidate_set.drop_reasons or {}), removed_id:reason},
             edges=tuple(e for e in candidate_set.edges if removed_id not in (e['source'],e['target'])),
-            delivery_audit=tuple({**row,'delivered':False,'drop_reason':'FULL_REQUEST_CONTEXT_BUNDLE'}
+            delivery_audit=tuple({**row,'delivered':False,'drop_reason':reason}
                 if row.get('id')==removed_id else row for row in candidate_set.delivery_audit),
             context_audit=candidate_set.context_audit+({'request_tokens_before':request_tokens,
                 'limit':limit,'removed_ids':[removed_id], 'adopted_ids':list(adopted_ids)},))
@@ -440,14 +440,14 @@ def trim_context_bundle(candidate_set: CandidateSet, *, request_tokens: int, lim
     edges = tuple(e for e in candidate_set.edges if str(e['source']) not in removed and str(e['target']) not in removed)
     kept_ids = {str(c['id']) for c in kept}
     audit = tuple({**row, 'delivered': str(row.get('id')) in kept_ids,
-                   'drop_reason': (row.get('drop_reason') or 'FULL_REQUEST_CONTEXT_BUNDLE')
+                   'drop_reason': (row.get('drop_reason') or reason)
                    if str(row.get('id')) in removed else row.get('drop_reason')}
                   for row in candidate_set.delivery_audit)
     return replace(candidate_set, candidates=kept, selected_ids=tuple(str(c['id']) for c in kept),
         context_tokens=(sum(int(token_counter(str(u.get('text','')))) for u in kept)
             if token_counter is not None else candidate_set.context_tokens),
         dropped_ids=tuple(dict.fromkeys([*candidate_set.dropped_ids, *sorted(removed)])), edges=edges,
-        drop_reasons={**(candidate_set.drop_reasons or {}), **{k: 'FULL_REQUEST_CONTEXT_BUNDLE' for k in removed}},
+        drop_reasons={**(candidate_set.drop_reasons or {}), **{k: reason for k in removed}},
         context_audit=candidate_set.context_audit + ({'request_tokens_before': request_tokens, 'limit': limit,
             'removed_ids': sorted(removed), 'removed_reference_edges': len(candidate_set.edges) - len(edges),
             'interpretation': 'Bounded reference bundle removed; no causal correctness claim'},),
