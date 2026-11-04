@@ -1,13 +1,16 @@
 # 当前系统实施入口（2026-11-04）
 
-本分支固定最新工程候选 `e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538`，并按四个工作包继续优化。`formal_ready=false`。此前工程检查为原运行3347通过、7个路径问题失败、4跳过，原版短路径重跑7项通过；六个历史/native模块不在portable范围。该基线没有新整案真实模型成绩。
+当前生产源码已完成四步方案中前三个工作包的工程修改，冻结摘要为 `15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4`；修改前基线为 `e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538`。最终整合回归为3384项通过、4项跳过、90个子测试通过，原生9项及六组公开流程模拟通过。工作包4正在进行冻结真实对照，已观察到退步，`formal_ready=false`；工程通过不代表整体修复率提高。
 
-- [给老师的进展报告](docs/implementation/20261104/CONTRACTEDGE_PROGRESS_REPORT_FOR_ADVISOR_20261104.md)
-- [逐项问题、改法与验收](docs/implementation/20261104/IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md)
-- [最新实施状态](docs/implementation/20261104/STATUS.json)
-- [当前代码审查](docs/implementation/20261104/DEEP_PIPELINE_AND_CONTROL_DESIGN_REVIEW.md)
+- [最新实施与真实验证状态](docs/implementation/20261104/STATUS.json)
+- [逐项问题、修改文件与验收边界](docs/implementation/20261104/ISSUE_CLOSURE_MATRIX.md)
+- [真实对照中的发现与保留失败](docs/implementation/20261104/REAL_VALIDATION_FINDINGS.md)
+- [克隆版本核验与协作方式](docs/implementation/20261104/REPRODUCE_AND_COLLABORATE.md)
+- [工程验收记录](docs/implementation/20261104/ENGINEERING_REVIEW.md)
+- [四个工作包计划](docs/implementation/20261104/IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md)
+- [给老师的实施前进展报告](docs/implementation/20261104/CONTRACTEDGE_PROGRESS_REPORT_FOR_ADVISOR_20261104.md)
 
-协作时以本目录当前源码、基线tag和后续逐包commit为准。报告中的服务器绝对路径是历史证据索引，不保证克隆后可用。真实实验需要公开数据、运行镜像和独立评分进程；凭据与费用账本留在运行环境。以下原说明保留为历史资料。
+协作以本目录当前源码及上述状态文件为准。基线标签为`system-e6784-pre-consolidation-20261104`，候选标签为`system-15141-fourstep-candidate-20261104`；后续文档提交未改变该候选的生产源码。报告中的服务器绝对路径是历史证据索引，不保证克隆后可用。凭据、原始模型记录与费用账本留在运行环境。下面的旧开发说明保留为历史资料，其旧状态字段和默认快照校验不能作为当前候选的验收证书。
 
 ---
 
