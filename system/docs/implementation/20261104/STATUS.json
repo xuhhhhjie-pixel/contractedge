@@ -19,7 +19,7 @@
     "4": "24_SLOT_REAL_VALIDATION_RUNNING"
   },
   "budget_authorization_cny": 100,
-  "latest_conservative_spend_cny": 78.03822,
+  "latest_conservative_spend_cny": 79.686224,
   "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
   "engineering": {
     "portable_passed": 3384,
@@ -38,14 +38,29 @@
     ],
     "status": "RUNNING",
     "formal_ready": false,
-    "completed_slots": 18,
+    "completed_slots": 20,
     "preliminary_independent_pass": {
       "old_current": 3,
-      "new_current": 2,
+      "new_current": 3,
       "new_large": 2
     },
-    "preliminary_completed_cases_each": 6
+    "preliminary_completed_slots_by_arm": {
+      "old_current": 7,
+      "new_current": 7,
+      "new_large": 6
+    },
+    "controller_recovery": {
+      "document": "EXPERIMENT_SUPERVISION.md",
+      "completed_worker_reconciled": 20,
+      "model_replays": 0,
+      "fresh_remaining_original_slots": [
+        21,
+        22,
+        23,
+        24
+      ]
+    }
   },
-  "financial_observation_scope": "Completed-slot boundary after18 slots, excludes later in-flight reservations; same cumulative100 authorization",
+  "financial_observation_scope": "Completed-slot boundary after20 slots, excludes later in-flight reservations; cumulative100 authorization",
   "real_findings": "REAL_VALIDATION_FINDINGS.md"
 }
