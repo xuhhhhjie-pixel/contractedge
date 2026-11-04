@@ -5,6 +5,7 @@
 - [最新实施与真实验证状态](docs/implementation/20261104/STATUS.json)
 - [逐项问题、修改文件与验收边界](docs/implementation/20261104/ISSUE_CLOSURE_MATRIX.md)
 - [真实对照中的发现与保留失败](docs/implementation/20261104/REAL_VALIDATION_FINDINGS.md)
+- [剩余失败对应的具体代码与后继验收](docs/implementation/20261104/REMAINING_FAILURES_AND_NEXT_CHANGES.md)
 - [克隆版本核验与协作方式](docs/implementation/20261104/REPRODUCE_AND_COLLABORATE.md)
 - [工程验收记录](docs/implementation/20261104/ENGINEERING_REVIEW.md)
 - [四个工作包计划](docs/implementation/20261104/IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md)
