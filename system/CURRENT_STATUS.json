@@ -1,5 +1,5 @@
 {
-  "status": "FOUR_STEP_IMPLEMENTATION_STARTED",
+  "status": "ENGINEERING_VERIFIED_REAL_PANEL_PREPARED",
   "date": "2026-11-04",
   "formal_ready": false,
   "implementation_baseline": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
@@ -13,11 +13,19 @@
     "regressions": 1
   },
   "packages": {
-    "1": "IMPLEMENTED_TARGETED_CHECKS_PASS_FINAL_INTEGRATION_PENDING",
-    "2": "IMPLEMENTED_155_TARGETED_PASS_FINAL_INTEGRATION_PENDING",
-    "3": "IMPLEMENTED_TARGETED_PASS_FINAL_INTEGRATION_PENDING",
-    "4": "PREPARING_ENGINEERING_FREEZE"
+    "1": "ENGINEERING_PASS",
+    "2": "ENGINEERING_PASS_PUBLIC_MATERIAL_RECHECK_IN_PROGRESS",
+    "3": "ENGINEERING_PASS",
+    "4": "24_SLOT_BINDINGS_PASS_NOT_DISPATCHED"
   },
   "budget_authorization_cny": 100,
-  "latest_conservative_spend_cny": 68.17361
+  "latest_conservative_spend_cny": 68.17361,
+  "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+  "engineering": {
+    "portable_passed": 3384,
+    "portable_skipped": 4,
+    "portable_subtests_passed": 90,
+    "native_passed": 9,
+    "simulation_variants_passed": 6
+  }
 }
