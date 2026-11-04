@@ -93,7 +93,7 @@ def test_withdrawn_diagnosis_hard_stop_cannot_export_old_plan(tmp_path, monkeypa
             return original(*args, **kwargs)
         monkeypatch.setattr(gap_delivery, 'audit_gap_delivery', missing_final_source)
     trace = runner.run_front_half(method, tmp_path, provider, config, lambda s: len(s.split()))
-    assert trace.status == ('BUDGET_EXHAUSTED' if stop == 'budget' else 'EVIDENCE_GAP')
+    assert trace.status == ('BUDGET_EXHAUSTED' if stop == 'budget' else 'EVIDENCE_DELIVERY_INCOMPLETE')
     if stop == 'delivery':
         assert any('REQUIRED_SOURCE_NOT_DELIVERED' in error for error in trace.errors)
     assert provider.diagnosis_calls == 2 and provider.plan_calls == 1
