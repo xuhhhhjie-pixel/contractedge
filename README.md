@@ -1,4 +1,4 @@
-> 2026-11-04 系统协作更新：[冻结源码与实施入口](system/README.md) · [32槽完整验证报告](system/docs/implementation/20261104/FINAL_IMPLEMENTATION_REPORT.md)。同容量新旧版均4/12通过，尚未证明整体收益；当前 `formal_ready=false`。
+> 2026-11-04 系统协作更新：[当前版本与统一问题清单](system/docs/implementation/20261104/CURRENT_SYSTEM_ISSUES_AND_VERSION.md) · [32槽验证报告](system/docs/implementation/20261104/FINAL_IMPLEMENTATION_REPORT.md)。开发候选为0.6.68／源码15141db3，安装副本仍为063d12e2；当前 `formal_ready=false`。
 
 # ContractEdge
 

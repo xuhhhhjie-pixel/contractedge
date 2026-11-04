@@ -1,7 +1,8 @@
 # 当前系统实施入口（2026-11-04）
 
-本轮代码修改、工程检查和32槽真实验证已经结束，生产源码固定为 `15141db3`，对照基线为 `e6784c10`。同版回归3384项通过、4项跳过、90个子测试通过，原生9项及六组公开流程模拟通过。12个案例的同容量对照中新旧版均4/12通过，一例改善、一例退步；新版调用和费用更高，尚未证明整体收益。完整声明与补证额度等剩余缺口见最终报告。**`formal_ready=false`**。
+本轮代码修改、工程检查和32槽真实验证已经结束，包标称版本为 **0.6.68**、生产源码固定为 `15141db3`，对照基线为 `e6784c10`。同版回归3384项通过、4项跳过、90个子测试通过，原生9项及六组公开流程模拟通过。12个案例的同容量对照中新旧版均4/12通过，一例改善、一例退步；新版调用和费用更高，尚未证明整体收益。完整声明与补证额度等剩余缺口见最终报告。**`formal_ready=false`**。
 
+- [当前系统版本与统一问题清单](docs/implementation/20261104/CURRENT_SYSTEM_ISSUES_AND_VERSION.md)
 - [四步实施与完整真实结果](docs/implementation/20261104/FINAL_IMPLEMENTATION_REPORT.md)
 - [最新实施与真实验证状态](docs/implementation/20261104/STATUS.json)
 - [逐项问题、修改文件与验收边界](docs/implementation/20261104/ISSUE_CLOSURE_MATRIX.md)
@@ -20,7 +21,7 @@
 
 最终测试前提和审计边界见[收尾 r3](docs/development/2026-10-25-public-check-protocol-fixtures-r3.md)。当前验收工具修订见[同版工具 r2](docs/development/2026-10-25-public-check-protocol-harness-r2.md)。当前阶段收尾及检查绑定协议见[2026-10-25 修订说明](docs/development/2026-10-25-public-check-protocol-wrapup.md)，本轮同版结果见[验证记录](docs/development/architecture-public-check-protocol-20261025-r3.validation.json)。正式研究准入仍为 false。
 
-当前开发身份以 [CURRENT_STATUS.json](CURRENT_STATUS.json) 的 `current_development.snapshot` 为准；待冻结变更见同一对象的 `status` 与 `planned_snapshot`。包版本仍为 `0.6.27`，方法身份由同版源码、配置和测试面板摘要确定，不能沿用历史版本效果。`formal_ready=false`，不运行正式数据实验或隐藏评分。阶段 B 的范围与验证登记见[隔离运行与可信公开观察说明](docs/development/2026-10-23-architecture-b-runtime-observer.md)。 跨阶段引用、调用账本封存及 READY 原阶段继承见[阶段 A2 说明](docs/development/2026-10-23-architecture-a2-stage-references.md)；该阶段的通过范围以同版验证报告为准。 状态转换及标准CLI持久记录见[阶段C1说明](docs/development/2026-10-24-architecture-c1-state-cli.md)。 持久候选事务、恢复与可替换消费者见[阶段C2/D1说明](docs/development/2026-10-24-architecture-c2-transactions-consumers.md)。
+以下段落为历史开发说明，其中原包版本 `0.6.27` 及 `current_development.snapshot` 等旧状态字段已不适用于当前候选。当前包版本为 `0.6.68`，精确源码身份与安装副本差异以[当前版本说明](docs/implementation/20261104/CURRENT_SYSTEM_ISSUES_AND_VERSION.md)及 [CURRENT_STATUS.json](CURRENT_STATUS.json) 为准；历史版本效果不能沿用。`formal_ready=false`，不运行正式数据实验或隐藏评分。阶段 B 的范围与验证登记见[隔离运行与可信公开观察说明](docs/development/2026-10-23-architecture-b-runtime-observer.md)。 跨阶段引用、调用账本封存及 READY 原阶段继承见[阶段 A2 说明](docs/development/2026-10-23-architecture-a2-stage-references.md)；该阶段的通过范围以同版验证报告为准。 状态转换及标准CLI持久记录见[阶段C1说明](docs/development/2026-10-24-architecture-c1-state-cli.md)。 持久候选事务、恢复与可替换消费者见[阶段C2/D1说明](docs/development/2026-10-24-architecture-c2-transactions-consumers.md)。
 
 ## 安装与冻结校验
 

@@ -1,4 +1,4 @@
-> 实施后更新：本页保留给老师的实施前汇报，完整代码修改与32槽结果见[最终实施报告](FINAL_IMPLEMENTATION_REPORT.md)。正式准入仍为false。
+> 当前入口：[系统版本与前半程、交接处、后半程统一问题清单](CURRENT_SYSTEM_ISSUES_AND_VERSION.md)。本页保留实施前汇报；完整代码修改与32槽结果见[最终实施报告](FINAL_IMPLEMENTATION_REPORT.md)。正式准入仍为false。
 
 **ContractEdge 系统研发进展与后续优化计划**
 

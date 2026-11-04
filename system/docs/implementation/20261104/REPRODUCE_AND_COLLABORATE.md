@@ -2,6 +2,8 @@
 
 当前分支为`fix/four-step-consolidation-20261104`，草稿PR为[#33](https://github.com/xuhhhhjie-pixel/contractedge/pull/33)。生产候选标签固定为`system-15141-fourstep-candidate-20261104`；修改前对照标签为`system-e6784-pre-consolidation-20261104`。当前状态以[STATUS.json](STATUS.json)为准，不把文档更新当作新的方法版本。
 
+包标称版本为0.6.68；当前开发候选精确源码为15141db3，服务器安装副本仍为063d12e2。完整身份及统一遗留问题见[当前系统版本与问题清单](CURRENT_SYSTEM_ISSUES_AND_VERSION.md)。
+
 ## 核验克隆得到的生产源码
 
 在仓库的`system`目录运行以下只读命令。它核对全部`.py/.json`的精确文件集合、每个文件的SHA-256以及总摘要，不依赖服务器绝对路径：

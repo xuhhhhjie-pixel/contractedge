@@ -189,5 +189,14 @@
     8
   ],
   "open_issue_scope": "Known remaining retrieval/query/whole-declaration admission/correction gaps; see matrix. TopoMen autonomy remains a conditional design experiment.",
-  "decision": "Retain frozen development candidate; no formal promotion or default capacity increase. Same-capacity4/12 vs4/12, one win and one regression; higher calls and cost."
+  "decision": "Retain frozen development candidate; no formal promotion or default capacity increase. Same-capacity4/12 vs4/12, one win and one regression; higher calls and cost.",
+  "current_issue_document": "CURRENT_SYSTEM_ISSUES_AND_VERSION.md",
+  "version_identity": {
+    "package_version": "0.6.68",
+    "candidate_tag": "system-15141-fourstep-candidate-20261104",
+    "candidate_commit": "d842853a9ef0d729c2a965a6481c229fbb04b0fb",
+    "installed_package_version": "0.6.68",
+    "installed_source_sha256": "063d12e251278822dc0f316f42f5d20e9411367f9c00c58eea97306c504df4dd",
+    "installed_updated": false
+  }
 }
