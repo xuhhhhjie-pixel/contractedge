@@ -214,6 +214,26 @@ class ArtifactRecorderTests(unittest.TestCase):
                          json.loads(json.dumps(budget.calls)))
         self.assertEqual(sealed.call_refs[0].request_digest, budget.calls[0]["request_digest"])
 
+    def test_observed_output_settlement_is_not_dispatch_identity_mutation(self):
+        from contractedge.model.budget import BudgetedProvider
+        from contractedge.model.provider import ModelRequest, ModelResponse
+        class Synthetic:
+            def complete_json(self, request):
+                return ModelResponse('{"received":true}', {
+                    'fixture': True, 'usage': {'completion_tokens': 2},
+                })
+        budget = BudgetedProvider(Synthetic(), len, max_tokens=10000,
+            max_seconds=30, max_calls=2, reconcile_observed_output=True,
+            on_update=lambda calls: self.recorder.update_ledger(calls))
+        request = ModelRequest(model="synthetic", prompt_version="public.fixture",
+            messages=({"role": "user", "content": "public input"},), max_output_tokens=20,
+            temperature=0.0)
+        budget.complete_json(request)
+        sealed = self.recorder.seal_ledger()
+        self.assertEqual(budget.calls[0]['output_tokens_accounted'], 2)
+        self.assertEqual(budget.reserved_tokens, len('public input') + 2)
+        self.assertEqual(sealed.call_refs[0].request_digest, budget.calls[0]['request_digest'])
+
     def test_same_actual_index_cannot_be_aliased_across_segments(self):
         self.recorder.update_ledger([call()], segment_index=0, first_call_index=0)
         with self.assertRaises(ValueError):

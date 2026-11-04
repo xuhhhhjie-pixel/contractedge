@@ -26,6 +26,24 @@ _JAVA_DECL = re.compile(r"(?m)^[ \t]*(?:(?:public|private|protected|static|final
 _HELM_ACTION = re.compile(r"\{\{[-]?\s*(.*?)\s*[-]?\}\}", re.DOTALL)
 
 
+def mask_go_code(text: str, *, keep_strings: bool = False) -> str:
+    """Mask comments/literals without moving any source character coordinates."""
+    pattern = r'"(?:\\.|[^"\\])*"|`[^`]*`|\'(?:\\.|[^\'\\])*\'|//[^\n]*|/\*[\s\S]*?\*/'
+    return re.sub(pattern, lambda m: m[0] if keep_strings and not m[0].startswith('/')
+                  else re.sub(r'[^\n]', ' ', m[0]), text)
+
+
+def _excerpt_locator(text: str, start: int, end: int, *, truncated: bool,
+                     original_end_line: int, start_line: int, column_start: int) -> dict[str, Any]:
+    """Original Unicode character offsets and exact displayed line/column range."""
+    fragment = text[start:end]
+    end_line = start_line + fragment.count('\n') - (1 if fragment.endswith('\n') else 0)
+    return {'start_line': start_line, 'end_line': max(start_line, end_line),
+            'column_start': column_start,
+            'start_char': start, 'end_char': end, 'truncated': truncated,
+            'original_end_line': original_end_line}
+
+
 def _unit(snapshot_id: str, path: str, text: str, start: int, end: int, parser_kind: str, *,
           unit_kind: str, symbol: str | None = None,
           declared: Iterable[str] = (), references: Iterable[str] = (),
@@ -43,7 +61,9 @@ def _unit(snapshot_id: str, path: str, text: str, start: int, end: int, parser_k
     clipped = len(fragment) > max_chars
     if clipped:
         fragment = fragment[:max_chars]
-    locator = {"start_line": start_line, "end_line": end_line, "column_start": 1}
+    locator = _excerpt_locator(text, start, start + len(fragment), truncated=clipped,
+        original_end_line=end_line, start_line=start_line,
+        column_start=start - (text.rfind('\n', 0, start) + 1) + 1)
     seed = f"{snapshot_id}:{path}:{start}:{end}"
     if clipped:
         seed+=':excerpt:'+hashlib.sha256(fragment.encode('utf-8')).hexdigest()
@@ -193,7 +213,13 @@ def _yaml_units(path: str, text: str, snapshot_id: str, max_chars: int,
         if not isinstance(node, (MappingNode, SequenceNode)) or depth > 2:
             return
         start = line_offset(node.start_mark.line)
-        end = line_offset(node.end_mark.line + 1)
+        # PyYAML's end mark is exclusive. A mark at the next key's
+        # indentation belongs to the preceding content line, including EOF
+        # immediately after a newline. Keep the existing whole-line view.
+        end_line = node.end_mark.line
+        if text[line_offset(end_line):node.end_mark.index].strip():
+            end_line += 1
+        end = line_offset(end_line)
         if end <= start:
             end = len(text)
         path_label = ".".join(path_parts) or "$"
@@ -201,7 +227,7 @@ def _yaml_units(path: str, text: str, snapshot_id: str, max_chars: int,
                             unit_kind="CONFIG_SUBTREE", max_chars=max_chars,
                             extra={"node_path": path_label, "node_tag": node.tag},
                             start_line_number=node.start_mark.line + 1,
-                            end_line_number=node.end_mark.line + 1))
+                            end_line_number=end_line))
         if isinstance(node, MappingNode):
             for key_node, value_node in node.value:
                 key = str(getattr(key_node, "value", "?"))
@@ -256,6 +282,9 @@ def _bound_units(units: list[dict[str, Any]], text: str, max_lines: int,
                  max_chars: int) -> list[dict[str, Any]]:
     """Apply common line/character limits and re-digest the exposed excerpt."""
     lines = text.splitlines(keepends=True)
+    offsets = [0]
+    for line in lines:
+        offsets.append(offsets[-1] + len(line))
     bounded = []
     line_limit = max(1, max_lines)
     char_limit = max(1, max_chars)
@@ -263,12 +292,14 @@ def _bound_units(units: list[dict[str, Any]], text: str, max_lines: int,
         unit = dict(source_unit)
         locator = dict(unit["locator"])
         start_line = max(1, int(locator["start_line"]))
-        old_end_line = int(locator["end_line"])
+        old_end_line = int(locator.get('original_end_line', locator["end_line"]))
         end_line = min(len(lines), old_end_line, start_line + line_limit - 1)
         excerpt = "".join(lines[start_line - 1:end_line])
         truncated = bool(unit.get("truncated")) or end_line < old_end_line or len(excerpt) > char_limit
         excerpt = excerpt[:char_limit]
-        locator["end_line"] = end_line
+        start_char = offsets[start_line - 1]
+        locator.update(_excerpt_locator(text, start_char, start_char + len(excerpt),
+            truncated=truncated, original_end_line=old_end_line, start_line=start_line, column_start=1))
         unit["locator"] = locator
         unit["text"] = excerpt
         unit["truncated"] = truncated

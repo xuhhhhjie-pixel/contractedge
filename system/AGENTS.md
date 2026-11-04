@@ -1,8 +1,9 @@
-# ContractEdge system handoff
+# Current implementation instructions
 
-Read README.md and docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md first.
-Runtime source is 0.6.27; formal_ready=false. Historical reports contain superseded status; CURRENT_STATUS.json and the handoff plan identify the current failed gate.
-Preserve benchmark/ and tools/ in the repository root. Do not put credentials, hidden graders, GT/Fixed, runtime workspaces or caches into model context or Git.
-Use saved public failure replay before behavior changes; verify actual final serialized requests across diagnosis, plan, execution and re-diagnosis. Re-read the current snapshot after edits.
-Run python scripts/test_portable.py for the self-contained development subset; report explicitly that six historical/native modules are excluded. Full tests require the documented external fixtures. Never call subset results a full 662-test reproduction.
-Source changes require a new method freeze, configuration digest and registered same-version development panel. Do not pool historical best scores, overwrite failed attempts, or lower PASS/UNKNOWN gates. Publishing this development snapshot does not authorize formal150 runs.
+Read docs/implementation/20261104/IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md and STATUS.json first. The user authorized all four work packages, real validation within the existing cumulative CNY100 ledger, and GitHub publication. Earlier plans and reports are historical; do not use their superseded budgets or scopes.
+
+Preserve Diagnosis → ChangeSet → TopoMen. Implement shared mechanisms, not case exceptions or prompt-only patches. Keep all adopted/referenced evidence bodies and immutable identities. Preserve baseline freezes, original tests, historical failures and ledgers. No credentials, hidden evaluators, golden fixes, caches or runtime workspaces in Git or model context. Preserve benchmark/ and tools/.
+
+Use an isolated successor; never edit installed /home/xhj/contractedge-system or frozen report trees. For each package retain a failing counterexample, implement, review the actual diff, run targeted checks; then run scripts/test_portable.py with its six declared exclusions and native/simulation checks. Freeze exact source/config/input identities before real calls. Do not claim real improvement from engineering tests. formal_ready remains false until documented gates pass.
+
+No new agents/delegation unless explicitly authorized by the user. No extra permissions required for the already authorized implementation or publication.

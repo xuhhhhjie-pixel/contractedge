@@ -68,8 +68,13 @@ def payload():
 
 def inspect(body, frame=None):
     provider = CountingProvider()
+    frame = frame or context()
+    original = next((row['original']['text'] for row in frame['subjects']
+                     if row['kind'] == 'ORIGINAL_REQUIREMENT'), None)
+    if original is not None:
+        body = {'requirement': original, **body}
     req = request(body)
-    return inspect_delivery(req, quote_request(provider, req, len), frame or context())
+    return inspect_delivery(req, quote_request(provider, req, len), frame)
 
 
 def evidence_row(report):
@@ -150,6 +155,28 @@ def test_exact_declared_target_content_is_bound_without_duplicating_support_exce
     body['current_target_files'][0]['path'] = 'unrelated.py'
     with pytest.raises(SemanticDeliveryError):
         require_delivery(inspect(body))
+
+
+def test_windowed_declared_target_content_is_bound_to_full_source_digest(tmp_path):
+    content = ''.join(f'line-{index}\n' for index in range(1, 201))
+    (tmp_path / 'helper.go').write_text(content)
+    source = {**SOURCE, 'locator': {'path': 'helper.go', 'start_line': 180, 'end_line': 180},
+              'excerpt': 'line-180\n',
+              'content_digest': hashlib.sha256(b'line-180\n').hexdigest()}
+    plan = {'operations': [{'change_id': 'C1', 'target': {'path': 'helper.go'}}]}
+    frame = delivery_context(METHOD, consumer='EXECUTION', snapshot_id='s1', plan=plan,
+        necessary_support=[source], source_root=tmp_path)
+    body = {'support_identity': [{k: v for k, v in source.items() if k != 'excerpt'}],
+            'current_target_files': [{
+                'path': 'helper.go', 'content': 'line-1\nline-2\n/* omitted */\nline-180\n',
+                'windowed_from_current_target': True,
+                'source_file_sha256': hashlib.sha256(content.encode()).hexdigest(),
+                'window_segments': [[1, 2], [180, 180]],
+            }], 'acceptance': {'snapshot_id': 's1'}}
+    report = inspect(body, frame)
+    current = next(r for r in report['subjects'] if r['kind'] == 'CURRENT_TARGET_SOURCE')
+    assert current['classification'] == 'WINDOWED_CURRENT_TARGET_BYTES'
+    require_delivery(report)
 
 
 @pytest.mark.parametrize('key,value', [('snapshot_id', 'stale-snapshot'), ('locator', {'path': 'another.py'})])
@@ -249,8 +276,12 @@ def test_current_selected_target_projection_preserves_historical_identity_and_pa
     assert current['required_basis'][0]['component'] == 'current_file_bytes'
     require_delivery(report)
     body['current_target_files'][0]['content'] = 'arbitrary replacement\n'
-    with pytest.raises(SemanticDeliveryError, match='CONTENT_DRIFT'):
-        require_delivery(inspect(body, frame))
+    drift = inspect(body, frame)
+    assert any(issue['classification'] == 'CONTENT_DRIFT' for issue in drift['issues'])
+    # A failed complete-target witness now also retains the original excerpt
+    # requirement; either missing proof must reject the final request.
+    with pytest.raises(SemanticDeliveryError):
+        require_delivery(drift)
     body['current_target_files'][0]['content'] = content
     prerequisite_frame = delivery_context(METHOD, consumer='EXECUTION', snapshot_id='s1', plan=plan,
         necessary_support=[SOURCE], source_root=tmp_path,
@@ -414,7 +445,7 @@ def test_real_repair_entry_stops_a_final_prepared_required_source_gap_without_re
     assert any('/front/' in ref['relative_path'] for ref in selected['input_refs'])
 
 
-def test_real_two_consumer_retry_binds_selected_current_bytes_without_claiming_old_excerpt_delivered(tmp_path, monkeypatch):
+def test_real_two_consumer_retry_preserves_history_and_binds_selected_current_bytes(tmp_path, monkeypatch):
     build_candidates = front_runner.build_candidate_set
     monkeypatch.setattr(front_runner, 'build_candidate_set',
         lambda *args, **kwargs: replace(build_candidates(*args, **kwargs), extension_used=True))
@@ -429,16 +460,19 @@ def test_real_two_consumer_retry_binds_selected_current_bytes_without_claiming_o
             reports.append(report)
     assert len(reports) == 2
     snapshots = set()
-    saw_historical_gap = False
+    saw_delivered_history = False
     for report in reports:
         assert not report['issues']
         current = [row for row in report['subjects'] if row['kind'] == 'CURRENT_TARGET_SOURCE']
         assert current and all(row['classification'] == 'FULL_CURRENT_TARGET_BYTES' for row in current)
         snapshots.update(row['original']['snapshot_id'] for row in current)
         assert not any(row['required_content_gate'] for row in report['subjects'] if row['kind'] == 'OBLIGATION')
-        saw_historical_gap |= any(row['kind'] == 'EVIDENCE' and row.get('historical_required_basis')
-            and row['classification'] == 'IDENTITY_ONLY' for row in report['subjects'])
-    assert len(snapshots) == 2 and saw_historical_gap
+        saw_delivered_history |= any(row['kind'] == 'EVIDENCE' and row.get('historical_required_basis')
+            and row['classification'] == 'FULL_ORIGINAL' and row['required_content_gate']
+            and {'kind':'ADOPTED_REQUEST_SOURCE_SUPPORT','component':'excerpt'} in row['required_basis']
+            and row['original']['snapshot_id'] != report['context']['snapshot_id']
+            for row in report['subjects'])
+    assert len(snapshots) == 2 and saw_delivered_history
 
 
 @pytest.mark.parametrize('case', ['config-binding', 'reload-state', 'two-consumers'])

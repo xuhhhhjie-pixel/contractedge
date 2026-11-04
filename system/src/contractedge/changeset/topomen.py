@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
+from contractedge.diagnosis.evidence import merge_evidence_records
+
 
 SUPPORTED_CONSUMER_CONTRACTS = {"contractedge.topomen_plan.v1"}
 
@@ -31,6 +33,7 @@ def translate_for_topomen(changeset: Mapping[str, Any], consumer_version: str, *
         "postconditions": [dict(item) for item in changeset.get("postconditions", [])],
         "preserve_constraints": [dict(item) for item in changeset.get("preserve_constraints", [])],
         "open_obligations": [dict(item) for item in changeset.get("open_obligations", [])],
+        "state_mapping": [dict(item) for item in changeset.get("state_mapping", [])],
         "production_path_review": [dict(item) for item in changeset.get("production_path_review", [])],
         "status": changeset.get("status"),
         "consumer_acceptance": "UNVERIFIED",
@@ -43,19 +46,18 @@ def translate_for_topomen(changeset: Mapping[str, Any], consumer_version: str, *
     if 'obligation_lineage' in changeset:
         from copy import deepcopy
         result['obligation_lineage']=deepcopy(changeset['obligation_lineage'])
+    diagnosis_evidence = merge_evidence_records(diagnosis.get('evidence_refs', [])) if diagnosis is not None else []
     if diagnosis is not None:
         violations = [v for v in diagnosis.get('violations', []) if v['id'] in changeset.get('planned_violation_ids', [])]
         relation_ids = {v['relation_id'] for v in violations}
         relations = [r for r in diagnosis.get('expected_relations', []) if r['id'] in relation_ids]
-        support_ids = {ref for r in relations for ref in r.get('support_refs', [])}
-        support_ids.update(ref for v in violations for ref in v.get('evidence_refs', []))
         result['coordination_context'] = {
             'diagnosis_snapshot': diagnosis.get('snapshot_id'),
             'obligation_atoms': [dict(a) for a in diagnosis.get('obligation_atoms', [])],
             'expected_relations': [dict(r) for r in relations],
             'violations': [dict(v) for v in violations],
-            'source_support': [dict(e) for e in diagnosis.get('evidence_refs', [])
-                               if e['id'] in support_ids and e.get('kind') == 'SOURCE_SPAN'],
+            'source_support': [dict(e) for e in diagnosis_evidence if e.get('kind') == 'SOURCE_SPAN'],
+            'public_observations': [dict(e) for e in diagnosis_evidence if e.get('kind') == 'PUBLIC_OBSERVATION'],
             'interpretation': 'Validated diagnosis context; historical after source changes. Not a new edit permission.'}
     if public_capabilities is not None:
         result['public_execution_capabilities'] = dict(public_capabilities)
@@ -68,7 +70,6 @@ def translate_for_topomen(changeset: Mapping[str, Any], consumer_version: str, *
                     or hashlib.sha256(record['excerpt'].encode()).hexdigest() != record.get('content_digest')):
                 raise ValueError('Executor prerequisite source must bind the current snapshot/exact content')
         context = result.setdefault('coordination_context', {})
-        existing = {e['id']:e for e in context.get('source_support', [])}
-        existing.update({e['id']:dict(e) for e in source_support})
-        context['source_support'] = list(existing.values())
+        combined = merge_evidence_records([*diagnosis_evidence, *source_support])
+        context['source_support'] = [record for record in combined if record.get('kind') == 'SOURCE_SPAN']
     return result

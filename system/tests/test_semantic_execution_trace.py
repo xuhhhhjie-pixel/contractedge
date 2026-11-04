@@ -2,6 +2,7 @@ import tempfile,unittest
 from pathlib import Path
 from tests.test_repair_execution import bound_plan
 from contractedge.execution.topomen import apply_edits
+from contractedge.model.budget import BudgetExceeded
 
 
 class SemanticExecutionTraceTests(unittest.TestCase):
@@ -21,12 +22,15 @@ class SemanticExecutionTraceTests(unittest.TestCase):
             self.assertEqual(trace[0]['literal_edits'][0]['new_text'],'name: selected')
             self.assertIn('NOT_PROVEN',trace[0]['semantic_status'])
 
-    def test_review_mapping_keeps_actual_edits_with_explicit_bounded_truncation(self):
+    def test_review_mapping_keeps_complete_edits_or_rejects_explicit_limit(self):
         from contractedge.execution.topomen import execution_review_mapping
-        result={'semantic_edit_trace':[{'change_id':'C','semantic_action':'Keep trigger',
+        result={'from_snapshot':'before','to_snapshot':'after',
+            'semantic_edit_trace':[{'change_id':'C','semantic_action':'Keep trigger',
             'literal_edits':[{'old_text':'old','new_text':'x'*10000}]}]}
-        mapping=execution_review_mapping(result,max_characters=30)
+        with self.assertRaisesRegex(BudgetExceeded, 'context'):
+            execution_review_mapping(result,max_characters=30)
+        mapping=execution_review_mapping(result)
         self.assertEqual(mapping[0]['literal_edits'][0]['old_text'],'old')
-        self.assertTrue(mapping[0]['literal_edits'][0]['truncated'])
-        self.assertLessEqual(len(mapping[0]['literal_edits'][0]['new_text']),30)
+        self.assertFalse(mapping[0]['literal_edits'][0]['truncated'])
+        self.assertEqual(mapping[0]['literal_edits'][0]['new_text'],'x'*10000)
         self.assertEqual(result['semantic_edit_trace'][0]['literal_edits'][0]['new_text'],'x'*10000)

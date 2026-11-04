@@ -7,7 +7,7 @@ later response settlement appends a revision rather than changing old evidence.
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import asdict, replace
+from dataclasses import asdict, dataclass, replace
 import hashlib
 import json
 import os
@@ -20,10 +20,13 @@ from contractedge.contracts.artifacts import (
     ArtifactRef, CallRef, LedgerSeal, StageReceipt, digest, identity, index, relative_path,
 )
 from contractedge.contracts.validation import canonical_digest
+from contractedge.model.provider import ModelResponse
 
 
 _SETTLEMENT_FIELDS = {
     "response_content", "response_metadata", "provider_error_metadata", "error", "elapsed_seconds",
+    "dispatch_state", "output_tokens_accounted", "output_tokens_released",
+    "prompt_tokens_accounted", "prompt_tokens_released",
 }
 
 
@@ -68,6 +71,27 @@ def preserve_error(primary, record_action):
         except Exception:
             pass
         return None
+
+
+@dataclass(frozen=True)
+class ProducedValue:
+    """An actual response's retained product, not a semantic validity claim."""
+    value_digest: str
+    dispatch: StageReceipt | None
+
+    def source_for(self, value):
+        if canonical_digest(value) != self.value_digest:
+            raise ValueError('Produced value differs from its bound response product')
+        return self.dispatch
+
+
+@dataclass(frozen=True)
+class RecordedResponse(ModelResponse):
+    """Carry the dispatch source through parsing, validation and recovery."""
+    dispatch: StageReceipt | None = None
+
+    def produced(self, value):
+        return ProducedValue(canonical_digest(value), self.dispatch)
 
 
 class RunRecorder:
@@ -481,16 +505,37 @@ class ProviderJournal:
         self.dispatches.append((stage, receipt))
         return receipt
 
-    def final_front(self, trace, *, attempt_id, dispatch_start, input_refs=(), projection_refs=()):
+    def completed_response(self, response, receipt):
+        """Bind only the known response of this exact recorded dispatch.
+
+        A prompt name, response text search or latest-stage lookup cannot name
+        a producer: identical requests/responses may occur more than once.
+        """
+        if (receipt is None or receipt.run_id != self.recorder.run_id
+                or receipt.input_digest != self.recorder.input_digest
+                or receipt.status != 'RESPONSE_RECEIVED' or len(receipt.call_refs) != 1):
+            raise ValueError('Completed response requires one actual recorded dispatch')
+        reference = receipt.call_refs[0]
+        offset = reference.absolute_call_index - self.first_call_index
+        if (reference.segment_index != self.segment_index or self.provider is None
+                or not 0 <= offset < len(self.provider.calls)):
+            raise ValueError('Completed response belongs to another ledger segment')
+        call = self.provider.calls[offset]
+        if (call.get('request_digest') != reference.request_digest
+                or call.get('dispatch_state') != 'response_known'
+                or call.get('response_content') != response.content
+                or call.get('response_metadata') != dict(response.metadata)):
+            raise ValueError('Completed response differs from its canonical dispatch facts')
+        return RecordedResponse(response.content, response.metadata, receipt)
+
+    def final_front(self, trace, *, attempt_id, products=None, input_refs=(), projection_refs=()):
         source = self.recorder.capture_value(trace.to_wire(), "FRONT_TRACE", snapshot_id=trace.snapshot_id)
-        recent = self.dispatches[dispatch_start:]
         previous = tuple(input_refs)
-        for stage, value, prefixes in (
-                ("diagnosis", trace.diagnosis, ("DIAGNOSIS",)),
-                ("planning", trace.changeset, ("SEMANTIC_CHANGESET", "CHANGESET_REVISION"))):
-            produced = tuple((name, receipt) for name, receipt in recent if name.startswith(prefixes))
-            refs = produced[-1][1].call_refs if produced else ()
-            request_refs = tuple(self.recorder.receipt_ref(receipt) for _, receipt in produced)
+        for stage, value in (("diagnosis", trace.diagnosis), ("planning", trace.changeset)):
+            product = (products or {}).get(stage) if value is not None else None
+            dispatch = product.source_for(value) if product is not None else None
+            refs = dispatch.call_refs if dispatch is not None else ()
+            request_refs = (self.recorder.receipt_ref(dispatch),) if dispatch is not None else ()
             output = (() if value is None else (self.recorder.capture_value(value,
                 "FINAL_DIAGNOSIS" if stage == "diagnosis" else "FINAL_SEMANTIC_PLAN",
                 snapshot_id=trace.snapshot_id),))
@@ -499,7 +544,7 @@ class ProviderJournal:
                 status="PRODUCED" if value is not None else "NOT_PRODUCED",
                 input_refs=previous + request_refs, output_refs=output,
                 projection_refs=projection_refs, call_refs=refs,
-                issues=(() if produced or value is None else ({"code": "LEGACY_CALL_LINK_INCOMPLETE"},)))
+                issues=(() if dispatch is not None or value is None else ({"code": "LEGACY_CALL_LINK_INCOMPLETE"},)))
             self.latest[stage] = self.recorder.receipt_ref(receipt)
             previous = (self.latest[stage],)
         receipt = self.record("front", attempt_id=attempt_id, snapshot_id=trace.snapshot_id,

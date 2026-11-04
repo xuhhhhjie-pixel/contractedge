@@ -6,6 +6,8 @@ from typing import Any, Mapping
 
 import yaml
 
+from contractedge.contracts.status import project_statuses, scoring_exclusion
+
 
 class GroundTruthError(ValueError):
     pass
@@ -150,6 +152,7 @@ def normalize_gt(private_case: Mapping[str, Any], release_id: str, *,
 
 def score_run(run_trace: Mapping[str, Any], normalized_gt: Mapping[str, Any]) -> dict[str, Any]:
     status = run_trace.get("status")
+    projection = project_statuses(run_trace)
     precision_eligible = normalized_gt.get("precision_eligible")
     recall_eligible = normalized_gt.get("recall_eligible")
     record: dict[str, Any] = {
@@ -160,6 +163,7 @@ def score_run(run_trace: Mapping[str, Any], normalized_gt: Mapping[str, Any]) ->
         "oracle_boundary": normalized_gt.get("oracle_boundary"),
         "oracle_limit": normalized_gt.get("oracle_limit"),
         "status": status, "denominator_included": True, "failure_kind": None,
+        **projection,
         "precision": None, "recall": None,
         "expected_relation_precision": None, "expected_relation_recall": None,
         "violation_precision": None, "violation_recall": None,
@@ -168,15 +172,10 @@ def score_run(run_trace: Mapping[str, Any], normalized_gt: Mapping[str, Any]) ->
         "scoring_status": "SCORED",
         "ambiguous_relation_matches": [],
     }
-    if status == "INFRASTRUCTURE_ERROR":
-        record["failure_kind"] = "INFRASTRUCTURE"
+    exclusion = scoring_exclusion(run_trace, projection)
+    if exclusion is not None:
+        record['failure_kind'], record['scoring_status'] = exclusion
         return record
-    if status == "BUDGET_EXHAUSTED":
-        record["failure_kind"] = "BUDGET"
-        return record
-    if status in {"INVALID_OUTPUT", "INVALID_PLAN"}:
-        record["failure_kind"] = "METHOD_OUTPUT"
-    diagnosis = run_trace.get("diagnosis") or {}
     diagnosis = run_trace.get("diagnosis") or {}
     predicted_relations = [item for item in diagnosis.get("expected_relations", [])
                            if isinstance(item, Mapping) and item.get("id")]

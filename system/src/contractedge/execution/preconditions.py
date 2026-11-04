@@ -48,8 +48,10 @@ def _covers(required, initialization):
     return 'CHECKED_SYNTAX' if all(any(i<=r for i in init) for r in req) else 'CONFLICT'
 
 
-def validate_helper_preconditions(plan: dict, changed_source: dict, helper_evidence: list[dict]) -> dict:
+def validate_helper_preconditions(plan: dict, changed_source: dict, helper_evidence: list[dict], *,
+                                  unverified_evidence_ids=()) -> dict:
     merges=[];initializers={};cleaners={}
+    unverified = set(unverified_evidence_ids)
     for evidence in helper_evidence:
         text=evidence.get('excerpt','');name=re.search(r'\bfunc\s+(\w+)\s*\(',text)
         if not name:continue
@@ -57,9 +59,9 @@ def validate_helper_preconditions(plan: dict, changed_source: dict, helper_evide
         if key and 'append(' in text:
             merges.append((name[1],key[1],evidence.get('id')))
         key=re.search(r'\bSetAnnotation\(\s*(\w+)',text)
-        if key:initializers.setdefault(key[1],[]).append(name[1])
+        if key:initializers.setdefault(key[1],[]).append((name[1],evidence.get('id')))
         key=re.search(r'\bClearAnnotation\(\s*(\w+)',text)
-        if key:cleaners.setdefault(key[1],[]).append(name[1])
+        if key:cleaners.setdefault(key[1],[]).append((name[1],evidence.get('id')))
     checks=[]
     for path,text in changed_source.items():
         if not path.endswith('.go'):continue
@@ -75,14 +77,20 @@ def validate_helper_preconditions(plan: dict, changed_source: dict, helper_evide
                     for label,names,before in [('RESOURCE_ID_INITIALIZATION',initializers.get(key,[]),True),
                                                ('RESOURCE_ID_CLEANUP',cleaners.get(key,[]),False)]:
                         candidates=[]
-                        for helper in names:
+                        for helper, _helper_id in names:
                             regex=r'\b'+re.escape(alias)+r'\.'+re.escape(helper)+r'\(\s*'+re.escape(resource)+r'\s*\)'
                             for m in re.finditer(regex,body):
                                 if (before and m.start()<call.start()) or (not before and m.start()>call.start()):
                                     candidates.append(_covers(required,_condition_at(body,m.start())))
                         status=('CHECKED_SYNTAX' if 'CHECKED_SYNTAX' in candidates else
                                 'UNKNOWN' if 'UNKNOWN' in candidates else 'CONFLICT')
+                        invalid = unverified & {eid, *(helper_id for _helper, helper_id in names)}
+                        if invalid:
+                            status = 'UNKNOWN'
                         checks.append({**common,'precondition':label,'annotation_key':key,'status':status,
-                            'reason':'Initializer/cleanup must cover every supported call guard; aliasing, loops and early exits are not proven'})
+                            'reason':('Helper source changed, disappeared or became ambiguous; historical evidence '
+                                      + ', '.join(sorted(str(ref) for ref in invalid)) + ' is not a current contract. '
+                                      if invalid else '')
+                                     + 'Initializer/cleanup must cover every supported call guard; aliasing, loops and early exits are not proven'})
     return dict(schema_version='ce.helper_preconditions.v1',checks=checks,
         interpretation='Finite registered syntax relation only; behavior probes remain required, no general control-flow or alias proof')

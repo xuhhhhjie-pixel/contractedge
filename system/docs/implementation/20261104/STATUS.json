@@ -1,0 +1,23 @@
+{
+  "status": "FOUR_STEP_IMPLEMENTATION_STARTED",
+  "date": "2026-11-04",
+  "formal_ready": false,
+  "implementation_baseline": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+  "baseline_real_effect": "NOT_RUN",
+  "historical_real_panel": {
+    "source_sha256": "806e29f8fe3851b502dfbd91c03783877d4c601033d11505a550d15f3557ed8c",
+    "candidate_pass": 3,
+    "baseline_pass": 2,
+    "cases_each": 8,
+    "wins": 2,
+    "regressions": 1
+  },
+  "packages": {
+    "1": "PENDING",
+    "2": "PENDING",
+    "3": "PENDING",
+    "4": "PENDING"
+  },
+  "budget_authorization_cny": 100,
+  "latest_conservative_spend_cny": 68.17361
+}

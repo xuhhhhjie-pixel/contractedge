@@ -1,4 +1,5 @@
 """Selected context must not disappear merely because diagnosis did not cite it."""
+from contractedge.model.budget import BudgetExceeded
 import json
 from dataclasses import replace
 from types import SimpleNamespace
@@ -19,11 +20,13 @@ def test_extension_preserves_uncited_selected_type_without_new_edit_permission(t
     units=parse_source_units('owner.go',(tmp_path/'owner.go').read_text(),snapshot.snapshot_id)
     selected=build_candidate_set('Owner',None,units,[],top_n=12,max_context_tokens=12000,token_counter=len)
     method=SimpleNamespace(declared_artifacts=(),public_evidence=())
-    # Initial context retains the existing opt-in support policy. Once evidence
-    # acquisition has been spent, all finally selected source stays available.
-    assert required_planning_source_support(method,selected,snapshot.snapshot_id)==[]
+    # Initial and extended contexts preserve the same complete selected source;
+    # diagnosis citations do not create a second context-selection boundary.
+    initial_support=required_planning_source_support(method,selected,snapshot.snapshot_id)
+    assert len(initial_support)==1 and initial_support[0]['excerpt']==units[0]['text']
     selected=replace(selected,extension_used=True)
     support=required_planning_source_support(method,selected,snapshot.snapshot_id)
+    assert support==initial_support
     assert len(support)==1 and support[0]['excerpt']==units[0]['text']
     assert support[0]['delivery_required'] and support[0]['snapshot_id']==snapshot.snapshot_id
     diagnosis=validate_diagnosis(valid_diagnosis(),parse_method_input(valid_method_input()),None)
@@ -91,7 +94,7 @@ def test_uncited_extension_context_survives_ready_and_execution_with_budget_guar
     body=json.loads(request.messages[1]['content'])
     assert any('client *ExternalClient' in r['excerpt'] for r in body['read_only_source_support'])
     assert {r['path'] for r in body['current_target_files']}=={'templates/serviceaccount.yaml'}
-    with pytest.raises(PlanRejected,match='source was not delivered'):
+    with pytest.raises(BudgetExceeded,match='read-only support budget'):
         build_execution_request(plan,tmp_path,{'allowed_paths':['templates/**']},lambda s:len(s.split()),
             {**config,'max_execution_support_bytes':1},requirement=value['requirement_text'])
     assert compute_snapshot(tmp_path).snapshot_id==value['initial_snapshot_id']

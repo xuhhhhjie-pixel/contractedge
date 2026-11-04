@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 from typing import Any, Mapping
 
-from contractedge.contracts.models import ContractError, DiagnosisPacket, MethodInput, RunContext
+from contractedge.contracts.models import ContractError, DiagnosisPacket, MethodInput, RunContext, ValidationIssue
 from contractedge.contracts.validation import validate_diagnosis as validate_contract_diagnosis
 from contractedge.retrieval.candidates import CandidateSet
 
@@ -20,15 +20,30 @@ def validate_diagnosis(payload: Mapping[str, Any], method_input: MethodInput,
         issues.extend(validate_public_check_claims(payload,method_input.public_evidence,run_context.snapshot_id))
         if issues:
             first=issues[0]
-            raise ContractError(first['code'],'operation_assessments',str(issues))
+            structured = tuple(ValidationIssue(str(issue.get('code', 'VALIDATION_ERROR')),
+                                                str(issue.get('path', 'operation_assessments')),
+                                                str(issue.get('message', issue)))
+                               for issue in issues if isinstance(issue, Mapping))
+            raise ContractError(first['code'], 'operation_assessments', str(issues), issues=structured)
     candidate_by_id = {str(item["id"]): item for item in candidate_set.candidates}
     selected_paths = {str(item.get("path", "")) for item in candidate_set.candidates}
     public_by_digest = {}
     for item in method_input.public_evidence:
         public_by_digest.setdefault(str(item['content_digest']), []).append(item)
     artifacts_by_id = {str(item["id"]): item for item in method_input.declared_artifacts}
+    adopted = None
+    if run_context is not None and run_context.retrieval_config.get('source_context') is not None:
+        from contractedge.diagnosis.evidence import build_evidence_catalog, same_evidence_content
+        adopted = {r['id']: r for r in build_evidence_catalog(method_input, candidate_set,
+            run_context.snapshot_id, source_context=run_context.retrieval_config['source_context'])}
     for index, evidence in enumerate(packet.evidence_refs):
         if evidence["kind"] == "SOURCE_SPAN":
+            if adopted is not None:
+                original = adopted.get(evidence['id'])
+                if original is None or not same_evidence_content(original, evidence):
+                    raise ContractError('EVIDENCE_NOT_IN_CANDIDATES', f'evidence_refs[{index}]',
+                                        'source evidence must equal its adopted canonical record')
+                continue
             path = evidence["locator"].get("path")
             if path not in selected_paths:
                 raise ContractError("EVIDENCE_NOT_IN_CANDIDATES", f"evidence_refs[{index}].locator.path",

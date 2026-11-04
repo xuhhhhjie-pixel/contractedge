@@ -16,6 +16,7 @@ from collections import Counter
 import yaml
 
 from contractedge.dataset.benchmark import file_sha
+from contractedge.contracts.failures import make_failure, project_terminal_status
 from contractedge.source.snapshot import compute_snapshot
 
 
@@ -54,46 +55,236 @@ def _link_or_copy(source, destination):
 
 
 def has_candidate_runtime_failure(report):
-    """Consume only current failures produced by this public runtime wrapper."""
-    return bool(report.get('status')=='EXECUTION_FAILED' and report.get('snapshot_id') and any(
-        f.get('snapshot_id')==report['snapshot_id'] and f.get('operation')=='PRODUCTION_PROCESS_START'
-        and f.get('status')=='FAILED' and f.get('source_locations')
-        for f in report.get('candidate_runtime_failures',[])))
+    """Current producer facts survive a separate aggregate timeout/cleanup outcome."""
+    return bool(report.get('snapshot_id') and any(
+        f.get('snapshot_id')==report['snapshot_id'] and f.get('status')=='FAILED' and (
+            f.get('operation')=='PRODUCTION_PROCESS_START' and f.get('source_locations')
+            or is_registered_readiness_failure(f))
+        for f in _candidate_runtime_records(report)))
+
+
+def _candidate_runtime_records(report):
+    records = report.get('candidate_runtime_failures')
+    return [record for record in records if isinstance(record, dict)] if isinstance(records, list) else []
+
+
+def is_registered_readiness_failure(failure):
+    """Validate a finite public operation result without asserting code blame."""
+    from contractedge.execution.probe_specs import registered_programs
+    pid=failure.get('probe_id')
+    if pid not in {'alertmanager-reload-v1','alertmanager-reload-v2','alertmanager-reload-v3','alertmanager-reload-v4'}:
+        return False
+    message='PROBE_ERROR: server readiness: \nexit status 2\n'
+    return (failure.get('operation')=='PRODUCTION_PROCESS_READINESS'
+        and failure.get('status')=='FAILED'
+        and failure.get('producer')=='REGISTERED_PUBLIC_READINESS_WINDOW_V1'
+        and failure.get('probe_sha256')==hashlib.sha256(registered_programs()[pid][0].encode()).hexdigest()
+        and failure.get('scenario')=='method-'+pid
+        and type(failure.get('observation_window_seconds')) is int and failure['observation_window_seconds']==20
+        and failure.get('build_passed') is True and failure.get('process_started') is True
+        and failure.get('before_scenario_injection') is True and failure.get('source_cause')=='UNKNOWN'
+        and failure.get('source_locations')==[] and failure.get('stderr_truncated') is False
+        and failure.get('stderr_excerpt')==message
+        and failure.get('stderr_sha256')==hashlib.sha256(message.encode()).hexdigest())
+
+
+def classify_candidate_build_failures(raw_root, snapshot):
+    """Recognize finite Go compiler diagnostics against the unchanged source.
+
+    This establishes a source-bound build error, not its semantic cause. Unknown
+    tools, dependency errors and incomplete execution remain unclassified.
+    """
+    raw_root = Path(raw_root)
+    execution = raw_root / 'public_execution.json'
+    if (raw_root.is_symlink() or execution.is_symlink() or not execution.is_file()
+            or execution.stat().st_size > 1024 * 1024):
+        return []
+    try:
+        record = json.loads(execution.read_text())
+    except (ValueError, OSError):
+        return []
+    if (not isinstance(record, dict) or record.get('status') != 'EXECUTION_FAILED'
+            or not isinstance(record.get('scenarios'), list)
+            or record.get('private_materials_loaded') is not False):
+        return []
+    root = Path(snapshot.source_root)
+    pattern = re.compile(r'^(?:\./)?([^\s:]+\.go):([1-9]\d*):([1-9]\d*): (.+)$')
+    messages = re.compile(r'^(?:cannot use\b|undefined:|syntax error:|unknown field\b|'
+                          r'not enough arguments\b|too many arguments\b|'
+                          r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)+ undefined '
+                          r'\(type .+ has no field or method [A-Za-z_]\w*\)$|'
+                          r'.+ declared and not used$|.+ imported and not used$)')
+    failures = []
+    for scenario in record.get('scenarios', []):
+        if not isinstance(scenario, dict):
+            continue
+        name = scenario.get('scenario')
+        if (not isinstance(name, str) or not re.fullmatch(r'[A-Za-z0-9_.-]+', name)
+                or type(scenario.get('exit_code')) is not int or scenario['exit_code'] == 0
+                or scenario.get('timed_out') is not False
+                or scenario.get('output_limited') is not False):
+            continue
+        for stream in ['stderr', 'stdout']:
+            path = raw_root / (name + '.' + stream)
+            if path.is_symlink() or not path.is_file() or path.stat().st_size > 1024 * 1024:
+                continue
+            data = path.read_bytes()
+            locations, lines = [], []
+            for line in data.decode('utf-8', errors='replace').splitlines():
+                match = pattern.fullmatch(line)
+                if not match or not messages.match(match[4]):
+                    continue
+                relative = Path(match[1])
+                if relative.is_absolute() or '..' in relative.parts:
+                    continue
+                relative = relative.as_posix()
+                target = root / relative
+                if (relative not in snapshot.file_digests or target.is_symlink()
+                        or not target.is_file() or target.stat().st_size > 1024 * 1024):
+                    continue
+                source = target.read_bytes()
+                if hashlib.sha256(source).hexdigest() != snapshot.file_digests[relative]:
+                    continue
+                row, column = int(match[2]), int(match[3])
+                source_lines = source.splitlines()
+                if row > len(source_lines) or column > len(source_lines[row - 1]) + 1:
+                    continue
+                locations.append(dict(path=relative, line=row, column=column,
+                    file_sha256=snapshot.file_digests[relative]))
+                lines.append(line)
+                if len(locations) == 8:
+                    break
+            if locations:
+                excerpt = '\n'.join(lines)[:4000]
+                failures.append(dict(operation='PRODUCTION_COMPILE', compiler='go', status='FAILED',
+                    producer='FROZEN_PUBLIC_GO_COMPILER_DIAGNOSTIC_V1',
+                    snapshot_id=snapshot.snapshot_id, scenario=name, source_locations=locations,
+                    stderr_excerpt=excerpt, stderr_truncated=len('\n'.join(lines)) > 4000,
+                    stderr_sha256=hashlib.sha256(data).hexdigest(),
+                    diagnostic_sha256=hashlib.sha256(excerpt.encode()).hexdigest(),
+                    locator={'path': 'raw/' + path.name},
+                    interpretation='Source-bound compiler diagnostic; no behavioral verdict or proven root cause'))
+                if len(failures) == 4:
+                    return failures
+    return failures
+
+
+def _candidate_build_records(report):
+    records = report.get('candidate_build_failures')
+    return [record for record in records if isinstance(record, dict)] if isinstance(records, list) else []
+
+
+def has_candidate_build_failure(report):
+    def valid(failure):
+        locations = failure.get('source_locations')
+        excerpt = failure.get('stderr_excerpt')
+        return (failure.get('snapshot_id') == report.get('snapshot_id')
+            and failure.get('operation') == 'PRODUCTION_COMPILE' and failure.get('compiler') == 'go'
+            and failure.get('producer') == 'FROZEN_PUBLIC_GO_COMPILER_DIAGNOSTIC_V1'
+            and failure.get('status') == 'FAILED' and isinstance(excerpt, str) and bool(excerpt)
+            and hashlib.sha256(excerpt.encode()).hexdigest() == failure.get('diagnostic_sha256')
+            and bool(re.fullmatch(r'[0-9a-f]{64}', str(failure.get('stderr_sha256', ''))))
+            and isinstance(locations, list) and bool(locations) and all(
+                isinstance(location, dict) and str(location.get('path', '')).endswith('.go')
+                and not Path(location['path']).is_absolute() and '..' not in Path(location['path']).parts
+                and all(type(location.get(key)) is int and location[key] > 0 for key in ['line', 'column'])
+                and bool(re.fullmatch(r'[0-9a-f]{64}', str(location.get('file_sha256', ''))))
+                for location in locations))
+    return bool(report.get('snapshot_id')
+                and any(valid(failure) for failure in _candidate_build_records(report)))
+
+
+def has_candidate_execution_failure(report):
+    return has_candidate_runtime_failure(report) or has_candidate_build_failure(report)
 
 
 def public_failure_diagnostics(report):
     """Keep candidate execution failures distinct from adapter failures."""
-    runtime=report.get('candidate_runtime_failures',[]) if has_candidate_runtime_failure(report) else []
+    runtime=[f for f in _candidate_runtime_records(report) if has_candidate_runtime_failure(
+        {**report, 'candidate_runtime_failures': [f]})]
+    build=[f for f in _candidate_build_records(report) if has_candidate_build_failure(
+        {**report, 'candidate_build_failures': [f]})]
     return [*report.get('observation_adapter_audit',[]),
         *[{'kind':'CANDIDATE_RUNTIME_FAILURE',**f} for f in runtime],
+        *[{'kind':'CANDIDATE_BUILD_FAILURE',**f} for f in build],
         *([{'kind':'METHOD_PROBE_ERROR','status':'PROBE_ERROR'}]
-            if report.get('method_probe_status')=='PROBE_ERROR' and not runtime else [])]
+            if report.get('method_probe_status')=='PROBE_ERROR' and not runtime and not build else [])]
 
 
 def cleanup_owned_containers(roots):
-    """Remove only containers mounting this invocation's disposable directories."""
+    """Remove proven owned containers, then verify the complete daemon inventory.
+
+    A successful rm is not an absence receipt. Unknown inspect results must
+    not authorize deletion or a CLOSED result; other proven owned containers
+    are still cleaned. Mount ownership remains limited to this invocation's
+    disposable roots, including containers which have already stopped.
+    """
     owned = [Path(p).resolve() for p in roots]
-    removed = []
+    errors, attempted, removed = [], [], []
+
+    def inventory():
+        result = subprocess.run(['docker', 'ps', '-aq', '--no-trunc'],
+                                capture_output=True, text=True, timeout=10)
+        if result.returncode:
+            raise ValueError('Container inventory unavailable')
+        identifiers = result.stdout.split()
+        if any(not re.fullmatch(r'[0-9a-f]{64}', cid) for cid in identifiers):
+            raise ValueError('Container inventory did not return complete identities')
+        return list(dict.fromkeys(identifiers))
+
+    def is_owned(cid):
+        result = subprocess.run(['docker', 'inspect', '--format', '{{json .Mounts}}', cid],
+                                capture_output=True, text=True, timeout=10)
+        if result.returncode:
+            raise ValueError('Container mount inspection failed: ' + cid)
+        mounts = json.loads(result.stdout)
+        if not isinstance(mounts, list) or any(not isinstance(m, dict)
+                or not isinstance(m.get('Type'), str) or not m['Type'] for m in mounts):
+            raise ValueError('Invalid container mount inventory: ' + cid)
+        sources = []
+        for mount in mounts:
+            if mount.get('Type') == 'bind':
+                value = mount.get('Source')
+                if not isinstance(value, str) or not Path(value).is_absolute():
+                    raise ValueError('Invalid bind source: ' + cid)
+                sources.append(Path(value).resolve())
+        return any(path.is_relative_to(root) for path in sources for root in owned)
+
     try:
-        running = subprocess.run(['docker', 'ps', '-q'], capture_output=True, text=True, timeout=10)
-        if running.returncode:
-            return {'status': 'DOCKER_UNAVAILABLE', 'removed': []}
-        for cid in running.stdout.split():
-            mounts = subprocess.run(['docker', 'inspect', '--format', '{{json .Mounts}}', cid],
-                                    capture_output=True, text=True, timeout=10)
-            if mounts.returncode:
+        identifiers = inventory()
+    except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
+        return {'status': 'DOCKER_UNAVAILABLE', 'removed': [], 'errors': [str(exc)]}
+    removal_failed = False
+    for cid in identifiers:
+        try:
+            if not is_owned(cid):
                 continue
-            values = json.loads(mounts.stdout)
-            if not any(m.get('Type') == 'bind' and any(Path(m['Source']).resolve().is_relative_to(root)
-                       for root in owned) for m in values):
-                continue
-            result = subprocess.run(['docker', 'rm', '-f', cid], capture_output=True, timeout=15)
+        except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
+            errors.append(str(exc))
+            continue
+        try:
+            result = subprocess.run(['docker', 'rm', '-f', cid],
+                                    capture_output=True, text=True, timeout=15)
             if result.returncode:
-                return {'status': 'OWNED_CLEANUP_FAILED', 'removed': removed}
-            removed.append(cid)
-        return {'status': 'OWNED_CONTAINERS_CLOSED', 'removed': removed}
-    except (OSError, ValueError, subprocess.TimeoutExpired):
-        return {'status': 'CLEANUP_UNCONFIRMED', 'removed': removed}
+                raise ValueError('Owned container removal failed: ' + cid)
+            attempted.append(cid)
+        except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
+            removal_failed = True
+            errors.append(str(exc))
+    try:
+        remaining = inventory()
+        removed = [cid for cid in attempted if cid not in remaining]
+        for cid in remaining:
+            try:
+                if is_owned(cid):
+                    errors.append('Owned container remains after cleanup: ' + cid)
+            except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
+                errors.append(str(exc))
+    except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
+        errors.append(str(exc))
+    status = ('OWNED_CLEANUP_FAILED' if removal_failed else
+              'CLEANUP_UNCONFIRMED' if errors else 'OWNED_CONTAINERS_CLOSED')
+    return {'status': status, 'removed': removed, 'errors': list(dict.fromkeys(errors))}
 
 
 class BenchmarkPublicRunner:
@@ -187,7 +378,8 @@ class BenchmarkPublicRunner:
         derived_evidence = {}
         method_probe_report = None
         runtime_failures = []
-        if self.method_probe_profiles and result['returncode'] == 0 and not result['timed_out']:
+        if (self.method_probe_profiles and result['returncode'] == 0 and not result['timed_out']
+                and cleanup['status'] == 'OWNED_CONTAINERS_CLOSED'):
             from contractedge.execution.probes import run_method_probes, behavior_records, candidate_runtime_failures
             specs = self._method_probe_specs.get(str(workspace.resolve()))
             if specs is None:
@@ -287,7 +479,10 @@ class BenchmarkPublicRunner:
                 destination = path.with_suffix(suffix)
                 destination.write_text(body)
                 derived_evidence[destination] = {
-                    'evidence_kind': 'PUBLIC_STRUCTURE', 'scenario': path.stem}
+                    'evidence_kind': 'PUBLIC_STRUCTURE', 'scenario': path.stem,
+                    **({'adapter_id':'contractedge.render-inventory.v1','structured_complete':True,
+                        'source_file':record['source_file'],'source_file_sha256':record['source_sha256']}
+                       if record.get('observation_type')=='PARSED_PUBLIC_RESOURCE_INVENTORY' else {})}
             # Keep each pod-bearing resource independently quotable. A large
             # inventory prefix must not crowd target fields out of review context.
             for index, pod in enumerate(pods):
@@ -361,27 +556,45 @@ class BenchmarkPublicRunner:
             used += len(record['excerpt'].encode())
             selected_spans.add(key)
             observations.append({'id': 'OBS' + str(len(observations) + 1), **record})
+        # The classifier checks its own complete frozen producer record and
+        # current source binding. A later timeout or cleanup failure must not
+        # prevent retaining an already observed compiler fact.
+        build_failures = classify_candidate_build_failures(output / 'raw', compute_snapshot(source))
         if result['timed_out']:
-            status = 'BUDGET_EXCEEDED'
-        elif cleanup['status'] != 'OWNED_CONTAINERS_CLOSED':
-            status = 'INFRA_ERROR'
+            process_status = 'BUDGET_EXCEEDED'
         elif any(s in {'INFRA_ERROR', 'INVALID_OBSERVATION', 'PREPARATION_FAILED'} for s in raw_statuses):
-            status = 'INFRA_ERROR'
-        elif runtime_failures:
-            status = 'EXECUTION_FAILED'
+            process_status = 'INFRA_ERROR'
+        elif runtime_failures or build_failures:
+            process_status = 'EXECUTION_FAILED'
         elif result['returncode'] == 0 and observations:
-            status = 'EXECUTION_PASS'
+            process_status = 'EXECUTION_PASS'
         elif 'EXECUTION_FAILED' in raw_statuses:
-            status = 'EXECUTION_FAILED'
+            process_status = 'EXECUTION_FAILED'
         else:
-            status = 'INVALID_OBSERVATION'
+            process_status = 'INVALID_OBSERVATION'
+        primary_failure = (make_failure('public_execution', process_status,
+            failure_class='execution' if process_status == 'EXECUTION_FAILED' else 'infrastructure',
+            dispatch_state='response_known', snapshot_id=before)
+            if process_status != 'EXECUTION_PASS' else None)
+        cleanup_failure = (make_failure('cleanup', 'CLEANUP_UNCONFIRMED',
+            failure_class='infrastructure', dispatch_state='response_known', snapshot_id=before,
+            secondary=True, message='Public runtime cleanup was not confirmed', details=cleanup)
+            if cleanup['status'] != 'OWNED_CONTAINERS_CLOSED' else None)
+        secondary_failures = [cleanup_failure] if cleanup_failure else []
+        terminal = project_terminal_status(primary_failure, cleanup_failure, default=process_status)
+        # Keep the frozen public-observation status dialect at its boundary.
+        status = 'INFRA_ERROR' if terminal == 'INFRASTRUCTURE_ERROR' else terminal
         report = {'schema_version': 'ce.public_observation.v1', 'status': status,
+                  'process_status': process_status, 'primary_failure': primary_failure,
+                  'cleanup_failure': cleanup_failure, 'secondary_failures': secondary_failures,
+                  'failure_records': ([primary_failure] if primary_failure else []) + secondary_failures,
                   **comparison_identity,
                   'case_id': workspace_record['case_id'], 'snapshot_id': before,
                   'observations': observations, 'launcher': result,
                   'raw_execution_statuses': raw_statuses,
                   'method_probe_status': method_probe_report.get('status') if method_probe_report else 'NOT_RUN',
                   'candidate_runtime_failures': runtime_failures,
+                  'candidate_build_failures': build_failures,
                   'observation_adapter_audit': adapter_audit,
                   'runtime_cleanup': cleanup,
                   'source_unchanged_by_public_build': before == after,

@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import copy
+import errno
 import hashlib
 import json
 import os
 import re
+import socket
+import time
 import urllib.request
 from urllib.parse import urlsplit
 from contextvars import ContextVar
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from typing import Any, Mapping, Protocol
 
 from contractedge.model.output_contract import strict_transport_schema, restore_strict_content
@@ -59,6 +62,57 @@ def _digest(value):
                                     separators=(',', ':')).encode()).hexdigest()
 
 
+def _read_response_with_deadline(response, timeout_seconds: float) -> bytes:
+    """Read an HTTP response with a wall-clock deadline.
+
+    ``socket`` timeouts are inactivity limits; a server that drips bytes can
+    therefore keep ``HTTPResponse.read()`` alive indefinitely.  The public
+    model ledger treats a missing response as ``response_unknown`` and must
+    stop waiting after the configured request budget.  Read bounded chunks
+    and refresh the underlying socket timeout from one monotonic deadline. A
+    non-HTTP fixture without an exposed socket keeps the old single-read path.
+    """
+    deadline = time.monotonic() + max(0.001, float(timeout_seconds))
+    stream = getattr(response, 'fp', None)
+    raw = getattr(stream, 'raw', None)
+    sock = getattr(raw, '_sock', None)
+    if sock is None:
+        return response.read()
+    # ``http.client`` can expose a closed SSL socket while its buffered
+    # reader still owns the complete response body.  Calling settimeout on
+    # that private socket can invalidate the reader and lose the body.
+    if getattr(sock, '_closed', False):
+        return response.read()
+    chunks = []
+    while True:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError('model response read exceeded the configured request deadline')
+        try:
+            sock.settimeout(remaining)
+            chunk = response.read(64 * 1024)
+        except socket.timeout as exc:
+            raise TimeoutError('model response read exceeded the configured request deadline') from exc
+        except OSError as exc:
+            # Some HTTPS servers advertise ``Connection: close`` and finish
+            # the TLS shutdown between ``urlopen`` returning and this first
+            # read.  urllib keeps the response bytes in its buffered reader,
+            # but the private socket handle is already invalid; trying to
+            # change its timeout then raises EBADF before we can consume those
+            # bytes.  This is a completed transport, not an unknown response.
+            # Do not apply this fallback to other socket errors: those may
+            # represent a genuine read failure and must remain observable.
+            if exc.errno == errno.EBADF:
+                try:
+                    return response.read()
+                except socket.timeout as timeout_exc:
+                    raise TimeoutError('model response read exceeded the configured request deadline') from timeout_exc
+            raise
+        if not chunk:
+            return b''.join(chunks)
+        chunks.append(chunk)
+
+
 @dataclass(frozen=True)
 class _PreparedRequest:
     body: bytes
@@ -81,6 +135,26 @@ class _PreparedRequest:
 
 
 _active_prepared_request = ContextVar('contractedge_prepared_request', default=None)
+
+
+@dataclass(frozen=True)
+class _PreHttpFailure:
+    provider: object
+    request: ModelRequest
+    prepared: _PreparedRequest
+
+
+def consume_pre_http_failure(exc, provider, request, prepared) -> bool:
+    """Consume only a fact issued for this exact adapter invocation's bytes.
+
+    Exception text, a dispatch_state attribute, and persisted metadata alone
+    cannot establish that a transport was never entered.
+    """
+    fact = getattr(exc, '_provider_pre_http_failure', None)
+    if fact is not None:
+        delattr(exc, '_provider_pre_http_failure')
+    return (isinstance(fact, _PreHttpFailure) and fact.provider is provider
+            and fact.request is request and fact.prepared is prepared)
 
 
 class _IdentityProvider:
@@ -244,26 +318,50 @@ class OpenAICompatibleProvider(_IdentityProvider):
     def complete_json(self, request: ModelRequest) -> ModelResponse:
         prepared = self._prepared_for(request)
         metadata, wire = dict(prepared.metadata), prepared.wire_schema
-        if self.context_tokens is not None:
-            payload = json.loads(prepared.body)
-            count = sum(int(self.token_counter(message['content'])) for message in payload['messages'])
-            count += int(self.token_counter(prepared.overhead)) if prepared.overhead else 0
-            if count + request.max_output_tokens > self.context_tokens:
-                raise ValueError('Serialized output schema and messages exceed the configured model context')
-        api_key = os.environ.get(self.api_key_env)
-        if not api_key:
-            raise RuntimeError(f'model API key env var {self.api_key_env!r} is not configured')
         body = prepared.body
-        http_request = urllib.request.Request(self.base_url + '/chat/completions', data=body,
-            headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}, method='POST')
         reservation = None
-        if self.money_budget is not None:
-            reservation = self.money_budget.reserve(request.model, len(body) + 1024,
-                request.max_output_tokens, prompt_version=request.prompt_version)
+        money_admission = False
+        try:
+            if self.context_tokens is not None:
+                payload = json.loads(body)
+                count = sum(int(self.token_counter(message['content'])) for message in payload['messages'])
+                count += int(self.token_counter(prepared.overhead)) if prepared.overhead else 0
+                if count + request.max_output_tokens > self.context_tokens:
+                    raise ValueError('Serialized output schema and messages exceed the configured model context')
+            api_key = os.environ.get(self.api_key_env)
+            if not api_key:
+                raise RuntimeError(f'model API key env var {self.api_key_env!r} is not configured')
+            http_request = urllib.request.Request(self.base_url + '/chat/completions', data=body,
+                headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}, method='POST')
+            if self.money_budget is not None:
+                money_admission = True
+                reservation = self.money_budget.reserve(request.model, len(body) + 1024,
+                    request.max_output_tokens, prompt_version=request.prompt_version)
+        except Exception as exc:
+            # This block ends before urlopen. It proves only this exact adapter
+            # invocation was not sent; exception text alone cannot prove that.
+            exc._provider_pre_http_failure = _PreHttpFailure(self, request, prepared)
+            exc.provider_metadata = dict(metadata)
+            from contractedge.model.money import MoneyBudgetExceeded
+            if money_admission and isinstance(exc, MoneyBudgetExceeded):
+                exc.provider_metadata['admission_rejection'] = {
+                    'request_digest': _digest(asdict(request)),
+                    'body_sha256': hashlib.sha256(body).hexdigest(),
+                    'ledger_path': str(self.money_budget.path),
+                    'prompt_bound': len(body) + 1024,
+                    'output_bound': request.max_output_tokens,
+                    'exception_type': type(exc).__name__,
+                }
+            raise
         try:
             with urllib.request.urlopen(http_request, timeout=self.timeout_seconds) as response:
-                raw = json.loads(response.read().decode('utf-8'))
+                body = _read_response_with_deadline(response, self.timeout_seconds)
+                raw = json.loads(body.decode('utf-8'))
         except Exception as exc:
+            # Reusing an exception from an earlier rejection cannot undo the
+            # fact that this invocation has now entered the HTTP transport.
+            if hasattr(exc, '_provider_pre_http_failure'):
+                delattr(exc, '_provider_pre_http_failure')
             exc.provider_metadata = metadata
             raise
         if not isinstance(raw, Mapping):
@@ -331,13 +429,20 @@ class OllamaNativeProvider(_IdentityProvider):
 
     def complete_json(self, request: ModelRequest) -> ModelResponse:
         prepared = self._prepared_for(request)
-        http_request = urllib.request.Request(self.base_url + '/api/chat',
-            data=prepared.body, headers={'Content-Type': 'application/json'}, method='POST')
         metadata = dict(prepared.metadata)
+        try:
+            http_request = urllib.request.Request(self.base_url + '/api/chat',
+                data=prepared.body, headers={'Content-Type': 'application/json'}, method='POST')
+        except Exception as exc:
+            exc._provider_pre_http_failure = _PreHttpFailure(self, request, prepared)
+            exc.provider_metadata = metadata
+            raise
         try:
             with urllib.request.urlopen(http_request, timeout=self.timeout_seconds) as response:
                 raw = json.loads(response.read().decode('utf-8'))
         except Exception as exc:
+            if hasattr(exc, '_provider_pre_http_failure'):
+                delattr(exc, '_provider_pre_http_failure')
             exc.provider_metadata = metadata
             raise
         if not isinstance(raw, Mapping):

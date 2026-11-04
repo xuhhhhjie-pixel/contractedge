@@ -1,3 +1,16 @@
+# 当前系统实施入口（2026-11-04）
+
+本分支固定最新工程候选 `e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538`，并按四个工作包继续优化。`formal_ready=false`。此前工程检查为原运行3347通过、7个路径问题失败、4跳过，原版短路径重跑7项通过；六个历史/native模块不在portable范围。该基线没有新整案真实模型成绩。
+
+- [给老师的进展报告](docs/implementation/20261104/CONTRACTEDGE_PROGRESS_REPORT_FOR_ADVISOR_20261104.md)
+- [逐项问题、改法与验收](docs/implementation/20261104/IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md)
+- [最新实施状态](docs/implementation/20261104/STATUS.json)
+- [当前代码审查](docs/implementation/20261104/DEEP_PIPELINE_AND_CONTROL_DESIGN_REVIEW.md)
+
+协作时以本目录当前源码、基线tag和后续逐包commit为准。报告中的服务器绝对路径是历史证据索引，不保证克隆后可用。真实实验需要公开数据、运行镜像和独立评分进程；凭据与费用账本留在运行环境。以下原说明保留为历史资料。
+
+---
+
 # ContractEdge developer entry
 
 最终测试前提和审计边界见[收尾 r3](docs/development/2026-10-25-public-check-protocol-fixtures-r3.md)。当前验收工具修订见[同版工具 r2](docs/development/2026-10-25-public-check-protocol-harness-r2.md)。当前阶段收尾及检查绑定协议见[2026-10-25 修订说明](docs/development/2026-10-25-public-check-protocol-wrapup.md)，本轮同版结果见[验证记录](docs/development/architecture-public-check-protocol-20261025-r3.validation.json)。正式研究准入仍为 false。

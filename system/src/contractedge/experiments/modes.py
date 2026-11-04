@@ -16,7 +16,9 @@ from contractedge.contracts.validation import canonical_digest
 from contractedge.contracts.permissions import target_permission_error
 from contractedge.execution.literal import PlanRejected, safe_target
 from contractedge.model.provider import ModelRequest
-from contractedge.model.admission import quote_request, context_fits, complete_quoted
+from contractedge.model.config import model_name
+from contractedge.model.admission import quote_request, require_context, complete_quoted
+from contractedge.model.budget import BudgetExceeded
 from contractedge.source.snapshot import compute_snapshot
 from contractedge.orchestration.recorder import preserve_error
 
@@ -55,8 +57,10 @@ def source_input(method_input, source, policy, observations=(), feedback=None):
         if target_permission_error(path, policy) is None:
             text = safe_target(source, path).read_text(encoding='utf-8')
             files.append({'path': path, 'content_digest': snapshot.file_digests[path], 'text': text})
-    if sum(len(row['text'].encode()) for row in files) > 4 * 1024 * 1024:
-        raise PlanRejected('Presemantic source inventory exceeds byte limit')
+    source_bytes = sum(len(row['text'].encode()) for row in files)
+    if source_bytes > 4 * 1024 * 1024:
+        raise BudgetExceeded('Presemantic source inventory exceeds byte limit: '
+            f'required={source_bytes}, allowed={4 * 1024 * 1024}')
     return {'requirement': method_input.requirement_text,
         'snapshot_id': snapshot.snapshot_id, 'input_digest': method_input.input_digest,
         'declared_artifacts': list(method_input.declared_artifacts),
@@ -78,7 +82,7 @@ def direct_plan_request(inputs, config):
             'goal': {'type': 'string', 'minLength': 1},
             'steps': {'type': 'array', 'minItems': 1, 'maxItems': 128, 'items': step}},
         'required': ['schema_version', 'snapshot_id', 'input_digest', 'goal', 'steps']}
-    return ModelRequest(model=str(config['model']), prompt_version='direct-plan.v1',
+    return ModelRequest(model=model_name(config['model']), prompt_version='direct-plan.v1',
         messages=({'role': 'system', 'content': 'Independently propose a direct edit plan from the raw public requirement and permitted source. Preserve its complete conditions and existing required behavior. Source inventory grants permission, not a proposed target. Author your own steps and dependencies. Return the strict JSON plan.'},
                   {'role': 'user', 'content': json.dumps(inputs, ensure_ascii=False)}),
         output_schema=schema, max_output_tokens=int(config.get('max_output_tokens', 4096)),
@@ -97,8 +101,8 @@ def generate_nonrelation(mode, method_input, source, policy, provider, token_cou
         allowance = max(0, int(config.get('max_format_retries', 0)))
         for attempt in range(allowance + 1):
             quote = quote_request(provider, request, token_counter)
-            if not context_fits(quote, int(config['max_context_tokens']), config.get('model_context_tokens')):
-                raise PlanRejected('DirectPlan request exceeds context budget')
+            require_context(quote, int(config['max_context_tokens']), config.get('model_context_tokens'),
+                label='DirectPlan request')
             start = len(provider.calls)
             dispatch_error = None
             try:
@@ -107,6 +111,11 @@ def generate_nonrelation(mode, method_input, source, policy, provider, token_cou
                 dispatch_error = exc
                 raise
             finally:
+                if (attempt and journal is not None and getattr(journal, 'engine', None) is not None
+                        and any(call.get('dispatch_state') in {'response_known', 'response_unknown'}
+                                for call in provider.calls[start:])):
+                    preserve_error(dispatch_error, lambda: journal.engine.policy.consume(
+                        'format_correction', 'direct-plan:' + attempt_id))
                 if journal is not None:
                     preserve_error(dispatch_error, lambda: journal.record_dispatch('DIRECT_PLAN',
                         attempt_id=attempt_id + '.direct-' + str(attempt),
@@ -122,8 +131,6 @@ def generate_nonrelation(mode, method_input, source, policy, provider, token_cou
             except (ValueError, PlanRejected) as exc:
                 if attempt >= allowance:
                     raise
-                if journal is not None and getattr(journal, 'engine', None) is not None:
-                    journal.engine.policy.consume('format_correction', 'direct-plan:' + attempt_id)
                 request = replace(request, messages=request.messages + (
                     {'role': 'assistant', 'content': response.content},
                     {'role': 'user', 'content': 'Correct this same independent plan contract: ' + str(exc) + '. Keep all original requirement conditions and preservation duties.'}))

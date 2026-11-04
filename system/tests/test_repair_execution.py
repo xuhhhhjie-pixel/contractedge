@@ -83,6 +83,17 @@ class SourceConsumerTests(unittest.TestCase):
                 apply_edits(plan, root, {'allowed_paths': ['**']}, {'edits': [edit, {**edit, 'old_text': 'not present'}]})
             self.assertEqual(source.read_text(), 'name: default\n')
 
+    def test_each_accepted_operation_requires_an_effective_edit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); (root / 'templates').mkdir()
+            source = root / 'templates/serviceaccount.yaml'; source.write_text('name: default\n')
+            plan = bound_plan(root)
+            with self.assertRaisesRegex(PlanRejected, 'no-op change_ids'):
+                apply_edits(plan, root, {'allowed_paths': ['**']}, {'edits': [{
+                    'change_id': 'C1', 'path': 'templates/serviceaccount.yaml', 'operation': 'MODIFY',
+                    'old_text': 'name: default', 'new_text': 'name: default'}]})
+            self.assertEqual(source.read_text(), 'name: default\n')
+
     def test_scope_and_symlink_are_checked_before_model_edits(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp); (root / 'templates').mkdir()
@@ -141,7 +152,7 @@ class PublicLoopRunner:
 class TwoStepExecutor:
     def __init__(self): self.calls = 0
 
-    def execute(self, plan, source, policy, **kwargs):
+    def execute(self, plan, source, policy, *, source_context=None, **kwargs):
         self.calls += 1
         old, new = ('name: default', 'name: intermediate') if self.calls == 1 else ('name: intermediate', 'name: selected')
         return apply_edits(plan, source, policy, {'edits': [{'change_id': 'C1',
@@ -310,7 +321,7 @@ if __name__ == '__main__':
     unittest.main()
 
 class ExecutionRetryContextTests(unittest.TestCase):
-    def test_large_public_feedback_keeps_check_state_without_duplicating_raw_output(self):
+    def test_large_selected_feedback_is_rejected_without_deleting_its_body(self):
         from contractedge.execution.topomen import build_execution_request
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);(root/'templates').mkdir();(root/'templates/serviceaccount.yaml').write_text('name: default\n')
@@ -319,14 +330,11 @@ class ExecutionRetryContextTests(unittest.TestCase):
                     'locator':{'path':'render.stdout'},'excerpt':'x'*500000}],
                 'pending_obligations':[{'id':'P1','statement':'selected name'}],
                 'retained_constraints':[{'id':'KEEP1','statement':'keep disabled branch'}]}
-            request=build_execution_request(bound_plan(root),root,{'allowed_paths':['templates/**']},len,
-                {'model':'test','max_context_tokens':30000,'execution_max_output_tokens':1000},
-                requirement='Render selected ServiceAccount',observations=(),feedback=feedback)
-            payload=json.loads(request.messages[1]['content'])
-            self.assertLess(len(request.messages[1]['content']),30000)
-            self.assertEqual(payload['execution_feedback']['pending_obligations'],feedback['pending_obligations'])
-            self.assertEqual(payload['execution_feedback']['retained_constraints'],feedback['retained_constraints'])
-            self.assertEqual(payload['execution_feedback_digest'],__import__('contractedge.contracts.validation',fromlist=['canonical_digest']).canonical_digest(feedback))
+            with self.assertRaisesRegex(BudgetExceeded, 'context budget'):
+                build_execution_request(bound_plan(root),root,{'allowed_paths':['templates/**']},len,
+                    {'model':'test','max_context_tokens':30000,'execution_max_output_tokens':1000},
+                    requirement='Render selected ServiceAccount',observations=(),feedback=feedback)
+            self.assertEqual(feedback['public_observations'][0]['excerpt'], 'x'*500000)
 
     def test_execution_correction_receives_the_exact_previous_rejected_draft(self):
         from contractedge.execution.topomen import build_execution_request

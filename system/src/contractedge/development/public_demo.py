@@ -254,7 +254,7 @@ class SyntheticExampleProvider:
             else:
                 old, new = 'secondary = "default"', 'secondary = config["selected_name"]'
             payload = {'edits': [{'change_id': 'C1', 'path': 'app.py', 'operation': 'MODIFY', 'old_text': old, 'new_text': new}]}
-        elif version == 'public-postcondition-review.v1':
+        elif version in {'public-postcondition-review.v1','public-postcondition-review.v2'}:
             records = body['public_observations']
             checks = []
             for check in body['checks']:
@@ -285,15 +285,14 @@ class SyntheticExampleProvider:
                                            ('P2', 'Disabled output retains default_name.'), ('P3', 'Mode remains stable for every public scenario.')]],
                 'preserve_constraints': [], 'open_obligations': [],
                 'outcome_coverage': [{'outcome_id': oid, 'repair_supported': ['V1'], 'preserve_required': [], 'unresolved': []}], 'status': 'READY'}
-        if (not version.startswith('diagnosis.') and version not in {'topomen-source-execution.v1', 'public-postcondition-review.v1'}
+        if (not version.startswith('diagnosis.') and version not in {'topomen-source-execution.v1', 'public-postcondition-review.v1', 'public-postcondition-review.v2'}
                 and isinstance(self.runner, IsolatedPublicExampleRunner)):
             # This synthetic provider explicitly declares its finite predicate
             # bindings. Real model responses must supply their own bindings.
             for condition in payload['postconditions']:
                 suffix = {'P1': 'selected', 'P2': 'disabled', 'P3': 'stable'}[condition['id']]
                 condition.update(verification_kind='PUBLIC_BEHAVIOR',
-                    verification_scope={'scenario': {'selected': 'selected', 'disabled': 'disabled',
-                        'stable': 'all-published-scenarios'}[suffix]},
+                    verification_scope={'scenario': 'selected-and-preservation'},
                     behavior_check_refs=['contractedge-public-process-v1:' + suffix],
                     check_coverage='ALL_OF',
                     coverage_rationale='This postcondition is restricted to its published finite process-output predicate; it makes no hidden or internal-state claim.')
@@ -325,9 +324,18 @@ def _method_source_identity():
 
 
 def _runtime_identity():
-    from importlib.metadata import version
+    from importlib.metadata import version, PackageNotFoundError
+    packages = {}
+    for name in ['PyYAML', 'jsonschema', 'pydantic', 'rich', 'python-dotenv', 'jinja2']:
+        try:
+            packages[name] = version(name)
+        except PackageNotFoundError:
+            # Metadata can be absent in a source checkout even when the
+            # dependency is importable.  Record that fact without preventing
+            # the deterministic development panel from starting.
+            packages[name] = 'NOT_INSTALLED'
     return {'python': sys.version, 'executable': sys.executable,
-            'packages': {name: version(name) for name in ['PyYAML', 'jsonschema', 'pydantic', 'rich', 'python-dotenv', 'jinja2']}}
+            'packages': packages}
 
 
 def _provider(config, case, runner):
@@ -631,6 +639,8 @@ def run_demo(case, output, *, save_ready=False, resume_ready=None, provider_conf
         journal = ProviderJournal(RunRecorder(output, run_id=front_config['run_id'], input_digest=method['input_digest']))
         budget = BudgetedProvider(provider, counter, max_tokens=config['max_total_tokens'], max_seconds=config['max_elapsed_seconds'],
             max_calls=config['max_model_calls'],
+            reconcile_observed_output=config.get('reconcile_observed_output', False),
+            reconcile_observed_input=config.get('reconcile_observed_input', False),
             on_update=lambda calls: journal.callback(calls, lambda actual: write_json(output / 'model_calls.json', actual)))
         journal.attach(budget)
         budget.started = started

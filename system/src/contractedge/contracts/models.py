@@ -7,10 +7,14 @@ from typing import Any, Mapping
 class ContractError(ValueError):
     """Raised when a wire object is malformed or violates identity constraints."""
 
-    def __init__(self, code: str, path: str, message: str) -> None:
+    def __init__(self, code: str, path: str, message: str, *, issues=()) -> None:
         self.code = code
         self.path = path
         self.message = message
+        # Engine-only structured issues used to compact correction feedback;
+        # this remains optional so existing callers and wire contracts are
+        # unchanged.
+        self.issues = tuple(issues or ())
         super().__init__(f"{code} at {path or '<root>'}: {message}")
 
 

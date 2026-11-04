@@ -95,6 +95,7 @@ def apply_literal_edits(source, policy, response, *, snapshot_id, targets, opera
             'No source was changed. Cover every accepted operation with its own change_id; '
             'do not silently omit an operation or relabel another operation as completed.')
     original, changed, per_change = {}, {}, Counter()
+    effective_changes = set()
     for edit_index, edit in enumerate(sorted(edits, key=lambda e: acceptance['operation_order'].index(e['change_id']))):
         if set(edit) != {'change_id', 'path', 'operation', 'old_text', 'new_text'}:
             raise PlanRejected('Unsupported edit fields')
@@ -114,6 +115,7 @@ def apply_literal_edits(source, policy, response, *, snapshot_id, targets, opera
             if per_change[op.key] or edit['old_text'] or not edit['new_text'] or original[relative] is not None:
                 raise PlanRejected('CREATE must specify one complete new regular file')
             changed[relative] = edit['new_text']
+            effective_changes.add(op.key)
         else:
             matches = changed[relative].count(edit['old_text']) if edit['old_text'] else 0
             if not edit['old_text'] or matches != 1:
@@ -121,7 +123,14 @@ def apply_literal_edits(source, policy, response, *, snapshot_id, targets, opera
                     f'change_id={edit["change_id"]}, path={relative}, edit_index={edit_index}, matches={matches}. '
                     'Copy a unique literal anchor from current_target_files; no source was changed.')
             changed[relative] = changed[relative].replace(edit['old_text'], edit['new_text'], 1)
+            if edit['old_text'] != edit['new_text']:
+                effective_changes.add(op.key)
         per_change[op.key] += 1
+    missing_effective = set(by_id) - set(retained) - effective_changes
+    if missing_effective:
+        raise PlanRejected('Every accepted operation must contain at least one effective source change; '
+            f'no-op change_ids={sorted(missing_effective)}. Copy a real source anchor and implement the '
+            'accepted semantic action; do not satisfy operation coverage with old_text equal to new_text.')
     if sum(len(value.encode()) for value in changed.values()) > 8 * 1024 * 1024:
         raise PlanRejected('Edited file batch exceeds the consumer byte limit')
     if all(original[path] == text.encode() for path, text in changed.items()):

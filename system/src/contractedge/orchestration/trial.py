@@ -13,8 +13,10 @@ import os
 from pathlib import Path
 import tempfile
 import time
+from typing import Mapping
 
 from contractedge.contracts.validation import canonical_digest
+from contractedge.model.budget import recorded_dispatch_state
 from contractedge.orchestration.candidate_guard import checkpoint_candidate
 from contractedge.source.snapshot import compute_snapshot
 
@@ -123,8 +125,9 @@ def ledger_facts(recorder):
                 calls[position]=call
     ordered=[calls[key] for key in sorted(calls)]
     if sorted(calls) != list(range(len(calls))): raise ValueError('Noncontiguous original dispatch records')
+    dispatch_states = [recorded_dispatch_state(call) for call in ordered]
     return {'files':facts, 'digest':canonical_digest(ordered), 'calls':ordered,
-        'unknown_dispatch':any(not isinstance(call.get('response_content'),str) for call in ordered)}
+        'unknown_dispatch':'response_unknown' in dispatch_states}
 
 
 class TrialSession:
@@ -257,6 +260,43 @@ class TrialSession:
         return self.record('ROLLBACK_FAILED' if error else 'ROLLBACK_COMPLETED',snapshot_id=snapshot.snapshot_id,
             exportable=error is None and snapshot.snapshot_id==self.begin_event['parent_snapshot'],
             error=str(error) if error else None)
+
+
+def load_trials(recorder):
+    """Use the existing verified event reader for repair and recovery alike."""
+    directory = recorder._path('journal/trials')
+    if not directory.exists():
+        return []
+    paths = []
+    for path in directory.iterdir():
+        if path.name == 'writer.lock' and path.is_file() and not path.is_symlink():
+            continue
+        paths.append(path)
+    if any(path.is_symlink() or not path.is_dir() or not path.name.startswith('round-')
+           or not path.name[6:].isdigit() for path in paths):
+        raise ValueError('Invalid or linked trial directory')
+    trials = [TrialSession(recorder, path.name) for path in sorted(paths, key=lambda path: int(path.name[6:]))]
+    for trial in trials:
+        trial.events()
+    return trials
+
+
+def recorded_execution_facts(recorder, *, trials=None, require_isolated=False):
+    """Small projection of durable effects; underlying observations remain owned."""
+    from contractedge.contracts.status import repair_execution_facts
+    from contractedge.execution.public_observer import isolated_observation_complete
+    def complete(observation):
+        cleanup = observation.get('runtime_cleanup')
+        if ('runtime_cleanup' in observation
+                and (not isinstance(cleanup, Mapping) or cleanup.get('status') != 'OWNED_CONTAINERS_CLOSED')):
+            return False
+        return (observation.get('status') == 'EXECUTION_PASS' and
+                (not require_isolated or isolated_observation_complete(observation)))
+    def reference(event):
+        name = f"journal/trials/{event['trial_id']}/{event['sequence']:06d}.json"
+        return asdict(recorder.artifact_ref(name, 'TRIAL_EVENT', snapshot_id=event.get('snapshot_id')))
+    return repair_execution_facts([trial.events() for trial in (load_trials(recorder) if trials is None else trials)],
+                                  reference=reference, observation_complete=complete)
 
 
 def initialize_recovery(recorder, source, method_input, config, *, consumer_id=None):

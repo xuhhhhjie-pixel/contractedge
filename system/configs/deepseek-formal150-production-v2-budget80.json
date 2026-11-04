@@ -1,7 +1,7 @@
 {
   "provider": "openai_compatible",
-  "base_url": "https://api.chatanywhere.tech/v1",
-  "model": "deepseek-v4.1-flash",
+  "base_url": "https://api.deepseek.com",
+  "model": "deepseek-flash",
   "tokenizer": "contractedge.tokenizers:utf8_byte_token_bound",
   "tokenizer_revision": "UTF8-byte-upper-bound-v1",
   "max_context_tokens": 220000,
@@ -18,6 +18,7 @@
   "public_timeout_seconds": 2400,
   "max_format_retries": 1,
   "max_rounds": 2,
+  "max_evidence_extensions": 2,
   "top_n": 12,
   "observe_broken": true,
   "lock_root": "/tmp/contractedge-system-native-locks",
@@ -26,10 +27,11 @@
   "topomen_source_root": "/home/xhj/contractedge-integrations/topomen",
   "topomen_source_sha256": "3dfc43754d4bae6dbc99051ed607d4cc756b26049b79b7f5cc2f9865ee17b2dd",
   "api_key_env": "CONTRACTEDGE_API_KEY",
+  "benchmark_release_id": "ContractEdge-benchmark150-v1-20261019",
   "money_budget": {
-    "path": "/home/xhj/contractedge-reports/deepseek-batch-readiness-20261019/money-ledger.json",
+    "path": "money-ledger.json",
     "limit_cny": "80",
-    "model": "deepseek-v4.1-flash",
+    "model": "deepseek-flash",
     "input_cny_per_million": "2",
     "output_cny_per_million": "8"
   },
@@ -42,5 +44,25 @@
   "keep_workspaces": false,
   "min_free_work_disk_bytes": 25769803776,
   "execution_empty_reasoning_retry": "disable_thinking",
-  "expected_partition_manifest_sha256": "aa32b07dc8cd2f3c946cb54e42385bded2ccbdf3cdd31b2b358a999480146aea"
+  "expected_partition_manifest_sha256": "aa32b07dc8cd2f3c946cb54e42385bded2ccbdf3cdd31b2b358a999480146aea",
+  "model_identity_policy": "require_match",
+  "max_execution_support_bytes": 100000,
+  "planning_truncation_retry": "disable_thinking",
+  "execution_format_retry_in_round": true,
+  "execution_truncation_retry": "disable_thinking",
+  "review_truncation_retry": "disable_thinking",
+  "planning_truncation_separate_allowance": true,
+  "production_path_review_enabled": true,
+  "method_probe_profiles": [
+    "kpt-configpath-v2",
+    "alertmanager-reload-v1"
+  ],
+  "diagnosis_format_retry_per_context": true,
+  "execution_helper_support_enabled": true,
+  "helper_preconditions_enabled": true,
+  "requirement_traceability_enabled": true,
+  "configuration_consumer_lookup_enabled": true,
+  "gap_role_delivery_enabled": true,
+  "reconcile_observed_input": true,
+  "reconcile_observed_output": true
 }

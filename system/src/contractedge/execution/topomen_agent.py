@@ -17,7 +17,7 @@ import threading
 from typing import Mapping
 
 from contractedge.contracts.validation import canonical_digest
-from contractedge.model.admission import complete_quoted, context_fits, quote_request
+from contractedge.model.admission import complete_quoted, require_context, quote_request
 from contractedge.execution.topomen import (
     PlanRejected, apply_edits, _build_execution_request, validate_execution_response,
 )
@@ -96,6 +96,19 @@ def _native_agent(config: Mapping):
                     os.environ[key] = value
 
 
+def preflight_native_agent(config: Mapping) -> dict:
+    """Load the audited native agent before any model dispatch.
+
+    Native TopoMen imports optional runtime packages (for example LiteLLM and
+    OpenAI).  Calling this during orchestration admission turns a late
+    execution-time import failure into an early, reportable infrastructure
+    failure, so a run cannot spend diagnosis/planning calls on an environment
+    that cannot execute the accepted plan.
+    """
+    _, _, provenance = _native_agent(config)
+    return provenance
+
+
 class _ModelPort:
     def __init__(self, provider, request, token_counter, config, *, quote=None):
         self.provider, self.request, self.response = provider, request, None
@@ -107,8 +120,8 @@ class _ModelPort:
         # Reuse identical prepared bytes; otherwise admit the actual final request.
         quote = self.quote if self.quote is not None and request == self.request else quote_request(
             self.provider, request, self.token_counter)
-        if not context_fits(quote, int(self.config['max_context_tokens']), self.config.get('model_context_tokens')):
-            raise PlanRejected('Native TopoMen request exceeds the full context budget')
+        require_context(quote, int(self.config['max_context_tokens']), self.config.get('model_context_tokens'),
+            label='Native TopoMen request')
         self.response = complete_quoted(self.provider, request, quote)
         body = validate_execution_response(self.response, request)
         return {'role': 'assistant', 'content': self.response.content,
@@ -129,9 +142,12 @@ class _ModelPort:
 
 
 class _FileEnvironment:
-    def __init__(self, plan, source, policy, submitted, *, require_behavior_change=False):
+    def __init__(self, plan, source, policy, submitted, *, requirement=None,
+                 require_behavior_change=False, trial_session=None):
         self.plan, self.source, self.policy, self.submitted = plan, source, policy, submitted
+        self.requirement = requirement
         self.require_behavior_change=require_behavior_change
+        self.trial_session = trial_session
         self.result = None
 
     def execute(self, action, cwd=''):
@@ -139,7 +155,9 @@ class _FileEnvironment:
                 or action['kind'] != 'apply_source_edits' or self.result is not None):
             raise PlanRejected('Native TopoMen environment only accepts one scoped source-edit transaction')
         self.result = apply_edits(self.plan, self.source, self.policy, action['body'],
-                                  require_behavior_change=self.require_behavior_change)
+                                  requirement=self.requirement,
+                                  require_behavior_change=self.require_behavior_change,
+                                  trial_session=self.trial_session)
         raise self.submitted({'role': 'exit', 'content': 'Accepted source edits applied.',
             'extra': {'exit_status': 'Submitted', 'submission': 'Accepted source edits applied.'}})
 
@@ -155,17 +173,22 @@ class TopoMenAgentExecutor:
     def __init__(self, provider, token_counter, config: Mapping, *, on_trace=None):
         self.provider, self.token_counter, self.config = provider, token_counter, dict(config)
         self.on_trace, self.last_trace = on_trace, None
+        self.trial_session = None
 
     def execute(self, plan: Mapping, source: Path, policy: Mapping, *, requirement: str,
-                declared_artifacts=(), observations=(), feedback=None, previous_attempt=None) -> dict:
+                declared_artifacts=(), observations=(), feedback=None, previous_attempt=None,
+                source_context=None) -> dict:
         self.last_trace = None
         request, quote = _build_execution_request(plan, source, policy, self.token_counter, self.config,
             requirement=requirement, declared_artifacts=declared_artifacts, observations=observations,
-            feedback=feedback, previous_attempt=previous_attempt, provider=self.provider)
+            feedback=feedback, previous_attempt=previous_attempt, provider=self.provider,
+            source_context=source_context)
         agent_class, submitted, provenance = _native_agent(self.config)
         model = _ModelPort(self.provider, request, self.token_counter, self.config, quote=quote)
         environment = _FileEnvironment(plan, source, policy, submitted,
-            require_behavior_change=json.loads(request.messages[1]['content'])['require_behavior_change'])
+            requirement=requirement,
+            require_behavior_change=json.loads(request.messages[1]['content'])['require_behavior_change'],
+            trial_session=self.trial_session)
         agent = agent_class(model=model, env=environment,
             system_template='{{ execution_system }}', instance_template='{{ execution_input }}',
             step_limit=1, cost_limit=0)

@@ -38,6 +38,94 @@ def test_delivery_checks_decoded_catalog_and_detects_dropped_body():
     assert api().audit_gap_delivery([], [unit], clipped)['status']=='INCOMPLETE'
 
 
+def test_gap_receipt_distinguishes_found_but_not_selected_from_not_found():
+    required = 'C-required'
+    found = api().audit_gap_delivery(
+        [{'required_unit_ids': [required], 'available_unit_ids': [required]}],
+        [], json.dumps({'evidence_catalog': []}))
+    assert found['status'] == 'INCOMPLETE'
+    assert found['records'] == [{
+        'unit_id': required, 'roles': [], 'found': True, 'selected': False,
+        'delivered': False, 'cited': None, 'drop_reason': 'FOUND_NOT_SELECTED',
+        'status': 'FOUND_NOT_SELECTED'}]
+
+    missing = api().audit_gap_delivery(
+        [{'required_unit_ids': [required], 'available_unit_ids': []}],
+        [], json.dumps({'evidence_catalog': []}))
+    assert missing['records'][0]['drop_reason'] == 'NOT_FOUND'
+    assert missing['failure_codes'] == ['NOT_FOUND']
+
+
+def test_gap_receipt_marks_selected_clipped_and_model_citation():
+    unit = dict(id='C2', text='exact body',
+                content_digest=hashlib.sha256(b'exact body').hexdigest(),
+                gap_role_keys=['G1:anchor'])
+    clipped = api().audit_gap_delivery(
+        [{'required_unit_ids': ['C2'], 'available_unit_ids': ['C2']}], [unit],
+        json.dumps({'evidence_catalog': [{'id': 'SRC-C2', 'excerpt': 'prefix',
+                                          'content_digest': unit['content_digest']}]}))
+    assert clipped['records'][0]['drop_reason'] == 'NOT_DELIVERED'
+    assert clipped['records'][0]['status'] == 'NOT_DELIVERED'
+
+    delivered = api().audit_gap_delivery(
+        [{'required_unit_ids': ['C2'], 'available_unit_ids': ['C2']}], [unit],
+        json.dumps({'evidence_catalog': [{'id': 'SRC-C2', 'excerpt': unit['text'],
+                                          'content_digest': unit['content_digest']}]}))
+    cited = api().annotate_gap_delivery_citations(delivered, {'evidence_refs': ['SRC-C2']})
+    assert cited['model_citation_status'] == 'CITED'
+    assert cited['records'][0]['cited'] is True
+    not_cited = api().annotate_gap_delivery_citations(delivered, {'evidence_refs': []})
+    assert not_cited['model_citation_status'] == 'NOT_CITED'
+    assert not_cited['records'][0]['cited'] is False
+    assert not_cited['records'][0]['status'] == 'MODEL_DID_NOT_USE_EVIDENCE'
+
+
+def test_gap_receipt_preserves_selector_drop_reason():
+    receipt = api().audit_gap_delivery(
+        [{'required_unit_ids': ['C-required'], 'available_unit_ids': ['C-required']}],
+        [], json.dumps({'evidence_catalog': []}),
+        drop_reasons={'C-required': 'TOP_N_LIMIT'})
+    assert receipt['records'][0]['drop_reason'] == 'TOP_N_LIMIT'
+    assert receipt['records'][0]['status'] == 'TOP_N_LIMIT'
+
+
+def test_gap_receipt_marks_selected_delivery_without_model_citation():
+    unit = dict(id='C3', text='exact body',
+                content_digest=hashlib.sha256(b'exact body').hexdigest(),
+                gap_role_keys=['G1:anchor'])
+    receipt = api().audit_gap_delivery(
+        [{'required_unit_ids': ['C3'], 'available_unit_ids': ['C3']}], [unit],
+        json.dumps({'evidence_catalog': [{'id': 'SRC-C3', 'excerpt': unit['text'],
+                                          'content_digest': unit['content_digest']}]}),
+        model_citations=[])
+    assert receipt['status'] == 'INCOMPLETE'
+    assert receipt['records'][0]['status'] == 'MODEL_DID_NOT_USE_EVIDENCE'
+    cited = api().audit_gap_delivery(
+        [{'required_unit_ids': ['C3'], 'available_unit_ids': ['C3']}], [unit],
+        json.dumps({'evidence_catalog': [{'id': 'SRC-C3', 'excerpt': unit['text'],
+                                          'content_digest': unit['content_digest']}]}),
+        model_citations=['SRC-C3'])
+    assert cited['status'] == 'DELIVERED'
+    assert cited['records'][0]['cited'] is True
+
+
+def test_gap_receipt_audits_required_extension_without_gap_role():
+    """Required extension units are delivered even when they have no role key."""
+    body = 'type Processor struct { binding BindingManager }\n'
+    unit = dict(id='C-required', text=body,
+                content_digest=hashlib.sha256(body.encode()).hexdigest(),
+                required_for_gap_delivery=True)
+    receipt = api().audit_gap_delivery(
+        [{'required_unit_ids': ['C-required'], 'available_unit_ids': ['C-required']}],
+        [unit],
+        json.dumps({'evidence_catalog': [{'id': 'SRC-C-required',
+                                          'excerpt': body,
+                                          'content_digest': unit['content_digest']}]}))
+    assert receipt['status'] == 'DELIVERED'
+    assert receipt['missing_required_ids'] == []
+    assert receipt['records'][0]['unit_id'] == 'C-required'
+
+
 def test_config_template_gap_does_not_require_an_api_or_writer(tmp_path):
     (tmp_path/'template.yaml').write_text('kind: Job\nmetadata:\n  name: selected\n')
     units,audit=api().locate_gap_roles(compute_snapshot(tmp_path),[dict(id='G1',summary='Find Job template',locator_hint={'path':'template.yaml','search_term':'Job'})],{})
@@ -58,6 +146,50 @@ def test_found_but_budget_dropped_endpoint_remains_required():
     assert receipt['status']=='INCOMPLETE' and receipt['missing_required_ids']==['B']
 
 
+def test_optional_gap_context_does_not_expand_hard_delivery_set():
+    """Only the located endpoint is hard; bounded context stays optional."""
+    import hashlib
+    def unit(identifier, text, **extra):
+        return dict(id=identifier, path=identifier + '.go', text=text,
+                    content_digest=hashlib.sha256(text.encode()).hexdigest(),
+                    snapshot_id='S0', locator={'start_line': 1, 'end_line': 1}, **extra)
+    initial = build_candidate_set('target', None, [], [], top_n=2,
+                                  max_context_tokens=1000, token_counter=len)
+    gap = {'id': 'G1', 'locator_hint': {'path': 'target.go', 'symbol': 'Target'}}
+    extended = extend_once(initial, [gap], [
+        unit('anchor', 'func Target() {}', gap_role_keys=['G1:anchor'],
+             evidence_gap_refs=['G1']),
+        unit('context', 'func Context() {}', gap_role_keys=['G1:context'],
+             evidence_gap_refs=['G1'], optional_gap_context=True),
+        unit('callee', 'func Callee() {}', evidence_gap_refs=['G1'],
+             same_receiver_callee_support=True),
+    ], max_context_tokens=1000, token_counter=len)
+    assert extended.required_endpoint_ids == ('anchor',)
+
+
+def test_gap_extension_endpoint_survives_boundary_anchor_budget(tmp_path):
+    """A located protocol branch cannot be displaced by same-file context."""
+    from contractedge.source.units import extract_gap_extension_units
+    (tmp_path / 'send.go').write_text(
+        'package p\nfunc post() { sendBindingEventToApp() }\n'
+        'func isAppSubscribedToBinding() { http.MethodOptions }\n')
+    snapshot = compute_snapshot(tmp_path)
+    boundary = [dict(id=f'B{index}', path=f'boundary{index}.go', text='boundary',
+                     snapshot_id=snapshot.snapshot_id,
+                     locator={'start_line': 1, 'end_line': 1},
+                     boundary_scope_anchor=True, anchor_priority=3)
+                for index in range(10)]
+    initial = build_candidate_set('timeout OPTIONS', None, boundary, [], top_n=12,
+                                  max_context_tokens=10000, token_counter=len)
+    extension, _ = extract_gap_extension_units(snapshot, [], [], [{
+        'id': 'G1', 'locator_hint': {'path': 'send.go', 'search_term': 'http.MethodOptions'}}])
+    result = extend_once(initial, [{'id': 'G1', 'locator_hint': {
+        'path': 'send.go', 'search_term': 'http.MethodOptions'}}], extension,
+        max_context_tokens=10000, token_counter=len)
+    options = [u for u in result.candidates if u.get('symbol') == 'isAppSubscribedToBinding']
+    assert options and options[0].get('required_for_gap_delivery')
+
+
 def test_exact_gap_in_long_declaration_preserves_late_state_replacement(tmp_path):
     text=('package p\nfunc run() {\n'+' println("setup")\n'*190+
           ' coordinator.Subscribe(func() { state.Stop(); state = NewState() })\n}\n')
@@ -73,6 +205,8 @@ def test_exact_gap_in_long_declaration_preserves_late_state_replacement(tmp_path
     prefix=parse_source_units('main.go',text,compute_snapshot(tmp_path).snapshot_id,max_lines=80)[0]
     assert prefix['truncated']
     assert prefix['id']!=declarations[0]['id'], 'Different delivered excerpts need different evidence identities'
+
+
 
 
 def test_gap_reader_receiver_reaches_local_package_without_generic_constructor_decoys(tmp_path):
@@ -140,7 +274,8 @@ def test_declaration_index_preserves_scoped_handler_omitted_from_intermediate_po
     initial=build_candidate_set('reload',None,seeds,[],top_n=2,max_context_tokens=10000,token_counter=len)
     extended=extend_once(initial,[gap],units,max_context_tokens=10000,token_counter=len)
     handler=next(u for u in units if u.get('symbol')=='getGroupsHandler')
-    assert handler['id'] in extended.required_endpoint_ids and handler['id'] in extended.selected_ids
+    assert handler['id'] not in extended.required_endpoint_ids and handler['id'] in extended.selected_ids
+    assert handler['optional_gap_context'] is True
 
 
 def test_character_clipped_text_windows_have_distinct_evidence_identity():

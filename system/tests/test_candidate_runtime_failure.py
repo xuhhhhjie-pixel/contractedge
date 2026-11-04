@@ -39,6 +39,8 @@ def observe_fixture(root, mutation=None):
     if mutation=='bad_line':message=message.replace('main.go:2','main.go:999')
     if mutation=='unclassified_error':message='PROBE_ERROR: sampling incomplete: network error\n'
     if mutation=='raw_spoof':message=json.dumps(dict(candidate_runtime_failure=True,panic='runtime error'))
+    if mutation=='readiness_window':message='PROBE_ERROR: server readiness: \nexit status 2\n'
+    if mutation=='truncated_readiness':message='PROBE_ERROR: server readiness:'
     def public_process(argv,logs,timeout):
         out=Path(argv[argv.index('--output')+1]);out.mkdir();logs.mkdir()
         (logs/'tool.stdout').write_text('build completed\n');(logs/'tool.stderr').write_text('')
@@ -88,3 +90,49 @@ def test_unverified_probe_error_is_not_blame_on_candidate(tmp_path,mutation):
     report,_=observe_fixture(tmp_path,mutation)
     assert report['status']=='EXECUTION_PASS'
     assert not report.get('candidate_runtime_failures')
+
+
+def test_completed_registered_readiness_window_is_actionable_without_source_blame(tmp_path):
+    from contractedge.execution.public import has_candidate_execution_failure
+    report,_=observe_fixture(tmp_path,'readiness_window')
+    assert report['status']=='EXECUTION_FAILED'
+    assert has_candidate_execution_failure(report)
+    failure=report['candidate_runtime_failures'][0]
+    assert failure['operation']=='PRODUCTION_PROCESS_READINESS'
+    assert failure['source_locations']==[]
+    assert failure['source_cause']=='UNKNOWN'
+    assert failure['observation_window_seconds']==20
+    assert failure['build_passed'] and failure['process_started']
+    feedback=make_feedback(case_id='CASE-1',run_id='run',input_digest='a'*64,round_id=0,
+        from_snapshot='before',to_snapshot=report['snapshot_id'],patch_digest='b'*64,
+        execution_status=report['status'],observations=report['observations'],
+        plan={'postconditions':[],'preserve_constraints':[],'open_obligations':[]},
+        observation_diagnostics=[{'kind':'CANDIDATE_RUNTIME_FAILURE',**failure}])
+    view=historical_trial_prompt_view(feedback_prompt_view(feedback))
+    task=view['failure_tasks']['shared_execution_errors'][0]
+    assert task['error_field']=='production_readiness'
+    assert '20' in task['actual_error']
+    assert 'root cause remains unproven' in task['interpretation']
+    assert feedback['semantic_outcome']=='UNKNOWN'
+    assert not any(o.get('behavior_check') for o in report['observations'])
+
+
+def test_partial_readiness_line_remains_unknown_infrastructure(tmp_path):
+    report,_=observe_fixture(tmp_path,'truncated_readiness')
+    assert report['status']=='EXECUTION_PASS'
+    assert not report.get('candidate_runtime_failures')
+
+
+@pytest.mark.parametrize('change',['stale','hash','producer','window','truncated','source_blame'])
+def test_readiness_fact_must_remain_bound_and_not_upgrade_causality(tmp_path,change):
+    from contractedge.execution.public import has_candidate_execution_failure
+    report,_=observe_fixture(tmp_path,'readiness_window')
+    assert has_candidate_execution_failure(report)
+    failure=report['candidate_runtime_failures'][0]
+    if change=='stale':failure['snapshot_id']='old'
+    if change=='hash':failure['probe_sha256']='f'*64
+    if change=='producer':failure['producer']='candidate'
+    if change=='window':failure['observation_window_seconds']=0
+    if change=='truncated':failure['stderr_truncated']=True
+    if change=='source_blame':failure['source_cause']='PROVEN'
+    assert not has_candidate_execution_failure(report)

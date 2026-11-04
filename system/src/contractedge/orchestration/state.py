@@ -19,7 +19,9 @@ class PolicyLedger:
         self.limits = {"format_correction": max(0, int(config.get("max_format_retries", 1))),
                        "truncation_recovery": (1 if config.get("planning_truncation_separate_allowance", False)
                                                else max(0, int(config.get("max_format_retries", 1)))),
-                       "evidence_extension": 1,
+                       # Shared bounded acquisitions for diagnosis and planning;
+                       # legacy profiles retain their single-acquisition default.
+                       "evidence_extension": min(2, max(1, int(config.get("max_evidence_extensions", 1)))),
                        "repair_round": rounds, "rediagnosis": rounds,
                        "plan_revision": rounds, "execution_retry": rounds}
         self._used = {}

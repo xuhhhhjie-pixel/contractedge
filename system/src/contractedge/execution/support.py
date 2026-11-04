@@ -4,10 +4,53 @@ Kinds are assigned by the observation producer, never by the review response.
 They establish what can be observed, not that a semantic inference is correct.
 """
 from collections.abc import Mapping
+import hashlib
+import json
 from contractedge.execution.comparison import compare_declared_input
 from contractedge.contracts.execution_capabilities import behavior_binding_error, public_behavior_check_catalog
 
 _UNSPECIFIED_SNAPSHOT = object()
+
+
+def _inventory_covers(record, resource):
+    """A registered complete kind collection can cover a narrower object scope.
+
+    This permits evidence review, never infers presence/absence or semantic PASS.
+    Unknown effective namespaces and unnamed objects cannot establish a bounded
+    namespace/name enumeration; keep those cases conservative.
+    """
+    locator=record.get('locator') or {}
+    if (record.get('adapter_id')!='contractedge.render-inventory.v1'
+            or record.get('structured_complete') is not True
+            or locator.get('whole_file_read') is not True or locator.get('truncated') is not False
+            or set(resource)-{'kind','name','namespace'}
+            or any(v is not None and not isinstance(v,str) for v in resource.values())):return False
+    try:
+        text=record['excerpt'];body=json.loads(text)
+        if hashlib.sha256(text.encode()).hexdigest()!=record.get('content_digest'):return False
+        if (body.get('observation_type')!='PARSED_PUBLIC_RESOURCE_INVENTORY'
+                or body.get('complete_inventory') is not True or not resource.get('kind')
+                or body.get('kind')!=resource['kind']
+                or body.get('source_file')!=record.get('source_file')
+                or not isinstance(body.get('source_sha256'),str) or len(body['source_sha256'])!=64
+                or body['source_sha256']!=record.get('source_file_sha256')
+                or not isinstance(body.get('resources'),list)):return False
+        return all(isinstance(row,dict) and row.get('kind')==resource['kind']
+            and isinstance(row.get('name'),str) and bool(row['name'])
+            and (row.get('namespace') is None or isinstance(row['namespace'],str))
+            and (not resource.get('namespace') or isinstance(row.get('namespace'),str)
+                 and bool(row['namespace'].strip()))
+            for row in body['resources'])
+    except (KeyError,TypeError,ValueError,AttributeError,RecursionError):return False
+
+
+def _operation_in_resource_scope(record,resource):
+    identity=record.get('resource_identity')
+    # Null scope fields do not exclude named objects. Unknown operation identity
+    # fields cannot waive a potentially relevant failure either.
+    return not isinstance(identity,Mapping) or all(v is None
+        or not isinstance(identity.get(k),str) or not identity[k].strip() or identity[k]==v
+        for k,v in resource.items())
 
 
 def support_error(obligation, claim, observations, artifacts=(), *,
@@ -37,8 +80,10 @@ def support_error(obligation, claim, observations, artifacts=(), *,
             scope_error = 'OBSERVATION_SCENARIO_MISMATCH'
             continue
         resource = scope.get('resource')
-        if resource and (not isinstance(record.get('resource_identity'), Mapping)
-                         or any(record['resource_identity'].get(k) != v for k, v in resource.items())):
+        if resource and not (_inventory_covers(record,resource)
+                if record.get('adapter_id')=='contractedge.render-inventory.v1' else
+                isinstance(record.get('resource_identity'),Mapping)
+                and all(record['resource_identity'].get(k)==v for k,v in resource.items())):
             scope_error = 'OBSERVATION_RESOURCE_MISMATCH'
             continue
         eligible.append(record)
@@ -49,8 +94,7 @@ def support_error(obligation, claim, observations, artifacts=(), *,
         snapshots={r.get('snapshot_id') for r in eligible}
         relevant=[r for r in observations if r.get('snapshot_id') in snapshots
             and (not scope.get('scenario') or r.get('scenario')==scope['scenario'])
-            and (not scope.get('resource') or isinstance(r.get('resource_identity'),Mapping)
-                and all(r['resource_identity'].get(k)==v for k,v in scope['resource'].items()))]
+            and (not scope.get('resource') or _operation_in_resource_scope(r,scope['resource']))]
         if any(o['status']!='SUCCEEDED' for o in operation_facts(relevant)):
             return 'OPERATION_SUCCESS_CONFLICT'
     probe_records = [r for r in eligible if r.get('behavior_check')]
@@ -118,13 +162,23 @@ def deterministic_check_result(obligation, observations, *, snapshot_id, capabil
     records = [o for o in observations if o.get('snapshot_id') == snapshot_id
                and o.get('behavior_check', {}).get('id') in bound and o.get('excerpt')]
     available = {o['behavior_check']['id']: o['behavior_check']['status'] for o in records}
-    status = ('FAIL' if any(available.get(k) == 'FAIL' for k in bound) else
-              'PASS' if coverage == 'ALL_OF' and bound <= available.keys()
-              and all(available[k] == 'PASS' for k in bound) else None)
-    if status is None:
+    if any(available.get(k) == 'FAIL' for k in bound):
+        status = 'FAIL'
+    elif bound <= available.keys() and all(available[k] == 'PASS' for k in bound):
+        status = 'PASS' if coverage == 'ALL_OF' else 'UNKNOWN'
+    else:
         return None
-    claim = {'status':status, 'rationale':'Deterministic aggregation of predeclared '+coverage+' check bindings; semantic coverage remains declared, not independently proven.',
+    if status == 'UNKNOWN':
+        rationale = ('All bound necessary predicates passed, but their declared coverage cannot establish the full obligation. '
+                     + (obligation.get('coverage_rationale') or ''))
+    else:
+        rationale = ('Deterministic aggregation of predeclared '+coverage
+                     +' check bindings; semantic coverage remains declared, not independently proven.')
+    claim = {'status':status, 'rationale':rationale,
              'evidence':[{'observation_id':o['id'], 'quote':o['excerpt']} for o in records],
              'decision_method':'BOUND_CHECK_AGGREGATION'}
+    # The selected checks determine the finite predicate, but do not erase
+    # uncited operation facts from the same scope and snapshot. In particular,
+    # an otherwise positive check cannot hide a failed related operation.
     return claim if support_error(obligation,claim,observations,
                                  snapshot_id=snapshot_id, capabilities=capabilities) is None else None

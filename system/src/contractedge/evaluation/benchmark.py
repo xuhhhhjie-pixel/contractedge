@@ -108,7 +108,10 @@ def evaluate_benchmark(benchmark_root: str | Path, trace_manifest: str | Path | 
         if trace is None:
             score = {'case_id': member['case_id'], 'primary_class': member['primary_class'],
                      'status': 'NOT_RUN', 'denominator_included': True, 'failure_kind': 'NOT_RUN',
-                     'precision': None, 'recall': None}
+                    'precision': None, 'recall': None,
+                    'method_status': 'NOT_RUN', 'execution_status': 'NOT_RUN',
+                    'public_status': 'NOT_APPLICABLE', 'independent_score_status': 'NOT_RUN',
+                    'scoring_status': 'NOT_RUN'}
         else:
             score = score_run(trace, gt)
             score['traceability'] = traceability(trace)

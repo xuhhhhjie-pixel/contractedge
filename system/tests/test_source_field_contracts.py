@@ -89,7 +89,9 @@ def test_real_front_ready_and_execution_builder_keep_uncited_contract_source(tmp
             assert 'ignored' in body['source_prerequisites'][0]['reason']
             response=super().complete_json(request);plan=json.loads(response.content)
             plan['precondition_review']=[dict(source_evidence_ref=r['source_evidence_ref'],condition='This Go field is not consumed by the Helm template.',
-                disposition='NOT_APPLICABLE',verification_refs=[],open_obligation_refs=[],rationale='The source-local comment describes a separate unused API; no propagation inference is made from it.') for r in body['source_prerequisites']]
+                disposition='NOT_APPLICABLE',verification_refs=[],open_obligation_refs=[],
+                establishment=dict(mode='NOT_APPLICABLE',source_quote='',change_refs=[],mechanism='The Go field is unrelated to the Helm consumer.'),
+                rationale='The source-local comment describes a separate unused API; no propagation inference is made from it.') for r in body['source_prerequisites']]
             return ModelResponse(json.dumps(plan),{})
     p=Provider();p._snapshot_digests={'templates/serviceaccount.yaml':hashlib.sha256(template.read_bytes()).hexdigest()}
     config=dict(model={'model':'fixture'},max_context_tokens=24000,max_output_tokens=1024,max_total_tokens=100000,gap_role_delivery_enabled=True)

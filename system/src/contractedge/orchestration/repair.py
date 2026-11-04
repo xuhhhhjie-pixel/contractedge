@@ -19,27 +19,34 @@ from contractedge.changeset.adapter import adapt_model_changeset, bind_changeset
 from contractedge.changeset.prompt import build_changeset_request
 from contractedge.changeset.validate import validate_semantic_changeset
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
+from contractedge.contracts.public_checks import public_check_catalog
 from contractedge.execution.runtime_preflight import check_runtime, scoped_runtime_environment
 from contractedge.contracts.models import RunContext
 from contractedge.contracts.validation import canonical_digest, parse_method_input, validate_run_trace
 from contractedge.dataset.benchmark import execution_contract, editable_policy, file_sha, method_input_from_task, public_task
 from contractedge.diagnosis.validate import validate_diagnosis
 from contractedge.execution.public import BenchmarkPublicRunner
-from contractedge.execution.review import ModelPublicReviewer
+from contractedge.execution.review import ModelPublicReviewer, PublicReviewFormatError
 from contractedge.contracts.repair_intent import SemanticChangeSetIntent
 from contractedge.execution.consumer import (ConsumerContext, BudgetPort, build_consumer,
     validate_consumer, execution_review_mapping, PlanRejected)
-from contractedge.model.budget import BudgetedProvider, BudgetExceeded
-from contractedge.model.admission import quote_request, context_fits, complete_quoted
-from contractedge.orchestration.evidence_delivery import select_observations_delivery
+from contractedge.model.budget import BudgetedProvider, BudgetExceeded, recorded_token_charge, recorded_dispatch_state
+from contractedge.diagnosis.evidence import (source_context_records, source_context_validate,
+    source_context_commit, source_context_continuation)
+from contractedge.model.config import model_config, model_name
+from contractedge.model.admission import quote_request, require_context, complete_quoted
+from contractedge.orchestration.evidence_delivery import select_observations_delivery, annotate_delivery_citations
 from contractedge.orchestration.front_delivery import build_front_delivery
 from contractedge.orchestration.recorder import RunRecorder, ProviderJournal, preserve_error
 from contractedge.orchestration.semantic_delivery import SemanticDeliveryError, delivery_context, install_monitor
 from contractedge.contracts.stages import StageResult, front_status, feedback_status, stop_status
+from contractedge.contracts.failures import ObservationRejected, classify_exception, make_failure
+from contractedge.contracts.status import project_statuses
 from contractedge.orchestration.state import RepairEngine
-from contractedge.orchestration.trial import TrialSession, initialize_recovery
+from contractedge.orchestration.trial import TrialSession, initialize_recovery, recorded_execution_facts
 
-from contractedge.orchestration.feedback import make_feedback, validate_feedback, review_plan_with_retained, feedback_prompt_view
+from contractedge.orchestration.feedback import (make_feedback, validate_feedback,
+    review_plan_with_retained, feedback_prompt_view, select_feedback_observations)
 from contractedge.orchestration.runner import run_front_half, required_planning_source_support, required_source_prerequisites
 from contractedge.retrieval.candidates import CandidateSet
 from contractedge.source.snapshot import compute_snapshot
@@ -64,18 +71,21 @@ def write_json(path: Path, value):
 
 def run_front_recorded(method_input, workspace, provider, config, token_counter, *,
                        directory, execution_feedback=None, public_observations=(), evidence_delivery=None,
-                       journal=None, attempt_id="front"):
+                       journal=None, attempt_id="front", inherited_source_context=None):
     """Persist exact effective front inputs, without synthesizing legacy traces."""
     directory = Path(directory)
     write_json(directory / 'front.method_input.json', asdict(method_input) if is_dataclass(method_input) else dict(method_input))
     write_json(directory / 'front.config.json', dict(config))
     write_json(directory / 'front.public_observations.json', list(public_observations))
     write_json(directory / 'front.execution_feedback.json', execution_feedback)
+    if inherited_source_context is not None:
+        write_json(directory / 'front.source_context.json', inherited_source_context)
     start = len(provider.calls)
     active_error = None
     try:
         return run_front_half(method_input, workspace, provider, config, token_counter,
                               execution_feedback=execution_feedback, public_observations=public_observations,
+                              inherited_source_context=inherited_source_context,
                               **({'journal': journal, 'attempt_id': attempt_id} if journal is not None else {}))
     except BaseException as exc:
         active_error = exc
@@ -108,7 +118,48 @@ def select_observations(observations, query: str, token_counter, max_tokens: int
     return select_observations_delivery(observations, query, token_counter, max_tokens).records
 
 
-def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabilities: Mapping | None = None):
+def _ready_dispatched_context(call, method_input, *, sealed_calls=None):
+    """Restore actual request material, not two self-consistent metadata copies."""
+    from types import SimpleNamespace
+    import hashlib
+    from contractedge.model.provider import ModelRequest
+    from contractedge.orchestration.recorder import RunRecorder
+    from contractedge.orchestration.semantic_delivery import inspect_delivery, require_delivery
+    wire=call.get('request')
+    if not isinstance(wire,Mapping) or not call.get('request_digest'):
+        raise ValueError('Ready source lifetime requires its actual canonical request and digest')
+    RunRecorder._request_digest(call)
+    if sealed_calls is not None:
+        matching=[saved for saved in sealed_calls if saved.get('request_digest')==call['request_digest']]
+        if not any(canonical_digest(saved.get('request'))==canonical_digest(wire)
+                   and canonical_digest(saved.get('transport_request'))==canonical_digest(call.get('transport_request'))
+                   and recorded_dispatch_state(saved) in {'response_known','response_unknown'} for saved in matching):
+            raise ValueError('Ready source request differs from the sealed dispatched call')
+    request=ModelRequest(**wire)
+    adopted=request.metadata.get('source_context')
+    if (adopted is None or adopted != call.get('request_metadata',{}).get('source_context')
+            or list(request.messages)!=call.get('messages')):
+        raise ValueError('Ready source metadata differs from the actual dispatched request')
+    prepared=None
+    transport=call.get('transport_request')
+    if transport is not None:
+        if not isinstance(transport,Mapping) or not isinstance(transport.get('body_utf8'),str):
+            raise ValueError('Ready source lifetime has no saved prepared bytes')
+        body=transport['body_utf8'].encode('utf-8')
+        if (len(body)!=transport.get('body_bytes')
+                or hashlib.sha256(body).hexdigest()!=RunRecorder._transport_digest(call)):
+            raise ValueError('Ready prepared source bytes differ from their recorded digest')
+        prepared=SimpleNamespace(body=body)
+    # No preparation, tokenizer or provider call: this is a view of saved facts.
+    quote=SimpleNamespace(prepared=prepared,request_digest=call['request_digest'],_prepared_digest=None)
+    semantic=delivery_context(method_input,consumer='READY_SOURCE_RESTORE',
+        snapshot_id=request.metadata.get('snapshot_id'),source_requirements=False)
+    require_delivery(inspect_delivery(request,quote,semantic))
+    return adopted
+
+
+def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabilities: Mapping | None = None,
+                         recorder=None, call_refs=()):
     validate_run_trace(trace)
     snapshot = compute_snapshot(source)
     if (trace['case_id'] != method_input.case_id or trace['input_digest'] != method_input.input_digest
@@ -122,7 +173,59 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
         current = resolve_execution_capabilities(capabilities)
         if any(recorded[key] != current[key] for key in ('consumer_id', 'supported_operations')):
             raise ValueError('Ready trace execution capabilities differ from current consumer')
+        public_check_catalog(recorded)
+        public_check_catalog(current)
+        # READY/revision cannot authorize a check removed or redefined since
+        # the actual planning request. Bind definitions, not only check names.
+        keys = ('registered_public_checks', 'method_behavior_probes')
+        if canonical_digest({k: recorded[k] for k in keys if k in recorded}) != canonical_digest(
+                {k: current[k] for k in keys if k in current}):
+            raise ValueError('Ready trace public check capabilities differ from current declarations')
     candidates = CandidateSet(**trace['candidate_set'])
+    adopted = context.retrieval_config.get('source_context')
+    declared_lifetime = any(isinstance(call.get('request'),Mapping)
+        and isinstance(call['request'].get('metadata'),Mapping)
+        and call['request']['metadata'].get('source_context') is not None
+        and recorded_dispatch_state(call) in {'response_known','response_unknown'}
+        for call in trace.get('model_calls',[]))
+    if declared_lifetime and adopted is None:
+        raise ValueError('Ready trace removed the source lifetime declared by its actual request')
+    if adopted is not None:
+        source_context_validate(adopted)
+        if any(adopted['binding'].get(k) != getattr(context,k)
+               for k in ('run_id','case_id','input_digest')):
+            raise ValueError('Ready source context belongs to another work chain')
+        sealed_calls = None
+        if recorder is not None:
+            sealed_calls=[]
+            for supplied_ref in call_refs:
+                ref=recorder.verify_call(supplied_ref)
+                if ref.ledger_segment_digest is not None:
+                    seal=recorder._load_seal(recorder._revision_name(ref.segment_index,ref.ledger_revision,metadata=True))
+                    recorded=recorder._read(seal.artifact_ref.relative_path)
+                    first=seal.first_call_index
+                else:
+                    pending=recorder._pending(ref.segment_index)
+                    recorded=pending['calls'];first=pending['first_call_index']
+                sealed_calls.append(recorded[ref.absolute_call_index-first])
+        sent = [_ready_dispatched_context(call,method_input,sealed_calls=sealed_calls)
+                for call in trace.get('model_calls',[]) if recorded_dispatch_state(call) in
+                {'response_known','response_unknown'} and (
+                    call.get('request_metadata',{}).get('source_context') is not None or
+                    (isinstance(call.get('request'),Mapping) and
+                     call['request'].get('metadata',{}).get('source_context') is not None))]
+        if not sent or sent[-1] != adopted:
+            raise ValueError('Ready source context differs from its actual dispatched request')
+        from contractedge.contracts.delivery import source_span_matches
+        for record in source_context_records(adopted,kind='SOURCE_SPAN'):
+            if record['snapshot_id'] != snapshot.snapshot_id:
+                continue  # Historical namespace was frozen in the dispatched context, never relabelled current.
+            loc=record['locator']; relative=loc.get('path')
+            if relative not in snapshot.file_digests:
+                raise ValueError('Ready adopted source is not in the current snapshot inventory')
+            path=(source/relative).resolve(strict=True);path.relative_to(source.resolve())
+            if not source_span_matches(record,path.read_text()):
+                raise ValueError('Ready adopted source locator does not match the actual source')
     # Revalidate source excerpts in a resumed trace against actual current files.
     for candidate in candidates.candidates:
         if candidate.get('origin_kind') == 'DECLARED_ARTIFACT':
@@ -138,8 +241,50 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
     # Runtime evidence lives in the trace, not a mutation of original MethodInput.
     public = tuple(e for e in trace['diagnosis']['evidence_refs'] if e['kind'] == 'PUBLIC_OBSERVATION')
     run_input = replace(method_input, public_evidence=public or method_input.public_evidence)
-    expected_support = required_planning_source_support(run_input,candidates,snapshot.snapshot_id)
-    expected_prerequisites = required_source_prerequisites(candidates)
+    declaration=None
+    establishment_declaration=False
+    planning_request=None
+    for call in reversed(trace.get('model_calls',[])):
+        actual = call.get('request') if adopted is not None else None
+        prompt = actual.get('prompt_version','') if isinstance(actual,Mapping) else call.get('prompt_version','')
+        if str(prompt).startswith('changeset.'):
+            metadata = actual.get('metadata',{}) if isinstance(actual,Mapping) else call.get('request_metadata',{})
+            declaration=metadata.get('planning_helper_contracts')
+            establishment_declaration=metadata.get('precondition_establishment_required',False)
+            planning_request=actual
+            break
+    if adopted is not None:
+        if not isinstance(planning_request,Mapping):
+            raise ValueError('Ready source lifetime has no canonical planning declaration')
+        body=None
+        for message in planning_request.get('messages',[]):
+            if message.get('role')!='user':continue
+            try: value=json.loads(message.get('content',''))
+            except (ValueError,TypeError):continue
+            if isinstance(value,Mapping) and value.get('schema_version')=='ce.semantic_changeset.v1_1':
+                body=value;break
+        if body is None or any(body.get(key,[])!=context.retrieval_config.get(key,[])
+                for key in ('source_prerequisites','production_path_frontier')):
+            raise ValueError('Ready planning contract differs from its canonical request')
+    expected_declaration=({'enabled':True,'max_bytes':context.retrieval_config.get('planning_helper_max_bytes',24000)}
+        if context.retrieval_config.get('planning_helper_contracts') is True else None)
+    if canonical_digest(declaration)!=canonical_digest(expected_declaration):
+        raise ValueError('Ready trace helper context differs from its actual planning declaration')
+    if establishment_declaration != context.retrieval_config.get('precondition_establishment_required',False):
+        raise ValueError('Ready trace establishment requirements differ from actual planning declaration')
+    helpers=[]
+    if context.retrieval_config.get('planning_helper_contracts') is True:
+        if adopted is not None:
+            helpers=source_context_records(adopted,producer='planning_helper')
+        else:
+            from contractedge.execution.helper_context import planning_helper_source_support
+            helpers,_=planning_helper_source_support(snapshot,candidates.candidates,
+                max_bytes=context.retrieval_config.get('planning_helper_max_bytes',24000))
+    expected_support = ([{**r,'delivery_required':True} for r in source_context_records(adopted,kind='SOURCE_SPAN')
+        if r['snapshot_id'] == snapshot.snapshot_id]
+        if adopted is not None else required_planning_source_support(run_input,candidates,snapshot.snapshot_id,helper_support=helpers))
+    expected_prerequisites = required_source_prerequisites(candidates,helper_support=helpers,
+        establishment_required=context.retrieval_config.get('precondition_establishment_required') is True)
     if (context.retrieval_config.get('necessary_source_support', []) != expected_support
             or context.retrieval_config.get('source_prerequisites', []) != expected_prerequisites):
         raise ValueError('Ready trace prerequisite context differs from actually supplied current source')
@@ -153,7 +298,9 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
         policy=(context.retrieval_config.get('public_execution_capabilities') or {}).get('editable_policy'),
         frontier=context.retrieval_config.get('production_path_frontier'),
         prerequisites=context.retrieval_config.get('source_prerequisites'),
-        capabilities=context.retrieval_config.get('public_execution_capabilities'))
+        source_support=context.retrieval_config.get('necessary_source_support'),
+        capabilities=context.retrieval_config.get('public_execution_capabilities'),
+        boundary_contract_critical_paths=context.retrieval_config.get('boundary_contract_critical_paths'))
     if not validation.valid:
         raise ValueError('Ready trace plan failed consumer preflight: ' + str(validation.errors))
     return packet, context
@@ -164,19 +311,132 @@ def canonical_text_digest(text):
     return hashlib.sha256(text.encode()).hexdigest()
 
 
+def plan_reassessment_required(plan: Mapping, current_snapshot: str, previous: Mapping | None) -> bool:
+    """Request a prerequisite review, without attributing the runtime failure.
+
+    Compiler errors and unrelated/unknown probe errors keep the existing edit
+    route. A verified readiness failure questions whether a required runtime
+    prerequisite was established; the planner may retain or revise its intent.
+    """
+    if not any(p.get('disposition') == 'REQUIRED' for p in plan.get('precondition_review', [])):
+        return False
+    previous = previous or {}
+    trial = previous.get('rejected_trial') or {}
+    decision = trial.get('decision') or trial.get('candidate_decision') or {}
+    if trial.get('decision') and trial.get('candidate_decision') and trial['decision'] != trial['candidate_decision']:
+        return False
+    historical = trial.get('feedback') or {}
+    if not (previous.get('source_snapshot') == current_snapshot
+            and decision.get('decision') == 'UNCOMPARABLE'
+            and decision.get('from_snapshot') == current_snapshot
+            and trial.get('snapshot_id') and trial['snapshot_id'] != current_snapshot
+            and decision.get('trial_snapshot') == trial['snapshot_id'] == historical.get('to_snapshot')
+            and historical.get('build_state') == 'FAILED'):
+        return False
+    from contractedge.execution.public import is_registered_readiness_failure
+    return any(isinstance(f, Mapping) and f.get('kind') == 'CANDIDATE_RUNTIME_FAILURE'
+        and f.get('snapshot_id') == trial['snapshot_id'] and is_registered_readiness_failure(f)
+        for f in historical.get('observation_diagnostics', []))
+
+
+def behavior_plan_reassessment_required(plan: Mapping, current_snapshot: str, feedback: Mapping | None) -> bool:
+    """A bound necessary failure can question intent even when startup succeeds."""
+    if (not feedback or feedback.get('to_snapshot') != current_snapshot
+            or feedback.get('semantic_outcome') != 'PUBLIC_REVIEW_FAIL'
+            or not any(p.get('disposition') == 'REQUIRED' for p in plan.get('precondition_review', []))):
+        return False
+    from contractedge.execution.support import deterministic_check_result
+    return any((result := deterministic_check_result(condition, feedback.get('public_observations', []),
+        snapshot_id=current_snapshot, capabilities=feedback.get('public_execution_capabilities')))
+        and result['status'] == 'FAIL'
+        for kind in ('postconditions', 'preserve_constraints', 'open_obligations')
+        for condition in plan.get(kind, []))
+
+
+def prerequisite_review_feedback(feedback: Mapping) -> dict:
+    """Use the existing uncertain diagnosis-stage route, not a causal verdict."""
+    result = {**feedback, 'route': 'DIAGNOSIS', 'next_action': 'DIAGNOSIS',
+        'failure_kind': 'DIAGNOSIS', 'route_confidence': 'LOW',
+        'rationale': 'A current necessary behavior failed under prerequisite-dependent intent. Reassess current '
+        'source and accepted assumptions before another edit; this route is not proof that the plan caused it. '
+        'DIAGNOSIS selects the work stage at LOW confidence, not proven source blame. This review instruction '
+        'supersedes the old execution-first instruction. The unchanged original feedback retains its attribution '
+        'and rationale; do not treat that historical instruction as the current action.'}
+    result.pop('routing_policy', None)
+    return result
+
+
 def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
-                provider, token_counter, config: Mapping) -> dict:
-    packet, context = validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
-    request = build_changeset_request(packet, context, [{'code': 'PUBLIC_EXECUTION_PLAN_FEEDBACK',
-                                                        'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}])
+                provider, token_counter, config: Mapping, *, rejected_trial=None, source_context=None,
+                recorder=None,call_refs=()) -> dict:
+    packet, context = validate_ready_trace(trace, method_input, source,
+        capabilities=config.get('public_execution_capabilities'),recorder=recorder,call_refs=call_refs)
+    if source_context is not None:
+        original=context.retrieval_config.get('source_context')
+        if original is None:
+            raise ValueError('Legacy plan revision cannot adopt an undeclared source lifetime')
+        source_context_continuation(original,source_context)
+        context=replace(context,retrieval_config={**context.retrieval_config,
+            'source_context':source_context,
+            'necessary_source_support':[{**r,'delivery_required':True} for r in
+                source_context_records(source_context,kind='SOURCE_SPAN')
+                if r['snapshot_id']==context.snapshot_id]})
+    context = replace(context, retrieval_config={**context.retrieval_config,
+        'declared_artifacts': list(method_input.declared_artifacts)})
+    validation_feedback = [{'code': 'PUBLIC_EXECUTION_PLAN_FEEDBACK',
+        'message': json.dumps(feedback_prompt_view(feedback), ensure_ascii=False)}]
+    if rejected_trial is not None:
+        decision = rejected_trial.get('decision') or rejected_trial.get('candidate_decision') or {}
+        if (decision.get('from_snapshot') != context.snapshot_id
+                or decision.get('trial_snapshot') != rejected_trial.get('snapshot_id')
+                or rejected_trial.get('snapshot_id') == context.snapshot_id
+                or (rejected_trial.get('feedback') or {}).get('to_snapshot') != rejected_trial.get('snapshot_id')):
+            raise ValueError('Rejected trial snapshot does not bind this current plan revision')
+        validation_feedback.append({'code': 'REJECTED_TRIAL_PREREQUISITE_REASSESSMENT',
+            'message': json.dumps(dict(current_snapshot=context.snapshot_id, rejected_trial=rejected_trial,
+                instruction='The recorded failure is not proof of a plan defect or source cause. Reassess required '
+                'preconditions against the delivered current source and the historical failed edits. Distinguish '
+                'a false plan assumption from an implementation that did not fulfill valid intent. Preserve valid '
+                'intent when implementation alone failed; revise unsupported mechanisms instead of requiring the '
+                'executor to obey them. A source comment, empty collection, worker launch or first received item '
+                'does not prove completion. State the producer-backed completion condition, including zero initial '
+                'work and continued updates, or leave it unresolved. Historical observations retain their own '
+                'snapshot and cannot prove current satisfaction. Preserve every requirement and protected condition.'),
+                ensure_ascii=False)})
+    request = build_changeset_request(packet, context, validation_feedback,
+        previous_attempt=dict(run_id=context.run_id, snapshot_id=context.snapshot_id,
+            input_digest=context.input_digest, diagnosis_digest=canonical_digest(packet.raw),
+            response_content=json.dumps(trace['changeset'], ensure_ascii=False, sort_keys=True),
+            state='CURRENT_PLAN_FOR_REVISION'))
+    if not isinstance(provider, BudgetedProvider):
+        # Standalone callers use the same dispatch/settlement implementation;
+        # the production path already supplies its non-resetting shared budget.
+        provider = BudgetedProvider(provider, token_counter,
+            max_tokens=int(config.get('max_total_tokens', 160000)),
+            max_seconds=float(config.get('max_elapsed_seconds', 2400)),
+            max_calls=int(config.get('max_model_calls', 24)),
+            reconcile_observed_input=config.get('reconcile_observed_input', False),
+            reconcile_observed_output=config.get('reconcile_observed_output', False))
+        prior_calls = trace['model_calls']
+        elapsed = [call.get('elapsed_seconds') for call in prior_calls]
+        if any(type(value) not in (int, float) or not 0 <= value < float('inf') for value in elapsed):
+            raise ValueError('Plan revision requires explicit nonnegative prior elapsed time')
+        provider.reserved_tokens = sum(recorded_token_charge(call) for call in prior_calls)
+        provider.prior_calls = len(prior_calls)
+        provider.started -= max(elapsed, default=0)
+    call_start = len(provider.calls)
     quote = quote_request(provider, request, token_counter)
-    if not context_fits(quote, int(config['max_context_tokens']), config.get('model_context_tokens')):
-        raise BudgetExceeded('Plan revision exceeds the full context budget')
+    require_context(quote, int(config['max_context_tokens']), config.get('model_context_tokens'),
+        label='Plan revision')
     monitor = getattr(provider, '_semantic_delivery_monitor', None)
     semantic = delivery_context(method_input, consumer='FEEDBACK_CHANGESET_REVISION',
         snapshot_id=context.snapshot_id, diagnosis=trace.get('diagnosis'), changeset=trace.get('changeset'),
         feedback=feedback, necessary_support=context.retrieval_config.get('necessary_source_support', ()),
-        prerequisites=context.retrieval_config.get('source_prerequisites', ()))
+        prerequisites=context.retrieval_config.get('source_prerequisites', ()),
+        declared_artifacts=method_input.declared_artifacts, feedback_required=feedback is not None,
+        historical_contexts=(rejected_trial,) if rejected_trial is not None else (),
+        mandatory_refs=tuple(record for record in packet.raw.get('evidence_refs', ())
+            if record.get('kind') == 'PUBLIC_OBSERVATION'))
     with monitor.scope(semantic) if monitor is not None else nullcontext():
         response = complete_quoted(provider, request, quote)
     payload = json.loads(response.content)
@@ -186,22 +446,21 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
         policy=(config.get('public_execution_capabilities') or {}).get('editable_policy'),
         frontier=context.retrieval_config.get('production_path_frontier'),
         prerequisites=context.retrieval_config.get('source_prerequisites'),
-        capabilities=context.retrieval_config.get('public_execution_capabilities'))
+        source_support=context.retrieval_config.get('necessary_source_support'),
+        capabilities=context.retrieval_config.get('public_execution_capabilities'),
+        boundary_contract_critical_paths=context.retrieval_config.get('boundary_contract_critical_paths'))
     if not validation.valid:
         raise PlanRejected('Feedback plan revision failed: ' + str(validation.errors))
-    call = {'stage': 'EXECUTION_PLAN_REVISION', 'prompt_version': request.prompt_version,
-            'response_content': response.content, 'response_metadata': dict(response.metadata), 'runner_binding': binding,
-            'prompt_tokens_reserved': quote.input_tokens,
-            'output_tokens_reserved': request.max_output_tokens,
-            'elapsed_seconds': provider.summary()['elapsed_seconds'] if isinstance(provider, BudgetedProvider) else 0}
-    return {**trace, 'changeset': payload, 'status': payload['status'],
-            'model_calls': list(trace['model_calls']) + [call]}
+    calls = [{**call, 'stage': 'EXECUTION_PLAN_REVISION', 'runner_binding': binding}
+             for call in provider.calls[call_start:]]
+    return {**trace, 'changeset': payload, 'status': payload['status'], 'run_context':asdict(context),
+            'model_calls': list(trace['model_calls']) + calls}
 
 
-def rebind_execution_plan(*args, **kwargs):
+def rebind_execution_plan(plan: Mapping, source: Path, feedback: Mapping, *, prior_execution=None) -> dict:
     """Compatibility export; new engine retries go through consumer.prepare."""
     from contractedge.execution.consumers.topomen import rebind_execution_plan as rebind
-    return rebind(*args, **kwargs)
+    return rebind(plan, source, feedback, prior_execution=prior_execution)
 
 
 def repair_case(public_root: str | Path, tools_root: str | Path, case_id: str,
@@ -263,7 +522,12 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
     if out.is_relative_to(root) or root.is_relative_to(out):
         raise ValueError('Repair output must be independent of frozen public tasks')
     out.mkdir(parents=True, exist_ok=False)
-    method_value, projection = method_input_from_task(root, case_id)
+    # Formal build directories intentionally keep execution assets separate
+    # from the older release wrapper.  Bind the release identity from the
+    # frozen configuration when present instead of silently deriving it from
+    # whichever sibling directory happens to contain RELEASE_ENTRY.json.
+    method_value, projection = method_input_from_task(
+        root, case_id, release_id=config.get('benchmark_release_id'))
     mode = method_mode(config)
     if mode != 'full' and initial_trace is not None:
         raise PlanRejected('Legacy READY trace cannot be relabelled as a new method mode')
@@ -304,9 +568,23 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         preserve_error(primary, lambda: journal.recorder.seal_ledger(segment_index=journal.segment_index))
     budget = BudgetedProvider(provider, token_counter, max_tokens=int(config.get('max_total_tokens', 160000)),
         max_seconds=float(config.get('max_elapsed_seconds', 2400)), max_calls=int(config.get('max_model_calls', 24)),
-        on_update=persist_calls)
+        on_update=persist_calls,
+        reconcile_observed_output=config.get('reconcile_observed_output', False),
+        reconcile_observed_input=config.get('reconcile_observed_input', False))
     journal.attach(budget)
+
+    def failure_call_refs(exc, failure=None):
+        call_ref = (failure or {}).get('call_ref')
+        if call_ref:
+            return tuple(ref for ref in journal.refs()
+                         if f'{ref.run_id}:{ref.segment_index}:{ref.absolute_call_index}' == call_ref)
+        index = budget.failure_call_index(exc)
+        return journal.refs(index)[:1] if index is not None else ()
+
     semantic_monitor = install_monitor(budget, journal)
+    def ready_call_refs():
+        previous=(journal.recorder._seals(0)[-1].call_refs if journal.first_call_index else ())
+        return (*previous,*journal.refs())
     if _runtime_started is not None:
         budget.started = _runtime_started
     runner = public_runner or BenchmarkPublicRunner(root, tools_root,
@@ -321,6 +599,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
     workspace = out / 'workspace'
     trace, plan, feedback, current_observation = None, None, None, None
     execution_input = None
+    active_source_context = None
     last_execution_attempt = None
     last_applied_execution = None
     execution_format_corrections = 0
@@ -332,6 +611,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
     retry_restored_candidate = False
     source_integrity_verified = True
     rounds, errors = [], []
+    failure_records = []
     primary_error = None
     status = 'STARTING'
     source = None
@@ -365,14 +645,20 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 + tuple(journal.latest[key] for key in predecessor if key in journal.latest),
             output_refs=tuple(capture_file(path, 'STAGE_OUTPUT', fallback_snapshot=snapshot_id) for path in outputs),
             projection_refs=tuple(capture_file(path, 'DELIVERY_PROJECTION') for path in projections))
-    def semantic_context_for(consumer, *, evidence=(), mandatory_refs=(), source_requirements=True):
+    def semantic_context_for(consumer, *, evidence=(), mandatory_refs=(), source_requirements=True,
+                             adopt_feedback=False, historical_contexts=(), execution_mapping=None):
         retrieval = ((trace or {}).get('run_context') or {}).get('retrieval_config') or {}
         return delivery_context(method_input, consumer=consumer,
             snapshot_id=compute_snapshot(source).snapshot_id if source is not None else initial_snapshot,
             diagnosis=(trace or {}).get('diagnosis'), changeset=(trace or {}).get('changeset'),
             plan=plan, feedback=feedback if mode == 'full' else public_feedback(feedback), necessary_support=retrieval.get('necessary_source_support', ()),
             prerequisites=(plan or {}).get('precondition_review', ()), evidence=evidence,
-            mandatory_refs=mandatory_refs, source_requirements=source_requirements, source_root=source,
+            mandatory_refs=tuple(mandatory_refs) + tuple(evidence),
+            declared_artifacts=method_input.declared_artifacts,
+            feedback_required=adopt_feedback and feedback is not None,
+            historical_contexts=historical_contexts,
+            execution_mapping=execution_mapping,
+            source_requirements=source_requirements, source_root=source,
             **({'layer_absence': {'diagnosis': 'NOT_APPLICABLE' if mode in {'direct', 'without_relation'} else 'UNKNOWN',
                                   'changeset': 'NOT_APPLICABLE'}} if mode != 'full' else {}))
     def reserve_public_time():
@@ -396,6 +682,11 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 if stage == 'observe':
                     record_stage('review', attempt_id=attempt_id, snapshot_id=actual, status='NOT_RUN',
                         outputs=(failed.relative_to(out).as_posix(),), predecessor=('observe',))
+                    if active_trial is not None:
+                        active_trial.record('OBSERVATION_REJECTED', snapshot_id=actual,
+                            observation_status='OBSERVATION_ERROR',
+                            observation_ref=asdict(journal.recorder.artifact_ref(
+                                failed.relative_to(out).as_posix(), 'PUBLIC_OBSERVATION_ERROR', snapshot_id=actual)))
             preserve_error(exc, record_failure)
             raise
         actual = compute_snapshot(source).snapshot_id
@@ -413,10 +704,25 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         write_json(record_path, observed)
         record_stage(stage, attempt_id=attempt_id, snapshot_id=actual, status=observed['status'],
             outputs=tuple(outputs), predecessor=predecessor)
-        observation_status = ('ENVIRONMENT_ERROR' if observed['status'] in {'INFRA_ERROR', 'INVALID_OBSERVATION'} else
+        cleanup = observed.get('runtime_cleanup')
+        cleanup_unconfirmed = ('runtime_cleanup' in observed and
+            (not isinstance(cleanup, Mapping) or cleanup.get('status') != 'OWNED_CONTAINERS_CLOSED'))
+        observation_status = ('ENVIRONMENT_ERROR' if cleanup_unconfirmed
+                              or observed['status'] in {'INFRA_ERROR', 'INVALID_OBSERVATION'} else
                               'BUDGET_EXHAUSTED' if observed['status'] == 'BUDGET_EXCEEDED' else 'COMPLETE')
         engine.step(StageResult('incumbent' if stage == 'observe_initial' else 'observation',
             observation_status, journal.latest[stage], snapshot_id=actual))
+        if cleanup_unconfirmed:
+            # Keep the original process failure above. Unconfirmed cleanup is
+            # an independent stop condition, including on source-build failure.
+            failure_records.extend(dict(record) for record in observed.get('failure_records', ()))
+            error = RuntimeError('Public runtime cleanup is unconfirmed; no further model or execution request is admitted')
+            if stage == 'observe' and active_trial is not None:
+                preserve_error(error, lambda: active_trial.record('OBSERVATION_REJECTED', snapshot_id=actual,
+                    observation_status='INVALID_OBSERVATION', raw_status=observed['status'],
+                    observation_ref=asdict(journal.recorder.artifact_ref(
+                        relative_record, 'PUBLIC_OBSERVATION', snapshot_id=actual))))
+            raise error
         return observed
     def restore_recorded(checkpoint, destination, *, attempt_id, predecessor):
         from contractedge.orchestration.candidate_guard import restore_candidate
@@ -439,6 +745,10 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             preserve_error(exc, record_failure)
             raise
         actual = compute_snapshot(source).snapshot_id
+        # A source rollback restores bytes/authority, not model knowledge.
+        # This checkpoint was made after the current front root was accepted;
+        # all records keep their own snapshot and actual dispatch/quota facts.
+        # Only the explicit next DIAGNOSE/REDIAGNOSE route replaces that root.
         if active_trial is not None:
             active_trial.record_rollback()
         write_json(destination, {'status': 'RESTORED', 'from_snapshot': trial, 'to_snapshot': actual,
@@ -447,15 +757,18 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             outputs=(destination.relative_to(out).as_posix(),), predecessor=predecessor)
         engine.step(StageResult('rollback', 'COMPLETE', journal.latest['rollback'], snapshot_id=actual))
     try:
+        if backend == 'topomen_agent':
+            from contractedge.execution.topomen_agent import preflight_native_agent
+            preflight_native_agent(config)
         if initial_trace:
             calls = initial_trace['model_calls']
             for call in calls:
                 for field in ['prompt_tokens_reserved', 'output_tokens_reserved']:
-                    if not isinstance(call.get(field), int) or call[field] < 0:
+                    if type(call.get(field)) is not int or call[field] < 0:
                         raise ValueError('Resuming requires explicit nonnegative prior token reservations')
                 if not isinstance(call.get('elapsed_seconds'), (int, float)) or call['elapsed_seconds'] < 0:
                     raise ValueError('Resuming requires explicit nonnegative prior elapsed time')
-            budget.reserved_tokens += sum(c['prompt_tokens_reserved'] + c['output_tokens_reserved'] for c in calls)
+            budget.reserved_tokens += sum(recorded_token_charge(c) for c in calls)
             budget.prior_calls = len(calls)
             budget.started -= max((float(c['elapsed_seconds']) for c in calls), default=0)
             if budget.reserved_tokens > budget.max_tokens or budget.prior_calls >= budget.max_calls:
@@ -487,7 +800,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 'registered_public_observation_adapters': adapters}
             write_json(out / 'public-observation-adapters.json', adapters)
         if initial_trace:
-            validate_ready_trace(initial_trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
+            validate_ready_trace(initial_trace, method_input, source, capabilities=config.get('public_execution_capabilities'),
+                recorder=journal.recorder,call_refs=ready_call_refs())
             trace = dict(initial_trace)
             # Resuming a real development trace does not replenish model budgets.
             write_json(out / 'initial-front.trace.json', trace)
@@ -506,7 +820,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 stage='observe_initial', attempt_id='broken', predecessor=('begin',))
             if current_observation['status'] in {'INFRA_ERROR', 'INVALID_OBSERVATION', 'BUDGET_EXCEEDED'}:
                 status = current_observation['status']
-                raise ValueError('Initial public observation could not be produced')
+                raise ObservationRejected('Initial public observation could not be produced')
         for round_id in range(max_rounds):
             if budget.remaining_seconds <= 0:
                 raise BudgetExceeded('Global wall-clock budget exhausted')
@@ -528,12 +842,33 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                                   'errors': delivery.receipt['errors']}, ensure_ascii=False))
                 break
             observations = delivery.records
+            if (mode == 'full' and trace is not None and retry_restored_candidate
+                    and plan_reassessment_required(trace.get('changeset') or {},compute_snapshot(source).snapshot_id,
+                                                   last_execution_attempt)):
+                revision_call_start=journal.position()
+                trace=revise_plan(trace,method_input,source,feedback,budget,token_counter,config,
+                    rejected_trial=last_execution_attempt['rejected_trial'], source_context=active_source_context,
+                    recorder=journal.recorder,call_refs=ready_call_refs())
+                write_json(directory/'plan-reassessment.trace.json',trace)
+                revision_value=journal.recorder.capture_value(trace['changeset'],'FINAL_SEMANTIC_PLAN',
+                    snapshot_id=trace['snapshot_id'])
+                journal.record('planning',attempt_id='round-'+str(round_id)+'.prerequisite-reassessment',
+                    snapshot_id=trace['snapshot_id'],status=trace['status'],call_start=revision_call_start,
+                    input_refs=tuple(journal.latest[k] for k in ('planning','feedback') if k in journal.latest),
+                    output_refs=(revision_value,))
+                # Re-prepare the consumer with the revised intent. Rebinding the
+                # previous AcceptedInput would silently discard the new plan.
+                execution_input=None;last_applied_execution=None;plan=None
             if trace is not None and engine.state.diagnosis_snapshot is None and trace.get('diagnosis'):
                 imported = (journal.capture('initial-front.trace.json', 'IMPORTED_FRONT_TRACE',
                                            snapshot_id=trace['snapshot_id']) if initial_trace else journal.latest.get('front'))
                 engine.step(StageResult('diagnosis', front_status(trace['diagnosis']['status']), imported,
                     snapshot_id=trace['snapshot_id']))
-            next_route = ('EXECUTE' if retry_restored_candidate else feedback['route'] if feedback else
+            behavior_reassessment = (mode == 'full' and trace is not None and
+                behavior_plan_reassessment_required(trace.get('changeset') or {},
+                    compute_snapshot(source).snapshot_id, feedback))
+            next_route = ('DIAGNOSIS' if behavior_reassessment else
+                          'EXECUTE' if retry_restored_candidate else feedback['route'] if feedback else
                           'EXECUTE' if trace is not None else 'DIAGNOSIS')
             round_decision = engine.start_round(StageResult('round_start', 'READY',
                 journal.latest.get('feedback') or journal.latest.get('front_import'),
@@ -541,7 +876,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             if mode in {'without_relation', 'direct'} and (
                     trace is None or round_decision.action != 'EXECUTE'):
                 with semantic_monitor.scope(semantic_context_for('DIRECT_PLAN_ROUND_' + str(round_id),
-                        evidence=observations, mandatory_refs=delivery.receipt.get('mandatory_refs', ()))):
+                        evidence=observations, mandatory_refs=delivery.receipt.get('mandatory_refs', ()),
+                        adopt_feedback=True)):
                     trace = generate_nonrelation(mode, method_input, source, policy, budget, token_counter,
                         {**dict(config), 'run_id': run_id}, observations=observations, feedback=feedback,
                         journal=journal, attempt_id='round-' + str(round_id))
@@ -551,28 +887,39 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 round_config = {**dict(config), 'run_id': run_id,
                     'max_total_tokens': max(1, budget.max_tokens - budget.reserved_tokens),
                     'max_elapsed_seconds': budget.remaining_seconds,
-                    'model': {'model': config['model'], 'provider': config.get('provider', 'configured'),
-                              'schema_in_prompt': config.get('schema_in_prompt', True)}}
+                    'model': model_config(config.get('model'),
+                                          provider=config.get('provider', 'configured'),
+                                          schema_in_prompt=config.get('schema_in_prompt', True))}
                 trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
-                    budget, round_config, token_counter, execution_feedback=feedback if mode == 'full' else public_feedback(feedback),
+                    budget, round_config, token_counter,
+                    execution_feedback=(prerequisite_review_feedback(feedback) if behavior_reassessment else feedback)
+                        if mode == 'full' else public_feedback(feedback),
                     public_observations=observations, directory=directory, evidence_delivery=delivery.receipt,
-                    journal=journal, attempt_id='round-' + str(round_id)).to_wire()
+                    journal=journal, attempt_id='round-' + str(round_id),
+                    inherited_source_context=active_source_context).to_wire()
                 plan = None
+                execution_input = None
+                last_applied_execution = None
             if trace['status'] not in {'READY', 'READY_PARTIAL'}:
-                unknown = bool(budget.calls and budget.calls[-1].get('error')
-                    and 'response_content' not in budget.calls[-1] and trace['status'] != 'BUDGET_EXHAUSTED')
+                front_failure = trace.get('primary_failure') or {}
+                dispatch_state = front_failure.get('dispatch_state')
+                unknown = dispatch_state == 'response_unknown' and trace['status'] != 'BUDGET_EXHAUSTED'
                 preserve_error(journal.primary_error, lambda: engine.step(StageResult('front',
                     front_status(trace['status'], response_unknown=unknown), journal.latest.get('front'),
                     snapshot_id=trace['snapshot_id'],
-                    call_refs=journal.refs(max(0, len(budget.calls)-1)) if unknown else ())))
+                    call_refs=failure_call_refs(journal.primary_error, front_failure),
+                    failure_class=front_failure.get('failure_class'), dispatch_state=dispatch_state,
+                    error_code=front_failure.get('code'))))
                 write_json(directory / 'front.trace.json', trace)
                 status = trace['status']
                 errors.extend(trace.get('errors', []))
+                failure_records.extend(dict(record) for record in trace.get('failure_records', ()))
                 break
             if mode == 'full' and round_decision.action in {'REVISE_PLAN', 'REDIAGNOSE'}:
                 if round_decision.action == 'REVISE_PLAN':
                     revision_call_start = journal.position()
-                    trace = revise_plan(trace, method_input, source, feedback, budget, token_counter, config)
+                    trace = revise_plan(trace, method_input, source, feedback, budget, token_counter, config,
+                        source_context=active_source_context,recorder=journal.recorder,call_refs=ready_call_refs())
                     revision_value = journal.recorder.capture_value(trace['changeset'], 'FINAL_SEMANTIC_PLAN',
                                                                   snapshot_id=trace['snapshot_id'])
                     journal.record('planning', attempt_id='round-' + str(round_id) + '.revision',
@@ -582,14 +929,17 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     plan = None
                 else:
                     # Old source evidence cannot be relabelled as current solely to reuse a diagnosis.
-                    feedback = {**feedback, 'route': 'DIAGNOSIS', 'failure_kind': 'DIAGNOSIS',
-                                'rationale': 'Plan feedback requires rediagnosis because source evidence is stale.'}
+                    feedback = (prerequisite_review_feedback(feedback) if behavior_reassessment else
+                        {**feedback, 'route': 'DIAGNOSIS', 'failure_kind': 'DIAGNOSIS',
+                         'rationale': 'Plan feedback requires rediagnosis because source evidence is stale.'})
                     trace = run_front_recorded(method_input, source if method_input.source_root == '.' else source.parent,
-                        budget, {**dict(config), 'run_id': run_id, 'model': {'model': config['model'],
-                            'schema_in_prompt': config.get('schema_in_prompt', True)}},
+                        budget, {**dict(config), 'run_id': run_id,
+                            'model': model_config(config.get('model'),
+                                                  schema_in_prompt=config.get('schema_in_prompt', True))},
                         token_counter, execution_feedback=feedback, public_observations=observations,
                         directory=directory, evidence_delivery=delivery.receipt,
-                        journal=journal, attempt_id='round-' + str(round_id) + '.rediagnosis').to_wire()
+                        journal=journal, attempt_id='round-' + str(round_id) + '.rediagnosis',
+                        inherited_source_context=active_source_context).to_wire()
                     plan = None
             write_json(directory / 'front.trace.json', trace)
             if trace['status'] not in {'READY', 'READY_PARTIAL'}:
@@ -599,7 +949,8 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             rebind_input = bool(((feedback and feedback['route'] == 'EXECUTE') or retry_restored_candidate)
                                 and execution_input is not None)
             if not rebind_input and mode == 'full':
-                validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'))
+                validate_ready_trace(trace, method_input, source, capabilities=config.get('public_execution_capabilities'),
+                    recorder=journal.recorder,call_refs=ready_call_refs())
             intent = repair_intent(mode, trace, method_input, source) if not rebind_input else intent
             context = ConsumerContext(source, policy, config, method_input.requirement_text,
                 tuple(method_input.declared_artifacts), tuple(observations),
@@ -608,6 +959,18 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             execution_input = consumer.prepare(intent, context)
             plan = dict(execution_input.payload)
             before = compute_snapshot(source).snapshot_id
+            front_sources = ((trace.get('run_context') or {}).get('retrieval_config') or {}).get('source_context')
+            if front_sources is not None:
+                if active_source_context is None or active_source_context['binding'] != front_sources['binding']:
+                    active_source_context = source_context_validate(front_sources)
+                elif front_sources != active_source_context:
+                    try:
+                        active_source_context = source_context_continuation(active_source_context,front_sources)
+                    except ValueError:
+                        # Execution may have already adopted more than this
+                        # earlier front artifact. Keep that complete superset;
+                        # divergent same-chain material must not be merged by guess.
+                        source_context_continuation(front_sources,active_source_context)
             retry_restored_candidate = False
             incumbent_observation, incumbent_feedback = current_observation, feedback
             incumbent_execution = last_applied_execution
@@ -654,6 +1017,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 execution_result = {'status': 'PLAN_REJECTED', 'error': str(exc)}
             else:
                 attempts = []
+                correction_pending = False
                 while True:
                     calls_before_execution = len(budget.calls)
                     rejection_kind = None
@@ -662,10 +1026,18 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                         execution_input = replace(execution_input, context=replace(execution_input.context,
                             previous_attempt=last_execution_attempt))
                         accepted_input = replace(accepted_input, execution_input=execution_input)
+                        from contractedge.execution.topomen import execution_attempt_for_snapshot
+                        adopted_attempt = (execution_attempt_for_snapshot(last_execution_attempt,
+                            accepted_input.execution_input.snapshot_id)
+                            if consumer_capabilities.consumer_id == 'contractedge.topomen_source_consumer.v1'
+                            else last_execution_attempt)
                         with semantic_monitor.scope(semantic_context_for('EXECUTION_ROUND_' + str(round_id),
-                                evidence=observations)):
+                                evidence=observations,
+                                adopt_feedback=True,
+                                historical_contexts=(adopted_attempt,) if adopted_attempt is not None else (),
+                                mandatory_refs=((plan or {}).get('coordination_context') or {}).get('public_observations', ()))):
                             execution_result = consumer.execute(accepted_input,
-                                BudgetPort(budget, token_counter, config, active_trial))
+                                BudgetPort(budget, token_counter, config, active_trial, source_context=active_source_context))
                     except SemanticDeliveryError:
                         raise
                     except (PlanRejected, ValueError) as exc:
@@ -673,6 +1045,20 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                         execution_result = {'status': 'CONCRETE_EDIT_REJECTED', 'error': str(exc)}
                         if getattr(consumer, 'last_trace', None) is not None:
                             execution_result['topomen_trace'] = consumer.last_trace
+                    finally:
+                        for dispatched in budget.calls[calls_before_execution:]:
+                            draft = dispatched.get('request_metadata',{}).get('source_context')
+                            if draft is not None and active_source_context is not None:
+                                committed = preserve_error(sys.exc_info()[1], lambda: source_context_commit(
+                                    active_source_context,draft,recorded_dispatch_state(dispatched)))
+                                if committed is not None:
+                                    active_source_context = committed
+                        if correction_pending and any(call.get('dispatch_state') in
+                                {'response_known', 'response_unknown'} for call in budget.calls[calls_before_execution:]):
+                            used = preserve_error(sys.exc_info()[1], lambda: engine.policy.consume(
+                                'format_correction', 'execution:case'))
+                            if used is not None:
+                                execution_format_corrections = used
                     completed_response = False
                     if len(budget.calls) > calls_before_execution:
                         call = budget.calls[-1]
@@ -704,7 +1090,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     # the round: no S1 or fresh execution feedback exists yet.
                     # Never retry a missing/unknown HTTP response. Shared case
                     # tokens, calls, wall time and money still guard the request.
-                    execution_format_corrections = engine.policy.consume('format_correction', 'execution:case')
+                    correction_pending = True
                 execution_result = {**execution_result, 'generation_attempts': len(attempts),
                                     'format_corrections_used': execution_format_corrections}
             write_json(directory / 'execution.json', execution_result)
@@ -765,18 +1151,42 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                         with semantic_monitor.scope(semantic_context_for('PUBLIC_REVIEW_ROUND_' + str(round_id),
                                 evidence=review_delivery.records,
                                 mandatory_refs=review_delivery.receipt.get('mandatory_refs', ()),
+                                execution_mapping=review_observation['execution_mapping'],
                                 source_requirements=False)):
                             review = reviewer.review(method_input.requirement_text, review_plan, review_observation)
                     except SemanticDeliveryError:
                         raise
+                    except PublicReviewFormatError as exc:
+                        review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
+                                  'method': 'PUBLIC_REVIEW_INVALID',
+                                  'review_failure_code': exc.code,
+                                  'review_failure_attempt': exc.attempt,
+                                  'review_failure_issues': list(exc.issues),
+                                  'rationale': str(exc)}
                     except (ValueError, KeyError) as exc:
                         review = {'decision': 'UNKNOWN', 'checks': [], 'failure_kind': 'UNKNOWN',
-                                  'method': 'PUBLIC_REVIEW_INVALID', 'rationale': str(exc)}
+                                  'method': 'PUBLIC_REVIEW_INVALID',
+                                  'review_failure_code': 'REVIEW_FORMAT_INVALID',
+                                  'review_failure_issues': [str(exc)[:600]], 'rationale': str(exc)}
+                if review.get('review_failure_code'):
+                    # The reviewer already spent its configured correction
+                    # allowance.  Keep the public decision UNKNOWN, but make
+                    # the exhausted format correction explicit in the engine
+                    # ledger so it cannot be routed as an execution failure.
+                    failure_records.append(make_failure(
+                        'review', str(review['review_failure_code']),
+                        failure_class='model_format',
+                        dispatch_state='response_known',
+                        message=str(review.get('rationale') or review['review_failure_code']),
+                        snapshot_id=compute_snapshot(source).snapshot_id,
+                        details={'attempt': review.get('review_failure_attempt'),
+                                 'issues': list(review.get('review_failure_issues') or ())}))
                 from contractedge.execution.public_observer import enforce_public_profile
                 review = enforce_public_profile(review, current_observation,
                     required=requires_public_profile)
                 if hasattr(runner, 'enforce_requirement_profile'):
                     review = runner.enforce_requirement_profile(review, current_observation)
+                review_delivery = annotate_delivery_citations(review_delivery, review)
                 write_json(directory / 'public-review.json', review)
                 record_stage('review', snapshot_id=compute_snapshot(source).snapshot_id,
                     status=review['decision'], call_start=review_call_start,
@@ -827,6 +1237,12 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                 feedback=reassess_unchanged_operations(feedback,incumbent_observation,current_observation)
                 feedback=reassess_failed_target_predicates(feedback,incumbent_observation,current_observation,review_plan)
                 validate_feedback(feedback,case_id=case_id,input_digest=method_input.input_digest,to_snapshot=after)
+            # Raw observations remain in the recorded public result and feed
+            # deterministic checks. Carry the chosen stage material forward,
+            # plus complete support for final checks, rather than reselecting
+            # every raw log merely because a retry needs feedback.
+            feedback = select_feedback_observations(feedback,
+                delivery.records if rejection_kind else review_delivery.records)
             write_json(directory / 'feedback.json', feedback)
             record_stage('feedback', snapshot_id=after, status=feedback['route'],
                 inputs=(relative + '/public-review-plan.json', relative + '/execution.json'),
@@ -869,14 +1285,14 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                     'COMPLETE' if decision['decision'] == 'PROMOTE' else 'CANDIDATE_REJECTED',
                     journal.latest['candidate_decision'], snapshot_id=after))
                 if decision['decision']!='PROMOTE':
-                    # A registered production startup panic is actionable even
+                    # A source-bound compiler diagnostic or registered startup failure is actionable even
                     # when it prevented completing preservation checks. Keep
                     # their status UNKNOWN, restore the incumbent, and use only
                     # an already available edit round; generic probe/infra
                     # failures still stop without guessing a source repair.
-                    from contractedge.execution.public import has_candidate_runtime_failure
+                    from contractedge.execution.public import has_candidate_execution_failure
                     runtime_failed = (current_observation.get('snapshot_id')==decision['trial_snapshot']
-                        and has_candidate_runtime_failure(current_observation))
+                        and has_candidate_execution_failure(current_observation))
                     # Keep the trial artifacts above, but export only the coherent
                     # incumbent below. Failed trial evidence retains its own snapshot.
                     rejected_context={'snapshot_id':decision['trial_snapshot'],
@@ -899,7 +1315,7 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
                         last_execution_attempt={**(last_execution_attempt or {}),'source_snapshot':before,
                             'validation_error':('Candidate rejected: a protected current behavior regressed. '
                                 if decision['decision']=='REJECT_REGRESSION' else
-                                'Candidate rejected: production startup failed and protected behavior could not be verified. ')
+                                'Candidate rejected: public production compilation, startup or readiness failed and protected behavior could not be verified; source cause remains unproven. ')
                                 +'Revise the accepted intent on the restored source using historical trial evidence; preserve every current condition.',
                             'rejected_trial':rejected_context}
                     rounds.append(dict(round_id=round_id,from_snapshot=before,
@@ -920,39 +1336,74 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
             if (config.get('execution_format_retry_in_round', False) and rejection_kind == 'EXECUTION' and before == after):
                 status = 'INVALID_OUTPUT'
                 errors.append('Concrete generation could not produce an accepted edit within its existing correction allowance')
+                failure_records.append(make_failure('execution', 'INVALID_OUTPUT',
+                    failure_class='model_format', message=errors[-1]))
                 break
             if feedback_decision.action == 'STOP':
                 status = stop_status(feedback)
                 break
             status = 'ROUND_LIMIT'
+    except PublicReviewFormatError as exc:
+        primary_error = exc
+        status = 'INVALID_OUTPUT'
+        errors.append(str(exc))
+        failure_records.append(make_failure('review', exc.code,
+            failure_class='model_format', dispatch_state='response_known',
+            message=str(exc), details={'attempt': exc.attempt, 'issues': list(exc.issues)}))
+        preserve_error(exc, lambda: engine.step(StageResult('failure', 'FORMAT_INVALID',
+            journal.latest.get('review') or journal.latest.get('observe') or journal.latest.get('execute'),
+            snapshot_id=compute_snapshot(source).snapshot_id if source else initial_snapshot,
+            call_refs=journal.refs(max(0, len(budget.calls)-1))
+                if budget.calls and budget.calls[-1].get('error') else (),
+            failure_class='model_format', dispatch_state='response_known', error_code=exc.code)))
     except SemanticDeliveryError as exc:
         primary_error = exc
         status = 'EVIDENCE_DELIVERY_INCOMPLETE'
         errors.append(str(exc))
+        failure_records.append(make_failure('delivery', 'EVIDENCE_DELIVERY_INCOMPLETE',
+            failure_class='evidence', message=str(exc)))
     except BudgetExceeded as exc:
         primary_error = exc
         status = 'BUDGET_EXHAUSTED'
         errors.append(str(exc))
+        dispatch_state = budget.failure_dispatch_state(exc) or 'not_sent'
+        failure_records.append(make_failure('orchestration', 'BUDGET_EXHAUSTED',
+            failure_class='infrastructure', dispatch_state=dispatch_state, message=str(exc)))
         preserve_error(exc, lambda: engine.step(StageResult('failure', 'BUDGET_EXHAUSTED',
             journal.latest.get('execute') or journal.latest.get('front'),
             snapshot_id=compute_snapshot(source).snapshot_id if source else initial_snapshot,
-            call_refs=journal.refs(max(0, len(budget.calls)-1))
-                if budget.calls and budget.calls[-1].get('error') else ())))
+            call_refs=failure_call_refs(exc),
+            failure_class='infrastructure', dispatch_state=dispatch_state,
+            error_code='BUDGET_EXHAUSTED')))
     except Exception as exc:
         primary_error = exc
+        errors.append(type(exc).__name__ + ': ' + str(exc))
+        mapped_status, failure = classify_exception(exc, stage='orchestration',
+            dispatch_state=budget.failure_dispatch_state(exc))
+        failure_records.append(failure)
         if budget.remaining_seconds <= 0:
             status = 'BUDGET_EXHAUSTED'
-        elif status not in {'INFRA_ERROR', 'INVALID_OBSERVATION', 'BUDGET_EXCEEDED'}:
-            status = 'INFRASTRUCTURE_ERROR'
-        errors.append(type(exc).__name__ + ': ' + str(exc))
-        failure_status = ('PLAN_INVALID' if isinstance(exc, PlanRejected) else
-            'RESPONSE_UNKNOWN' if budget.calls and budget.calls[-1].get('error')
-                and 'response_content' not in budget.calls[-1] else 'ENVIRONMENT_ERROR')
+            failure_status = 'BUDGET_EXHAUSTED'
+        elif mapped_status == 'INVALID_PLAN':
+            status, failure_status = 'INVALID_OUTPUT', 'PLAN_INVALID'
+        elif mapped_status == 'INVALID_OUTPUT':
+            status, failure_status = 'INVALID_OUTPUT', 'FORMAT_INVALID'
+        elif mapped_status == 'RESPONSE_UNKNOWN':
+            status, failure_status = 'INFRASTRUCTURE_ERROR', 'RESPONSE_UNKNOWN'
+        elif mapped_status == 'INVALID_OBSERVATION':
+            status, failure_status = 'INVALID_OBSERVATION', 'INVALID_OBSERVATION'
+        elif mapped_status == 'INFRASTRUCTURE_ERROR':
+            status, failure_status = 'INFRASTRUCTURE_ERROR', 'ENVIRONMENT_ERROR'
+        else:
+            # A truly unclassified exception remains an infrastructure stop,
+            # while its internal failure record retains INTERRUPTED.
+            status, failure_status = 'INFRASTRUCTURE_ERROR', 'ENVIRONMENT_ERROR'
         preserve_error(exc, lambda: engine.step(StageResult('failure', failure_status,
             journal.latest.get('execute') or journal.latest.get('front'),
             snapshot_id=compute_snapshot(source).snapshot_id if source else initial_snapshot,
-            call_refs=journal.refs(max(0, len(budget.calls)-1))
-                if budget.calls and budget.calls[-1].get('error') else ())))
+            call_refs=failure_call_refs(exc),
+            failure_class=failure.get('failure_class'),
+            dispatch_state=failure.get('dispatch_state'), error_code=failure.get('code'))))
     if active_checkpoint is not None and source is not None:
         # Transport errors, budget exits and failed observations must not bypass
         # promotion. The previous candidate is selected until a trial completes.
@@ -978,20 +1429,35 @@ def _repair_case_impl(public_root: str | Path, tools_root: str | Path, case_id: 
         except Exception as exc:
             status = 'INFRASTRUCTURE_ERROR'
             errors.append('Final patch export: ' + str(exc))
+    try:
+        execution_facts = recorded_execution_facts(journal.recorder, require_isolated=requires_public_profile)
+    except Exception as exc:
+        # An unreadable journal cannot prove either completion or NOT_RUN.
+        # Retain the original failure and expose this as a separate fact.
+        execution_facts = None
+        failure_records.append(make_failure('selection', 'EXECUTION_EVIDENCE_INVALID',
+            failure_class='infrastructure', secondary=bool(failure_records), message=str(exc)))
+        errors.append('Execution evidence projection: ' + str(exc))
+        if primary_error is None:
+            status = 'INFRASTRUCTURE_ERROR'
     report = {'schema_version': 'ce.repair_trace.v1', 'case_id': case_id,
               'release_id': method_input.release_id, 'run_id': run_id,
               'input_digest': method_input.input_digest, 'requirement_digest': canonical_text_digest(method_input.requirement_text),
               'initial_snapshot_id': initial_snapshot,
               'final_snapshot_id': compute_snapshot(source).snapshot_id if source else None,
               'status': status, 'candidate': final_patch, 'rounds': rounds,
+              'repair_execution_facts': execution_facts,
               'candidate_selection': {'rejected_trials':len(rejected_trials),'decisions':rejected_trials},
               'last_feedback': feedback, 'budget': budget.summary(), 'errors': errors,
               'exportable': final_patch is not None,
               'public_semantic_status': (feedback or {}).get('semantic_outcome', 'UNKNOWN'),
               'preservation_comparison': selected_comparison,
               'execution_format_corrections_used': execution_format_corrections,
+              'failure_records': failure_records,
+              'primary_failure': next((f for f in failure_records if not f.get('secondary')), None),
               'hidden_evaluation': 'NOT_RUN; final patch must be scored in an independent evaluator process',
               'scope': 'Public repair execution. A public review is an uncertain method signal, not a benchmark PASS.'}
+    report.update(project_statuses(report))
     if initial_trace:
         report['resumed_front_trace_digest'] = canonical_digest(initial_trace)
     if 'method_mode' in config:

@@ -1,8 +1,10 @@
 import json
+import pytest
 import tempfile
 from pathlib import Path
 
 from contractedge.execution.topomen import build_execution_request
+from contractedge.model.budget import BudgetExceeded
 from contractedge.source.snapshot import compute_snapshot
 from tests.test_repair_execution import bound_plan
 
@@ -65,7 +67,7 @@ def test_python_local_import_helper_precondition_is_readonly_context():
         assert 'read-only' in records[0]['origin']
 
 
-def test_budget_keeps_helper_referenced_by_rejected_trial_conflict(tmp_path):
+def test_budget_does_not_drop_selected_helpers_or_history_to_keep_a_conflict(tmp_path):
     root=tmp_path;(root/'templates').mkdir();(root/'templates/serviceaccount.yaml').write_text('name: default\n')
     (root/'go.mod').write_text('module example.org/demo\n');(root/'runtime').mkdir()
     (root/'main.go').write_text('package main\nimport r "example.org/demo/runtime"\nfunc main(){ r.Other(items); r.Merge(items) }\n')
@@ -80,10 +82,13 @@ def test_budget_keeps_helper_referenced_by_rejected_trial_conflict(tmp_path):
     merge=next(r['id'] for r in support if 'func Merge(' in r['excerpt'])
     previous=dict(source_snapshot=snap.snapshot_id,rejected_trial=dict(public_check_results=[dict(rationale='x'*15000)],
         feedback=dict(full_feedback_digest='a'*64,helper_preconditions=dict(checks=[dict(status='CONFLICT',helper_evidence_ref=merge)]))))
-    request=build_execution_request(plan,root,{'allowed_paths':['main.go']},len,{**cfg,'max_context_tokens':10000},
+    with pytest.raises(BudgetExceeded, match='context budget'):
+        build_execution_request(plan,root,{'allowed_paths':['main.go']},len,{**cfg,'max_context_tokens':10000},
+            requirement='Fix failed merge',previous_attempt=previous)
+    request=build_execution_request(plan,root,{'allowed_paths':['main.go']},len,cfg,
         requirement='Fix failed merge',previous_attempt=previous)
     body=json.loads(request.messages[1]['content'])
     assert merge in {r['id'] for r in body['read_only_source_support']}
-    assert all('func Other(' not in r['excerpt'] for r in body['read_only_source_support'])
-    assert 'public_check_results' not in body['previous_execution_attempt']['rejected_trial']
+    assert any('func Other(' in r['excerpt'] for r in body['read_only_source_support'])
+    assert body['previous_execution_attempt']['rejected_trial']['public_check_results']==previous['rejected_trial']['public_check_results']
     assert previous['rejected_trial']['public_check_results'][0]['rationale']=='x'*15000

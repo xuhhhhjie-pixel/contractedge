@@ -1,5 +1,6 @@
 """Pure counterexamples plus real production entry checks for C1 extraction."""
 from dataclasses import asdict, replace
+from functools import wraps
 import json
 from pathlib import Path
 from unittest.mock import patch
@@ -157,6 +158,7 @@ def test_real_entry_edit_rejection_preserves_diagnosis_without_new_diagnosis_cal
     from contractedge.execution.topomen import PlanRejected
     original = TopoMenAgentExecutor.execute
     attempts = []
+    @wraps(original)
     def reject_once(self, *args, **kwargs):
         attempts.append(1)
         if len(attempts) == 1:

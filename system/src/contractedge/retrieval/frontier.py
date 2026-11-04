@@ -1,6 +1,6 @@
 """Small, explicitly lexical branch inventory from source already in context."""
 from collections import defaultdict
-from contractedge.retrieval.candidates import literal_identifiers
+from contractedge.retrieval.candidates import literal_identifier_hits, literal_identifiers
 
 _COMMON_CALLS = {'len','append','make','new','delete','copy','Errorf','Error','String','Printf','Sprintf','panic','recover'}
 
@@ -9,7 +9,7 @@ def production_frontier(candidates, requirement):
     identifiers = literal_identifiers(requirement)
     eligible = [u for u in candidates if u.get('kind') == 'FUNCTION_OR_TYPE'
                 and not any(x in u.get('path','').lower() for x in ('_test.', '/test/', '/tests/'))
-                and any(t in u.get('text','').casefold() for t in identifiers)]
+                and literal_identifier_hits(u.get('text',''), identifiers)]
     peers = defaultdict(set)
     for i,a in enumerate(eligible):
         for b in eligible[i+1:]:

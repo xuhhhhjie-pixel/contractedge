@@ -2,6 +2,7 @@ import hashlib
 import json
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 from contractedge.contracts.validation import canonical_digest
@@ -24,6 +25,67 @@ def test_production_consumer_correction_explains_observation_vs_implementation()
     assert 'U2' in feedback and 'OBS1' in feedback
     assert 'SOURCE_SPAN' in feedback and 'OBSERVED_STATE' in feedback
     assert 'do not' in feedback.lower()
+
+
+def test_missing_obligation_relation_correction_preserves_atom_inventory():
+    feedback = _format_validation_feedback(
+        ValueError('OBLIGATION_RELATION_MISSING at expected_relations: atomic obligation A7 is not represented by an ExpectedRelation'),
+        {
+            'obligation_atoms': [
+                {'id': 'A1', 'outcome_id': 'O1'},
+                {'id': 'A7', 'outcome_id': 'O1'},
+            ],
+            'expected_relations': [
+                {'id': 'R1', 'obligation_refs': ['A1']},
+            ],
+        },
+    )
+    assert 'A7' in feedback
+    assert 'Do not delete, renumber' in feedback
+    assert 'all prior atoms preserved' in feedback
+
+
+def test_observed_only_causal_correction_names_only_invalid_violations():
+    feedback = _format_validation_feedback(
+        ValueError('CAUSAL_CLAIM_UNSUPPORTED at violations: an observed outcome alone cannot support a causal violation'),
+        {
+            'violations': [
+                {'id': 'V1', 'causal_status': 'SUPPORTED', 'support_basis': 'OBSERVED_AND_STATIC'},
+                {'id': 'V3', 'causal_status': 'SUPPORTED', 'support_basis': 'OBSERVED_ONLY'},
+            ],
+        },
+    )
+    assert 'V3' in feedback
+    assert 'V1' in feedback
+    assert 'causal_status=TENTATIVE' in feedback
+    assert 'Remove only those downgraded IDs' in feedback
+
+
+def test_missing_relation_feedback_also_surfaces_observed_only_cause():
+    feedback = _format_validation_feedback(
+        ValueError('OBLIGATION_RELATION_MISSING at expected_relations: atomic obligation A1 is not represented'),
+        {
+            'obligation_atoms': [{'id': 'A1', 'outcome_id': 'O1'}],
+            'expected_relations': [],
+            'violations': [{'id': 'V1', 'causal_status': 'SUPPORTED', 'support_basis': 'OBSERVED_ONLY'}],
+        },
+    )
+    assert 'A1' in feedback
+    assert 'V1' in feedback
+    assert 'causal_status=TENTATIVE' in feedback
+
+
+def test_clause_disposition_feedback_does_not_request_fake_relation():
+    feedback = _format_validation_feedback(
+        ValueError('CLAUSE_DISPOSITION_MISMATCH at clause_treatments'),
+        {
+            'clause_treatments': [{'source_ref': 'requirement_text:1:4',
+                                   'disposition': 'BACKGROUND', 'obligation_refs': ['A2']}],
+        },
+    )
+    assert 'A2' in feedback
+    assert 'empty obligation_refs' in feedback
+    assert 'inventing a production edge' in feedback
 
 
 class PipelineFixtureProvider:
@@ -238,11 +300,21 @@ class NeighborExtensionProvider(PipelineFixtureProvider):
         super().__init__()
         self.diagnosis_count = 0
         self.selected_paths = []
+        self.source_catalogs = []
 
     def complete_json(self, request):
         if request.prompt_version == "diagnosis.v1.1.24":
             public = json.loads(request.messages[1]["content"])
             self.selected_paths.append([item["path"] for item in public["candidate_set"]["selected_candidates"]])
+            self.source_catalogs.append([item for item in public['evidence_catalog'] if item['kind']=='SOURCE_SPAN'])
+            if self.diagnosis_count:
+                # This scripted provider chooses the callee it requested.
+                # The actual request still contains the unchanged caller;
+                # retention order no longer substitutes for model choice.
+                ordered=sorted(public['evidence_catalog'],
+                    key=lambda row:'buildService' not in row.get('excerpt',''))
+                request=replace(request,messages=(request.messages[0],
+                    {**request.messages[1],'content':json.dumps({**public,'evidence_catalog':ordered})}))
         response = super().complete_json(request)
         if request.prompt_version == "diagnosis.v1.1.24":
             self.diagnosis_count += 1
@@ -691,7 +763,11 @@ class OrchestrationTests(unittest.TestCase):
 
         self.assertEqual(trace.status, "READY", f"{trace.errors}; selected={[u['path'] for u in trace.candidate_set.candidates]}; plan={trace.changeset}")
         self.assertEqual(provider.selected_paths[0], ["src/controller.go"])
-        self.assertEqual(provider.selected_paths[1], ["src/service.go"])
+        self.assertEqual(provider.selected_paths[1], ["src/controller.go", "src/service.go"])
+        self.assertIn(provider.source_catalogs[0][0],provider.source_catalogs[1])
+        self.assertTrue(any(row['excerpt']=='func ensureService() { buildService() }\n'
+                            for row in provider.source_catalogs[1]))
+        self.assertEqual(trace.changeset['changes'][0]['target']['path'],'src/service.go')
 
     def test_changeset_format_failure_gets_one_revision_attempt(self):
         with tempfile.TemporaryDirectory() as tmp:
