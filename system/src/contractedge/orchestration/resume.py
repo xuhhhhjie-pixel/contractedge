@@ -12,11 +12,14 @@ import time
 
 from contractedge.contracts.execution_capabilities import resolve_execution_capabilities
 from contractedge.contracts.validation import canonical_digest, parse_method_input
+from contractedge.contracts.status import project_statuses
 from contractedge.dataset.benchmark import method_input_from_task, public_task, editable_policy, execution_contract
 from contractedge.orchestration.candidate_guard import restore_candidate
 from contractedge.orchestration.recorder import RunRecorder
-from contractedge.orchestration.trial import TrialSession, atomic_json, ledger_facts, recovery_identity, sha
+from contractedge.orchestration.trial import (atomic_json, ledger_facts, recovery_identity, sha,
+    load_trials, recorded_execution_facts)
 from contractedge.source.snapshot import compute_snapshot
+from contractedge.model.budget import recorded_dispatch_state, recorded_token_charge
 
 
 def _validate_workspace(trial, source):
@@ -54,11 +57,36 @@ def _policy_state(recorder, config):
     return [merged[key] for key in sorted(merged)]
 
 
+def _completed_attempt(recorder):
+    """Retain the original terminal attempt through its existing frozen receipt.
+
+    Recovery must not turn a completed failed attempt into a fresh method
+    success merely because its earlier incumbent remains exportable.
+    """
+    paths = sorted(recorder._path('journal/stages/selection/final').glob('revision-*.json'))
+    receipts = [recorder._load_stage(path.relative_to(recorder.root).as_posix(),
+        stage='selection', attempt_id='final', revision=index) for index, path in enumerate(paths)]
+    if not receipts:
+        return None
+    references = [ref for ref in receipts[-1].output_refs
+                  if ref.relative_path.endswith('/repair.trace.json')]
+    if len(references) != 1:
+        raise ValueError('Completed attempt lacks its unique frozen repair trace')
+    reference = recorder.verify_artifact(references[0])
+    report = recorder._read(reference.relative_path)
+    if (report.get('run_id') != recorder.run_id or report.get('input_digest') != recorder.input_digest
+            or report.get('final_snapshot_id') != reference.snapshot_id
+            or report.get('status') != receipts[-1].status):
+        raise ValueError('Completed attempt trace identity differs')
+    return report
+
+
 def _finish_selection(recorder, saved, config, policies, result):
     """Commit the real recovered effect through the same engine, once."""
     from contractedge.orchestration.state import RepairEngine
     from contractedge.contracts.stages import StageResult
-    report=result['report'];snapshot=report['final_snapshot_id']
+    report={**result['report'], **project_statuses(result['report'])}
+    snapshot=report['final_snapshot_id']
     reference=recorder.capture_artifact('journal/recovery.result.json','RECOVERED_SELECTION',snapshot_id=snapshot)
     engine=RepairEngine.restore_committed(recorder,saved['initial_snapshot'],config,policy_usage=policies)
     if engine.state.selected!=reference:
@@ -104,8 +132,7 @@ def resume_repair_case(public_root, tools_root, case_id, output, config, *, publ
         raise ValueError('Saved public input changed')
     ledger=ledger_facts(recorder)
     policies=_policy_state(recorder,config)
-    trials=[TrialSession(recorder,path.name) for path in sorted(recorder._path('journal/trials').glob('round-*'),
-        key=lambda path:int(path.name[6:])) if path.is_dir()]
+    trials=load_trials(recorder)
     trial=trials[-1] if trials else None
     selected_feedback=None; selection='INCUMBENT'; semantic='UNKNOWN'; errors=[]
     transition_lock=recorder._path('journal/transitions/writer.lock').exists()
@@ -129,7 +156,7 @@ def resume_repair_case(public_root, tools_root, case_id, output, config, *, publ
         if (completed['ledger_digest']!=ledger['digest'] or completed['report']['final_snapshot_id']!=compute_snapshot(source).snapshot_id
                 or completed['report']['candidate'] and sha(out/'candidate.patch')!=completed['report']['candidate']['patch_sha256']):
             raise ValueError('Recovered selected source/patch/ledger changed')
-        return completed['report']
+        return {**completed['report'], **project_statuses(completed['report'])}
     pending_result=recorder._path('journal/recovery.result.json')
     if pending_result.exists():
         result=recorder._read('journal/recovery.result.json')
@@ -163,7 +190,8 @@ def resume_repair_case(public_root, tools_root, case_id, output, config, *, publ
         if consume_received_response and available and not ledger['unknown_dispatch']:
             response_event=available[-1]
             request=response_event['request']; response=response_event['response']
-            if not any(call.get('request')==request and call.get('response_content')==response['content']
+            if not any(recorded_dispatch_state(call)=='response_known'
+                       and call.get('request')==request and call.get('response_content')==response['content']
                        and call.get('response_metadata',{})==response['metadata'] for call in ledger['calls']):
                 raise ValueError('Durable response differs from original dispatch settlement')
             if not callable(getattr(consumer,'consume_received_response',None)):
@@ -206,13 +234,14 @@ def resume_repair_case(public_root, tools_root, case_id, output, config, *, publ
     calls=ledger['calls']
     report={'schema_version':'ce.repair_trace.v1','case_id':case_id,'release_id':method_input.release_id,
         'run_id':recorder.run_id,'input_digest':method_input.input_digest,'initial_snapshot_id':saved['initial_snapshot'],
-        'final_snapshot_id':snapshot,'status':'RESPONSE_UNKNOWN' if ledger['unknown_dispatch'] else 'RECOVERED_'+selection,
+        'final_snapshot_id':snapshot,'status':'RESPONSE_UNKNOWN' if ledger['unknown_dispatch'] else
+            'INFRASTRUCTURE_ERROR' if patch is None else 'RECOVERED_'+selection,
         'candidate':patch,'last_feedback':selected_feedback,'rounds':[], 'errors':errors,
         'candidate_selection':{'selection':selection,'trial_id':trial.trial_id if trial else None},
         'public_semantic_status':semantic,'exportable':patch is not None,
         'preservation_comparison':selection_intent['preservation_comparison'] if selection=='TRIAL' else None,
         'budget':{'max_tokens':int(config.get('max_total_tokens',160000)),
-            'reserved_tokens':sum(call.get('prompt_tokens_reserved',0)+call.get('output_tokens_reserved',0) for call in calls),
+            'reserved_tokens':sum(recorded_token_charge(call) for call in calls),
             'max_calls':int(config.get('max_model_calls',24)),'model_calls':len(calls),'resumed_model_calls':len(calls),
             'max_seconds':float(config.get('max_elapsed_seconds',2400)),'elapsed_seconds':max(0,time.time()-saved['started_unix'])},
         'policy_usage':policies,'recovery':{'terminal':True,'dispatches':0,'budget_reinitialized':False,
@@ -220,6 +249,19 @@ def resume_repair_case(public_root, tools_root, case_id, output, config, *, publ
             'transition_writer_lock_left_in_place':transition_lock,
             'scope':'Finish verified selection or restore incumbent. New trials require an explicit continuation protocol preserving this ledger, policy usage and original deadline.'},
         'hidden_evaluation':'NOT_RUN; recovery is not semantic PASS'}
+    report['repair_execution_facts']=recorded_execution_facts(recorder, trials=trials,
+        require_isolated=config.get('public_runtime')=='isolated'
+            or getattr(runner,'requires_public_profile',False) is True)
+    prior = _completed_attempt(recorder)
+    if prior is not None:
+        if prior['final_snapshot_id'] != snapshot:
+            raise ValueError('Recovered candidate differs from the completed attempt')
+        report['failure_records'] = prior.get('failure_records', [])
+        report['primary_failure'] = prior.get('primary_failure')
+        report['errors'] = [*prior.get('errors', []), *errors]
+        if not ledger['unknown_dispatch'] and patch is not None:
+            report['status'] = prior['status']
+    report.update(project_statuses(report))
     result={'ledger_digest':ledger['digest'],'report':report}
     atomic_json(pending_result,result,immutable=True)
     return _finish_selection(recorder,saved,config,policies,result)

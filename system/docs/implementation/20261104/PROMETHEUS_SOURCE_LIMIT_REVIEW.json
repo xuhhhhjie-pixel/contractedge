@@ -1,0 +1,174 @@
+{
+  "status": "CONFIRMED_COMPLETE_DECLARATION_EXCEEDS_FROZEN_EXTENSION_BYTE_LIMITS",
+  "case_id": "RW-PROMETHEUS-19838",
+  "variant": "new_current",
+  "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+  "snapshot_id": "f6d770793d534c02701a6e0543a6d0735e19ebde4e598f6e957c978a5a2204e4",
+  "method_status": "EVIDENCE_DELIVERY_INCOMPLETE",
+  "model_calls": 1,
+  "second_request_sent": false,
+  "missing_unit": {
+    "id": "CU-a6f4f1a2fdc7daf4",
+    "path": "cmd/prometheus/main.go",
+    "symbol": "main",
+    "locator": {
+      "start_line": 376,
+      "end_line": 1657,
+      "column_start": 1,
+      "start_char": 16155,
+      "end_char": 68834,
+      "truncated": false,
+      "original_end_line": 1657
+    },
+    "content_digest": "8b34749db0b52c50a2de01a91799c373fb49e97d2abbe7b4f2da4cdaff65f028",
+    "expanded_from_unit_id": "CU-428aae647f41793e"
+  },
+  "complete_body_bytes": 52679,
+  "extension_limits": {
+    "batch_records": 12,
+    "batch_bytes": 24000,
+    "total_records": 24,
+    "total_bytes": 48000
+  },
+  "original_delivery_failure": {
+    "status": "INCOMPLETE",
+    "records": [
+      {
+        "unit_id": "CU-eb448f2b6f22b43e",
+        "roles": [
+          "G1:anchor"
+        ],
+        "found": true,
+        "selected": true,
+        "delivered": true,
+        "cited": null,
+        "drop_reason": null,
+        "status": "DELIVERED"
+      },
+      {
+        "unit_id": "CU-c58c9df5aab086a1",
+        "roles": [
+          "G3:anchor"
+        ],
+        "found": true,
+        "selected": true,
+        "delivered": true,
+        "cited": null,
+        "drop_reason": null,
+        "status": "DELIVERED"
+      },
+      {
+        "unit_id": "CU-5496d69d74f39fcf",
+        "roles": [
+          "RECEIVER_DECLARATION:CU-5496d69d74f39fcf"
+        ],
+        "found": true,
+        "selected": true,
+        "delivered": true,
+        "cited": null,
+        "drop_reason": null,
+        "status": "DELIVERED"
+      },
+      {
+        "unit_id": "CU-b4037fae4e9500c8",
+        "roles": [
+          "RECEIVER_DECLARATION:CU-b4037fae4e9500c8"
+        ],
+        "found": true,
+        "selected": true,
+        "delivered": true,
+        "cited": null,
+        "drop_reason": null,
+        "status": "DELIVERED"
+      },
+      {
+        "unit_id": "CU-26a488332d729d6e",
+        "roles": [
+          "RECEIVER_DECLARATION:CU-26a488332d729d6e"
+        ],
+        "found": true,
+        "selected": true,
+        "delivered": true,
+        "cited": null,
+        "drop_reason": null,
+        "status": "DELIVERED"
+      },
+      {
+        "unit_id": "CU-a1985dff226cc8ca",
+        "roles": [
+          "RECEIVER_DECLARATION:CU-a1985dff226cc8ca"
+        ],
+        "found": true,
+        "selected": true,
+        "delivered": true,
+        "cited": null,
+        "drop_reason": null,
+        "status": "DELIVERED"
+      },
+      {
+        "unit_id": "CU-73a2cd492a82ccae",
+        "roles": [],
+        "found": true,
+        "selected": true,
+        "delivered": true,
+        "cited": null,
+        "drop_reason": null,
+        "status": "DELIVERED"
+      },
+      {
+        "unit_id": "CU-5582e6fb24af5de3",
+        "roles": [
+          "G3:context"
+        ],
+        "found": true,
+        "selected": true,
+        "delivered": true,
+        "cited": null,
+        "drop_reason": null,
+        "status": "DELIVERED"
+      },
+      {
+        "unit_id": "CU-fc5ba2a6b84a1c4a",
+        "roles": [
+          "G3:context"
+        ],
+        "found": true,
+        "selected": true,
+        "delivered": true,
+        "cited": null,
+        "drop_reason": null,
+        "status": "DELIVERED"
+      },
+      {
+        "unit_id": "CU-a6f4f1a2fdc7daf4",
+        "roles": [],
+        "found": true,
+        "selected": false,
+        "delivered": false,
+        "cited": null,
+        "drop_reason": "CUMULATIVE_SOURCE_ADMISSION",
+        "status": "CUMULATIVE_SOURCE_ADMISSION"
+      }
+    ],
+    "missing_required_ids": [
+      "CU-a6f4f1a2fdc7daf4"
+    ],
+    "failure_codes": [
+      "CUMULATIVE_SOURCE_ADMISSION"
+    ],
+    "model_citation_status": "NOT_AVAILABLE",
+    "interpretation": "Found, selection and exact request delivery are recorded separately; delivery does not prove causal relevance"
+  },
+  "trace_sha256": "9218a483b69e6dd0de458b7397e907abee9953abb1d413aecd0922748920d701",
+  "model_calls_sha256": "8c35de8cafb9991c699c9b5e2d1c68c8652c0c387c4c424b16ddb4b239a0e02e",
+  "api_calls_for_review": 0,
+  "source_unchanged": true,
+  "interpretation": [
+    "The original run completed one Diagnosis request; the next source draft failed admission before any second request.",
+    "The full1282-line main declaration is52679UTF8bytes, greater than both the24000batch and48000total extension byte limits.",
+    "The four-parameter large-capacity treatment did not change source_extension_limits, so larger model/request/support windows alone cannot remove this gate.",
+    "The original generic CUMULATIVE_SOURCE_ADMISSION records lacked attempted bytes and effective batch remainder; this review reconstructs the declaration and limits without replaying the whole model method.",
+    "DELIVERED values inside the failed source draft are preparation-view flags, not proof that the unsent second request reached the provider.",
+    "Raising these limits has not been validated; request, execution-support and financial admission must still hold, and complete adopted bodies must remain intact."
+  ]
+}

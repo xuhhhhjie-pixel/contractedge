@@ -4,6 +4,7 @@ from types import SimpleNamespace
 import pytest
 
 from contractedge.execution.topomen import build_execution_request,PlanRejected
+from contractedge.model.budget import BudgetExceeded
 from contractedge.orchestration.runner import required_planning_source_support
 from contractedge.retrieval.candidates import build_candidate_set
 from contractedge.source.snapshot import compute_snapshot
@@ -36,6 +37,6 @@ def test_non_lifecycle_gap_source_survives_planning_and_execution(tmp_path):
 
 def test_non_lifecycle_required_source_cannot_silently_drop_at_support_budget(tmp_path):
     plan,_=setup(tmp_path)
-    with pytest.raises(PlanRejected,match='source was not delivered'):
+    with pytest.raises(BudgetExceeded,match='read-only support budget'):
         build_execution_request(plan,tmp_path,{'allowed_paths':['templates/**']},len,
             dict(model='fixture',max_context_tokens=50000,max_execution_support_bytes=1),requirement='Repair')

@@ -14,7 +14,7 @@ def test_shared_public_execution_error_and_helper_conflict_survive_compact_feedb
     assert len(tasks['shared_execution_errors'])==1
     assert tasks['shared_execution_errors'][0]['affected_checks']==['inventory','binding','transform']
     assert tasks['helper_precondition_conflicts'][0]['call']=='Merge'
-    assert 'public_observations' not in view
+    assert view['public_observations'] == rows
     assert len(feedback['public_observations'])==3
 
 
@@ -24,7 +24,7 @@ def test_stale_success_or_unregistered_raw_error_never_becomes_execution_task():
     assert 'failure_tasks' not in feedback_prompt_view(dict(to_snapshot='S1',public_observations=[row]))
 
 
-def test_rejected_trial_projection_preserves_failures_helpers_and_unseen_obligation_without_duplicating_ledger():
+def test_rejected_trial_keeps_full_history_without_unproven_text_aliases():
     from copy import deepcopy
     from contractedge.orchestration.feedback import historical_trial_prompt_view
     value=dict(to_snapshot='TRIAL',full_feedback_digest='a'*64,obligation_lineage={'definitions':'x'*60000},
@@ -32,12 +32,12 @@ def test_rejected_trial_projection_preserves_failures_helpers_and_unseen_obligat
         public_check_results=[dict(id='P1',status='FAIL',evidence=[dict(observation_id='O1',quote='x'*4000)])],
         helper_preconditions=dict(checks=[dict(status='CONFLICT',call='Merge')]),failure_tasks=dict(shared_execution_errors=['duplicate']))
     before=deepcopy(value);view=historical_trial_prompt_view(value,canonical_text='Known requirement')
-    assert value==before and 'obligation_lineage' not in view
+    assert value==before and view['obligation_lineage']==value['obligation_lineage']
     assert view['public_check_results'][0]['status']=='FAIL'
     assert view['helper_preconditions']==value['helper_preconditions']
-    assert view['pending_obligation_refs'][1]['statement']=='Extra historical branch'
+    assert view['pending_obligations']==value['pending_obligations']
     assert view['full_feedback_digest']=='a'*64 and view['to_snapshot']=='TRIAL'
-    assert len(json.dumps(view))<4000
+    assert view['public_check_results']==value['public_check_results']
 
 
 def predicate_record(status='FAIL', snapshot='TRIAL'):

@@ -13,14 +13,18 @@ from contractedge.source.snapshot import compute_snapshot
 
 def _record(snapshot_id: str, query_kind: str, query: str, inspected: int,
             matched_paths: list[str], *, complete: bool, inspected_bytes: int = 0,
-            max_bytes: int | None = None, failure: str | None = None) -> dict[str, Any]:
+            max_bytes: int | None = None, failure: str | None = None,
+            match_count: int | None = None) -> dict[str, Any]:
+    # Rebuilding an existing record receives only its bounded path preview;
+    # preserve the original full count independently of that display limit.
+    count = len(matched_paths) if match_count is None else match_count
     locator: dict[str, Any] = {
         "query_kind": query_kind,
         "query": query,
         "scope": "snapshot_file_inventory",
         "inspected_file_count": inspected,
         "inspected_byte_count": inspected_bytes,
-        "match_count": len(matched_paths),
+        "match_count": count,
         "matched_paths": matched_paths[:50],
         "complete": complete,
         "truncated": not complete,
@@ -29,7 +33,7 @@ def _record(snapshot_id: str, query_kind: str, query: str, inspected: int,
         locator["incomplete_reason"] = failure
     if max_bytes is not None:
         locator["max_bytes"] = max_bytes
-    excerpt = (f"Complete {query_kind.lower()} search found {len(matched_paths)} matching path(s)."
+    excerpt = (f"Complete {query_kind.lower()} search found {count} matching path(s)."
                if complete else f"Bounded {query_kind.lower()} search was incomplete: {failure or 'file limit reached'}.")
     digest = static_search_content_digest(snapshot_id, locator, excerpt)
     evidence_id = "SEARCH-" + digest[:16]
@@ -49,6 +53,7 @@ def collect_absence_search_evidence(snapshot: Snapshot, evidence_gaps: Sequence[
     """
     root_paths = sorted(snapshot.file_digests)
     queries: list[tuple[str, str]] = []
+    skipped_directories: dict[str, dict[str, Any]] = {}
     for gap in evidence_gaps:
         hint = gap.get("locator_hint")
         if not isinstance(hint, Mapping):
@@ -59,7 +64,17 @@ def collect_absence_search_evidence(snapshot: Snapshot, evidence_gaps: Sequence[
             if not candidate.is_absolute() and ".." not in candidate.parts and "*" not in path:
                 normalized = candidate.as_posix()
                 if normalized not in {"", "."}:
-                    queries.append(("EXACT_PATH", normalized))
+                    children = [name for name in root_paths if name.startswith(normalized + "/")]
+                    if normalized not in snapshot.file_digests and children:
+                        # Retrieval accepts known directory hints. Their lack
+                        # of an exact *file* entry must not become negative
+                        # evidence about the directory or its implementation.
+                        skipped_directories[normalized] = dict(query=normalized,
+                            reason="KNOWN_DIRECTORY_HINT_NOT_EXACT_FILE_QUERY",
+                            matched_file_count=len(children), matched_paths_preview=children[:50],
+                            scope="snapshot_file_inventory_only; no implementation absence claim")
+                    else:
+                        queries.append(("EXACT_PATH", normalized))
         symbol = hint.get("symbol")
         if isinstance(symbol, str) and re.fullmatch(r"[A-Za-z_$][A-Za-z0-9_$]*", symbol.strip()):
             queries.append(("EXACT_SYMBOL", symbol.strip()))
@@ -76,7 +91,10 @@ def collect_absence_search_evidence(snapshot: Snapshot, evidence_gaps: Sequence[
             audits.append(dict(record["locator"]))
             continue
         if len(root_paths) > max_files:
-            record = _record(snapshot.snapshot_id, query_kind, query, max_files, [], complete=False,
+            # This guard skips the matching loop; its limit is not a count of
+            # inspected contents. The final integrity snapshot is separate IO.
+            record = _record(snapshot.snapshot_id, query_kind, query, 0, [], complete=False,
+                             max_bytes=max_bytes,
                              failure=f"snapshot contains {len(root_paths)} files; limit is {max_files}")
             records.append(record)
             audits.append(dict(record["locator"]))
@@ -89,19 +107,20 @@ def collect_absence_search_evidence(snapshot: Snapshot, evidence_gaps: Sequence[
         inspected = 0
         inspected_bytes = 0
         for relative in root_paths:
-            inspected += 1
             try:
                 path = root_path(snapshot, relative)
                 size = path.stat().st_size
                 if inspected_bytes + size > max_bytes:
                     failure = f"byte limit {max_bytes} would be exceeded at {relative}"
-                    inspected -= 1
                     break
                 content = path.read_bytes()
             except OSError as exc:
                 failure = f"cannot read {relative}: {type(exc).__name__}"
                 break
-            inspected_bytes += size
+            # Count completed content reads, including a read whose digest has
+            # changed. Failed attempts and byte-limit prechecks inspect none.
+            inspected += 1
+            inspected_bytes += len(content)
             if hashlib.sha256(content).hexdigest() != snapshot.file_digests[relative]:
                 failure = f"snapshot content changed while searching {relative}"
                 break
@@ -123,11 +142,15 @@ def collect_absence_search_evidence(snapshot: Snapshot, evidence_gaps: Sequence[
             locator["incomplete_reason"] = "source snapshot changed during absence search"
             replacement = _record(snapshot.snapshot_id, locator["query_kind"], locator["query"],
                                   locator["inspected_file_count"], locator["matched_paths"],
-                                  complete=False, failure="source snapshot changed during absence search")
+                                  complete=False, inspected_bytes=locator["inspected_byte_count"],
+                                  max_bytes=locator.get("max_bytes"),
+                                  match_count=locator["match_count"],
+                                  failure="source snapshot changed during absence search")
             refreshed.append(replacement)
             audits.append(dict(replacement["locator"]))
         records, audits = refreshed, audits
-    return tuple(records), {"query_count": len(queries), "records": audits}
+    return tuple(records), {"query_count": len(queries), "records": audits,
+                            "skipped_directory_hints": list(skipped_directories.values())}
 
 
 def root_path(snapshot: Snapshot, relative: str):

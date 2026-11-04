@@ -4,13 +4,39 @@ This command may see the evaluator registry; its results must never enter a
 repair model's prompts or same-case candidate selection/retry decisions.
 """
 from collections import Counter
+from hashlib import sha256
 import json
 from pathlib import Path
 import sys
 
 from contractedge.dataset.benchmark import file_sha
+from contractedge.contracts.status import project_statuses, scoring_exclusion
 from contractedge.execution.public import run_tool
 from contractedge.orchestration.repair import write_json
+
+
+def _frozen_trace(batch, method):
+    """Read the same frozen trace that owns the selected candidate and status."""
+    trace=(batch/method['trace']).resolve(strict=True)
+    trace.relative_to(batch)
+    trace_bytes=trace.read_bytes()
+    if sha256(trace_bytes).hexdigest()!=method['trace_sha256']:
+        raise ValueError('Final candidate or repair trace changed before independent scoring')
+    value=json.loads(trace_bytes)
+    if (not isinstance(value,dict) or value.get('case_id')!=method['case_id']
+            or value.get('status')!=method['status'] or value.get('candidate')!=method.get('candidate')):
+        raise ValueError('Frozen repair trace case/status/candidate identity mismatch')
+    return value
+
+
+def _frozen_patch(batch, candidate):
+    patch=Path(candidate['patch_path']).resolve(strict=True)
+    patch.relative_to(batch)
+    patch_bytes=patch.read_bytes()
+    if (sha256(patch_bytes).hexdigest()!=candidate['patch_sha256']
+            or len(patch_bytes)!=candidate['patch_bytes']):
+        raise ValueError('Final candidate or repair trace changed before independent scoring')
+    return patch
 
 
 def evaluate_repair_batch(evaluation_root, batch_root, tools_root, output, *, timeout_seconds=7200):
@@ -40,34 +66,42 @@ def evaluate_repair_batch(evaluation_root, batch_root, tools_root, output, *, ti
     save()
     for case_id in ids:
         method=records[case_id]
-        result={'case_id':case_id,'method_status':method['status']}
         candidate=method.get('candidate')
+        if 'trace' in method:
+            trace=_frozen_trace(batch,method)
+        elif candidate:
+            raise ValueError('Candidate has no frozen repair trace identity')
+        else:
+            trace=method
+        projection=project_statuses(trace)
+        result={'case_id':case_id,**projection}
+        patch=_frozen_patch(batch,candidate) if candidate else None
         if method['status']=='NOT_RUN':
             result['status']='NOT_RUN'
         elif not candidate or not candidate.get('patch_bytes'):
             result['status']='NO_CANDIDATE'
         else:
-            trace=batch/method['trace']
-            patch=Path(candidate['patch_path']).resolve(strict=True)
-            patch.relative_to(batch)
-            if file_sha(trace)!=method['trace_sha256'] or file_sha(patch)!=candidate['patch_sha256']:
-                raise ValueError('Final candidate or repair trace changed before independent scoring')
             result['patch_sha256']=candidate['patch_sha256']
-            case_out=out/'cases'/case_id
-            command=[sys.executable,str(Path(tools_root).resolve(strict=True)/'score_case.py'),
-                '--evaluation-root',str(evaluation),'--case-id',case_id,'--patch',str(patch),'--output',str(case_out/'native')]
-            execution=run_tool(command,case_out/'launcher',timeout_seconds)
-            score=case_out/'native/score.json'
-            result['execution']=execution
-            if score.is_file():
-                value=json.loads(score.read_text())
-                if value.get('case_id')!=case_id or value.get('patch_sha256')!=candidate['patch_sha256']:
-                    raise ValueError('Independent score case/patch identity mismatch')
-                result.update(status=value.get('status','INVALID_SCORE'),score=str(score.relative_to(out)),score_sha256=file_sha(score))
-                if execution['timed_out'] or (result['status']=='PASS' and execution['returncode']!=0):
-                    result['native_score_status']=result['status']
-                    result['status']='SCORER_TIMEOUT' if execution['timed_out'] else 'SCORER_ERROR'
+            exclusion=scoring_exclusion(trace,projection,independent_repair=True)
+            if exclusion:
+                result['failure_kind'],result['status']=exclusion
             else:
-                result['status']='SCORER_TIMEOUT' if execution['timed_out'] else 'SCORER_ERROR'
+                case_out=out/'cases'/case_id
+                command=[sys.executable,str(Path(tools_root).resolve(strict=True)/'score_case.py'),
+                    '--evaluation-root',str(evaluation),'--case-id',case_id,'--patch',str(patch),'--output',str(case_out/'native')]
+                execution=run_tool(command,case_out/'launcher',timeout_seconds)
+                score=case_out/'native/score.json'
+                result['execution']=execution
+                if score.is_file():
+                    value=json.loads(score.read_text())
+                    if value.get('case_id')!=case_id or value.get('patch_sha256')!=candidate['patch_sha256']:
+                        raise ValueError('Independent score case/patch identity mismatch')
+                    result.update(status=value.get('status','INVALID_SCORE'),score=str(score.relative_to(out)),score_sha256=file_sha(score))
+                    if execution['timed_out'] or (result['status']=='PASS' and execution['returncode']!=0):
+                        result['native_score_status']=result['status']
+                        result['status']='SCORER_TIMEOUT' if execution['timed_out'] else 'SCORER_ERROR'
+                else:
+                    result['status']='SCORER_TIMEOUT' if execution['timed_out'] else 'SCORER_ERROR'
+        result['independent_score_status']=result['status']
         report['records'].append(result);save()
     return report

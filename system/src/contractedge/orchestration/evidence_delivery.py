@@ -203,3 +203,28 @@ def select_observations_delivery(observations, query: str, token_counter, max_to
         "records_digest": canonical_digest(selected_records)}
     receipt["receipt_digest"] = canonical_digest(receipt)
     return Delivery(records=tuple(selected_records), receipt=receipt)
+
+
+def annotate_delivery_citations(delivery: Delivery, review: Mapping | None) -> Delivery:
+    """Add the observed review citations without treating citation as proof.
+
+    Delivery is established before the reviewer runs.  This second receipt
+    projection records whether the reviewer actually cited each delivered
+    record; it never changes the selected records or their mandatory status.
+    """
+    cited = set()
+    if isinstance(review, Mapping):
+        for check in review.get("checks", ()):
+            if not isinstance(check, Mapping):
+                continue
+            for evidence in check.get("evidence", ()):
+                if isinstance(evidence, Mapping) and isinstance(evidence.get("observation_id"), str):
+                    cited.add(evidence["observation_id"])
+    receipt = dict(delivery.receipt)
+    receipt["citation_status"] = {
+        str(row.get("ref", {}).get("id")): ("CITED" if row.get("ref", {}).get("id") in cited else "NOT_CITED")
+        for row in receipt.get("selected", ()) if isinstance(row, Mapping)}
+    receipt["model_citation_status"] = "CITED" if cited else "NOT_CITED"
+    receipt["receipt_digest"] = canonical_digest({key: value for key, value in receipt.items()
+        if key != "receipt_digest"})
+    return Delivery(records=delivery.records, receipt=receipt)

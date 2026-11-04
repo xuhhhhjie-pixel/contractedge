@@ -14,8 +14,10 @@ from contractedge.contracts.validation import canonical_digest
 from contractedge.execution.consumer import (ConsumerCapabilities, ExecutionInput, AcceptedInput)
 from contractedge.execution.literal import (PlanRejected, LiteralTarget, safe_target,
     validate_literal_targets, apply_literal_edits)
-from contractedge.model.admission import quote_request, context_fits, complete_quoted
+from contractedge.model.admission import quote_request, require_context, complete_quoted
+from contractedge.model.budget import BudgetExceeded
 from contractedge.model.provider import ModelRequest
+from contractedge.model.config import model_name
 from contractedge.source.snapshot import compute_snapshot
 from jsonschema import Draft202012Validator
 
@@ -136,7 +138,9 @@ class ModifyOnlyConsumer:
             text=safe_target(context.source,path).read_text(encoding='utf-8')
             size=len(text.encode());used+=size
             if size>1024*1024 or used>4*1024*1024:
-                raise PlanRejected('Source inventory exceeds consumer byte limit')
+                raise BudgetExceeded('Source inventory exceeds consumer byte limit: '
+                    f'file_bytes={size}, allowed_file_bytes={1024*1024}, '
+                    f'total_bytes={used}, allowed_total_bytes={4*1024*1024}')
             files.append({'file':path,'text':text})
         properties={'key':{'type':'string'},'file':{'type':'string','enum':list(item.target_paths)},
             'before':{'type':'string','minLength':1},'after':{'type':'string'}}
@@ -156,13 +160,13 @@ class ModifyOnlyConsumer:
             if context.feedback.get('schema_version') != 'ce.mode_public_feedback.v1':
                 raise PlanRejected('Ablation feedback must originate from the public-only mode projector')
             payload['public_feedback']=context.feedback
-        request=ModelRequest(model=str(budget_port.config['model']),prompt_version=self.PROMPT,
+        request=ModelRequest(model=model_name(budget_port.config['model']),prompt_version=self.PROMPT,
             messages=({'role':'system','content':'Implement the actual repair input with literal replacements in current_files. Respect its existing conditions and preservation obligations. No shell or other file operation is available. Return JSON replacements only. Source inventory grants edit permission, and is not an authored semantic plan.'},
                       {'role':'user','content':json.dumps(payload,ensure_ascii=False)}),
             max_output_tokens=int(budget_port.config.get('execution_max_output_tokens',8192)),output_schema=schema)
         quote=quote_request(budget_port.provider,request,budget_port.token_counter)
-        if not context_fits(quote,int(budget_port.config['max_context_tokens']),budget_port.config.get('model_context_tokens')):
-            raise PlanRejected('Execution request exceeds the full context budget')
+        require_context(quote,int(budget_port.config['max_context_tokens']),budget_port.config.get('model_context_tokens'),
+            label='Execution request')
         response=complete_quoted(budget_port.provider,request,quote)
         trial=budget_port.trial_session
         response_id=trial.record_response(request,response) if trial is not None else None

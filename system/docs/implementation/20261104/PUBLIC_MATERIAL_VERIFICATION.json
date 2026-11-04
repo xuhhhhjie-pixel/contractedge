@@ -1,0 +1,108 @@
+{
+  "kpt": {
+    "case_id": "R3-KPT-4746",
+    "status": "PUBLIC_MATERIAL_PIPELINE_PREPARED_PASS",
+    "snapshot_id": "09dd9c81f39b12001e6b1cd07ce0be9e40f43939a164f8b4aa3e7abb24901605",
+    "materials": [
+      {
+        "symbol": "Merge",
+        "id": "CU-68aa5bd2540870ac",
+        "path": "pkg/lib/update/merge3/merge3.go",
+        "bytes": 815,
+        "discovered": true,
+        "selected": true,
+        "prepared_complete": true
+      },
+      {
+        "symbol": "MergeTuples",
+        "id": "CU-be95098cb365933d",
+        "path": "pkg/lib/update/merge3/merge3.go",
+        "bytes": 646,
+        "discovered": true,
+        "selected": true,
+        "prepared_complete": true
+      },
+      {
+        "symbol": "mergePackage",
+        "id": "CU-0d13b022cd314708",
+        "path": "pkg/lib/update/resource-merge.go",
+        "bytes": 958,
+        "discovered": true,
+        "selected": true,
+        "prepared_complete": true
+      },
+      {
+        "symbol": "tuple.merge",
+        "id": "CU-2f74d2b46ddcb608",
+        "path": "pkg/lib/update/merge3/tuple.go",
+        "bytes": 297,
+        "discovered": true,
+        "selected": true,
+        "prepared_complete": true
+      }
+    ],
+    "prepared_sha256": "7c27081e8e986c6bf9dcb32665bd49aaa23660e98ceee9519c3a0284613cace1",
+    "input_bound": 108170,
+    "original_capacity_fits": true,
+    "prior_material_preserved": true,
+    "scope": "Current reader/selection/adoption/transport preparation; not full runner or historical response replay",
+    "api_calls": 0,
+    "real_model_success": false
+  },
+  "helm": {
+    "case_id": "R4-PROVIDER-HELM-408",
+    "status": "PUBLIC_MATERIAL_PIPELINE_PREPARED_PASS",
+    "snapshot_id": "a1b8e691476832976ef5ce4ee21e819b45f7bdffc8efc4ce2d5bc3b60698f5a8",
+    "materials": [
+      {
+        "id": "PUBLICDEP-913e1faf1d41b9ab",
+        "locator": {
+          "start_char": 2681,
+          "end_char": 4213,
+          "start_line": 88,
+          "end_line": 142,
+          "truncated": false
+        },
+        "bytes": 1532,
+        "discovered": true,
+        "selected": true,
+        "prepared_complete": true
+      },
+      {
+        "id": "PUBLICDEP-e5014cf70c19127b",
+        "locator": {
+          "start_char": 1669,
+          "end_char": 2624,
+          "start_line": 57,
+          "end_line": 85,
+          "truncated": false
+        },
+        "bytes": 955,
+        "discovered": true,
+        "selected": true,
+        "prepared_complete": true
+      },
+      {
+        "id": "PUBLICDEP-2130468171470b88",
+        "locator": {
+          "start_char": 6724,
+          "end_char": 6816,
+          "start_line": 214,
+          "end_line": 218,
+          "truncated": false
+        },
+        "bytes": 92,
+        "discovered": true,
+        "selected": true,
+        "prepared_complete": true
+      }
+    ],
+    "prepared_sha256": "1b1d0b3015df766b8c5191e80126f1665ed74d11d9c6fd10c1c811453575fefa",
+    "input_bound": 265690,
+    "original_capacity_fits": false,
+    "prior_material_preserved": true,
+    "scope": "Current reader/selection/adoption/transport preparation; not full runner or historical response replay",
+    "api_calls": 0,
+    "real_model_success": false
+  }
+}

@@ -102,6 +102,16 @@ def context_fits(quote: RequestQuote, max_context_tokens: int,
         and (model_context_tokens is None or quote.total_tokens <= model_context_tokens))
 
 
+def require_context(quote: RequestQuote, max_context_tokens: int,
+                    model_context_tokens: int | None = None, *, label='Model request') -> None:
+    """Reject the intact request before dispatch, with its required/allowed size."""
+    if not context_fits(quote, max_context_tokens, model_context_tokens):
+        from contractedge.model.budget import BudgetExceeded
+        raise BudgetExceeded(f'{label} exceeds the full context budget: '
+            f'input={quote.input_tokens}, allowed_input={max_context_tokens}, '
+            f'input_plus_output={quote.total_tokens}, model_window={model_context_tokens}')
+
+
 def _dispatch_quoted(provider: Any, request: ModelRequest, quote: RequestQuote):
     """Internal dispatch after admission/commit; prepared bytes remain authoritative.
 

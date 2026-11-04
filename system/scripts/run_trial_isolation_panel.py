@@ -211,7 +211,7 @@ def validate_review_path(case, point, dialect, calls):
     from contractedge.contracts.validation import canonical_digest
     from contractedge.execution.public_observer import enforce_public_profile, isolated_observation_complete
     from contractedge.execution.support import deterministic_check_result
-    expected_prompts = ['diagnosis.v1.1.24', 'changeset.v1.1.12',
+    expected_prompts = ['diagnosis.v1.1.24', 'changeset.v1.1.14',
                         'topomen-source-execution.v1' if dialect == 'topomen-native'
                         else 'modify-only-literal-execution.v1']
     require([call.get('prompt_version') for call in calls] == expected_prompts,

@@ -66,9 +66,16 @@ class TopoMenRepairConsumer:
                 self.executor=ModelPlanExecutor(budget_port.provider,budget_port.token_counter,budget_port.config)
         # C2 owns durable request/response/edit hooks. Never emulate them here.
         self.executor.trial_session=budget_port.trial_session or self.trial_session
+        execution_context = {}
+        if budget_port.source_context is not None:
+            from inspect import signature
+            if 'source_context' not in signature(self.executor.execute).parameters:
+                raise PlanRejected('Selected executor does not support adopted source context')
+            execution_context['source_context'] = budget_port.source_context
         return self.executor.execute(item.payload,context.source,accepted_input.acceptance['scope_policy'],
             requirement=context.requirement,declared_artifacts=context.declared_artifacts,
-            observations=context.observations,feedback=context.feedback,previous_attempt=context.previous_attempt)
+            observations=context.observations,feedback=context.feedback,previous_attempt=context.previous_attempt,
+            **execution_context)
 
 
     def consume_received_response(self, request, response, accepted_input, budget_port, *, response_id=None):
@@ -85,7 +92,7 @@ class TopoMenRepairConsumer:
         item=accepted_input.execution_input
         return self.executor.consume_received_response(request,response,item.payload,item.context.source,
             accepted_input.acceptance['scope_policy'],trial_session=budget_port.trial_session,
-            response_id=response_id)
+            response_id=response_id,requirement=item.context.requirement)
 
 
 def rebind_execution_plan(plan: Mapping, source: Path, feedback: Mapping, *, prior_execution=None) -> dict:

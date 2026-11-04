@@ -62,3 +62,28 @@ class GapSourceRecoveryTests(unittest.TestCase):
             'path': 'pkg/runner.go', 'search_term': 'configPath'}}], [source],
             max_context_tokens=1000, token_counter=len)
         self.assertEqual(result.selected_ids, ('SRC',))
+
+    def test_nearby_file_hint_falls_back_to_same_package_literal_owner(self):
+        """A wrong nested path must still find the exact branch in its package."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            binding = root / 'pkg/runtime/processor/binding'
+            (binding / 'input').mkdir(parents=True)
+            (binding / 'input/input.go').write_text(
+                'package input\ntype Options struct { Name string }\n')
+            (binding / 'binding.go').write_text('package binding\nfunc New() {}\n')
+            (binding / 'send.go').write_text(
+                'package binding\nfunc (b *Binding) isAppSubscribedToBinding() error {\n'
+                '    req, _ := http.NewRequest(http.MethodOptions, "", nil)\n'
+                '    _ = req\n    return nil\n}\n')
+            snapshot = compute_snapshot(root)
+            gap = {'id': 'G1', 'summary': 'Locate OPTIONS discovery branch',
+                   'locator_hint': {'path': 'pkg/runtime/processor/binding/input/input.go',
+                                    'search_term': 'http.MethodOptions'}}
+            units, audit = extract_gap_extension_units(snapshot, [], [], [gap],
+                                                       max_files=4)
+            owners = [u for u in units if u.get('symbol') == 'isAppSubscribedToBinding']
+            self.assertTrue(owners)
+            self.assertTrue(owners[0]['path'].endswith('binding/send.go'))
+            self.assertIn('http.MethodOptions', owners[0]['text'])
+            self.assertLessEqual(audit['inspected_files'], 4)

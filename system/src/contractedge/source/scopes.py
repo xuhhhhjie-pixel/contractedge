@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 from contractedge.contracts.models import Snapshot
+from contractedge.retrieval.candidates import literal_identifier_hits, literal_identifiers, test_example_path
 
 
 DEFAULT_SCOPE_SEARCH_FILES = 20_000
@@ -136,12 +137,18 @@ def resolve_scope(source_root: str | Path, snapshot: Snapshot,
                 if query_terms:
                     match_mode = "CONCEPT_TERMS"
             if query_terms:
+                identifiers = literal_identifiers(value)
                 minimum_hits = min(2, len(query_terms))
                 for path in sorted(files):
                     path_hits = {term for term in query_terms if term in path.casefold()}
                     if len(path_hits) >= minimum_hits:
                         scored[path] = len(path_hits)
-                scan_paths = sorted(files - set(scored), key=_search_priority)
+                # A path match is a useful locator, not a ceiling on content
+                # relevance. Read those candidates too, under the same shared
+                # limits, before lower-priority paths consume the search cap.
+                scan_paths = sorted(files, key=lambda path: (
+                    _search_priority(path)[0], path not in scored,
+                    *_search_priority(path)[1:]))
                 for path in scan_paths:
                     if path not in searchable:
                         try:
@@ -166,11 +173,16 @@ def resolve_scope(source_root: str | Path, snapshot: Snapshot,
                     bytes_inspected += len(searchable[path].encode("utf-8"))
                     hits = {term for term in query_terms if term in path.casefold() or
                             term in searchable[path].casefold()}
-                    if len(hits) >= minimum_hits:
-                        scored[path] = len(hits)
+                    literal_hits = literal_identifier_hits(searchable[path], identifiers)
+                    if len(hits) >= minimum_hits or literal_hits:
+                        # Concept overlap in examples is a soft locator signal.
+                        # Explicit paths/symbols keep their independent lookup.
+                        scored[path] = (len(hits) + 12 * literal_hits) / (8 if test_example_path(path) else 1)
                 found = sorted(scored, key=lambda path: (-scored[path], _search_priority(path), path))
             else:
-                pattern = re.compile(re.escape(value), re.IGNORECASE)
+                pattern = (re.compile(r'(?<![A-Za-z0-9_$])' + re.escape(value) + r'(?![A-Za-z0-9_$])')
+                           if value in literal_identifiers(value) and value.isupper()
+                           else re.compile(re.escape(value), re.IGNORECASE))
                 scored = {path: 1 for path in files if pattern.search(path)}
                 for path in sorted(files - set(scored), key=_search_priority):
                     if path not in searchable:

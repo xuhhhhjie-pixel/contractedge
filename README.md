@@ -1,3 +1,7 @@
+> 2026-11-05 前半程协作入口：[重构设计、代码修改与验收规格](system/docs/implementation/20261105/FRONT_HALF_REDESIGN_IMPLEMENTATION_SPEC.md)。定位助手、统一查阅、完整交付、Diagnosis接口与统一预算的实施以此为准；设计待实现、效果待验证。
+>
+> 冻结基线：[当前版本与统一问题清单](system/docs/implementation/20261104/CURRENT_SYSTEM_ISSUES_AND_VERSION.md) · [32槽验证报告](system/docs/implementation/20261104/FINAL_IMPLEMENTATION_REPORT.md)。开发候选为0.6.68／源码15141db3，安装副本仍为063d12e2；当前 `formal_ready=false`。
+
 # ContractEdge
 
 真实云原生声明式部署与配置缺陷修复 Benchmark。当前冻结资源为 **R1–R5各30条，共150条**；R1另27条备用保留于原资源池，不进入本实验分母。
@@ -35,7 +39,7 @@ GitHub Release单个附件必须小于2GiB，本项目较大的包会分卷。�
 
 完整修复实验链为：公开任务 → 方法修改Broken → 导出patch → 独立隐藏评分 → 指标汇总。Agentless、SWE-agent、OpenHands等比较方法需要适配该任务/patch接口，可保留自身检索与编辑流程。完整包交给实验管理者；模型进程仅可访问public白名单和允许的源码工作区，不能读取evaluation/、GT、Fixed或历史修复。
 
-公开EXECUTION_PASS只是观察程序完成，不等于隐藏语义PASS。不同案例的终点可为渲染对象、控制决策、转换工件、外部API映射或运行消费行为，不一律声称真实集群/云最终收敛。当前没有模型baseline结果。沿用精确身份绑定历史证据，不重复全量3+3。
+公开EXECUTION_PASS只是观察程序完成，不等于隐藏语义PASS。不同案例的终点可为渲染对象、控制决策、转换工件、外部API映射或运行消费行为，不一律声称真实集群/云最终收敛。本发布说明不汇总模型baseline成绩；用户已报告三个baseline完成，当前系统的新验证结果见上方实施入口。沿用精确身份绑定历史证据，不重复全量3+3。
 
 ## 版本、分区与来源
 
@@ -45,4 +49,4 @@ GitHub Release单个附件必须小于2GiB，本项目较大的包会分卷。�
 
 ## ContractEdge 修复系统（开发交接版）
 
-当前系统源码、测试、TopoMen运行源码、配置和设计文档见 [system/](system/README.md)。请先读 [正式实验准入与最终优化实施计划](system/docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md)。系统0.6.27尚未通过正式实验准入；历史开发成绩不代表150条正式结果。Benchmark冻结资源与系统开发状态分别管理。
+当前系统源码、测试、TopoMen运行源码、配置和设计文档见 [system/](system/README.md)。后继前半程优化请先读 [20261105实施规格](system/docs/implementation/20261105/FRONT_HALF_REDESIGN_IMPLEMENTATION_SPEC.md)，再核对 [冻结基线状态](system/docs/implementation/20261104/STATUS.json)。[上一轮四步清单](system/docs/implementation/20261104/IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md)保留供追溯，其已被替代的前半程建议不控制新实现。当前候选尚未通过正式实验准入；历史开发成绩不代表150条正式结果。Benchmark冻结资源与系统开发状态分别管理。

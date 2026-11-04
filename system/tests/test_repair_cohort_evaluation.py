@@ -34,9 +34,11 @@ class RepairCohortEvaluationTests(unittest.TestCase):
             tools=root/'tools';tools.mkdir();batch=root/'batch';batch.mkdir()
             patch_file=batch/'candidate.patch';patch_file.write_text('patch')
             digest=hashlib.sha256(patch_file.read_bytes()).hexdigest()
-            trace=batch/'repair.trace.json';trace.write_text('{}')
+            from tests.test_repair_cohort_eligibility import complete_trace
+            candidate=dict(patch_path=str(patch_file),patch_bytes=5,patch_sha256=digest)
+            trace=batch/'repair.trace.json';trace.write_text(json.dumps(complete_trace(candidate)))
             record=dict(case_id='A',status='PUBLIC_EXECUTION_COMPLETE',trace=trace.name,
-                trace_sha256=hashlib.sha256(trace.read_bytes()).hexdigest(),candidate=dict(patch_path=str(patch_file),patch_bytes=5,patch_sha256=digest))
+                trace_sha256=hashlib.sha256(trace.read_bytes()).hexdigest(),candidate=candidate)
             (batch/'batch.json').write_text(json.dumps({'case_count':1,'records':[record]}))
             def fail_after_score(argv,*args):
                 out=Path(argv[argv.index('--output')+1]);out.mkdir(parents=True)

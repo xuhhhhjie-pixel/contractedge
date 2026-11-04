@@ -9,6 +9,7 @@ from contractedge.contracts.validation import parse_method_input, canonical_dige
 from contractedge.orchestration.feedback import make_feedback, feedback_prompt_view
 from contractedge.orchestration.repair import revise_plan
 from contractedge.orchestration.runner import run_front_half
+from contractedge.model.budget import BudgetExceeded
 from tests.test_benchmark_current import make_public_fixture
 from tests.test_orchestration import PipelineFixtureProvider
 from tests.test_repair_execution import PublicLoopRunner
@@ -42,20 +43,17 @@ class FeedbackContextTests(unittest.TestCase):
             review={'decision': 'FAIL', 'checks': [{'id': 'P1', 'status': 'FAIL'}], 'failure_kind': 'DIAGNOSIS'})
         self.observations = observation['observations']
 
-    def test_changeset_revision_keeps_obligations_without_repeating_large_raw_output(self):
+    def test_changeset_revision_rejects_oversized_complete_feedback_before_dispatch(self):
         seen = []
         original = self.provider.complete_json
         def complete(request):
             seen.append(request)
             return original(request)
         self.provider.complete_json = complete
-        result = revise_plan(self.trace, parse_method_input(self.method), self.source, self.feedback,
-                             self.provider, len, self.config)
-        self.assertEqual(result['status'], 'READY')
-        serialized = json.dumps(seen[0].messages)
-        self.assertLess(len(serialized), 100000)
-        self.assertIn('OBS-LARGE', serialized)
-        self.assertIn('pending_obligations', serialized)
+        with self.assertRaisesRegex(BudgetExceeded, 'full context budget'):
+            revise_plan(self.trace, parse_method_input(self.method), self.source, self.feedback,
+                        self.provider, len, self.config)
+        self.assertEqual(seen, [])
 
     def test_prompt_projection_preserves_every_non_observation_field_and_original_feedback(self):
         before = json.dumps(self.feedback, sort_keys=True)
@@ -66,13 +64,24 @@ class FeedbackContextTests(unittest.TestCase):
         self.assertEqual(projected['full_feedback_digest'], canonical_digest(self.feedback))
         self.assertEqual(projected['public_observation_refs'][-1]['content_digest'],
                          self.feedback['public_observations'][-1]['content_digest'])
-        self.assertNotIn('public_observations', projected)
+        self.assertEqual(projected['public_observations'], self.feedback['public_observations'])
         self.assertEqual(before, json.dumps(self.feedback, sort_keys=True))
 
     def test_rediagnosis_retains_candidates_and_uses_fresh_selected_quotes(self):
         result = run_front_half(self.method, self.source.parent, self.provider,
             {**self.config, 'run_id': self.trace['run_id']}, len,
-            execution_feedback=self.feedback, public_observations=self.observations).to_wire()
+            execution_feedback={**self.feedback, 'public_observations': self.observations},
+            public_observations=self.observations).to_wire()
         self.assertEqual(result['status'], 'READY', result['errors'])
         self.assertTrue(result['candidate_set']['selected_ids'])
         self.assertEqual(result['run_context']['round_id'], 1)
+
+    def test_rediagnosis_does_not_discard_large_selected_feedback_to_fit(self):
+        def no_dispatch(request):
+            self.fail('Oversized complete feedback must not dispatch')
+        self.provider.complete_json = no_dispatch
+        result = run_front_half(self.method, self.source.parent, self.provider,
+            {**self.config, 'run_id': self.trace['run_id']}, len,
+            execution_feedback=self.feedback, public_observations=self.observations).to_wire()
+        self.assertEqual(result['status'], 'BUDGET_EXHAUSTED', result['errors'])
+        self.assertEqual(result['model_calls'], [])

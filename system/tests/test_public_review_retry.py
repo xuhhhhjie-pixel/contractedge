@@ -63,7 +63,6 @@ class PublicReviewRetryTests(unittest.TestCase):
         initial = provider.requests[0]
         bound = sum(len(m['content']) for m in initial.messages) + initial.max_output_tokens
         provider = ReviewSequence()
-        result = self.review(provider, max_context_tokens=bound)
-        self.assertEqual(result['decision'], 'UNKNOWN')
-        self.assertEqual(result['method'], 'CONTEXT_LIMIT')
+        with self.assertRaisesRegex(BudgetExceeded, 'context budget'):
+            self.review(provider, max_context_tokens=bound)
         self.assertEqual(len(provider.requests), 1)

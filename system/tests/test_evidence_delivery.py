@@ -4,7 +4,7 @@ import unittest
 
 from contractedge.contracts.delivery import Delivery
 from contractedge.contracts.validation import canonical_digest
-from contractedge.orchestration.evidence_delivery import select_observations_delivery
+from contractedge.orchestration.evidence_delivery import select_observations_delivery, annotate_delivery_citations
 
 
 def observation(identifier, excerpt="public output", snapshot="S1", **fields):
@@ -26,6 +26,15 @@ def failed_check(identifier="FAILED", snapshot="S1"):
 
 
 class EvidenceDeliveryTests(unittest.TestCase):
+    def test_delivery_receipt_separates_delivery_from_model_citation(self):
+        record = observation("ONE")
+        delivery = select_observations_delivery([record], "condition", len, 100)
+        cited = annotate_delivery_citations(delivery, {
+            "checks": [{"evidence": [{"observation_id": "ONE", "quote": "public"}]}]})
+        self.assertEqual(cited.receipt["model_citation_status"], "CITED")
+        self.assertEqual(cited.receipt["citation_status"]["ONE"], "CITED")
+        self.assertEqual(cited.receipt["selected"][0]["ref"]["id"], "ONE")
+
     def test_original_resource_priority_and_complete_records_are_preserved(self):
         def pod(identifier, kind, name, fields):
             record = observation(identifier, json.dumps({"resource": {"kind": kind,

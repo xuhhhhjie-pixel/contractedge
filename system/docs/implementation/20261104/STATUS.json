@@ -1,0 +1,202 @@
+{
+  "status": "VALIDATION_COMPLETE_FORMAL_GATE_NOT_MET",
+  "date": "2026-11-04",
+  "formal_ready": false,
+  "implementation_baseline": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+  "baseline_real_effect": "FIXED_EIGHT_3_OF_8",
+  "historical_real_panel": {
+    "source_sha256": "806e29f8fe3851b502dfbd91c03783877d4c601033d11505a550d15f3557ed8c",
+    "candidate_pass": 3,
+    "baseline_pass": 2,
+    "cases_each": 8,
+    "wins": 2,
+    "regressions": 1
+  },
+  "packages": {
+    "1": "ENGINEERING_PASS",
+    "2": "ENGINEERING_AND_PUBLIC_MATERIAL_CHECKS_PASS",
+    "3": "ENGINEERING_PASS",
+    "4": "VALIDATION_COMPLETE_GATE_NOT_MET"
+  },
+  "budget_authorization_cny": 100,
+  "latest_conservative_spend_cny": 89.023362,
+  "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+  "engineering": {
+    "portable_passed": 3384,
+    "portable_skipped": 4,
+    "portable_subtests_passed": 90,
+    "native_passed": 9,
+    "simulation_variants_passed": 6
+  },
+  "real_comparison": {
+    "cases": 8,
+    "slots": 24,
+    "arms": [
+      "old_current",
+      "new_current",
+      "new_large"
+    ],
+    "status": "COMPLETE",
+    "formal_ready": false,
+    "completed_slots": 24,
+    "controller_recovery": {
+      "document": "EXPERIMENT_SUPERVISION.md",
+      "completed_worker_reconciled": 20,
+      "model_replays": 0,
+      "fresh_remaining_original_slots": [
+        21,
+        22,
+        23,
+        24
+      ]
+    },
+    "primary_scoring_errors": [
+      {
+        "slot": 23,
+        "case_id": "RW-ALERTMANAGER-4705",
+        "primary_independent_status": "SCORER_ERROR",
+        "cause": "Exact scorer image missing after public-only cache precheck",
+        "supplemental_independent_status": "PASS",
+        "supplemental_replaces_primary": false,
+        "method_replays": 0
+      }
+    ],
+    "independent_pass": {
+      "old_current": 3,
+      "new_current": 3,
+      "new_large": 2
+    },
+    "completed_slots_by_arm": {
+      "old_current": 8,
+      "new_current": 8,
+      "new_large": 8
+    },
+    "code_contrast": {
+      "left": "old_current",
+      "right": "new_current",
+      "wins": [
+        "R4-CERTMANAGER-9204"
+      ],
+      "regressions": [
+        "R3-KPT-4673"
+      ],
+      "both_pass": [
+        "RW-CAND-130",
+        "R3-KOPF-726"
+      ],
+      "both_not_pass": [
+        "R4-PROVIDER-HELM-408",
+        "R3-KPT-4746",
+        "R4-ACK-CLOUDWATCH-2985",
+        "RW-ALERTMANAGER-4705"
+      ],
+      "pending": [],
+      "inconclusive": []
+    },
+    "capacity_contrast": {
+      "left": "new_current",
+      "right": "new_large",
+      "wins": [
+        "R3-KPT-4673"
+      ],
+      "regressions": [
+        "R3-KOPF-726",
+        "R4-CERTMANAGER-9204"
+      ],
+      "both_pass": [
+        "RW-CAND-130"
+      ],
+      "both_not_pass": [
+        "R4-PROVIDER-HELM-408",
+        "R3-KPT-4746",
+        "R4-ACK-CLOUDWATCH-2985"
+      ],
+      "pending": [],
+      "inconclusive": [
+        "RW-ALERTMANAGER-4705"
+      ]
+    }
+  },
+  "financial_observation_scope": "Final32-slot boundary; all142 new calls settled; two historical pending reservations retained",
+  "real_findings": "REAL_VALIDATION_FINDINGS.md",
+  "public_expansion": {
+    "status": "COMPLETE",
+    "cases": 4,
+    "slots": 8,
+    "source_unchanged": true,
+    "registration_sha256": "997b9aaa9afdaf9c17a3277bc5b4064aefb6dba8f098df7e99739b8e99a328bb",
+    "completed_slots": 8,
+    "independent_pass": {
+      "old_current": 1,
+      "new_current": 1
+    },
+    "code_contrast": {
+      "left": "old_current",
+      "right": "new_current",
+      "wins": [],
+      "regressions": [],
+      "both_pass": [
+        "RW-CAND-091"
+      ],
+      "both_not_pass": [
+        "RW-HELM-CONTROLLER-1411",
+        "R3-SKAFFOLD-9732",
+        "RW-PROMETHEUS-19838"
+      ],
+      "pending": [],
+      "inconclusive": []
+    }
+  },
+  "updated_at_utc": "2026-11-04T14:58:36.161135+00:00",
+  "model_effectiveness_proven": false,
+  "real_validation_summary": "REAL_VALIDATION_SUMMARY.json",
+  "final_report": "FINAL_IMPLEMENTATION_REPORT.md",
+  "combined_same_capacity": {
+    "cases": 12,
+    "variants": {
+      "old_current": {
+        "planned": 12,
+        "completed": 12,
+        "independent_pass": 4,
+        "pre_edit_stops": 7,
+        "calls": 49,
+        "cost_micro_cny": 7028560,
+        "provider_tokens": 2380154
+      },
+      "new_current": {
+        "planned": 12,
+        "completed": 12,
+        "independent_pass": 4,
+        "pre_edit_stops": 7,
+        "calls": 57,
+        "cost_micro_cny": 7896752,
+        "provider_tokens": 2680561
+      }
+    },
+    "wins": [
+      "R4-CERTMANAGER-9204"
+    ],
+    "regressions": [
+      "R3-KPT-4673"
+    ]
+  },
+  "open_issue_numbers": [
+    2,
+    3,
+    4,
+    6,
+    7,
+    8
+  ],
+  "open_issue_scope": "Known remaining retrieval/query/whole-declaration admission/correction gaps; see matrix. TopoMen autonomy remains a conditional design experiment.",
+  "decision": "Retain frozen development candidate; no formal promotion or default capacity increase. Same-capacity4/12 vs4/12, one win and one regression; higher calls and cost.",
+  "current_issue_document": "CURRENT_SYSTEM_ISSUES_AND_VERSION.md",
+  "version_identity": {
+    "package_version": "0.6.68",
+    "candidate_tag": "system-15141-fourstep-candidate-20261104",
+    "candidate_commit": "d842853a9ef0d729c2a965a6481c229fbb04b0fb",
+    "installed_package_version": "0.6.68",
+    "installed_source_sha256": "063d12e251278822dc0f316f42f5d20e9411367f9c00c58eea97306c504df4dd",
+    "installed_updated": false
+  }
+}

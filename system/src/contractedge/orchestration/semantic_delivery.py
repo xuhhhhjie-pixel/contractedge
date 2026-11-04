@@ -6,13 +6,15 @@ Only previously required concrete evidence content can deny a dispatch here.
 from __future__ import annotations
 
 from contextlib import contextmanager
-from dataclasses import asdict, is_dataclass
+from dataclasses import asdict, is_dataclass, replace
 import hashlib
 import json
 from pathlib import Path, PurePosixPath
 from typing import Mapping
 
 from contractedge.contracts.validation import canonical_digest
+from contractedge.contracts.delivery import target_supplies_source, target_supplies_support, reread_source_locator
+from contractedge.diagnosis.evidence import merge_evidence_records
 
 
 class SemanticDeliveryError(ValueError):
@@ -42,6 +44,101 @@ def _legal_source_path(value):
 
 def _source_identity(record):
     return {key: record.get(key) for key in ('id', 'kind', 'snapshot_id', 'locator', 'content_digest')}
+
+
+def _evidence_key(record):
+    snapshot = (record.get('current_source_snapshot') if record.get('kind') == 'PUBLIC_DEPENDENCY_DECLARATION'
+                else record.get('snapshot_id'))
+    return record.get('id'), snapshot if isinstance(snapshot, str) else None
+
+
+def with_adopted_source_support(request, records, *, current_targets=()):
+    """Freeze builder-selected read-only records independently of prepared bytes.
+
+    Source sharing remains the existing exact target/excerpt contract. Pinned
+    public dependency declarations retain their external provenance and never
+    become editable source-root paths or additional model-required fields.
+    """
+    selected = [*request.metadata.get('adopted_source_support', ()), *records]
+    targets = [*request.metadata.get('adopted_current_targets', ()), *current_targets]
+    if not selected and not targets:
+        return request
+    by_key = {}
+    try:
+        for record in selected:
+            if not isinstance(record, Mapping) or record.get('kind') not in {
+                    'SOURCE_SPAN', 'PUBLIC_DEPENDENCY_DECLARATION'}:
+                raise ValueError('Adopted source support must use an existing source/API record kind')
+            key = _evidence_key(record)
+            by_key[key] = merge_evidence_records([by_key[key], record] if key in by_key else [record])[0]
+    except ValueError as exc:
+        raise SemanticDeliveryError('Invalid adopted source support: ' + str(exc)) from exc
+    return replace(request, metadata={**request.metadata,
+        'adopted_source_support': _clone(list(by_key.values())),
+        **({'adopted_current_targets': _clone(targets)} if targets else {})})
+
+
+def _with_request_source_subjects(context, request):
+    """Add selected builder facts to the same evidence namespace and gate."""
+    context = {**context, 'subjects': list(context.get('subjects', [])),
+               'source_conflicts': list(context.get('source_conflicts', [])),
+               'current_target_sources': dict(context.get('current_target_sources', {}))}
+    source_context = request.metadata.get('source_context')
+    adopted_records = list(request.metadata.get('adopted_source_support', ()))
+    if source_context is not None:
+        from contractedge.diagnosis.evidence import source_context_records, source_context_target_view
+        adopted_records.extend(source_context_records(source_context))
+        # Current target gates still verify original file/window coordinates.
+        # Earlier adopted views live in their own snapshot namespace and must
+        # remain complete; they cannot be matched against a newer target path.
+        for index, target in enumerate(source_context.get('targets', ())):
+            if target in request.metadata.get('adopted_current_targets', ()):
+                continue
+            view = source_context_target_view(target)
+            context['subjects'].append(_subject('HISTORICAL_CONTEXT', view,
+                identifier='adopted_target_view:'+str(index), required_basis=[{
+                    'kind':'ADOPTED_REQUEST_SOURCE_SUPPORT','component':'complete_context'}]))
+    # Every selected target view is adopted material, including simple plans
+    # without an upstream source catalog. Freeze both the real file and the
+    # chosen view: a transport cannot shrink two valid windows into one.
+    for target in request.metadata.get('adopted_current_targets', ()):
+        path = target['path']
+        original = {'id': 'CURRENT_TARGET:' + path, **target,
+                    'content_digest': _sha(target['content'])}
+        basis = {'kind': 'ADOPTED_EXECUTION_TARGET_SOURCE', 'component': 'selected_source_view'}
+        found = next((index for index, subject in enumerate(context['subjects'])
+            if subject['kind'] == 'CURRENT_TARGET_SOURCE' and subject['id'] == original['id']), None)
+        if found is None:
+            context['subjects'].append(_subject('CURRENT_TARGET_SOURCE', original, required_basis=[basis]))
+        else:
+            subject = _clone(context['subjects'][found])
+            if not _contains_record(subject['original'], original):
+                context['source_conflicts'].append({'id': original['id'], 'snapshot_id': original['snapshot_id'],
+                    'records': [subject['original'], original]})
+            subject['original'] = original
+            subject['original_digest'] = canonical_digest(original)
+            subject['required_basis'].append(basis)
+            context['subjects'][found] = subject
+        context['current_target_sources'][path] = {key: original[key]
+            for key in ('content', 'snapshot_id', 'source_file_sha256')}
+    for record in adopted_records:
+        basis = {'kind': 'ADOPTED_REQUEST_SOURCE_SUPPORT', 'component': 'excerpt'}
+        found = next((index for index, subject in enumerate(context['subjects'])
+            if subject['kind'] == 'EVIDENCE' and _evidence_key(subject['original']) == _evidence_key(record)), None)
+        if found is None:
+            context['subjects'].append(_subject('EVIDENCE', record, required_basis=[basis]))
+            continue
+        subject = _clone(context['subjects'][found])
+        if basis not in subject['required_basis']:
+            subject['required_basis'].append(basis)
+        try:
+            subject['original'] = merge_evidence_records([subject['original'], record])[0]
+            subject['original_digest'] = canonical_digest(subject['original'])
+        except ValueError:
+            context['source_conflicts'].append({'id': record.get('id'),
+                'snapshot_id': _evidence_key(record)[1], 'records': [subject['original'], _clone(record)]})
+        context['subjects'][found] = subject
+    return context
 
 
 def _walk(value, path='', depth=0):
@@ -104,7 +201,8 @@ def _subject(kind, record, *, identifier=None, required_basis=(), origin=None, p
 def delivery_context(method_input, *, consumer, snapshot_id=None, diagnosis=None,
                      changeset=None, plan=None, feedback=None, necessary_support=(),
                      prerequisites=(), evidence=(), mandatory_refs=(), layer_absence=None,
-                     source_requirements=True, source_root=None):
+                     source_requirements=True, source_root=None, declared_artifacts=(),
+                     feedback_required=False, historical_contexts=(), execution_mapping=None):
     """Use actual upstream objects; absent E/C layers are never reconstructed."""
     method = asdict(method_input) if is_dataclass(method_input) else dict(method_input or {})
     diagnosis = diagnosis if isinstance(diagnosis, Mapping) else None
@@ -114,6 +212,8 @@ def delivery_context(method_input, *, consumer, snapshot_id=None, diagnosis=None
     raw = method.get('requirement_text')
     if isinstance(raw, str) and raw:
         subjects.append(_subject('ORIGINAL_REQUIREMENT', {'text': raw}, identifier='requirement_text',
+                                 required_basis=[{'kind': 'ADOPTED_ORIGINAL_REQUIREMENT',
+                                                  'component': 'complete_requirement_text'}],
                                  origin={'sha256': _sha(raw), 'span': [0, len(raw)]}))
     for atom in (diagnosis or {}).get('obligation_atoms', []):
         spans = []
@@ -141,42 +241,64 @@ def delivery_context(method_input, *, consumer, snapshot_id=None, diagnosis=None
     for key in ('postconditions', 'preserve_constraints', 'open_obligations'):
         subjects.extend(_subject('POSTCONDITION' if key == 'postconditions' else key.upper(), row)
                         for row in (changeset or plan or {}).get(key, []))
-    support, source_conflicts, all_records, current_targets = {}, [], {}, {}
-    required_ids = {r['id'] for r in necessary_support if r.get('delivery_required') is True}
+    support, source_conflicts, all_records, current_targets, current_sources = {}, [], {}, {}, {}
+    required_keys = {_evidence_key(r) for r in necessary_support if r.get('delivery_required') is True}
     for row in [*(diagnosis or {}).get('evidence_refs', []),
                 *((plan or {}).get('coordination_context') or {}).get('source_support', []),
+                *((plan or {}).get('coordination_context') or {}).get('public_observations', []),
                 *evidence, *necessary_support]:
         if isinstance(row, Mapping) and isinstance(row.get('id'), str):
             identifier = row['id']
+            key = _evidence_key(row)
             if row.get('delivery_required') is True:
-                required_ids.add(identifier)
-            previous = support.get(identifier)
-            all_records.setdefault(identifier, []).append(_clone(row))
-            if previous is not None and (_source_identity(previous) != _source_identity(row)
-                    or previous.get('excerpt') and row.get('excerpt') and previous['excerpt'] != row['excerpt']):
-                # Preserve both originals. An ID cannot silently select a new version.
-                source_conflicts.append({'id': identifier, 'records': _clone(all_records[identifier])})
-            if previous is None or not previous.get('excerpt') and _source_identity(previous) == _source_identity(row):
-                support[row['id']] = dict(row)
+                required_keys.add(key)
+            previous = support.get(key)
+            all_records.setdefault(key, []).append(_clone(row))
+            if previous is None:
+                support[key] = dict(row)
+                continue
+            # An identity-only copy may reuse a complete same-identity upstream
+            # record. Neither copy can replace another snapshot or change any
+            # other metadata; historical namespaces remain independent.
+            left, right = dict(previous), dict(row)
+            if _source_identity(left) == _source_identity(right):
+                if 'excerpt' not in left and isinstance(right.get('excerpt'), str):
+                    left['excerpt'] = right['excerpt']
+                if 'excerpt' not in right and isinstance(left.get('excerpt'), str):
+                    right['excerpt'] = left['excerpt']
+            try:
+                support[key] = merge_evidence_records([left, right])[0]
+            except ValueError:
+                source_conflicts.append({'id': identifier, 'snapshot_id': row.get('snapshot_id'),
+                                         'records': _clone(all_records[key])})
     prerequisites = {r.get('source_evidence_ref'): r for r in prerequisites
                      if r.get('disposition') != 'NOT_APPLICABLE'}
-    for identifier in required_ids | set(prerequisites):
-        if isinstance(identifier, str) and identifier not in support:
-            support[identifier] = {'id': identifier, 'actual_original_record': 'MISSING'}
+    for identifier in prerequisites:
+        if isinstance(identifier, str) and not any(key[0] == identifier for key in support):
+            support[(identifier, snapshot_id)] = {'id': identifier, 'snapshot_id': snapshot_id,
+                                                  'actual_original_record': 'MISSING'}
+    mandatory_keys = set()
     for ref in mandatory_refs:
-        if isinstance(ref.get('id'), str) and ref['id'] not in support:
-            support[ref['id']] = {**dict(ref), 'actual_original_record': 'MISSING'}
+        if not isinstance(ref.get('id'), str):
+            continue
+        key = _evidence_key(ref)
+        mandatory_keys.add(key)
+        if key not in support:
+            support[key] = {**dict(ref), 'actual_original_record': 'MISSING'}
+        elif support[key].get('content_digest') != ref.get('content_digest'):
+            source_conflicts.append({'id': ref['id'], 'snapshot_id': ref.get('snapshot_id'),
+                                     'records': [_clone(support[key]), _clone(ref)]})
     target_paths = {(op.get('target') or {}).get('path') for op in operations
                     if isinstance(op.get('target'), Mapping)}
-    for identifier, row in support.items():
+    for key, row in support.items():
+        identifier = key[0]
         basis = []
-        if source_requirements and identifier in required_ids:
+        if source_requirements and key in required_keys:
             basis.append({'kind': 'EXISTING_DELIVERY_REQUIRED', 'component': 'excerpt'})
         if source_requirements and identifier in prerequisites:
             basis.append({'kind': 'EXISTING_SOURCE_PREREQUISITE', 'component': 'excerpt',
                           'record': prerequisites[identifier]})
-        if any(all(row.get(k) == ref.get(k) for k in ('id', 'snapshot_id', 'content_digest'))
-               for ref in mandatory_refs):
+        if key in mandatory_keys:
             basis.append({'kind': 'EXISTING_MANDATORY_EVIDENCE', 'component': 'excerpt'})
         subject = _subject('EVIDENCE', row, required_basis=basis)
         path = (row.get('locator') or {}).get('path') if isinstance(row.get('locator'), Mapping) else None
@@ -189,42 +311,60 @@ def delivery_context(method_input, *, consumer, snapshot_id=None, diagnosis=None
                     content = target.read_text(encoding='utf-8')
                     excerpt = row.get('excerpt')
                     if path in target_paths:
-                        if (source_requirements and identifier in required_ids and isinstance(excerpt, str)
+                        current_sources[path] = {'content': content, 'snapshot_id': snapshot_id,
+                            'source_file_sha256': hashlib.sha256(target.read_bytes()).hexdigest()}
+                        if (source_requirements and key in required_keys and isinstance(excerpt, str)
                                 and excerpt and row.get('content_digest') == _sha(excerpt)
                                 and isinstance(row.get('snapshot_id'), str) and row['snapshot_id']):
-                            key = (path, snapshot_id)
-                            if key not in current_targets:
+                            target_key = (path, snapshot_id)
+                            if target_key not in current_targets:
                                 record = {'id': 'CURRENT_TARGET:' + path, 'snapshot_id': snapshot_id,
                                     'path': path, 'content': content, 'content_digest': _sha(content),
                                     'source_file_sha256': hashlib.sha256(target.read_bytes()).hexdigest()}
-                                current_targets[key] = _subject('CURRENT_TARGET_SOURCE', record)
-                            current_targets[key]['required_basis'].append({
+                                current_targets[target_key] = _subject('CURRENT_TARGET_SOURCE', record)
+                            current_targets[target_key]['required_basis'].append({
                                 'kind': 'EXISTING_SELECTED_TARGET_CURRENT_SOURCE', 'component': 'current_file_bytes',
                                 'source_evidence_id': identifier,
-                                'producer_protocol': 'execution.topomen._build_execution_request:target_ids'})
-                            subject['historical_required_basis'] = [basis for basis in subject['required_basis']
-                                if basis['kind'] == 'EXISTING_DELIVERY_REQUIRED']
-                            subject['required_basis'] = [basis for basis in subject['required_basis']
-                                if basis['kind'] != 'EXISTING_DELIVERY_REQUIRED']
-                            subject['current_target_delivery_ref'] = current_targets[key]['id']
+                                'source_snapshot_id': row.get('snapshot_id'),
+                                'producer_protocol': 'contracts.delivery.target_supplies_support'})
+                            # A path is not delivery. Retain the excerpt gate
+                            # until the final prepared projection proves it,
+                            # or proves the complete historical target bridge.
+                            subject['current_target_delivery_ref'] = current_targets[target_key]['id']
                     if (row.get('snapshot_id') != snapshot_id and isinstance(excerpt, str)
                             and excerpt and content.count(excerpt) == 1):
-                        start = content.count('\n', 0, content.index(excerpt)) + 1
+                        locator = reread_source_locator(row, content)
                         subject['reread_identity'] = {**_source_identity(row), 'snapshot_id': snapshot_id,
-                            'locator': {'path': path, 'start_line': start,
-                                        'end_line': start + len(excerpt.splitlines()) - 1}}
+                            'locator': locator}
             except (OSError, ValueError, UnicodeError):
                 pass
         subjects.append(subject)
     subjects.extend(current_targets.values())
+    if feedback_required and not isinstance(feedback, Mapping):
+        raise ValueError('Required feedback must be an explicitly adopted feedback object')
     if isinstance(feedback, Mapping):
-        subjects.append(_subject('FEEDBACK', feedback, identifier='execution_feedback'))
+        subjects.append(_subject('FEEDBACK', feedback, identifier='execution_feedback',
+            required_basis=([{'kind': 'ADOPTED_FEEDBACK', 'component': 'complete_context'}]
+                            if feedback_required else ())))
+    for index, artifact in enumerate(declared_artifacts):
+        subjects.append(_subject('DECLARED_ARTIFACT', artifact,
+            required_basis=[{'kind': 'ADOPTED_DECLARED_ARTIFACT', 'component': 'content'}]))
+    for index, historical in enumerate(historical_contexts):
+        if not isinstance(historical, Mapping) or not historical:
+            raise ValueError('Adopted historical context must be a nonempty object')
+        subjects.append(_subject('HISTORICAL_CONTEXT', historical, identifier='historical_context:' + str(index),
+            required_basis=[{'kind': 'ADOPTED_HISTORICAL_CONTEXT', 'component': 'complete_context'}]))
+    if execution_mapping is not None:
+        subjects.append(_subject('EXECUTION_MAPPING', {'execution_mapping': execution_mapping},
+            identifier='execution_mapping',
+            required_basis=[{'kind': 'ADOPTED_EXECUTION_MAPPING', 'component': 'complete_context'}]))
     absence = dict(layer_absence or {})
     return {'consumer': consumer, 'run_id': (changeset or diagnosis or {}).get('run_id'),
             'snapshot_id': snapshot_id, 'input_digest': method.get('input_digest'),
             'layers': {key: ('PRESENT' if value is not None else absence.get(key, 'UNKNOWN'))
                        for key, value in [('diagnosis', diagnosis), ('changeset', changeset)]},
-            'subjects': subjects, 'source_conflicts': source_conflicts}
+            'subjects': subjects, 'source_conflicts': source_conflicts,
+            'current_target_sources': current_sources}
 
 
 def _contains_record(expected, actual):
@@ -232,48 +372,172 @@ def _contains_record(expected, actual):
                                               for key, value in expected.items())
 
 
-def _classify(subject, nodes, authority):
+def _target_entries(nodes):
+    for path, value in nodes:
+        if not isinstance(value, Mapping) or not isinstance(value.get('current_target_files'), list):
+            continue
+        acceptance = value.get('acceptance')
+        snapshot = acceptance.get('snapshot_id') if isinstance(acceptance, Mapping) else None
+        for index, entry in enumerate(value['current_target_files']):
+            if isinstance(entry, Mapping):
+                yield path + '/current_target_files/' + str(index), entry, snapshot
+
+
+_UNRESOLVED_CONTEXT_REFERENCE = object()
+
+
+def _resolve_context_reference(reference, candidate, candidate_path, nodes):
+    """Resolve only the existing builders' same-message JSON references."""
+    if not isinstance(reference, str):
+        return _UNRESOLVED_CONTEXT_REFERENCE
+    if reference == 'feedback.public_check_results':
+        feedback = candidate.get('feedback')
+        return (feedback['public_check_results']
+                if isinstance(feedback, Mapping) and 'public_check_results' in feedback
+                else _UNRESOLVED_CONTEXT_REFERENCE)
+    if not reference.startswith('/'):
+        return _UNRESOLVED_CONTEXT_REFERENCE
+    # JSON embedded in a message has its own root. A pointer cannot resolve
+    # against an unrelated previous message that merely has a similar value.
+    roots = [(path, value) for path, value in nodes if isinstance(value, Mapping)
+             and path.endswith('#json') and candidate_path.startswith(path + '/')]
+    if not roots:
+        return _UNRESOLVED_CONTEXT_REFERENCE
+    value = max(roots, key=lambda item: len(item[0]))[1]
+    try:
+        for raw in reference[1:].split('/'):
+            key = raw.replace('~1', '/').replace('~0', '~')
+            if isinstance(value, list):
+                if not key.isdigit() or str(int(key)) != key:
+                    return _UNRESOLVED_CONTEXT_REFERENCE
+                value = value[int(key)]
+            else:
+                value = value[key]
+    except (KeyError, IndexError, ValueError, TypeError):
+        return _UNRESOLVED_CONTEXT_REFERENCE
+    return value
+
+
+def _context_supplied(original, supplied, path, nodes, depth=0):
+    """Exact adopted content, allowing only existing explicit shared copies."""
+    if depth > 40:
+        return False
+    if isinstance(original, Mapping):
+        if not isinstance(supplied, Mapping):
+            return False
+        for key, value in original.items():
+            current = supplied.get(key)
+            child_path = path + '/' + _pointer(key)
+            if key == 'public_observations' and 'public_observation_refs' in supplied:
+                current = []
+                retained = supplied.get('public_observations', [])
+                if not isinstance(retained, (list, tuple)) or not isinstance(supplied['public_observation_refs'], (list, tuple)):
+                    return False
+                for ref in supplied['public_observation_refs']:
+                    if not isinstance(ref, Mapping):
+                        return False
+                    if 'public_observation_record_ref' in ref:
+                        record = _resolve_context_reference(ref['public_observation_record_ref'], supplied, path, nodes)
+                        if not isinstance(record, Mapping) or record.get('id') != ref.get('id'):
+                            return False
+                    else:
+                        matches = [record for record in retained if isinstance(record, Mapping)
+                                   and all(record.get(k) == ref.get(k) for k in ('id', 'snapshot_id', 'content_digest', 'locator'))]
+                        if len(matches) != 1:
+                            return False
+                        record = matches[0]
+                    current.append(record)
+            elif key not in supplied:
+                ref = supplied.get(key + '_record_ref', supplied.get(key + '_ref'))
+                if not isinstance(ref, str):
+                    return False
+                current = _resolve_context_reference(ref, supplied, path, nodes)
+                if current is _UNRESOLVED_CONTEXT_REFERENCE:
+                    return False
+            if not _context_supplied(value, current, child_path, nodes, depth + 1):
+                return False
+        return True
+    if isinstance(original, (list, tuple)):
+        return (isinstance(supplied, (list, tuple)) and len(original) == len(supplied)
+                and all(_context_supplied(a, b, path + '/' + str(i), nodes, depth + 1)
+                        for i, (a, b) in enumerate(zip(original, supplied))))
+    return type(original) is type(supplied) and original == supplied
+
+
+def _evidence_digest_valid(record):
+    excerpt = record.get('excerpt')
+    if not isinstance(excerpt, str):
+        return False
+    if record.get('kind') in {'STATIC_SEARCH', 'SOURCE_INVENTORY'}:
+        from contractedge.contracts.evidence import static_search_content_digest
+        locator = record.get('locator')
+        return isinstance(locator, Mapping) and record.get('content_digest') == static_search_content_digest(
+            record.get('snapshot_id'), locator, excerpt)
+    return bool(excerpt) and record.get('content_digest') == _sha(excerpt)
+
+
+def _classify(subject, nodes, authority, current_sources=None, evidence_namespaces=(), *,
+              allow_target_window=True, historical_paths=()):
     original, identifier = subject['original'], subject['id']
     locations, identities, drift = [], [], []
+    # Evidence owns its `id`; reference-local windows are not replacement
+    # evidence bodies. Incomplete bodies with an id still participate in drift
+    # checks. Other subjects retain their existing projection conflict signals.
+    identity_fields = (('id',) if subject['kind'] == 'EVIDENCE'
+                       else ('id', 'change_id', 'source_evidence_ref'))
     candidates = [(path, value) for path, value in nodes if isinstance(value, Mapping)
-                  and identifier is not None and any(value.get(k) == identifier
-                  for k in ('id', 'change_id', 'source_evidence_ref'))]
+                  and identifier is not None and any(value.get(key) == identifier for key in identity_fields)]
+    if subject['kind'] == 'EVIDENCE':
+        candidates = [(path, value) for path, value in candidates
+                      if not any(path.startswith(root + '/') for root in historical_paths)
+                      and (value.get('snapshot_id') in (None, original.get('snapshot_id'))
+                          or _evidence_key(value) not in evidence_namespaces
+                          or subject.get('reread_identity') == _source_identity(value))]
     identities = [path for path, value in nodes if value == identifier]
     if authority == 'UNKNOWN_PREPARED_CONTENT':
         return 'UNKNOWN', [], identities
     if subject['kind'] == 'CURRENT_TARGET_SOURCE':
-        for path, value in nodes:
-            if not isinstance(value, Mapping) or not isinstance(value.get('current_target_files'), list):
+        for path, entry, snapshot in _target_entries(nodes):
+            if entry.get('path') != original['path']:
                 continue
-            for index, entry in enumerate(value['current_target_files']):
-                if not isinstance(entry, Mapping) or entry.get('path') != original['path']:
-                    continue
-                pointer = path + '/current_target_files/' + str(index) + '/content'
-                if (value.get('acceptance') or {}).get('snapshot_id') != original['snapshot_id']:
-                    return 'IDENTITY_DRIFT', [{'pointer': path + '/acceptance/snapshot_id'}], identities
-                if entry.get('content') != original['content']:
-                    return 'CONTENT_DRIFT', [{'pointer': pointer}], identities
-                return 'FULL_CURRENT_TARGET_BYTES', [{'pointer': pointer,
+            pointer = path + '/content'
+            if snapshot != original['snapshot_id']:
+                return 'IDENTITY_DRIFT', [{'pointer': path}], identities
+            if ('selected_target' in original
+                    and not _contains_record(original['selected_target'], entry)):
+                return 'CONTENT_DRIFT', [{'pointer': path}], identities
+            if (entry.get('windowed_from_current_target') is True
+                    and entry.get('source_file_sha256') != original.get('source_file_sha256')):
+                return 'IDENTITY_DRIFT', [{'pointer': path + '/source_file_sha256'}], identities
+            if not target_supplies_source(entry, original['content'], allow_window=allow_target_window):
+                return 'CONTENT_DRIFT', [{'pointer': pointer}], identities
+            windowed = entry.get('windowed_from_current_target') is True
+            return ('WINDOWED_CURRENT_TARGET_BYTES' if windowed else 'FULL_CURRENT_TARGET_BYTES'), [{'pointer': pointer,
                     'snapshot_id': original['snapshot_id'], 'path': original['path'],
                     'content_sha256': original['content_digest'],
-                    'source_file_sha256': original['source_file_sha256']}], identities
+                    'source_file_sha256': original['source_file_sha256'],
+                    **({'window_segments': entry['window_segments']} if windowed else {})}], identities
         return 'NOT_DELIVERED', [], identities
     if subject['kind'] == 'ORIGINAL_REQUIREMENT':
         text = original['text']
         locations = [{'pointer': path, 'span': [0, len(text)], 'sha256': _sha(text)}
                      for path, value in nodes if isinstance(value, str) and value == text]
-    elif subject['kind'] == 'FEEDBACK':
-        locations = [{'pointer': path} for path, value in nodes if value == original]
+    elif subject['kind'] in {'FEEDBACK', 'HISTORICAL_CONTEXT', 'DECLARED_ARTIFACT', 'EXECUTION_MAPPING'}:
+        locations = [{'pointer': path} for path, value in nodes
+                     if _context_supplied(original, value, path, nodes)]
     else:
         locations = [{'pointer': path} for path, value in candidates if _contains_record(original, value)]
     if subject['kind'] == 'EVIDENCE' and isinstance(original.get('excerpt'), str) and original['excerpt']:
         excerpt = original['excerpt']
-        if original.get('content_digest') != _sha(excerpt):
+        if not _evidence_digest_valid(original):
             return 'UNKNOWN', [], identities
         # The existing execution consumer supplies a target file instead of duplicating
         # a source excerpt. Bind the exact excerpt to that exact declared source path.
         target_path = (original.get('locator') or {}).get('path') if isinstance(original.get('locator'), Mapping) else None
         bound = [(path, value) for path, value in candidates if _source_identity(value) == _source_identity(original)]
+        target_identity = {key: value for key, value in original.items()
+                           if key not in {'excerpt', 'delivery_required'}}
+        target_bound = [(path, value) for path, value in bound if _contains_record(target_identity, value)]
         reread = [(path, value) for path, value in candidates
                   if subject.get('reread_identity') is not None
                   and _source_identity(value) == subject['reread_identity']]
@@ -285,19 +549,39 @@ def _classify(subject, nodes, authority):
                                            'actual_identity': _source_identity(value)})
         if identity_drift:
             return 'IDENTITY_DRIFT', identity_drift, identities
-        for path, value in nodes:
-            if (_legal_source_path(target_path) and isinstance(value, Mapping) and value.get('path') == target_path
-                    and isinstance(value.get('content'), str) and bound):
-                content = value['content']
-                start = content.find(excerpt)
-                if start >= 0:
-                    locations.append({'pointer': path + '/content', 'span': [start, start + len(excerpt)],
-                                      'sha256': _sha(excerpt), 'binding': 'EXACT_DECLARED_SOURCE_PATH'})
+        for path, target, snapshot in _target_entries(nodes) if original.get('kind') == 'SOURCE_SPAN' else ():
+            if not _legal_source_path(target_path) or target.get('path') != target_path or not target_bound:
+                continue
+            current = (current_sources or {}).get(target_path)
+            if current is not None:
+                if snapshot != current['snapshot_id']:
+                    continue
+                if (target.get('windowed_from_current_target') is True
+                        and target.get('source_file_sha256') != current['source_file_sha256']):
+                    continue
+                actual = current['content']
+                if (original.get('snapshot_id') != current['snapshot_id'] and actual.count(excerpt) != 1):
+                    continue
+            else:
+                # Without an independent current file, only a complete target
+                # can witness original excerpt bytes. A window needs its real
+                # source coordinates, never inferred from rendered positions.
+                if target.get('windowed_from_current_target'):
+                    continue
+                actual = target.get('content')
+            if target_supplies_support(target, original, actual):
+                start = target['content'].find(excerpt)
+                locations.append({'pointer': path + '/content', 'span': [start, start + len(excerpt)],
+                                  'sha256': _sha(excerpt), 'binding': 'EXACT_DECLARED_SOURCE_PATH'})
         for path, value in candidates:
             if value.get('excerpt') == excerpt:
                 if any(path == bound_path for bound_path, _ in bound):
-                    locations.append({'pointer': path + '/excerpt', 'span': [0, len(excerpt)],
-                                      'sha256': _sha(excerpt), 'binding': 'EXACT_IDENTIFIED_EXCERPT'})
+                    retained = {k: v for k, v in original.items() if k != 'delivery_required'}
+                    if _contains_record(retained, value):
+                        locations.append({'pointer': path + '/excerpt', 'span': [0, len(excerpt)],
+                                          'sha256': _sha(excerpt), 'binding': 'EXACT_IDENTIFIED_EXCERPT'})
+                    else:
+                        drift.append(path)
             if value.get('content_digest') not in (None, original['content_digest']):
                 drift.append(path + '/content_digest')
             if 'excerpt' in value and value['excerpt'] != excerpt:
@@ -331,46 +615,132 @@ def _classify(subject, nodes, authority):
 
 
 def inspect_delivery(request, quote, context):
+    # An adopted correction exchange includes the selected assistant response
+    # and subsequent user feedback/wrappers. Compare complete logical messages
+    # with the prepared wire, retaining the initial current-input namespace.
+    context = _with_request_source_subjects(context, request)
+    correction_history_started = False
+    for index, message in enumerate(request.messages):
+        if not isinstance(message, Mapping):
+            continue
+        role = message.get('role')
+        if role == 'assistant':
+            correction_history_started = True
+        if correction_history_started and role in {'assistant', 'user'}:
+            context['subjects'].append(_subject('HISTORICAL_CONTEXT', dict(message),
+                identifier='correction_message:' + str(index),
+                required_basis=[{'kind': 'ADOPTED_CORRECTION_MESSAGE', 'component': 'complete_context'}]))
     projection = safe_request_projection(request, quote)
     nodes = list(_walk(projection['payload']))
     rows, issues = [], []
+    current_sources = context.get('current_target_sources', {})
+    evidence_namespaces = {_evidence_key(subject['original']) for subject in context.get('subjects', [])
+                           if subject['kind'] == 'EVIDENCE'}
+    evidence_subjects = {_evidence_key(subject['original']): subject for subject in context.get('subjects', [])
+                         if subject['kind'] == 'EVIDENCE'}
+    historical_paths = [path for subject in context.get('subjects', [])
+        if subject['kind'] == 'HISTORICAL_CONTEXT' for path, value in nodes
+        if _context_supplied(subject['original'], value, path, nodes)]
+    # Feedback already owns its historical records. Recognizing their namespace
+    # prevents a reused local ID from masquerading as drift of a current record;
+    # it never supplies missing current content or adds a new evidence claim.
     for subject in context.get('subjects', []):
-        classification, locations, identity_locations = _classify(subject, nodes, projection['authority'])
+        if subject['kind'] in {'FEEDBACK', 'HISTORICAL_CONTEXT'}:
+            evidence_namespaces.update(_evidence_key(value) for _, value in _walk(subject['original'])
+                if isinstance(value, Mapping) and isinstance(value.get('id'), str)
+                and isinstance(value.get('snapshot_id'), str))
+    for original_subject in context.get('subjects', []):
+        subject = _clone(original_subject)
         original = subject['original']
-        concrete = (subject['kind'] == 'EVIDENCE' and isinstance(original.get('excerpt'), str) and bool(original['excerpt'])
-                    and original.get('content_digest') == _sha(original['excerpt'])
-                    and isinstance(original.get('snapshot_id'), str) and bool(original['snapshot_id'])
+        source_path = (original.get('locator') or {}).get('path') if isinstance(original.get('locator'), Mapping) else None
+        current = current_sources.get(source_path) if isinstance(source_path, str) else None
+        if (subject['kind'] == 'EVIDENCE' and subject.get('current_target_delivery_ref')
+                and current is not None and original.get('snapshot_id') != current['snapshot_id']
+                and not any(b['kind'] == 'EXISTING_SOURCE_PREREQUISITE' for b in subject['required_basis'])
+                and any(target.get('path') == source_path and snapshot == current['snapshot_id']
+                        and target_supplies_source(target, current['content'])
+                        for _path, target, snapshot in _target_entries(nodes))):
+            subject['historical_required_basis'] = [b for b in subject['required_basis']
+                if b['kind'] == 'EXISTING_DELIVERY_REQUIRED']
+            subject['required_basis'] = [b for b in subject['required_basis']
+                if b['kind'] != 'EXISTING_DELIVERY_REQUIRED']
+        # A changed historical selection needs a complete current target. A
+        # valid window plus the old full excerpt cannot hide current gaps.
+        needs_complete_target = subject['kind'] == 'CURRENT_TARGET_SOURCE' and any(
+            basis.get('source_snapshot_id') != original.get('snapshot_id')
+            and not evidence_subjects.get((basis.get('source_evidence_id'),
+                                           basis.get('source_snapshot_id')), {}).get('reread_identity')
+            for basis in subject['required_basis'] if basis.get('source_evidence_id'))
+        classification, locations, identity_locations = _classify(
+            subject, nodes, projection['authority'], current_sources, evidence_namespaces,
+            allow_target_window=not needs_complete_target, historical_paths=historical_paths)
+        original = subject['original']
+        concrete = (subject['kind'] == 'EVIDENCE' and _evidence_digest_valid(original)
+                    and bool(_evidence_key(original)[1])
                     and (original.get('kind') != 'SOURCE_SPAN' or _legal_source_path(
                         original.get('locator', {}).get('path') if isinstance(original.get('locator'), Mapping) else None)))
+        if subject['kind'] == 'EVIDENCE' and original.get('kind') == 'PUBLIC_DEPENDENCY_DECLARATION':
+            concrete = (concrete and original.get('read_only') is True
+                and all(isinstance(original.get(key), str) and bool(original[key])
+                        for key in ('module', 'version', 'member', 'archive_path'))
+                and all(isinstance(original.get(key), str) and len(original[key]) == 64
+                        for key in ('archive_sha256', 'environment_sha256')))
+        if subject['kind'] == 'ORIGINAL_REQUIREMENT':
+            concrete = isinstance(original.get('text'), str) and bool(original['text'])
+        elif subject['kind'] == 'DECLARED_ARTIFACT':
+            concrete = (isinstance(original.get('id'), str) and bool(original['id'])
+                and isinstance(original.get('path'), str) and bool(original['path'])
+                and isinstance(original.get('content'), str)
+                and original.get('content_digest') == _sha(original['content']))
+        elif subject['kind'] in {'FEEDBACK', 'HISTORICAL_CONTEXT', 'EXECUTION_MAPPING'}:
+            concrete = isinstance(original, Mapping) and bool(original)
         if subject['kind'] == 'CURRENT_TARGET_SOURCE':
             concrete = (isinstance(original.get('content'), str) and original.get('content_digest') == _sha(original['content'])
                 and _legal_source_path(original.get('path')) and isinstance(original.get('snapshot_id'), str)
                 and bool(original['snapshot_id']) and isinstance(original.get('source_file_sha256'), str)
                 and len(original['source_file_sha256']) == 64)
         required = bool(subject['required_basis'])
+        historical_prerequisite = (subject['kind'] == 'EVIDENCE' and original.get('kind') == 'SOURCE_SPAN'
+            and original.get('snapshot_id') != context.get('snapshot_id')
+            and any(b['kind'] == 'EXISTING_SOURCE_PREREQUISITE' for b in subject['required_basis']))
+        # Keeping the original quote is honest historical delivery, not evidence
+        # that an explicit prerequisite still holds in the current source.
+        prerequisite_current = not historical_prerequisite or (
+            subject.get('reread_identity') is not None and any(
+                isinstance(value, Mapping) and _source_identity(value) == subject['reread_identity']
+                and value.get('excerpt') == original.get('excerpt') for _, value in nodes)) or (
+            current is not None and any(snapshot == current['snapshot_id']
+                and target.get('path') == source_path
+                and target_supplies_support(target, original, current['content'])
+                for _, target, snapshot in _target_entries(nodes)))
         row = {**subject, 'classification': classification, 'locations': locations,
                'identity_locations': identity_locations, 'required_content_gate': required}
         rows.append(row)
-        origin_ids = {basis.get('source_evidence_id') for basis in subject['required_basis']}
+        origin_keys = {(basis.get('source_evidence_id'), basis.get('source_snapshot_id'))
+                       for basis in subject['required_basis'] if basis.get('source_evidence_id')}
         conflict = next((row for row in context.get('source_conflicts', [])
-                         if row['id'] == subject['id'] or row['id'] in origin_ids), None)
+                         if _evidence_key(row) == _evidence_key(original)
+                         or _evidence_key(row) in origin_keys), None)
         if conflict:
             row['classification'] = classification = 'UNKNOWN_CONFLICTING_ORIGINAL_RECORDS'
         code = ('CONFLICTING_ORIGINAL_SOURCE' if required and conflict else
-                'REQUIRED_SOURCE_UNVERIFIABLE' if required and not concrete else
+                'REQUIRED_SOURCE_UNVERIFIABLE' if required and (not concrete or not prerequisite_current) else
                 'SEMANTIC_DELIVERY_REQUIRED_CONTENT_MISSING')
-        if required and (conflict or not concrete or classification not in {
-                'FULL_ORIGINAL', 'EXPLICIT_SOURCE_REREAD', 'FULL_CURRENT_TARGET_BYTES'}):
+        if required and (conflict or not concrete or not prerequisite_current or classification not in {
+                'FULL_ORIGINAL', 'EXPLICIT_SOURCE_REREAD', 'FULL_CURRENT_TARGET_BYTES',
+                'WINDOWED_CURRENT_TARGET_BYTES'}):
             issues.append({'code': code, 'subject_id': subject['id'],
                 'classification': classification, 'consumer': context['consumer'],
                 'expected_component': 'current_file_bytes' if subject['kind'] == 'CURRENT_TARGET_SOURCE'
+                                      else 'complete original requirement text' if subject['kind'] == 'ORIGINAL_REQUIREMENT'
+                                      else 'current prerequisite source' if historical_prerequisite
                                       else 'exact original excerpt', 'locations': locations,
                 'identity_locations': identity_locations, 'required_basis': subject['required_basis']})
     required_count = sum(row['required_content_gate'] for row in rows)
     status = ('REQUIRED_CONTENT_GAP' if issues else 'REQUIRED_CONTENT_VERIFIED' if required_count
               else 'RECORDED_WITHOUT_REQUIRED_CONTENT_CLAIM')
     return {'schema_version': 'ce.semantic_delivery.v1', 'status': status,
-            'context': {k: v for k, v in context.items() if k != 'subjects'},
+            'context': {k: v for k, v in context.items() if k not in {'subjects', 'current_target_sources'}},
             'request_projection': projection, 'subjects': rows, 'issues': issues,
             'required_content_count': required_count, 'adoption': 'UNVERIFIED',
             'interpretation': 'Exact delivery witnesses only; summaries and identity references are never original content or adoption proof.'}

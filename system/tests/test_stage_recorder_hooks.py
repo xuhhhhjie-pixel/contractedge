@@ -138,13 +138,16 @@ class StageRecorderProductionTests(unittest.TestCase):
     def test_ready_resume_has_new_absolute_segment_and_retains_legacy_missing_request(self):
         with tempfile.TemporaryDirectory() as tmp:
             saved, continued = Path(tmp)/'saved', Path(tmp)/'continued'
-            public_demo.run_demo('reload-state', saved, save_ready=True)
-            trace = read(saved / 'ready.trace.json')
+            # Real pre-lifecycle output, rather than stripping the new contract
+            # from a current trace to make it appear to be a legacy artifact.
+            legacy = Path(__file__).parent / 'fixtures/legacy-ready-7911'
+            public = public_demo.freeze_example('reload-state', saved)
+            trace = read(legacy / 'ready.trace.json')
+            self.assertNotIn('source_context', trace['run_context']['retrieval_config'])
             for call in trace['model_calls']:
                 for key in ('request', 'request_digest', 'transport_request', 'transport_body_sha256'):
                     call.pop(key, None)
-            config = read(saved / 'run.config.json')
-            public = saved / 'frozen-public/public'
+            config = read(legacy / 'run.config.json')
             runner = public_demo.PublicExampleRunner(public, 'reload-state')
             provider = public_demo.SyntheticExampleProvider('reload-state', runner)
             report = repair_case(public, saved / 'frozen-public', 'reload-state', continued, provider,
@@ -161,6 +164,23 @@ class StageRecorderProductionTests(unittest.TestCase):
             old = read(continued / imported['call_refs'][0]['ledger_segment_path'])
             self.assertEqual(old, trace['model_calls'])
             self.assertTrue(all('request' not in call for call in old))
+
+    def test_current_ready_cannot_discard_actual_requests_to_claim_legacy_import(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            saved, continued = Path(tmp)/'saved', Path(tmp)/'continued'
+            public_demo.run_demo('reload-state', saved, save_ready=True)
+            trace = read(saved / 'ready.trace.json')
+            for call in trace['model_calls']:
+                for key in ('request', 'request_digest', 'transport_request', 'transport_body_sha256'):
+                    call.pop(key, None)
+            public = saved / 'frozen-public/public'
+            runner = public_demo.PublicExampleRunner(public, 'reload-state')
+            provider = public_demo.SyntheticExampleProvider('reload-state', runner)
+            report = repair_case(public, saved / 'frozen-public', 'reload-state', continued, provider,
+                public_demo.count_tokens, read(saved/'run.config.json'), initial_trace=trace, public_runner=runner)
+            self.assertEqual(report['status'], 'INVALID_OUTPUT', report)
+            self.assertIn('actual canonical request', ' '.join(report['errors']))
+            self.assertEqual(read(continued / 'model_calls.json'), [])
 
     def test_unknown_provider_response_is_recorded_once_without_fake_output_or_retry(self):
         class Unknown:

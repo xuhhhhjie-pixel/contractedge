@@ -1,6 +1,6 @@
 """Standard CLI front journaling, using public-only controlled responses."""
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict
+from dataclasses import asdict, replace
 import json
 from pathlib import Path
 import shutil
@@ -98,7 +98,11 @@ def run(fixture, **kwargs):
 def assert_actual_journal(fixture, provider, trace):
     actual = read(fixture.artifacts / 'model_calls.json')
     payload = trace.to_wire() if hasattr(trace, 'to_wire') else trace
-    assert payload['model_calls'] == actual
+    # The trace may add stage/validation annotations, but every canonical
+    # dispatch and usage fact must still be identical to the sealed ledger.
+    assert len(payload['model_calls']) == len(actual)
+    for projected, canonical in zip(payload['model_calls'], actual):
+        assert {key: projected[key] for key in canonical} == canonical
     assert [row['request'] for row in actual] == provider.requests
     assert len(actual) == len(provider.requests)
     budget = read(fixture.artifacts / 'budget.json')
@@ -155,6 +159,48 @@ def test_format_corrections_are_separate_actual_calls_in_one_budget(public_case,
         assert any(row['request_metadata'].get('format_retry_index') == 1 for row in actual)
     if invalid in {'planning', 'both'}:
         assert any(row['request_metadata'].get('planning_format_retry_index') == 1 for row in actual)
+
+
+def test_final_cli_trace_retains_stage_binding_and_validation_annotations(public_case, monkeypatch):
+    fixture = public_case
+    fixture.config['max_format_retries'] = 1
+    write(fixture.config_path, fixture.config)
+    provider, _ = install_provider(monkeypatch, fixture, invalid_diagnosis=True, invalid_plan=True)
+    trace = run(fixture)
+    assert trace.status == 'READY', trace.errors
+    canonical = assert_actual_journal(fixture, provider, trace)
+    projected = list(trace.model_calls)
+    assert [row['stage'] for row in projected] == [
+        'DIAGNOSIS', 'DIAGNOSIS_FORMAT_RETRY', 'SEMANTIC_CHANGESET', 'CHANGESET_REVISION']
+    assert projected[0]['validation_error']
+    assert all(projected[index]['validation_feedback'] for index in (0, 2))
+    assert all(isinstance(projected[index]['runner_binding'], dict) for index in (1, 3))
+    assert all('stage' not in row and 'validation_feedback' not in row for row in canonical)
+    assert read(fixture.output)['model_calls'] == projected
+
+
+@pytest.mark.parametrize('mismatch', ['request_digest', 'request', 'dispatch_state',
+                                    'output_tokens_reserved', 'response_content'])
+def test_final_cli_annotations_cannot_replace_canonical_facts_or_create_calls(public_case, monkeypatch, mismatch):
+    from contractedge.orchestration import cli_front_recording as recording
+    fixture = public_case
+    provider, _ = install_provider(monkeypatch, fixture)
+    original = recording.run_front_recorded
+    def change_projection(*args, **kwargs):
+        trace = original(*args, **kwargs)
+        calls = json.loads(json.dumps(trace.model_calls))
+        calls[0].update(stage='WRONG_CALL_ANNOTATION', validation_feedback='wrong call')
+        calls[0][mismatch] = 999 if mismatch == 'output_tokens_reserved' else 'mismatched'
+        calls.append({**calls[-1], 'stage': 'FABRICATED_CALL'})
+        return replace(trace, model_calls=tuple(calls))
+    monkeypatch.setattr(recording, 'run_front_recorded', change_projection)
+    trace = run(fixture)
+    assert trace.status == 'READY', trace.errors
+    actual = assert_actual_journal(fixture, provider, trace)
+    assert len(actual) == len(provider.requests) == 2
+    assert 'stage' not in trace.model_calls[0]
+    assert 'validation_feedback' not in trace.model_calls[0]
+    assert trace.model_calls[1]['stage'] == 'SEMANTIC_CHANGESET'
 
 
 def test_unknown_dispatch_keeps_one_reservation_and_never_resends(public_case, monkeypatch):

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, replace
+from typing import Mapping
 
 from contractedge.contracts.stages import StageResult
 from contractedge.contracts.validation import canonical_digest
@@ -15,6 +16,28 @@ class TransitionDecision:
     reason: str
     result: StageResult
     effect_id: str
+
+
+def resolve_repair_route(trace, feedback, *, current_snapshot, mode='full',
+                         retry_restored_candidate=False, previous_attempt=None):
+    """Resolve continuation from the selected source, never the rejected trial.
+
+    Feedback proposes a route. This is the sole repair-loop policy boundary;
+    transition() then verifies diagnosis freshness before issuing the effect.
+    Both ordinary plan revision and prerequisite review use that same gate.
+    """
+    plan = (trace or {}).get('changeset') or {}
+    review_prerequisites = bool(mode == 'full' and trace is not None and retry_restored_candidate
+        and plan_reassessment_required(plan, current_snapshot, previous_attempt))
+    if review_prerequisites:
+        route = 'CHANGESET'
+    elif mode == 'full' and trace is not None and behavior_plan_reassessment_required(plan, current_snapshot, feedback):
+        feedback = prerequisite_review_feedback(feedback)
+        route = 'DIAGNOSIS'
+    else:
+        route = ('EXECUTE' if retry_restored_candidate else feedback['route'] if feedback
+                 else 'EXECUTE' if trace is not None else 'DIAGNOSIS')
+    return dict(route=route, feedback=feedback, review_prerequisites=review_prerequisites)
 
 
 def transition(state: RepairState, result: StageResult) -> TransitionDecision:
@@ -43,7 +66,9 @@ def transition(state: RepairState, result: StageResult) -> TransitionDecision:
             reason = "DIAGNOSIS_NOT_READY"
     elif result.stage == "round_start":
         next_state = replace(next_state, current_snapshot=result.snapshot_id)
-        if result.route == "DIAGNOSIS":
+        if result.route == "STOP":
+            action = "STOP"
+        elif result.route == "DIAGNOSIS":
             action = "DIAGNOSE"
         elif result.route == "CHANGESET":
             action = "REVISE_PLAN" if state.diagnosis_snapshot == result.snapshot_id else "REDIAGNOSE"
@@ -94,3 +119,60 @@ def transition(state: RepairState, result: StageResult) -> TransitionDecision:
     identity = {"revision": state.revision, "snapshot": state.current_snapshot,
                 "result": asdict(result), "action": action, "reason": reason}
     return TransitionDecision(next_state, action, reason, result, canonical_digest(identity))
+
+
+def plan_reassessment_required(plan: Mapping, current_snapshot: str, previous: Mapping | None) -> bool:
+    """Request a prerequisite review, without attributing the runtime failure.
+
+    Compiler errors and unrelated/unknown probe errors keep the existing edit
+    route. A verified readiness failure questions whether a required runtime
+    prerequisite was established; the planner may retain or revise its intent.
+    """
+    if not any(p.get('disposition') == 'REQUIRED' for p in plan.get('precondition_review', [])):
+        return False
+    previous = previous or {}
+    trial = previous.get('rejected_trial') or {}
+    decision = trial.get('decision') or trial.get('candidate_decision') or {}
+    if trial.get('decision') and trial.get('candidate_decision') and trial['decision'] != trial['candidate_decision']:
+        return False
+    historical = trial.get('feedback') or {}
+    if not (previous.get('source_snapshot') == current_snapshot
+            and decision.get('decision') == 'UNCOMPARABLE'
+            and decision.get('from_snapshot') == current_snapshot
+            and trial.get('snapshot_id') and trial['snapshot_id'] != current_snapshot
+            and decision.get('trial_snapshot') == trial['snapshot_id'] == historical.get('to_snapshot')
+            and historical.get('build_state') == 'FAILED'):
+        return False
+    from contractedge.execution.public import is_registered_readiness_failure
+    return any(isinstance(f, Mapping) and f.get('kind') == 'CANDIDATE_RUNTIME_FAILURE'
+        and f.get('snapshot_id') == trial['snapshot_id'] and is_registered_readiness_failure(f)
+        for f in historical.get('observation_diagnostics', []))
+
+
+def behavior_plan_reassessment_required(plan: Mapping, current_snapshot: str, feedback: Mapping | None) -> bool:
+    """Only a failed verification of an actual required prerequisite questions it."""
+    if (not feedback or feedback.get('to_snapshot') != current_snapshot
+            or feedback.get('semantic_outcome') != 'PUBLIC_REVIEW_FAIL'
+            or not any(p.get('disposition') == 'REQUIRED' for p in plan.get('precondition_review', []))):
+        return False
+    from contractedge.execution.support import deterministic_check_result
+    verification_ids = {ref for row in plan.get('precondition_review', [])
+                        if row.get('disposition') == 'REQUIRED' for ref in row.get('verification_refs', [])}
+    return any((result := deterministic_check_result(condition, feedback.get('public_observations', []),
+        snapshot_id=current_snapshot, capabilities=feedback.get('public_execution_capabilities')))
+        and result['status'] == 'FAIL'
+        for kind in ('postconditions', 'preserve_constraints', 'open_obligations')
+        for condition in plan.get(kind, []) if condition.get('id') in verification_ids)
+
+
+def prerequisite_review_feedback(feedback: Mapping) -> dict:
+    """Use the existing uncertain diagnosis-stage route, not a causal verdict."""
+    result = {**feedback, 'route': 'DIAGNOSIS', 'next_action': 'DIAGNOSIS',
+        'failure_kind': 'DIAGNOSIS', 'route_confidence': 'LOW',
+        'rationale': 'A current necessary behavior failed under prerequisite-dependent intent. Reassess current '
+        'source and accepted assumptions before another edit; this route is not proof that the plan caused it. '
+        'DIAGNOSIS selects the work stage at LOW confidence, not proven source blame. This review instruction '
+        'supersedes the old execution-first instruction. The unchanged original feedback retains its attribution '
+        'and rationale; do not treat that historical instruction as the current action.'}
+    result.pop('routing_policy', None)
+    return result

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections import Counter
 from pathlib import PurePosixPath
 from pathlib import Path
 from typing import Any, Mapping
@@ -9,6 +10,7 @@ from typing import Any, Mapping
 from jsonschema import Draft202012Validator
 
 from .evidence import static_search_content_digest, supports_expected_missing_evidence
+from .pointers import JSON_POINTER_GUIDANCE
 from .models import (
     ContractError,
     DiagnosisPacket,
@@ -31,6 +33,78 @@ SCHEMA_FILES = {
 }
 
 
+# Validation is intentionally grouped in the control plane.  These are not
+# model labels and are not part of any output contract.
+VALIDATION_LAYERS = ("schema", "evidence", "semantic")
+
+
+def validation_layer(code: str | None, path: str = "") -> str:
+    """Classify a validation code for bounded correction feedback."""
+    value = str(code or "").upper()
+    location = str(path or "").casefold()
+    if (value.startswith(("SCHEMA", "INVALID_JSON", "OBJECT_REQUIRED", "DUPLICATE_ID"))
+            or value in {"SCHEMA_VERSION_UNSUPPORTED", "SCHEMA_VERSION_MISMATCH", "INVALID_MODEL_PLAN"}
+            or "json" in location):
+        return "schema"
+    if (value.startswith(("EVIDENCE", "SNAPSHOT", "INPUT_", "REQUIREMENT_", "REFERENCE_", "ARTIFACT_", "SOURCE_", "DELIVERY_"))
+            or value.endswith(("_NOT_IN_INPUT", "_NOT_IN_CANDIDATES", "_DIGEST_MISMATCH"))
+            or any(token in value for token in ("IDENTITY", "LOCATOR", "QUOTE"))):
+        return "evidence"
+    return "semantic"
+
+
+def compact_validation_feedback(issues, *, max_per_layer: int = 8,
+                                max_total: int = 12,
+                                include_codes=()) -> list[dict[str, str]]:
+    """Return only the active validation layer for the next correction.
+
+    Shape errors block evidence and semantic checks, and evidence identity
+    errors block semantic interpretation.  Keeping those later layers out of
+    the same prompt prevents a correction from spending its allowance on
+    errors that cannot yet be validated.  Existing issue codes and paths stay
+    intact for traceability.
+    """
+    rows = []
+    for issue in issues or ():
+        if isinstance(issue, Mapping):
+            code, path, message = issue.get("code"), issue.get("path", ""), issue.get("message", "")
+        else:
+            code = getattr(issue, "code", None)
+            path = getattr(issue, "path", "")
+            message = getattr(issue, "message", str(issue))
+        if not isinstance(code, str) or not code:
+            code = "VALIDATION_ERROR"
+        row = {"code": code, "path": str(path or ""), "message": str(message or "")[:1800]}
+        row["layer"] = validation_layer(code, row["path"])
+        rows.append(row)
+    if not rows:
+        return []
+    # Preserve validator order while removing exact duplicates.
+    unique = []
+    seen = set()
+    for row in rows:
+        key = (row["code"], row["path"], row["message"])
+        if key not in seen:
+            seen.add(key)
+            unique.append(row)
+    active = next((layer for layer in VALIDATION_LAYERS
+                   if any(row["layer"] == layer for row in unique)), "semantic")
+    result = [row for row in unique if row["layer"] == active][:max(0, int(max_per_layer))]
+    # A small set of checks is deliberately independent of payload shape.  In
+    # particular, source-prerequisite identity/establishment checks can be
+    # verified against the delivered bytes even when a schema error blocks
+    # deeper semantic validation.  Callers may include those codes in the
+    # same correction so a single bounded retry does not merely reveal the
+    # next independent error after fixing the active layer.  The default stays
+    # layer-gated for diagnosis and all other callers.
+    independent = {str(code) for code in include_codes}
+    if independent:
+        for row in unique:
+            if row["code"] in independent and row not in result:
+                result.append(row)
+    return result[:max(0, int(max_total))]
+
+
 def canonical_digest(value: Mapping[str, Any]) -> str:
     encoded = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
@@ -46,15 +120,36 @@ def _load_schema(version: str) -> dict[str, Any]:
         raise ContractError("SCHEMA_UNAVAILABLE", filename, str(exc)) from exc
 
 
+def _schema_error_message(error) -> str:
+    """Report the violated constraint without echoing a potentially huge value."""
+    if error.validator in {'maxItems','minItems'} and isinstance(error.instance,list):
+        direction='maximum' if error.validator=='maxItems' else 'minimum'
+        message=f'Array has {len(error.instance)} items; {direction} is {error.validator_value}.'
+        if list(error.absolute_path)[-1:]==['precondition_review']:
+            refs=[r.get('source_evidence_ref') for r in error.instance if isinstance(r,Mapping)
+                and isinstance(r.get('source_evidence_ref'),str)]
+            repeated=[f'{ref[:100]} ({count})' for ref,count in Counter(refs).items() if count>1]
+            if repeated:
+                message+=' Duplicate source_evidence_ref: '+', '.join(repeated[:8])+'.'
+                message+=' Consolidate all conditions for each source into one review, preserving every condition and check reference.'
+        return message
+    if error.validator in {'maxLength','minLength'} and isinstance(error.instance,str):
+        return f'String length is {len(error.instance)}; {error.validator} is {error.validator_value}.'
+    return error.message if len(error.message)<=600 else error.message[:600]+' [value echo omitted; consult the supplied schema]'
+
+
 def _check_schema(payload: Any, version: str) -> None:
     schema = _load_schema(version)
     errors = sorted(Draft202012Validator(schema).iter_errors(payload), key=lambda e: tuple(str(x) for x in e.absolute_path))
     if errors:
         error = errors[0]
         path = ".".join(str(part) for part in error.absolute_path)
-        additional = ["SCHEMA_INVALID at " + '.'.join(map(str, e.absolute_path)) + ': ' + e.message[:220]
+        additional = ["SCHEMA_INVALID at " + '.'.join(map(str, e.absolute_path)) + ': ' + _schema_error_message(e)[:220]
                       for e in errors[1:12]]
-        raise ContractError("SCHEMA_INVALID", path, error.message +
+        pointer_hint = ('; ' + JSON_POINTER_GUIDANCE if any(
+            e.validator == 'pattern' and list(e.absolute_path)[-1:] in [['input_pointer'], ['output_pointer']]
+            for e in errors) else '')
+        raise ContractError("SCHEMA_INVALID", path, _schema_error_message(error) + pointer_hint +
                             ('; additional independent errors: ' + '; '.join(additional) if additional else ''))
 
 
@@ -188,7 +283,8 @@ def validate_diagnosis(
         first, *rest = issues
         raise ContractError(first.code, first.path, first.message +
                             ('; additional independent errors: ' + '; '.join(
-                                f'{i.code} at {i.path}: {i.message}' for i in rest) if rest else ''))
+                                f'{i.code} at {i.path}: {i.message}' for i in rest) if rest else ''),
+                            issues=issues)
     _check_schema(payload, version)
     if payload["input_digest"] != method_input.input_digest:
         raise ContractError("INPUT_DIGEST_MISMATCH", "input_digest", "diagnosis does not belong to this public input")
@@ -329,6 +425,9 @@ def validate_diagnosis(
                                     "a production consumer must cite a source span in the current snapshot"))
 
     def has_consumer_path(outcome_id: str) -> bool:
+        # This checks the production path actually claimed by a ready packet.
+        # It is not a proof of end-to-end behavior. A local template/function
+        # repair need not invent a runtime terminal or a deployment graph.
         config_ids = {unit["id"] for unit in units if unit["semantic_role_class"] == "CONFIGURATION_INPUT"
                       and outcome_id in unit["requirement_refs"]}
         terminal_ids = {unit["id"] for unit in units if unit["semantic_role_class"] in
@@ -336,14 +435,47 @@ def validate_diagnosis(
                         and outcome_id in unit["requirement_refs"]}
         if not config_ids or not terminal_ids:
             return True
+
+        def production_source(record):
+            path = str(record.get('locator', {}).get('path', ''))
+            parts = path.replace('\\', '/').split('/')
+            return (record['kind'] == 'SOURCE_SPAN'
+                    and not path.endswith('_test.go')
+                    and not any(part in {'test', 'tests', '__tests__'} for part in parts))
+
+        def located(unit):
+            cited = [evidence_by_id[ref] for ref in unit['locator_refs']]
+            if unit['existence'] == 'EXPECTED_MISSING':
+                # A repair may create a missing component; do not require the
+                # broken source to already realize the desired relation.
+                return any(supports_expected_missing_evidence(record) for record in cited)
+            if unit['semantic_role_class'] == 'PRODUCTION_CONSUMER':
+                return (unit['existence'] == 'PRESENT'
+                        and any(production_source(record) for record in cited))
+            return (unit['existence'] == 'PRESENT' and any(
+                production_source(record) or record['kind'] in {'PUBLIC_OBSERVATION', 'DECLARED_ARTIFACT'}
+                for record in cited))
+
+        known_units = {unit['id'] for unit in units if located(unit)} | config_ids
+        terminal_ids &= known_units
+        if not terminal_ids:
+            return False
         graph: dict[str, set[str]] = {}
         for relation in relations:
             if outcome_id not in relation["requirement_refs"]:
                 continue
+            # A desired edge with no production/absence support does not
+            # establish a ready path, even if its endpoint names connect.
+            if not any(production_source(evidence_by_id[ref])
+                       or supports_expected_missing_evidence(evidence_by_id[ref])
+                       for ref in relation['support_refs']):
+                continue
             for source_id in relation["source_unit_ids"]:
-                graph.setdefault(source_id, set()).update(relation["target_unit_ids"])
+                if source_id in known_units:
+                    graph.setdefault(source_id, set()).update(
+                        set(relation["target_unit_ids"]) & known_units)
         consumer_ids = {unit["id"] for unit in units if unit["semantic_role_class"] == "PRODUCTION_CONSUMER"
-                        and outcome_id in unit["requirement_refs"]}
+                        and outcome_id in unit["requirement_refs"] and unit['id'] in known_units}
         for source_id in config_ids:
             stack = [(source_id, False, frozenset({source_id}))]
             while stack:
@@ -358,10 +490,16 @@ def validate_diagnosis(
 
     supported_outcomes = {outcome_id for violation in violations if violation["causal_status"] == "SUPPORTED"
                           for outcome_id in relation_by_id[violation["relation_id"]]["requirement_refs"]}
-    for outcome_id in sorted(supported_outcomes):
+    # SUPPORTED belongs to a local violation. An honest EVIDENCE_GAP packet
+    # can retain that evidence while requesting a downstream implementation
+    # fact. Only packets entering planning must establish their claimed path;
+    # schema, references, source anchors and causal support still apply above
+    # and below to every status.
+    ready_outcomes = supported_outcomes if payload['status'] in {'READY', 'PARTIAL_READY'} else set()
+    for outcome_id in sorted(ready_outcomes):
         if not has_consumer_path(outcome_id):
             graph_issues.append(ValidationIssue("PRODUCTION_PATH_INCOMPLETE", "expected_relations",
-                                f"supported configuration outcome {outcome_id} lacks an evidenced path through a production consumer to its generated/runtime/observed state"))
+                                f"ready configuration outcome {outcome_id} lacks support for its claimed path through a production consumer to its generated/runtime/observed state; retain local supported violations and request blocking evidence with EVIDENCE_GAP instead of inventing an edge"))
     if graph_issues:
         first, *rest = graph_issues
         raise ContractError(first.code, first.path, first.message +
@@ -394,6 +532,11 @@ def validate_diagnosis(
         raise ContractError("CAUSAL_CLAIM_UNSUPPORTED", "violations",
                             "an observed outcome alone cannot support a causal violation")
     unresolved = any(item["unresolved"] for item in coverage)
+    if payload["status"] == "EVIDENCE_GAP" and not payload["evidence_gaps"]:
+        raise ContractError("STATUS_INCONSISTENT", "evidence_gaps",
+                            "EVIDENCE_GAP requires at least one concrete blocking evidence_gaps entry with a locator_hint; "
+                            "unverified future outcomes alone do not identify a missing mechanism or actionable target. "
+                            "Preserve supported local violations and genuine gaps; READY must satisfy its full validation")
     if payload["status"] == "READY" and (not supported or unresolved or payload["evidence_gaps"]):
         raise ContractError("STATUS_INCONSISTENT", "status", "READY requires a supported violation and no unresolved outcome/evidence gap")
     if payload["status"] == "PARTIAL_READY" and not supported:
@@ -633,8 +776,13 @@ def validate_changeset(
         issues.append(_issue('STATUS_INCONSISTENT', 'evidence_gaps', 'READY cannot contain unresolved planning evidence gaps'))
     if payload["status"] in {"READY", "READY_PARTIAL"} and not planned:
         issues.append(_issue("STATUS_INCONSISTENT", "planned_violation_ids", "ready plans require a supported planned violation"))
-    if payload["status"] == "NEEDS_EVIDENCE" and (planned or payload["changes"]):
-        issues.append(_issue("STATUS_INCONSISTENT", "status", "NEEDS_EVIDENCE plans cannot contain executable changes"))
+    if payload["status"] == "NEEDS_EVIDENCE":
+        if planned:
+            issues.append(_issue("STATUS_INCONSISTENT", "planned_violation_ids",
+                "NEEDS_EVIDENCE: planned_violation_ids must be empty; supported diagnosis violations are not yet executable repairs. Keep unsupported repair obligations open and name the missing evidence; do not invent changes to cover these IDs."))
+        if payload["changes"]:
+            issues.append(_issue("STATUS_INCONSISTENT", "changes",
+                "NEEDS_EVIDENCE: changes must be empty. Retain unresolved obligations and evidence gaps, or use a ready status only when the existing evidence supports an executable plan."))
 
     return ValidationResult(not issues, tuple(issues), dict(payload))
 

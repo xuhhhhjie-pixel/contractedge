@@ -31,23 +31,30 @@ class OpenObligationReviewTests(unittest.TestCase):
             'Full original requirement', self.plan, {'status': 'EXECUTION_PASS', 'observations': [self.observation]})
         return result, provider
 
-    def feedback(self, review, plan=None):
+    def feedback(self, review, plan=None, independent_open_ids=()):
         return make_feedback(case_id='CASE', run_id='run', input_digest='a' * 64, round_id=0,
             from_snapshot='S0', to_snapshot='S1', patch_digest='b' * 64,
             execution_status='EXECUTION_PASS', observations=[self.observation],
-            plan=plan or self.plan, review=review)
+            plan=plan or self.plan, review=review, independent_open_ids=independent_open_ids)
 
-    def test_open_claim_is_explicitly_reviewed_and_requires_its_own_fresh_quote(self):
+    def test_open_claim_is_explicitly_reviewed_but_public_review_cannot_close_it(self):
         review, provider = self.review([self.check('P1', 'ownerReferences: parent'),
                                        self.check('open:A2-OPEN', 'namespace: selected')])
         payload = json.loads(provider.request.messages[1]['content'])
         self.assertIn('open:A2-OPEN', [c['id'] for c in payload['checks']])
         self.assertEqual(review['decision'], 'PASS')
         result = self.feedback(review)
+        self.assertEqual(result['semantic_outcome'], 'UNKNOWN')
+        self.assertEqual([p['id'] for p in result['pending_obligations']], ['open:A2-OPEN'])
+        self.assertFalse(any(c['historical_obligation_refs'] == ['A2'] for c in result['retained_constraints']))
+        self.assertEqual(len(self.plan['open_obligations']), 1)  # The historical plan is not rewritten.
+
+    def test_explicit_independent_open_resolution_can_close_the_item(self):
+        review, _ = self.review([self.check('P1', 'ownerReferences: parent'),
+                                 self.check('open:A2-OPEN', 'namespace: selected')])
+        result = self.feedback(review, independent_open_ids={'open:A2-OPEN'})
         self.assertEqual(result['semantic_outcome'], 'PUBLIC_REVIEW_PASS')
         self.assertEqual(result['pending_obligations'], [])
-        self.assertTrue(any(c['historical_obligation_refs'] == ['A2'] for c in result['retained_constraints']))
-        self.assertEqual(len(self.plan['open_obligations']), 1)  # The historical plan is not rewritten.
 
     def test_unknown_open_claim_stays_pending(self):
         review, _ = self.review([self.check('P1', 'ownerReferences: parent'),

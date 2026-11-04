@@ -42,6 +42,37 @@ def _clone(value):
     return json.loads(_bytes(value))
 
 
+def _project_final_calls(calls, annotated_calls):
+    """Keep front annotations only on the same canonical dispatch record.
+
+    The final trace is a view; model_calls.json and journal seals remain the
+    canonical ledger. Position is deliberate: repeated identical requests must
+    not borrow annotations from another dispatch of those same request bytes.
+    """
+    annotation_fields = {'stage', 'runner_binding', 'validation_error', 'validation_feedback',
+        'gap_delivery', 'target_binding_reassessment', 'format_retry_index',
+        'truncation_recovery_index', 'semantic_call_index', 'extension_used', 'trigger'}
+    annotated_calls = _clone(annotated_calls)
+    result = []
+    for index, call in enumerate(calls):
+        annotation = annotated_calls[index] if index < len(annotated_calls) else None
+        projected = dict(call)
+        if isinstance(annotation, Mapping) and call.get('request_digest'):
+            same_facts = all(key in annotation and annotation[key] == value
+                for key, value in call.items() if key != 'request_metadata')
+            # Citation annotations may enrich gap_delivery after the response;
+            # the original provider-bound request metadata must remain intact.
+            metadata, annotated_metadata = call.get('request_metadata'), annotation.get('request_metadata')
+            same_metadata = isinstance(metadata, Mapping) and isinstance(annotated_metadata, Mapping) and (
+                {key: value for key, value in metadata.items() if key != 'gap_delivery'} ==
+                {key: value for key, value in annotated_metadata.items() if key != 'gap_delivery'})
+            if same_facts and same_metadata:
+                projected.update(_clone({key: annotation[key] for key in annotation_fields
+                                         if key in annotation and key not in call}))
+        result.append(projected)
+    return tuple(result)
+
+
 def _sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -275,7 +306,9 @@ def run_recorded_public_case(public_root, case_id, config, *, recording_dir, out
                         'source': 'CLI_IDENTITY_OR_RECORDING_ADMISSION'}
                 raise
         budget = BudgetedProvider(provider, counter, max_tokens=effective['max_total_tokens'],
-            max_seconds=effective['max_elapsed_seconds'], max_calls=effective['max_model_calls'], on_update=update)
+            max_seconds=effective['max_elapsed_seconds'], max_calls=effective['max_model_calls'], on_update=update,
+            reconcile_observed_output=effective.get('reconcile_observed_output', False),
+            reconcile_observed_input=effective.get('reconcile_observed_input', False))
         budget.started = started
         journal.attach(budget)
         original_complete = budget.complete_quoted
@@ -306,7 +339,7 @@ def run_recorded_public_case(public_root, case_id, config, *, recording_dir, out
             content = _write_once(owner.root / 'failure.json', failure)
             owner.publish(content)
         else:
-            trace = replace(trace, model_calls=tuple(calls))
+            trace = replace(trace, model_calls=_project_final_calls(calls, trace.model_calls))
             def record_final(name):
                 if journal is not None:
                     journal.update(calls)

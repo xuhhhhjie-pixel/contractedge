@@ -1,4 +1,5 @@
 from copy import deepcopy
+import hashlib
 import pytest
 
 from contractedge.execution.topomen import build_execution_request,PlanRejected
@@ -37,7 +38,8 @@ def test_explicit_runtime_prerequisite_uses_reasoning_for_one_operation(tmp_path
     plan['precondition_review']=[dict(disposition='REQUIRED',source_evidence_ref='unused')]
     # Source on target is supplied in full, independent of read-only support.
     plan['coordination_context']={'source_support':[dict(id='unused',snapshot_id=plan['snapshot_id'],
-        locator={'path':'templates/serviceaccount.yaml'},excerpt='') ]}
+        locator={'path':'templates/serviceaccount.yaml','start_line':1,'end_line':1},
+        excerpt='name: default\n', content_digest=hashlib.sha256(b'name: default\n').hexdigest()) ]}
     assert request(tmp_path,plan,config).thinking=='enabled'
 
 
@@ -54,6 +56,90 @@ def test_unknown_policy_fails_before_model_call(tmp_path):
     plan,config=fixture(tmp_path);config['execution_reasoning_policy']='unknown'
     with pytest.raises(PlanRejected,match='reasoning policy'):
         request(tmp_path,plan,config)
+
+
+def test_failed_trial_only_keeps_code_output_budget_for_initial_precondition_plan(tmp_path):
+    plan,config=fixture(tmp_path)
+    config['execution_reasoning_policy']='failed_trial_only'
+    plan['precondition_review']=[dict(disposition='REQUIRED',source_evidence_ref='unused')]
+    plan['coordination_context']={'source_support':[dict(id='unused',snapshot_id=plan['snapshot_id'],
+        locator={'path':'templates/serviceaccount.yaml','start_line':1,'end_line':1},
+        excerpt='name: default\n', content_digest=hashlib.sha256(b'name: default\n').hexdigest())]}
+    result=request(tmp_path,plan,config)
+    assert result.thinking=='disabled' and result.max_output_tokens==16384
+
+
+def test_failed_trial_only_still_reasons_on_a_bound_behavior_regression(tmp_path):
+    plan,config=fixture(tmp_path);config['execution_reasoning_policy']='failed_trial_only'
+    result=request(tmp_path,plan,config,previous_attempt=rejected_predicate_attempt(plan))
+    assert result.thinking=='enabled'
+    assert result.metadata['execution_thinking_policy']=='FAILED_TRIAL_REASONING'
+
+
+def test_public_failure_correction_disables_reasoning_even_after_stop_response(tmp_path):
+    plan,config=fixture(tmp_path);config.update(
+        execution_reasoning_policy='failed_trial_only',
+        execution_truncation_retry='disable_thinking')
+    previous=rejected_predicate_attempt(plan)
+    previous.update(
+        model_response='{"edits": []}',
+        validation_error='Candidate rejected after public build; change_id=C1 needs correction',
+        response_metadata={'finish_reason':'stop', 'usage': {
+            'completion_tokens': 100,
+            'completion_tokens_details': {'reasoning_tokens': 90}}})
+    result=request(tmp_path,plan,config,previous_attempt=previous)
+    assert result.thinking=='disabled'
+    assert result.metadata['execution_retry_policy']=='VALIDATION_FEEDBACK_DISABLE_THINKING'
+    import json
+    body=json.loads(result.messages[1]['content'])
+    assert body['execution_correction']['rejected_change_ids']==['C1']
+    assert body['execution_correction']['preserve_other_edits'] is True
+    assert 'copy all other edits' in body['edit_contract']
+
+
+def test_public_failure_on_continuation_targets_current_file_when_prior_response_is_stale(tmp_path):
+    plan,config=fixture(tmp_path)
+    config.update(execution_truncation_retry='disable_thinking')
+    plan['execution_continuation']={'prior_applied_operations': {
+        'C1': {'path':'templates/serviceaccount.yaml', 'snapshot_id': plan['snapshot_id'],
+               'content_digest': 'current'}}}
+    feedback={'observation_diagnostics':[{
+        'kind':'CANDIDATE_BUILD_FAILURE','status':'FAILED',
+        'source_locations':[{'path':'templates/serviceaccount.yaml','line':1}],
+    }]}
+    result=request(tmp_path,plan,config,feedback=feedback,
+                   previous_attempt={'source_snapshot':'old','model_response':'{"edits":[]}'})
+    import json
+    body=json.loads(result.messages[1]['content'])
+    assert result.thinking=='disabled'
+    assert body['execution_correction']['rejected_change_ids']==['C1']
+    assert body['execution_correction']['preserve_other_edits'] is False
+    assert body['execution_correction']['eligible_prior_change_ids']==['C1']
+
+
+def test_public_build_diagnostic_binds_correction_after_stale_attempt_is_dropped(tmp_path):
+    plan,config=fixture(tmp_path);config.update(
+        execution_reasoning_policy='failed_trial_only',
+        execution_truncation_retry='disable_thinking')
+    previous={'source_snapshot':'OLD', 'model_response':'{"edits": []}',
+              'validation_error':'candidate snapshot was restored'}
+    feedback={'observation_diagnostics': [{
+        'kind':'CANDIDATE_BUILD_FAILURE', 'status':'FAILED',
+        'source_locations':[{'path':'templates/serviceaccount.yaml', 'line':2}]}]}
+    result=request(tmp_path,plan,config,previous_attempt=previous,feedback=feedback)
+    assert result.thinking=='disabled'
+    import json
+    body=json.loads(result.messages[1]['content'])
+    assert body['execution_correction']['rejected_change_ids']==['C1']
+
+
+def test_request_explains_multiple_edits_reuse_the_same_semantic_change_id(tmp_path):
+    import json
+    plan,config=fixture(tmp_path)
+    body=json.loads(request(tmp_path,plan,config).messages[1]['content'])
+    assert body['edit_batch_rules']['multiple_edits_per_change_id'] is True
+    assert body['edit_batch_rules']['numbered_fields_allowed'] is False
+    assert set(body['edit_batch_rules']['allowed_edit_fields'])=={'change_id','path','operation','old_text','new_text'}
 
 
 def rejected_predicate_attempt(plan):

@@ -2,11 +2,75 @@ from __future__ import annotations
 
 from pathlib import Path
 from itertools import zip_longest
+import hashlib
 import re
 from typing import Any, Mapping
 
 from contractedge.contracts.models import Snapshot
 from contractedge.source.parsers import parse_source_units, _unit
+
+
+def materialize_complete_units(snapshot: Snapshot, units, *, artifacts=(), adopted_ids=()):
+    """Complete newly offered declarations before selection, never mutate adoption.
+
+    Discovery windows remain windows. A declaration is recovered from its exact
+    source/line/parser identity, not its name. Whole-unit admission downstream
+    decides whether the body fits; this reader never truncates it again.
+    """
+    root = Path(snapshot.source_root).resolve(strict=True)
+    adopted = set(adopted_ids)
+    inputs = {a['id']: a for a in artifacts}
+    parsed = {}
+    result = []
+    for unit in units:
+        if (not unit.get('truncated') or unit['id'] in adopted
+                or 'FALLBACK' in str(unit.get('parser_kind', ''))
+                or unit.get('query_window')):
+            result.append(unit)
+            continue
+        if unit.get('snapshot_id') != snapshot.snapshot_id:
+            raise ValueError('Complete declaration snapshot mismatch')
+        artifact_id = unit.get('artifact_id') if unit.get('origin_kind') == 'DECLARED_ARTIFACT' else None
+        key = (artifact_id, unit['path'])
+        if key not in parsed:
+            if artifact_id is not None:
+                artifact = inputs.get(artifact_id)
+                if artifact is None or artifact['path'] != unit['path']:
+                    raise ValueError('Complete declaration has no matching declared artifact')
+                text = artifact['content']
+            else:
+                path = root / unit['path']
+                if (unit['path'] not in snapshot.file_digests
+                        or path.is_symlink() or not path.resolve().is_relative_to(root)):
+                    raise ValueError('Complete declaration is outside snapshot')
+                raw = path.read_bytes()
+                if hashlib.sha256(raw).hexdigest() != snapshot.file_digests.get(unit['path']):
+                    raise ValueError('Complete declaration source differs from snapshot')
+                # Preserve CRLF and Unicode coordinates in the original file.
+                text = raw.decode('utf-8')
+            parsed[key] = parse_source_units(unit['path'], text, snapshot.snapshot_id,
+                max_lines=text.count('\n') + 1, max_chars=max(1, len(text)))
+        matches = [u for u in parsed[key]
+                   if u['locator']['start_line'] == unit['locator']['start_line']
+                   and u.get('symbol') == unit.get('symbol')
+                   and u.get('node_path') == unit.get('node_path')
+                   and u['parser_kind'] == unit.get('parser_kind')]
+        if len(matches) != 1 or matches[0].get('truncated'):
+            raise ValueError('Complete declaration cannot be uniquely rebound to original source')
+        full = matches[0]
+        # read_text in historical discovery normalizes CRLF; accept only that
+        # known representation difference, never a same-name unrelated body.
+        if (hashlib.sha256(unit['text'].encode()).hexdigest() != unit['content_digest']
+                or not (full['text'].startswith(unit['text'])
+                    or full['text'].replace('\r\n', '\n').startswith(unit['text'].replace('\r\n', '\n')))):
+            raise ValueError('Complete declaration prefix differs from original source')
+        full = {**unit, **full, 'expanded_from_unit_id': unit['id']}
+        if artifact_id is not None:
+            full['id'] = 'CU-INPUT-' + str(artifact_id) + '-' + full['id'].removeprefix('CU-')
+        for stale in ('declaration_locator', 'declaration_content_digest'):
+            full.pop(stale, None)
+        result.append(full)
+    return result
 
 
 def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: int = 80,
@@ -21,6 +85,10 @@ def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: in
     output: list[dict[str, Any]] = []
     seen: set[tuple[str, int, int]] = set()
     seed_units: list[dict[str, Any]] = []
+    # A before/after obligation needs the containing production declaration,
+    # even when no task-specific probe registered that handler as an entry.
+    ordering_query = bool(query and re.search(r'\b(before|after|prior to)\b', query, re.I))
+    ordering_expanded_files: set[str] = set()
 
     def read_units(relative: str) -> list[dict[str, Any]]:
         if relative not in snapshot.file_digests:
@@ -38,9 +106,17 @@ def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: in
             return []
         parsed = parse_source_units(relative, text, snapshot.snapshot_id,
                                     max_lines=max_lines, max_chars=max_chars)
-        if relative in focused_paths and relative.endswith('.go') and query:
-            from contractedge.retrieval.candidates import _terms
+        explicit_focus = relative in focused_paths
+        ordering_focus = (ordering_query and relative in paths
+            and len(ordering_expanded_files) < 4
+            and not relative.endswith('_test.go')
+            and not (set(Path(relative.casefold()).parts) & {'generated', 'test', 'tests'})
+            and not Path(relative).name.casefold().startswith('zz_generated')
+            and not re.search(r'^//\s*Code generated\b.*DO NOT EDIT', text[:4096], re.M))
+        if (explicit_focus or ordering_focus) and relative.endswith('.go') and query:
+            from contractedge.retrieval.candidates import _terms, literal_identifier_hits, literal_identifiers
             terms=_terms(query)
+            identifiers=literal_identifiers(query)
             # The public entry file is already read. A relevant long callback
             # must not be represented only by its flag/header prefix until a
             # model happens to ask for an extension. Keep at most two bounded
@@ -50,15 +126,21 @@ def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: in
             for unit in complete:
                 prefixes=[p for p in parsed if p.get('symbol')==unit.get('symbol') and p.get('truncated')]
                 relevance=len(terms&_terms(unit['text']))
-                if prefixes and not unit.get('truncated') and unit.get('kind')=='FUNCTION_OR_TYPE' and relevance:
+                production_order = (len(identifiers) >= 2
+                    and literal_identifier_hits(unit['text'], identifiers) >= 2
+                    and bool(re.search(r'^func\s', unit['text'], re.M)))
+                if (prefixes and not unit.get('truncated') and unit.get('kind')=='FUNCTION_OR_TYPE'
+                        and relevance and (explicit_focus or production_order)):
                     options.append((relevance,unit,prefixes[0]['id']))
             options.sort(key=lambda row:(-row[0],row[1]['locator']['start_line']))
+            if options and not explicit_focus:
+                ordering_expanded_files.add(relative)
             for _,unit,prefix in options[:2]:
                 parsed=[p for p in parsed if not(p.get('symbol')==unit.get('symbol') and p.get('truncated'))]
                 parsed.append({**unit,'expanded_from_unit_id':prefix,'anchor_priority':2,
-                    'source_focus_basis':'BOUNDED_PUBLIC_ENTRY_DECLARATION_BODY; fresh source only, not a causal claim or edit permission'})
+                    'source_focus_basis':('BOUNDED_PUBLIC_ENTRY_DECLARATION_BODY' if explicit_focus else 'BOUNDED_REQUIREMENT_ORDER_DECLARATION_BODY')+'; fresh source only, not a causal claim or edit permission'})
         if query:
-            from contractedge.retrieval.candidates import _terms, literal_identifiers
+            from contractedge.retrieval.candidates import _terms, literal_identifier_hits, literal_identifiers
             identifiers, terms = literal_identifiers(query), _terms(query)
             # Explicit public identifiers may occur beyond a long declaration's
             # prefix. Read bounded seed-file windows; never assert a full AST.
@@ -68,7 +150,7 @@ def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: in
                     offsets.append(offsets[-1] + len(line))
                 windows = set()
                 for number, line in enumerate(lines, 1):
-                    if not any(t in line.casefold() for t in identifiers):
+                    if not literal_identifier_hits(line, identifiers):
                         continue
                     if any(int(u['locator']['start_line']) <= number <= int(u['locator']['end_line'])
                            for u in parsed):
@@ -82,7 +164,7 @@ def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: in
                         extra={'query_window': True, 'query_origin': 'PUBLIC_REQUIREMENT_IDENTIFIER'}))
                     if len(windows) >= 8:
                         break
-            parsed.sort(key=lambda u: (-(12 * sum(t in u['text'].casefold() for t in identifiers)
+            parsed.sort(key=lambda u: (-(12 * literal_identifier_hits(u['text'], identifiers)
                 + len(terms & _terms(u['text']))), int(u['locator']['start_line'])))
         return parsed
 
@@ -151,15 +233,9 @@ def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: in
     # A known public execution entry must contribute actual declarations before
     # many document files exhaust this intermediate pool. This is bounded pool
     # admission, not forced final Top-N membership or a new source permission.
-    from contractedge.retrieval.candidates import literal_identifiers
+    from contractedge.retrieval.candidates import example_context_cost, literal_identifier_hits, literal_identifiers
     identifiers = literal_identifiers(query or '')
-    focus = [u for u in seed_units if u['path'] in focused_paths and u.get('kind')=='FUNCTION_OR_TYPE'
-             and any(t in u.get('text','').casefold() for t in identifiers)]
-    focus_symbols = {v for u in focus for v in u.get('declared_symbols',[])}
-    focus_calls = {v for u in focus for v in u.get('references',[])}
-    focus += [u for u in seed_units if u['path'] in focused_paths and u.get('kind')=='FUNCTION_OR_TYPE'
-              and (set(u.get('references',[])) & focus_symbols or set(u.get('declared_symbols',[])) & focus_calls)
-              and u not in focus]
+    focus = [u for u in seed_units if u['path'] in focused_paths and u.get('kind')=='FUNCTION_OR_TYPE']
     from contractedge.retrieval.candidates import _terms
     requirement_terms=_terms(query or '')
     resources=[u for u in seed_units if u['path'] in focused_paths and u.get('resource_kind')
@@ -170,7 +246,20 @@ def extract_units(snapshot: Snapshot, scope: Mapping[str, Any], *, max_units: in
     for unit in focus:
         unit['anchor_priority'] = max(1,unit.get('anchor_priority',0))
         unit['source_focus_basis'] = 'PUBLIC_ENTRY_OR_EXPLICIT_RESOURCE_FILE; bounded relevant resource/declaration, not edit permission'
-    interleaved = iter(focus + [unit for row in zip_longest(*by_path.values()) for unit in row if unit is not None])
+    # Rank already-read bodies before the existing pool cut. An absolute
+    # literal prefix lets numerous generic test examples erase production
+    # context before final selection. Reuse the soft example cost and existing
+    # interleaving, so exact bodies and relevant configuration can compete.
+    pool = [unit for row in zip_longest(*by_path.values()) for unit in row if unit is not None]
+    if query:
+        def relevance(unit):
+            text = unit.get('text', '')
+            score = (1 + 12 * literal_identifier_hits(text, identifiers)
+                     + len(requirement_terms & _terms(text)))
+            complete = unit.get('kind') == 'FUNCTION_OR_TYPE' and not unit.get('truncated')
+            return score * (2 if complete else 1) / example_context_cost(unit, identifiers)
+        pool.sort(key=lambda unit: -relevance(unit))
+    interleaved = iter(focus + pool)
     for unit in interleaved:
         relative = str(unit.get("path", ""))
         key = (relative, int(unit["locator"]["start_line"]), int(unit["locator"]["end_line"]))
@@ -199,6 +288,28 @@ def extract_declared_artifact_units(artifacts: tuple[Mapping[str, Any], ...] | l
             if len(output) >= max_units:
                 return output
     return output
+
+
+def _gap_query_identifiers(query: str) -> list[str]:
+    """Return the existing bounded, explicit identifier projection of a phrase."""
+    if re.fullmatch(r'[A-Za-z_]\w*', query):
+        return []
+    tokens = list(dict.fromkeys(re.findall(
+        r'(?<![A-Za-z0-9_$])([A-Za-z_][A-Za-z0-9_]*)(?![A-Za-z0-9_$])', query)))
+    return [token for token in tokens if len(token) >= 12
+            and (re.search(r'[a-z][A-Z]', token) or '_' in token)][:4]
+
+
+def _gap_query_matches(query: str, text: str) -> bool:
+    """Match the literal phrase or its same bounded, case-exact identifiers."""
+    query = str(query or '').strip()
+    if not query:
+        return False
+    if query.casefold() in text.casefold():
+        return True
+    return any(re.search(r'(?<![A-Za-z0-9_$])' + re.escape(token)
+                         + r'(?![A-Za-z0-9_$])', text)
+               for token in _gap_query_identifiers(query))
 
 
 def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] | list[str],
@@ -231,17 +342,49 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
     if not hints:
         return [], {"inspected_files": 0, "matched_files": [], "candidate_count": 0,
                     "truncated_search": False, "queries": []}
+    # A model may supply several identifiers and connective prose in one
+    # search_term. Preserve the original literal query, then add at most four
+    # explicit long identifiers from that same query. This is token location,
+    # not semantic expansion or a guessed synonym. Same-gap paths still apply.
+    for hint in list(hints):
+        query = hint['value']
+        if hint['kind'] != 'search_term' or re.fullmatch(r'[A-Za-z_]\w*', query):
+            continue
+        hints.extend({'gap_id': hint['gap_id'], 'kind': 'search_term', 'value': token,
+                      'literal_token': True, 'parent_query': query}
+                     for token in _gap_query_identifiers(query))
+
+    # A precise public identifier is itself a bounded read locator. Requiring
+    # a pre-existing call edge first makes disconnected production consumers
+    # impossible to discover even when this scan already reads their files.
+    # Generic words/prose and path-specific gaps keep their existing scope.
+    precise_hints = [h for h in hints if h['kind'] in {'symbol', 'search_term'}
+        and not any(p['kind'] == 'path' and p['gap_id'] == h['gap_id'] for p in hints)
+        and len(h['value']) >= 12 and re.fullmatch(r'[A-Za-z_]\w*', h['value'])
+        and (re.search(r'[a-z][A-Z]', h['value']) or '_' in h['value'])]
+
+    def precise_match(hint, text):
+        # Preserve the same case-sensitive token boundary at every admission
+        # stage; a sibling declaration must not borrow a file-level hit.
+        return bool(re.search(r'(?<![A-Za-z0-9_$])' + re.escape(hint['value'])
+                              + r'(?![A-Za-z0-9_$])', text))
+
+    def query_match(hint, text):
+        if hint in precise_hints or hint.get('literal_token'):
+            return precise_match(hint, text)
+        return hint['value'].casefold() in text.casefold()
 
     root = Path(snapshot.source_root).resolve()
     seed = set(seed_paths)
     anchors = [unit for unit in existing_units if str(unit.get("path", "")) in seed]
     seed_symbols = {str(symbol) for unit in anchors for symbol in unit.get("declared_symbols", ())}
     seed_references = {str(symbol) for unit in anchors for symbol in unit.get("references", ())}
-    existing_keys = {
-        (str(unit.get("path", "")), int(unit.get("locator", {}).get("start_line", 0)),
-         int(unit.get("locator", {}).get("end_line", 0)))
-        for unit in existing_units
-    }
+    existing_by_key: dict[tuple[str, int, int], list[Mapping[str, Any]]] = {}
+    for unit in existing_units:
+        key = (str(unit.get("path", "")), int(unit.get("locator", {}).get("start_line", 0)),
+               int(unit.get("locator", {}).get("end_line", 0)))
+        existing_by_key.setdefault(key, []).append(unit)
+    emitted_keys: set[tuple[str, int, int]] = set()
     extensions = {".go", ".ts", ".tsx", ".js", ".jsx", ".yaml", ".yml", ".json", ".tpl", ".gotpl", '.py', '.c', '.h', '.java'}
     output: list[dict[str, Any]] = []
     matched_files: list[str] = []
@@ -249,12 +392,47 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
     candidate_count = 0
     read_bytes = 0
     byte_limit_hit = False
+    go_texts = {}
     inventory = set(snapshot.file_digests)
     # Resolve a normalized directory only with a query in that same gap.
     # This is bounded read-only location, never a syntax edge or edit grant.
     from pathlib import PurePosixPath
     exact_hints = {}
     directory_paths = set()
+
+    def _ancestor_query_paths(value, queries):
+        """Return bounded siblings for an explicit but non-matching file hint.
+
+        Diagnosis extensions occasionally preserve the right package and
+        literal while naming a nearby file (for example ``binding/input``
+        for a branch that lives in ``binding/send.go``).  The old resolver
+        treated that file as a closed world and never reached the owning
+        function on the next extension round.  Walk only ancestors of the
+        supplied path and choose the nearest ancestor with more than one
+        source file.  This is still a same-gap, read-only lookup; it cannot
+        turn a bare filename into a repository-wide search.
+        """
+        if not queries:
+            return
+        raw = str(value).rstrip('/')
+        parts = PurePosixPath(raw).parts
+        # A file at the repository root has no bounded package to expand.
+        if len(parts) < 2:
+            return
+        ancestors = []
+        for end in range(len(parts) - 1, 0, -1):
+            prefix = '/'.join(parts[:end]).strip('/')
+            if prefix:
+                children = sorted(p for p in inventory if p.startswith(prefix + '/'))
+                source_children = [p for p in children if Path(p).suffix.lower() in extensions]
+                if len(source_children) > 1:
+                    ancestors.append(source_children)
+                    break
+        if not ancestors:
+            return
+        for relative in ancestors[0]:
+            exact_hints.setdefault(relative, []).extend(queries)
+            directory_paths.add(relative)
     for hint in hints:
         if hint['kind'] != 'path':
             continue
@@ -266,6 +444,11 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
                    and h['kind'] in {'symbol', 'search_term'}]
         if value in inventory:
             exact_hints.setdefault(value, []).extend(queries)
+            # If the exact file is a nearby but non-owning declaration, allow
+            # one same-package fallback on the next ancestor that has sibling
+            # source files.  The query remains mandatory and is applied again
+            # to every candidate before any unit is emitted.
+            _ancestor_query_paths(value, queries)
         elif queries:
             for relative in sorted(p for p in inventory if p.startswith(value + '/'))[:max_files]:
                 exact_hints.setdefault(relative, []).extend(queries)
@@ -279,6 +462,7 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
     truncated_search = len(eligible_paths) > max_files
     for relative in eligible_paths[:max_files]:
         inspected += 1
+        if (root / relative).is_symlink():continue
         path = (root / relative).resolve()
         try:
             path.relative_to(root)
@@ -291,17 +475,31 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             if read_bytes + size > max_search_bytes:
                 byte_limit_hit = True
                 break
-            text = path.read_text(encoding="utf-8", errors="replace")
-            read_bytes += size
+            raw = path.read_bytes()
+            read_bytes += len(raw)
+            if read_bytes > max_search_bytes or len(raw) > max_file_bytes:
+                byte_limit_hit = True
+                break
+            if hashlib.sha256(raw).hexdigest() != snapshot.file_digests[relative]:
+                continue
+            text = raw.decode(encoding="utf-8", errors="replace")
         except (OSError, ValueError):
             continue
+        if relative.endswith('.go'):
+            # Reuse verified reads for bounded structural context. No extra
+            # source scan or unlimited caller lookup is hidden behind this.
+            go_texts[relative] = text
+        literal_hints = [h for h in precise_hints if relative not in seed and relative.endswith('.go') and re.search(
+            r'(?<![A-Za-z0-9_$])' + re.escape(h['value']) + r'(?![A-Za-z0-9_$])', text)]
+        if literal_hints:
+            exact_hints.setdefault(relative, []).extend(literal_hints)
         units = parse_source_units(relative, text, snapshot.snapshot_id,
                                    max_lines=max_lines, max_chars=max_chars)
         if relative in requested_paths and (relative in seed or exact_hints.get(relative)):
             # A long declaration exposes only its bounded prefix. A precise
             # same-file gap may read a bounded literal window around a later
             # variable/closure use, without claiming a complete syntax unit.
-            queries = [h['value'].casefold() for h in exact_hints.get(relative, [])]
+            queries = exact_hints.get(relative, [])
             lines = text.splitlines(keepends=True)
             offsets = [0]
             for line in lines:
@@ -310,10 +508,10 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             seen_windows = set()
             width = max(1, max_lines)
             for number, line in enumerate(lines, 1):
-                if not any(query in line.casefold() for query in queries):
+                if not any(query_match(query, line) for query in queries):
                     continue
                 if any(int(u['locator']['start_line']) <= number <= int(u['locator']['end_line'])
-                       and any(query in u['text'].casefold() for query in queries) for u in units):
+                       and any(query_match(query, u['text']) for query in queries) for u in units):
                     continue
                 start = max(0, number - 1 - width // 2)
                 end = min(len(lines), start + width)
@@ -331,7 +529,6 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
         # the complete request budget remains authoritative.
         same_file_queries = exact_hints.get(relative, [])
         if max_declaration_lines > max_lines and same_file_queries and any(u.get('truncated') and u.get('kind') == 'FUNCTION_OR_TYPE' for u in units):
-            import hashlib
             wider = parse_source_units(relative, text, snapshot.snapshot_id,
                 max_lines=max(max_lines, max_declaration_lines), max_chars=max_chars)
             wide_by_start = {(u.get('symbol'), u['locator']['start_line']): u for u in wider}
@@ -339,7 +536,7 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
                 expanded = wide_by_start.get((unit.get('symbol'), unit['locator']['start_line']))
                 if not (unit.get('truncated') and unit.get('kind') == 'FUNCTION_OR_TYPE' and expanded
                         and len(expanded['text']) > len(unit['text'])
-                        and any(h['value'].casefold() in expanded['text'].casefold() for h in same_file_queries)):
+                        and any(query_match(h, expanded['text']) for h in same_file_queries)):
                     continue
                 expanded = dict(expanded)
                 expanded['expanded_from_unit_id'] = unit['id']
@@ -356,8 +553,9 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             or set(map(str, u.get("references", ()))) & seed_symbols for u in units)
         query_hints = [h for h in hints if h['kind'] in {'symbol', 'search_term'}]
         connected_query_ids = {u['id'] for u in units if file_is_connected and any(
-            re.search(r'(?<![A-Za-z0-9_$])' + re.escape(h['value']) + r'(?![A-Za-z0-9_$])',
-                      str(u.get('text', '')), re.IGNORECASE) for h in query_hints)}
+            (precise_match(h, str(u.get('text', ''))) if h in precise_hints or h.get('literal_token') else
+             re.search(r'(?<![A-Za-z0-9_$])' + re.escape(h['value']) + r'(?![A-Za-z0-9_$])',
+                       str(u.get('text', '')), re.IGNORECASE)) for h in query_hints)}
         neighbors = []
         for unit in units:
             declared = {str(value) for value in unit.get("declared_symbols", ())}
@@ -369,9 +567,10 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
                 and hint['value'].casefold() in str(unit.get('text', '')).casefold()
                 for hint in hints)
             located_exact = any(
+                precise_match(h, str(unit.get('text', ''))) if h in precise_hints or h.get('literal_token') else
                 (re.search(r'(?<![A-Za-z0-9_$])' + re.escape(h['value']) + r'(?![A-Za-z0-9_$])',
                            str(unit.get('text', '')), re.IGNORECASE) if h['kind'] == 'symbol'
-                 else h['value'].casefold() in str(unit.get('text', '')).casefold())
+                 else query_match(h, str(unit.get('text', ''))))
                 for h in exact_hints.get(relative, []))
             if declared & seed_references or references & seed_symbols or located_declaration or located_seed_text or located_exact or unit["id"] in connected_query_ids:
                 neighbors.append(unit)
@@ -386,7 +585,9 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
             unit_hints = []
             for hint in hints:
                 value = hint["value"]
-                if hint["kind"] == "symbol":
+                if hint in precise_hints or hint.get('literal_token'):
+                    match = precise_match(hint, str(unit.get('text', '')))
+                elif hint["kind"] == "symbol":
                     match = re.search(r"(?<![A-Za-z0-9_$])" + re.escape(value) + r"(?![A-Za-z0-9_$])",
                                       unit_content, re.IGNORECASE)
                 elif hint["kind"] == "path":
@@ -411,20 +612,25 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
         for unit, matched_hints in matched_units:
             key = (str(unit.get("path", "")), int(unit.get("locator", {}).get("start_line", 0)),
                    int(unit.get("locator", {}).get("end_line", 0)))
-            if key in existing_keys:
+            if key in emitted_keys:
                 continue
             item = dict(unit)
+            direct = (set(map(str, unit.get('declared_symbols', ()))) & seed_references
+                      or set(map(str, unit.get('references', ()))) & seed_symbols)
             item["scope_extension"] = ("EVIDENCE_GAP_SEED_UNIT" if relative in seed else
                                        "EVIDENCE_GAP_DIRECTORY_PATH" if relative in directory_paths else
                                        "EVIDENCE_GAP_EXACT_PATH" if relative in requested_paths
+                                       else "EVIDENCE_GAP_PRECISE_IDENTIFIER" if not direct and any(h in literal_hints for h in matched_hints)
                                        else "EVIDENCE_GAP_DIRECT_NEIGHBOR")
+            if item['scope_extension'] == 'EVIDENCE_GAP_PRECISE_IDENTIFIER':
+                item['read_scope_basis'] = 'BOUNDED_PUBLIC_PRECISE_IDENTIFIER_TEXT_LOCATION'
+                item['association_status'] = 'EXACT_IDENTIFIER_TEXT_LOCATION; not a verified reference/causal edge, unique binding or edit grant'
             if item['scope_extension'] in {'EVIDENCE_GAP_EXACT_PATH', 'EVIDENCE_GAP_DIRECTORY_PATH'}:
                 item['read_scope_basis'] = ('BOUNDED_PUBLIC_DIRECTORY_AND_SAME_GAP_QUERY' if relative in directory_paths
                                             else 'EXACT_PUBLIC_SOURCE_PATH_AND_SAME_GAP_QUERY')
                 item['association_status'] = 'LOCATED_TEXT_ONLY; not a verified causal/reference edge or edit grant'
-            direct = (set(map(str, unit.get('declared_symbols', ()))) & seed_references
-                      or set(map(str, unit.get('references', ()))) & seed_symbols)
-            if unit['id'] in connected_query_ids and not direct and relative not in seed and relative not in requested_paths:
+            if (unit['id'] in connected_query_ids and not direct and relative not in seed
+                    and relative not in requested_paths and item['scope_extension'] != 'EVIDENCE_GAP_PRECISE_IDENTIFIER'):
                 item['scope_extension'] = 'EVIDENCE_GAP_CONNECTED_FILE_QUERY'
                 item['association_status'] = 'LEXICAL_CONNECTED_FILE_QUERY; not a verified causal edge or edit grant'
                 item['hop_distance'] = 2
@@ -442,15 +648,82 @@ def extract_gap_extension_units(snapshot: Snapshot, seed_paths: tuple[str, ...] 
                         and (not own_queries or own_hits)):
                     qualified.append(gid)
             item["evidence_gap_refs"] = qualified
+            if key in existing_by_key:
+                # Index membership is not final-context delivery. A unit
+                # dropped by Top-N still needs fresh gap qualification so it
+                # can compete with newly discovered matches. Reuse only a
+                # same-gap text hit, never a path-only or outside-path match.
+                # A symbol locator requalifies its declaration; a body search
+                # requires a search_term rather than re-emitting every caller.
+                if not any(h['kind'] != 'path' and h['gap_id'] in qualified
+                           and query_match(h, str(unit.get('text', '')))
+                           and (h['kind'] == 'search_term'
+                                or h['value'] == unit.get('symbol')
+                                or h['value'] in unit.get('declared_symbols', ()))
+                           for h in matched_hints):
+                    continue
+                previous = next((old for old in existing_by_key[key]
+                    if old.get('snapshot_id') == snapshot.snapshot_id
+                    and old.get('locator') == unit.get('locator')
+                    and old.get('text') == unit.get('text')
+                    and old.get('content_digest') == unit.get('content_digest')), None)
+                if previous is not None:
+                    # Keep valid prior context metadata and stable identity;
+                    # source bytes and new gap provenance come from this read.
+                    item = {**previous, **item, 'id': previous['id']}
+                item['read_scope_basis'] = 'BOUNDED_PUBLIC_SAME_GAP_QUERY_REQUALIFICATION'
+                item['association_status'] = 'LOCATED_TEXT_ONLY; not a verified causal/reference edge or edit grant'
             output.append(item)
-            existing_keys.add(key)
+            emitted_keys.add(key)
+    module_text = None
+    if go_texts and 'go.mod' in inventory and inspected < max_files:
+        module_path = root / 'go.mod'
+        try:
+            size = module_path.stat().st_size
+            if (not module_path.is_symlink() and module_path.resolve().is_relative_to(root)
+                    and size <= min(max_file_bytes, 64000) and read_bytes + size <= max_search_bytes):
+                inspected += 1
+                raw = module_path.read_bytes()
+                read_bytes += len(raw)
+                if (read_bytes <= max_search_bytes and len(raw) <= min(max_file_bytes, 64000)
+                        and hashlib.sha256(raw).hexdigest() == snapshot.file_digests['go.mod']):
+                    module_text = raw.decode('utf-8')
+        except (OSError, ValueError, UnicodeError):
+            pass
+    from contractedge.source.go_context import bounded_go_context
+    context_units, context_audit = bounded_go_context(snapshot, go_texts, existing_units,
+        evidence_gaps, module_text=module_text, max_units=min(6, max_units),
+        max_lines=max_declaration_lines, max_chars=max_chars)
+    for item in context_units:
+        previous = next((u for u in output if u['id'] == item['id']), None)
+        if previous is None:
+            output.append(item)
+        else:
+            previous['anchor_priority'] = max(previous.get('anchor_priority', 0), item['anchor_priority'])
+            previous['evidence_gap_refs'] = sorted(set(previous.get('evidence_gap_refs', [])) | set(item['evidence_gap_refs']))
+            previous['gap_role_keys'] = sorted(set(previous.get('gap_role_keys', [])) | set(item['gap_role_keys']))
+            if 'optional_gap_context' not in previous:
+                previous['optional_gap_context'] = True
     # Interleave bounded matches across files before applying the pool cap.
     # Ranking still chooses final relevance; this is not a final-context quota.
     from itertools import zip_longest
     by_path = {}
     for item in output:
         by_path.setdefault(item['path'], []).append(item)
+    if any(h.get('literal_token') for h in hints):
+        def token_priority(item):
+            hits = {h['value'] for h in hints if h.get('literal_token')
+                    and h['gap_id'] in item.get('evidence_gap_refs', [])
+                    and precise_match(h, str(item.get('text', '')))}
+            # A constructor mentioning one generic type must not displace the
+            # consumer containing both explicit query identifiers before the
+            # final ranker ever sees it. No extra unit or read slots are added.
+            return (-len(hits), -max(map(len, hits), default=0))
+        for group in by_path.values():
+            group.sort(key=token_priority)
+        by_path = dict(sorted(by_path.items(), key=lambda pair: token_priority(pair[1][0])))
     output = [item for row in zip_longest(*by_path.values()) for item in row if item is not None][:max_units]
     return output, {"inspected_files": inspected, "matched_files": sorted(set(matched_files)),
                     "candidate_count": candidate_count, "truncated_search": truncated_search or byte_limit_hit,
-                    "inspected_bytes": read_bytes, "queries": hints}
+                    "inspected_bytes": read_bytes, "queries": hints,
+                    "construction_context": context_audit}

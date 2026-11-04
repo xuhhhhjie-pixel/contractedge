@@ -1,0 +1,448 @@
+{
+  "status": "COMPLETE",
+  "registration_sha256": "e1d8561c3e56222456afcf72d5c5a5d51dd4fa8e01bf8429af9f8a01a5b9478a",
+  "result_sha256": "fe41e2e5e61c6e3e8b5a030dc56324f6773765aa2fb1c263dc86cb63feb911bf",
+  "variants": {
+    "old_current": {
+      "planned": 8,
+      "completed": 8,
+      "independent_pass": 3,
+      "status_counts": {
+        "PUBLIC_EXECUTION_COMPLETE": 2,
+        "PUBLIC_REVIEW_COMPLETE": 1,
+        "EVIDENCE_GAP": 5
+      },
+      "pre_edit_stops": 4,
+      "calls": 37,
+      "cost_micro_cny": 5413706,
+      "provider_tokens": 1857115
+    },
+    "new_current": {
+      "planned": 8,
+      "completed": 8,
+      "independent_pass": 3,
+      "status_counts": {
+        "PUBLIC_REVIEW_COMPLETE": 2,
+        "EVIDENCE_GAP": 4,
+        "PUBLIC_EXECUTION_COMPLETE": 1,
+        "INVALID_PLAN": 1
+      },
+      "pre_edit_stops": 4,
+      "calls": 41,
+      "cost_micro_cny": 5763776,
+      "provider_tokens": 1956715
+    },
+    "new_large": {
+      "planned": 8,
+      "completed": 8,
+      "independent_pass": 2,
+      "status_counts": {
+        "PUBLIC_REVIEW_COMPLETE": 2,
+        "EVIDENCE_GAP": 5,
+        "PUBLIC_EXECUTION_COMPLETE": 1
+      },
+      "pre_edit_stops": 5,
+      "calls": 36,
+      "cost_micro_cny": 5924440,
+      "provider_tokens": 2055704
+    }
+  },
+  "contrasts": {
+    "code": {
+      "left": "old_current",
+      "right": "new_current",
+      "wins": [
+        "R4-CERTMANAGER-9204"
+      ],
+      "regressions": [
+        "R3-KPT-4673"
+      ],
+      "both_pass": [
+        "RW-CAND-130",
+        "R3-KOPF-726"
+      ],
+      "both_not_pass": [
+        "R4-PROVIDER-HELM-408",
+        "R3-KPT-4746",
+        "R4-ACK-CLOUDWATCH-2985",
+        "RW-ALERTMANAGER-4705"
+      ],
+      "pending": [],
+      "inconclusive": []
+    },
+    "capacity": {
+      "left": "new_current",
+      "right": "new_large",
+      "wins": [
+        "R3-KPT-4673"
+      ],
+      "regressions": [
+        "R3-KOPF-726",
+        "R4-CERTMANAGER-9204"
+      ],
+      "both_pass": [
+        "RW-CAND-130"
+      ],
+      "both_not_pass": [
+        "R4-PROVIDER-HELM-408",
+        "R3-KPT-4746",
+        "R4-ACK-CLOUDWATCH-2985"
+      ],
+      "pending": [],
+      "inconclusive": [
+        "RW-ALERTMANAGER-4705"
+      ]
+    }
+  },
+  "formal_ready": false,
+  "delivery_verified_calls": 114,
+  "model_calls": 114,
+  "panel_cost_micro_cny": 17101922,
+  "cumulative_committed_micro_cny": 85275532,
+  "primary_score_errors": [
+    {
+      "slot": 23,
+      "case_id": "RW-ALERTMANAGER-4705",
+      "independent_status": "SCORER_ERROR",
+      "supplemental_independent_status": "PASS"
+    }
+  ],
+  "slots": [
+    {
+      "slot": 1,
+      "case_id": "RW-CAND-130",
+      "variant": "old_current",
+      "status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 4,
+      "delivery_verified_call_count": 4,
+      "pre_edit_stop": false,
+      "supplemental_independent_status": null,
+      "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49"
+    },
+    {
+      "slot": 2,
+      "case_id": "RW-CAND-130",
+      "variant": "new_current",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "independent_status": "PASS",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 4,
+      "delivery_verified_call_count": 4,
+      "pre_edit_stop": false,
+      "supplemental_independent_status": null,
+      "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49"
+    },
+    {
+      "slot": 3,
+      "case_id": "RW-CAND-130",
+      "variant": "new_large",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "independent_status": "PASS",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+      "model_calls": 4,
+      "delivery_verified_call_count": 4,
+      "pre_edit_stop": false,
+      "supplemental_independent_status": null,
+      "patch_sha256": "a8f64207c7954c294ccf728905ab4f9f1f84c030e9c17acd3cfa7b0967ae469e"
+    },
+    {
+      "slot": 4,
+      "case_id": "R3-KOPF-726",
+      "variant": "new_current",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "independent_status": "PASS",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 5,
+      "delivery_verified_call_count": 5,
+      "pre_edit_stop": false,
+      "supplemental_independent_status": null,
+      "patch_sha256": "c5baf737101f66ef8e2b933160f83b2787fd6385646fc6dd1ff760c8425fa3da"
+    },
+    {
+      "slot": 5,
+      "case_id": "R3-KOPF-726",
+      "variant": "new_large",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+      "model_calls": 3,
+      "delivery_verified_call_count": 3,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 6,
+      "case_id": "R3-KOPF-726",
+      "variant": "old_current",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "independent_status": "PASS",
+      "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 5,
+      "delivery_verified_call_count": 5,
+      "pre_edit_stop": false,
+      "supplemental_independent_status": null,
+      "patch_sha256": "a77e3d1f3a285dbda4f6c2cd312eca4099f5ce4c1557b53e71cdbdfd7d809e7c"
+    },
+    {
+      "slot": 7,
+      "case_id": "R4-PROVIDER-HELM-408",
+      "variant": "new_large",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+      "model_calls": 3,
+      "delivery_verified_call_count": 3,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 8,
+      "case_id": "R4-PROVIDER-HELM-408",
+      "variant": "old_current",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 3,
+      "delivery_verified_call_count": 3,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 9,
+      "case_id": "R4-PROVIDER-HELM-408",
+      "variant": "new_current",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 3,
+      "delivery_verified_call_count": 3,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 10,
+      "case_id": "R3-KPT-4746",
+      "variant": "old_current",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 3,
+      "delivery_verified_call_count": 3,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 11,
+      "case_id": "R3-KPT-4746",
+      "variant": "new_current",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 3,
+      "delivery_verified_call_count": 3,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 12,
+      "case_id": "R3-KPT-4746",
+      "variant": "new_large",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+      "model_calls": 3,
+      "delivery_verified_call_count": 3,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 13,
+      "case_id": "R3-KPT-4673",
+      "variant": "new_current",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 3,
+      "delivery_verified_call_count": 3,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 14,
+      "case_id": "R3-KPT-4673",
+      "variant": "new_large",
+      "status": "PUBLIC_REVIEW_COMPLETE",
+      "independent_status": "PASS",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+      "model_calls": 6,
+      "delivery_verified_call_count": 6,
+      "pre_edit_stop": false,
+      "supplemental_independent_status": null,
+      "patch_sha256": "db94c6d42414dde96cd05cadbf0c70b6e7552aeb71299f0114aef3caceba57ba"
+    },
+    {
+      "slot": 15,
+      "case_id": "R3-KPT-4673",
+      "variant": "old_current",
+      "status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 6,
+      "delivery_verified_call_count": 6,
+      "pre_edit_stop": false,
+      "supplemental_independent_status": null,
+      "patch_sha256": "27c213eb33fe9f34c2c976a901e22a2d8b4a659d015b31b5ef56155db3fc9b2c"
+    },
+    {
+      "slot": 16,
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "variant": "new_large",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+      "model_calls": 3,
+      "delivery_verified_call_count": 3,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 17,
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "variant": "old_current",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 3,
+      "delivery_verified_call_count": 3,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 18,
+      "case_id": "R4-ACK-CLOUDWATCH-2985",
+      "variant": "new_current",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 4,
+      "delivery_verified_call_count": 4,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 19,
+      "case_id": "R4-CERTMANAGER-9204",
+      "variant": "old_current",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 4,
+      "delivery_verified_call_count": 4,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 20,
+      "case_id": "R4-CERTMANAGER-9204",
+      "variant": "new_current",
+      "status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "PASS",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 8,
+      "delivery_verified_call_count": 8,
+      "pre_edit_stop": false,
+      "supplemental_independent_status": null,
+      "patch_sha256": "565c5e99e20da3ec6702f122d51c0005644d325ef54d0827fefb41fa64a6fb5f"
+    },
+    {
+      "slot": 21,
+      "case_id": "R4-CERTMANAGER-9204",
+      "variant": "new_large",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "NOT_SCORED_EXECUTION",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+      "model_calls": 4,
+      "delivery_verified_call_count": 4,
+      "pre_edit_stop": true,
+      "supplemental_independent_status": null,
+      "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "slot": 22,
+      "case_id": "RW-ALERTMANAGER-4705",
+      "variant": "new_current",
+      "status": "INVALID_PLAN",
+      "independent_status": "METHOD_FAILURE",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 11,
+      "delivery_verified_call_count": 11,
+      "pre_edit_stop": false,
+      "supplemental_independent_status": null,
+      "patch_sha256": "a077257d192f6ac48c43d973badbd09273d2531fff01c5e28eae419eb00d9a9a"
+    },
+    {
+      "slot": 23,
+      "case_id": "RW-ALERTMANAGER-4705",
+      "variant": "new_large",
+      "status": "PUBLIC_EXECUTION_COMPLETE",
+      "independent_status": "SCORER_ERROR",
+      "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+      "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+      "model_calls": 10,
+      "delivery_verified_call_count": 10,
+      "pre_edit_stop": false,
+      "supplemental_independent_status": "PASS",
+      "patch_sha256": "6628294f18b333e3858d5922c50ac57dd04db8276aa522388ef7c2431135cdea"
+    },
+    {
+      "slot": 24,
+      "case_id": "RW-ALERTMANAGER-4705",
+      "variant": "old_current",
+      "status": "EVIDENCE_GAP",
+      "independent_status": "SEMANTIC_FAIL",
+      "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+      "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+      "model_calls": 9,
+      "delivery_verified_call_count": 9,
+      "pre_edit_stop": false,
+      "supplemental_independent_status": null,
+      "patch_sha256": "83bd390b38e1b969792941bab237ccea23ae520083862cba10bd8de25f75e118"
+    }
+  ]
+}

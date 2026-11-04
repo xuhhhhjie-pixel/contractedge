@@ -1,0 +1,24 @@
+{
+  "status": "RECORDED_CORRECTION_FILTER_REPRODUCED",
+  "slot": 22,
+  "case_id": "RW-ALERTMANAGER-4705",
+  "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+  "model_calls_sha256": "98e146a0bcb57346c15a1907fc9801b6d8a9ef28d86f8e48504db0641952ce81",
+  "original_plan_call_index": 9,
+  "correction_call_index": 10,
+  "independently_detected_codes": [
+    "PRECONDITION_REVIEW_INCOMPLETE"
+  ],
+  "sent_correction_codes": [
+    "SCHEMA_INVALID"
+  ],
+  "filtered_feedback_matches_actual": true,
+  "same_physical_source_two_ids": [
+    "SRC-CU-HELPER-cf802c352a33f438",
+    "HELPER-cf802c352a33f438"
+  ],
+  "body_and_digest_equal": true,
+  "api_calls": 0,
+  "production_modified": false,
+  "scope": "Independent prerequisite identity check and correction filter only; no full semantic replay or model-effect claim."
+}

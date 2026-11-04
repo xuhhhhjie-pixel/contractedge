@@ -1,0 +1,74 @@
+{
+  "status": "EXACT_INITIAL_SELECTION_AND_GAP_QUERY_REPRODUCED",
+  "case_id": "R4-CERTMANAGER-9204",
+  "snapshot_id": "64dec6098477231ba69131b34071c37846ceab380489bf4f778905bec69c3b2b",
+  "initial_unit_count": 85,
+  "initial_selection_verified": true,
+  "pool_limit": 40,
+  "diagnostic_uncapped_limit": 200,
+  "limited_count": 40,
+  "uncapped_count": 106,
+  "scan_audit_equal": true,
+  "findings": [
+    {
+      "symbol": "lookupCNAMETarget",
+      "hits": [
+        {
+          "index": 48,
+          "id": "CU-ffab93d99015e429",
+          "path": "pkg/issuer/acme/dns/util/dns.go",
+          "bytes": 582,
+          "gap_refs": [
+            "G2"
+          ],
+          "in_40_pool": false
+        }
+      ]
+    },
+    {
+      "symbol": "dnsQuery",
+      "hits": []
+    },
+    {
+      "symbol": "changeRecord",
+      "hits": [
+        {
+          "index": 60,
+          "id": "CU-0b3b479cd6f5a2e1",
+          "path": "pkg/issuer/acme/dns/rfc2136/rfc2136.go",
+          "bytes": 1127,
+          "gap_refs": [],
+          "in_40_pool": false
+        },
+        {
+          "index": 61,
+          "id": "CU-93bf71091e731fc3",
+          "path": "pkg/issuer/acme/dns/route53/route53.go",
+          "bytes": 1760,
+          "gap_refs": [
+            "G3"
+          ],
+          "in_40_pool": false
+        }
+      ]
+    },
+    {
+      "symbol": "extractChallengeSolverConfig",
+      "hits": [
+        {
+          "index": 40,
+          "id": "CU-b3ba84bf3ec56d6e",
+          "path": "pkg/issuer/acme/dns/dns.go",
+          "bytes": 248,
+          "gap_refs": [
+            "G1"
+          ],
+          "in_40_pool": true
+        }
+      ]
+    }
+  ],
+  "api_calls": 0,
+  "source_unchanged": true,
+  "interpretation": "The200-unit invocation diagnoses the original pool cut only; it is not a proposed unlimited reader or a model-effect result."
+}

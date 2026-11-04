@@ -1,0 +1,1628 @@
+{
+  "status": "COMPLETE_REAL_VALIDATION",
+  "generated_at_utc": "2026-11-04T14:55:48.497861+00:00",
+  "formal_ready": false,
+  "requested_and_reported_model": "deepseek-flash",
+  "panels": {
+    "fixed_eight": {
+      "planned_slots": 24,
+      "completed_slots": 24,
+      "cases": [
+        "RW-CAND-130",
+        "R3-KOPF-726",
+        "R4-PROVIDER-HELM-408",
+        "R3-KPT-4746",
+        "R3-KPT-4673",
+        "R4-ACK-CLOUDWATCH-2985",
+        "R4-CERTMANAGER-9204",
+        "RW-ALERTMANAGER-4705"
+      ],
+      "variants": {
+        "old_current": {
+          "planned": 8,
+          "completed": 8,
+          "independent_pass": 3,
+          "status_counts": {
+            "PUBLIC_EXECUTION_COMPLETE": 2,
+            "PUBLIC_REVIEW_COMPLETE": 1,
+            "EVIDENCE_GAP": 5
+          },
+          "pre_edit_stops": 4,
+          "calls": 37,
+          "cost_micro_cny": 5413706,
+          "provider_tokens": 1857115
+        },
+        "new_current": {
+          "planned": 8,
+          "completed": 8,
+          "independent_pass": 3,
+          "status_counts": {
+            "PUBLIC_REVIEW_COMPLETE": 2,
+            "EVIDENCE_GAP": 4,
+            "PUBLIC_EXECUTION_COMPLETE": 1,
+            "INVALID_PLAN": 1
+          },
+          "pre_edit_stops": 4,
+          "calls": 41,
+          "cost_micro_cny": 5763776,
+          "provider_tokens": 1956715
+        },
+        "new_large": {
+          "planned": 8,
+          "completed": 8,
+          "independent_pass": 2,
+          "status_counts": {
+            "PUBLIC_REVIEW_COMPLETE": 2,
+            "EVIDENCE_GAP": 5,
+            "PUBLIC_EXECUTION_COMPLETE": 1
+          },
+          "pre_edit_stops": 5,
+          "calls": 36,
+          "cost_micro_cny": 5924440,
+          "provider_tokens": 2055704
+        }
+      },
+      "contrasts": {
+        "code": {
+          "left": "old_current",
+          "right": "new_current",
+          "wins": [
+            "R4-CERTMANAGER-9204"
+          ],
+          "regressions": [
+            "R3-KPT-4673"
+          ],
+          "both_pass": [
+            "RW-CAND-130",
+            "R3-KOPF-726"
+          ],
+          "both_not_pass": [
+            "R4-PROVIDER-HELM-408",
+            "R3-KPT-4746",
+            "R4-ACK-CLOUDWATCH-2985",
+            "RW-ALERTMANAGER-4705"
+          ],
+          "pending": [],
+          "inconclusive": []
+        },
+        "capacity": {
+          "left": "new_current",
+          "right": "new_large",
+          "wins": [
+            "R3-KPT-4673"
+          ],
+          "regressions": [
+            "R3-KOPF-726",
+            "R4-CERTMANAGER-9204"
+          ],
+          "both_pass": [
+            "RW-CAND-130"
+          ],
+          "both_not_pass": [
+            "R4-PROVIDER-HELM-408",
+            "R3-KPT-4746",
+            "R4-ACK-CLOUDWATCH-2985"
+          ],
+          "pending": [],
+          "inconclusive": [
+            "RW-ALERTMANAGER-4705"
+          ]
+        }
+      },
+      "slots": [
+        {
+          "slot": 1,
+          "case_id": "RW-CAND-130",
+          "variant": "old_current",
+          "status": "PUBLIC_EXECUTION_COMPLETE",
+          "independent_status": "PASS",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 4,
+          "model_stages": {
+            "diagnosis.v1.1.26": 1,
+            "changeset.v1.1.13": 1,
+            "topomen-source-execution.v1": 1,
+            "public-postcondition-review.v2": 1
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 118297,
+            "completion_tokens": 25224,
+            "total_tokens": 143521
+          },
+          "accounted_tokens": 143521,
+          "delivery_verified_call_count": 4,
+          "incremental_micro_cny": 438386,
+          "elapsed_seconds": 149.72674683481455,
+          "patch_bytes": 1474,
+          "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+          "run_result_sha256": "53bd136e329e77a2629619a0d82abbd97958d8174bf3cdd68defbf512ce9a1bc",
+          "model_calls_sha256": "4a0d0dfd52b02957e8f15200df8ef5c2f6b91aca57d5de3cf8dfb9639d6fac84",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 2,
+          "case_id": "RW-CAND-130",
+          "variant": "new_current",
+          "status": "PUBLIC_REVIEW_COMPLETE",
+          "independent_status": "PASS",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 4,
+          "model_stages": {
+            "diagnosis.v1.1.26": 1,
+            "changeset.v1.1.13": 1,
+            "topomen-source-execution.v1": 1,
+            "public-postcondition-review.v2": 1
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 115573,
+            "completion_tokens": 24806,
+            "total_tokens": 140379
+          },
+          "accounted_tokens": 140379,
+          "delivery_verified_call_count": 4,
+          "incremental_micro_cny": 429594,
+          "elapsed_seconds": 133.11445361748338,
+          "patch_bytes": 1474,
+          "patch_sha256": "c5006ae25d78c4ba5e16a2a105452fa94b00af187a3f8d5211085a7c4f492b49",
+          "run_result_sha256": "16a571b160d0ce4e2ffc4acaaa575916219fd28f95f20a5ceb18cf633710781b",
+          "model_calls_sha256": "79ea78177b34f21cc0266b14bf6ee0018961f96384ccc2ab589be7b4e97d6648",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [
+            {
+              "round_id": "0",
+              "schema_version": "ce.candidate_decision.v1",
+              "decision": "PROMOTE",
+              "from_snapshot": "f44e75768af304334eff5fb7c49cc596b12218dbf83efdf95639691b167063f5",
+              "trial_snapshot": "98bf568be0c0e7ad060164052391da82cca9a7be7a69ab326474e02a86e97dc2",
+              "regressions": [],
+              "uncomparable": [],
+              "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness",
+              "protected_check_ids": [],
+              "guard_enabled": true
+            }
+          ],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 3,
+          "case_id": "RW-CAND-130",
+          "variant": "new_large",
+          "status": "PUBLIC_REVIEW_COMPLETE",
+          "independent_status": "PASS",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+          "model_calls": 4,
+          "model_stages": {
+            "diagnosis.v1.1.26": 1,
+            "changeset.v1.1.13": 1,
+            "topomen-source-execution.v1": 1,
+            "public-postcondition-review.v2": 1
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 131148,
+            "completion_tokens": 20911,
+            "total_tokens": 152059
+          },
+          "accounted_tokens": 152059,
+          "delivery_verified_call_count": 4,
+          "incremental_micro_cny": 429584,
+          "elapsed_seconds": 128.05754189565778,
+          "patch_bytes": 1439,
+          "patch_sha256": "a8f64207c7954c294ccf728905ab4f9f1f84c030e9c17acd3cfa7b0967ae469e",
+          "run_result_sha256": "8f359ca3afb09042a60ddf1f35fcfb3289ef21564bd34c70ed5a22305a8c1c1a",
+          "model_calls_sha256": "aa278ba74176ff8e5912dbf1975c592daa6782908efd6f3cd8fd70a30598e274",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [
+            {
+              "round_id": "0",
+              "schema_version": "ce.candidate_decision.v1",
+              "decision": "PROMOTE",
+              "from_snapshot": "f44e75768af304334eff5fb7c49cc596b12218dbf83efdf95639691b167063f5",
+              "trial_snapshot": "6582e8e2bfcc7938531d1a37bddd48f0d5987522313dea9f5dd83f9b12c46eb2",
+              "regressions": [],
+              "uncomparable": [],
+              "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness",
+              "protected_check_ids": [],
+              "guard_enabled": true
+            }
+          ],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 4,
+          "case_id": "R3-KOPF-726",
+          "variant": "new_current",
+          "status": "PUBLIC_REVIEW_COMPLETE",
+          "independent_status": "PASS",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 5,
+          "model_stages": {
+            "diagnosis.v1.1.26": 1,
+            "changeset.v1.1.16": 2,
+            "topomen-source-execution.v1": 1,
+            "public-postcondition-review.v2": 1
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 118173,
+            "completion_tokens": 32321,
+            "total_tokens": 150494
+          },
+          "accounted_tokens": 150494,
+          "delivery_verified_call_count": 5,
+          "incremental_micro_cny": 494914,
+          "elapsed_seconds": 214.94489933550358,
+          "patch_bytes": 1648,
+          "patch_sha256": "c5baf737101f66ef8e2b933160f83b2787fd6385646fc6dd1ff760c8425fa3da",
+          "run_result_sha256": "3e7e2d2577c095dd29a148380b1cd23a43fa55c1b6dc5fa8b10cca6aedf64eda",
+          "model_calls_sha256": "659ed7528f779f07821db23d20140230779a720a0f16945b9e2b27c4c11ffc99",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [
+            {
+              "round_id": "0",
+              "schema_version": "ce.candidate_decision.v1",
+              "decision": "PROMOTE",
+              "from_snapshot": "91dc66b83830728322ee0cb9dbe8ec5b1d0685dbbe55c5e84edfc872628ad3de",
+              "trial_snapshot": "86b975a5342334cae3c7ed8a853e8a2510544c3be761d79a9620c0578fa6d52e",
+              "regressions": [],
+              "uncomparable": [],
+              "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness",
+              "protected_check_ids": [],
+              "guard_enabled": true
+            }
+          ],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 5,
+          "case_id": "R3-KOPF-726",
+          "variant": "new_large",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+          "model_calls": 3,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 115472,
+            "completion_tokens": 40380,
+            "total_tokens": 155852
+          },
+          "accounted_tokens": 155852,
+          "delivery_verified_call_count": 3,
+          "incremental_micro_cny": 553984,
+          "elapsed_seconds": 235.2744627855718,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "325f019222dce95686b91e761ab70dcbd9a914e5e3a20b8e1aa9a506d7835a37",
+          "model_calls_sha256": "1f03307722490e83d3ebd0dc953ab999dc3bef60fccc97229ad92e753c04b8fb",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 6,
+          "case_id": "R3-KOPF-726",
+          "variant": "old_current",
+          "status": "PUBLIC_REVIEW_COMPLETE",
+          "independent_status": "PASS",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 5,
+          "model_stages": {
+            "diagnosis.v1.1.26": 2,
+            "changeset.v1.1.16": 1,
+            "topomen-source-execution.v1": 1,
+            "public-postcondition-review.v2": 1
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 107790,
+            "completion_tokens": 32712,
+            "total_tokens": 140502
+          },
+          "accounted_tokens": 140502,
+          "delivery_verified_call_count": 5,
+          "incremental_micro_cny": 477276,
+          "elapsed_seconds": 209.2886265516281,
+          "patch_bytes": 1303,
+          "patch_sha256": "a77e3d1f3a285dbda4f6c2cd312eca4099f5ce4c1557b53e71cdbdfd7d809e7c",
+          "run_result_sha256": "ba5ee3caed35ba74a8db9e00307750fb2b06e37f6abdfbfd117c066a51180911",
+          "model_calls_sha256": "2c15eb3eef5e5cb40eae2b32eb1809d5d5912d85e0e303f9650459c4a2a1c558",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 7,
+          "case_id": "R4-PROVIDER-HELM-408",
+          "variant": "new_large",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+          "model_calls": 3,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 177763,
+            "completion_tokens": 21615,
+            "total_tokens": 199378
+          },
+          "accounted_tokens": 199378,
+          "delivery_verified_call_count": 3,
+          "incremental_micro_cny": 528446,
+          "elapsed_seconds": 338.2019798979163,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "7be2f79979c7d26bc56a11c490862b9bde8c10954ab273038404146768e042db",
+          "model_calls_sha256": "2bac996b18973ee5f95c78aad94efa56ff4f8c6817c4ff4321ae0e57d6628f7c",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 8,
+          "case_id": "R4-PROVIDER-HELM-408",
+          "variant": "old_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 3,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 142754,
+            "completion_tokens": 26709,
+            "total_tokens": 169463
+          },
+          "accounted_tokens": 169463,
+          "delivery_verified_call_count": 3,
+          "incremental_micro_cny": 499180,
+          "elapsed_seconds": 354.9597962535918,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "fdae52c3917e04654e0290bf8726fe607408817d67de9b247f31c01b7bf4e8f0",
+          "model_calls_sha256": "33ffce386b24b94e99b3af567e7278fc59c94485808a49c9608f75ee74ff482d",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 9,
+          "case_id": "R4-PROVIDER-HELM-408",
+          "variant": "new_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 3,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 126367,
+            "completion_tokens": 23409,
+            "total_tokens": 149776
+          },
+          "accounted_tokens": 149776,
+          "delivery_verified_call_count": 3,
+          "incremental_micro_cny": 440006,
+          "elapsed_seconds": 347.0895284153521,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "5f50dfca079cd4114260e855194fe6e2df7400493bdac1bf93070b894b99300b",
+          "model_calls_sha256": "bca5db04af129d695b426cbeabfb4c70ab41e18b2be9a0db99b7987ec66e451a",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 10,
+          "case_id": "R3-KPT-4746",
+          "variant": "old_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 3,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 106619,
+            "completion_tokens": 28717,
+            "total_tokens": 135336
+          },
+          "accounted_tokens": 135336,
+          "delivery_verified_call_count": 3,
+          "incremental_micro_cny": 442974,
+          "elapsed_seconds": 220.19486850127578,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "c80c6aed9b3cdba29b4563cdeff710966430592bdcc7af5751a58a52ec2d4e3b",
+          "model_calls_sha256": "20b294c8da92dbc51264896b4ff44726311ba0b401c53601046be67bdfa08654",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 11,
+          "case_id": "R3-KPT-4746",
+          "variant": "new_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 3,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 103655,
+            "completion_tokens": 26480,
+            "total_tokens": 130135
+          },
+          "accounted_tokens": 130135,
+          "delivery_verified_call_count": 3,
+          "incremental_micro_cny": 419150,
+          "elapsed_seconds": 225.19015888869762,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "e87e398c01e257708f836b8d808a9ab353c1a3c8021bdae31958524e2e4d1416",
+          "model_calls_sha256": "d443105ea0aecdce957f1d92ea45eaae901fb673f9a0b923fb987eaef7892d63",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 12,
+          "case_id": "R3-KPT-4746",
+          "variant": "new_large",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+          "model_calls": 3,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 103460,
+            "completion_tokens": 30251,
+            "total_tokens": 133711
+          },
+          "accounted_tokens": 133711,
+          "delivery_verified_call_count": 3,
+          "incremental_micro_cny": 448928,
+          "elapsed_seconds": 245.67510365322232,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "6ae535860382e2e0e695769ca975c33693a0b9de577f1b68545723e3e79c07bd",
+          "model_calls_sha256": "5a67b321469d71312fc3658b9b53db35f0b8b614f75c8529a431f26957189683",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 13,
+          "case_id": "R3-KPT-4673",
+          "variant": "new_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 3,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 141603,
+            "completion_tokens": 29191,
+            "total_tokens": 170794
+          },
+          "accounted_tokens": 170794,
+          "delivery_verified_call_count": 3,
+          "incremental_micro_cny": 516734,
+          "elapsed_seconds": 306.0087717100978,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "fd3918971093476d33946cc549296d69f897f0ceb8cf135445eeccf146adaf4a",
+          "model_calls_sha256": "69a21975e49689d2c6af9d16f5a9ee97df2e4b90d4edbb84c7f6307ffd4fbd10",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [
+              "kpt-configpath-v2:control.final_resources",
+              "kpt-configpath-v2:control.ordinary_inputs",
+              "kpt-configpath-v2:mutator.config_retained",
+              "kpt-configpath-v2:mutator.config_transformed",
+              "kpt-configpath-v2:mutator.later_sees_config",
+              "kpt-configpath-v2:mutator.owner_binding",
+              "kpt-configpath-v2:mutator.owner_excludes_config",
+              "kpt-configpath-v2:mutator.workload_retained",
+              "kpt-configpath-v2:mutator.workload_transformed",
+              "kpt-configpath-v2:validator.config_retained",
+              "kpt-configpath-v2:validator.config_transformed",
+              "kpt-configpath-v2:validator.owner_binding",
+              "kpt-configpath-v2:validator.owner_excludes_config",
+              "kpt-configpath-v2:validator.workload_retained"
+            ],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 14,
+          "case_id": "R3-KPT-4673",
+          "variant": "new_large",
+          "status": "PUBLIC_REVIEW_COMPLETE",
+          "independent_status": "PASS",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+          "model_calls": 6,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3,
+            "changeset.v1.1.16": 2,
+            "topomen-source-execution.v1": 1
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 305545,
+            "completion_tokens": 56111,
+            "total_tokens": 361656
+          },
+          "accounted_tokens": 361656,
+          "delivery_verified_call_count": 6,
+          "incremental_micro_cny": 1059978,
+          "elapsed_seconds": 597.1687007620931,
+          "patch_bytes": 3433,
+          "patch_sha256": "db94c6d42414dde96cd05cadbf0c70b6e7552aeb71299f0114aef3caceba57ba",
+          "run_result_sha256": "ffa30ceda9fdc6c7e6e7b69fec6ee8d1c6d8b8e51f44771f9825ba47ef933509",
+          "model_calls_sha256": "f40e1cacecd0668d0af99e1c517b98bb83a7f24875232a17582aa819b11492e7",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [
+              "kpt-configpath-v2:control.final_resources",
+              "kpt-configpath-v2:control.ordinary_inputs",
+              "kpt-configpath-v2:mutator.config_retained",
+              "kpt-configpath-v2:mutator.config_transformed",
+              "kpt-configpath-v2:mutator.later_sees_config",
+              "kpt-configpath-v2:mutator.owner_binding",
+              "kpt-configpath-v2:mutator.owner_excludes_config",
+              "kpt-configpath-v2:mutator.workload_retained",
+              "kpt-configpath-v2:mutator.workload_transformed",
+              "kpt-configpath-v2:validator.config_retained",
+              "kpt-configpath-v2:validator.config_transformed",
+              "kpt-configpath-v2:validator.owner_binding",
+              "kpt-configpath-v2:validator.owner_excludes_config",
+              "kpt-configpath-v2:validator.workload_retained"
+            ],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [
+            {
+              "round_id": "0",
+              "schema_version": "ce.candidate_decision.v1",
+              "decision": "PROMOTE",
+              "from_snapshot": "549777ce5a6794c45f726f2dd284384bd01106ce8d67f6e66395b3f57791cfc3",
+              "trial_snapshot": "3ad36059b148f07425124ca8b5bc5cd5cbb45d69d7ee8af569516608fcf6a8c4",
+              "regressions": [],
+              "uncomparable": [],
+              "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness",
+              "protected_check_ids": [
+                "kpt-configpath-v2:control.final_resources",
+                "kpt-configpath-v2:control.ordinary_inputs",
+                "kpt-configpath-v2:mutator.config_retained",
+                "kpt-configpath-v2:mutator.config_transformed",
+                "kpt-configpath-v2:mutator.later_sees_config",
+                "kpt-configpath-v2:mutator.owner_binding",
+                "kpt-configpath-v2:mutator.owner_excludes_config",
+                "kpt-configpath-v2:mutator.workload_retained",
+                "kpt-configpath-v2:mutator.workload_transformed",
+                "kpt-configpath-v2:validator.config_retained",
+                "kpt-configpath-v2:validator.config_transformed",
+                "kpt-configpath-v2:validator.owner_binding",
+                "kpt-configpath-v2:validator.owner_excludes_config",
+                "kpt-configpath-v2:validator.workload_retained"
+              ],
+              "guard_enabled": true
+            }
+          ],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 15,
+          "case_id": "R3-KPT-4673",
+          "variant": "old_current",
+          "status": "PUBLIC_EXECUTION_COMPLETE",
+          "independent_status": "PASS",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 6,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3,
+            "changeset.v1.1.16": 2,
+            "topomen-source-execution.v1": 1
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 301351,
+            "completion_tokens": 47401,
+            "total_tokens": 348752
+          },
+          "accounted_tokens": 348752,
+          "delivery_verified_call_count": 6,
+          "incremental_micro_cny": 981910,
+          "elapsed_seconds": 539.098740041256,
+          "patch_bytes": 4036,
+          "patch_sha256": "27c213eb33fe9f34c2c976a901e22a2d8b4a659d015b31b5ef56155db3fc9b2c",
+          "run_result_sha256": "dfc2bba70f1e535effa7c0c9ff94bd80b3ed4a6d521f5bd7f6ebc3466c168e2d",
+          "model_calls_sha256": "80c45e5615c70fab4002ab26c35a0e8a0f77806470d0d991815cd3a9704498c0",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 16,
+          "case_id": "R4-ACK-CLOUDWATCH-2985",
+          "variant": "new_large",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+          "model_calls": 3,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 165994,
+            "completion_tokens": 18436,
+            "total_tokens": 184430
+          },
+          "accounted_tokens": 184430,
+          "delivery_verified_call_count": 3,
+          "incremental_micro_cny": 479476,
+          "elapsed_seconds": 312.4789663478732,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "9d415d6f839b0a1144f5450346ca5a6bb3a4bca96986d3ad2d20b698be896ff6",
+          "model_calls_sha256": "30e973ac792d1cb69ab41ea3208022d76d66aee50447ea6c93e6c5aca51fb4e0",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 17,
+          "case_id": "R4-ACK-CLOUDWATCH-2985",
+          "variant": "old_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 3,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 154638,
+            "completion_tokens": 27530,
+            "total_tokens": 182168
+          },
+          "accounted_tokens": 182168,
+          "delivery_verified_call_count": 3,
+          "incremental_micro_cny": 529516,
+          "elapsed_seconds": 366.97079634666443,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "a69d7cc59c76428ae9d5f69304dbf375b62984d978368e14b7b32ede1cda6d51",
+          "model_calls_sha256": "6b63430140f49aee61839d9255bdbcb957d211777f3dab20ab05f133ca7db5a6",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 18,
+          "case_id": "R4-ACK-CLOUDWATCH-2985",
+          "variant": "new_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 4,
+          "model_stages": {
+            "diagnosis.v1.1.26": 4
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 216911,
+            "completion_tokens": 32594,
+            "total_tokens": 249505
+          },
+          "accounted_tokens": 249505,
+          "delivery_verified_call_count": 4,
+          "incremental_micro_cny": 694574,
+          "elapsed_seconds": 397.0562033057213,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "e91775ecf3ede5079c757a064dbb531018e9440a6dbdfe8472431c857ad3dfc3",
+          "model_calls_sha256": "c18e5bb26b65869a13bfd671d04402eb17566821abf5b24af5033bdb3f5fb317",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 19,
+          "case_id": "R4-CERTMANAGER-9204",
+          "variant": "old_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 4,
+          "model_stages": {
+            "diagnosis.v1.1.26": 4
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 185256,
+            "completion_tokens": 31578,
+            "total_tokens": 216834
+          },
+          "accounted_tokens": 216834,
+          "delivery_verified_call_count": 4,
+          "incremental_micro_cny": 623136,
+          "elapsed_seconds": 563.126173954457,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "c167348a66f9b88e28989a5b490c603774c88d4ad57b7e26165809142403fd25",
+          "model_calls_sha256": "c7477a8b9d7c7e311a38979bf0e1c2eb056c16667eafdf25ec0fde88c97b0bb0",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 20,
+          "case_id": "R4-CERTMANAGER-9204",
+          "variant": "new_current",
+          "status": "PUBLIC_EXECUTION_COMPLETE",
+          "independent_status": "PASS",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 8,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3,
+            "changeset.v1.1.16": 2,
+            "topomen-source-execution.v1": 1,
+            "public-postcondition-review.v2": 2
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 299082,
+            "completion_tokens": 53338,
+            "total_tokens": 352420
+          },
+          "accounted_tokens": 352420,
+          "delivery_verified_call_count": 8,
+          "incremental_micro_cny": 1024868,
+          "elapsed_seconds": 1080.0294871218503,
+          "patch_bytes": 1038,
+          "patch_sha256": "565c5e99e20da3ec6702f122d51c0005644d325ef54d0827fefb41fa64a6fb5f",
+          "run_result_sha256": "19c8edf7455a0529c8a40bbddf9fce99e36913f7903bcb2a0f8ebee718ee52bd",
+          "model_calls_sha256": "1623733025df40e35a2853633738769df2e996666fa8eadd9d6275ea6682b510",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [
+            {
+              "round_id": "0",
+              "schema_version": "ce.candidate_decision.v1",
+              "decision": "PROMOTE",
+              "from_snapshot": "64dec6098477231ba69131b34071c37846ceab380489bf4f778905bec69c3b2b",
+              "trial_snapshot": "71f51a80c63d04a57306ec41887c52ce8ef84a4baecd82579c3c36dd0c0d4c16",
+              "regressions": [],
+              "uncomparable": [],
+              "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness",
+              "protected_check_ids": [],
+              "guard_enabled": true
+            }
+          ],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 21,
+          "case_id": "R4-CERTMANAGER-9204",
+          "variant": "new_large",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+          "model_calls": 4,
+          "model_stages": {
+            "diagnosis.v1.1.26": 4
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 250046,
+            "completion_tokens": 31606,
+            "total_tokens": 281652
+          },
+          "accounted_tokens": 281652,
+          "delivery_verified_call_count": 4,
+          "incremental_micro_cny": 752940,
+          "elapsed_seconds": 575.9733847491443,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "b68ca776858c3fef9bf66cdb79ff54de57e17b1384fc889087f1166f8eeaf72b",
+          "model_calls_sha256": "80c70b63999b50a597d5a9534ce4570e891dbe1143e42b1a7e3360dbdd6dbb46",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 22,
+          "case_id": "RW-ALERTMANAGER-4705",
+          "variant": "new_current",
+          "status": "INVALID_PLAN",
+          "independent_status": "METHOD_FAILURE",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 11,
+          "model_stages": {
+            "diagnosis.v1.1.26": 6,
+            "changeset.v1.1.16": 4,
+            "topomen-source-execution.v1": 1
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 526960,
+            "completion_tokens": 86252,
+            "total_tokens": 613212
+          },
+          "accounted_tokens": 613212,
+          "delivery_verified_call_count": 11,
+          "incremental_micro_cny": 1743936,
+          "elapsed_seconds": 1093.1149976067245,
+          "patch_bytes": 1445,
+          "patch_sha256": "a077257d192f6ac48c43d973badbd09273d2531fff01c5e28eae419eb00d9a9a",
+          "run_result_sha256": "edec668a84332b14223b6ec2d80585985ac9ef0f1f20d051702d819de9c4b1f1",
+          "model_calls_sha256": "98e146a0bcb57346c15a1907fc9801b6d8a9ef28d86f8e48504db0641952ce81",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [
+              "alertmanager-reload-v1:groups.visible_after_reload",
+              "alertmanager-reload-v1:groups.visible_during_reload"
+            ],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [
+            {
+              "round_id": "0",
+              "schema_version": "ce.candidate_decision.v1",
+              "decision": "PROMOTE",
+              "from_snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+              "trial_snapshot": "f98bc177ec00a618ba5decec7caf44a49187119d485fa19d95d794b457e91779",
+              "regressions": [],
+              "uncomparable": [],
+              "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness",
+              "protected_check_ids": [
+                "alertmanager-reload-v1:groups.visible_after_reload",
+                "alertmanager-reload-v1:groups.visible_during_reload"
+              ],
+              "guard_enabled": true
+            }
+          ],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 23,
+          "case_id": "RW-ALERTMANAGER-4705",
+          "variant": "new_large",
+          "status": "PUBLIC_EXECUTION_COMPLETE",
+          "independent_status": "SCORER_ERROR",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "36dfff270252e164eda3d2632dd8ef1eef776fda9a59dbc9280bd3f2da2004e4",
+          "model_calls": 10,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3,
+            "changeset.v1.1.16": 5,
+            "topomen-source-execution.v1": 2
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 504104,
+            "completion_tokens": 82862,
+            "total_tokens": 586966
+          },
+          "accounted_tokens": 586966,
+          "delivery_verified_call_count": 10,
+          "incremental_micro_cny": 1671104,
+          "elapsed_seconds": 1318.7457135766745,
+          "patch_bytes": 2774,
+          "patch_sha256": "6628294f18b333e3858d5922c50ac57dd04db8276aa522388ef7c2431135cdea",
+          "run_result_sha256": "e9fce97a153852dff35c3ae4353f0169ec9845c610e4a142bac7b0a9184cf8e7",
+          "model_calls_sha256": "0ec7ac923564b9b7520b6da945423a2bd1b2bb240e2fcc61fbe4b7283912912e",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [
+              "alertmanager-reload-v1:groups.visible_after_reload",
+              "alertmanager-reload-v1:groups.visible_during_reload"
+            ],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [
+            {
+              "round_id": "0",
+              "schema_version": "ce.candidate_decision.v1",
+              "decision": "PROMOTE",
+              "from_snapshot": "007325c7f55977c4afd2dfae9e3213373126ad9d11f0854be1d3f54f8fe89308",
+              "trial_snapshot": "912ff760d96f5590f25c54e717530b3feb442b4e8470c295e13b046da64fd027",
+              "regressions": [],
+              "uncomparable": [],
+              "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness",
+              "protected_check_ids": [
+                "alertmanager-reload-v1:groups.visible_after_reload",
+                "alertmanager-reload-v1:groups.visible_during_reload"
+              ],
+              "guard_enabled": true
+            },
+            {
+              "round_id": "1",
+              "schema_version": "ce.candidate_decision.v1",
+              "decision": "PROMOTE",
+              "from_snapshot": "912ff760d96f5590f25c54e717530b3feb442b4e8470c295e13b046da64fd027",
+              "trial_snapshot": "ef8a927003298ddb15d32e5076bf9287468ad89c91a1fb6438adb5abb174e0df",
+              "regressions": [],
+              "uncomparable": [],
+              "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness",
+              "protected_check_ids": [
+                "alertmanager-reload-v1:groups.visible_after_reload",
+                "alertmanager-reload-v1:groups.visible_during_reload"
+              ],
+              "guard_enabled": true
+            }
+          ],
+          "supplemental_independent_status": "PASS"
+        },
+        {
+          "slot": 24,
+          "case_id": "RW-ALERTMANAGER-4705",
+          "variant": "old_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "SEMANTIC_FAIL",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 9,
+          "model_stages": {
+            "diagnosis.v1.1.26": 6,
+            "changeset.v1.1.16": 2,
+            "topomen-source-execution.v1": 1
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 457164,
+            "completion_tokens": 63375,
+            "total_tokens": 520539
+          },
+          "accounted_tokens": 520539,
+          "delivery_verified_call_count": 9,
+          "incremental_micro_cny": 1421328,
+          "elapsed_seconds": 942.1020918525755,
+          "patch_bytes": 885,
+          "patch_sha256": "83bd390b38e1b969792941bab237ccea23ae520083862cba10bd8de25f75e118",
+          "run_result_sha256": "a8a9d6652a31b2c59624e17926f44e34c31859d1fa8b81f8b20beaa4cf55bbb7",
+          "model_calls_sha256": "e0ff3572ef389c67e127a8d5758b2a4d5d5c7dad7b1e66d81454bf0639613ed8",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        }
+      ],
+      "registration_sha256": "e1d8561c3e56222456afcf72d5c5a5d51dd4fa8e01bf8429af9f8a01a5b9478a",
+      "results_sha256": "fe41e2e5e61c6e3e8b5a030dc56324f6773765aa2fb1c263dc86cb63feb911bf",
+      "local_analysis_sha256": "28a82cdedb4c76743b34e243ee0519fbd689a1e40b31ae30b9d01d7386c97331",
+      "panel_cost_micro_cny": 17101922,
+      "cumulative_committed_micro_cny": 85275532,
+      "cumulative_ledger_records": 657,
+      "historical_pending_calls": 2,
+      "new_pending_calls": 0
+    },
+    "preselected_four": {
+      "planned_slots": 8,
+      "completed_slots": 8,
+      "cases": [
+        "RW-CAND-091",
+        "RW-HELM-CONTROLLER-1411",
+        "R3-SKAFFOLD-9732",
+        "RW-PROMETHEUS-19838"
+      ],
+      "variants": {
+        "old_current": {
+          "planned": 4,
+          "completed": 4,
+          "independent_pass": 1,
+          "status_counts": {
+            "PUBLIC_EXECUTION_COMPLETE": 1,
+            "EVIDENCE_GAP": 3
+          },
+          "pre_edit_stops": 3,
+          "calls": 12,
+          "cost_micro_cny": 1614854,
+          "provider_tokens": 523039
+        },
+        "new_current": {
+          "planned": 4,
+          "completed": 4,
+          "independent_pass": 1,
+          "status_counts": {
+            "PUBLIC_EXECUTION_COMPLETE": 1,
+            "EVIDENCE_GAP": 1,
+            "INVALID_OUTPUT": 1,
+            "EVIDENCE_DELIVERY_INCOMPLETE": 1
+          },
+          "pre_edit_stops": 3,
+          "calls": 16,
+          "cost_micro_cny": 2132976,
+          "provider_tokens": 723846
+        }
+      },
+      "contrasts": {
+        "code": {
+          "left": "old_current",
+          "right": "new_current",
+          "wins": [],
+          "regressions": [],
+          "both_pass": [
+            "RW-CAND-091"
+          ],
+          "both_not_pass": [
+            "RW-HELM-CONTROLLER-1411",
+            "R3-SKAFFOLD-9732",
+            "RW-PROMETHEUS-19838"
+          ],
+          "pending": [],
+          "inconclusive": []
+        }
+      },
+      "slots": [
+        {
+          "slot": 1,
+          "case_id": "RW-CAND-091",
+          "variant": "old_current",
+          "status": "PUBLIC_EXECUTION_COMPLETE",
+          "independent_status": "PASS",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 4,
+          "model_stages": {
+            "diagnosis.v1.1.26": 1,
+            "changeset.v1.1.13": 1,
+            "topomen-source-execution.v1": 1,
+            "public-postcondition-review.v2": 1
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 95756,
+            "completion_tokens": 29681,
+            "total_tokens": 125437
+          },
+          "accounted_tokens": 125437,
+          "delivery_verified_call_count": 4,
+          "incremental_micro_cny": 428960,
+          "elapsed_seconds": 170.12718819081783,
+          "patch_bytes": 1825,
+          "patch_sha256": "6479314e2de9fe6259d2d4f0b48ad7616f50b6dd7d4dbcf15113fa18c85a1f9e",
+          "run_result_sha256": "837f8a51ff520b653ab2ebb44af159a274912f6aef41fff72acdc57b422c988b",
+          "model_calls_sha256": "ec2285373eac9dfa87806acb022ee0817ee7e93ea73fa64f4d84c041bb33fcf2",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 2,
+          "case_id": "RW-CAND-091",
+          "variant": "new_current",
+          "status": "PUBLIC_EXECUTION_COMPLETE",
+          "independent_status": "PASS",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 7,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3,
+            "changeset.v1.1.13": 1,
+            "topomen-source-execution.v1": 1,
+            "public-postcondition-review.v2": 2
+          },
+          "pre_edit_stop": false,
+          "actual_usage": {
+            "prompt_tokens": 238910,
+            "completion_tokens": 48674,
+            "total_tokens": 287584
+          },
+          "accounted_tokens": 287584,
+          "delivery_verified_call_count": 7,
+          "incremental_micro_cny": 867212,
+          "elapsed_seconds": 298.50682285800576,
+          "patch_bytes": 1786,
+          "patch_sha256": "f6580e5a973bbcae845a3535a2192780c261c72a44c21537b0ea692740c5fff2",
+          "run_result_sha256": "a33020fce1bceae7dfbe315e48297d7a835acb613dbff37ea9501916736b2be0",
+          "model_calls_sha256": "8e59aa42873afed0b26a1885a7a31a92b9bdd4c4d616621d17c8a9e472bd849d",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [
+            {
+              "round_id": "0",
+              "schema_version": "ce.candidate_decision.v1",
+              "decision": "PROMOTE",
+              "from_snapshot": "0c8eafaa10114eb10f1aedf697c61d17900a884c38f010aef7a9b92043e8e3b4",
+              "trial_snapshot": "eb8bee61873381de3f20f78a8cb26b3be98ed685595abab8408248b1f2b0677a",
+              "regressions": [],
+              "uncomparable": [],
+              "interpretation": "No known comparable preservation regression; PROMOTE is not semantic correctness",
+              "protected_check_ids": [],
+              "guard_enabled": true
+            }
+          ],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 3,
+          "case_id": "RW-HELM-CONTROLLER-1411",
+          "variant": "new_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 4,
+          "model_stages": {
+            "diagnosis.v1.1.26": 4
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 145846,
+            "completion_tokens": 26777,
+            "total_tokens": 172623
+          },
+          "accounted_tokens": 172623,
+          "delivery_verified_call_count": 4,
+          "incremental_micro_cny": 505908,
+          "elapsed_seconds": 360.1441158875823,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "de0329b4c064e2bf80a942ec69df495a990ca10f33ca45da8bd31a55f4631910",
+          "model_calls_sha256": "86a8106b825f806fe0f58382c6c62003403a1c83aa53c0dd0dbda15e586a18ca",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 4,
+          "case_id": "RW-HELM-CONTROLLER-1411",
+          "variant": "old_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 3,
+          "model_stages": {
+            "diagnosis.v1.1.26": 3
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 119463,
+            "completion_tokens": 31215,
+            "total_tokens": 150678
+          },
+          "accounted_tokens": 150678,
+          "delivery_verified_call_count": 3,
+          "incremental_micro_cny": 488646,
+          "elapsed_seconds": 389.56893323361874,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "b2f61d4e45842c8b0f79b1aa77d3038abf36ca341caa3deb989b2f49a8879fc1",
+          "model_calls_sha256": "c11d45f16ba40a2226f0c95ab0a20a54da0723e787e9a1b5f4aef8c9f1fb6ccf",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 5,
+          "case_id": "R3-SKAFFOLD-9732",
+          "variant": "old_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 4,
+          "model_stages": {
+            "diagnosis.v1.1.26": 4
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 185162,
+            "completion_tokens": 26142,
+            "total_tokens": 211304
+          },
+          "accounted_tokens": 211304,
+          "delivery_verified_call_count": 4,
+          "incremental_micro_cny": 579460,
+          "elapsed_seconds": 601.5343089960515,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "3a0f95e57cb3bea1c416151c189b7e28c3ee163d967653bafec4ea98aa9faa86",
+          "model_calls_sha256": "b70bfb5a393fc88fe0d004455d713d8567286796ca8dd9bcfface60fb3b50bfe",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 6,
+          "case_id": "R3-SKAFFOLD-9732",
+          "variant": "new_current",
+          "status": "INVALID_OUTPUT",
+          "independent_status": "METHOD_FAILURE",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 4,
+          "model_stages": {
+            "diagnosis.v1.1.26": 4
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 196997,
+            "completion_tokens": 28423,
+            "total_tokens": 225420
+          },
+          "accounted_tokens": 225420,
+          "delivery_verified_call_count": 4,
+          "incremental_micro_cny": 621378,
+          "elapsed_seconds": 604.013645093888,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "3c0e2dded8c5b9aca1dcbbb9e937a324f37976f17b2720dfe8b62ba267bfe4cf",
+          "model_calls_sha256": "d0e5699051313c658166633aa1c8b614a3b86b4bba199d064f268de4127a0d73",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 7,
+          "case_id": "RW-PROMETHEUS-19838",
+          "variant": "new_current",
+          "status": "EVIDENCE_DELIVERY_INCOMPLETE",
+          "independent_status": "NOT_SCORED_EVIDENCE",
+          "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 1,
+          "model_stages": {
+            "diagnosis.v1.1.26": 1
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 27879,
+            "completion_tokens": 10340,
+            "total_tokens": 38219
+          },
+          "accounted_tokens": 38219,
+          "delivery_verified_call_count": 1,
+          "incremental_micro_cny": 138478,
+          "elapsed_seconds": 574.4346430972219,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "a5589e8460a46479e28fb68cf3662a2689c9f21d922ddd472b9be7dda3bd173f",
+          "model_calls_sha256": "8c35de8cafb9991c699c9b5e2d1c68c8652c0c387c4c424b16ddb4b239a0e02e",
+          "guard_policy": {
+            "enabled": true,
+            "runner": "BenchmarkPublicRunner",
+            "fixed_public_check_ids": [],
+            "dynamic_protection": "Current preserve and undisputed retained/pending preservation obligations"
+          },
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        },
+        {
+          "slot": 8,
+          "case_id": "RW-PROMETHEUS-19838",
+          "variant": "old_current",
+          "status": "EVIDENCE_GAP",
+          "independent_status": "NOT_SCORED_EXECUTION",
+          "source_sha256": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+          "config_sha256": "e086818e37eb6f7539aca402b28a510fee7ad81142fe6f3c0a743d135c920460",
+          "model_calls": 1,
+          "model_stages": {
+            "diagnosis.v1.1.26": 1
+          },
+          "pre_edit_stop": true,
+          "actual_usage": {
+            "prompt_tokens": 27862,
+            "completion_tokens": 7758,
+            "total_tokens": 35620
+          },
+          "accounted_tokens": 35620,
+          "delivery_verified_call_count": 1,
+          "incremental_micro_cny": 117788,
+          "elapsed_seconds": 558.9583157412708,
+          "patch_bytes": 0,
+          "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "run_result_sha256": "342069a4bf3f77f13b542a5fa6b96d56bbf466f9a888465fee0bc93e2dd35b0f",
+          "model_calls_sha256": "553be97719d6ac0affa82ef2dbacb5e8b87f4beaebdf2b9b89643a5e41caceea",
+          "guard_policy": null,
+          "candidate_selection": {
+            "rejected_trials": 0,
+            "decisions": []
+          },
+          "candidate_decisions": [],
+          "supplemental_independent_status": null
+        }
+      ],
+      "registration_sha256": "997b9aaa9afdaf9c17a3277bc5b4064aefb6dba8f098df7e99739b8e99a328bb",
+      "results_sha256": "81e6d6af477106f4ab2a332dffaf23d01be6dcb0027f97e32ed80f6b139e316e",
+      "local_analysis_sha256": "de0903874c9f35cf3522cdfcdf3c0c33b17522314c0a7963b787d796cf008982",
+      "panel_cost_micro_cny": 3747830,
+      "cumulative_committed_micro_cny": 89023362,
+      "cumulative_ledger_records": 685,
+      "historical_pending_calls": 2,
+      "new_pending_calls": 0
+    }
+  },
+  "combined_same_capacity": {
+    "cases": 12,
+    "variants": {
+      "old_current": {
+        "planned": 12,
+        "completed": 12,
+        "independent_pass": 4,
+        "pre_edit_stops": 7,
+        "calls": 49,
+        "cost_micro_cny": 7028560,
+        "provider_tokens": 2380154
+      },
+      "new_current": {
+        "planned": 12,
+        "completed": 12,
+        "independent_pass": 4,
+        "pre_edit_stops": 7,
+        "calls": 57,
+        "cost_micro_cny": 7896752,
+        "provider_tokens": 2680561
+      }
+    },
+    "wins": [
+      "R4-CERTMANAGER-9204"
+    ],
+    "regressions": [
+      "R3-KPT-4673"
+    ]
+  },
+  "budget_authorization_cny": 100,
+  "interpretation": [
+    "Independent PASS is whole-case success; delivery is not model use.",
+    "Single trial per arm and case; no statistical or deterministic causal claim.",
+    "Preselected four were not used to tune these work packages; not certified historically unseen.",
+    "Joint four-parameter capacity treatment does not identify individual parameter effects.",
+    "Original failed methods preserved; supervision recovery replayed no method.",
+    "Primary slot23 scoring infrastructure error retained; supplemental score is not substituted in contrasts."
+  ]
+}

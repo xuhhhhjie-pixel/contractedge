@@ -6,11 +6,11 @@ resource and field is still a semantic claim, never an independent behavior scor
 import json
 from typing import Mapping
 import yaml
+from contractedge.contracts.pointers import validate_json_pointer
 
 
 def json_pointer(value, pointer):
-    if not isinstance(pointer, str) or pointer and not pointer.startswith('/'):
-        raise ValueError('Comparison needs a JSON Pointer, including empty root pointer')
+    validate_json_pointer(pointer)
     for part in pointer.split('/')[1:]:
         part = part.replace('~1', '/').replace('~0', '~')
         if isinstance(value, list):
@@ -26,16 +26,42 @@ def json_pointer(value, pointer):
 
 def compare_declared_input(spec, artifacts, observations):
     """No model-supplied expected values and no missing==missing false pass."""
+    def unavailable(reason):
+        return {'status': 'UNAVAILABLE', 'spec': dict(spec), 'reason': reason,
+                'interpretation': 'No equality claim; repair the indicated evidence or path boundary'}
+
+    for field, reason in [('input_pointer', 'INVALID_INPUT_POINTER'),
+                          ('output_pointer', 'INVALID_OUTPUT_POINTER')]:
+        try:
+            validate_json_pointer(spec.get(field))
+        except ValueError:
+            return unavailable(reason)
+    artifact = next((a for a in artifacts if a['id'] == spec.get('artifact_id')), None)
+    if artifact is None:
+        return unavailable('INPUT_ARTIFACT_MISSING')
+    observation = next((o for o in observations if o['id'] == spec.get('observation_id')), None)
+    if observation is None:
+        return unavailable('OUTPUT_OBSERVATION_MISSING')
     try:
-        artifact = next(a for a in artifacts if a['id'] == spec['artifact_id'])
-        observation = next(o for o in observations if o['id'] == spec['observation_id'])
-        # All actual values come from the pinned input and fresh output record.
-        expected = json_pointer(yaml.safe_load(artifact['content']), spec['input_pointer'])
-        actual = json_pointer(json.loads(observation['excerpt']), spec['output_pointer'])
+        published_input = yaml.safe_load(artifact['content'])
+    except (KeyError, ValueError, TypeError, yaml.YAMLError):
+        return unavailable('INPUT_PARSE_ERROR')
+    try:
+        fresh_output = json.loads(observation['excerpt'])
+    except (KeyError, ValueError, TypeError):
+        return unavailable('OUTPUT_PARSE_ERROR')
+    try:
+        expected = json_pointer(published_input, spec['input_pointer'])
+    except (KeyError, IndexError, ValueError, TypeError):
+        return unavailable('INPUT_FIELD_UNAVAILABLE')
+    try:
+        actual = json_pointer(fresh_output, spec['output_pointer'])
+    except (KeyError, IndexError, ValueError, TypeError):
+        return unavailable('OUTPUT_FIELD_UNAVAILABLE')
+    try:
         equal = json.dumps(expected, sort_keys=True, ensure_ascii=False) == json.dumps(actual, sort_keys=True, ensure_ascii=False)
-    except (StopIteration, KeyError, IndexError, ValueError, TypeError, yaml.YAMLError):
-        return {'status': 'UNAVAILABLE', 'spec': dict(spec),
-                'interpretation': 'Missing/non-JSON output or invalid pointer; no equality claim'}
+    except (ValueError, TypeError):
+        return unavailable('NON_JSON_VALUE')
     return {'status': 'EQUAL' if equal else 'DIFFERENT', 'spec': dict(spec),
             'artifact_content_digest': artifact.get('content_digest'),
             'observation_content_digest': observation.get('content_digest'),

@@ -114,9 +114,10 @@ def test_regular_configuration_plan_remains_compatible_without_prerequisites():
 def test_translation_retains_prerequisite_source_even_if_not_cited_by_diagnosis():
     import hashlib
     diagnosis, plan = fixture(); plan['precondition_review'] = [review()]
-    record = dict(id='EV2', kind='SOURCE_SPAN', snapshot_id=plan['snapshot_id'],
+    record = dict(id='HELPER-INIT', kind='SOURCE_SPAN', snapshot_id=plan['snapshot_id'],
         excerpt='initialize()', content_digest=hashlib.sha256(b'initialize()').hexdigest(),
         locator=dict(path='worker.go', start_line=1, end_line=1))
+    plan['precondition_review'][0]['source_evidence_ref'] = record['id']
     translated = translate_for_topomen(plan, 'contractedge.topomen_plan.v1',
         diagnosis=diagnosis.raw, source_support=[record])
     assert record in translated['coordination_context']['source_support']
@@ -174,8 +175,9 @@ def test_changed_prerequisite_requires_replanning_instead_of_false_freshness(tmp
 
 def test_required_source_is_not_silently_removed_for_budget(tmp_path):
     import pytest
-    from contractedge.execution.topomen import build_execution_request,PlanRejected
+    from contractedge.execution.topomen import build_execution_request
+    from contractedge.model.budget import BudgetExceeded
     plan,config=execution_fixture(tmp_path)
-    with pytest.raises(PlanRejected,match='Prerequisite source'):
+    with pytest.raises(BudgetExceeded,match='read-only support budget'):
         build_execution_request(plan,tmp_path,{'allowed_paths':['main.go']},len,
             {**config,'max_execution_support_bytes':0},requirement='Preserve state')

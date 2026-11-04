@@ -32,3 +32,22 @@ def test_seed_retry_uses_current_proof_but_not_restored_trial(tmp_path):
     target.write_text('package restored\n')
     assert bind(new_rebind,original,tmp_path,{},prior,proof) is original
     assert calls[-1][1] is None
+
+
+def test_actual_isolated_worker_and_compatibility_export_keep_partial_operation_proof(tmp_path):
+    from copy import deepcopy
+    from contractedge.orchestration.repair import rebind_execution_plan
+    from contractedge.execution.topomen import apply_edits
+    from tests.test_continuation_operation_coverage import fixture
+    from tests.test_isolated_worker_entry import worker
+    prior, edits, policy = fixture(tmp_path)
+    original = deepcopy(prior)
+    original['operations'][0]['intent'] = 'Historical original intent'
+    applied = apply_edits(prior, tmp_path, policy, edits)
+    rebound = worker().bind_seed_retry(rebind_execution_plan, original, tmp_path, {}, prior, applied)
+    assert rebound['execution_continuation']['prior_applied_operations']['C1']['path'] == 'templates/serviceaccount.yaml'
+    result = apply_edits(rebound, tmp_path, policy, {'edits': [dict(change_id='C2', path='other.go',
+        operation='MODIFY', old_text='trial()', new_text='fixed()')]})
+    assert result['unchanged_change_ids'] == ['C1']
+    assert (tmp_path/'templates/serviceaccount.yaml').read_text() == 'name: selected\n'
+    assert 'fixed()' in (tmp_path/'other.go').read_text()

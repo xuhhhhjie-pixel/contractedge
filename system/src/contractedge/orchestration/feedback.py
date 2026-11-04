@@ -9,26 +9,22 @@ from typing import Any, Mapping
 
 from contractedge.contracts.models import ContractError
 from contractedge.contracts.validation import _check_schema, canonical_digest
+from contractedge.diagnosis.evidence import same_evidence_content
 
 
-def feedback_prompt_view(value: Mapping | None, *, supplied_observations=()) -> dict | None:
-    """Keep all obligation state, referencing raw outputs stored in full on disk.
-
-    This is a prompt projection, never a replacement for validated feedback.
-    Fresh bounded observation excerpts are supplied by each stage separately.
-    """
-    if value is None:
-        return None
-    result = {key: item for key, item in value.items() if key != 'public_observations'}
-    result['public_observation_refs'] = [
+def observations_prompt_view(records, *, supplied_observations=()) -> dict:
+    """Resolve exact duplicates against the request's public_observations."""
+    records = list(records)
+    result = {'public_observation_refs': [
         {key: record[key] for key in ('id', 'snapshot_id', 'content_digest', 'locator') if key in record}
-        for record in value.get('public_observations', [])]
+        for record in records]}
     # Share metadata only with a unique, byte-bound record in this same
     # request. IDs alone cannot resolve current and historical observations.
     supplied={}
     for index,record in enumerate(supplied_observations):
         supplied.setdefault(record.get('id'),[]).append((index,record))
     shared=False
+    shared_indices=set()
     for index,reference in enumerate(result['public_observation_refs']):
         if not all(key in reference for key in ('id','snapshot_id','content_digest','locator')):continue
         matches=supplied.get(reference.get('id'),[])
@@ -36,15 +32,30 @@ def feedback_prompt_view(value: Mapping | None, *, supplied_observations=()) -> 
         target_index,record=matches[0]
         excerpt=record.get('excerpt')
         if (not isinstance(excerpt,str) or hashlib.sha256(excerpt.encode()).hexdigest()!=record.get('content_digest')
-                or not all(record.get(k)==v for k,v in reference.items())):continue
+                or not same_evidence_content(record, records[index])):continue
         result['public_observation_refs'][index]=dict(id=reference['id'],
             public_observation_record_ref='/public_observations/'+str(target_index))
         shared=True
+        shared_indices.add(index)
+    retained=[record for index,record in enumerate(records)
+              if index not in shared_indices]
+    if retained:
+        result['public_observations']=retained
     if shared:
         result['observation_reference_policy']=(
             'public_observation_record_ref resolves to the exact public_observations array record in this request, '
-            'including its snapshot, content_digest and locator. Other entries retain their full identity and location. '
+            'including its snapshot, content_digest and locator. Other entries retain their complete records in this feedback. '
             'A shared reference is not a new observation or a behavior verdict.')
+    return result
+
+
+def feedback_prompt_view(value: Mapping | None, *, supplied_observations=()) -> dict | None:
+    """Keep complete feedback, sharing only exact observations in this request."""
+    if value is None:
+        return None
+    result = {key: item for key, item in value.items() if key != 'public_observations'}
+    result.update(observations_prompt_view(value.get('public_observations', ()),
+        supplied_observations=supplied_observations))
     result['full_feedback_digest'] = canonical_digest(value)
     tasks=summarize_failure_tasks(value)
     if tasks:result['failure_tasks']=tasks
@@ -108,17 +119,34 @@ def summarize_failure_tasks(value):
             group['affected_checks'].append(check['id']);group['observation_refs'].append(record['id'])
     runtime=[]
     for failure in value.get('observation_diagnostics',[]):
-        if (failure.get('kind')!='CANDIDATE_RUNTIME_FAILURE'
+        compile_failure = failure.get('kind') == 'CANDIDATE_BUILD_FAILURE'
+        from contractedge.execution.public import is_registered_readiness_failure
+        readiness_failure = failure.get('kind')=='CANDIDATE_RUNTIME_FAILURE' and is_registered_readiness_failure(failure)
+        if compile_failure:
+            from contractedge.execution.public import has_candidate_build_failure
+            if not has_candidate_build_failure(dict(status='EXECUTION_FAILED',
+                    snapshot_id=value.get('to_snapshot'), candidate_build_failures=[failure])):
+                continue
+        if (failure.get('kind') not in {'CANDIDATE_RUNTIME_FAILURE','CANDIDATE_BUILD_FAILURE'}
                 or failure.get('snapshot_id')!=value.get('to_snapshot')
-                or failure.get('operation')!='PRODUCTION_PROCESS_START'
-                or failure.get('status')!='FAILED' or not failure.get('source_locations')
+                or failure.get('operation')!=('PRODUCTION_COMPILE' if compile_failure else
+                    'PRODUCTION_PROCESS_READINESS' if readiness_failure else 'PRODUCTION_PROCESS_START')
+                or failure.get('status')!='FAILED' or not readiness_failure and not failure.get('source_locations')
                 or not isinstance(failure.get('stderr_excerpt'),str)):continue
         message=failure['stderr_excerpt']
-        runtime.append(dict(scenario=failure.get('scenario'),error_field='production_startup',
+        if readiness_failure:
+            message=('The registered wrapper built and started the process, but readiness was not observed '
+                'within 20 seconds before scenario alerts were injected. Implementation versus environment cause is unknown. '
+                'Inspect initialization with zero work, the first item and a full initial backlog; signal completion only after the required state exists. '
+                'Raw registered wrapper: '+message)
+        runtime.append(dict(scenario=failure.get('scenario'),error_field='production_compile' if compile_failure else
+            'production_readiness' if readiness_failure else 'production_startup',
             actual_error=message[:1500],error_truncated=len(message)>1500 or failure.get('stderr_truncated',False),
             source_locations=failure['source_locations'],stderr_sha256=failure.get('stderr_sha256'),
             affected_checks=[],observation_refs=[],snapshot_id=value['to_snapshot'],
-            interpretation='Registered production startup failed at this recorded snapshot; root cause remains unproven; compare its snapshot with current source before use'))
+            interpretation=('Registered source compilation failed' if compile_failure else
+                'Registered public readiness was not observed in its finite window' if readiness_failure else 'Registered production startup failed')
+                +' at this recorded snapshot; root cause remains unproven; compare its snapshot with current source before use'))
     errors=(runtime+list(groups.values()))[:4]
     conflicts=[c for c in (value.get('helper_preconditions') or {}).get('checks',[]) if c.get('status')=='CONFLICT'][:8]
     predicates,omitted=_failed_predicate_tasks(value)
@@ -133,30 +161,14 @@ def summarize_failure_tasks(value):
 
 
 def historical_trial_prompt_view(value,*,canonical_text=''):
-    """Compact a rejected trial; current plan/feedback retain all live obligations.
+    """Keep the selected rejected trial intact, with its historical identity.
 
-    Full trial feedback is immutable on disk. This projection changes neither
-    candidate selection nor the retained-constraint ledger used by verification.
+    canonical_text remains a compatibility argument, not proof that an exact
+    record exists elsewhere in this request. Final admission handles its size.
     """
-    fields=('schema_version','case_id','run_id','input_digest','round_id','from_snapshot','to_snapshot',
-            'patch_digest','build_state','semantic_outcome','failure_kind','route','route_confidence',
-            'helper_preconditions','failure_tasks','operation_failure_comparison','predicate_progress_comparison')
-    result={k:value[k] for k in fields if k in value}
+    result=dict(value)
     result['full_feedback_digest']=value.get('full_feedback_digest') or canonical_digest(value)
     result['projection']='REJECTED_HISTORICAL_TRIAL; current plan and current feedback are authoritative for live obligations'
-    result['rationale']=str(value.get('rationale',''))[:2000]
-    result['public_check_results']=[]
-    for check in value.get('public_check_results',[]):
-        row={k:check[k] for k in ('id','status','submitted_status','evidence_validation') if k in check}
-        row['rationale_excerpt']=str(check.get('rationale',''))[:512]
-        row['observation_refs']=[e.get('observation_id') for e in check.get('evidence',[]) if e.get('observation_id')]
-        result['public_check_results'].append(row)
-    result['pending_obligation_refs']=[]
-    for obligation in value.get('pending_obligations',[]):
-        row={k:obligation[k] for k in ('id','kind','stable_obligation_keys','obligation_refs','requirement_refs','verification_scope','reason_category','verification_gap') if k in obligation}
-        statement=obligation.get('statement')
-        if statement and statement not in canonical_text:row['statement']=statement
-        result['pending_obligation_refs'].append(row)
     return result
 
 
@@ -406,11 +418,54 @@ def validate_feedback(value: Mapping, *, case_id: str, input_digest: str,
     return dict(value)
 
 
+def select_feedback_observations(value: Mapping, selected_observations=()) -> dict:
+    """Freeze selected content and final check support after raw fact evaluation.
+
+    Call after profile enforcement and reassessment, before recording feedback.
+    This does not rank, truncate or reinterpret evidence. Raw observations stay
+    in their original observation artifact; all already selected records and
+    every final check/link reference retain their complete current record.
+    """
+    identity = dict(case_id=value.get('case_id'), input_digest=value.get('input_digest'),
+                    to_snapshot=value.get('to_snapshot'))
+    validated = validate_feedback(value, **identity)
+    records = validated['public_observations']
+    by_id = {record['id']: record for record in records}
+    retained_ids = set()
+
+    def retain(identifier):
+        if not isinstance(identifier, str) or identifier not in by_id:
+            raise ContractError('FEEDBACK_EVIDENCE_MISMATCH', 'public_observations',
+                                'Selected or referenced observation has no valid current raw record')
+        retained_ids.add(identifier)
+
+    for selected in selected_observations:
+        identifier = selected.get('id') if isinstance(selected, Mapping) else None
+        retain(identifier)
+        if not same_evidence_content(selected, by_id[identifier]):
+            raise ContractError('FEEDBACK_EVIDENCE_MISMATCH', 'public_observations',
+                                'Selected observation conflicts with its complete current raw record')
+    for check in validated['public_check_results']:
+        citations = check.get('evidence', ())
+        if not isinstance(citations, (list, tuple)):
+            raise ContractError('FEEDBACK_EVIDENCE_MISMATCH', 'public_check_results',
+                                'Final check evidence must identify current raw observations')
+        for citation in citations:
+            retain(citation.get('observation_id') if isinstance(citation, Mapping) else None)
+    for link in validated.get('coordination_links', ()):
+        for identifier in link.get('observation_refs', ()):
+            retain(identifier)
+    result = {**validated, 'public_observations': [dict(record) for record in records
+                                                 if record['id'] in retained_ids]}
+    return validate_feedback(result, **identity)
+
+
 def make_feedback(*, case_id: str, run_id: str, input_digest: str, round_id: int,
                   from_snapshot: str, to_snapshot: str, patch_digest: str,
                   execution_status: str, observations: list[Mapping],
                   plan: Mapping, review: Mapping | None = None,
-                  diagnosis: Mapping | None = None, observation_diagnostics=()) -> dict:
+                  diagnosis: Mapping | None = None, observation_diagnostics=(),
+                  independent_open_ids=()) -> dict:
     review = dict(review or {})
     checks = [dict(c) for c in review.get('checks', [])]
     public_by_id = {o['id']: o for o in observations}
@@ -425,6 +480,9 @@ def make_feedback(*, case_id: str, run_id: str, input_digest: str, round_id: int
         for p in plan.get(kind, []) if p.get('verification_kind') == 'NOT_PUBLICLY_OBSERVABLE'}
     # PASS and FAIL both require current evidence. Keep the submitted verdict,
     # but never retain/route on a stale, fabricated or unsupported review claim.
+    # An OPEN item records an unresolved gap. Public review cannot self-authorize
+    # closing it; only an explicit independent checker may do so.
+    independent_open_ids = {str(item) for item in (independent_open_ids or ())}
     for check in checks:
         if check.get('status') not in {'PASS', 'FAIL'}:
             continue
@@ -439,6 +497,9 @@ def make_feedback(*, case_id: str, run_id: str, input_digest: str, round_id: int
         capability_error = support_error(obligations.get(check.get('id'), {}), check, observations,
                                          plan.get('declared_artifacts', []), snapshot_id=to_snapshot,
                                          capabilities=plan.get('public_execution_capabilities')) if verified else None
+        if (check.get('id', '').startswith('open:')
+                and check.get('id') not in independent_open_ids):
+            capability_error = 'OPEN_REQUIRES_INDEPENDENT_REVIEW'
         if not verified or capability_error:
             check.update(submitted_status=check['status'], status='UNKNOWN',
                          evidence_validation=capability_error or 'REJECTED_NO_FRESH_SUPPORT')
@@ -560,11 +621,14 @@ def make_feedback(*, case_id: str, run_id: str, input_digest: str, round_id: int
             'status': statuses.get(check_id, 'UNKNOWN'),
             'interpretation': 'Traceable association, not independent proof of causal attribution'})
     runtime_errors = [dict(r) for r in observation_diagnostics if r.get('kind')=='CANDIDATE_RUNTIME_FAILURE']
+    build_errors = [dict(r) for r in observation_diagnostics if r.get('kind')=='CANDIDATE_BUILD_FAILURE']
     adapter_errors = [dict(r) for r in observation_diagnostics
-        if r.get('status') not in {'COMPLETE','NOT_APPLICABLE'} and r.get('kind')!='CANDIDATE_RUNTIME_FAILURE']
+        if r.get('status') not in {'COMPLETE','NOT_APPLICABLE'}
+        and r.get('kind') not in {'CANDIDATE_RUNTIME_FAILURE','CANDIDATE_BUILD_FAILURE'}]
     for pending_item in pending:
         check = next((c for c in checks if c['id']==pending_item['id']), {})
         pending_item['reason_category'] = ('OBSERVED_FAILURE' if check.get('status')=='FAIL' else
+            'EXECUTION_BLOCKED' if build_errors else
             'OBSERVATION_ADAPTER_ERROR' if adapter_errors else
             'NOT_PUBLICLY_OBSERVABLE' if pending_item.get('verification_kind') in {'NOT_PUBLICLY_OBSERVABLE','BUILD_ONLY'} else
             'CHECK_COVERAGE_INSUFFICIENT' if check.get('evidence_validation') else 'EVIDENCE_INSUFFICIENT')
@@ -575,9 +639,10 @@ def make_feedback(*, case_id: str, run_id: str, input_digest: str, round_id: int
             'coverage':pending_item.get('check_coverage','UNDECLARED'),
             'remaining_scope':'Original requirement beyond these finite checks remains unverified' if pending_item.get('check_coverage')=='NECESSARY_ONLY' else None,
             'action':'REPAIR_IMPLEMENTATION' if check.get('status')=='FAIL' else
+                'REPAIR_IMPLEMENTATION' if build_errors else
                 'MAINTAIN_ADAPTER' if adapter_errors else
                 'STOP_UNOBSERVABLE' if pending_item.get('verification_kind') in {'NOT_PUBLICLY_OBSERVABLE','BUILD_ONLY'} else 'OBTAIN_SUFFICIENT_PUBLIC_EVIDENCE'}
-    payload['observation_diagnostics'] = adapter_errors+runtime_errors
+    payload['observation_diagnostics'] = adapter_errors+runtime_errors+build_errors
     payload['next_action'] = ('REPAIR_OBSERVATION_ADAPTER' if adapter_errors and not any(c.get('status')=='FAIL' for c in checks)
         else route if route!='STOP' else 'STOP_UNOBSERVABLE' if pending and all(p.get('reason_category')=='NOT_PUBLICLY_OBSERVABLE' for p in pending)
         else 'STOP_UNCERTAIN' if pending else 'COMPLETE')
@@ -597,3 +662,40 @@ def make_feedback(*, case_id: str, run_id: str, input_digest: str, round_id: int
         payload['obligation_coverage']=project_obligation_coverage(payload['obligation_lineage'],lineage_checks,
             dict(snapshot_id=to_snapshot,input_digest=input_digest))
     return validate_feedback(payload, case_id=case_id, input_digest=input_digest, to_snapshot=to_snapshot)
+
+
+def finalize_feedback(feedback, *, review, execution_result, rejection_kind,
+                      incumbent_observation, current_observation, review_plan,
+                      fixed_requirement_profile, operation_consistency_enabled,
+                      round_id, max_rounds):
+    """Build one feedback recommendation from public facts; no dispatch here."""
+    feedback = dict(feedback)
+    before, after = feedback['from_snapshot'], feedback['to_snapshot']
+    if rejection_kind is None and fixed_requirement_profile:
+        if review.get('requirement_profile_valid') is True:
+            fixed = review['public_requirement_checks']
+            verdict = review['requirement_profile_decision']
+            feedback.update(public_check_results=fixed,
+                semantic_outcome='PUBLIC_REVIEW_PASS' if verdict == 'PASS' and not feedback['pending_obligations'] else
+                    'PUBLIC_REVIEW_FAIL' if verdict == 'FAIL' else 'UNKNOWN',
+                failure_kind='NONE' if verdict == 'PASS' else 'UNKNOWN', route='STOP',
+                rationale='Fixed requirement-level public profile: ' + verdict,
+                next_action='COMPLETE' if verdict == 'PASS' and not feedback['pending_obligations'] else 'STOP_UNCERTAIN')
+            if verdict == 'FAIL' and round_id == 0 and before != after and max_rounds > 1:
+                feedback.update(route='EXECUTE', routing_policy='BOUNDED_ACCEPTED_INTENT_RETRY',
+                    next_action='EXECUTE', rationale='Bounded retry of this mode\'s accepted intent using only fresh fixed public failures; semantic attribution remains UNKNOWN.')
+            validate_feedback(feedback, case_id=feedback['case_id'], input_digest=feedback['input_digest'], to_snapshot=after)
+    if rejection_kind:
+        feedback.update(build_state='NOT_RUN', failure_kind=rejection_kind,
+            route='CHANGESET' if rejection_kind == 'PLAN' else 'EXECUTE',
+            next_action='CHANGESET' if rejection_kind == 'PLAN' else 'EXECUTE',
+            route_confidence='HIGH', rationale=execution_result['error'])
+        validate_feedback(feedback, case_id=feedback['case_id'], input_digest=feedback['input_digest'], to_snapshot=after)
+    if execution_result.get('helper_preconditions'):
+        feedback['helper_preconditions']=execution_result['helper_preconditions']
+        validate_feedback(feedback, case_id=feedback['case_id'], input_digest=feedback['input_digest'], to_snapshot=after)
+    if rejection_kind is None and operation_consistency_enabled:
+        feedback=reassess_unchanged_operations(feedback,incumbent_observation,current_observation)
+        feedback=reassess_failed_target_predicates(feedback,incumbent_observation,current_observation,review_plan)
+        validate_feedback(feedback, case_id=feedback['case_id'], input_digest=feedback['input_digest'], to_snapshot=after)
+    return feedback

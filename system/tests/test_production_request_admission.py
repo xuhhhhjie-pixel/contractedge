@@ -10,6 +10,7 @@ from contractedge.execution.review import ModelPublicReviewer
 from contractedge.execution.topomen import build_execution_request, ModelPlanExecutor, PlanRejected
 from contractedge.execution.topomen_agent import TopoMenAgentExecutor
 from contractedge.model.admission import quote_request
+from contractedge.model.budget import BudgetExceeded
 from contractedge.model.provider import ModelResponse, OpenAICompatibleProvider
 from tests.test_repair_execution import bound_plan
 
@@ -64,7 +65,7 @@ def test_direct_native_schema_overhead_rejects_before_dispatch(tmp_path):
         len, settings, requirement='Select configured name')
     settings['max_context_tokens'] = input_size(initial) + 2
     provider = NativePort()
-    with pytest.raises(PlanRejected, match='context budget'):
+    with pytest.raises(BudgetExceeded, match='context budget'):
         ModelPlanExecutor(provider, len, settings).execute(plan, tmp_path,
             {'allowed_paths': ['templates/**']}, requirement='Select configured name')
     assert not provider.dispatches
@@ -86,7 +87,7 @@ def test_direct_exact_input_cap_does_not_subtract_output_reservation(tmp_path):
     assert provider.preparations[0][1] is provider.dispatches[0][1]
 
 
-def test_optional_execution_support_is_trimmed_with_native_overhead(tmp_path):
+def test_selected_execution_support_is_not_trimmed_to_fit_native_overhead(tmp_path):
     plan, settings = source_fixture(tmp_path), config()
     settings['execution_max_output_tokens'] = 32
     initial = build_execution_request(plan, tmp_path, {'allowed_paths': ['templates/**']},
@@ -104,11 +105,9 @@ def test_optional_execution_support_is_trimmed_with_native_overhead(tmp_path):
     plan['coordination_context'] = {'source_support': [evidence]}
     settings['max_context_tokens'] = base.input_tokens + 1000
     provider = NativePort()
-    request = build_execution_request(plan, tmp_path, {'allowed_paths': ['templates/**']},
-        len, settings, requirement='Select configured name', provider=provider)
-    assert not json.loads(request.messages[1]['content'])['read_only_source_support']
-    assert any(row['result'] == 'FULL_REQUEST_CONTEXT_BUDGET'
-        for row in request.metadata['read_only_support_audit'])
+    with pytest.raises(BudgetExceeded, match='full context budget'):
+        build_execution_request(plan, tmp_path, {'allowed_paths': ['templates/**']},
+            len, settings, requirement='Select configured name', provider=provider)
     assert not provider.dispatches
 
 
@@ -144,7 +143,7 @@ def test_native_wrapping_rechecks_final_context_before_dispatch(tmp_path):
         wrapper = 'native wrapper must also fit ' * 1000
     with patch('contractedge.execution.topomen_agent._native_agent',
             return_value=(WrappedAgent, Submitted, {'agent_class': 'fake.native.agent'})):
-        with pytest.raises(PlanRejected, match='context budget'):
+        with pytest.raises(BudgetExceeded, match='context budget'):
             TopoMenAgentExecutor(provider, len, settings).execute(plan, tmp_path,
                 {'allowed_paths': ['templates/**']}, requirement='Select configured name')
     assert not provider.dispatches
@@ -176,9 +175,8 @@ def test_review_schema_overhead_returns_context_limit_without_dispatch():
     initial = provider.dispatches[0][0]
     provider = NativePort()
     settings['max_context_tokens'] = input_size(initial) + 2
-    result = ModelPublicReviewer(provider, len, settings).review('Required behavior', plan, observation)
-    assert result['decision'] == 'UNKNOWN'
-    assert result['method'] == 'CONTEXT_LIMIT'
+    with pytest.raises(BudgetExceeded, match='context budget'):
+        ModelPublicReviewer(provider, len, settings).review('Required behavior', plan, observation)
     assert not provider.dispatches
 
 
@@ -189,8 +187,8 @@ def test_review_retry_is_admitted_again_and_keeps_only_first_call():
     quote = quote_request(NativePort(), probe.dispatches[0][0], len)
     settings.update(max_context_tokens=quote.input_tokens + 1, max_format_retries=1)
     provider = NativePort(['invalid JSON', json.dumps(REVIEW)])
-    result = ModelPublicReviewer(provider, len, settings).review('Required behavior', plan, observation)
-    assert result['method'] == 'CONTEXT_LIMIT'
+    with pytest.raises(BudgetExceeded, match='context budget'):
+        ModelPublicReviewer(provider, len, settings).review('Required behavior', plan, observation)
     assert len(provider.dispatches) == 1
     assert len(provider.preparations) == 2
 

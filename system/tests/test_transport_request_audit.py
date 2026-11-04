@@ -1,16 +1,19 @@
 """Final HTTP bytes are durable before dispatch; transports are deterministic fakes."""
 import copy
+import errno
 import hashlib
 import io
 import json
 import urllib.error
+import socket
 from unittest.mock import patch
 
 import pytest
 
 from contractedge.model.budget import BudgetedProvider, BudgetExceeded
 from contractedge.model.money import MoneyBudget
-from contractedge.model.provider import ModelRequest, OpenAICompatibleProvider, OllamaNativeProvider
+from contractedge.model.provider import (ModelRequest, OpenAICompatibleProvider, OllamaNativeProvider,
+                                         _read_response_with_deadline)
 
 
 SCHEMA = {'type': 'object', 'properties': {'answer': {'type': 'string'}, 'note': {'type': 'string'}},
@@ -102,6 +105,99 @@ def test_openai_final_payload_is_persisted_before_dispatch(tmp_path, mode, suppo
     with patch('urllib.request.urlopen', side_effect=transport):
         budget.complete_json(req)
     assert len(seen) == 1 and budget.calls[0]['response_metadata']['usage']['completion_tokens'] == 2
+
+
+def test_observed_output_reconciliation_releases_only_unused_capacity(tmp_path):
+    port = provider('openai')
+    budget, _ = budget_with_disk_ledger(port, tmp_path, reconcile_observed_output=True)
+    req = request()
+    quote = budget.quote_request(req)
+
+    with patch('urllib.request.urlopen', return_value=Response(response('openai'))):
+        budget.complete_json(req)
+
+    assert budget.reserved_tokens == quote.input_tokens + 2
+    assert budget.calls[0]['output_tokens_reserved'] == 64
+    assert budget.calls[0]['output_tokens_accounted'] == 2
+    assert budget.calls[0]['output_tokens_released'] == 62
+
+
+def test_observed_output_reconciliation_ignores_identity_mismatch(tmp_path):
+    port = provider('openai', model_identity_policy='record')
+    budget, _ = budget_with_disk_ledger(port, tmp_path, reconcile_observed_output=True)
+    req = request()
+    quote = budget.quote_request(req)
+
+    with patch('urllib.request.urlopen', return_value=Response(response('openai', model='unlisted-model'))):
+        budget.complete_json(req)
+
+    assert budget.reserved_tokens == quote.total_tokens
+    assert 'output_tokens_accounted' not in budget.calls[0]
+
+
+def test_observed_prompt_reconciliation_requires_verified_model_identity(tmp_path):
+    port = provider('openai', model_identity_policy='require_match')
+    budget, _ = budget_with_disk_ledger(port, tmp_path,
+                                        reconcile_observed_output=True,
+                                        reconcile_observed_input=True)
+    req = request()
+    quote = budget.quote_request(req)
+
+    with patch('urllib.request.urlopen', return_value=Response(response('openai'))):
+        budget.complete_json(req)
+
+    assert budget.reserved_tokens == 3 + 2
+    assert budget.calls[0]['prompt_tokens_accounted'] == 3
+    assert budget.calls[0]['prompt_tokens_released'] == quote.input_tokens - 3
+
+
+def test_observed_prompt_reconciliation_keeps_upper_bound_on_identity_mismatch(tmp_path):
+    port = provider('openai', model_identity_policy='record')
+    budget, _ = budget_with_disk_ledger(port, tmp_path, reconcile_observed_input=True)
+    req = request()
+    quote = budget.quote_request(req)
+
+    with patch('urllib.request.urlopen', return_value=Response(response('openai', model='unlisted-model'))):
+        budget.complete_json(req)
+
+    assert budget.reserved_tokens == quote.total_tokens
+    assert 'prompt_tokens_accounted' not in budget.calls[0]
+
+
+def test_http_response_reader_enforces_one_monotonic_deadline():
+    class Socket:
+        def __init__(self): self.timeouts = []
+        def settimeout(self, value): self.timeouts.append(value)
+    class Response:
+        def __init__(self):
+            self.fp = type('Stream', (), {'raw': type('Raw', (), {'_sock': Socket()})()})()
+            self.calls = 0
+        def read(self, _size):
+            self.calls += 1
+            return b'part' if self.calls == 1 else b''
+    response = Response()
+    assert _read_response_with_deadline(response, 1) == b'part'
+    assert response.fp.raw._sock.timeouts
+
+
+def test_http_response_reader_translates_socket_timeout_to_unknown_response_error():
+    class Socket:
+        def settimeout(self, _value): pass
+    class Response:
+        fp = type('Stream', (), {'raw': type('Raw', (), {'_sock': Socket()})()})()
+        def read(self, _size): raise socket.timeout('fixture timeout')
+    with pytest.raises(TimeoutError, match='request deadline'):
+        _read_response_with_deadline(Response(), 1)
+
+
+def test_http_response_reader_consumes_buffered_body_when_socket_closed_before_read():
+    class Socket:
+        _closed = True
+        def settimeout(self, _value): raise OSError(errno.EBADF, 'Bad file descriptor')
+    class Response:
+        fp = type('Stream', (), {'raw': type('Raw', (), {'_sock': Socket()})()})()
+        def read(self, *_args): return b'{"ok":true}'
+    assert _read_response_with_deadline(Response(), 1) == b'{"ok":true}'
 
 
 @pytest.mark.parametrize('schema', [None, SCHEMA])
