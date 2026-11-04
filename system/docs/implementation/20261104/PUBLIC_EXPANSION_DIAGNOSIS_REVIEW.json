@@ -1,0 +1,457 @@
+{
+  "scope": "Completed supplementary slots3-6 only; public requests and Broken source, no hidden evaluator content",
+  "source_sha256": {
+    "old_current": "e6784c1085dc9aaa73226cc82d5a7971322e95f75456f511a820e224c1279538",
+    "new_current": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4"
+  },
+  "rows": [
+    {
+      "slot": 3,
+      "case_id": "RW-HELM-CONTROLLER-1411",
+      "variant": "new_current",
+      "method_status": "EVIDENCE_GAP",
+      "errors": [
+        "Existing bounded evidence acquisition allowance exhausted"
+      ],
+      "model_calls": 4,
+      "model_calls_sha256": "86a8106b825f806fe0f58382c6c62003403a1c83aa53c0dd0dbda15e586a18ca",
+      "last_model_reported_status": "EVIDENCE_GAP",
+      "reported_gaps": [
+        {
+          "id": "G1",
+          "summary": "No public runtime observation or fixture shows the HelmRelease condition set after an InSync no-action reconciliation with stale failure conditions; static code supports the local break but the status transition remains unobserved.",
+          "locator_hint": {
+            "path": "internal/reconcile/atomic_release.go",
+            "symbol": "actionForState"
+          }
+        }
+      ],
+      "delivered_named_declarations": [
+        {
+          "id": "SRC-CU-ac9604a04c4afe38",
+          "symbols": [
+            "actionForState"
+          ],
+          "bytes": 10185,
+          "locator": {
+            "column_start": 1,
+            "end_char": 24252,
+            "end_line": 550,
+            "original_end_line": 550,
+            "path": "internal/reconcile/atomic_release.go",
+            "start_char": 14067,
+            "start_line": 335,
+            "truncated": false
+          },
+          "content_digest": "346fb408baaffd07e55868f95708fc0abfe3f344230b652d895bad17dcf4a322"
+        }
+      ],
+      "static_searches": [
+        {
+          "complete": true,
+          "inspected_byte_count": 0,
+          "inspected_file_count": 290,
+          "match_count": 1,
+          "matched_paths": [
+            "internal/reconcile/atomic_release.go"
+          ],
+          "query": "internal/reconcile/atomic_release.go",
+          "query_kind": "EXACT_PATH",
+          "scope": "snapshot_file_inventory",
+          "truncated": false
+        },
+        {
+          "complete": true,
+          "inspected_byte_count": 3128567,
+          "inspected_file_count": 290,
+          "match_count": 44,
+          "matched_paths": [
+            "CHANGELOG.md",
+            "api/v2/annotations.go",
+            "api/v2/helmrelease_types.go",
+            "api/v2beta1/helmrelease_types.go",
+            "api/v2beta2/annotations.go",
+            "api/v2beta2/annotations_test.go",
+            "api/v2beta2/helmrelease_types.go",
+            "config/crd/bases/helm.toolkit.fluxcd.io_helmreleases.yaml",
+            "docs/api/v2/helm.md",
+            "docs/spec/README.md",
+            "docs/spec/v2/helmreleases.md",
+            "docs/spec/v2alpha1/helmreleases.md",
+            "docs/spec/v2beta1/helmreleases.md",
+            "docs/spec/v2beta2/helmreleases.md",
+            "internal/controller/helmrelease_controller.go",
+            "internal/controller/helmrelease_controller_test.go",
+            "internal/controller/helmrelease_indexers.go",
+            "internal/controller/helmrelease_manager.go",
+            "internal/reconcile/atomic_release.go",
+            "internal/reconcile/atomic_release_test.go",
+            "internal/reconcile/correct_cluster_drift.go",
+            "internal/reconcile/correct_cluster_drift_test.go",
+            "internal/reconcile/helmchart_template.go",
+            "internal/reconcile/helmchart_template_test.go",
+            "internal/reconcile/install.go",
+            "internal/reconcile/install_test.go",
+            "internal/reconcile/reconcile.go",
+            "internal/reconcile/release.go",
+            "internal/reconcile/release_test.go",
+            "internal/reconcile/rollback_remediation.go",
+            "internal/reconcile/rollback_remediation_test.go",
+            "internal/reconcile/state.go",
+            "internal/reconcile/state_test.go",
+            "internal/reconcile/suite_test.go",
+            "internal/reconcile/test.go",
+            "internal/reconcile/test_test.go",
+            "internal/reconcile/uninstall.go",
+            "internal/reconcile/uninstall_remediation.go",
+            "internal/reconcile/uninstall_remediation_test.go",
+            "internal/reconcile/uninstall_test.go",
+            "internal/reconcile/unlock.go",
+            "internal/reconcile/unlock_test.go",
+            "internal/reconcile/upgrade.go",
+            "internal/reconcile/upgrade_test.go"
+          ],
+          "max_bytes": 67108864,
+          "query": "Reconcile",
+          "query_kind": "EXACT_SYMBOL",
+          "scope": "snapshot_file_inventory",
+          "truncated": false
+        },
+        {
+          "complete": true,
+          "inspected_byte_count": 3128567,
+          "inspected_file_count": 290,
+          "match_count": 2,
+          "matched_paths": [
+            "internal/reconcile/atomic_release.go",
+            "internal/reconcile/atomic_release_test.go"
+          ],
+          "max_bytes": 67108864,
+          "query": "actionForState",
+          "query_kind": "EXACT_SYMBOL",
+          "scope": "snapshot_file_inventory",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "slot": 4,
+      "case_id": "RW-HELM-CONTROLLER-1411",
+      "variant": "old_current",
+      "method_status": "EVIDENCE_GAP",
+      "errors": [
+        "Existing bounded evidence acquisition allowance exhausted"
+      ],
+      "model_calls": 3,
+      "model_calls_sha256": "c11d45f16ba40a2226f0c95ab0a20a54da0723e787e9a1b5f4aef8c9f1fb6ccf",
+      "last_model_reported_status": "EVIDENCE_GAP",
+      "reported_gaps": [
+        {
+          "id": "G1",
+          "summary": "Need the v2 production span that clears stale failure conditions on no-action success; supplied ClearFailures is v2beta2 only, so the actionable reset target for v2 is unverified.",
+          "locator_hint": {
+            "path": "api/v2/helmrelease_types.go",
+            "search_term": "ClearFailures",
+            "symbol": "ClearFailures"
+          }
+        },
+        {
+          "id": "G2",
+          "summary": "Need a v2 success-condition helper or call site for no-action completion; supplied HelmReleaseReady is v2beta1 and exact search shows no HelmReleaseReady in atomic_release.go.",
+          "locator_hint": {
+            "path": "api/v2/helmrelease_types.go",
+            "search_term": "HelmReleaseReady",
+            "symbol": "HelmReleaseReady"
+          }
+        }
+      ],
+      "delivered_named_declarations": [
+        {
+          "id": "SRC-CU-ac9604a04c4afe38",
+          "symbols": [
+            "actionForState"
+          ],
+          "bytes": 10185,
+          "locator": {
+            "column_start": 1,
+            "end_char": 24252,
+            "end_line": 550,
+            "original_end_line": 550,
+            "path": "internal/reconcile/atomic_release.go",
+            "start_char": 14067,
+            "start_line": 335,
+            "truncated": false
+          },
+          "content_digest": "346fb408baaffd07e55868f95708fc0abfe3f344230b652d895bad17dcf4a322"
+        }
+      ],
+      "static_searches": [
+        {
+          "complete": true,
+          "inspected_byte_count": 0,
+          "inspected_file_count": 290,
+          "match_count": 1,
+          "matched_paths": [
+            "internal/reconcile/atomic_release.go"
+          ],
+          "query": "internal/reconcile/atomic_release.go",
+          "query_kind": "EXACT_PATH",
+          "scope": "snapshot_file_inventory",
+          "truncated": false
+        },
+        {
+          "complete": true,
+          "inspected_byte_count": 3128567,
+          "inspected_file_count": 290,
+          "match_count": 44,
+          "matched_paths": [
+            "CHANGELOG.md",
+            "api/v2/annotations.go",
+            "api/v2/helmrelease_types.go",
+            "api/v2beta1/helmrelease_types.go",
+            "api/v2beta2/annotations.go",
+            "api/v2beta2/annotations_test.go",
+            "api/v2beta2/helmrelease_types.go",
+            "config/crd/bases/helm.toolkit.fluxcd.io_helmreleases.yaml",
+            "docs/api/v2/helm.md",
+            "docs/spec/README.md",
+            "docs/spec/v2/helmreleases.md",
+            "docs/spec/v2alpha1/helmreleases.md",
+            "docs/spec/v2beta1/helmreleases.md",
+            "docs/spec/v2beta2/helmreleases.md",
+            "internal/controller/helmrelease_controller.go",
+            "internal/controller/helmrelease_controller_test.go",
+            "internal/controller/helmrelease_indexers.go",
+            "internal/controller/helmrelease_manager.go",
+            "internal/reconcile/atomic_release.go",
+            "internal/reconcile/atomic_release_test.go",
+            "internal/reconcile/correct_cluster_drift.go",
+            "internal/reconcile/correct_cluster_drift_test.go",
+            "internal/reconcile/helmchart_template.go",
+            "internal/reconcile/helmchart_template_test.go",
+            "internal/reconcile/install.go",
+            "internal/reconcile/install_test.go",
+            "internal/reconcile/reconcile.go",
+            "internal/reconcile/release.go",
+            "internal/reconcile/release_test.go",
+            "internal/reconcile/rollback_remediation.go",
+            "internal/reconcile/rollback_remediation_test.go",
+            "internal/reconcile/state.go",
+            "internal/reconcile/state_test.go",
+            "internal/reconcile/suite_test.go",
+            "internal/reconcile/test.go",
+            "internal/reconcile/test_test.go",
+            "internal/reconcile/uninstall.go",
+            "internal/reconcile/uninstall_remediation.go",
+            "internal/reconcile/uninstall_remediation_test.go",
+            "internal/reconcile/uninstall_test.go",
+            "internal/reconcile/unlock.go",
+            "internal/reconcile/unlock_test.go",
+            "internal/reconcile/upgrade.go",
+            "internal/reconcile/upgrade_test.go"
+          ],
+          "max_bytes": 67108864,
+          "query": "Reconcile",
+          "query_kind": "EXACT_SYMBOL",
+          "scope": "snapshot_file_inventory",
+          "truncated": false
+        },
+        {
+          "complete": true,
+          "inspected_byte_count": 3128567,
+          "inspected_file_count": 290,
+          "match_count": 2,
+          "matched_paths": [
+            "internal/reconcile/atomic_release.go",
+            "internal/reconcile/atomic_release_test.go"
+          ],
+          "max_bytes": 67108864,
+          "query": "actionForState",
+          "query_kind": "EXACT_SYMBOL",
+          "scope": "snapshot_file_inventory",
+          "truncated": false
+        },
+        {
+          "complete": true,
+          "decoding": "utf-8 with replacement",
+          "inspected_byte_count": 26131,
+          "inspected_file_count": 1,
+          "match_count": 0,
+          "matched_paths": [],
+          "matching": "case-sensitive escaped text with Unicode word boundaries",
+          "path": "internal/reconcile/atomic_release.go",
+          "query": "HelmReleaseReady",
+          "query_kind": "EXACT_TEXT_IN_FILE",
+          "scope": "snapshot_file_content",
+          "source_file_sha256": "bcea9ec559eade5239c017e49b132a27bd6eaf96940c324d3dd3b1c0f61c0948",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "slot": 5,
+      "case_id": "R3-SKAFFOLD-9732",
+      "variant": "old_current",
+      "method_status": "EVIDENCE_GAP",
+      "errors": [
+        "Existing bounded evidence acquisition allowance exhausted"
+      ],
+      "model_calls": 4,
+      "model_calls_sha256": "b70bfb5a393fc88fe0d004455d713d8567286796ca8dd9bcfface60fb3b50bfe",
+      "last_model_reported_status": "EVIDENCE_GAP",
+      "reported_gaps": [
+        {
+          "id": "G1",
+          "summary": "No delivered production span shows where Kustomization patches[].patch inline content is parsed and forwarded to the kustomize render path; bounded exact-symbol searches for 'Kustomization' and 'render' were truncated, so the owning function is not established.",
+          "locator_hint": {
+            "path": "pkg/skaffold",
+            "search_term": "patches",
+            "symbol": "Kustomization"
+          }
+        },
+        {
+          "id": "G2",
+          "summary": "No delivered production span shows how the --set value is injected into the resolve step; the read that fails with 'inline/base: is a directory' is therefore located by the observation (OBS4) rather than by the line that constructs it.",
+          "locator_hint": {
+            "path": "pkg/skaffold",
+            "search_term": "--set",
+            "symbol": "render"
+          }
+        }
+      ],
+      "delivered_named_declarations": [],
+      "static_searches": [
+        {
+          "complete": false,
+          "incomplete_reason": "snapshot contains 14709 files; limit is 2000",
+          "inspected_byte_count": 0,
+          "inspected_file_count": 0,
+          "match_count": 0,
+          "matched_paths": [],
+          "max_bytes": 67108864,
+          "query": "Kustomization",
+          "query_kind": "EXACT_SYMBOL",
+          "scope": "snapshot_file_inventory",
+          "truncated": true
+        },
+        {
+          "complete": false,
+          "incomplete_reason": "snapshot contains 14709 files; limit is 2000",
+          "inspected_byte_count": 0,
+          "inspected_file_count": 0,
+          "match_count": 0,
+          "matched_paths": [],
+          "max_bytes": 67108864,
+          "query": "render",
+          "query_kind": "EXACT_SYMBOL",
+          "scope": "snapshot_file_inventory",
+          "truncated": true
+        }
+      ]
+    },
+    {
+      "slot": 6,
+      "case_id": "R3-SKAFFOLD-9732",
+      "variant": "new_current",
+      "method_status": "INVALID_OUTPUT",
+      "errors": [
+        "CAUSAL_CLAIM_UNSUPPORTED at violations: an observed outcome alone cannot support a causal violation"
+      ],
+      "model_calls": 4,
+      "model_calls_sha256": "d0e5699051313c658166633aa1c8b614a3b86b4bba199d064f268de4127a0d73",
+      "last_model_reported_status": "EVIDENCE_GAP",
+      "reported_gaps": [
+        {
+          "id": "G1",
+          "summary": "Missing --set flag binding and value propagation from the Skaffold render command into the Kustomize renderer.",
+          "locator_hint": {
+            "path": "cmd/skaffold/app/cmd/render.go",
+            "symbol": "doRender",
+            "search_term": "--set"
+          }
+        },
+        {
+          "id": "G2",
+          "summary": "Missing implementation of mirrorPatches that handles inline patch content during render with --set.",
+          "locator_hint": {
+            "path": "pkg/skaffold/render/renderer/kustomize/kustomize.go",
+            "symbol": "mirrorPatches",
+            "search_term": "mirrorPatches"
+          }
+        }
+      ],
+      "delivered_named_declarations": [
+        {
+          "id": "SRC-CU-d9eb622e4bb3f5a0",
+          "symbols": [
+            "doRender"
+          ],
+          "bytes": 1023,
+          "locator": {
+            "column_start": 1,
+            "end_char": 3122,
+            "end_line": 84,
+            "original_end_line": 84,
+            "path": "cmd/skaffold/app/cmd/render.go",
+            "start_char": 2099,
+            "start_line": 53,
+            "truncated": false
+          },
+          "content_digest": "876e0a55bff2a337095ec65b799cb2a6e9180f93c612c58317fe078c4f3516ba"
+        }
+      ],
+      "static_searches": [
+        {
+          "complete": true,
+          "inspected_byte_count": 0,
+          "inspected_file_count": 14709,
+          "match_count": 1,
+          "matched_paths": [
+            "cmd/skaffold/app/cmd/render.go"
+          ],
+          "query": "cmd/skaffold/app/cmd/render.go",
+          "query_kind": "EXACT_PATH",
+          "scope": "snapshot_file_inventory",
+          "truncated": false
+        },
+        {
+          "complete": true,
+          "decoding": "utf-8 with replacement",
+          "inspected_byte_count": 3122,
+          "inspected_file_count": 1,
+          "match_count": 0,
+          "matched_paths": [],
+          "matching": "case-sensitive escaped text with Unicode word boundaries",
+          "path": "cmd/skaffold/app/cmd/render.go",
+          "query": "set",
+          "query_kind": "EXACT_TEXT_IN_FILE",
+          "scope": "snapshot_file_content",
+          "source_file_sha256": "1d3c9607a48b7dc9226589c91de1fcaf39699f3f7f22b8de5fe8886023fa7ece",
+          "truncated": false
+        },
+        {
+          "complete": true,
+          "inspected_byte_count": 0,
+          "inspected_file_count": 14709,
+          "match_count": 1,
+          "matched_paths": [
+            "cmd/skaffold/app/cmd/flags.go"
+          ],
+          "query": "cmd/skaffold/app/cmd/flags.go",
+          "query_kind": "EXACT_PATH",
+          "scope": "snapshot_file_inventory",
+          "truncated": false
+        }
+      ]
+    }
+  ],
+  "conclusions": [
+    "HelmController new_current received full actionForState; asks for original-program InSync status observation, not necessarily future repaired success.",
+    "HelmController old_current asks for API version-specific declarations; same terminal label does not prove the same failure mechanism.",
+    "Skaffold old_current stopped EVIDENCE_GAP after bounded retrieval. Incomplete exact-symbol inventory search is not proof of absence.",
+    "Skaffold new_current final model status EVIDENCE_GAP was rejected by causal validation: method terminal status INVALID_OUTPUT, not EVIDENCE_GAP.",
+    "Skaffold new_current received doRender but not a mirrorPatches declaration in final evidence excerpts. Missing --set propagation is broader than absence of doRender.",
+    "Both Skaffold declarations exist in public Broken source; this alone does not establish a unique retrieval root cause or correct repair.",
+    "No production code, model retries, or frozen protocol changed for this review."
+  ]
+}

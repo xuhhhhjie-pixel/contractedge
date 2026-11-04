@@ -30,6 +30,8 @@ PYCODE
 
 真实实验使用另行获取的公开Benchmark输入和固定运行镜像；方法仅访问公开材料，独立评分在方法结束后执行。Git不保存密钥、费用账本、原始模型请求、私有评分实现、运行工作区或下载缓存。当前公开对照协议见[REAL_PANEL_PROTOCOL.md](REAL_PANEL_PROTOCOL.md)，补充样本名单已在结果产生前固定，见[PRESELECTED_PUBLIC_CHECKS.json](PRESELECTED_PUBLIC_CHECKS.json)。这些是可审查协议与身份，不冒充一个无需配置即可复现实验的发布包。
 
+完整32槽验证已经结束，见[最终报告](FINAL_IMPLEMENTATION_REPORT.md)及[逐槽公开汇总](REAL_VALIDATION_SUMMARY.json)。同容量新旧各4/12，候选保持开发状态；不要据工程回归通过直接升级正式实验。
+
 ## 后续协作修改
 
 真实验证发现的具体入口、修改方向及正反例要求见[剩余失败与后继修改](REMAINING_FAILURES_AND_NEXT_CHANGES.md)。该页明确区分已实现代码和待做的继承版本。

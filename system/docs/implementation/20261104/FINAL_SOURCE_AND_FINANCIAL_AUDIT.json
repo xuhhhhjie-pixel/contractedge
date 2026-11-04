@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "recorded_at_utc": "2026-11-04T14:59:23.298451+00:00",
+  "source_sha256": "15141db36fde55f526e18be0b288a24548b0a91a6c5ce40b7763603aaa4636f4",
+  "production_files": 123,
+  "frozen_sources_and_configs_unchanged": true,
+  "completed_slots": 32,
+  "model_calls": 142,
+  "new_ledger_records": 142,
+  "incremental_micro_cny": 20849752,
+  "final_conservative_micro_cny": 89023362,
+  "ledger_records": 685,
+  "historical_pending": 2,
+  "new_pending": 0,
+  "ledger_prefix_and_slot_suffix_verified": true,
+  "formal_ready": false
+}

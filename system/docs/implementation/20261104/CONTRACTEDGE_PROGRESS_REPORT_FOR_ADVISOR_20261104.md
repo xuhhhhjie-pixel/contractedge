@@ -1,3 +1,5 @@
+> 实施后更新：本页保留给老师的实施前汇报，完整代码修改与32槽结果见[最终实施报告](FINAL_IMPLEMENTATION_REPORT.md)。正式准入仍为false。
+
 **ContractEdge 系统研发进展与后续优化计划**
 
 汇报日期：2026年11月4日  
@@ -182,8 +184,8 @@ flowchart TD
 - [当前组件与问题清单](SYSTEM_COMPONENT_ISSUE_MAP_AND_OPTIMIZATION_PLAN.md)
 - [进一步深度审查与修改设计](DEEP_PIPELINE_AND_CONTROL_DESIGN_REVIEW.md)
 - [四步实施与验收清单](IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md)
-- [已完成真实面板的独立核验](analysis/BOUNDED_CONTINUATION_PANEL_RESULTS_INDEPENDENT_AUDIT.json)
-- [取材与准入补充审查](analysis/front-material-admission-followup/FRONT_MATERIAL_ADMISSION_FOLLOWUP_REVIEW.md)
-- [候选选择、续修与回滚审查](analysis/control-decision-independent-review/CONTROL_DECISION_INDEPENDENT_REVIEW.md)
-- [候选保护开关的离线反例](analysis/control-decision-independent-review/GUARD_PROFILE_COUNTERFACTUAL.json)
-- [最新候选工程证书](followup/source-access-admission-fix/ENGINEERING_VERIFICATION.json)
+- 已完成真实面板的独立核验（服务器本地证据：`/home/xhj/contractedge-reports/system-core-consolidation-20261104/analysis/BOUNDED_CONTINUATION_PANEL_RESULTS_INDEPENDENT_AUDIT.json`）
+- 取材与准入补充审查（服务器本地证据：`/home/xhj/contractedge-reports/system-core-consolidation-20261104/analysis/front-material-admission-followup/FRONT_MATERIAL_ADMISSION_FOLLOWUP_REVIEW.md`）
+- 候选选择、续修与回滚审查（服务器本地证据：`/home/xhj/contractedge-reports/system-core-consolidation-20261104/analysis/control-decision-independent-review/CONTROL_DECISION_INDEPENDENT_REVIEW.md`）
+- 候选保护开关的离线反例（服务器本地证据：`/home/xhj/contractedge-reports/system-core-consolidation-20261104/analysis/control-decision-independent-review/GUARD_PROFILE_COUNTERFACTUAL.json`）
+- 最新候选工程证书（服务器本地证据：`/home/xhj/contractedge-reports/system-core-consolidation-20261104/followup/source-access-admission-fix/ENGINEERING_VERIFICATION.json`）
