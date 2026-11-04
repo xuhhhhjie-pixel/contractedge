@@ -37,7 +37,7 @@ GitHub Release单个附件必须小于2GiB，本项目较大的包会分卷。�
 
 完整修复实验链为：公开任务 → 方法修改Broken → 导出patch → 独立隐藏评分 → 指标汇总。Agentless、SWE-agent、OpenHands等比较方法需要适配该任务/patch接口，可保留自身检索与编辑流程。完整包交给实验管理者；模型进程仅可访问public白名单和允许的源码工作区，不能读取evaluation/、GT、Fixed或历史修复。
 
-公开EXECUTION_PASS只是观察程序完成，不等于隐藏语义PASS。不同案例的终点可为渲染对象、控制决策、转换工件、外部API映射或运行消费行为，不一律声称真实集群/云最终收敛。当前没有模型baseline结果。沿用精确身份绑定历史证据，不重复全量3+3。
+公开EXECUTION_PASS只是观察程序完成，不等于隐藏语义PASS。不同案例的终点可为渲染对象、控制决策、转换工件、外部API映射或运行消费行为，不一律声称真实集群/云最终收敛。本发布说明不汇总模型baseline成绩；用户已报告三个baseline完成，当前系统的新验证结果见上方实施入口。沿用精确身份绑定历史证据，不重复全量3+3。
 
 ## 版本、分区与来源
 
@@ -47,4 +47,4 @@ GitHub Release单个附件必须小于2GiB，本项目较大的包会分卷。�
 
 ## ContractEdge 修复系统（开发交接版）
 
-当前系统源码、测试、TopoMen运行源码、配置和设计文档见 [system/](system/README.md)。请先读 [正式实验准入与最终优化实施计划](system/docs/superpowers/plans/2026-10-22-formal-experiment-delivery.md)。系统0.6.27尚未通过正式实验准入；历史开发成绩不代表150条正式结果。Benchmark冻结资源与系统开发状态分别管理。
+当前系统源码、测试、TopoMen运行源码、配置和设计文档见 [system/](system/README.md)。请先读 [四步实施与验收清单](system/docs/implementation/20261104/IMPLEMENTATION_AND_ACCEPTANCE_PLAN.md) 和 [当前状态](system/docs/implementation/20261104/STATUS.json)。旧计划保留供追溯，当前候选尚未通过正式实验准入；历史开发成绩不代表150条正式结果。Benchmark冻结资源与系统开发状态分别管理。

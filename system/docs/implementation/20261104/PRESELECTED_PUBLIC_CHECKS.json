@@ -1,0 +1,34 @@
+{
+  "status": "PRESELECTED_BEFORE_NEW_REAL_RESULTS",
+  "selection_rule": "One public development case from each R1,R2,R3,R5; exclude fixed-eight repositories; lowest SHA256(seed:case_id). No scores or solution patches consulted.",
+  "seed": "contractedge-fourstep-public-check-20261104",
+  "cases": [
+    {
+      "case_id": "RW-CAND-091",
+      "primary_class": "R1",
+      "repository": "aws-samples/sample-agentic-ai-acceleration-kr",
+      "candidate_split": "development"
+    },
+    {
+      "case_id": "RW-HELM-CONTROLLER-1411",
+      "primary_class": "R2",
+      "repository": "fluxcd/helm-controller",
+      "candidate_split": "development"
+    },
+    {
+      "case_id": "R3-SKAFFOLD-9732",
+      "primary_class": "R3",
+      "repository": "googlecontainertools/skaffold",
+      "candidate_split": "development"
+    },
+    {
+      "case_id": "RW-PROMETHEUS-19838",
+      "primary_class": "R5",
+      "repository": "prometheus/prometheus",
+      "candidate_split": "development"
+    }
+  ],
+  "scope": "Not used to tune this four-package change; historical project-wide exposure not certified.",
+  "source_partition_sha256": "aa32b07dc8cd2f3c946cb54e42385bded2ccbdf3cdd31b2b358a999480146aea",
+  "formal_ready": false
+}
