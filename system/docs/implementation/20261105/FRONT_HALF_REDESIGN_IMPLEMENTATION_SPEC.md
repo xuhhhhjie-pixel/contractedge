@@ -2,6 +2,8 @@
 
 日期：2026-11-05。面向负责代码实施、评审和实验的协作者。
 
+复审修订：在初版`03831cf`基础上逐项核对历史约定与实际调用链，补充第7.5节删除／替换／保留清单、第7.6节配置迁移及新增集成验收。[本次覆盖复审记录](FRONT_HALF_SPEC_COVERAGE_REVIEW.md)说明具体补充与检查范围；本次仍仅修改文档。
+
 **状态：设计已明确，生产代码尚未实施本方案，真实模型收益尚未验证，`formal_ready=false`。** 本次发布的是实施规格，不能将文档提交当作新算法版本或实验完成。
 
 目标是让系统从公开任务自主找到必要源码，完整交给 Diagnosis，形成有依据、可交给 ChangeSet 的诊断。保留 **Diagnosis 找原因 → ChangeSet 表达修改与保持要求 → TopoMen 修改代码**。增加一个只读定位助手，替代旧的多级候选淘汰和独立补证准入流程。
@@ -65,6 +67,7 @@ flowchart TD
     B -->|结束本次查阅，程序交付原文| E[Diagnosis]
     E -->|具体查阅问题| B
     E -->|合法且可行动的诊断| F[ChangeSet]
+    F -->|有效查阅问题，经诊断重评后再规划| B
     F --> G[TopoMen]
 ```
 
@@ -127,7 +130,7 @@ flowchart TD
 3. 同名消歧至少结合来源版本、包／文件、receiver及声明范围；不得仅按名字去重。文本命中只是线索，不自动变成必需端点、因果证据或编辑权限。
 4. Go结构解析支持方法、泛型、闭包和正确字节坐标；Python可复用AST，YAML等复用已有解析能力。tree-sitter不能成为唯一读取门。目标节点解析失败时，允许明确范围的原文读取或适合语言版本的后备解析器。
 5. 工具必须保留扫描范围、是否完成、解析不足及失败原因。全仓文件多时允许查询指定目录；未完成的搜索可以继续或缩小范围，不能缓存成完整零结果。
-6. 固定依赖解析须保留真实import binding、别名遮蔽、版本和来源核验。静态绑定有歧义时返回歧义及候选，不能伪造唯一调用链。不要要求模型先猜出未知API的准确名称才允许进入读取。
+6. 固定依赖解析须保留真实import binding、别名遮蔽、版本和来源核验。静态绑定有歧义时返回歧义及候选，不能伪造唯一调用链。不要要求模型先猜出未知API的准确名称才允许进入读取。路径线索须区分文件与目录，目录范围不能继续被旧`path != path_hint`精确文件比较排除。
 7. 查询复用键包含实际查询、范围、游标／完成状态、快照或依赖身份。`G1`等编号不能作为查询等价依据；“找到选项API”与“找到实际消费该选项的方法”不能合并为已回答。
 8. 查阅结果在允许的公开范围内产生。只提供构建观察的案例不能被补造运行状态。公开生产代码、声明和允许材料的边界按任务契约处理，不按案例ID前缀推类别。
 
@@ -147,8 +150,10 @@ flowchart TD
 - 工具读取后、尚未发送的正文是准备材料。程序核验其来源，并对下一次完整请求报价；过大时明确拒绝这次派发，不把草案写成已送达。
 - 正文一旦实际交付给定位助手，就纳入本次前半程的采用记录，继续完整提供给Diagnosis及相关后续阶段。助手后来声称“不重要”不能成为删除已采用正文的理由。
 - 已采用、仍被引用的公开观察、声明和源码同样完整交接。不得只保留ID、摘要或模型转述。
+- 完整原始`requirement_text`、`public_observable_text`及当前快照已接纳的真实公开观察必须保留，包括触发、非触发、保持条件和观察边界。归一化outcomes／atoms不替代原始需求；观察是否保留不由模型是否引用决定。当前已有“保留未引用公开观察”的实现必须保留，不将它重新包装为待发明机制。
 - 同一请求中经来源、版本、范围和正文核对后确认的完全重复副本，可以保留一份正文并解析全部引用。不同文件的相同字符串不能当成同一证据；不得靠删ID前缀猜别名。
 - 拼接展示窗口不改变原文件坐标。切片、辅助函数读取和来源验证使用原文件坐标接口；展示窗口只负责展示。
+- 原有`FALLBACK`、`query_window`及其他摘录保持窗口属性。换用tree-sitter后，新完整声明须从固定原文核验范围并生成对应身份，不能把旧窗口改标签充当全文；已采用的旧身份仍可追溯。解析器的`parser_kind/node_path`变化也不能成为原地更换既有正文的理由。
 
 源码改变后，旧版本正文保留其历史身份，不得冒充当前源码。新的重诊链重新绑定当前快照；继承的引用、观察和保持义务仍须有完整历史正文。不得用重启链路来偷偷清空同一次查阅已采用的材料。
 
@@ -203,6 +208,10 @@ flowchart TD
 
 初诊、补查后诊断、格式纠错和输出截断恢复共用这套处理逻辑，不再按payload形状猜当前属于哪一种方言。保留已有有界纠错，不因特定案例失败增加一套重试计数。
 
+复用`_append_diagnosis_retry_turn`整理纠错上下文：只保留最新待修草稿，合并完全重复的问题，去除已被当前校验证实修好的旧错误；仍有效且已安全检出的独立问题必须保留。当前反馈尾部24000字节截取不能充当无损去重，应退出新路径；放不下时在真实请求边界明确处理。原始响应和完整校验错误仍保存在原记录中，不能通过删历史伪装已纠正。需要前序结构成立才能判断的错误仍按原有校验依赖处理，不能为“报全”制造错误结论。
+
+同步清理输出侧为了简短而加的额外语义上限：`diagnosis/prompt.py`的“最多三个因果步骤”等硬性表达规则，以及`model/schema.py::constrained_output_schema`额外施加的字符串600字符、units16、relations／violations12、gaps4等限制，不能在新Diagnosis或轻量查阅中阻止表达完整问题。这些是生成约束，并非输入正文截断器；当前尚未证明它们导致了某个特定整案失败。输出schema转换应忠实保留当前有效语义契约，不再自行加一组省token的数量／篇幅门。仍保留必要类型、枚举、引用、因果和实际输出预算；不能无差别删除内部schema的全部`maxItems/maxLength`。同一转换函数的其他消费者必须单独检查，避免无关改变ChangeSet行为。
+
 ### 6.3 必须保留的语义边界
 
 - 已有静态源码足以支持原因时，可以计划修复；未来修复成功留给执行后验证。
@@ -249,6 +258,43 @@ flowchart TD
 
 新协议／配置身份与源码一起冻结。旧记录按旧契约恢复或明确拒绝不兼容恢复，不使用新规则续跑旧冻结槽；同版恢复不重置预算、不沿用错误快照坐标。现有恢复不支持任意中断点的地方应明确停止，不能在本轮宣称已有全流程任意崩溃恢复。
 
+ChangeSet的有效`NEEDS_EVIDENCE`或目标绑定查阅同样回到这个统一入口。`runner.py`中`CHANGESET_NEEDS_EVIDENCE/CHANGESET_TARGET_BINDING_GAP`回边不能继续检查旧`evidence_extension`余量；`changeset/prompt.py`中“shares the single Diagnosis extension allowance”等旧说明也同步移除。材料补齐后按现有合法诊断重评再规划，已消耗的纠错次数继续有效，不自动补语义单元、不放行非法计划、不扩大编辑权限。这属于必要交接适配。
+
+### 7.5 删除、替换与保留的逐项清单
+
+以下是**后继实现要求，尚未执行删除**。删除针对新流程中的规则职责；旧冻结版本、历史读取兼容和真实保护不能按函数名或数字批量删除。
+
+| 当前规则／入口 | 新路径必须删除或替换什么 | 必须保留什么／如何证明 |
+|---|---|---|
+| `source/units.py::extract_units`初取80、声明索引2048、公开artifact抽取40；runner按artifact数缩减源码名额及扩展文件限制 | 不得作为助手唯一可访问集合；旧初选退出或只提供可继续导航，点名声明直接读取 | 完整来源和读取范围；导航页外结果、公开artifact、其余源码均可继续访问 |
+| `extract_gap_extension_units`前40、`retrieval/candidates.py::_select/build_candidate_set/extend_once`的`top_n` | 删除永久淘汰和新路径的旧候选重选流程；兼容投影不调用这些裁决 | 导航相关性排序可以保留；不能决定哪个已找到声明从此不可读 |
+| `source/scopes.py::resolve_scope`每提示前64项；Diagnosis路径预览8／32项 | 范围匹配和预览改成可追溯、可翻页的导航；不得把预览当完整搜索结果或唯一源码范围 | 路径安全、实际扫描范围；第65项及预览外明确路径可读取 |
+| `source/go_context.py`及`retrieval/gap_delivery.py`中少量owner／callee／helper提示名额 | 从决定可读全集的资格门降为导航提示；统一read不受这些小列表限制 | 名称歧义、真实调用关联与来源验证；未列出的合法声明仍可定向读取 |
+| `source/dependency.py::gap_dependency_support`的`targets[:2]`、4条／24k及`PublicGoDependencies.package`的前4个mount | 取消作为唯一可读依赖集合的截取；按公开授权和固定来源导航到所需包／方法；保留可继续访问后续授权来源 | 不扩大公开白名单；真实导入、来源hash、有效版本、shadowing检查继续有效 |
+| `PublicGoDependencies.package`因一个大文件／build tag／扫描不足而丢弃全包已读结果 | 区分“某个固定来源声明完整可读”与“全包扫描及实际编译绑定已证明”；不能前者已确认却仅因后者不足禁止只读查阅 | 归档时间／解压量／成员资源限制、构建选择和版本真实性；不完整扫描不证明不存在或唯一绑定 |
+| `diagnosis/evidence.py::source_extension_limits/source_context_offer/validate/restart`的12条、24k及累计派生额度 | 新材料契约去掉独立条数／字节准入与恢复重建；不以大常数保留旧门 | 来源、采用记录、去重和不可变正文；旧契约按旧身份保存 |
+| `execution/helper_context.py`规划helper8条／24k及依赖／本地helper返回名额 | 新发现与后续读取也走统一工具，不能只解除已采用正文门、仍把新helper永久排除 | 实际扫描资源保护和调用关系；导航可分页，完整声明可定向读取 |
+| `runner.py::fit_diagnosis`的`initial_diagnosis_context_tokens/first_limit`首诊额外小窗与`trim_context_bundle`反复淘汰 | 初诊、补查、纠错都用真实完整请求检查；新路径不再继承首诊额外小窗，也不通过裁候选“拟合” | 用户配置的真实请求输入cap、模型窗口和输出留量；超过旧小窗但真实请求足够时可发 |
+| `planning_source_draft`及`execution/topomen.py::_build_execution_request`的源码支持字节门 | 删除对同一采用正文的提前和重复源码额度检查，规划和执行各自检查最终完整请求 | 身份、权限、全文及实际请求检查；不让Diagnosis放行后在另一层按旧100k等门停止 |
+| `runner.py::required_source_prerequisites`12项与`semantic_changeset.v1_1.json::precondition_review.maxItems=12` | 新契约同时解除代码、内部schema和`changeset/prompt.py::_case_output_schema`的固定12项瓶颈，不能只改生成格式或只去Python检查 | 每项来源、唯一引用和实际适用性仍检查；13项真实有效前提可以完整表达和校验；不删除全部ChangeSet数量约束 |
+| `PolicyLedger`1—2次补证夹限，初诊／补查／ChangeSet回边中的`policy.available/consume('evidence_extension')` | 新查阅退出这一独立额度；不能改成每轮消耗`repair_round/rediagnosis`；同时清理旧提示说明 | 同一任务总费用／token／调用／时间，无进展停止和既有有界纠错；外层真正修复轮次仍受原约束 |
+| 有损正文裁剪与`compact_planning_context`相关投影 | 删除会让采用正文或仍引用内容不在请求里的投影；不按`compact`函数名一刀切 | 当前`_compact_planning_evidence`同请求有完全相同来源正文才去重复副本，`_compact_source_support`只去传输标记，属于可保留的无损方式；原始需求和公开观察不能只留ID |
+| 词法同名强制、字段／reader提示和`production_frontier`的有限列表 | 不得在新助手或兼容投影中重新将名称命中设为必需因果端点；有限提示列表不能变成完整覆盖证明 | 已完成的`requires_gap_delivery`收窄应保留；显式端点、真实来源约束和已采用正文不丢，ChangeSet依据正文判断适用性而非自动全部适用／全部忽略 |
+| Diagnosis最多三因果步、`model/schema.py`额外数量／篇幅门及纠错反馈24k尾截 | 去掉新交互中会丢失义务、分支、原因、真实缺口或有效纠错问题的固定表达压缩；重复文字可合并 | 实际输出预算、合法内部契约、当前仍有效错误及原始回复；严禁以放松因果校验代替接口修复 |
+| 浅拷贝改写模型原对象、内部字段纠错、同源多ID和多套取材／费用入口 | 分别以不可变原始视图、模型字段反馈、可靠身份映射及共用入口替代；删除无兼容用途且已无调用的重复分支 | 原始记录、来源引用、一个正式Diagnosis及一份费用账本；不删身份／因果校验，不把只读助手变成第二个修复执行器 |
+
+扫描的文件数、单文件资源限制、归档成员／解压量／耗时、容器资源保护与上表的“材料资格门”不同。前者可以保留为实际资源保护，但触发后必须准确标明未完成范围，允许在任务预算内继续或定向读取；不能返回完整空结果。定向读取仍超过真实资源保护时，按具体原因明确停止，不绕过保护。`replace/exclude`、vendor、`go.work`或build tags影响实际依赖版本／编译选择时，应解析真实绑定或保留未知，不能为打通读取直接删除保护。
+
+名称相似只是导航线索，已送达的源码约束仍由ChangeSet判断是否适用。允许给出有依据的`NOT_APPLICABLE`，不能程序自动填，也不能因选中了材料就要求全部修改。读取或采用本身也不能自动给所有材料设置`precondition_review_required`；真实前提的来源与生成依据应沿用合法语义。已有正确的完整声明、坐标、来源和未引用观察保留实现均须继续通过回归。
+
+### 7.6 旧配置、提示和兼容入口如何退出
+
+新实现须提供冻结的新配置，不原地修改历史实验配置。迁移说明逐项列明`max_units/max_declared_units/max_gap_units/top_n`、`initial_diagnosis_context_tokens`、`max_evidence_extensions`、`max_execution_support_bytes`等旧材料门在新路径不再生效，以及哪些名称只作为旧版本兼容读取。若保留导航页大小，使用明确的展示含义，不能偷偷复用旧参数继续永久淘汰。
+
+新配置不得继续把这些旧材料门列成有效调参项；入口遇到不兼容的新旧混用应明确报配置错误，或通过显式迁移生成并记录新配置，不能悄悄忽略配置、使用旧默认值或自动回退旧取材流水线。真实请求窗口和任务预算仍明确配置并记录。
+
+清理范围包括默认配置／示例、CLI与benchmark实际入口、prompt中的旧额度说明、序列化与恢复校验、测试fixture及调用方。历史配置、旧schema验收及旧运行记录保留；新验收必须证明实际默认调用链已退出旧规则，而不是只有新工具单测绕过它。
+
 ## 8. 代码修改地图
 
 以下路径相对`system/src/contractedge/`；函数名指当前版本或明确标注的拟新增接口。行号会随实施变化，协作者应按符号定位。
@@ -257,13 +303,15 @@ flowchart TD
 |---|---|---|
 | `source/parsers.py`、`source/units.py` | 分离导航与全文；复用`materialize_complete_units`；退出`extract_gap_extension_units`的永久截取；结构解析与原文后备 | 能直接读到精确声明，未完成解析不变成不存在 |
 | `source/navigation.py`（拟新增薄入口） | 组合搜索、读取、依赖导航，统一来源与坐标 | 对模型只有一套查阅工具，内部复用已有实现 |
-| `source/absence.py::collect_absence_search_evidence`、`retrieval/gap_delivery.py::locate_gap_roles` | 保留定位条件和操作词，范围可继续，区分部分扫描 | 搜索事实回答原问题，无范围越界推断 |
+| `source/scopes.py::resolve_scope`、`source/absence.py::collect_absence_search_evidence`、`retrieval/gap_delivery.py::locate_gap_roles` | 保留定位条件和操作词，范围与结果可继续，区分部分扫描，退出旧范围截取和角色槽对读取的裁决 | 搜索事实回答原问题，无范围越界推断 |
 | `source/dependency.py::PublicGoDependencies/_declarations/gap_dependency_support`、`source/go_context.py` | 固定依赖、方法／receiver、真实调用对象、别名遮蔽及歧义 | 不要求未知API精确猜名，不只读取构造入口 |
 | `retrieval/locator.py`（拟新增）、`orchestration/runner.py` | 一个只读查阅循环；首次和补查共用；空初选可启动；显式消费者视图 | 退出旧初选／补证淘汰链，不并排跑两个默认流程 |
 | `diagnosis/evidence.py::source_context_*`、`retrieval/candidates.py` | 记录保留来源和全文；移除新路径的条数／字节准入；统一身份与去重 | 不重建材料库，旧格式兼容不控制新任务 |
 | `diagnosis/prompt.py`、`diagnosis/parse.py`、`diagnosis/validate.py`、`contracts/schema/diagnosis_packet.v1_1.json`、`contracts/validation.py` | 轻量查阅与最终诊断分开；用途说明一致；保留内部语义契约 | 不为查阅生成完整诊断，不放行非法最终诊断 |
+| `model/schema.py`、`model/output_contract.py`及provider输出格式适配 | 清理新Diagnosis交互的额外语义数量／篇幅门；实际请求支持轻量与完整分支；不无关改变其他消费者 | 输出格式与实际可解析范围一致；必要语义及真实输出预算仍有效 |
 | `runner.py::_bind_diagnosis_envelope`及初诊／补查／纠错调用点、`requirement/normalize.py` | 原始模型对象不变；绑定深拷贝；错误统一投影回模型字段 | 不再纠错程序内部数组，无嵌套原地改写 |
 | `runner.py::fit_diagnosis/planning_source_draft`、`execution/helper_context.py`、`execution/topomen.py` | 合并材料读取入口；撤去同正文重复源码额度；保留实际请求完整性 | Diagnosis放行的材料不在后续被旧100k等源码门重新拒绝 |
+| `runner.py::required_source_prerequisites`、`changeset/prompt.py::_case_output_schema`、`contracts/schema/semantic_changeset.v1_1.json` | 新契约同步撤去前提固定12项门；ChangeSet有效补查返回统一查阅入口 | 模型生成、内部校验和READY恢复一致，来源及适用性仍校验 |
 | `orchestration/semantic_delivery.py`、`front_delivery.py`、`recorder.py` | 复用真实准备／派发回执，补齐新消费者及异常查询轮次 | 草案、已派发、响应未知、最终使用分别可追溯 |
 | `model/admission.py`、`budget.py`、`money.py`、`orchestration/state.py`、`resume.py`及配置入口 | 一套请求与费用预算；退出旧补证策略消费；新旧运行身份隔离 | 不新增账本，不重置额度，不错误恢复 |
 
@@ -293,22 +341,31 @@ flowchart TD
 |---|---|
 | 空初选启动 | 无候选正文但有原需求时，实际runner启动查阅；不会先返回`no source candidates resolved` |
 | 点名函数与分页 | Certmanager目标不受第48名影响；分页后仍可访问其他结果；同名不同包／receiver不串绑 |
+| 入口全集与局部导航 | 第65个路径、第81个初始声明、第41条公开声明材料、旧索引截取之外的声明及第三个同文件helper可定向读；不被旧角色槽决定资格 |
 | 定位与操作并存 | CloudWatch原查询得到目标操作在指定范围的结果，不只返回helper存在 |
 | 依赖真实路径 | 从实际调用点进入固定依赖，可读取receiver方法；假导入、遮蔽、版本不符不被当作真绑定 |
+| 依赖局部完整性 | 第三个真实依赖入口及后续授权mount可继续查阅；其他文件的build tag或扫描不足不抹掉已核验原文，也不伪称已证明编译选中／完整不存在 |
 | 解析失败后备 | 语法不支持仍可读允许范围原文；局部解析成功可用；索引不完整不作全仓不存在结论 |
 | 完整声明与坐标 | 超80行／16000字符的函数尾部保留；CRLF、Unicode字节坐标、闭包及拼接窗口不串位 |
+| 解析器迁移 | 新完整声明与旧窗口身份分别正确；不得修改旧窗口属性冒充全文，已采用正文与引用不被原地换掉 |
 | 大声明实际派发 | Prometheus完整52679字节正文通过新路径；真实请求足够时完整发送，不再被24k/48k拒绝；真实超窗时准确未发送 |
+| 首诊单一请求边界 | 超过旧`initial_diagnosis_context_tokens`、但完整请求加输出留量可容纳时正常派发，不再触发首诊裁候选 |
 | 单份可靠身份 | 错快照、错坐标、截断后重hash、错误digest被识别；同源双ID可一致解析，跨来源相同文本不误合并 |
 | 全阶段交付 | 发给定位助手的采用正文进入Diagnosis；被采用／引用正文继续进入ChangeSet和TopoMen，含仅由保持义务引用的观察 |
+| 原始需求与未引用观察 | 原始触发／非触发／保持条件及观察边界完整；当前已接纳但模型未引用的公开观察仍可供规划使用，不能只传归一化需求或ID |
 | 下游无重复关卡 | 初选、补查、规划helper、执行支持、恢复不会再按旧条数／字节额度拒绝同一已采用正文 |
+| 前提数量与适用性 | 13项真实有效前提在完整请求足够时可生成、校验并恢复；同源重复正确合并，不借撤12项门删除引用／适用性检查 |
 | 原始输出保护 | 绑定与校验后，保存的原始模型对象及其嵌套字段完全不变 |
 | 正确纠错字段 | 初诊、补查和纠错均只反馈模型可修改字段；单需求多原因时不误删有效原因 |
+| 纠错与输出表达完整 | 超过旧反馈尾截长度仍保留有效独立问题；多义务／多分支诊断不被额外三步或模型schema省token门压掉；内部契约与真实输出预算继续有效 |
 | 查阅与诊断分离 | 合法轻量查阅可执行；最终诊断仍检查关系、覆盖、引用与因果；混合非法回复不能绕过 |
 | 阶段判断反例 | KOPF未来成功观察与Helm Controller原状态未知分别处理；Skaffold观察不能自动支持因果；不自动READY |
 | 请求完整报价 | schema、工具说明、纠错和输出预留计入；报价后消息被改写不能发送；输入超窗与输出截断分别记录 |
 | 循环与预算 | 不同具体查询可超过旧两次门；同查询复用；无进展停止；全部模型调用和费用记入原任务 |
+| ChangeSet补查回边 | 旧补证次数已用满但统一任务预算尚有余量时，有效新查阅可执行；再诊断后规划，不自动生成因果单位、不重置纠错次数 |
 | 派发失败与恢复 | 未发送、响应未知、工具异常、非法输出保留真实轮次与原因；未知请求不自动重发；同版恢复不重置预算，跨版恢复明确拒绝 |
 | 后半程兼容 | 真实runner经READY交给ChangeSet和TopoMen；CandidateSet兼容投影及同版恢复不重选／重新淘汰；原候选保护、错误分类、回滚和公开状态含义不退步 |
+| 配置与真实入口 | 新配置不暗中继承旧材料门；CLI／benchmark／恢复实际调用链与登记一致，不兼容混用明确处理，不静默回退旧路径 |
 
 原冻结工程证书的3384项portable通过、9项native及6组模拟仅属于旧候选。后继代码必须重新运行适用检查；`scripts/test_portable.py`的六项历史排除不能为了变绿而扩展，环境缺失与算法失败分别报告。只改本文档时无需重跑整套模型或工程实验。
 
