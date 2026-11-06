@@ -768,6 +768,19 @@ def source_extension_dependency_allowance(local_selection, source_context):
         local_selection.required_endpoint_ids, source_context)
 
 
+def _extension_quota(source_context):
+    """(batch_count, batch_bytes, total_count, total_bytes) for the legacy extension selector.
+
+    Source context v2 has no independent extension quota; until the locator
+    replaces this selector, its counts/bytes are unbounded and only the
+    complete request boundary limits what is sent.
+    """
+    from contractedge.diagnosis.evidence import source_extension_limits
+    if source_context.get('version') == 2:
+        return 1 << 30, 1 << 62, 1 << 30, 1 << 62
+    return source_extension_limits(source_context)
+
+
 def _dependency_allowance(units, required_ids, source_context):
     from contractedge.diagnosis.evidence import (source_context_records,
         source_extension_limits, source_context_key)
@@ -782,7 +795,7 @@ def _dependency_allowance(units, required_ids, source_context):
         return 0, 0
     used = [r for r in source_context_records(source_context, producer='extension')
             if r['kind'] != 'STATIC_SEARCH']
-    batch_count, batch_bytes, total_count, total_bytes = source_extension_limits(source_context)
+    batch_count, batch_bytes, total_count, total_bytes = _extension_quota(source_context)
     return (max(0, min(batch_count, total_count-len(used)) - len(required)),
             max(0, min(batch_bytes, total_bytes-sum(len(r['excerpt'].encode()) for r in used))
                 - sum(len(u['text'].encode()) for u in required)))
@@ -838,7 +851,7 @@ def _append_source_extension(base, proposals, max_context_tokens, token_counter,
     reserved = [r for r in source_context_records(reserved_context)
                 if source_context_key(r) not in old_keys and r['kind'] != 'STATIC_SEARCH']
     used = [r for r in source_context_records(reserved_context, producer='extension') if r['kind'] != 'STATIC_SEARCH']
-    batch_count, batch_bytes, total_count, total_bytes = source_extension_limits(source_context)
+    batch_count, batch_bytes, total_count, total_bytes = _extension_quota(source_context)
     reserved_bytes = sum(len(r['excerpt'].encode()) for r in reserved)
     if len(reserved) > batch_count or reserved_bytes > batch_bytes:
         raise ValueError('Read-only source reservation exceeds this acquisition quota')

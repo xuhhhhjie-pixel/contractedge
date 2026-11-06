@@ -25,7 +25,7 @@ from contractedge.diagnosis.parse import parse_diagnosis_response, parse_json_re
 from contractedge.diagnosis.evidence import (bind_evidence_ids, build_evidence_catalog, field_contract_contexts,
     source_context_new, source_context_offer, source_context_records, source_context_commit,
     source_context_for_candidates, source_context_restart, merge_evidence_records,
-    same_evidence_content, source_context_key)
+    same_evidence_content, source_context_key, source_context_contract)
 from contractedge.diagnosis.prompt import build_diagnosis_request
 from contractedge.diagnosis.validate import validate_diagnosis
 from contractedge.model.provider import ModelProvider, ModelResponse
@@ -1031,6 +1031,9 @@ def run_front_half(method_input: MethodInput | Mapping[str, Any], workspace: str
                    execution_feedback: Mapping[str, Any] | None = None,
                    public_observations: tuple[Mapping[str, Any], ...] = (),
                    journal=None, attempt_id="front", inherited_source_context=None) -> RunTrace:
+    # A malformed or mixed source-material contract is a configuration error,
+    # raised before any acquisition or model call rather than a run outcome.
+    source_context_contract(config)
     if not isinstance(provider, BudgetedProvider):
         if token_counter is None:
             raise ValueError("an explicit model tokenizer/token counter is required")
@@ -1377,7 +1380,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             if r.get('current_source_snapshot') == current_context.snapshot_id)
         support_bytes = dependency_bytes + sum(len(r['excerpt'].encode()) for r in support)
         support_limit = int(config.get('max_execution_support_bytes',24000))
-        if support_bytes > support_limit:
+        # Source context v2 has no second source quota for already-adopted
+        # bodies: planning and execution check their final complete requests.
+        if draft.get('version') != 2 and support_bytes > support_limit:
             raise BudgetExceeded('Adopted planning source exceeds execution support admission bound: '
                 f'{support_bytes} > {support_limit} bytes', details={
                     'dimension': 'execution_support_bytes', 'actual': support_bytes, 'limit': support_limit})
@@ -1446,10 +1451,18 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             # Legacy synthetic callers declare only an input cap. Preserve
             # that admission contract; real profiles declare a model window.
             reserve_output = execution_feedback is not None or config.get('model_context_tokens') is not None
-            first_limit = (min(fitted.max_context_tokens,
-                int(config.get('initial_diagnosis_context_tokens', fitted.max_context_tokens)))
-                if initial_context else
-                min(fitted.max_context_tokens, total_limit - (request.max_output_tokens if reserve_output else 0)))
+            v2_sources = active_sources.get('version') == 2
+            if v2_sources:
+                # One request boundary for initial, extension and feedback
+                # diagnosis: the configured input cap and the model window
+                # with output reserved. No smaller first-diagnosis allowance.
+                window = int(config.get('model_context_tokens') or config['max_context_tokens'])
+                first_limit = min(fitted.max_context_tokens, window - request.max_output_tokens)
+            else:
+                first_limit = (min(fitted.max_context_tokens,
+                    int(config.get('initial_diagnosis_context_tokens', fitted.max_context_tokens)))
+                    if initial_context else
+                    min(fitted.max_context_tokens, total_limit - (request.max_output_tokens if reserve_output else 0)))
             if count <= first_limit:
                 try:
                     planning_source_draft(fitted, method, draft_context,
@@ -1490,8 +1503,11 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 return fitted, request, count
             fitted = replace(fitted, context_audit=fitted.context_audit + ({'admission_failure': {
                 'dimension': 'request_input_tokens', 'actual': count, 'limit': first_limit,
+                **({'reserved_output_tokens': request.max_output_tokens, 'sent': False} if v2_sources else {}),
                 'message': f'Complete diagnosis input exceeds request allowance: {count} > {first_limit}'}},))
-            if not fitted.candidates:
+            if not fitted.candidates or v2_sources:
+                # v2: prepared bodies are not cut to fit; an over-window
+                # request is refused unsent with its exact size recorded.
                 return fitted, None, count
             before_ids = tuple(fitted.selected_ids)
             fitted = trim_context_bundle(fitted, request_tokens=count, limit=first_limit,
@@ -1887,7 +1903,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                                      "max_elapsed_seconds": max_elapsed_seconds})
         active_sources = source_context_restart(inherited_source_context,
             dict(run_id=run_id,case_id=parsed.case_id,input_digest=parsed.input_digest,front_id=attempt_id),
-            execution_feedback, evidence_extensions=policy.limit('evidence_extension'), initial_records=candidate_set.top_n)
+            execution_feedback, evidence_extensions=policy.limit('evidence_extension'), initial_records=candidate_set.top_n,
+            version=source_context_contract(config))
         run_context_wire = asdict(context)
         if not candidate_set.selected_ids:
             return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id, "EVIDENCE_GAP",
@@ -2023,7 +2040,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     'production_path_frontier': production_frontier(candidate_set.candidates, parsed.requirement_text)})
                 run_context_wire = asdict(context)
             helper_enabled=config.get('helper_preconditions_enabled',False)
-            helper_bytes=max(0,min(int(config.get('max_execution_support_bytes',24000)),24000))
+            helper_bytes=(None if active_sources.get('version')==2 else
+                max(0,min(int(config.get('max_execution_support_bytes',24000)),24000)))
             draft_sources,planning_helpers,helper_audit,source_prerequisites,source_support = planning_source_draft(
                 candidate_set,run_input,context)
             # Corrections retain the same selected bodies. The projection may

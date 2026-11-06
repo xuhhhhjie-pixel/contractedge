@@ -23,7 +23,9 @@ def compiler_dependency_support(snapshot, feedback, *, max_bytes=24000, max_reco
     from contractedge.source.dependency import PublicGoDependencies
 
     records, audit = [], []
-    if not isinstance(feedback, dict) or max_bytes <= 0 or max_records <= 0:
+    # None = no output admission quota (source context v2); scan bounds remain.
+    if (not isinstance(feedback, dict) or (max_bytes is not None and max_bytes <= 0)
+            or (max_records is not None and max_records <= 0)):
         return records, audit
     failures = [d for d in feedback.get('observation_diagnostics', [])
         if d.get('kind') == 'CANDIDATE_BUILD_FAILURE' and has_candidate_build_failure(dict(
@@ -57,7 +59,7 @@ def compiler_dependency_support(snapshot, feedback, *, max_bytes=24000, max_reco
     used = 0
     for imported, package, typename in targets[:2]:
         members, scan_audit, complete = reader.package(imported, package_name=package,
-            max_member_bytes=min(max_bytes-used, 65536))
+            max_member_bytes=65536 if max_bytes is None else min(max_bytes-used, 65536))
         audit.extend(scan_audit)
         candidates = [row for row in members if re.search(r'\btype\s+' + re.escape(typename)
             + r'\s+(?:struct|interface)\b', _go_code(row['excerpt']))]
@@ -70,7 +72,8 @@ def compiler_dependency_support(snapshot, feedback, *, max_bytes=24000, max_reco
             if row in records or already_supplied is not None and already_supplied(row):
                 audit.append(dict(result='ALREADY_DELIVERED_DEPENDENCY_API', id=row['id'], **reason))
                 continue
-            if len(records) < max_records and used+size <= max_bytes:
+            if ((max_records is None or len(records) < max_records)
+                    and (max_bytes is None or used+size <= max_bytes)):
                 records.append(row)
                 used += size
                 audit.append(dict(result='INCLUDED_PUBLIC_DEPENDENCY_API', id=row['id'], module=module,
@@ -250,9 +253,14 @@ def _go_field_dependencies(scanned, bindings, audit):
 def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
                             max_scan_files=128, max_scan_bytes=4*1024*1024,
                             max_records=8, already_supplied=None):
-    """Read-only implementation context, never a causal claim or edit grant."""
-    if type(max_records) is not int or not 0 <= max_records <= 8:
+    """Read-only implementation context, never a causal claim or edit grant.
+
+    ``max_records``/``max_bytes`` of None mean no output admission quota
+    (source context v2); the scan limits below still protect the tool.
+    """
+    if max_records is not None and (type(max_records) is not int or not 0 <= max_records <= 8):
         raise ValueError('Helper output limit must be between zero and eight')
+    unbounded = max_records is None and max_bytes is None
     from contractedge.retrieval.gap_delivery import _go_code, _go_import_specs
     root = Path(snapshot.source_root).resolve()
     if 'go.mod' not in snapshot.file_digests: return [], []
@@ -274,7 +282,8 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
         code_lines = _go_code(text).splitlines()
         declarations = {i+1 for i,line in enumerate(code_lines) if re.match(r'\s*func\s*\(', line)}
         method_units = [u for u in parse_source_units(target['path'], text, snapshot.snapshot_id,
-            max_lines=768, max_chars=32000) if current and not u.get('truncated')
+            **(dict(max_lines=text.count('\n')+2, max_chars=max(1, len(text))) if unbounded else
+               dict(max_lines=768, max_chars=32000))) if current and not u.get('truncated')
             and u['locator']['start_line'] in declarations]
         package_name = re.search(r'(?m)^\s*package\s+(\w+)\b', _go_code(text))
         for operation in operations:
@@ -386,7 +395,10 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
                 audit.append(dict(path=path,result='SOURCE_CHANGED_AFTER_SNAPSHOT'));continue
             text=raw.decode(errors='replace');lines=text.splitlines(keepends=True)
             long_body = async_entry or package in input_packages or package in receiver_packages
-            for unit in parse_source_units(path,text,snapshot.snapshot_id,max_lines=768 if long_body else 80,max_chars=32000 if long_body else 16000):
+            # Without an output quota (v2) a helper is never reduced to a prefix.
+            window=(dict(max_lines=text.count('\n')+2,max_chars=max(1,len(text))) if unbounded else
+                    dict(max_lines=768 if long_body else 80,max_chars=32000 if long_body else 16000))
+            for unit in parse_source_units(path,text,snapshot.snapshot_id,**window):
                 candidates.append((path,lines,unit))
             if async_entry and package not in receiver_packages and _go_async_complete(candidates, async_entry): break
         scanned[package]=candidates
@@ -448,7 +460,7 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
         for path,lines,unit in candidates:
             rank=priority(unit)
             if (rank==4 and unit.get('symbol') not in symbols) or unit.get('truncated'):continue
-            if rank==4 and unit['locator']['end_line']-unit['locator']['start_line']>=80:continue
+            if not unbounded and rank==4 and unit['locator']['end_line']-unit['locator']['start_line']>=80:continue
             queued.append((rank,path,lines,unit,None))
     queued.extend((1,path,lines,unit,link) for path,lines,unit,link in _go_field_dependencies(scanned,bindings,audit))
     # A helper's input type is part of its calling contract. Locate only simple
@@ -547,7 +559,8 @@ def local_go_helper_support(snapshot, targets, operations, *, max_bytes=24000,
             seen.add((path,digest))
             audit.append(dict(path=path,symbol=unit['symbol'],result='ALREADY_DELIVERED_HELPER'))
             continue
-        if included_bytes+size>max_bytes or len(result)>=max_records:
+        if ((max_bytes is not None and included_bytes+size>max_bytes)
+                or (max_records is not None and len(result)>=max_records)):
             audit.append(dict(path=path,symbol=unit['symbol'],result='READ_ONLY_SUPPORT_BUDGET'));continue
         included_bytes+=size;seen.add((path,digest))
         result.append(record)
@@ -570,12 +583,18 @@ def planning_helper_source_support(snapshot, selected, *, max_bytes=24000, sourc
     from contractedge.diagnosis.evidence import source_context_records
     from contractedge.model.budget import BudgetExceeded
     adopted=source_context_records(source_context, producer='planning_helper')
-    byte_limit=max(0,min(int(max_bytes),24000))
     adopted_bytes=sum(len(r['excerpt'].encode()) for r in adopted)
-    if len(adopted)>8 or adopted_bytes>byte_limit:
-        raise BudgetExceeded('Adopted planning helpers exceed the explicit support budget')
-    if len(adopted)==8 or adopted_bytes==byte_limit:
-        return adopted, []
+    v2 = source_context is not None and source_context.get('version')==2
+    if v2:
+        # Source context v2: helpers have no separate record/byte admission
+        # quota; the final planning request is checked whole at dispatch.
+        byte_limit=record_limit=None
+    else:
+        byte_limit,record_limit=max(0,min(int(max_bytes),24000)),8
+        if len(adopted)>8 or adopted_bytes>byte_limit:
+            raise BudgetExceeded('Adopted planning helpers exceed the explicit support budget')
+        if len(adopted)==8 or adopted_bytes==byte_limit:
+            return adopted, []
     known=source_context_records(source_context)
     def already_supplied(record):
         # Repeated discovery is not a new adoption. Identity includes source
@@ -621,7 +640,7 @@ def planning_helper_source_support(snapshot, selected, *, max_bytes=24000, sourc
     if not operations:return adopted,audit
     caller_paths={op['target']['path'] for op in operations}
     records,lookup=local_go_helper_support(snapshot,[t for p,t in targets.items() if p in caller_paths],operations,
-        max_bytes=byte_limit-adopted_bytes, max_records=8-len(adopted),
+        max_bytes=None if v2 else byte_limit-adopted_bytes, max_records=None if v2 else record_limit-len(adopted),
         already_supplied=already_supplied if source_context is not None else None)
     return [*adopted,*records],[*audit,*lookup]
 
@@ -814,7 +833,8 @@ def local_helper_support(snapshot, targets, operations, *, max_bytes=24000,
     import ast
     result,audit=local_go_helper_support(snapshot,targets,operations,max_bytes=max_bytes,
         max_records=max_records,already_supplied=already_supplied)
-    remaining=max_bytes-sum(len(r['excerpt'].encode()) for r in result)
+    unbounded=max_bytes is None and max_records is None
+    remaining=None if max_bytes is None else max_bytes-sum(len(r['excerpt'].encode()) for r in result)
     root=Path(snapshot.source_root).resolve();queries=set();scanned=used=0
     for target in targets:
         if not target['path'].endswith('.py') or not target['content']:continue
@@ -838,7 +858,7 @@ def local_helper_support(snapshot, targets, operations, *, max_bytes=24000,
             for name in node.names:
                 if (name.asname or name.name) in calls and name.name!='*':queries.add((module+'.py',name.name))
     for path,symbol in sorted(queries):
-        if len(result)>=max_records or scanned>=128:break
+        if (max_records is not None and len(result)>=max_records) or scanned>=128:break
         if path not in snapshot.file_digests or path in {t['path'] for t in targets}:continue
         candidate=root/path
         if (candidate.is_symlink() or not candidate.resolve().is_relative_to(root)
@@ -853,7 +873,9 @@ def local_helper_support(snapshot, targets, operations, *, max_bytes=24000,
                 or hashlib.sha256(raw).hexdigest()!=snapshot.file_digests[path]):
             audit.append({'path':path,'result':'SOURCE_CHANGED_AFTER_SNAPSHOT'});continue
         text=raw.decode(errors='replace')
-        matches=[unit for unit in parse_source_units(path,text,snapshot.snapshot_id)
+        # Without an output quota the helper body is read whole, never as an 80-line prefix.
+        whole=dict(max_lines=text.count('\n')+2,max_chars=max(1,len(text))) if unbounded else {}
+        matches=[unit for unit in parse_source_units(path,text,snapshot.snapshot_id,**whole)
                  if unit.get('symbol')==symbol]
         if len(matches)!=1 or matches[0].get('truncated'):
             audit.append({'path':path,'symbol':symbol,'result':'HELPER_IMPLEMENTATION_UNRESOLVED'});continue
@@ -864,8 +886,9 @@ def local_helper_support(snapshot, targets, operations, *, max_bytes=24000,
                 'Direct imported local Python call in accepted target; read-only, not verified causality or edit permission')
             if already_supplied is not None and already_supplied(record):
                 audit.append({'path':path,'symbol':symbol,'result':'ALREADY_DELIVERED_HELPER'});continue
-            if len(excerpt.encode())>remaining:
+            if remaining is not None and len(excerpt.encode())>remaining:
                 audit.append({'path':path,'symbol':symbol,'result':'READ_ONLY_SUPPORT_BUDGET'});continue
-            remaining-=len(excerpt.encode())
+            if remaining is not None:
+                remaining-=len(excerpt.encode())
             result.append(record);audit.append({'id':record['id'],'path':path,'symbol':symbol,'result':'INCLUDED_READ_ONLY_HELPER'})
     return result,audit

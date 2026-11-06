@@ -20,8 +20,41 @@ def source_context_key(record):
             if record.get('kind') == 'PUBLIC_DEPENDENCY_DECLARATION' else record.get('snapshot_id'))
 
 
+SOURCE_CONTEXT_VERSIONS = (1, 2)
+# Version 2 (front-half redesign): adoption keeps identity, digest and
+# no-eviction rules but has no per-producer record/byte admission quotas; the
+# real request boundary and task budget decide what can be sent.
+SOURCE_PRODUCERS = {'initial', 'extension', 'planning_helper', 'execution_helper', 'reread', 'inherited'}
+SOURCE_PRODUCERS_V2 = SOURCE_PRODUCERS | {'locator'}
+
+
+# Material gates the v2 contract removes; a v2 config that still sets them is
+# a configuration error, not something silently ignored or defaulted.
+SUPERSEDED_BY_SOURCE_CONTEXT_V2 = ('initial_diagnosis_context_tokens', 'max_execution_support_bytes')
+
+
+def source_context_contract(config: Mapping) -> int:
+    """The frozen source-material contract a new work chain uses (default 1)."""
+    value = config.get('source_context_contract', 1)
+    if type(value) is not int or value not in SOURCE_CONTEXT_VERSIONS:
+        raise ValueError('source_context_contract must be 1 or 2')
+    if value == 2:
+        legacy = [key for key in SUPERSEDED_BY_SOURCE_CONTEXT_V2 if key in config]
+        if legacy:
+            raise ValueError('Source context v2 config sets superseded material gates: ' + ', '.join(legacy))
+    return value
+
+
+def source_context_version(context) -> int:
+    if not isinstance(context, Mapping) or context.get('version') not in SOURCE_CONTEXT_VERSIONS:
+        raise ValueError('Unknown source context contract')
+    return context['version']
+
+
 def source_extension_limits(context):
     """One frozen policy supplies selector and canonical cumulative bounds."""
+    if source_context_version(context) == 2:
+        raise ValueError('Source context v2 has no independent extension quota')
     limits = context.get('limits', {'evidence_extensions': 1})
     if (not isinstance(limits, Mapping) or not {'evidence_extensions'} <= set(limits) <= {'evidence_extensions', 'initial_records'}
             or type(limits['evidence_extensions']) is not int
@@ -33,10 +66,108 @@ def source_extension_limits(context):
     return count, size, count * limits['evidence_extensions'], size * limits['evidence_extensions']
 
 
-def source_context_new(binding: Mapping, *, evidence_extensions=1, initial_records=12) -> dict:
+def _require_exact_span(record):
+    """v2 adoption needs coordinates that can be re-read, not just a self-consistent digest.
+
+    When byte coordinates are present they must span exactly the excerpt, so a
+    cut body whose digest was recomputed cannot keep its original coordinates.
+    """
+    locator = record.get('locator') or {}
+    if record['kind'] == 'PUBLIC_DEPENDENCY_DECLARATION':
+        if not all(isinstance(record.get(k), str) and record[k]
+                   for k in ('member', 'archive_sha256', 'current_source_snapshot', 'version')):
+            raise ValueError('Dependency source record lacks its pinned identity')
+    elif record['kind'] == 'SOURCE_SPAN':
+        if not isinstance(locator.get('path'), str) or not locator['path'] or not all(
+                type(locator.get(k)) is int for k in ('start_line', 'end_line')):
+            raise ValueError('Source record lacks exact path and line coordinates')
+    if 'start_byte' in locator or 'end_byte' in locator:
+        if (type(locator.get('start_byte')) is not int or type(locator.get('end_byte')) is not int
+                or locator['end_byte'] - locator['start_byte'] != len(record['excerpt'].encode())):
+            raise ValueError('Source record byte coordinates do not span its excerpt')
+
+
+def source_record_from_read(read: Mapping, *, current_snapshot: str) -> dict:
+    """Canonical record for a body actually read through SourceNavigator.read.
+
+    The record copies the tool's exact text and coordinates; nothing is
+    summarized or re-cut. Dependency bodies stay read-only API context in the
+    current snapshot's namespace.
+    """
+    text = read['text']
+    if hashlib.sha256(text.encode()).hexdigest() != read['content_digest']:
+        raise ValueError('Navigation read digest does not match its text')
+    suffix = str(read['handle']).split('-', 1)[1]
+    locator = {k: read[k] for k in ('start_line', 'end_line', 'start_char', 'end_char', 'start_byte', 'end_byte')}
+    locator.update(path=read['path'], truncated=False, complete_declaration=bool(read['complete_declaration']),
+                   file_digest=read['file_digest'], parser_kind=read['parser_kind'])
+    if read.get('symbol'):
+        locator.update(symbol=read['symbol'], receiver=read.get('receiver') or '')
+    if read.get('origin') == 'DEPENDENCY':
+        dep = read['dependency']
+        return {'id': 'PUBLICDEP-' + suffix, 'kind': 'PUBLIC_DEPENDENCY_DECLARATION',
+                'module': dep['module'], 'version': dep['version'], 'package': dep.get('package'),
+                'current_source_snapshot': current_snapshot, 'archive_path': dep['archive_path'],
+                'archive_sha256': dep['archive_sha256'], 'member': dep['member'],
+                'member_content_digest': read['file_digest'], 'environment_sha256': dep.get('environment_sha256'),
+                'build_constraint': dep.get('build_constraint'), 'locator': locator,
+                'content_digest': read['content_digest'], 'excerpt': text, 'read_only': True,
+                'interpretation': 'Exact hash-pinned public dependency source read; API context only, '
+                                  'not proof that this project calls it, an editable target or causal evidence'}
+    if read.get('snapshot_id') != current_snapshot:
+        raise ValueError('Navigation read belongs to another snapshot')
+    return {'id': 'SRC-NAV-' + suffix, 'kind': 'SOURCE_SPAN', 'snapshot_id': current_snapshot,
+            'locator': locator, 'content_digest': read['content_digest'], 'excerpt': text,
+            'origin': 'Exact source read through the navigation tool'}
+
+
+def verify_source_record(record: Mapping, snapshot) -> dict:
+    """Re-read the fixed source and compare bytes; a recomputed hash alone proves nothing.
+
+    Returns a verification fact; raises ValueError when the record no longer
+    matches its source. Records without byte coordinates (legacy candidates)
+    are checked at their character range instead and say so.
+    """
+    from pathlib import Path
+    if record.get('kind') != 'SOURCE_SPAN':
+        raise ValueError('Only current-source spans can be re-read here')
+    locator = record.get('locator') or {}
+    path = locator.get('path')
+    root = Path(snapshot.source_root).resolve()
+    if path not in snapshot.file_digests or record.get('snapshot_id') != snapshot.snapshot_id:
+        raise ValueError('Source record is not in this snapshot')
+    target = root / path
+    if target.is_symlink() or not target.resolve().is_relative_to(root):
+        raise ValueError('Source record path escapes the snapshot')
+    raw = target.read_bytes()
+    digest = hashlib.sha256(raw).hexdigest()
+    if digest != snapshot.file_digests[path] or locator.get('file_digest', digest) != digest:
+        raise ValueError('Source file changed since the record was made')
+    excerpt = record.get('excerpt', '').encode()
+    if hashlib.sha256(excerpt).hexdigest() != record.get('content_digest'):
+        raise ValueError('Source record digest does not match its excerpt')
+    if 'start_byte' in locator:
+        if raw[locator['start_byte']:locator['end_byte']] != excerpt:
+            raise ValueError('Source record bytes differ from the fixed source range')
+        return {'id': record['id'], 'verified': 'EXACT_BYTE_RANGE', 'file_digest': digest}
+    text = raw.decode('utf-8')
+    start, end = locator.get('start_char'), locator.get('end_char')
+    candidates = [text, text.replace('\r\n', '\n')]   # legacy discovery read CRLF-normalized text
+    if not any(isinstance(start, int) and isinstance(end, int) and t[start:end].encode() == excerpt
+               for t in candidates):
+        raise ValueError('Source record text differs from the fixed source range')
+    return {'id': record['id'], 'verified': 'CHARACTER_RANGE', 'file_digest': digest}
+
+
+def source_context_new(binding: Mapping, *, evidence_extensions=1, initial_records=12, version=1) -> dict:
     if any(not isinstance(binding.get(k), str) or not binding[k]
            for k in ('run_id', 'case_id', 'input_digest', 'front_id')):
         raise ValueError('Source context requires its original work-chain binding')
+    if version == 2:
+        return dict(version=2, contract='front_half.source_context.v2', binding=_source_copy(dict(binding)),
+                    records=[], targets=[], producer_refs={}, candidate_ids=[])
+    if version != 1:
+        raise ValueError('Unknown source context contract')
     result = dict(version=1, binding=_source_copy(dict(binding)), records=[], targets=[],
                   producer_refs={}, candidate_ids=[], limits={'evidence_extensions': evidence_extensions})
     if initial_records != 12:
@@ -48,8 +179,7 @@ def source_context_new(binding: Mapping, *, evidence_extensions=1, initial_recor
 def source_context_records(context, *, producer=None, kind=None) -> list[dict]:
     if context is None:
         return []
-    if not isinstance(context, Mapping) or context.get('version') != 1:
-        raise ValueError('Unknown source context contract')
+    source_context_version(context)
     selected = (None if producer is None else
                 {tuple(ref) for ref in context['producer_refs'].get(producer, [])})
     return [_source_copy(r) for r in context['records']
@@ -65,10 +195,11 @@ def source_context_offer(active, records, *, producer, targets=(), candidate_ids
     Quotas count first adoption, not repeated reads or compacted wire copies.
     """
     from contractedge.model.budget import BudgetExceeded
-    if producer not in {'initial', 'extension', 'planning_helper', 'execution_helper', 'reread', 'inherited'}:
-        raise ValueError('Unknown source producer')
-    if not isinstance(active, Mapping) or active.get('version') != 1:
+    if not isinstance(active, Mapping) or active.get('version') not in SOURCE_CONTEXT_VERSIONS:
         raise ValueError('Missing source context binding')
+    version = active['version']
+    if producer not in (SOURCE_PRODUCERS_V2 if version == 2 else SOURCE_PRODUCERS):
+        raise ValueError('Unknown source producer')
     result = _source_copy(active)
     by_key = {source_context_key(r): r for r in result['records']}
     if len(by_key) != len(result['records']):
@@ -82,8 +213,10 @@ def source_context_offer(active, records, *, producer, targets=(), candidate_ids
                 or (record.get('kind') != 'PUBLIC_DEPENDENCY_DECLARATION'
                     and not isinstance(record.get('locator'), Mapping))):
             raise ValueError('Invalid canonical source context record')
-        if record['kind'] == 'STATIC_SEARCH' and producer not in {'initial', 'extension', 'inherited'}:
+        if record['kind'] == 'STATIC_SEARCH' and producer not in {'initial', 'extension', 'inherited', 'locator'}:
             raise ValueError('Static search facts are not helper or reread source material')
+        if version == 2:
+            _require_exact_span(record)
         digest = (static_search_content_digest(record.get('snapshot_id', ''), record['locator'], record['excerpt'])
                   if record['kind'] == 'STATIC_SEARCH' else hashlib.sha256(record['excerpt'].encode()).hexdigest())
         if digest != record.get('content_digest'):
@@ -107,10 +240,12 @@ def source_context_offer(active, records, *, producer, targets=(), candidate_ids
         result['records'].append(value); by_key[key] = value
         refs.append(list(key))
     selected = [r for r in source_context_records(result, producer=producer) if r['kind'] != 'STATIC_SEARCH']
-    _, _, extension_count, extension_bytes = source_extension_limits(result)
-    limits = {'initial':(result.get('limits', {}).get('initial_records', 12),None),
-              'extension': (extension_count, extension_bytes), 'planning_helper': (8, 24000),
-              'execution_helper': (8, None)}
+    limits = {}
+    if version == 1:
+        _, _, extension_count, extension_bytes = source_extension_limits(result)
+        limits = {'initial':(result.get('limits', {}).get('initial_records', 12),None),
+                  'extension': (extension_count, extension_bytes), 'planning_helper': (8, 24000),
+                  'execution_helper': (8, None)}
     if producer in limits:
         count, byte_limit = limits[producer]
         size = sum(len(r['excerpt'].encode()) for r in selected)
@@ -150,10 +285,13 @@ def source_context_commit(active, draft, dispatch_state):
 def source_context_continuation(active, draft):
     """Validate same-chain preservation without making a dispatch claim."""
     source_context_validate(draft)
-    if (source_extension_limits(active) != source_extension_limits(draft)
+    if source_context_version(active) != source_context_version(draft):
+        raise ValueError('Source context contract changed during continuation')
+    if active['version'] == 1 and (
+            source_extension_limits(active) != source_extension_limits(draft)
             or active.get('limits', {}).get('initial_records', 12) != draft.get('limits', {}).get('initial_records', 12)):
         raise ValueError('Frozen source limits changed during continuation')
-    if active.get('binding') != draft.get('binding') or active.get('version') != draft.get('version'):
+    if active.get('binding') != draft.get('binding'):
         raise ValueError('Source context belongs to another work chain')
     records = {source_context_key(r): r for r in source_context_records(draft)}
     for prior in source_context_records(active):
@@ -175,10 +313,16 @@ def source_context_continuation(active, draft):
 
 def source_context_validate(context):
     """Check recorded adoption, identity and cumulative bounds without reselection."""
-    source_extension_limits(context)
-    rebuilt = source_context_new(context['binding'],
-        evidence_extensions=context.get('limits', {}).get('evidence_extensions', 1),
-        initial_records=context.get('limits', {}).get('initial_records', 12))
+    if source_context_version(context) == 2:
+        if set(context) - {'version', 'contract', 'binding', 'records', 'targets', 'producer_refs',
+                           'candidate_ids', 'inherited_from'} or context.get('contract') != 'front_half.source_context.v2':
+            raise ValueError('Source context v2 carries unknown or legacy quota fields')
+        rebuilt = source_context_new(context['binding'], version=2)
+    else:
+        source_extension_limits(context)
+        rebuilt = source_context_new(context['binding'],
+            evidence_extensions=context.get('limits', {}).get('evidence_extensions', 1),
+            initial_records=context.get('limits', {}).get('initial_records', 12))
     owners = {}
     for producer, refs in context['producer_refs'].items():
         for ref in refs:
@@ -223,16 +367,21 @@ def source_context_target_view(target):
                          'source_file_sha256':target['source_file_sha256']})
 
 
-def source_context_restart(active, binding, inherited_inputs, *, evidence_extensions=1, initial_records=12):
+def source_context_restart(active, binding, inherited_inputs, *, evidence_extensions=1, initial_records=12,
+                           version=1):
     """Only the engine's explicit full-diagnosis route may replace the root.
 
     Exact references inherit their canonical bodies. An unqualified ID cannot
     choose the newest snapshot: retain every matching namespace conservatively.
-    An unrelated discovery has no lifetime in the new work chain.
+    An unrelated discovery has no lifetime in the new work chain. A chain is
+    never continued under another contract version.
     """
-    result = source_context_new(binding, evidence_extensions=evidence_extensions, initial_records=initial_records)
+    result = source_context_new(binding, evidence_extensions=evidence_extensions, initial_records=initial_records,
+                                version=version)
     if active is None:
         return result
+    if source_context_version(active) != version:
+        raise ValueError('Cannot continue a source context under another contract version')
     source_context_validate(active)
     wanted = set()
     records = source_context_records(active)

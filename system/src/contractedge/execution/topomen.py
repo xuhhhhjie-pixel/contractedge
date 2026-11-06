@@ -476,6 +476,9 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
     from contractedge.diagnosis.evidence import (source_context_records, source_context_offer,
         source_context_key, source_context_projection)
     adopted = source_context_records(source_context)
+    # Source context v2: bodies Diagnosis/planning already adopted are not
+    # re-admitted under a second byte quota; the final request is quoted whole.
+    v2_sources = source_context is not None and source_context.get('version') == 2
     if source_context is not None:
         if source_context['binding']['input_digest'] != plan['input_digest']:
             raise PlanRejected('Source context belongs to another method input')
@@ -556,7 +559,7 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
                         reread_records.append(evidence)
                     previous = next((r for r in support if source_context_key(r) == source_context_key(evidence)), None)
                     if previous is None:
-                        if used + len(excerpt.encode()) > int(config.get('max_execution_support_bytes', 24000)):
+                        if not v2_sources and used + len(excerpt.encode()) > int(config.get('max_execution_support_bytes', 24000)):
                             raise BudgetExceeded('Selected execution source exceeds the read-only support budget: '
                                 f'required_bytes_at_least={used + len(excerpt.encode())}, '
                                 f'allowed_bytes={int(config.get("max_execution_support_bytes", 24000))}')
@@ -573,8 +576,8 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
     compiler_api = [r for r in adopted_api if r.get('current_source_snapshot') == acceptance['snapshot_id']]
     new_execution_records = []
     used += sum(len(r['excerpt'].encode()) for r in compiler_api)
-    support_limit = int(config.get('max_execution_support_bytes', 24000))
-    if used > support_limit:
+    support_limit = None if v2_sources else int(config.get('max_execution_support_bytes', 24000))
+    if support_limit is not None and used > support_limit:
         raise BudgetExceeded('Adopted execution support exceeds the explicit support budget')
     if config.get('execution_helper_support_enabled'):
         from contractedge.execution.helper_context import compiler_dependency_support, local_helper_support
@@ -583,19 +586,20 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
             # This is source-integrity failure before dispatch, not an invalid
             # model plan/edit eligible for a format-correction retry.
             raise OSError('Source snapshot changed during execution context construction')
-        remaining = max(0, support_limit-used)
+        remaining = None if v2_sources else max(0, support_limit-used)
         def api_already_supplied(record):
             return any(same_evidence_content(record, prior) for prior in adopted_api)
         new_api, compiler_audit = compiler_dependency_support(snapshot, feedback, max_bytes=remaining,
-            max_records=max(0, min(2-len(adopted_api), 8-len(execution_adopted))),
+            max_records=None if v2_sources else max(0, min(2-len(adopted_api), 8-len(execution_adopted))),
             already_supplied=api_already_supplied)
         if not compiler_api and not new_api and previous_attempt:
             historical = (previous_attempt.get('rejected_trial') or {}).get('feedback')
             new_api, historical_audit = compiler_dependency_support(snapshot, historical, max_bytes=remaining,
-                max_records=max(0, min(2-len(adopted_api), 8-len(execution_adopted))),
+                max_records=None if v2_sources else max(0, min(2-len(adopted_api), 8-len(execution_adopted))),
                 already_supplied=api_already_supplied)
             compiler_audit.extend(historical_audit)
-        remaining -= sum(len(r['excerpt'].encode()) for r in new_api)
+        if remaining is not None:
+            remaining -= sum(len(r['excerpt'].encode()) for r in new_api)
         compiler_api.extend(new_api)
         support_audit.extend(compiler_audit)
         # Accepted locators use original file coordinates. The bounded display
@@ -609,7 +613,8 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
                         ('kind','snapshot_id','locator','content_digest','excerpt')) for prior in support)
                     or target_supplies_support(targets.get(path),record,full_target_texts.get(path,'')))
         helpers, audit = local_helper_support(snapshot, helper_targets, plan['operations'], max_bytes=remaining,
-            max_records=max(0,8-len(execution_adopted)-len(new_api)),already_supplied=helper_already_supplied)
+            max_records=None if v2_sources else max(0,8-len(execution_adopted)-len(new_api)),
+            already_supplied=helper_already_supplied)
         new_execution_records = [*helpers, *new_api]
         support.extend(helpers)
         support_audit.extend(audit)
@@ -815,7 +820,7 @@ def _build_execution_request(plan: Mapping, source: Path, policy: Mapping, token
         budget_records = {source_context_key(r): r for r in [*support, *compiler_api,
             *full_context_records, *payload['adopted_source_context']['records']]
             if 'excerpt' in r and r.get('kind') != 'STATIC_SEARCH'}
-        if sum(len(r['excerpt'].encode()) for r in budget_records.values()) > support_limit:
+        if support_limit is not None and sum(len(r['excerpt'].encode()) for r in budget_records.values()) > support_limit:
             raise BudgetExceeded('Complete adopted execution support exceeds the explicit support budget')
     thinking, metadata = config.get('execution_thinking'), {}
     if thinking is not None:
