@@ -177,6 +177,92 @@ class PublicGoDependencies:
         return (records if complete else []), audit, complete
 
 
+    def package_files(self, imported, *, max_member_bytes=4 * 1024 * 1024, max_seconds=60):
+        """Per-file read of one pinned package for navigation (spec section 4.6, 7.5).
+
+        Unlike ``package``, one oversized, build-tagged or platform file does not
+        discard the files already verified: those facts are attached to each
+        file, and anything not read makes ``complete`` false with a reason.
+        Build tags are reported, not evaluated, so a listed file is "readable
+        pinned source", not proof that the compiler selects it.
+        """
+        from contractedge.retrieval.gap_delivery import _go_code
+        target = self.resolve(imported)
+        if target is None:
+            return dict(files=[], complete=False, audit=[dict(result='NOT_A_PINNED_MODULE', imported=imported)])
+        module, version, package_path = target
+        needle = module + '@' + version + '/' + (package_path + '/' if package_path else '')
+        files, audit, seen, names, complete = [], [], set(), set(), True
+        for entry in self.environment.get('public_mounts', []):
+            if 'archive' not in entry or 'sha256' not in entry:
+                continue
+            row = dict(result='PUBLIC_DEPENDENCY_PACKAGE_FILES', module=module, version=version,
+                       archive_sha256=entry['sha256'], skipped=[])
+            try:
+                archive = confined(self.inputs, entry['archive'])
+                if archive.stat().st_size > 512 * 1024 * 1024:
+                    raise ValueError('Dependency archive exceeds the tool size limit')
+                with archive.open('rb') as stream:
+                    digest = hashlib.sha256()
+                    for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+                        digest.update(chunk)
+                    if digest.hexdigest() != entry['sha256']:
+                        raise ValueError('Dependency archive hash mismatch')
+                    stream.seek(0)
+                    started, scanned, expanded = time.monotonic(), 0, 0
+                    with tarfile.open(fileobj=stream, mode='r|*') as tar:
+                        for member in tar:
+                            scanned += 1
+                            expanded += member.size
+                            if scanned > 200000 or expanded > 8 * 1024**3 or time.monotonic() - started > max_seconds:
+                                complete = False
+                                row['stopped'] = 'TOOL_SCAN_LIMIT'
+                                break
+                            path = PurePosixPath(member.name)
+                            if path.is_absolute() or '..' in path.parts or '\\' in member.name or not member.isfile():
+                                continue
+                            pos = member.name.find(needle)
+                            if pos < 0 or (pos and member.name[pos - 1] != '/'):
+                                continue
+                            name = member.name[pos + len(needle):]
+                            if '/' in name or not name.endswith('.go') or name.endswith('_test.go'):
+                                continue
+                            if member.size > max_member_bytes:
+                                complete = False
+                                row['skipped'].append(dict(member=member.name, reason='FILE_EXCEEDS_TOOL_LIMIT',
+                                                           size=member.size))
+                                continue
+                            raw = tar.extractfile(member).read(member.size + 1)
+                            if len(raw) != member.size:
+                                raise ValueError('Incomplete dependency file')
+                            identity = (entry['sha256'], member.name)
+                            if identity in seen:
+                                raise ValueError('Duplicate dependency file')
+                            seen.add(identity)
+                            text = raw.decode('utf-8')
+                            code = _go_code(text)
+                            package = re.search(r'(?m)^\s*package\s+(\w+)\b', code)
+                            if package:
+                                names.add(package[1])
+                            constraint = re.search(r'(?m)^//go:build\s+(.+)$', text)
+                            files.append(dict(text=text, content_digest=_sha(raw), identity=dict(
+                                module=module, version=version, archive_path=entry['archive'],
+                                archive_sha256=entry['sha256'], member=member.name,
+                                environment_sha256=self.authority.get('sha256'),
+                                package=package[1] if package else None,
+                                build_constraint=constraint[1].strip() if constraint else
+                                ('legacy +build' if '// +build' in text else None),
+                                platform_file=bool(_PLATFORM.search(name)))))
+                row.update(inspected_members=scanned)
+            except (OSError, ValueError, TypeError, KeyError, tarfile.TarError, UnicodeError) as exc:
+                complete = False
+                row.update(result='DEPENDENCY_API_UNAVAILABLE', reason=str(exc))
+            audit.append(row)
+        if len(names) > 1:
+            audit.append(dict(result='SEVERAL_PACKAGE_NAMES', names=sorted(names)))
+        return dict(files=files, complete=complete and bool(files), audit=audit)
+
+
 def _close(code, start):
     pairs = {'(': ')', '[': ']', '{': '}'}
     stack = []
