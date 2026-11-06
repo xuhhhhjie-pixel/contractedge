@@ -335,6 +335,12 @@ def build_changeset_request(diagnosis: DiagnosisPacket, run_context: RunContext,
         user_payload.pop('output_schema')
         user_payload['output_fields'] = list(_case_output_schema(diagnosis, policy, frontier, probe_ids, prerequisites, capabilities)['properties'])
     system_prompt = CHANGESET_SYSTEM_PROMPT + (COVERAGE_PROMPT + IMPACT_PROMPT if diagnosis.raw.get('requirement_spec',{}).get('traceability_required') else '') + (FRONTIER_PROMPT if frontier else "")
+    if (retrieval.get('source_context') or {}).get('version') == 2:
+        # Source context v2: evidence requests go to the shared read-only locator.
+        system_prompt = system_prompt.replace(
+            'This shares the single Diagnosis extension allowance; it does not create a new round or replenish budgets.',
+            'The runner\'s read-only locator reads the requested source within the same task budget, then the '
+            'diagnosis is reassessed before planning again; used correction counts are not reset.')
     if declared_artifacts:
         system_prompt += DECLARED_ARTIFACT_GUIDANCE
     if observation_scope_paths:

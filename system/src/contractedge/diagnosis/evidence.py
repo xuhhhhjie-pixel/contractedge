@@ -30,7 +30,11 @@ SOURCE_PRODUCERS_V2 = SOURCE_PRODUCERS | {'locator'}
 
 # Material gates the v2 contract removes; a v2 config that still sets them is
 # a configuration error, not something silently ignored or defaulted.
-SUPERSEDED_BY_SOURCE_CONTEXT_V2 = ('initial_diagnosis_context_tokens', 'max_execution_support_bytes')
+SUPERSEDED_BY_SOURCE_CONTEXT_V2 = (
+    'initial_diagnosis_context_tokens', 'max_execution_support_bytes',      # duplicate request/source quotas
+    'top_n', 'max_units', 'max_declared_units', 'max_gap_units',             # candidate pool cuts
+    'max_extension_files', 'max_lines_per_unit', 'max_gap_declaration_lines',
+    'max_evidence_extensions')                                               # independent extension count
 
 
 def source_context_contract(config: Mapping) -> int:
@@ -43,6 +47,12 @@ def source_context_contract(config: Mapping) -> int:
         if legacy:
             raise ValueError('Source context v2 config sets superseded material gates: ' + ', '.join(legacy))
     return value
+
+
+def source_contract_of(retrieval_config: Mapping | None) -> int:
+    """Contract version recorded in a run context's adopted sources (1 when absent)."""
+    context = (retrieval_config or {}).get('source_context')
+    return context.get('version', 1) if isinstance(context, Mapping) else 1
 
 
 def source_context_version(context) -> int:
@@ -469,6 +479,13 @@ def build_evidence_catalog(method_input: MethodInput, candidates: CandidateSet |
     records = []
     artifacts = {a['id']: a for a in merge_evidence_records(method_input.declared_artifacts)}
     for item in selected:
+        if item.get('canonical_record') is not None:
+            # Locator-delivered material: the adopted record itself, not a re-derivation.
+            record = dict(item['canonical_record'])
+            if record.get('id') != f"SRC-{item['id']}":
+                raise ValueError('Candidate projection does not match its canonical record')
+            records.append(record)
+            continue
         locator = {"path": str(item['path']), **dict(item['locator'])}
         if 'truncated' in item:
             if type(item['truncated']) is not bool:
@@ -510,9 +527,9 @@ def build_evidence_catalog(method_input: MethodInput, candidates: CandidateSet |
 def source_context_for_candidates(active, method_input, candidates, snapshot_id):
     records = [r for r in build_evidence_catalog(method_input, candidates, snapshot_id)
                if r['kind'] in {'SOURCE_SPAN', 'DECLARED_ARTIFACT', 'STATIC_SEARCH'}]
-    return source_context_offer(active, records,
-        producer='extension' if active['candidate_ids'] else 'initial',
-        candidate_ids=candidates.selected_ids)
+    producer = ('locator' if active.get('version') == 2 else
+                'extension' if active['candidate_ids'] else 'initial')
+    return source_context_offer(active, records, producer=producer, candidate_ids=candidates.selected_ids)
 
 
 def bind_evidence_ids(evidence_refs: Any, catalog: list[Mapping[str, Any]]) -> list[dict[str, Any]]:

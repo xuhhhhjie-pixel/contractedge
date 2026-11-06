@@ -3,12 +3,17 @@ from __future__ import annotations
 from typing import Any, Mapping
 
 
-def constrained_output_schema(schema: Mapping[str, Any], *, omit: set[str] | None = None) -> dict[str, Any]:
+def constrained_output_schema(schema: Mapping[str, Any], *, omit: set[str] | None = None,
+                              compact_limits: bool = True) -> dict[str, Any]:
     """Lower a ContractEdge JSON Schema into Ollama's supported constrained-output subset.
 
     The lowered schema may be less restrictive where the native decoder does not support a
     contract keyword (currently ``anyOf``). The application always validates the full contract
     after generation, so this function must never be used as the final validator.
+
+    ``compact_limits`` adds generation-size caps that are not part of the contract (strings
+    600 chars, arrays 32 items, and per-field item counts). Source context v2 diagnosis turns
+    them off so a complete problem can be expressed; real output budgets still apply.
     """
     definitions = schema.get("$defs", {})
 
@@ -67,9 +72,9 @@ def constrained_output_schema(schema: Mapping[str, Any], *, omit: set[str] | Non
             if name in {"allOf", "not", "if", "then", "else"}:
                 raise ValueError(f"unsupported constrained-output schema keyword: {name}")
             result[name] = lower(item, resolving)
-        if result.get("type") == "string":
+        if compact_limits and result.get("type") == "string":
             result.setdefault("maxLength", 600)
-        if result.get("type") == "array":
+        if compact_limits and result.get("type") == "array":
             result.setdefault("maxItems", 32)
         return result
 
@@ -82,10 +87,10 @@ def constrained_output_schema(schema: Mapping[str, Any], *, omit: set[str] | Non
         properties = lowered.get("properties", {})
         for name in omitted:
             properties.pop(name, None)
-    for name, limit in {"requirement_horizon": 16, "inferred_causal_path": 8,
-                        "unverified_outcomes": 16, "units": 16, "expected_relations": 12,
-                        "violations": 12, "outcome_coverage": 32, "evidence_refs": 24,
-                        "evidence_gaps": 4}.items():
+    for name, limit in ({"requirement_horizon": 16, "inferred_causal_path": 8,
+                         "unverified_outcomes": 16, "units": 16, "expected_relations": 12,
+                         "violations": 12, "outcome_coverage": 32, "evidence_refs": 24,
+                         "evidence_gaps": 4} if compact_limits else {}).items():
         prop = lowered.get("properties", {}).get(name)
         if isinstance(prop, dict) and prop.get("type") == "array":
             prop["maxItems"] = limit

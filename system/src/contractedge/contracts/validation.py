@@ -138,8 +138,12 @@ def _schema_error_message(error) -> str:
     return error.message if len(error.message)<=600 else error.message[:600]+' [value echo omitted; consult the supplied schema]'
 
 
-def _check_schema(payload: Any, version: str) -> None:
+def _check_schema(payload: Any, version: str, *, unbounded: tuple[str, ...] = ()) -> None:
     schema = _load_schema(version)
+    for name in unbounded:
+        # A successor contract may lift a fixed top-level count (e.g. the
+        # 12-item precondition review); every per-item rule stays in force.
+        schema['properties'][name].pop('maxItems', None)
     errors = sorted(Draft202012Validator(schema).iter_errors(payload), key=lambda e: tuple(str(x) for x in e.absolute_path))
     if errors:
         error = errors[0]
@@ -577,7 +581,8 @@ def _issue(code: str, path: str, message: str) -> ValidationIssue:
 
 
 def validate_changeset(
-    payload: Mapping[str, Any], diagnosis: DiagnosisPacket, snapshot: Snapshot | None
+    payload: Mapping[str, Any], diagnosis: DiagnosisPacket, snapshot: Snapshot | None, *,
+    unbounded_prerequisites: bool = False
 ) -> ValidationResult:
     try:
         if not isinstance(payload, Mapping):
@@ -585,7 +590,8 @@ def validate_changeset(
         version = payload.get("schema_version")
         if version != "ce.semantic_changeset.v1_1":
             raise ContractError("SCHEMA_VERSION_UNSUPPORTED", "schema_version", f"unsupported schema version {version!r}")
-        _check_schema(payload, version)
+        _check_schema(payload, version,
+                      unbounded=('precondition_review',) if unbounded_prerequisites else ())
     except ContractError as exc:
         return ValidationResult(False, (_issue(exc.code, exc.path, exc.message),))
 

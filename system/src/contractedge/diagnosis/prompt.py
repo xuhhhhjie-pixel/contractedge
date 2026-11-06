@@ -53,16 +53,23 @@ def _output_schema() -> Mapping[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-@lru_cache(maxsize=1)
-def _body_schema() -> Mapping[str, Any]:
+@lru_cache(maxsize=2)
+def _body_schema(compact_limits: bool = True) -> Mapping[str, Any]:
     envelope = {"schema_version", "run_id", "snapshot_id", "input_digest", "requirement_spec"}
-    schema = constrained_output_schema(_output_schema(), omit=envelope)
+    schema = constrained_output_schema(_output_schema(), omit=envelope, compact_limits=compact_limits)
     schema["properties"]["evidence_refs"] = {"type": "array", "items": {"type": "string"}}
     return schema
 
 
-def _case_output_schema(requirement: Mapping[str, Any], evidence_catalog: list[Mapping[str, Any]]) -> dict[str, Any]:
-    schema = deepcopy(_body_schema())
+# Source context v2 removes a fixed expression cap; conciseness stays a style request.
+COMPACT_STEP_RULE = " Be concise: use short phrases, one sentence per relation or violation, and at most three causal steps."
+V2_STYLE_RULE = (" Be concise without dropping obligations, branches, causes or real unknowns: use short phrases"
+                 " and as many causal steps as the evidence requires.")
+
+
+def _case_output_schema(requirement: Mapping[str, Any], evidence_catalog: list[Mapping[str, Any]], *,
+                        compact_limits: bool = True) -> dict[str, Any]:
+    schema = deepcopy(_body_schema(compact_limits))
     outcomes = requirement.get("outcomes", [])
     outcome_ids = sorted({str(item["id"]) for item in outcomes
                           if isinstance(item, Mapping) and isinstance(item.get("id"), str)})
@@ -162,7 +169,9 @@ def build_diagnosis_request(method_input: MethodInput, requirement: Mapping[str,
         token_count = candidates.get("context_tokens")
     evidence_catalog = build_evidence_catalog(method_input, candidates, run_context.snapshot_id,
         source_context=run_context.retrieval_config.get('source_context'))
-    output_schema = _case_output_schema(requirement, evidence_catalog)
+    # Source context v2: lookup/diagnosis interaction, no generation-size caps.
+    interaction = (run_context.retrieval_config.get('source_context') or {}).get('version') == 2
+    output_schema = _case_output_schema(requirement, evidence_catalog, compact_limits=not interaction)
     candidate_summaries = []
     for item in selected:
         summary = {key: item[key] for key in (
@@ -248,6 +257,17 @@ def build_diagnosis_request(method_input: MethodInput, requirement: Mapping[str,
         system_prompt += ' Every UNRELATED assessment, including a successful control operation, needs non-empty scope_evidence_refs copied from allowed_evidence_ids supporting the distinct scope; otherwise use UNKNOWN. Merely labeling an operation unrelated cannot waive a failure.'
     if requirement.get('lineage_required'):
         system_prompt += ' Prior obligation IDs are immutable. Use lineage_events CONTINUE or REANCHOR with parent_ids and current atom_refs to preserve identity across changed prose/quotes. SPLIT records one parent and at least two children; MERGE records a conjunction view, never erases parents. Leave events empty for initial registration or exact unchanged anchors. Original definitions and unresolved residuals remain live; do not assert equivalence solely from wording.'
+    model_schema = output_schema
+    if interaction:
+        from contractedge.diagnosis.interaction import INTERACTION_PROMPT, interaction_output_schema
+        model_schema = interaction_output_schema(output_schema)
+        system_prompt = system_prompt.replace(COMPACT_STEP_RULE, V2_STYLE_RULE) + INTERACTION_PROMPT
+        if 'output_schema' in public:
+            public['output_schema'] = model_schema
+        else:
+            public['output_fields'] = list(model_schema['properties'])
+        public['output_contract'] = ('Return one JSON object with response_kind LOOKUP (lookup.evidence_gaps) or '
+                                     'DIAGNOSIS (diagnosis = DiagnosisPacket v1.1 body); no markdown fences.')
     contracts = field_contract_contexts(selected, method_input.requirement_text)
     readers = reader_reference_contexts(selected)
     if readers:
@@ -263,12 +283,17 @@ def build_diagnosis_request(method_input: MethodInput, requirement: Mapping[str,
     content = json.dumps(public, ensure_ascii=False, sort_keys=True)
     model = str(run_context.model_config.get("model", "UNCONFIGURED"))
     output_budget = int(run_context.budget.get("max_output_tokens", 4096))
-    return ModelRequest(model=model, prompt_version="diagnosis.v1.1.26" if requirement.get("traceability_required") else "diagnosis.v1.1.24",
+    version = "diagnosis.v1.1.26" if requirement.get("traceability_required") else "diagnosis.v1.1.24"
+    metadata = {"run_id": run_context.run_id, "snapshot_id": run_context.snapshot_id,
+                "input_digest": method_input.input_digest,
+                "schema_in_prompt": run_context.model_config.get('schema_in_prompt', True),
+                "selected_ids": selected_ids, "dropped_ids": dropped_ids}
+    if interaction:
+        # The diagnosis branch schema is what parse_diagnosis_interaction checks.
+        version = version.replace("diagnosis.v1.1.", "diagnosis.v2.lookup.")
+        metadata["diagnosis_body_schema"] = output_schema
+    return ModelRequest(model=model, prompt_version=version,
                         messages=({"role": "system", "content": system_prompt},
                                   {"role": "user", "content": content}),
                         max_output_tokens=output_budget, temperature=0.0,
-                        metadata={"run_id": run_context.run_id, "snapshot_id": run_context.snapshot_id,
-                                  "input_digest": method_input.input_digest,
-                                  "schema_in_prompt": run_context.model_config.get('schema_in_prompt', True),
-                                  "selected_ids": selected_ids, "dropped_ids": dropped_ids},
-                                  output_schema=output_schema)
+                        metadata=metadata, output_schema=model_schema)

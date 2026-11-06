@@ -416,7 +416,7 @@ def _configuration_graph_feedback(messages, response_content: str) -> str:
     return serialize()
 
 
-def _append_diagnosis_retry_turn(messages, response_content: str, validation_feedback: str):
+def _append_diagnosis_retry_turn(messages, response_content: str, validation_feedback: str, *, bounded=True):
     """Append one correction without accumulating prior correction turns.
 
     A diagnosis request carries a large, immutable evidence bundle.  Keeping
@@ -477,10 +477,12 @@ def _append_diagnosis_retry_turn(messages, response_content: str, validation_fee
         validation_feedback = "\n\n".join(deduplicated)
         # Feedback is diagnostic control data, not source evidence.  Bound it
         # independently so an unexpectedly verbose validator cannot recreate
-        # the original context-growth problem.
-        feedback_limit = 24_000
+        # the original context-growth problem.  Source context v2 does not cut
+        # still-valid independent errors from the tail; the complete request
+        # is checked at its real boundary instead.
+        feedback_limit = 24_000 if bounded else None
         encoded = validation_feedback.encode("utf-8", errors="replace")
-        if len(encoded) > feedback_limit:
+        if feedback_limit is not None and len(encoded) > feedback_limit:
             current = encoded[-feedback_limit:]
             validation_feedback = current.decode("utf-8", errors="ignore")
     return base_messages + (
@@ -595,11 +597,92 @@ def _collect_diagnosis_evidence_ids(payload: Mapping[str, Any]) -> Any:
     return refs
 
 
+_COVERAGE_PATH = re.compile(r'outcome_coverage\[(\d+)\]((?:\.[A-Za-z_]+(?:\[\d+\])?)*)')
+
+
+def _model_field_feedback(text: str, model_body: Mapping[str, Any], bound_body: Mapping[str, Any] | None) -> str:
+    """Point correction feedback at the keyed fields the model actually wrote.
+
+    The model writes ``outcome_coverage.<O>.disposition`` and preservation
+    fields; the runner derives the v1.1 arrays from them. Validation reports
+    paths in that derived array, which the model cannot edit directly.
+    """
+    coverage = model_body.get('outcome_coverage') if isinstance(model_body, Mapping) else None
+    if not isinstance(coverage, Mapping):
+        return text
+    rows = bound_body.get('outcome_coverage') if isinstance(bound_body, Mapping) else None
+    ids = ([r.get('outcome_id') if isinstance(r, Mapping) else None for r in rows]
+           if isinstance(rows, list) else list(coverage))
+
+    def field(match):
+        index, tail = int(match[1]), match[2]
+        if index >= len(ids) or not isinstance(ids[index], str):
+            return match[0]
+        base = 'outcome_coverage.' + ids[index]
+        if re.match(r'\.(repair_supported|preserve_required|unresolved)\b', tail):
+            return base + '.disposition'
+        if re.match(r'\.preserve_current_satisfaction(\[\d+\])?\.evidence_refs', tail):
+            return base + '.preservation_evidence_refs'
+        if re.match(r'\.preserve_current_satisfaction', tail):
+            return base + '.preservation_status'
+        return base
+    text = _COVERAGE_PATH.sub(field, text)
+    return text.replace(
+        'Remove only those downgraded IDs from outcome_coverage.repair_supported; keep other source-backed '
+        'supported violations and their relations.',
+        'For each affected outcome keep disposition=REPAIR_SUPPORTED when another SUPPORTED violation still links '
+        'to it through its ExpectedRelation; change that outcome\'s disposition only when none remains. Keep the '
+        'other valid causes and their relations.')
+
+
+class DiagnosisResponseError(ValueError):
+    """A parse/bind/validation failure that keeps the model's own object for feedback."""
+
+    def __init__(self, cause: Exception, model_body: Mapping[str, Any], bound_body: Mapping[str, Any] | None):
+        super().__init__(str(cause))
+        self.cause, self.model_body, self.bound_body = cause, model_body, bound_body
+        for name in ('code', 'path', 'issues'):
+            if hasattr(cause, name):
+                setattr(self, name, getattr(cause, name))
+
+
+def _diagnosis_from_response(content, method_input, context, requirement, candidate_set):
+    """One parse -> bind -> validate entry for initial, extension and correction responses.
+
+    The parsed model object is never modified; binding works on its own copy,
+    so correction feedback can be phrased against what the model wrote.
+    """
+    model_body: Mapping[str, Any] = {}
+    bound: Mapping[str, Any] | None = None
+    try:
+        model_body = parse_diagnosis_response(content)
+        bound, binding = _bind_diagnosis_envelope(model_body, method_input, context, requirement, candidate_set)
+        diagnosis = validate_diagnosis(bound, method_input, context, candidate_set)
+    except (ValueError, ContractError) as exc:
+        raise DiagnosisResponseError(exc, model_body if isinstance(model_body, Mapping) else {}, bound) from exc
+    return model_body, bound, binding, diagnosis
+
+
+def _diagnosis_feedback(error: Exception, *, model_fields: bool) -> str:
+    model_body = getattr(error, 'model_body', {})
+    cause = getattr(error, 'cause', error)
+    if not model_fields:
+        # Historical contract: feedback was computed on the bound body.
+        bound = getattr(error, 'bound_body', None)
+        return _format_validation_feedback(cause, bound if isinstance(bound, Mapping) else model_body)
+    return _model_field_feedback(_format_validation_feedback(cause, model_body), model_body,
+                                 getattr(error, 'bound_body', None))
+
+
 def _bind_diagnosis_envelope(payload: Mapping[str, Any], method_input: MethodInput,
                              context: RunContext, requirement: Mapping[str, Any],
                              candidate_set: CandidateSet
                              ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Bind runner-owned execution identity, RequirementSpec and evidence outside model output."""
+    from copy import deepcopy
+    # Binding writes nested runner-owned keys (e.g. stable_obligation_key);
+    # never let that reach the caller's parsed model object.
+    payload = deepcopy(payload)
     expected = {"schema_version": "ce.diagnosis_packet.v1_1", "run_id": context.run_id,
                 "snapshot_id": context.snapshot_id, "input_digest": method_input.input_digest,
                 "requirement_spec": dict(requirement)}
@@ -812,7 +895,7 @@ def _front_failure_projection(trace: RunTrace, journal=None, dispatch_start: int
 
 
 
-def required_source_prerequisites(candidate_set, *, helper_support=(), establishment_required=False):
+def required_source_prerequisites(candidate_set, *, helper_support=(), establishment_required=False, limit=12):
     """One producer/consumer projection of current, already-validated source roles.
 
     The Ready boundary independently recomputes these entries rather than
@@ -886,10 +969,11 @@ def required_source_prerequisites(candidate_set, *, helper_support=(), establish
         rows=combined
         for row in rows:
             row['establishment_required'] = True
-    if len(rows)>12:
-        raise BudgetExceeded('Planning prerequisite review exceeds the existing 12-record contract; '
-            f'{len(rows)} > 12 records; no required contract was silently dropped',
-            details={'dimension': 'prerequisite_records', 'actual': len(rows), 'limit': 12})
+    # Source context v2 passes limit=None: every real prerequisite is reviewed.
+    if limit is not None and len(rows)>limit:
+        raise BudgetExceeded(f'Planning prerequisite review exceeds the existing {limit}-record contract; '
+            f'{len(rows)} > {limit} records; no required contract was silently dropped',
+            details={'dimension': 'prerequisite_records', 'actual': len(rows), 'limit': limit})
     return rows
 
 
@@ -1221,19 +1305,24 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             # Correction/recovery stage names may differ; the request dialect
             # determines which selected material the actual builder adopts.
             planning = request.prompt_version.startswith('changeset.')
+            # The locator is an explicit consumer: it receives the original
+            # task and its own tool results, not the diagnosis material view.
+            locating = request.prompt_version.startswith('locator.')
             selected_public = tuple(record for record in run_input.public_evidence
                 if record.get('kind') == 'PUBLIC_OBSERVATION')
-            selected_evidence = (selected_public if planning else
+            selected_evidence = (() if locating else selected_public if planning else
                 tuple(build_evidence_catalog(run_input, candidate_set, snapshot_id, source_context=draft_sources)))
             semantic = delivery_context(parsed, consumer=stage, snapshot_id=snapshot_id,
-                diagnosis=diagnosis_wire, changeset=changeset_payload, feedback=execution_feedback,
+                diagnosis=None if locating else diagnosis_wire,
+                changeset=None if locating else changeset_payload, feedback=execution_feedback,
                 necessary_support=([{**r, 'delivery_required':True} for r in source_context_records(draft_sources,kind='SOURCE_SPAN')]
                                    if planning and draft_sources is not None else ()),
-                prerequisites=(required_source_prerequisites(candidate_set,helper_support=planning_helpers,establishment_required=True)
+                prerequisites=(required_source_prerequisites(candidate_set,helper_support=planning_helpers,establishment_required=True,
+                                   limit=None if v2_contract else 12)
                                if planning and candidate_set is not None else ()),
                 evidence=selected_evidence, mandatory_refs=selected_evidence,
-                declared_artifacts=run_input.declared_artifacts,
-                feedback_required=execution_feedback is not None and not planning,
+                declared_artifacts=() if locating else run_input.declared_artifacts,
+                feedback_required=execution_feedback is not None and not planning and not locating,
                 source_requirements=planning)
             with monitor.scope(semantic) if monitor is not None else nullcontext():
                 quote = request_quote(request)
@@ -1363,7 +1452,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
     def planning_source_draft(fitted, method, current_context, *, source_reservations=()):
         draft = source_context_for_candidates(active_sources, method, fitted, current_context.snapshot_id)
         if source_reservations:
-            draft = source_context_offer(draft, source_reservations, producer='extension')
+            draft = source_context_offer(draft, source_reservations, producer=reservation_producer())
         helpers = []; audit = []
         helper_bytes = max(0,min(int(config.get('max_execution_support_bytes',24000)),24000))
         if config.get('helper_preconditions_enabled',False):
@@ -1372,7 +1461,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 max_bytes=helper_bytes,source_context=active_sources)
         draft = source_context_offer(draft,helpers,producer='planning_helper')
         prerequisites = required_source_prerequisites(fitted,helper_support=helpers,
-            establishment_required=True)
+            establishment_required=True, limit=None if v2_contract else 12)
         support = [{**r,'delivery_required':True} for r in source_context_records(draft,kind='SOURCE_SPAN')
                    if r['snapshot_id'] == current_context.snapshot_id]
         dependency_bytes = sum(len(r['excerpt'].encode()) for r in
@@ -1416,7 +1505,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 return fitted,None,0
             draft_sources = source_context_for_candidates(active_sources, method, fitted, context.snapshot_id)
             if source_reservations:
-                draft_sources = source_context_offer(draft_sources, source_reservations, producer='extension')
+                draft_sources = source_context_offer(draft_sources, source_reservations, producer=reservation_producer())
             draft_context = replace(context, retrieval_config={**context.retrieval_config,
                 'source_context':draft_sources})
             request = build_diagnosis_request(method, requirement, fitted, draft_context,
@@ -1534,6 +1623,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
     def continue_with_evidence(diagnosis, gaps, *, trigger, planning_context=None):
         """One acquisition/fit/reassessment route, sharing the existing owners."""
         nonlocal candidate_set, requirement, diagnosis_wire, format_retries_used, changeset_payload
+        if v2_contract:
+            # Source context v2: the shared locator answers every evidence request.
+            return diagnose_v2(diagnosis, gaps, trigger=trigger, planning_context=planning_context)
         reassessed = False
 
         def stop(status, message, *, validation_status=None):
@@ -1671,11 +1763,9 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 response = recover_truncated_planning(response, request, stage)
                 if _output_was_truncated(response):
                     return diagnosis, stop('BUDGET_EXHAUSTED', 'Evidence rediagnosis output reached its existing generation limit'), False
-                body = {}
                 try:
-                    body = parse_diagnosis_response(response.content)
-                    body, binding = _bind_diagnosis_envelope(body, run_input, context, requirement, candidate_set)
-                    diagnosis = validate_diagnosis(body, run_input, context, candidate_set)
+                    _, _, binding, diagnosis = _diagnosis_from_response(
+                        response.content, run_input, context, requirement, candidate_set)
                     products['diagnosis'] = response.produced(diagnosis.raw)
                     diagnosis_wire = diagnosis.raw
                     reassessed = True
@@ -1688,11 +1778,13 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 except (ValueError, ContractError) as exc:
                     if not policy.available('format_correction', correction_scope):
                         return diagnosis, stop('INVALID_OUTPUT', str(exc), validation_status='FAIL'), False
-                    validation_feedback = _format_validation_feedback(exc, body if isinstance(body, Mapping) else {})
+                    v2_feedback = active_sources.get('version') == 2
+                    validation_feedback = _diagnosis_feedback(exc, model_fields=v2_feedback)
                     current_annotations()['validation_error'] = str(exc)
                     current_annotations()['validation_feedback'] = validation_feedback
                     request = replace(request, messages=_append_diagnosis_retry_turn(
-                        request.messages, response.content, validation_feedback), metadata={**request.metadata,
+                        request.messages, response.content, validation_feedback, bounded=not v2_feedback),
+                        metadata={**request.metadata,
                         'format_retry_index': policy.used('format_correction', correction_scope) + 1,
                         'correction_allowance': ('FRESH_EVIDENCE_CONTEXT_ONCE' if per_evidence_context_correction else 'SHARED_FORMAT_CORRECTION')})
                     request = planning_generation_mode(request)
@@ -1704,6 +1796,179 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     stage = 'DIAGNOSIS_FORMAT_RETRY'
             gaps = list(diagnosis.evidence_gaps) if diagnosis.status == 'EVIDENCE_GAP' else []
         return diagnosis, None, False
+
+    # ----------------------------------------------------------------------
+    # Source context v2 (front-half redesign): one read-only locator replaces
+    # initial candidate selection and every evidence extension. Its calls use
+    # the same quote/admission/record/dispatch path as other front requests.
+    # ----------------------------------------------------------------------
+    v2_contract = source_context_contract(config) == 2
+    locator_state = {'navigator': None, 'delivered': {}, 'records': [], 'units': [], 'sessions': 0,
+                     'corrections': None}
+
+    def reservation_producer():
+        return 'locator' if active_sources is not None and active_sources.get('version') == 2 else 'extension'
+
+    def locator_navigator():
+        if locator_state['navigator'] is None:
+            from contractedge.source.navigation import SourceNavigator
+            dependencies = None
+            try:
+                from contractedge.source.dependency import PublicGoDependencies
+                dependencies = PublicGoDependencies(snapshot, parsed.case_id,
+                                                    config.get('public_execution_capabilities') or {})
+            except (OSError, ValueError, KeyError, TypeError, UnicodeError):
+                dependencies = None   # no pinned dependency authority for this task
+            locator_state['navigator'] = SourceNavigator(snapshot, dependencies=dependencies)
+        return locator_state['navigator']
+
+    def locator_complete(request):
+        admit_front_request(request)
+        count = request_tokens(request)
+        response = complete_recorded(request, 'LOCATOR')
+        record_call({'stage': 'LOCATOR', 'prompt_version': request.prompt_version,
+                     'request_metadata': dict(request.metadata), 'response_metadata': dict(response.metadata),
+                     'response_content': response.content, 'elapsed_seconds': time.monotonic() - started,
+                     'prompt_tokens_reserved': count, 'output_tokens_reserved': request.max_output_tokens})
+        return response
+
+    def locator_task():
+        observations = [{k: item.get(k) for k in ('id', 'kind', 'excerpt', 'locator')}
+                        for item in run_input.public_evidence if item.get('kind') == 'PUBLIC_OBSERVATION']
+        return {'requirement_text': parsed.requirement_text,
+                'public_observable_text': parsed.public_observable_text,
+                'public_observations': observations,
+                'task_scope_hints': [dict(item) for item in parsed.scope_hints],
+                'declared_artifact_paths': [a['path'] for a in parsed.declared_artifacts]}
+
+    def run_locator_round(questions, trigger):
+        """One locator session; returns newly delivered canonical records."""
+        from contractedge.retrieval.locator import LocatorCorrections, LocatorLimits, run_locator
+        if locator_state['corrections'] is None:
+            locator_state['corrections'] = LocatorCorrections(limit=max(0, int(config.get('locator_format_corrections', 2))))
+        locator_state['sessions'] += 1
+        outcome = run_locator(locator_navigator(), questions=list(questions), task=locator_task(),
+            complete=locator_complete, truncated=_output_was_truncated,
+            model=str(context.model_config.get('model', 'UNCONFIGURED')) if context is not None
+                  else str((config.get('model') or {}).get('model', 'UNCONFIGURED')),
+            current_snapshot=snapshot.snapshot_id,
+            limits=LocatorLimits(max_steps=max(1, int(config.get('locator_max_steps', 24))),
+                                 no_progress_steps=max(1, int(config.get('locator_no_progress_steps', 3))),
+                                 max_output_tokens=max(256, int(config.get('locator_max_output_tokens', 2048)))),
+            corrections=locator_state['corrections'], prior_delivered=locator_state['delivered'],
+            session_id=f"{attempt_id}.locator-{locator_state['sessions']}")
+        navigator = locator_state['navigator']
+        new = []
+        for handle, record in zip(outcome.delivered_handles, outcome.delivered_records):
+            locator_state['delivered'][handle] = navigator.read(handle)
+            locator_state['records'].append(record)
+            new.append(record)
+        retrieval_rounds.append({'round_id': len(retrieval_rounds) + 1, 'trigger': trigger,
+                                 'extension_used': bool(new), 'locator_session': outcome.record,
+                                 'selected_ids': [r['id'] for r in new]})
+        return new
+
+    def locator_candidate_set():
+        """Deterministic CandidateSet projection of adopted material; no selection or cut."""
+        units = list(locator_state['units'])
+        known = {u['id'] for u in units}
+        for record in locator_state['records']:
+            if record['kind'] != 'SOURCE_SPAN' or record['id'][4:] in known:
+                continue
+            locator = record['locator']
+            units.append({'id': record['id'][4:], 'path': locator['path'], 'snapshot_id': record['snapshot_id'],
+                          'locator': {k: locator[k] for k in ('start_line', 'end_line', 'start_char', 'end_char')},
+                          'text': record['excerpt'], 'content_digest': record['content_digest'], 'truncated': False,
+                          'kind': 'FUNCTION_OR_TYPE' if locator.get('complete_declaration') else 'SOURCE_TEXT',
+                          'parser_kind': locator.get('parser_kind'), 'symbol': locator.get('symbol'),
+                          'declared_symbols': [locator['symbol']] if locator.get('symbol') else [],
+                          'references': [], 'canonical_record': record})
+            known.add(record['id'][4:])
+        locator_state['units'] = units
+        return CandidateSet(candidates=tuple(units), selected_ids=tuple(u['id'] for u in units), dropped_ids=(),
+            ranking_features={}, edges=(), context_tokens=sum(int(token_counter(str(u.get('text', ''))))
+                                                              for u in units),
+            max_context_tokens=int(config['max_context_tokens']), top_n=len(units),
+            ranking_requirement=parsed.requirement_text, ranking_observable=parsed.public_observable_text)
+
+    def locator_dependencies():
+        return [r for r in locator_state['records'] if r['kind'] == 'PUBLIC_DEPENDENCY_DECLARATION']
+
+    def diagnose_v2(diagnosis, gaps, *, trigger, planning_context=None):
+        """Diagnosis <-> locator loop under one task budget; stops when a lookup adds nothing."""
+        nonlocal candidate_set, requirement, diagnosis_wire, format_retries_used, changeset_payload
+        from contractedge.diagnosis.interaction import InteractionError, parse_diagnosis_interaction
+        reassessed = False
+
+        def stop(status, message, *, validation_status=None):
+            return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id, status,
+                requirement, scope, candidate_set, diagnosis.raw if diagnosis is not None else None,
+                None if reassessed else planning_context, tuple(front_calls()), (message,),
+                validation_status or structural_validation, semantic_review, tuple(retrieval_rounds),
+                run_context_wire)
+
+        pending = list(gaps)
+        while True:
+            if pending:
+                if not run_locator_round(pending, trigger):
+                    return diagnosis, stop('EVIDENCE_GAP', 'Locator found no new material for: ' + '; '.join(
+                        str(g.get('summary', ''))[:200] for g in pending)), not reassessed
+                candidate_set = locator_candidate_set()
+            questions, pending = pending, []
+            next_requirement = (requirement_for_rediagnosis(requirement, diagnosis.raw, snapshot.snapshot_id,
+                                                            parsed.input_digest) if diagnosis is not None else requirement)
+            fitted, request, count = fit_diagnosis(candidate_set, run_input, next_requirement, context,
+                prior=diagnosis.raw if diagnosis is not None else None, extension_gaps=questions,
+                planning_context=planning_context, source_reservations=locator_dependencies())
+            if request is None:
+                candidate_set = fitted
+                return diagnosis, stop('BUDGET_EXHAUSTED', admission_error(fitted)), False
+            admit_front_request(request)
+            candidate_set, requirement = fitted, next_requirement
+            stage = 'DIAGNOSIS' if trigger == 'INITIAL' and diagnosis is None and not questions else 'DIAGNOSIS_LOOKUP_REASSESSMENT'
+            response = complete_recorded(request, stage)
+            while True:
+                record_call({'stage': stage, 'prompt_version': request.prompt_version, 'trigger': trigger,
+                             'request_metadata': dict(request.metadata), 'response_metadata': dict(response.metadata),
+                             'response_content': response.content, 'elapsed_seconds': time.monotonic() - started,
+                             'prompt_tokens_reserved': request_tokens(request),
+                             'output_tokens_reserved': request.max_output_tokens})
+                response = recover_truncated_planning(response, request, stage)
+                if _output_was_truncated(response):
+                    return diagnosis, stop('BUDGET_EXHAUSTED', 'Diagnosis output reached its generation limit'), False
+                try:
+                    reply = parse_diagnosis_interaction(response.content, request.metadata['diagnosis_body_schema'])
+                    if reply.kind == 'LOOKUP':
+                        pending, trigger = [dict(g) for g in reply.evidence_gaps], 'DIAGNOSIS_LOOKUP'
+                        current_annotations()['diagnosis_lookup'] = list(pending)
+                        break
+                    _, _, binding, accepted = _diagnosis_from_response(
+                        reply.diagnosis_content, run_input, context, requirement, candidate_set)
+                except (InteractionError, ValueError, ContractError) as exc:
+                    if format_retries_used >= max_format_retries:
+                        return diagnosis, stop('INVALID_OUTPUT', str(exc), validation_status='FAIL'), False
+                    feedback = _diagnosis_feedback(exc, model_fields=True)
+                    current_annotations()['validation_error'] = str(exc)
+                    current_annotations()['validation_feedback'] = feedback
+                    request = replace(request, messages=_append_diagnosis_retry_turn(
+                        request.messages, response.content, feedback, bounded=False),
+                        metadata={**request.metadata, 'format_retry_index': format_retries_used + 1})
+                    request = planning_generation_mode(request)
+                    admit_front_request(request)
+                    response = complete_recorded(request, 'DIAGNOSIS_FORMAT_RETRY',
+                        correction_scopes=(('format_correction', 'diagnosis:' + attempt_id),))
+                    format_retries_used = policy.used('format_correction', 'diagnosis:' + attempt_id)
+                    stage = 'DIAGNOSIS_FORMAT_RETRY'
+                    continue
+                products['diagnosis'] = response.produced(accepted.raw)
+                diagnosis_wire = accepted.raw
+                current_annotations()['runner_binding'] = binding
+                annotate_gap_delivery(accepted.raw)
+                diagnosis, reassessed, changeset_payload = accepted, True, None
+                if accepted.status == 'EVIDENCE_GAP' and accepted.evidence_gaps:
+                    pending, trigger = [dict(g) for g in accepted.evidence_gaps], 'DIAGNOSIS_EVIDENCE_GAP'
+                    break
+                return diagnosis, None, False
 
     try:
         consumer_capabilities = resolve_execution_capabilities(config.get('public_execution_capabilities'),
@@ -1737,68 +2002,6 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
         if requirement["status"] != "READY":
             return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id, "UNDER_SPECIFIED",
                             requirement, None, None, None, None, tuple(front_calls()), ("public requirement is under-specified",))
-        effective_hints = [dict(item) for item in parsed.scope_hints]
-        for artifact in parsed.declared_artifacts:
-            origin = f"declared_artifacts[{artifact['id']}]"
-            try:
-                documents = list(yaml.safe_load_all(str(artifact["content"])))
-            except yaml.YAMLError:
-                documents = []
-            for document_index, document in enumerate(documents):
-                if not isinstance(document, Mapping):
-                    continue
-                metadata = document.get("metadata")
-                if isinstance(metadata, Mapping) and isinstance(metadata.get("name"), str):
-                    value = metadata["name"]
-                    effective_hints.append({"kind": "concept", "value": value, "raw_text": value,
-                                            "origin_ref": f"{origin}.document[{document_index}].metadata.name"})
-                spec = document.get("spec")
-                template = spec.get("template") if isinstance(spec, Mapping) else None
-                pod_spec = template.get("spec") if isinstance(template, Mapping) else None
-                containers = pod_spec.get("containers", []) if isinstance(pod_spec, Mapping) else []
-                if isinstance(containers, list):
-                    for container_index, container in enumerate(containers):
-                        if isinstance(container, Mapping):
-                            for key in ("name", "image"):
-                                value = container.get(key)
-                                if isinstance(value, str) and value:
-                                    effective_hints.append({"kind": "concept", "value": value,
-                                        "raw_text": value,
-                                        "origin_ref": f"{origin}.document[{document_index}].containers[{container_index}].{key}"})
-        # Observation-limit prose remains capability context. Only registered
-        # API descriptors and task/configuration hints guide source discovery.
-        from contractedge.source.entrypoints import probe_entrypoint_hints
-        api_hints, focused_paths, entrypoint_audit = probe_entrypoint_hints(snapshot,
-            [*((config.get('public_execution_capabilities') or {}).get('method_behavior_probes',[])),
-             *((config.get('public_execution_capabilities') or {}).get('registered_public_observation_adapters',[]))])
-        if config.get('configuration_consumer_lookup_enabled'):
-            from contractedge.source.entrypoints import configuration_consumer_hints
-            seeds=[h['value'] for h in effective_hints if h.get('kind')=='path']
-            config_hints, config_paths, config_audit = configuration_consumer_hints(snapshot,seeds,parsed.requirement_text)
-            api_hints.extend(config_hints);focused_paths.extend(p for p in config_paths if p not in focused_paths)
-            entrypoint_audit['configuration_consumers']=config_audit
-        effective_hints.extend(api_hints)
-        known_terms = {str(item.get("value", "")).casefold() for item in effective_hints}
-        if parsed.declared_artifacts:
-            stopwords = {"when", "while", "after", "before", "must", "should", "that", "this",
-                         "running", "process", "valid", "updated", "declared", "configuration",
-                         "deployment", "configmap", "kubernetes", "container"}
-            from contractedge.retrieval.candidates import _terms
-            terms = []
-            for token in re.findall(r"\b[A-Z][A-Za-z0-9_-]{2,}\b", parsed.requirement_text):
-                if (_terms(token) and token.casefold() not in stopwords
-                        and token.casefold() not in known_terms and token not in terms):
-                    terms.append(token)
-            for token in terms[:8]:
-                effective_hints.append({"kind": "concept", "value": token, "raw_text": token,
-                                        "origin_ref": "derived_from_public_requirement"})
-        scope = resolve_scope(
-            source_root, snapshot, effective_hints,
-            max_search_files=max(0, int(config.get("max_scope_search_files", DEFAULT_SCOPE_SEARCH_FILES))),
-            max_search_bytes=max(0, int(config.get("max_scope_search_bytes", DEFAULT_SCOPE_SEARCH_BYTES))),
-            max_search_file_bytes=max(0, int(config.get("max_scope_search_file_bytes", DEFAULT_SCOPE_SEARCH_FILE_BYTES))),
-            max_matches_per_hint=max(0, int(config.get("max_scope_matches_per_hint", DEFAULT_SCOPE_MATCHES_PER_HINT))),
-        )
         original_evidence = parsed.public_evidence if execution_feedback is None else tuple(
             item for item in parsed.public_evidence if item['kind'] == 'REQUIREMENT_TEXT')
         for item in public_observations:
@@ -1808,60 +2011,137 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
         rebased_evidence = tuple({**dict(item), "snapshot_id": snapshot.snapshot_id}
                                  for item in original_evidence) + tuple(dict(item) for item in public_observations)
         run_input = replace(parsed, public_evidence=rebased_evidence)
-        exact_paths = {path for audit in scope.search_audit if audit.get('kind') == 'path'
-                       and not str(audit.get('origin_ref','')).startswith(('METHOD_PROBE_PUBLIC_API:','METHOD_PUBLIC_PRODUCER_API:','METHOD_PUBLIC_CONFIG_CONSUMER:'))
-                       and audit.get('match_mode') in {'PATH_EXACT', 'PATH_DESCRIPTION_TOKEN', 'PATH_UNIQUE_SUFFIX'}
-                       for path in audit.get('matched_paths', [])}
-        focused_paths.extend(p for p in sorted(exact_paths) if p not in focused_paths)
-        declaration_index=[]
-        units = extract_units(snapshot, {"seed_paths": scope.seed_paths},
-                              query=parsed.requirement_text,
-                              max_units=max(1, int(config.get("max_units", 80)) - len(parsed.declared_artifacts) * 4),
-                              max_lines=int(config.get("max_lines_per_unit", 80)),
-                              max_extension_files=int(config.get("max_extension_files", 24)),
-                              focused_paths=focused_paths,declaration_index=declaration_index)
-        input_units = extract_declared_artifact_units(parsed.declared_artifacts, snapshot.snapshot_id,
-                                                      max_units=int(config.get("max_declared_units", 40)),
-                                                      max_lines=int(config.get("max_lines_per_unit", 80)))
-        for unit in units:
-            if unit['path'] in exact_paths:
-                unit['anchor_priority'] = max(int(unit.get('anchor_priority', 0)), 2)
-        seen_inputs = set()
-        for unit in input_units:
-            if unit['artifact_id'] not in seen_inputs:
-                unit['anchor_priority'] = 1
-                seen_inputs.add(unit['artifact_id'])
-        units.extend(input_units)
-        units = materialize_complete_units(snapshot, units, artifacts=parsed.declared_artifacts)
-        scope = replace(scope, extension_paths=tuple(sorted({str(unit["path"]) for unit in units
-                                                             if unit.get("scope_extension") == "DIRECT_REFERENCE"})))
-        candidate_set = build_candidate_set(
-            parsed.requirement_text, parsed.public_observable_text, units, build_direct_reference_edges(units),
-            top_n=int(config.get("top_n", 12)),
-            max_context_tokens=int(config["max_context_tokens"]), token_counter=token_counter,
-        )
-        if config.get('gap_role_delivery_enabled'):
-            from contractedge.execution.helper_context import source_lifecycle_units, source_exception_units
-            lifecycle_units, lifecycle_audit = source_lifecycle_units(snapshot, candidate_set.candidates)
-            entrypoint_audit['lifecycle_source_lookup'] = lifecycle_audit
-            exception_units, exception_audit = source_exception_units(snapshot, candidate_set.candidates,
-                run_input.public_evidence, max_records=max(0, 6-len(lifecycle_units)),
-                max_files=max(0, 4-len({u['path'] for u in lifecycle_units})))
-            entrypoint_audit['exception_source_lookup'] = exception_audit
-            necessary_units = materialize_complete_units(snapshot, [*lifecycle_units, *exception_units])
-            if necessary_units:
-                candidate_set = build_candidate_set(parsed.requirement_text, parsed.public_observable_text,
-                    [*units, *necessary_units], build_direct_reference_edges([*units, *necessary_units]),
-                    top_n=int(config.get('top_n', 12)), max_context_tokens=int(config['max_context_tokens']),
-                    token_counter=token_counter)
-                candidate_set = replace(candidate_set,
-                    required_endpoint_ids=tuple(u['id'] for u in necessary_units))
-        retrieval_rounds[:] = [{
-            "round_id": 1, "seed_paths": list(scope.seed_paths),
-            "probe_entrypoint_resolution": entrypoint_audit,
-            "selected_ids": list(candidate_set.selected_ids), "dropped_ids": list(candidate_set.dropped_ids),
-            "scope_extension_paths": list(scope.extension_paths), "extension_used": False,
-        }]
+        if v2_contract:
+            # Only the task's own path hints name a scope; nothing is ranked out.
+            scope = ScopeResolution(seed_paths=tuple(dict.fromkeys(
+                str(h.get('value')) for h in parsed.scope_hints
+                if h.get('kind') == 'path' and str(h.get('value')) in snapshot.file_digests)),
+                unresolved=(), matched_by_hint={})
+            units, declaration_index, entrypoint_audit = [], [], {}
+            # Declared inputs are immutable public material, parsed whole.
+            locator_state['units'] = list(extract_declared_artifact_units(parsed.declared_artifacts,
+                snapshot.snapshot_id, max_units=1 << 30, max_lines=1 << 30, max_chars=1 << 62))
+            run_locator_round([{'id': 'L0', 'summary': 'Locate the production source needed to diagnose '
+                                'the requirement: where it is implemented, consumed or should be enforced.'}],
+                              'INITIAL')
+            candidate_set = locator_candidate_set()
+        else:
+            effective_hints = [dict(item) for item in parsed.scope_hints]
+            for artifact in parsed.declared_artifacts:
+                origin = f"declared_artifacts[{artifact['id']}]"
+                try:
+                    documents = list(yaml.safe_load_all(str(artifact["content"])))
+                except yaml.YAMLError:
+                    documents = []
+                for document_index, document in enumerate(documents):
+                    if not isinstance(document, Mapping):
+                        continue
+                    metadata = document.get("metadata")
+                    if isinstance(metadata, Mapping) and isinstance(metadata.get("name"), str):
+                        value = metadata["name"]
+                        effective_hints.append({"kind": "concept", "value": value, "raw_text": value,
+                                                "origin_ref": f"{origin}.document[{document_index}].metadata.name"})
+                    spec = document.get("spec")
+                    template = spec.get("template") if isinstance(spec, Mapping) else None
+                    pod_spec = template.get("spec") if isinstance(template, Mapping) else None
+                    containers = pod_spec.get("containers", []) if isinstance(pod_spec, Mapping) else []
+                    if isinstance(containers, list):
+                        for container_index, container in enumerate(containers):
+                            if isinstance(container, Mapping):
+                                for key in ("name", "image"):
+                                    value = container.get(key)
+                                    if isinstance(value, str) and value:
+                                        effective_hints.append({"kind": "concept", "value": value,
+                                            "raw_text": value,
+                                            "origin_ref": f"{origin}.document[{document_index}].containers[{container_index}].{key}"})
+            # Observation-limit prose remains capability context. Only registered
+            # API descriptors and task/configuration hints guide source discovery.
+            from contractedge.source.entrypoints import probe_entrypoint_hints
+            api_hints, focused_paths, entrypoint_audit = probe_entrypoint_hints(snapshot,
+                [*((config.get('public_execution_capabilities') or {}).get('method_behavior_probes',[])),
+                 *((config.get('public_execution_capabilities') or {}).get('registered_public_observation_adapters',[]))])
+            if config.get('configuration_consumer_lookup_enabled'):
+                from contractedge.source.entrypoints import configuration_consumer_hints
+                seeds=[h['value'] for h in effective_hints if h.get('kind')=='path']
+                config_hints, config_paths, config_audit = configuration_consumer_hints(snapshot,seeds,parsed.requirement_text)
+                api_hints.extend(config_hints);focused_paths.extend(p for p in config_paths if p not in focused_paths)
+                entrypoint_audit['configuration_consumers']=config_audit
+            effective_hints.extend(api_hints)
+            known_terms = {str(item.get("value", "")).casefold() for item in effective_hints}
+            if parsed.declared_artifacts:
+                stopwords = {"when", "while", "after", "before", "must", "should", "that", "this",
+                             "running", "process", "valid", "updated", "declared", "configuration",
+                             "deployment", "configmap", "kubernetes", "container"}
+                from contractedge.retrieval.candidates import _terms
+                terms = []
+                for token in re.findall(r"\b[A-Z][A-Za-z0-9_-]{2,}\b", parsed.requirement_text):
+                    if (_terms(token) and token.casefold() not in stopwords
+                            and token.casefold() not in known_terms and token not in terms):
+                        terms.append(token)
+                for token in terms[:8]:
+                    effective_hints.append({"kind": "concept", "value": token, "raw_text": token,
+                                            "origin_ref": "derived_from_public_requirement"})
+            scope = resolve_scope(
+                source_root, snapshot, effective_hints,
+                max_search_files=max(0, int(config.get("max_scope_search_files", DEFAULT_SCOPE_SEARCH_FILES))),
+                max_search_bytes=max(0, int(config.get("max_scope_search_bytes", DEFAULT_SCOPE_SEARCH_BYTES))),
+                max_search_file_bytes=max(0, int(config.get("max_scope_search_file_bytes", DEFAULT_SCOPE_SEARCH_FILE_BYTES))),
+                max_matches_per_hint=max(0, int(config.get("max_scope_matches_per_hint", DEFAULT_SCOPE_MATCHES_PER_HINT))),
+            )
+            exact_paths = {path for audit in scope.search_audit if audit.get('kind') == 'path'
+                           and not str(audit.get('origin_ref','')).startswith(('METHOD_PROBE_PUBLIC_API:','METHOD_PUBLIC_PRODUCER_API:','METHOD_PUBLIC_CONFIG_CONSUMER:'))
+                           and audit.get('match_mode') in {'PATH_EXACT', 'PATH_DESCRIPTION_TOKEN', 'PATH_UNIQUE_SUFFIX'}
+                           for path in audit.get('matched_paths', [])}
+            focused_paths.extend(p for p in sorted(exact_paths) if p not in focused_paths)
+            declaration_index=[]
+            units = extract_units(snapshot, {"seed_paths": scope.seed_paths},
+                                  query=parsed.requirement_text,
+                                  max_units=max(1, int(config.get("max_units", 80)) - len(parsed.declared_artifacts) * 4),
+                                  max_lines=int(config.get("max_lines_per_unit", 80)),
+                                  max_extension_files=int(config.get("max_extension_files", 24)),
+                                  focused_paths=focused_paths,declaration_index=declaration_index)
+            input_units = extract_declared_artifact_units(parsed.declared_artifacts, snapshot.snapshot_id,
+                                                          max_units=int(config.get("max_declared_units", 40)),
+                                                          max_lines=int(config.get("max_lines_per_unit", 80)))
+            for unit in units:
+                if unit['path'] in exact_paths:
+                    unit['anchor_priority'] = max(int(unit.get('anchor_priority', 0)), 2)
+            seen_inputs = set()
+            for unit in input_units:
+                if unit['artifact_id'] not in seen_inputs:
+                    unit['anchor_priority'] = 1
+                    seen_inputs.add(unit['artifact_id'])
+            units.extend(input_units)
+            units = materialize_complete_units(snapshot, units, artifacts=parsed.declared_artifacts)
+            scope = replace(scope, extension_paths=tuple(sorted({str(unit["path"]) for unit in units
+                                                                 if unit.get("scope_extension") == "DIRECT_REFERENCE"})))
+            candidate_set = build_candidate_set(
+                parsed.requirement_text, parsed.public_observable_text, units, build_direct_reference_edges(units),
+                top_n=int(config.get("top_n", 12)),
+                max_context_tokens=int(config["max_context_tokens"]), token_counter=token_counter,
+            )
+            if config.get('gap_role_delivery_enabled'):
+                from contractedge.execution.helper_context import source_lifecycle_units, source_exception_units
+                lifecycle_units, lifecycle_audit = source_lifecycle_units(snapshot, candidate_set.candidates)
+                entrypoint_audit['lifecycle_source_lookup'] = lifecycle_audit
+                exception_units, exception_audit = source_exception_units(snapshot, candidate_set.candidates,
+                    run_input.public_evidence, max_records=max(0, 6-len(lifecycle_units)),
+                    max_files=max(0, 4-len({u['path'] for u in lifecycle_units})))
+                entrypoint_audit['exception_source_lookup'] = exception_audit
+                necessary_units = materialize_complete_units(snapshot, [*lifecycle_units, *exception_units])
+                if necessary_units:
+                    candidate_set = build_candidate_set(parsed.requirement_text, parsed.public_observable_text,
+                        [*units, *necessary_units], build_direct_reference_edges([*units, *necessary_units]),
+                        top_n=int(config.get('top_n', 12)), max_context_tokens=int(config['max_context_tokens']),
+                        token_counter=token_counter)
+                    candidate_set = replace(candidate_set,
+                        required_endpoint_ids=tuple(u['id'] for u in necessary_units))
+            retrieval_rounds[:] = [{
+                "round_id": 1, "seed_paths": list(scope.seed_paths),
+                "probe_entrypoint_resolution": entrypoint_audit,
+                "selected_ids": list(candidate_set.selected_ids), "dropped_ids": list(candidate_set.dropped_ids),
+                "scope_extension_paths": list(scope.extension_paths), "extension_used": False,
+            }]
         context = RunContext(run_id, parsed.case_id,
                              int(execution_feedback['round_id']) + 1 if execution_feedback else 0,
                              snapshot.snapshot_id,
@@ -1909,98 +2189,103 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
         if not candidate_set.selected_ids:
             return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id, "EVIDENCE_GAP",
                             requirement, scope, candidate_set, None, None, tuple(front_calls()),
-                            ("no source candidates resolved",), run_context=run_context_wire)
+                            ("locator delivered no source material" if v2_contract else "no source candidates resolved",), run_context=run_context_wire)
 
-        candidate_set, diagnosis_request, prompt_tokens = fit_diagnosis(
-            candidate_set, run_input, requirement, context)
-        failure=evidence_delivery_failure(candidate_set)
-        if failure is not None:return failure
-        if diagnosis_request is None:
-            return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
-                            "BUDGET_EXHAUSTED", requirement, scope, candidate_set, None, None,
-                            tuple(front_calls()), (admission_error(candidate_set),),
-                            retrieval_rounds=tuple(retrieval_rounds), run_context=run_context_wire)
-        admit_front_request(diagnosis_request)
-        diagnosis_response = complete_recorded(diagnosis_request, "DIAGNOSIS")
-        record_call({"stage": "DIAGNOSIS", "prompt_version": diagnosis_request.prompt_version,
-                      "request_metadata": dict(diagnosis_request.metadata),
-                      "response_metadata": dict(diagnosis_response.metadata),
-                      "response_content": diagnosis_response.content,
-                      "elapsed_seconds": time.monotonic() - started,
-                      "prompt_tokens_reserved": prompt_tokens,
-                      "output_tokens_reserved": diagnosis_request.max_output_tokens})
-        diagnosis_response = recover_truncated_planning(diagnosis_response, diagnosis_request, 'DIAGNOSIS')
-        if _output_was_truncated(diagnosis_response):
-            return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
-                            "BUDGET_EXHAUSTED", requirement, scope, candidate_set, None, None, tuple(front_calls()),
-                            ("Diagnosis output reached the configured generation token limit",),
-                            run_context=run_context_wire)
-        diagnosis_payload: Mapping[str, Any] = {}
-        diagnosis_retry_messages = tuple(diagnosis_request.messages)
-        try:
-            diagnosis_payload = parse_diagnosis_response(diagnosis_response.content)
-            diagnosis_payload, runner_binding = _bind_diagnosis_envelope(
-                diagnosis_payload, run_input, context, requirement, candidate_set)
-            diagnosis = validate_diagnosis(diagnosis_payload, run_input, context, candidate_set)
-            products['diagnosis'] = diagnosis_response.produced(diagnosis.raw)
-            diagnosis_wire = diagnosis.raw
-            current_annotations()["runner_binding"] = runner_binding
-            annotate_gap_delivery(diagnosis.raw)
-        except (ValueError, ContractError) as exc:
-            validation_error: Exception = exc
-            while True:
-                if format_retries_used >= max_format_retries:
-                    return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
-                                    "INVALID_OUTPUT", requirement, scope, candidate_set, None, None,
-                                    tuple(front_calls()), (str(validation_error),), "FAIL",
-                                    run_context=run_context_wire)
-                validation_feedback = _format_validation_feedback(validation_error, diagnosis_payload)
-                current_annotations()["validation_error"] = str(validation_error)
-                current_annotations()["validation_feedback"] = validation_feedback
-                diagnosis_retry_messages = _append_diagnosis_retry_turn(
-                    diagnosis_retry_messages, diagnosis_response.content, validation_feedback)
-                feedback = replace(diagnosis_request, messages=diagnosis_retry_messages,
-                    metadata={**dict(diagnosis_request.metadata), "format_retry_index": format_retries_used + 1})
-                feedback = planning_generation_mode(feedback)
-                feedback_tokens = request_tokens(feedback)
-                admit_front_request(feedback)
-                diagnosis_response = complete_recorded(feedback, "DIAGNOSIS_FORMAT_RETRY",
-                    correction_scopes=(("format_correction", "diagnosis:" + attempt_id),))
-                format_retries_used = policy.used("format_correction", "diagnosis:" + attempt_id)
-                record_call({"stage": "DIAGNOSIS_FORMAT_RETRY", "prompt_version": feedback.prompt_version,
-                              "request_metadata": dict(feedback.metadata),
-                              "response_metadata": dict(diagnosis_response.metadata),
-                              "response_content": diagnosis_response.content,
-                              "elapsed_seconds": time.monotonic() - started,
-                              "prompt_tokens_reserved": feedback_tokens,
-                              "output_tokens_reserved": feedback.max_output_tokens,
-                              "format_retry_index": format_retries_used})
-                diagnosis_response = recover_truncated_planning(diagnosis_response, feedback, 'DIAGNOSIS_FORMAT_RETRY')
-                if _output_was_truncated(diagnosis_response):
-                    return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
-                                    "BUDGET_EXHAUSTED", requirement, scope, candidate_set, None, None,
-                                    tuple(front_calls()), ("Diagnosis format-retry output reached its token limit",),
-                                    "FAIL", run_context=run_context_wire)
-                try:
-                    diagnosis_payload = parse_diagnosis_response(diagnosis_response.content)
-                    diagnosis_payload, runner_binding = _bind_diagnosis_envelope(
-                        diagnosis_payload, run_input, context, requirement, candidate_set)
-                    diagnosis = validate_diagnosis(diagnosis_payload, run_input, context, candidate_set)
-                    products['diagnosis'] = diagnosis_response.produced(diagnosis.raw)
-                    diagnosis_wire = diagnosis.raw
-                    current_annotations()["runner_binding"] = runner_binding
-                    annotate_gap_delivery(diagnosis.raw)
-                    break
-                except (ValueError, ContractError) as retry_exc:
-                    validation_error = retry_exc
-        structural_validation = "PASS"
-        semantic_review = {"decision": "UNCERTAIN", "method": "NOT_CONFIGURED",
-                           "rationale": "Deterministic validation passed; no independent semantic reviewer was configured."}
-        if diagnosis.status == "EVIDENCE_GAP" and diagnosis.evidence_gaps:
-            diagnosis, failure, _ = continue_with_evidence(diagnosis, list(diagnosis.evidence_gaps),
-                trigger='DIAGNOSIS_EVIDENCE_GAP')
+        if v2_contract:
+            diagnosis, failure, _ = diagnose_v2(None, [], trigger='INITIAL')
             if failure is not None:
                 return failure
+            structural_validation = "PASS"
+            semantic_review = {"decision": "UNCERTAIN", "method": "NOT_CONFIGURED",
+                               "rationale": "Deterministic validation passed; no independent semantic reviewer was configured."}
+        else:
+            candidate_set, diagnosis_request, prompt_tokens = fit_diagnosis(
+                candidate_set, run_input, requirement, context)
+            failure=evidence_delivery_failure(candidate_set)
+            if failure is not None:return failure
+            if diagnosis_request is None:
+                return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
+                                "BUDGET_EXHAUSTED", requirement, scope, candidate_set, None, None,
+                                tuple(front_calls()), (admission_error(candidate_set),),
+                                retrieval_rounds=tuple(retrieval_rounds), run_context=run_context_wire)
+            admit_front_request(diagnosis_request)
+            diagnosis_response = complete_recorded(diagnosis_request, "DIAGNOSIS")
+            record_call({"stage": "DIAGNOSIS", "prompt_version": diagnosis_request.prompt_version,
+                          "request_metadata": dict(diagnosis_request.metadata),
+                          "response_metadata": dict(diagnosis_response.metadata),
+                          "response_content": diagnosis_response.content,
+                          "elapsed_seconds": time.monotonic() - started,
+                          "prompt_tokens_reserved": prompt_tokens,
+                          "output_tokens_reserved": diagnosis_request.max_output_tokens})
+            diagnosis_response = recover_truncated_planning(diagnosis_response, diagnosis_request, 'DIAGNOSIS')
+            if _output_was_truncated(diagnosis_response):
+                return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
+                                "BUDGET_EXHAUSTED", requirement, scope, candidate_set, None, None, tuple(front_calls()),
+                                ("Diagnosis output reached the configured generation token limit",),
+                                run_context=run_context_wire)
+            diagnosis_retry_messages = tuple(diagnosis_request.messages)
+            v2_feedback = active_sources.get('version') == 2
+            try:
+                _, _, runner_binding, diagnosis = _diagnosis_from_response(
+                    diagnosis_response.content, run_input, context, requirement, candidate_set)
+                products['diagnosis'] = diagnosis_response.produced(diagnosis.raw)
+                diagnosis_wire = diagnosis.raw
+                current_annotations()["runner_binding"] = runner_binding
+                annotate_gap_delivery(diagnosis.raw)
+            except (ValueError, ContractError) as exc:
+                validation_error: Exception = exc
+                while True:
+                    if format_retries_used >= max_format_retries:
+                        return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
+                                        "INVALID_OUTPUT", requirement, scope, candidate_set, None, None,
+                                        tuple(front_calls()), (str(validation_error),), "FAIL",
+                                        run_context=run_context_wire)
+                    validation_feedback = _diagnosis_feedback(validation_error, model_fields=v2_feedback)
+                    current_annotations()["validation_error"] = str(validation_error)
+                    current_annotations()["validation_feedback"] = validation_feedback
+                    diagnosis_retry_messages = _append_diagnosis_retry_turn(
+                        diagnosis_retry_messages, diagnosis_response.content, validation_feedback,
+                        bounded=not v2_feedback)
+                    feedback = replace(diagnosis_request, messages=diagnosis_retry_messages,
+                        metadata={**dict(diagnosis_request.metadata), "format_retry_index": format_retries_used + 1})
+                    feedback = planning_generation_mode(feedback)
+                    feedback_tokens = request_tokens(feedback)
+                    admit_front_request(feedback)
+                    diagnosis_response = complete_recorded(feedback, "DIAGNOSIS_FORMAT_RETRY",
+                        correction_scopes=(("format_correction", "diagnosis:" + attempt_id),))
+                    format_retries_used = policy.used("format_correction", "diagnosis:" + attempt_id)
+                    record_call({"stage": "DIAGNOSIS_FORMAT_RETRY", "prompt_version": feedback.prompt_version,
+                                  "request_metadata": dict(feedback.metadata),
+                                  "response_metadata": dict(diagnosis_response.metadata),
+                                  "response_content": diagnosis_response.content,
+                                  "elapsed_seconds": time.monotonic() - started,
+                                  "prompt_tokens_reserved": feedback_tokens,
+                                  "output_tokens_reserved": feedback.max_output_tokens,
+                                  "format_retry_index": format_retries_used})
+                    diagnosis_response = recover_truncated_planning(diagnosis_response, feedback, 'DIAGNOSIS_FORMAT_RETRY')
+                    if _output_was_truncated(diagnosis_response):
+                        return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
+                                        "BUDGET_EXHAUSTED", requirement, scope, candidate_set, None, None,
+                                        tuple(front_calls()), ("Diagnosis format-retry output reached its token limit",),
+                                        "FAIL", run_context=run_context_wire)
+                    try:
+                        _, _, runner_binding, diagnosis = _diagnosis_from_response(
+                            diagnosis_response.content, run_input, context, requirement, candidate_set)
+                        products['diagnosis'] = diagnosis_response.produced(diagnosis.raw)
+                        diagnosis_wire = diagnosis.raw
+                        current_annotations()["runner_binding"] = runner_binding
+                        annotate_gap_delivery(diagnosis.raw)
+                        break
+                    except (ValueError, ContractError) as retry_exc:
+                        validation_error = retry_exc
+            structural_validation = "PASS"
+            semantic_review = {"decision": "UNCERTAIN", "method": "NOT_CONFIGURED",
+                               "rationale": "Deterministic validation passed; no independent semantic reviewer was configured."}
+            if diagnosis.status == "EVIDENCE_GAP" and diagnosis.evidence_gaps:
+                diagnosis, failure, _ = continue_with_evidence(diagnosis, list(diagnosis.evidence_gaps),
+                    trigger='DIAGNOSIS_EVIDENCE_GAP')
+                if failure is not None:
+                    return failure
         diagnosis_decision = diagnosis_gate(diagnosis)
         if diagnosis_decision.action != "PLAN":
             return RunTrace(run_id, parsed.case_id, parsed.input_digest, snapshot.snapshot_id,
@@ -2109,7 +2394,8 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                 policy=(config.get('public_execution_capabilities') or {}).get('editable_policy'),
                     frontier=context.retrieval_config.get('production_path_frontier'),
                     prerequisites=context.retrieval_config.get('source_prerequisites'), capabilities=consumer_capabilities,
-                    source_support=context.retrieval_config.get('necessary_source_support'))
+                    source_support=context.retrieval_config.get('necessary_source_support'),
+                    source_contract=2 if v2_contract else 1)
             finally:
                 # A retained rejected draft still has a real source response;
                 # binding provenance does not turn it into a valid plan. No
@@ -2128,7 +2414,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
             # action text. Reuse the one existing acquisition/reassessment;
             # never auto-create units or expand edit permissions here.
             if (config.get('gap_role_delivery_enabled') and not planning_gaps
-                    and policy.available('evidence_extension', attempt_id)
+                    and (v2_contract or policy.available('evidence_extension', attempt_id))
                     and feedback and {e['code'] for e in feedback} <= binding_errors
                     and any(e['code'] == 'PRODUCTION_BRANCH_TARGET_UNAVAILABLE' for e in feedback)):
                 planning_gaps = production_branch_rebinding_gaps(changeset_payload, diagnosis,
@@ -2138,7 +2424,7 @@ def _run_front_half_impl(method_input: MethodInput | Mapping[str, Any], workspac
                     current_annotations()['target_binding_reassessment'] = planning_gaps
             if ((changeset_payload.get('status') == 'NEEDS_EVIDENCE'
                     or extension_trigger == 'CHANGESET_TARGET_BINDING_GAP') and planning_gaps
-                    and policy.available('evidence_extension', attempt_id)):
+                    and (v2_contract or policy.available('evidence_extension', attempt_id))):
                 diagnosis, failure, no_reassessment = continue_with_evidence(diagnosis, planning_gaps,
                     trigger=extension_trigger, planning_context=changeset_payload)
                 if failure is not None and not no_reassessment:

@@ -74,7 +74,7 @@ def test_contract_versions_never_mix_on_continuation_or_restart():
 def test_v2_config_contract_rejects_superseded_material_gates():
     assert source_context_contract({}) == 1
     assert source_context_contract({'source_context_contract': 2, 'max_context_tokens': 1}) == 2
-    for key in ('initial_diagnosis_context_tokens', 'max_execution_support_bytes'):
+    for key in ('initial_diagnosis_context_tokens', 'max_execution_support_bytes', 'top_n', 'max_evidence_extensions'):
         with pytest.raises(ValueError, match=key):
             source_context_contract({'source_context_contract': 2, key: 1})
     with pytest.raises(ValueError):
@@ -180,37 +180,39 @@ def test_execution_support_bytes_are_not_rechecked_for_v2_adopted_bodies(tmp_pat
 
 def _v2_config(**overrides):
     from tests.test_bounded_retrieval_continuation import CONFIG
-    base = {k: v for k, v in CONFIG.items()
-            if k not in ('initial_diagnosis_context_tokens', 'max_execution_support_bytes')}
+    from contractedge.diagnosis.evidence import SUPERSEDED_BY_SOURCE_CONTEXT_V2
+    base = {k: v for k, v in CONFIG.items() if k not in SUPERSEDED_BY_SOURCE_CONTEXT_V2}
     return {**base, 'source_context_contract': 2, **overrides}
 
 
-def test_v2_runner_uses_one_request_boundary_and_keeps_extensions_working(tmp_path):
+def test_v2_runner_uses_one_request_boundary(tmp_path):
     from contractedge.orchestration.runner import run_front_half
     from tests.test_bounded_retrieval_continuation import CONFIG, SequentialGaps
+    from tests.test_front_half_locator_runner import V2Provider
     from tests.test_planning_evidence_extension import front_fixture
     method, template = front_fixture(tmp_path)
     small_first = run_front_half(method, tmp_path, SequentialGaps(template),
                                  {**CONFIG, 'initial_diagnosis_context_tokens': 50}, lambda t: len(t.split()))
     assert small_first.status == 'BUDGET_EXHAUSTED'          # v1 smaller first allowance trims everything
-    provider = SequentialGaps(template)
-    trace = run_front_half(method, tmp_path, provider, _v2_config(), lambda t: len(t.split()))
+    trace = run_front_half(method, tmp_path, V2Provider(template), _v2_config(), lambda t: len(t.split()))
     assert trace.status == 'READY', trace.errors
-    assert provider.diagnosis_count == 3 and [r['round_id'] for r in trace.retrieval_rounds] == [1, 2, 3]
     assert trace.run_context['retrieval_config']['source_context']['version'] == 2
 
 
-def test_v2_over_window_request_is_refused_unsent_without_trimming(tmp_path):
+def test_v2_over_window_diagnosis_is_refused_unsent_without_trimming(tmp_path):
     from contractedge.orchestration.runner import run_front_half
-    from tests.test_bounded_retrieval_continuation import SequentialGaps
+    from tests.test_front_half_locator_runner import V2Provider
     from tests.test_planning_evidence_extension import front_fixture
     method, template = front_fixture(tmp_path)
-    provider = SequentialGaps(template)
-    trace = run_front_half(method, tmp_path, provider, _v2_config(max_context_tokens=60), lambda t: len(t.split()))
-    assert trace.status == 'BUDGET_EXHAUSTED' and provider.requests == []
+    provider = V2Provider(template)
+    # Large enough for the locator turns, too small for the complete diagnosis request.
+    trace = run_front_half(method, tmp_path, provider, _v2_config(max_context_tokens=1200, max_output_tokens=256),
+                           lambda t: len(t.split()))
+    assert trace.status == 'BUDGET_EXHAUSTED', trace.errors
+    assert [r.prompt_version for r in provider.requests] == ['locator.v1', 'locator.v1']
     failure = [a['admission_failure'] for a in trace.candidate_set.context_audit if 'admission_failure' in a][-1]
-    assert failure['sent'] is False and failure['limit'] == 60 and failure['actual'] > 60
-    assert len(trace.candidate_set.selected_ids) > 0          # nothing was cut to make it fit
+    assert failure['sent'] is False and failure['limit'] == 1200 and failure['actual'] > 1200
+    assert len(trace.candidate_set.selected_ids) == 1          # nothing was cut to make it fit
 
 
 def test_v2_config_with_superseded_gate_fails_before_any_call(tmp_path):
@@ -223,3 +225,31 @@ def test_v2_config_with_superseded_gate_fails_before_any_call(tmp_path):
         run_front_half(method, tmp_path, provider, _v2_config(initial_diagnosis_context_tokens=120000),
                        lambda t: len(t.split()))
     assert provider.requests == []
+
+
+# --- the fixed 12-item precondition review is lifted only for v2
+
+def test_thirteen_real_prerequisites_are_reviewed_under_v2_only(monkeypatch):
+    from contractedge.orchestration.runner import required_source_prerequisites
+    from contractedge.retrieval.candidates import CandidateSet
+    units = tuple(dict(id=f'U{i}', path=f'f{i}.go', text='func F() {}', precondition_review_required=True,
+                       gap_role_keys=[]) for i in range(13))
+    candidates = CandidateSet(candidates=units, selected_ids=tuple(u['id'] for u in units), dropped_ids=(),
+                              ranking_features={}, edges=(), context_tokens=0, max_context_tokens=1, top_n=13)
+    with pytest.raises(BudgetExceeded):
+        required_source_prerequisites(candidates)
+    rows = required_source_prerequisites(candidates, limit=None)
+    assert len(rows) == 13 and len({r['source_evidence_ref'] for r in rows}) == 13
+
+    from contractedge.contracts import validation
+    seen = []
+    real = validation.Draft202012Validator
+    monkeypatch.setattr(validation, 'Draft202012Validator', lambda schema: seen.append(schema) or real(schema))
+    for unbounded in ((), ('precondition_review',)):
+        try:
+            validation._check_schema({}, 'ce.semantic_changeset.v1_1', unbounded=unbounded)
+        except validation.ContractError:
+            pass
+    v1_rule, v2_rule = (s['properties']['precondition_review'] for s in seen)
+    assert v1_rule['maxItems'] == 12 and 'maxItems' not in v2_rule
+    assert v1_rule['items'] == v2_rule['items']                 # every per-review rule is kept

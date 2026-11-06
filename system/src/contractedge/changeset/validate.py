@@ -146,15 +146,19 @@ def validate_semantic_changeset(payload: Mapping[str, Any], diagnosis: Diagnosis
                                 frontier: list | None = None,
                                 prerequisites: list | None = None, capabilities: Mapping | None = None,
                                 source_support: list | None = None,
-                                boundary_contract_critical_paths: list | tuple | None = None) -> ValidationResult:
+                                boundary_contract_critical_paths: list | tuple | None = None,
+                                source_contract: int = 1) -> ValidationResult:
     """Validate supported edits under the public source and execution policy.
 
     ``boundary_contract_critical_paths`` is accepted for callers with saved
     contexts, but is advisory only. Observation-scope locators neither require
     an edit nor authorize one; diagnosis support and editable policy own those
     decisions.
+
+    ``source_contract`` 2 (source context v2) lifts only the fixed 12-item
+    precondition review count; each review is still checked in full.
     """
-    result = validate_changeset(payload, diagnosis, snapshot)
+    result = validate_changeset(payload, diagnosis, snapshot, unbounded_prerequisites=source_contract == 2)
     independent = _prerequisite_input_issues(payload,diagnosis,prerequisites,source_support)
     if result.value is None:
         return ValidationResult(False,tuple([*result.errors,*independent]),None)

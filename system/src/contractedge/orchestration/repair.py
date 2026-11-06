@@ -32,7 +32,7 @@ from contractedge.execution.consumer import (ConsumerContext, BudgetPort, build_
     validate_consumer, execution_review_mapping, PlanRejected)
 from contractedge.model.budget import BudgetedProvider, BudgetExceeded, recorded_token_charge, recorded_dispatch_state
 from contractedge.diagnosis.evidence import (source_context_records, source_context_validate,
-    source_context_commit, source_context_continuation)
+    source_context_commit, source_context_continuation, source_contract_of)
 from contractedge.model.config import model_config, model_name
 from contractedge.model.admission import quote_request, require_context, complete_quoted
 from contractedge.orchestration.evidence_delivery import select_observations_delivery, annotate_delivery_citations
@@ -285,8 +285,10 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
     expected_support = ([{**r,'delivery_required':True} for r in source_context_records(adopted,kind='SOURCE_SPAN')
         if r['snapshot_id'] == snapshot.snapshot_id]
         if adopted is not None else required_planning_source_support(run_input,candidates,snapshot.snapshot_id,helper_support=helpers))
+    contract = source_contract_of(context.retrieval_config)
     expected_prerequisites = required_source_prerequisites(candidates,helper_support=helpers,
-        establishment_required=context.retrieval_config.get('precondition_establishment_required') is True)
+        establishment_required=context.retrieval_config.get('precondition_establishment_required') is True,
+        limit=None if contract == 2 else 12)
     if (context.retrieval_config.get('necessary_source_support', []) != expected_support
             or context.retrieval_config.get('source_prerequisites', []) != expected_prerequisites):
         raise ValueError('Ready trace prerequisite context differs from actually supplied current source')
@@ -302,7 +304,8 @@ def validate_ready_trace(trace: Mapping, method_input, source: Path, *, capabili
         prerequisites=context.retrieval_config.get('source_prerequisites'),
         source_support=context.retrieval_config.get('necessary_source_support'),
         capabilities=context.retrieval_config.get('public_execution_capabilities'),
-        boundary_contract_critical_paths=context.retrieval_config.get('boundary_contract_critical_paths'))
+        boundary_contract_critical_paths=context.retrieval_config.get('boundary_contract_critical_paths'),
+        source_contract=contract)
     if not validation.valid:
         raise ValueError('Ready trace plan failed consumer preflight: ' + str(validation.errors))
     return packet, context
@@ -396,7 +399,8 @@ def revise_plan(trace: Mapping, method_input, source: Path, feedback: Mapping,
         prerequisites=context.retrieval_config.get('source_prerequisites'),
         source_support=context.retrieval_config.get('necessary_source_support'),
         capabilities=context.retrieval_config.get('public_execution_capabilities'),
-        boundary_contract_critical_paths=context.retrieval_config.get('boundary_contract_critical_paths'))
+        boundary_contract_critical_paths=context.retrieval_config.get('boundary_contract_critical_paths'),
+        source_contract=source_contract_of(context.retrieval_config))
     if not validation.valid:
         raise PlanRejected('Feedback plan revision failed: ' + str(validation.errors))
     calls = [{**call, 'stage': 'EXECUTION_PLAN_REVISION', 'runner_binding': binding}
