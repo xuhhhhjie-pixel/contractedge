@@ -420,6 +420,9 @@ class SourceNavigator:
         selected: list[str] = []
         for value in scopes:
             value = (value or '').strip().strip('/')
+            # "." and "./x" name the snapshot root and paths below it.
+            while value == '.' or value.startswith('./'):
+                value = value[2:].lstrip('/') if value != '.' else ''
             parts = PurePosixPath(value).parts if value else ()
             if value and (PurePosixPath(value).is_absolute() or '..' in parts or '\\' in value):
                 raise NavigationError('BAD_SCOPE', f'Scope {value!r} must be a relative snapshot path')
