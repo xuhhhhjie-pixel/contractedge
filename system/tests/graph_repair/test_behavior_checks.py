@@ -104,8 +104,20 @@ def test_command_is_built_and_quoted_by_the_program():
     spec = {'kind': 'go_test', 'package': './calc', 'run': '^TestTable$/^bad$'}
     argv = shlex.split(checks.command(spec))
     assert argv[:3] == ['ce-run', '/bin/sh', '-c']
-    assert shlex.split(argv[3]) == ['cd', '/work', '&&', 'go', 'test', '-json', '-count=1', '-run',
-                                    '^TestTable$/^bad$', './calc']
+    inner = shlex.split(argv[3])
+    assert inner[:2] == ['cd', '/work'] and 'GOMODCACHE=/work/.contractedge-deps/gomod' in inner
+    assert inner[-9:] == ['exec', 'go', 'test', '-json', '-count=1', '$M', '-run', '^TestTable$/^bad$', './calc']
+
+
+def test_runner_version_is_part_of_the_definition():
+    spec = {'kind': 'go_test', 'package': './calc', 'run': '^TestAdd$'}
+    before = checks.def_hash(spec)
+    original = checks.RUNNER
+    try:
+        checks.RUNNER = 'go-test-json/next'
+        assert checks.def_hash(spec) != before
+    finally:
+        checks.RUNNER = original
 
 
 def test_same_definition_is_one_check_with_several_links():

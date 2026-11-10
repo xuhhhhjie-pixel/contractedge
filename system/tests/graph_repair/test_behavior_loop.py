@@ -214,6 +214,34 @@ def test_loop_counts_proposals_against_the_limit(tmp_path):
     assert calls == [{'timeout': 30}] and snap['counters']['proposals'] == 1
 
 
+def test_prepare_reads_the_requirement_file_the_task_names(tmp_path):
+    seen = []
+
+    class Model:
+        def query(self, messages, **kwargs):
+            seen.append(messages[1]['content'])
+            return {'content': json.dumps({'requirements': [
+                {'kind': 'target', 'condition': 'repeated reconciliation', 'expected': 'stable external name',
+                 'source_refs': [{'source': 'file', 'path': '/inputs/requirement.md',
+                                  'quote': 'must not alternate between identifiers'}]}]})}
+    files = {'/inputs/requirement.md': 'The `crossplane.io/external-name` value must not alternate between identifiers.\n'}
+
+    def run(command, timeout):
+        for path, text in files.items():
+            if command.startswith('test -f ' + path):
+                return {'output': text, 'returncode': 0}
+        return {'output': '', 'returncode': 1}
+    loop = BehaviorLoop(VARIANTS['behavior'], model=Model(), run=run, directory=tmp_path, remaining=lambda: 1000,
+                        baseline_tree='T0', env_identity='img', log=lambda *a, **k: None)
+    result = loop.prepare('Repair the repository.\nrequirement_file: requirement.md\nexecution_config: environment.json\n')
+    assert result['delta']['added'] == ['O1'] and 'Requirement file /inputs/requirement.md' in seen[0]
+    assert loop.store.load()['obligations']['O1']['source_refs'][0]['path'] == '/inputs/requirement.md'
+    loop2 = BehaviorLoop(VARIANTS['behavior'], model=Model(), run=run, directory=tmp_path / 'b', remaining=lambda: 1000,
+                         baseline_tree='T0', env_identity='img', log=lambda *a, **k: None)
+    loop2.prepare('requirement_file: ../../etc/passwd\n')
+    assert 'Requirement file' not in seen[1]
+
+
 @pytest.mark.parametrize('fields, message', [
     ({'behavior_feedback': True}, 'needs behavior_requirements'),
     ({'behavior_impact': True, 'behavior_requirements': True}, 'not implemented'),

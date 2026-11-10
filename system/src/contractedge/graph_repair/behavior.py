@@ -25,7 +25,9 @@ SCHEMA = 'contractedge.behavior_state.v1'
 KINDS = ('target', 'preserve')
 GROUNDING = ('GROUNDED', 'UNRESOLVED', 'RETRACTED')
 OUTCOMES = ('UNKNOWN', 'PASS_AT_SNAPSHOT', 'FAIL_AT_SNAPSHOT')
-ALLOWED_ROOTS = ('/testbed',)          # method-view whitelist; other roots need an explicit decision
+# Method view: the editable source and the read-only public inputs the task text declares
+# ("Public inputs are mounted read-only at /inputs"). Nothing else the container can see.
+ALLOWED_ROOTS = ('/testbed', '/inputs')
 DENIED = ('/testbed/.git',)
 MIN_QUOTE, MAX_QUOTE, MAX_TEXT = 8, 400, 400
 

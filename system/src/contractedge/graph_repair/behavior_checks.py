@@ -28,13 +28,24 @@ LAYOUT = re.compile(r'go\.mod file not found|directory prefix \S+ does not conta
                     r'is not in std|no Go files in|matched no packages|cannot find package')
 
 
+RUNNER = 'go-test-json/2'
+# The public runtime has a read-only root and no network. Cases ship their modules under
+# /work/.contractedge-deps (gomod, setup/go.sum) and the published build points Go at them; the
+# check uses the same setup, read from the case, and never writes the module files it is given.
+SETUP = ('cd /work && export GOTOOLCHAIN=local && M= && '
+         'if [ -d .contractedge-deps/gomod ]; then export GOMODCACHE=/work/.contractedge-deps/gomod GOPROXY=off '
+         'GOSUMDB=off; fi && if [ -f .contractedge-deps/setup/go.sum ]; then cp go.mod /tmp/ce-check.go.mod && '
+         'cp .contractedge-deps/setup/go.sum /tmp/ce-check.go.sum && M="-mod=readonly -modfile=/tmp/ce-check.go.mod"; fi && ')
+
+
 def def_hash(spec: dict) -> str:
-    return hashlib.sha256(json.dumps({'adapter': ADAPTER, 'runner': spec}, sort_keys=True).encode()).hexdigest()
+    return hashlib.sha256(json.dumps({'adapter': ADAPTER, 'runner': spec, 'runner_version': RUNNER},
+                                     sort_keys=True).encode()).hexdigest()
 
 
 def command(spec: dict) -> str:
     """Shell for the method container; the test runs through ce-run in the public runtime (/work)."""
-    inner = (f"cd /work && go test -json -count=1 -run {shlex.quote(spec['run'])} {shlex.quote(spec['package'])}")
+    inner = SETUP + f"exec go test -json -count=1 $M -run {shlex.quote(spec['run'])} {shlex.quote(spec['package'])}"
     return 'ce-run /bin/sh -c ' + shlex.quote(inner)
 
 

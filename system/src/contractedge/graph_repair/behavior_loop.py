@@ -28,12 +28,14 @@ from contractedge.graph_repair.checkpoint import parse, tree_script
 INDEX = '/ce-state/behavior.index'
 MAX_TASK, MAX_FILE, MAX_READ = 12000, 6000, 200_000
 TEST_FILE = re.compile(r'(?<![\w.-])((?:/testbed/)?[\w./-]*_test\.go)\b')
+REQUIREMENT_FILE = re.compile(r'^requirement_file:\s*([\w./-]+)\s*$', re.M)   # named by the method task text
 SHOWN = 5
 
 REQUIREMENTS = """You extract behaviour requirements for a bug fix from public material only.
 Reply with one JSON object and nothing else:
 {"requirements": [{"kind": "target" or "preserve", "condition": "...", "expected": "...",
   "source_refs": [{"source": "task", "quote": "<8-400 characters copied exactly from the task text>"}]}]}
+When a quote comes from the requirement file shown, use {"source": "file", "path": "<its path>", "quote": "..."}.
 Rules:
 - One observable behaviour per item. Different fields, outputs, conditions or triggering/non-triggering cases are
   separate items.
@@ -157,7 +159,15 @@ class BehaviorLoop:
         snapshot = self._load()
         if snapshot is None:
             return {'status': self.disabled}
-        result = self.propose(snapshot, 'requirements', 'Task text:\n<<<\n' + task[:MAX_TASK] + '\n>>>')
+        context = 'Task text:\n<<<\n' + task[:MAX_TASK] + '\n>>>'
+        named = REQUIREMENT_FILE.search(task)
+        path = behavior.Sources.resolve('/inputs/' + named.group(1)) if named else None
+        if path and path.startswith('/inputs/'):
+            text = self.sources.text(path)
+            if text:
+                context += f'\n\nRequirement file {path}:\n<<<\n' + text[:MAX_TASK] + '\n>>>'
+                self._event('requirement_file', status='READ', reason=path)
+        result = self.propose(snapshot, 'requirements', context)
         delta = None
         if result['status'] == 'OK':
             delta = behavior.apply_proposals(snapshot, result['value'].get('requirements'), self.sources, 'task')
@@ -171,7 +181,7 @@ class BehaviorLoop:
         unresolved = [o['id'] for o in snapshot['obligations'].values() if o['grounding'] == 'UNRESOLVED']
         if not grounded and not unresolved:
             return None
-        lines = ['[ce-behavior] Behaviour requirements from the public task text (quotes checked against the source):']
+        lines = ['[ce-behavior] Behaviour requirements from the public task material (quotes checked against the source):']
         for ob in grounded[:SHOWN]:
             lines.append(f"- {ob['id']} [{ob['kind']}] when {feedback._short(ob['condition'], 100)}: expected "
                          f"{feedback._short(ob['expected'], 120)}  (\"{feedback._short(ob['source_refs'][0]['quote'], 90)}\")")

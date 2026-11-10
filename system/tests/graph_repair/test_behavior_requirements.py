@@ -62,6 +62,15 @@ def test_unsupported_requirements_stay_unresolved(refs, why):
     assert behavior.active(snap) == []
 
 
+def test_public_inputs_are_a_source_but_escapes_are_not():
+    files = {'/inputs/requirement.md': 'The external-name value must not alternate between identifiers.\n'}
+    src = behavior.Sources(TASK, files.get)
+    ok, _ = src.check({'source': 'file', 'path': '/inputs/requirement.md', 'quote': 'must not alternate between identifiers'})
+    assert ok and ok['path'] == '/inputs/requirement.md'
+    for path in ('/inputs/../etc/passwd', '/inputsx/requirement.md', '/private/answer.md'):
+        assert src.check({'source': 'file', 'path': path, 'quote': 'must not alternate between'})[0] is None
+
+
 def test_pairing_does_not_ground_the_missing_half():
     """Released is quoted; a Ready requirement without its own quote is not grounded by the pair."""
     snap = behavior.empty()
