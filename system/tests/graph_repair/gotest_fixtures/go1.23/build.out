@@ -1,0 +1,5 @@
+# example.com/m/broken [example.com/m/broken.test]
+broken/broken.go:3:23: undefined: undefinedName
+{"Time":"2026-11-10T10:31:05.313257058Z","Action":"start","Package":"example.com/m/broken"}
+{"Time":"2026-11-10T10:31:05.313435954Z","Action":"output","Package":"example.com/m/broken","Output":"FAIL\texample.com/m/broken [build failed]\n"}
+{"Time":"2026-11-10T10:31:05.313454131Z","Action":"fail","Package":"example.com/m/broken","Elapsed":0}

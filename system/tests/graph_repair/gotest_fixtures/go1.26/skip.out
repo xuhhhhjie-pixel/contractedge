@@ -1,0 +1,9 @@
+{"Time":"2026-11-10T10:31:41.376560702Z","Action":"start","Package":"example.com/m/calc"}
+{"Time":"2026-11-10T10:31:41.383287499Z","Action":"run","Package":"example.com/m/calc","Test":"TestSkipped"}
+{"Time":"2026-11-10T10:31:41.383345119Z","Action":"output","Package":"example.com/m/calc","Test":"TestSkipped","Output":"=== RUN   TestSkipped\n"}
+{"Time":"2026-11-10T10:31:41.383420106Z","Action":"output","Package":"example.com/m/calc","Test":"TestSkipped","Output":"    calc_test.go:27: not on this platform\n"}
+{"Time":"2026-11-10T10:31:41.383441882Z","Action":"output","Package":"example.com/m/calc","Test":"TestSkipped","Output":"--- SKIP: TestSkipped (0.00s)\n"}
+{"Time":"2026-11-10T10:31:41.383458717Z","Action":"skip","Package":"example.com/m/calc","Test":"TestSkipped","Elapsed":0}
+{"Time":"2026-11-10T10:31:41.383469849Z","Action":"output","Package":"example.com/m/calc","Output":"PASS\n"}
+{"Time":"2026-11-10T10:31:41.38461165Z","Action":"output","Package":"example.com/m/calc","Output":"ok  \texample.com/m/calc\t0.007s\n"}
+{"Time":"2026-11-10T10:31:41.384686543Z","Action":"pass","Package":"example.com/m/calc","Elapsed":0.008}

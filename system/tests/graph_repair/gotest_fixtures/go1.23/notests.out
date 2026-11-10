@@ -1,0 +1,3 @@
+{"Time":"2026-11-10T10:31:10.625385773Z","Action":"start","Package":"example.com/m/notests"}
+{"Time":"2026-11-10T10:31:10.625532285Z","Action":"output","Package":"example.com/m/notests","Output":"?   \texample.com/m/notests\t[no test files]\n"}
+{"Time":"2026-11-10T10:31:10.625549048Z","Action":"skip","Package":"example.com/m/notests","Elapsed":0}

@@ -1,0 +1,17 @@
+{"Time":"2026-11-10T10:31:34.289761305Z","Action":"start","Package":"example.com/m/calc"}
+{"Time":"2026-11-10T10:31:34.296361455Z","Action":"run","Package":"example.com/m/calc","Test":"TestTable"}
+{"Time":"2026-11-10T10:31:34.296405263Z","Action":"output","Package":"example.com/m/calc","Test":"TestTable","Output":"=== RUN   TestTable\n"}
+{"Time":"2026-11-10T10:31:34.296499099Z","Action":"run","Package":"example.com/m/calc","Test":"TestTable/ok"}
+{"Time":"2026-11-10T10:31:34.296508305Z","Action":"output","Package":"example.com/m/calc","Test":"TestTable/ok","Output":"=== RUN   TestTable/ok\n"}
+{"Time":"2026-11-10T10:31:34.296531331Z","Action":"output","Package":"example.com/m/calc","Test":"TestTable/ok","Output":"--- PASS: TestTable/ok (0.00s)\n"}
+{"Time":"2026-11-10T10:31:34.296544958Z","Action":"pass","Package":"example.com/m/calc","Test":"TestTable/ok","Elapsed":0}
+{"Time":"2026-11-10T10:31:34.296558996Z","Action":"run","Package":"example.com/m/calc","Test":"TestTable/bad"}
+{"Time":"2026-11-10T10:31:34.296566308Z","Action":"output","Package":"example.com/m/calc","Test":"TestTable/bad","Output":"=== RUN   TestTable/bad\n"}
+{"Time":"2026-11-10T10:31:34.296574923Z","Action":"output","Package":"example.com/m/calc","Test":"TestTable/bad","Output":"    calc_test.go:21: Add = 2, want 3\n"}
+{"Time":"2026-11-10T10:31:34.296585819Z","Action":"output","Package":"example.com/m/calc","Test":"TestTable/bad","Output":"--- FAIL: TestTable/bad (0.00s)\n"}
+{"Time":"2026-11-10T10:31:34.2965969Z","Action":"fail","Package":"example.com/m/calc","Test":"TestTable/bad","Elapsed":0}
+{"Time":"2026-11-10T10:31:34.296606231Z","Action":"output","Package":"example.com/m/calc","Test":"TestTable","Output":"--- FAIL: TestTable (0.00s)\n"}
+{"Time":"2026-11-10T10:31:34.296615023Z","Action":"fail","Package":"example.com/m/calc","Test":"TestTable","Elapsed":0}
+{"Time":"2026-11-10T10:31:34.296626044Z","Action":"output","Package":"example.com/m/calc","Output":"FAIL\n"}
+{"Time":"2026-11-10T10:31:34.297705484Z","Action":"output","Package":"example.com/m/calc","Output":"FAIL\texample.com/m/calc\t0.007s\n"}
+{"Time":"2026-11-10T10:31:34.297751778Z","Action":"fail","Package":"example.com/m/calc","Elapsed":0.008}

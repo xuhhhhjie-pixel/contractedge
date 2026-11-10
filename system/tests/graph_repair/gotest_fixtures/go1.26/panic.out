@@ -1,0 +1,22 @@
+{"Time":"2026-11-10T10:31:48.317905902Z","Action":"start","Package":"example.com/m/calc"}
+{"Time":"2026-11-10T10:31:48.324606607Z","Action":"run","Package":"example.com/m/calc","Test":"TestPanic"}
+{"Time":"2026-11-10T10:31:48.324641463Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"=== RUN   TestPanic\n"}
+{"Time":"2026-11-10T10:31:48.324719311Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"--- FAIL: TestPanic (0.00s)\n"}
+{"Time":"2026-11-10T10:31:48.326758786Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"panic: assignment to entry in nil map [recovered, repanicked]\n"}
+{"Time":"2026-11-10T10:31:48.326775435Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"\n"}
+{"Time":"2026-11-10T10:31:48.32678372Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"goroutine 19 [running]:\n"}
+{"Time":"2026-11-10T10:31:48.326795939Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"testing.tRunner.func1.2({0x55b860, 0x6cbe70})\n"}
+{"Time":"2026-11-10T10:31:48.326805657Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"\t/usr/local/go/src/testing/testing.go:1974 +0x232\n"}
+{"Time":"2026-11-10T10:31:48.326814237Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"testing.tRunner.func1()\n"}
+{"Time":"2026-11-10T10:31:48.32682656Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"\t/usr/local/go/src/testing/testing.go:1977 +0x349\n"}
+{"Time":"2026-11-10T10:31:48.326836413Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"panic({0x55b860?, 0x6cbe70?})\n"}
+{"Time":"2026-11-10T10:31:48.326844001Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"\t/usr/local/go/src/runtime/panic.go:860 +0x13a\n"}
+{"Time":"2026-11-10T10:31:48.326856898Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"example.com/m/calc.TestPanic(0x314b2faf8248?)\n"}
+{"Time":"2026-11-10T10:31:48.326867252Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"\t/src/m/calc/calc_test.go:29 +0x28\n"}
+{"Time":"2026-11-10T10:31:48.32687525Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"testing.tRunner(0x314b2faf8248, 0x5940a0)\n"}
+{"Time":"2026-11-10T10:31:48.326886046Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"\t/usr/local/go/src/testing/testing.go:2036 +0xea\n"}
+{"Time":"2026-11-10T10:31:48.326896144Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"created by testing.(*T).Run in goroutine 1\n"}
+{"Time":"2026-11-10T10:31:48.326903657Z","Action":"output","Package":"example.com/m/calc","Test":"TestPanic","Output":"\t/usr/local/go/src/testing/testing.go:2101 +0x4c5\n"}
+{"Time":"2026-11-10T10:31:48.328118788Z","Action":"fail","Package":"example.com/m/calc","Test":"TestPanic","Elapsed":0}
+{"Time":"2026-11-10T10:31:48.328171582Z","Action":"output","Package":"example.com/m/calc","Output":"FAIL\texample.com/m/calc\t0.010s\n"}
+{"Time":"2026-11-10T10:31:48.328192823Z","Action":"fail","Package":"example.com/m/calc","Elapsed":0.01}

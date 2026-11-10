@@ -1,0 +1,9 @@
+{"Time":"2026-11-10T10:31:27.157585442Z","Action":"start","Package":"example.com/m/calc"}
+{"Time":"2026-11-10T10:31:27.163779105Z","Action":"run","Package":"example.com/m/calc","Test":"TestWrong"}
+{"Time":"2026-11-10T10:31:27.163825851Z","Action":"output","Package":"example.com/m/calc","Test":"TestWrong","Output":"=== RUN   TestWrong\n"}
+{"Time":"2026-11-10T10:31:27.163902651Z","Action":"output","Package":"example.com/m/calc","Test":"TestWrong","Output":"    calc_test.go:13: Add(2, 2) = 4, want 5\n"}
+{"Time":"2026-11-10T10:31:27.16392509Z","Action":"output","Package":"example.com/m/calc","Test":"TestWrong","Output":"--- FAIL: TestWrong (0.00s)\n"}
+{"Time":"2026-11-10T10:31:27.163937919Z","Action":"fail","Package":"example.com/m/calc","Test":"TestWrong","Elapsed":0}
+{"Time":"2026-11-10T10:31:27.163949868Z","Action":"output","Package":"example.com/m/calc","Output":"FAIL\n"}
+{"Time":"2026-11-10T10:31:27.164943772Z","Action":"output","Package":"example.com/m/calc","Output":"FAIL\texample.com/m/calc\t0.007s\n"}
+{"Time":"2026-11-10T10:31:27.164984904Z","Action":"fail","Package":"example.com/m/calc","Elapsed":0.007}
