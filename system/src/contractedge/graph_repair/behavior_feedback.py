@@ -37,8 +37,11 @@ def _set(ob: dict, scenario: str, status: str, evidence: dict, calibrated) -> di
     return row
 
 
-def reduce(snapshot: dict, evidence: dict, tree: str, baseline_tree: str | None) -> dict:
-    """Apply one evidence record; return {'changes', 'next_actions', 'text'}."""
+def reduce(snapshot: dict, evidence: dict, tree: str, baseline_tree: str | None, show: bool = True) -> dict:
+    """Apply one evidence record; return {'changes', 'next_actions', 'text'}.
+
+    With show=False (checks run while submitting) nothing is marked as shown, so an unseen failure
+    can still produce the one-time submission reminder."""
     check = snapshot['checks'][evidence['check_id']]
     ident = evidence['identity']
     changes, actions = [], []
@@ -47,7 +50,7 @@ def reduce(snapshot: dict, evidence: dict, tree: str, baseline_tree: str | None)
         actions.append({'type': 'CHECK', 'obligation_refs': list(evidence['obligation_versions']),
                         'evidence_refs': [evidence['id']], 'target': check['id'],
                         'reason': 'the result belongs to another version of the source; re-check'})
-        return _bundle(snapshot, evidence, check, changes, actions)
+        return _bundle(snapshot, evidence, check, changes, actions, show)
     at_baseline = baseline_tree is not None and tree == baseline_tree
     if at_baseline and result in ('PASS', 'SEMANTIC_FAIL'):
         check['baseline_result'] = result
@@ -94,12 +97,12 @@ def reduce(snapshot: dict, evidence: dict, tree: str, baseline_tree: str | None)
         actions.append({'type': 'DEFER', 'obligation_refs': list(evidence['obligation_versions']),
                         'evidence_refs': [evidence['id']], 'target': check['id'],
                         'reason': f"{result.lower().replace('_', ' ')}: {_short(evidence['detail'], 80)}"})
-    return _bundle(snapshot, evidence, check, changes, actions)
+    return _bundle(snapshot, evidence, check, changes, actions, show)
 
 
-def _bundle(snapshot, evidence, check, changes, actions) -> dict:
+def _bundle(snapshot, evidence, check, changes, actions, show=True) -> dict:
     signature = _signature(evidence)
-    fresh = signature not in snapshot['reported']
+    fresh = show and signature not in snapshot['reported']
     if fresh:
         snapshot['reported'].append(signature)
     snapshot['next_actions'] = [a for a in snapshot['next_actions']

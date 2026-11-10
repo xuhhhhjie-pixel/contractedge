@@ -9,6 +9,7 @@ import json
 from dataclasses import asdict, dataclass, fields, replace
 
 SWITCHES = ('graph', 'linkers', 'closure', 'probes', 'checkpoint', 'attribution', 'stop_rule')
+BEHAVIOR_SWITCHES = ('behavior_requirements', 'behavior_feedback', 'behavior_impact')
 
 
 @dataclass(frozen=True)
@@ -28,10 +29,33 @@ class Variant:
     probe_call_fraction: float = 0.15
     probe_timeout_seconds: int = 300
     max_full_tests: int = 2
+    # Behaviour requirements and checks (v1.2 method). Provisional limits, to be frozen before comparisons.
+    behavior_requirements: bool = False
+    behavior_feedback: bool = False
+    behavior_impact: bool = False
+    behavior_max_proposals: int = 3
+    behavior_proposal_timeout: int = 30
+    behavior_checks_per_tick: int = 1
+    behavior_submit_checks: int = 2
+    behavior_check_timeout: int = 120
+    behavior_max_check_runs: int = 12
+    behavior_reserve_seconds: int = 90
+
+    def __post_init__(self):
+        if self.behavior_impact:
+            raise ValueError('behavior_impact is not implemented in this version')
+        if self.behavior_feedback and not self.behavior_requirements:
+            raise ValueError('behavior_feedback needs behavior_requirements')
+        if self.behavior_requirements:
+            if not self.checkpoint:
+                raise ValueError('behaviour requirements need checkpoint (results are bound to source trees)')
+            clash = [name for name in ('graph', 'linkers', 'closure', 'probes') if getattr(self, name)]
+            if clash:
+                raise ValueError(f'behaviour requirements replace the graph completion rules; turn off {clash}')
 
     @property
     def any_mechanism(self) -> bool:
-        return any(getattr(self, name) for name in SWITCHES)
+        return any(getattr(self, name) for name in SWITCHES + BEHAVIOR_SWITCHES)
 
     def to_json(self) -> dict:
         return asdict(self)
@@ -56,6 +80,11 @@ VARIANTS = {
     'submit-only': Variant('submit-only', prompt='live', graph=False, linkers=False, closure=False,
                            probes=False, checkpoint=True, attribution=False, stop_rule=True),
 }
+# v1.2 comparison: submit-only is the shared reliable base; these add the behaviour method on top of it.
+VARIANTS['behavior'] = replace(VARIANTS['submit-only'], name='behavior', behavior_requirements=True,
+                               behavior_feedback=True)
+VARIANTS['behavior-requirements-only'] = replace(VARIANTS['submit-only'], name='behavior-requirements-only',
+                                                 behavior_requirements=True)
 
 
 def variant(name: str) -> Variant:

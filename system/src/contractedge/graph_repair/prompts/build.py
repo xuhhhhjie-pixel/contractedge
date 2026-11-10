@@ -77,6 +77,21 @@ def guide(v) -> str:
     return '\n'.join(parts)
 
 
+def behavior_section(v) -> str:
+    """Method note added before Live's rules; Live's own workflow text is left as it is."""
+    parts = ['## Behaviour requirements' + (' and checks' if v.behavior_feedback else ''), '',
+             'The executor extracts behaviour requirements from the public task text (and from public tests you read), '
+             'each with a quoted source, and lists them in a `[ce-behavior]` note appended to a command output.']
+    if v.behavior_feedback:
+        parts[-1] += (' When an existing test matches a requirement, it runs that test automatically after your edits and '
+                      'reports which requirement passed or failed on the current version. A check covers only the test it '
+                      'names; a runtime or build failure says nothing about behaviour (fix the environment, not production '
+                      'code, for it). An unseen failure is shown once more when you submit; nothing else blocks submission.')
+    parts[-1] += (' A requirement is only as reliable as its quote; use the notes as leads alongside your own reading and '
+                  'the public check. Nothing needs to be done to trigger them.')
+    return '\n'.join(parts + ['', ''])
+
+
 def agent_config(live_yaml: str, variant) -> dict:
     config = yaml.safe_load(live_yaml)
     cfg = copy.deepcopy(config['agent'])
@@ -86,4 +101,8 @@ def agent_config(live_yaml: str, variant) -> dict:
         cfg['instance_template'] = template[:start] + guide(variant) + template[end:]
     elif variant.prompt != 'live':
         raise ValueError(f'unknown prompt {variant.prompt!r}')
+    if getattr(variant, 'behavior_requirements', False):
+        template = cfg['instance_template']
+        end = template.index(END)
+        cfg['instance_template'] = template[:end] + behavior_section(variant) + template[end:]
     return {'config': config, 'agent': cfg}

@@ -3,6 +3,8 @@
 execute_action: automatic checkpoints, failure attribution, the 85% wall-clock forced submission.
 has_finished:   the submission marker triggers `ce-submit --check`; unmet items go back to the model;
                 two identical unmet results in a row force submission of the best candidate.
+run:            only with the behaviour method on: requirements are prepared before the first step and
+                a summary of the submitted version is written after the last (behavior_loop.py).
 The step loop, parsing, templates and model calls are DefaultAgent's.
 """
 from __future__ import annotations
@@ -18,6 +20,7 @@ from minisweagent.agents.default import (DefaultAgent, ExecutionTimeoutError, No
                                          Submitted)
 
 from contractedge.graph_repair import attribution
+from contractedge.graph_repair.behavior_loop import BehaviorLoop
 from contractedge.graph_repair.checkpoint import checkpoint_script, parse, score
 from contractedge.graph_repair.config import Variant
 
@@ -34,7 +37,8 @@ class SubmitBlocked(NonTerminatingException):
 
 class ContractGraphAgent(DefaultAgent):
     def __init__(self, model, env, *, ce_variant: Variant, ce_state: Path, ce_wire_usage: Path | None = None,
-                 ce_tool_timeout: int = 600, ce_baseline_tree: str | None = None, **kwargs):
+                 ce_tool_timeout: int = 600, ce_baseline_tree: str | None = None,
+                 ce_behavior_dir: Path | None = None, **kwargs):
         super().__init__(model, env, **kwargs)
         self.ce = ce_variant
         self.ce_state = Path(ce_state)
@@ -50,6 +54,9 @@ class ContractGraphAgent(DefaultAgent):
         self.ce_forced: dict | None = None
         self.ce_force_declined = False
         self.ce_seen_files: set[str] = set()
+        # Host-only directory (not mounted into the container), so the model cannot edit behaviour state.
+        self.ce_behavior_dir = Path(ce_behavior_dir) if ce_behavior_dir else self.ce_state.parent / 'ce-behavior'
+        self.ce_behavior: BehaviorLoop | None = None
 
     # ------------------------------------------------------------ bookkeeping
     def _log(self, event: str, **value) -> None:
@@ -166,7 +173,10 @@ class ContractGraphAgent(DefaultAgent):
         if not rows:
             return None
         results = self._read('results.json', {})
-        return max(rows, key=lambda c: (score(c['tree'], results), c['n']))
+        behaviour = self.ce_behavior.rank if self.ce_behavior is not None else (lambda tree: ())
+        # Public check first, then confirmed behaviour (fewer preserve failures, more target passes), then probes.
+        return max(rows, key=lambda c: (score(c['tree'], results)[:1], behaviour(c['tree']),
+                                        score(c['tree'], results)[1:], c['n']))
 
     def _force_submit(self, reason: str):
         """Restore the best candidate (when there is one) and submit it."""
@@ -187,6 +197,30 @@ class ContractGraphAgent(DefaultAgent):
         raise Submitted(f'FORCED_SUBMISSION ({reason}): best candidate submitted by the stop rule.\n')
 
     # ------------------------------------------------------------ overrides
+    def run(self, task: str, **kwargs) -> tuple[str, str]:
+        if not self.ce.behavior_requirements:
+            return super().run(task, **kwargs)
+        image = getattr(getattr(self.env, 'config', None), 'image', None) or 'local'
+        self.ce_behavior = BehaviorLoop(self.ce, model=self.model, run=self._run, directory=self.ce_behavior_dir,
+                                        remaining=self.remaining, baseline_tree=self.ce_baseline_tree,
+                                        env_identity=str(image), log=self._log)
+        try:
+            self.ce_behavior.prepare(task)
+        except Exception as exc:            # the executor runs as without the method
+            self.ce_behavior.disabled = f'PREPARE_ERROR: {type(exc).__name__}: {exc}'
+            self._log('behavior_disabled', reason=self.ce_behavior.disabled[:300])
+        status = 'ERROR'
+        try:
+            status, message = super().run(task, **kwargs)
+            return status, message
+        finally:
+            self.ce_behavior.finish(status)
+
+    @staticmethod
+    def _marked(output: dict) -> bool:
+        lines = output.get('output', '').lstrip().splitlines()
+        return bool(lines) and lines[0].strip() in MARKERS and output.get('returncode', 0) == 0
+
     def execute_action(self, action: dict) -> dict:
         if not self.ce.any_mechanism:
             return super().execute_action(action)     # live-equivalent: exactly DefaultAgent
@@ -232,12 +266,22 @@ class ContractGraphAgent(DefaultAgent):
                 note = attribution.render(rows)
                 output = {**output, 'output': output.get('output', '') + '\n' + note}
                 self._log('attribution', rows=attribution.to_json(rows))
+        if self.ce_behavior is not None and tree and not self._marked(output):
+            # A submission is recognised first; behaviour notes never precede the marker line.
+            note = self.ce_behavior.after_action(command, output, previous, tree)
+            if note:
+                output = {**output, 'output': output.get('output', '') + '\n' + note}
         self.has_finished(output)
         return output | {'action': command}
 
     def has_finished(self, output: dict):
         lines = output.get('output', '').lstrip().splitlines(keepends=True)
         marked = bool(lines) and lines[0].strip() in MARKERS and output.get('returncode', 0) == 0
+        if marked and self.ce_behavior is not None:
+            reminder = self.ce_behavior.before_submit(self.ce_last_tree)
+            if reminder:
+                self._log('behavior_submit_reminder')
+                raise SubmitBlocked(reminder)
         if not marked or not self.ce.stop_rule:
             return super().has_finished(output)
         submission = ''.join(lines[1:])
