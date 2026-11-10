@@ -82,7 +82,8 @@ def setup(active: Path, root: Path, scratch: Path) -> dict:
     for name in settings['commands']:
         mounts[str((tools / 'bin' / name).resolve())] = ('/usr/local/bin/' + name, 'ro')
     resources = config['native_resources']
-    args = ['--network', 'none', f"--memory={resources['memory_bytes']}", f"--cpus={resources['cpus']}",
+    # --rm: there is no supervisor here to remove the container by its telemetry label.
+    args = ['--rm', '--network', 'none', f"--memory={resources['memory_bytes']}", f"--cpus={resources['cpus']}",
             f"--pids-limit={resources['pids']}", '--security-opt=no-new-privileges:true', '-e', 'PAGER=cat',
             '-e', 'GIT_PAGER=cat']
     for src, (bind, mode) in mounts.items():
