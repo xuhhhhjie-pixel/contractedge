@@ -16,7 +16,7 @@ import subprocess
 import time
 from pathlib import Path
 
-from minisweagent.agents.default import (DefaultAgent, ExecutionTimeoutError, NonTerminatingException,
+from minisweagent.agents.default import (DefaultAgent, ExecutionTimeoutError, FormatError, NonTerminatingException,
                                          Submitted)
 
 from contractedge.graph_repair import attribution
@@ -29,6 +29,7 @@ PLAIN_PUBLIC = re.compile(r'^\s*(?:cd\s+\S+\s*&&\s*)?ce-public(?:\s+[\w.:/-]+)*\
 CHECKED_COMMAND = re.compile(r'(?<![\w./-])(?:ce-public|ce-run|ce-probe\s+run|go\s+(?:build|test|vet)|make\b|helm\s+'
                              r'(?:template|lint)|kustomize\s+build|kubectl\s+kustomize|npm\s+(?:test|run)|pytest|cargo\s+(?:build|test))')
 SUBMIT_JSON = re.compile(r'^CE_SUBMIT_CHECK_JSON=(\{.*\})\s*$', re.M)
+DSML_COMMAND = re.compile(r'parameter name="command"[^>]*>(.*?)</[^<>]*parameter>', re.S)
 
 
 class SubmitBlocked(NonTerminatingException):
@@ -38,7 +39,7 @@ class SubmitBlocked(NonTerminatingException):
 class ContractGraphAgent(DefaultAgent):
     def __init__(self, model, env, *, ce_variant: Variant, ce_state: Path, ce_wire_usage: Path | None = None,
                  ce_tool_timeout: int = 600, ce_baseline_tree: str | None = None,
-                 ce_behavior_dir: Path | None = None, **kwargs):
+                 ce_behavior_dir: Path | None = None, ce_behavior_gold: dict | None = None, **kwargs):
         super().__init__(model, env, **kwargs)
         self.ce = ce_variant
         self.ce_state = Path(ce_state)
@@ -57,6 +58,7 @@ class ContractGraphAgent(DefaultAgent):
         # Host-only directory (not mounted into the container), so the model cannot edit behaviour state.
         self.ce_behavior_dir = Path(ce_behavior_dir) if ce_behavior_dir else self.ce_state.parent / 'ce-behavior'
         self.ce_behavior: BehaviorLoop | None = None
+        self.ce_behavior_gold = ce_behavior_gold          # ceiling experiments only (BehaviorLoop.gold)
 
     # ------------------------------------------------------------ bookkeeping
     def _log(self, event: str, **value) -> None:
@@ -192,6 +194,11 @@ class ContractGraphAgent(DefaultAgent):
             if best is not None and best['tree'] != current:
                 restored = self._run(f'ce-rollback {best["n"]}', 120)
                 self._log('force_rollback', checkpoint=best['n'], output=restored['output'][-300:])
+        if self.ce.force_clean:
+            # A forced submission skips the submission check; drop what the rules would reject the patch for.
+            cleaned = self._run('ce-submit --clean --json', 60)
+            match = re.search(r'^CE_SUBMIT_CLEAN_JSON=(\{.*\})\s*$', cleaned.get('output', ''), re.M)
+            self._log('force_clean', result=json.loads(match.group(1)) if match else cleaned.get('output', '')[-300:])
         self.ce_forced = {'reason': reason, 'tree': current, 'at_elapsed': round(self.elapsed(), 1)}
         self._log('forced_submission', **self.ce_forced)
         raise Submitted(f'FORCED_SUBMISSION ({reason}): best candidate submitted by the stop rule.\n')
@@ -203,7 +210,7 @@ class ContractGraphAgent(DefaultAgent):
         image = getattr(getattr(self.env, 'config', None), 'image', None) or 'local'
         self.ce_behavior = BehaviorLoop(self.ce, model=self.model, run=self._run, directory=self.ce_behavior_dir,
                                         remaining=self.remaining, baseline_tree=self.ce_baseline_tree,
-                                        env_identity=str(image), log=self._log)
+                                        env_identity=str(image), log=self._log, gold=self.ce_behavior_gold)
         try:
             self.ce_behavior.prepare(task)
         except Exception as exc:            # the executor runs as without the method
@@ -215,6 +222,18 @@ class ContractGraphAgent(DefaultAgent):
             return status, message
         finally:
             self.ce_behavior.finish(status)
+
+    def parse_action(self, response: dict) -> dict:
+        try:
+            return super().parse_action(response)
+        except FormatError:
+            if not self.ce.salvage_dsml:
+                raise
+            commands = DSML_COMMAND.findall(response.get('content', '') or '')
+            if len(commands) != 1 or not commands[0].strip():
+                raise
+            self._log('dsml_salvaged', chars=len(commands[0]))
+            return {'action': commands[0].strip(), **response}
 
     @staticmethod
     def _marked(output: dict) -> bool:

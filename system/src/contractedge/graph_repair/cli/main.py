@@ -208,9 +208,16 @@ def cmd_rollback(argv):
 
 def cmd_submit(argv):
     p = argparse.ArgumentParser(prog='ce-submit', description='Check the stop rule before submitting.')
-    p.add_argument('--check', action='store_true', required=True); p.add_argument('--json', action='store_true')
+    mode = p.add_mutually_exclusive_group(required=True)
+    mode.add_argument('--check', action='store_true')
+    mode.add_argument('--clean', action='store_true', help='undo changes the submission rules reject (used by the executor)')
+    p.add_argument('--json', action='store_true')
     a = p.parse_args(argv)
     from contractedge.graph_repair import submit
+    if a.clean:
+        value = submit.clean()
+        print('CE_SUBMIT_CLEAN_JSON=' + json.dumps(value, sort_keys=True))
+        return 0
     value = submit.check()
     if a.json:
         print('CE_SUBMIT_CHECK_JSON=' + json.dumps(value, sort_keys=True))

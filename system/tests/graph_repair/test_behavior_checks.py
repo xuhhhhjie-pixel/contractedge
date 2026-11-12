@@ -195,6 +195,24 @@ def test_timeouts_are_recorded_and_not_cached_as_results(tmp_path):
     assert ev['result'] == 'TIMEOUT' and check['status'] == 'ACTIVE'
 
 
+def test_checks_keep_their_build_cache_in_the_ignored_dependency_directory():
+    inner = shlex.split(checks.command({'kind': 'go_test', 'package': './calc', 'run': '^TestAdd$'}))[3]
+    assert 'export GOCACHE=/work/.contractedge-deps/gocache' in inner
+    assert inner.index('GOCACHE') < inner.index('exec go test')
+
+
+def test_first_check_of_a_package_gets_the_cold_build_timeout(tmp_path):
+    snap, check = planned()
+    assert checks.timeout_for(check, snap, 420) == 420
+    runner = Runner('', 124, trees=['T1', 'T1'], timed_out=True)
+    checks.execute(check, snap, runner.run, runner.tree, 'img', tmp_path, checks.timeout_for(check, snap, 420))
+    assert runner.commands[0][1] == 420 and checks.timeout_for(check, snap, 420) == 420   # still cold
+    runner = Runner(*recorded('go1.26', 'build'), trees=['T2', 'T2'])
+    checks.execute(check, snap, runner.run, runner.tree, 'img', tmp_path, checks.timeout_for(check, snap, 420))
+    assert checks.timeout_for(check, snap, 420) == 120                                     # built once: warm
+    assert checks.timeout_for(check, snap, 60) == 120                                      # never below the check's own
+
+
 def test_failing_checks_are_rerun_first():
     snap = snapshot_with('Add must return the sum of both arguments', 'Add of two and two must be five')
     checks.plan(snap, [{'obligations': ['O1'], 'package': './calc', 'run': '^TestAdd$'},

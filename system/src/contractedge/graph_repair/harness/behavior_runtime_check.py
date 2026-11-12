@@ -7,10 +7,13 @@ the mounts run_native.graph() uses (network none), then either
   raw CMD...   runs commands in the method container and prints their results, or
   agent SPEC   runs ContractGraphAgent with a scripted model: proposal calls are answered from
                SPEC['proposals'][purpose], executor steps from SPEC['actions'] in order.
+  real SPEC    runs ContractGraphAgent with the real model through the controller's metered transport
+               (deepseek_transport: same model, request/token limits and usage ledger as run_native.graph());
+               SPEC gives the variant and overrides only. Paid; billed into SCRATCH/billing_summary.json.
 
-No model request is made. The experiment root and the case are only read; everything written
-goes to SCRATCH and the per-run socket directory, and both containers are removed at the end.
-Usage: python behavior_runtime_check.py ACTIVE_CASE_DIR EXPERIMENT_ROOT SCRATCH {raw CMD...|agent SPEC.json}
+raw and agent make no model request. The experiment root and the case are only read; everything
+written goes to SCRATCH and the per-run socket directory, and both containers are removed at the end.
+Usage: python behavior_runtime_check.py ACTIVE_CASE_DIR EXPERIMENT_ROOT SCRATCH {raw CMD...|agent SPEC.json|real SPEC.json}
 """
 from __future__ import annotations
 
@@ -26,9 +29,31 @@ from pathlib import Path
 
 P = Path('/tmp/contractedge-deepseek-preflight-20261019')
 SRC = Path(__file__).resolve().parents[3]          # system/src
+CREDENTIALS = '/home/zyw/.config/contractedge-deepseek-official/api.env'
+MODEL, BASE = 'deepseek-flash', 'https://api.deepseek.com/v1'      # as run_native.graph()
 
 
-def setup(active: Path, root: Path, scratch: Path) -> dict:
+CACHE_FROM, CACHE_TO = '--env=GOCACHE=/work/.cache/gocache', '--env=GOCACHE=/work/.contractedge-deps/gocache'
+
+
+def persistent_public_cache(tools_root: str, scratch: Path) -> str:
+    """A copy of the case's public runtime tools whose Go build cache survives between ce-run calls.
+
+    The published runtime points GOCACHE at a tmpfs dropped after every command (a cold build of
+    provider-upjet-aws takes about 250 s); the copy points it at the work tree's git-excluded
+    dependency directory instead. A shared environment fix: use it for every compared group alike."""
+    copy = scratch / 'public-tools'
+    shutil.copytree(tools_root, copy, symlinks=True)
+    for name in ('scorer/executor.py', 'scorer/isolation.py'):
+        path = copy / name
+        text = path.read_text()
+        assert text.count(CACHE_FROM) == 1, f'{name}: expected one GOCACHE setting'
+        path.chmod(0o644)                     # package files are read-only; copytree keeps their mode
+        path.write_text(text.replace(CACHE_FROM, CACHE_TO))
+    return str(copy)
+
+
+def setup(active: Path, root: Path, scratch: Path, public_cache: bool = False) -> dict:
     config = json.loads((active / 'case-config.json').read_text())
     ready = json.loads((active.parent / 'runtime/READY.json').read_text())
     template = json.loads((active / 'smoke/contractedge-graph/profile.json').read_text())
@@ -52,6 +77,8 @@ def setup(active: Path, root: Path, scratch: Path) -> dict:
     task.write_bytes(Path(template['task_path']).read_bytes())
     profile = {**template, 'source_root': str(source), 'task_path': str(task), 'public_logs': str(scratch / 'public-logs'),
                'public_socket_dir': str(socket), 'public_container_prefix': run_id + '-public-'}
+    if public_cache:
+        profile['tools_root'] = persistent_public_cache(template['tools_root'], scratch)
     (scratch / 'profile.json').write_text(json.dumps(profile, indent=2))
     tools = scratch / 'ce-tools'
     subprocess.run([sys.executable, str(SRC / 'contractedge/graph_repair/harness/package_tools.py'), str(SRC), str(tools)],
@@ -146,9 +173,42 @@ class ScriptedModel:
         return {'n_model_calls': self.n_calls, 'model_cost': self.cost}
 
 
+def real_model(root: Path, scratch: Path):
+    """The controller's model wiring: litellm through the metered DeepSeek transport (no key in this process' code)."""
+    sys.path[:0] = [str(root / 'controller/controller'), str(root / 'controller')]
+    run_id = 'bhvreal-' + uuid.uuid4().hex[:8]
+    (scratch / 'coordination').mkdir()          # request settlement of this run only, not the experiment root's
+    os.environ.update(CE_PREFLIGHT_CREDENTIAL_FILE=CREDENTIALS, CE_PRICING_FILE=str(root / 'controller/pricing.json'),
+                      CE_API_COORDINATION=str(scratch / 'coordination'),
+                      CE_RUN_ID=run_id, CE_API_USER_ID=run_id + '-real', OPENAI_API_KEY='task-local-adapter-no-upstream-secret',
+                      LITELLM_LOG='ERROR')
+    from deepseek_transport import AdapterError, install
+    adapter = install(scratch / 'wire')
+    from minisweagent.models import get_model
+    from minisweagent.models.litellm_model import LitellmModel
+    from tenacity import retry_if_not_exception_type
+    LitellmModel._query.retry.retry &= retry_if_not_exception_type(AdapterError)
+    cfg = {'model_name': 'openai/' + MODEL, 'cost_tracking': 'ignore_errors',
+           'model_kwargs': {'api_key': 'task-local-adapter-no-upstream-secret', 'api_base': BASE, 'max_tokens': 16384}}
+    return get_model(cfg['model_name'], cfg), adapter
+
+
+def bill(root: Path, scratch: Path) -> dict:
+    usage = scratch / 'wire/usage.jsonl'
+    if not usage.exists():
+        return {}
+    from billing import build
+    build(usage, root / 'controller/pricing.json', scratch)
+    rows = [json.loads(line) for line in usage.read_text().splitlines() if line.strip()]
+    summary = json.loads((scratch / 'billing_summary.json').read_text())
+    return {'cost_cny': summary.get('calculated_cost'), 'requests': sum(r.get('phase') == 'request_started' for r in rows),
+            'tokens': sum(r.get('usage', {}).get('total_tokens', 0) for r in rows if r.get('phase') == 'request_finished')}
+
+
 def main(active: str, root: str, scratch: str, mode: str, *rest: str) -> int:
     active, root, scratch = Path(active), Path(root), Path(scratch)
-    ctx = setup(active, root, scratch)
+    spec = json.loads(Path(rest[0]).read_text()) if mode in ('agent', 'real', 'extract') else {}
+    ctx = setup(active, root, scratch, public_cache=bool(spec.get('public_cache')) or os.environ.get('BHV_PUBLIC_CACHE') == '1')
     sys.path.insert(0, str(ctx['tools'] / 'lib'))
     live_yaml = (P / 'repos/live-swe-agent/config/livesweagent.yaml').read_text()
     env = None
@@ -162,7 +222,6 @@ def main(active: str, root: str, scratch: str, mode: str, *rest: str) -> int:
                                   'returncode': result.get('returncode'), 'output_tail': result.get('output', '')[-3000:]}),
                       flush=True)
             return 0
-        spec = json.loads(Path(rest[0]).read_text())
         from contractedge.graph_repair.agent import ContractGraphAgent
         from contractedge.graph_repair.config import variant as load_variant
         from contractedge.graph_repair.prompts.build import agent_config
@@ -180,17 +239,51 @@ def main(active: str, root: str, scratch: str, mode: str, *rest: str) -> int:
         cfg.update(step_limit=0, cost_limit=0)
         tree = env.execute('git -c safe.directory=* rev-parse ' + ctx['profile']['baseline_commit'] + '^{tree}')
         assert tree['returncode'] == 0, tree
-        model = ScriptedModel(spec)
-        agent = ContractGraphAgent(model, env, ce_variant=v, ce_state=scratch / 'ce-state', ce_wire_usage=None,
+        if mode == 'extract':
+            # Extraction only: the prepare() proposal with the real model on this case's public material. Nothing
+            # is edited and no driver runs; used to compare extraction prompts offline.
+            from contractedge.graph_repair.behavior_loop import BehaviorLoop
+            model, _ = real_model(root, scratch)
+
+            def run(command, timeout):
+                try:
+                    return env.execute(command, timeout=max(5, int(timeout)))
+                except Exception as exc:
+                    return {'output': str(exc), 'returncode': 124}
+            loop = BehaviorLoop(v, model=model, run=run, directory=scratch / 'ce-behavior', remaining=lambda: v.wall_seconds,
+                                baseline_tree=tree['output'].strip(), env_identity='extract', log=lambda *a, **k: None)
+            began = time.monotonic()
+            loop.prepare(Path(ctx['profile']['task_path']).read_text())
+            snap = loop.store.load()
+            result = {'seconds': round(time.monotonic() - began, 1), 'requirements': snap.get('obligations'),
+                      'examples': snap.get('examples'), **bill(root, scratch)}
+            (scratch / 'EXTRACT.json').write_text(json.dumps(result, indent=1, ensure_ascii=False))
+            print(json.dumps({k: result[k] for k in ('seconds', 'cost_cny')}, default=str), flush=True)
+            return 0
+        if mode == 'real':
+            model, _ = real_model(root, scratch)
+            wire = scratch / 'wire/usage.jsonl'
+        else:
+            model, wire = ScriptedModel(spec), None
+        agent = ContractGraphAgent(model, env, ce_variant=v, ce_state=scratch / 'ce-state', ce_wire_usage=wire,
                                    ce_tool_timeout=ctx['config']['tool_timeout_seconds'],
-                                   ce_baseline_tree=tree['output'].strip(), ce_behavior_dir=scratch / 'ce-behavior', **cfg)
+                                   ce_baseline_tree=tree['output'].strip(), ce_behavior_dir=scratch / 'ce-behavior',
+                                   ce_behavior_gold=spec.get('gold'), **cfg)
         began = time.monotonic()
-        status, message = agent.run(Path(ctx['profile']['task_path']).read_text(), system='Linux', release='',
-                                    version='', machine='x86_64')
+        try:
+            status, message = agent.run(Path(ctx['profile']['task_path']).read_text(), system='Linux', release='',
+                                        version='', machine='x86_64')
+        except Exception as exc:               # e.g. the transport's budget stop; keep the evidence
+            status, message = type(exc).__name__, str(exc)
         patch = env.execute('cd /testbed && git -c safe.directory=* status --porcelain && git -c safe.directory=* diff --stat')
+        baseline = ctx['profile']['baseline_commit']
+        diff = env.execute(f'cd /testbed && git -c safe.directory=* add -N . && git -c safe.directory=* diff --binary {baseline}')
+        (scratch / 'candidate.patch').write_text(diff.get('output', ''))
         result = {'status': status, 'message': message[-500:], 'seconds': round(time.monotonic() - began, 1),
-                  'model_calls': model.n_calls, 'asked': model.asked, 'forced': agent.ce_forced,
+                  'model_calls': model.n_calls, 'asked': getattr(model, 'asked', None), 'forced': agent.ce_forced,
                   'checkpoints': len(agent.ce_checkpoints), 'worktree': patch.get('output', '')[-800:]}
+        if mode == 'real':
+            result.update(bill(root, scratch))
         (scratch / 'trajectory.json').write_text(json.dumps(agent.messages, indent=1, default=str))
         (scratch / 'RESULT.json').write_text(json.dumps(result, indent=1, default=str))
         print(json.dumps(result, default=str), flush=True)

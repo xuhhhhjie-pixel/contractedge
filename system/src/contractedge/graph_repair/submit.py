@@ -65,6 +65,33 @@ def policy_unmet(policy: dict, change: dict) -> list[dict]:
     return unmet
 
 
+def clean() -> dict:
+    """Undo changes the submission rules reject: restore files outside patchable_paths (or matching
+    forbidden_paths) to the original version, and delete such files that are new.
+
+    Used before a forced submission, which skips the check: real runs submitted the executor's own
+    scratch files (`.probe/main.go`, `tmp_diag/main.go`, `.ce_candidate.go.mod`) and were rejected
+    whole although the source fix passed (R4-PROVIDER-UPJET-AWS-2182, 2026-11-12)."""
+    policy = state.run_config().get('policy', {})
+    baseline = checkpoint.baseline_commit()
+    change = changes(baseline, checkpoint.current_tree())
+    original = checkpoint.tree_paths(baseline)
+    restored, removed = [], []
+    for row in policy_unmet(policy, {**change, 'binary': [], 'mode_changes': [], 'patch_bytes': 0}):
+        path = row['id']
+        if row['id'] == 'PATCH':
+            continue
+        if path in original:
+            checkpoint._git('checkout', baseline, '--', path)
+            restored.append(path)
+        else:
+            target = state.WORKSPACE / path
+            if target.is_file() or target.is_symlink():
+                target.unlink()
+                removed.append(path)
+    return {'restored': restored, 'removed': removed, 'tree': checkpoint.current_tree()}
+
+
 def public_result(tree: str, timeout: int) -> dict:
     cached = checkpoint.results().get(tree, {}).get('public')
     if cached is not None:

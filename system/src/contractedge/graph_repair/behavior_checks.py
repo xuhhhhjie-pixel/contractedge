@@ -28,11 +28,17 @@ LAYOUT = re.compile(r'go\.mod file not found|directory prefix \S+ does not conta
                     r'is not in std|no Go files in|matched no packages|cannot find package')
 
 
-RUNNER = 'go-test-json/2'
+RUNNER = 'go-test-json/3'
 # The public runtime has a read-only root and no network. Cases ship their modules under
 # /work/.contractedge-deps (gomod, setup/go.sum) and the published build points Go at them; the
 # check uses the same setup, read from the case, and never writes the module files it is given.
+# The runtime's own GOCACHE is a tmpfs dropped after every ce-run, so each check rebuilt the package
+# (about 250 s on provider-upjet-aws). Checks keep their build cache in the work tree's ignored
+# dependency directory instead (same run, content-addressed by Go; about 5 s once warm). It is not
+# part of the exported patch (/.contractedge-deps/ is excluded from git).
 SETUP = ('cd /work && export GOTOOLCHAIN=local && M= && '
+         'if [ -d .contractedge-deps ] && mkdir -p .contractedge-deps/gocache 2>/dev/null; then '
+         'export GOCACHE=/work/.contractedge-deps/gocache; fi && '
          'if [ -d .contractedge-deps/gomod ]; then export GOMODCACHE=/work/.contractedge-deps/gomod GOPROXY=off '
          'GOSUMDB=off; fi && if [ -f .contractedge-deps/setup/go.sum ]; then cp go.mod /tmp/ce-check.go.mod && '
          'cp .contractedge-deps/setup/go.sum /tmp/ce-check.go.sum && M="-mod=readonly -modfile=/tmp/ce-check.go.mod"; fi && ')
@@ -207,7 +213,16 @@ def classify(output: str, returncode: int, timed_out: bool = False) -> dict:
 
 
 # ---------------------------------------------------------------- execution
-def execute(check: dict, snapshot: dict, run, tree, env: str, log_dir: Path) -> dict:
+COLD_RESULTS = ('TIMEOUT', 'INFRA_ERROR', 'UNCLASSIFIED')     # the package build may not have finished
+
+
+def timeout_for(check: dict, snapshot: dict, cold_timeout: int) -> int:
+    """The first check of a package builds it from scratch; later ones reuse the build cache."""
+    warm = snapshot.get('warm_packages', [])
+    return check['timeout'] if check['runner_spec']['package'] in warm else max(check['timeout'], int(cold_timeout))
+
+
+def execute(check: dict, snapshot: dict, run, tree, env: str, log_dir: Path, timeout: int | None = None) -> dict:
     """The only way evidence is produced: run, read with the adapter, bind to identities.
 
     `run(command, timeout)` executes in the method container and returns mini-swe-agent's dict;
@@ -215,7 +230,7 @@ def execute(check: dict, snapshot: dict, run, tree, env: str, log_dir: Path) -> 
     """
     before = tree()
     began = time.monotonic()
-    result = run(command(check['runner_spec']), check['timeout'])
+    result = run(command(check['runner_spec']), timeout or check['timeout'])
     seconds = round(time.monotonic() - began, 1)
     after = tree()
     reading = classify(result.get('output', ''), result.get('returncode', 0), bool(result.get('timed_out')))
@@ -238,6 +253,9 @@ def execute(check: dict, snapshot: dict, run, tree, env: str, log_dir: Path) -> 
     counters = snapshot['counters']
     counters['check_runs'] = counters.get('check_runs', 0) + 1
     counters['check_seconds'] = round(counters.get('check_seconds', 0) + seconds, 1)
+    package = check['runner_spec']['package']
+    if reading['result'] not in COLD_RESULTS and package not in snapshot.setdefault('warm_packages', []):
+        snapshot['warm_packages'].append(package)
     if reading['result'] == 'INVALID_CHECK' and before == after:
         check['status'] = 'INVALID'           # same definition would be invalid again
         check['invalid_reason'] = reading['detail']

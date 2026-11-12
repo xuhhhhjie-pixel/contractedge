@@ -87,6 +87,12 @@ def behavior_section(v) -> str:
                       'reports which requirement passed or failed on the current version. A check covers only the test it '
                       'names; a runtime or build failure says nothing about behaviour (fix the environment, not production '
                       'code, for it). An unseen failure is shown once more when you submit; nothing else blocks submission.')
+    if v.behavior_examples:
+        parts[-1] += (' When the public material gives concrete cases (such as a fixture\'s trigger and control cases), a '
+                      'separate helper writes a small driver under /testbed/.contractedge-deps/ce-examples that runs the '
+                      'production code on those cases; after each edit the executor runs it and reports each observed '
+                      'value against the value the public material states (or, when it states none, against the original '
+                      'version: a target case must change, a control case must not). Do not edit the driver.')
     parts[-1] += (' A requirement is only as reliable as its quote; use the notes as leads alongside your own reading and '
                   'the public check. Nothing needs to be done to trigger them.')
     return '\n'.join(parts + ['', ''])

@@ -113,12 +113,18 @@ def test_unseen_failure_blocks_submission_once(go_ws):
 
 
 def test_bad_proposal_reply_leaves_the_executor_running(go_ws):
-    agent = make(go_ws, VARIANTS['behavior'], ['I think the requirement is obvious.', FIX, SUBMIT])
+    agent = make(go_ws, VARIANTS['behavior'], ['I think the requirement is obvious.', '', FIX, SUBMIT])
     status, _ = go(agent)
-    assert status == 'Submitted' and agent.model.n_calls == 3                     # the failed proposal is still counted
+    assert status == 'Submitted' and agent.model.n_calls == 4                     # failed proposals are still counted
     rows = [json.loads(l) for l in (agent.ce_behavior_dir / 'behavior-events.jsonl').read_text().splitlines()]
-    assert rows[0]['event'] == 'proposal' and rows[0]['status'] == 'PARSE_ERROR'
+    assert [(r['event'], r['status']) for r in rows[:2]] == [('proposal', 'RETRY'), ('proposal', 'PARSE_ERROR')]
     assert summary(agent)['observed_pass'] == [] and notes(agent) == []
+
+
+def test_an_empty_proposal_reply_is_asked_once_more(go_ws):
+    agent = make(go_ws, VARIANTS['behavior'], ['', REQUIREMENTS, act('cat /testbed/calc/calc.go'), FIX, PLAN, SUBMIT])
+    assert go(agent)[0] == 'Submitted'
+    assert 'O1 [target] when two numbers are added' in notes(agent)[0]
 
 
 def test_transport_error_is_recorded_and_ignored(go_ws):
@@ -210,8 +216,9 @@ def test_loop_counts_proposals_against_the_limit(tmp_path):
                         baseline_tree='T0', env_identity='img', log=lambda *a, **k: None)
     snap = behavior.empty()
     assert loop.propose(snap, 'requirements', 'x')['status'] == 'EMPTY'
+    assert loop.propose(snap, 'check_plan', 'x')['status'] == 'EMPTY'      # requirements do not use the plan limit
     assert loop.propose(snap, 'check_plan', 'x')['status'] == 'BUDGET'
-    assert calls == [{'timeout': 30}] and snap['counters']['proposals'] == 1
+    assert calls == [{'timeout': 30}] * 2 and snap['counters'] == {'proposals': 2, 'check_plans': 1}
 
 
 def test_prepare_reads_the_requirement_file_the_task_names(tmp_path):
@@ -240,6 +247,77 @@ def test_prepare_reads_the_requirement_file_the_task_names(tmp_path):
                          baseline_tree='T0', env_identity='img', log=lambda *a, **k: None)
     loop2.prepare('requirement_file: ../../etc/passwd\n')
     assert 'Requirement file' not in seen[1]
+
+
+def test_prepare_offers_small_public_fixtures_and_grounds_their_quotes(tmp_path):
+    seen = []
+    trigger = '"external_name": "vpce-1/subnet-2"'
+    control = '"resource": "aws_vpc_endpoint_security_group_association"'
+
+    class Model:
+        def query(self, messages, **kwargs):
+            seen.append(messages[1]['content'])
+            ref = lambda q: [{'source': 'file', 'path': '/inputs/inputs/replay-input.json', 'quote': q}]
+            return {'content': json.dumps({'requirements': [
+                {'kind': 'target', 'condition': 'tfstate id a-vpce-1', 'expected': 'external name vpce-1/subnet-2',
+                 'source_refs': ref(trigger)},
+                {'kind': 'preserve', 'condition': 'security group association', 'expected': 'external name is the id',
+                 'source_refs': ref(control)},
+                {'kind': 'target', 'condition': 'x', 'expected': 'y', 'source_refs': ref('"not": "in the fixture"')}]})}
+    files = {'/inputs/requirement.md': 'The external name must not alternate.\n',
+             '/inputs/inputs/replay-input.json': '{"trigger": {' + trigger + '},\n "control": {' + control + '}}\n',
+             '/inputs/task.yaml': 'requirement_file: requirement.md\n', '/inputs/environment.json': '{}',
+             '/inputs/gomod.tar.gz': 'BINARY'}
+
+    def run(command, timeout):
+        if command.startswith('find /inputs'):
+            return {'output': '\n'.join(sorted(files)) + '\n/testbed/x.json\n', 'returncode': 0}
+        for path, text in files.items():
+            if command.startswith('test -f ' + path):
+                return {'output': text, 'returncode': 0}
+        return {'output': '', 'returncode': 1}
+    loop = BehaviorLoop(VARIANTS['behavior'], model=Model(), run=run, directory=tmp_path, remaining=lambda: 1000,
+                        baseline_tree='T0', env_identity='img', log=lambda *a, **k: None)
+    result = loop.prepare('Repair it.\nrequirement_file: requirement.md\n')
+    assert 'Public input file /inputs/inputs/replay-input.json' in seen[0]
+    for skipped in ('task.yaml', 'environment.json', 'gomod.tar.gz', '/testbed/x.json', 'Public input file /inputs/requirement.md'):
+        assert skipped not in seen[0]
+    assert result['delta']['added'] == ['O1', 'O2'] and result['delta']['unresolved'] == ['O3']
+    obligations = loop.store.load()['obligations']
+    assert obligations['O2']['kind'] == 'preserve' and obligations['O1']['source_refs'][0]['line'] == 1
+
+
+@pytest.mark.parametrize('command, files', [
+    ("find controllers -name '*.go' ! -name '*_test.go'", []),
+    ('grep -l Reconcile *_test.go', []),
+    ('nl -ba controllers/keda/hpa_test.go | sed -n 1,40p', ['controllers/keda/hpa_test.go']),
+    ('cat /testbed/calc/calc_test.go ./a.b/c_test.go', ['/testbed/calc/calc_test.go', './a.b/c_test.go']),
+])
+def test_only_named_test_files_are_taken_from_commands(command, files):
+    from contractedge.graph_repair.behavior_loop import TEST_FILE
+    assert TEST_FILE.findall(command) == files
+
+
+def test_an_unchanged_plan_context_is_not_asked_again(tmp_path):
+    asked = []
+
+    class Model:
+        def query(self, messages, **kwargs):
+            asked.append(messages[0]['content'][:12])
+            return {'content': '{"checks": [], "requirements": []}'}
+    loop = BehaviorLoop(VARIANTS['behavior'], model=Model(), run=lambda c, t: {'output': '', 'returncode': 1},
+                        directory=tmp_path, remaining=lambda: 1000, baseline_tree='T0', env_identity='img',
+                        log=lambda *a, **k: None)
+    snap = behavior.empty()
+    behavior.apply_proposals(snap, [{'kind': 'target', 'condition': 'c', 'expected': 'Add returns the sum',
+                                     'source_refs': [{'source': 'task', 'quote': 'Add returns the sum'}]}],
+                             behavior.Sources('Add returns the sum', lambda p: None), 'task')
+    snap['packages'] = {'./calc': ['TestAdd']}
+    loop._plan_checks(snap, ['./calc'], None)
+    loop._plan_checks(snap, ['./calc'], None)                   # same tests, same open requirement
+    snap['packages']['./other'] = ['TestOther']
+    loop._plan_checks(snap, ['./other'], None)                  # a new test is offered
+    assert len(asked) == 2 and snap['counters']['check_plans'] == 2
 
 
 @pytest.mark.parametrize('fields, message', [
