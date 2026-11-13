@@ -4,7 +4,8 @@ An example names a scenario (e.g. the fixture's "trigger" or "control" case), wh
 target or a preserve case, and the fields whose values the fixed code must produce. A field's
 expectation is either
 - LITERAL: a value copied from public material and verified to occur there verbatim; the program
-  compares the observed value with it; or
+  compares the observed value with it. A field bound to a key of the example's own quoted record (its record_key,
+  its name, or a long key its name ends with) takes the record's value, not the proposed one; or
 - DIFF: no public value; a target field must differ from what the original version produces and a
   preserve field must stay equal to it.
 Expected values are held here and never come from the driver. The driver prints one line per observation:
@@ -111,6 +112,23 @@ def _stated(refs: list[dict]) -> dict:
     return stated
 
 
+SUFFIX_MIN = 8   # a field name may end with a quoted key ("derived_external_name"); short keys (id, name) may not
+
+
+def _bound(fname: str, record_key, stated: dict) -> tuple[str, set] | None:
+    """The quoted key a field stands for: the declared record_key, else the field's own name, else a long key the
+    field name ends with (exactly one). Returns (key, values the quotes give) or None."""
+    if isinstance(record_key, str) and record_key.strip():
+        k = _key(re.split(r'[./]', record_key.strip())[-1])
+        if k in stated:
+            return k, stated[k]
+    k = _key(fname)
+    if k in stated:
+        return k, stated[k]
+    ends = [s for s in stated if len(s) >= SUFFIX_MIN and k.endswith(s)]
+    return (ends[0], stated[ends[0]]) if len(ends) == 1 else None
+
+
 def apply_examples(snapshot: dict, proposals, sources: behavior.Sources) -> dict:
     """Register proposed examples; LITERAL values must occur verbatim in the task text or a public file read."""
     delta = {'added': [], 'rejected': []}
@@ -133,14 +151,23 @@ def apply_examples(snapshot: dict, proposals, sources: behavior.Sources) -> dict
             if not NAME.match(fname):
                 continue
             expected = field.get('expected')
-            # Real run UPJET-AWS-2117: the trigger's quoted record says "external_name": "vpce-.../subnet-...", the
-            # proposal expected the state id (which also occurs in the material); the executor then "fixed" the code
-            # towards the wrong value. A value that contradicts the same key in the case's own quotes is not used.
-            conflict = stated.get(_key(fname))
-            if expected is not None and conflict and _canon(expected) not in conflict:
+            # Real runs UPJET-AWS-2117 (2026-11-12): the trigger's quoted record says "external_name":
+            # "vpce-.../subnet-...", five of six extractions expected the state id instead and the executor "fixed" the
+            # code towards it. Renaming the field (derived_external_name) slipped past a same-name check, and dropping
+            # a contradicted value to DIFF turned the record's own value into "must differ from it". The value of a
+            # field bound to a quoted key is therefore the record's, whatever the proposal says.
+            bound = _bound(fname, field.get('record_key'), stated)
+            if bound and len(bound[1]) == 1:
+                value = next(iter(bound[1]))
+                fields[fname] = {'mode': 'LITERAL', 'expected': value, 'record_key': bound[0]}
+                if expected is not None and _canon(expected) != value:
+                    fields[fname]['note'] = (f'proposed {_short(_canon(expected), 80)} replaced by the quoted record '
+                                             f'({bound[0]}: {_short(value, 80)})')
+                    delta.setdefault('replaced', []).append({'example': name, 'field': fname,
+                                                             'proposed': _canon(expected), 'record': value})
+            elif bound and expected is not None and _canon(expected) not in bound[1]:
                 fields[fname] = {'mode': 'DIFF', 'expected': None,
-                                 'note': f'expected value contradicts the quoted record ({fname}: '
-                                         f'{_short(sorted(conflict)[0], 80)})'}
+                                 'note': f'the quoted record gives several values for {bound[0]}, none proposed'}
             elif expected is not None and any(behavior._norm(_canon(expected)) in text for text in corpus):
                 fields[fname] = {'mode': 'LITERAL', 'expected': _canon(expected)}
             else:

@@ -58,11 +58,15 @@ EXAMPLES = """
 Also list the concrete cases the public material gives (for example the trigger and control cases of a fixture):
 add "examples": [{"name": "<case name, e.g. trigger>", "kind": "target" or "preserve",
   "input": "<what the case feeds the code, in a few words>",
-  "fields": [{"name": "<short_snake_case>", "meaning": "<what this value is>", "expected": <value or null>}],
+  "fields": [{"name": "<short_snake_case>", "meaning": "<what this value is>", "expected": <value or null>,
+              "record_key": "<key in the quoted record that states this output's value, or null>"}],
   "source_refs": [<quotes of the case, as above>]}]
 - A field is one observable output of the production code for that case (a returned identifier, whether an update
   or error happens, a rendered value ...). Give "expected" only when the public material states that exact value
   for that output; otherwise null. A case the material marks as a control is "preserve".
+- When the case's quoted record states the value an output must have (for example the record's external_name
+  for the name derived from its stored state), set "record_key" to that key; the expected value is then read
+  from the record itself.
 - A case may be a fixture record or a situation the task text describes (a condition and what must then happen);
   list both kinds.
 - A field is an OUTPUT the production code gives for the case; never list the case's own input values as fields.

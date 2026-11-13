@@ -13,7 +13,9 @@ from contractedge.graph_repair.config import VARIANTS, Variant
 FIXTURE = ('{"trigger": {"external_name": "vpce-1/subnet-2", "terraform_state": {"id": "a-vpce-1x9"}},\n'
            ' "control": {"external_name": "a-vpce-1y7", "terraform_state": {"id": "a-vpce-1y7"}}}\n')
 PATH = '/inputs/inputs/replay-input.json'
-REF = [{'source': 'file', 'path': PATH, 'quote': '"trigger": {"external_name": "vpce-1/subnet-2"'}]
+# The trigger's quote gives only the state id, so external_name below stays a DIFF field (a quoted external_name
+# would bind it to the record; see test_a_value_that_contradicts_the_quoted_record_is_replaced_by_the_record).
+REF = [{'source': 'file', 'path': PATH, 'quote': '"terraform_state": {"id": "a-vpce-1x9"}'}]
 CREF = [{'source': 'file', 'path': PATH, 'quote': '"control": {"external_name": "a-vpce-1y7"'}]
 PROPOSED = [
     {'name': 'trigger', 'kind': 'target', 'input': 'subnet association', 'source_refs': REF,
@@ -399,8 +401,9 @@ def test_a_late_driver_is_still_calibrated_within_the_remaining_time(tmp_path):
     assert fake.timeouts[0] == 800 - 90 - 60 and fake.runs == ['base', 'T0']
 
 
-def test_a_literal_that_contradicts_the_quoted_record_is_not_used():
-    # The UPJET-AWS-2117 dev run: expected the state id for external_name, the quoted record says otherwise.
+def test_a_value_that_contradicts_the_quoted_record_is_replaced_by_the_record():
+    # The UPJET-AWS-2117 runs: expected the state id for external_name, the quoted record says otherwise. Dropping the
+    # value to DIFF made the record's own value read as "must change"; the record's value is used instead.
     record = ('{"trigger": {"external_name": "vpce-1/subnet-2", "terraform_state": {"id": "a-vpce-1x9"}}}\n'
               'metadata:\n  annotations:\n    crossplane.io/external-name: vpce-1/subnet-2\n')
     path = '/inputs/inputs/r.json'
@@ -409,7 +412,7 @@ def test_a_literal_that_contradicts_the_quoted_record_is_not_used():
     refs = [{'source': 'file', 'path': path, 'quote': '"external_name": "vpce-1/subnet-2", "terraform_state": {"id": "a-vpce-1x9"}'}]
     yaml_refs = [{'source': 'file', 'path': path, 'quote': 'crossplane.io/external-name: vpce-1/subnet-2'}]
     snap = behavior.empty()
-    ex.apply_examples(snap, [
+    delta = ex.apply_examples(snap, [
         {'name': 'trigger', 'kind': 'target', 'source_refs': refs,
          'fields': [{'name': 'external_name', 'expected': 'a-vpce-1x9'},        # contradicts the record
                     {'name': 'rebuilt_id', 'expected': 'a-vpce-1x9'},           # no such key quoted: literal
@@ -418,7 +421,45 @@ def test_a_literal_that_contradicts_the_quoted_record_is_not_used():
          'fields': [{'name': 'external_name', 'expected': 'other'}, {'name': 'external-name', 'expected': 'vpce-1/subnet-2'}]}],
         s)
     fields = snap['examples']['trigger']['fields']
-    assert fields['external_name']['mode'] == 'DIFF' and 'contradicts the quoted record' in fields['external_name']['note']
-    assert fields['rebuilt_id']['mode'] == 'LITERAL' and fields['id']['mode'] == 'LITERAL'
+    assert fields['external_name']['mode'] == 'LITERAL' and fields['external_name']['expected'] == 'vpce-1/subnet-2'
+    assert 'replaced by the quoted record' in fields['external_name']['note']
+    assert fields['rebuilt_id'] == {'mode': 'LITERAL', 'expected': 'a-vpce-1x9', 'meaning': ''}
+    assert fields['id']['expected'] == 'a-vpce-1x9' and 'note' not in fields['id']
     yaml = snap['examples']['annotated']['fields']
-    assert yaml['external_name']['mode'] == 'DIFF' and yaml['external-name']['mode'] == 'LITERAL'
+    assert yaml['external_name']['expected'] == yaml['external-name']['expected'] == 'vpce-1/subnet-2'
+    assert [r['field'] for r in delta['replaced']] == ['external_name', 'external_name']
+
+
+def test_a_renamed_field_is_still_bound_to_the_quoted_record():
+    # r4-1 of UPJET-AWS-2117: "derived_external_name" escaped a same-name check and kept the state id.
+    record = '{"trigger": {"external_name": "vpce-1/subnet-2", "terraform_state": {"id": "a-vpce-1x9"}}}\n'
+    path = '/inputs/inputs/r.json'
+    s = behavior.Sources('Repair it.', lambda p: record if p == path else None)
+    s.text(path)
+    refs = [{'source': 'file', 'path': path, 'quote': '"external_name": "vpce-1/subnet-2", "terraform_state": {"id": "a-vpce-1x9"}'}]
+    snap = behavior.empty()
+    ex.apply_examples(snap, [{'name': 'trigger', 'kind': 'target', 'source_refs': refs, 'fields': [
+        {'name': 'derived_external_name', 'expected': 'a-vpce-1x9'},           # ends with a quoted key
+        {'name': 'name_after_sync', 'expected': 'a-vpce-1x9', 'record_key': 'trigger.external_name'},
+        {'name': 'rebuilt_identifier', 'expected': 'a-vpce-1x9'},              # "id" is too short to match a suffix
+        {'name': 'observed_id', 'expected': 'a-vpce-1x9', 'record_key': 'no_such_key'}]}], s)
+    f = snap['examples']['trigger']['fields']
+    assert f['derived_external_name']['expected'] == f['name_after_sync']['expected'] == 'vpce-1/subnet-2'
+    assert f['derived_external_name']['record_key'] == 'externalname'
+    assert f['rebuilt_identifier'] == {'mode': 'LITERAL', 'expected': 'a-vpce-1x9', 'meaning': ''}
+    assert f['observed_id']['mode'] == 'LITERAL' and 'record_key' not in f['observed_id']
+
+
+def test_a_key_with_several_quoted_values_is_not_bound():
+    record = '{"a": {"value": "1"}, "b": {"value": "0"}}\n'
+    path = '/inputs/inputs/r.json'
+    s = behavior.Sources('Repair it.', lambda p: record if p == path else None)
+    s.text(path)
+    refs = [{'source': 'file', 'path': path, 'quote': '"a": {"value": "1"}'},
+            {'source': 'file', 'path': path, 'quote': '"b": {"value": "0"}'}]
+    snap = behavior.empty()
+    ex.apply_examples(snap, [{'name': 'case', 'kind': 'target', 'source_refs': refs, 'fields': [
+        {'name': 'value', 'expected': '0'}, {'name': 'other_value', 'expected': None}]}], s)
+    f = snap['examples']['case']['fields']
+    assert f['value']['mode'] == 'LITERAL' and f['value']['expected'] == '0'
+    assert f['other_value']['mode'] == 'DIFF'
