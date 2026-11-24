@@ -1,0 +1,15 @@
+{
+  "schema_version": "contractedge.r1_release_digests.v1",
+  "version": "R1-quality30-full-20261019-v4.2-frozen-20261125",
+  "status": "FROZEN_NO_QUALIFICATION_GRANTED",
+  "frozen_date": "2026-11-25",
+  "frozen_case_count": 29,
+  "excluded_cases": [
+    "RW-CAND-134"
+  ],
+  "public_manifest_sha256": "d75eb412d20ec93087f34c1feb0cca02ac2ae72d69bd5950a3bd13030c1cf879",
+  "original_public_manifest_note": "v1 task manifests differ for all 30 cases (editable scope widened)",
+  "package_SHA256SUMS_sha256": "fe61bd6befa7e9f948e3562b7622fbb75ea327f2332a6ee5601bcc67106ff3ea",
+  "package_RELEASE_ENTRY_sha256": "cc1670c7354c1c338c86c84b393d1cf9171241dc20060455d1a8682b3cc3a543",
+  "package_distribution": "not uploaded to GitHub Releases yet; benchmark/RELEASE_INDEX.json still describes the v1 assets"
+}

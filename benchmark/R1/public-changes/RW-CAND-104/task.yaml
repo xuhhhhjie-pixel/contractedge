@@ -1,0 +1,20 @@
+schema_version: contractedge.method_task.v1
+requirement: When the relay workload and ServiceAccount creation are enabled, the
+  rendered relay Deployment must reference a ServiceAccount that the same chart render
+  creates. When the relay workload and ServiceAccount creation are disabled, neither
+  relay resource should be rendered. Preserve unrelated chart output.
+inputs:
+  source_archive: source.tar.gz
+  trigger_values: trigger-values.yaml
+  nontrigger_values: control-values.yaml
+rendering:
+  execution_config: environment.json
+  scenarios:
+  - trigger
+  - control
+expected_artifact: 'Trigger: the relay Deployment''s spec.template.spec.serviceAccountName names a
+  ServiceAccount that the same render creates (same namespace). Non-trigger: no relay
+  Deployment or relay ServiceAccount is emitted.'
+execution_config: environment.json
+source_root_policy: Paths in environment.json are relative to the normalized editable
+  source mounted at /work.

@@ -11,3 +11,7 @@ python3 tools/download_benchmark.py --class R1 --dest ./datasets --extract
 ```
 
 模型仅可见公开白名单任务与Broken工作区，不能读取完整包中的evaluation/、GT和历史修复。支持Linux/amd64；各案例实际观察边界和资源要求见包内README、task.yaml及运行契约。
+
+## 冻结版本 v4.2（2026-11-25）
+
+本目录的 `manifest.jsonl` 已更新为 R1 冻结版 `R1-quality30-full-20261019-v4.2-frozen-20261125` 的公开清单（任务清单摘要与 106 的公开需求文本有变化）；`frozen_case_ids.txt` 是 29 条冻结名单（`RW-CAND-134` 来源不可核，不在名单内）。公开输入的变更见 `RELEASE-NOTES-v4.2.md` 与 `public-changes/`，摘要见 `RELEASE-DIGESTS.json`。**冻结不等于授予资格**；完整实验包尚未上传，`../RELEASE_INDEX.json` 仍描述 v1 资产。

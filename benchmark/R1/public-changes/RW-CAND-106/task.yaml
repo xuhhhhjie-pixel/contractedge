@@ -1,0 +1,21 @@
+schema_version: contractedge.method_task.v1
+requirement: When a node selector is configured for the chart, all generated hook
+  Jobs must carry that selector in their pod template. When the node selector is explicitly
+  cleared (set to an empty value, e.g. null), the chart must not impose an effective node
+  placement constraint.
+inputs:
+  source_archive: source.tar.gz
+  trigger_values: trigger-values.yaml
+  nontrigger_values: control-values.yaml
+rendering:
+  execution_config: environment.json
+  scenarios:
+  - trigger
+  - control
+expected_artifact: 'Trigger: exactly three hook Jobs are rendered and each Job pod
+  template has nodeSelector {kubernetes.io/os: linux}. Control (node selector explicitly
+  cleared with null): exactly three hook Jobs are rendered and none has an effective
+  nodeSelector. Observation is rendered YAML only.'
+execution_config: environment.json
+source_root_policy: Paths in environment.json are relative to the normalized editable
+  source mounted at /work.

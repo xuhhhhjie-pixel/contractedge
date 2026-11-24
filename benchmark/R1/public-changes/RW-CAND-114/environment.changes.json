@@ -1,0 +1,35 @@
+{
+  "case_id": "RW-CAND-114",
+  "runtime_image": "alpine/helm@sha256:76c375eed56144c68d6197c55bc5a4552fb42002190b796729901cbab3ae6e51",
+  "scenarios": [
+    {
+      "name": "trigger",
+      "argv": [
+        "template",
+        "ct",
+        "/work",
+        "-n",
+        "contractedge",
+        "-f",
+        "/work/.contractedge-deps/r1-wiremock-annotations/trigger-values.yaml"
+      ]
+    },
+    {
+      "name": "control",
+      "argv": [
+        "template",
+        "ct",
+        "/work",
+        "-n",
+        "contractedge",
+        "-f",
+        "/work/.contractedge-deps/r1-wiremock-annotations/control-values.yaml"
+      ]
+    }
+  ],
+  "editable_paths": [
+    "templates/*",
+    "values.yaml"
+  ],
+  "note": "Only the fields changed relative to the v1 public package are republished here: editable_paths (chart-level editable scope, same value as patch_paths of the task manifest), and for some cases the runtime image and scenario commands. All other fields of the task's environment.json are unchanged from v1 and are in the full package."
+}
