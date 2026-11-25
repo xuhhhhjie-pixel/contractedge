@@ -1,27 +1,25 @@
 {
-  "version": "r4-v3.3-subset-20261125-r2",
+  "version": "r4-v3.3-subset-20261125-r3",
   "category": "R4",
-  "release_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r4-v3.3-subset-20261125-r2",
+  "release_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r4-v3.3-subset-20261125-r3",
   "scope": "QUALIFIED_SUBSET",
   "full_category_ready": false,
   "registered_members": 30,
-  "behavior_members": 25,
-  "gt_members": 25,
-  "dual_members": 25,
-  "member_manifest": "r4-v3.3-subset-20261125-r2-members.jsonl",
-  "member_manifest_sha256": "5775daa6ce3985113f8f9c10916b2dc0b39ca0545504757858ddb061dbd97376",
+  "behavior_members": 27,
+  "gt_members": 27,
+  "dual_members": 27,
+  "member_manifest": "r4-v3.3-subset-20261125-r3-members.jsonl",
+  "member_manifest_sha256": "f344518ed7c2e9247250b322967f632f8f939885388744341068d3f8cc37bf88",
   "asset": {
-    "name": "r4-v3.3-subset-20261125-r2-public-overlay.tar.gz",
-    "download_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/r4-v3.3-subset-20261125-r2/r4-v3.3-subset-20261125-r2-public-overlay.tar.gz",
-    "sha256": "27ecceb30e5bb273f755655ae8616a5450d10af6ac83036c3702c4526ea90fd8",
-    "bytes": 6990
+    "name": "r4-v3.3-subset-20261125-r3-public-overlay.tar.gz",
+    "download_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/r4-v3.3-subset-20261125-r3/r4-v3.3-subset-20261125-r3-public-overlay.tar.gz",
+    "sha256": "1965a5962a9fdfb6adae72305d6e5b2d098feb83beecb4476f85c90e318afe78",
+    "bytes": 7483
   },
   "historical_release": "benchmark-v1-20261019",
   "excluded": {
-    "R4-AWS-LBC-4876": "Technical verification is complete. Reproducible release packaging is pending.",
     "R4-CERTMANAGER-9204": "Technical verification is incomplete.",
     "R4-EXTERNAL-SECRETS-6821": "Technical verification is incomplete.",
-    "R4-PROVIDER-UPJET-AWS-2182": "Technical verification is complete. Reproducible release packaging is pending.",
     "R4-PROVIDER-UPJET-GCP-1015": "Technical verification is incomplete."
   }
 }
