@@ -6,6 +6,7 @@
 
 | 类别 | 行为与 GT 双指标合格 | 当前发布范围 | 入口 |
 |---|---:|---|---|
+| R1 | 29/30 | 合格子集（v4.2 冻结） | [成员与资产](benchmark/R1/README.md) · [发布说明](benchmark/R1/RELEASE-NOTES-v4.2.md) |
 | R3 | 30/30 | 完整类别 | [成员与资产](benchmark/R3/README.md) · [Release](https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r3-v3.3-20261125) |
 | R4 | 27/30 | 合格子集 | [成员与资产](benchmark/R4/README.md) · [Release](https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r4-v3.3-subset-20261125-r3) |
 | R5 | 28/30 | 合格子集 | [成员与资产](benchmark/R5/README.md) · [Release](https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r5-v3.3-subset-20261125-r3) |
