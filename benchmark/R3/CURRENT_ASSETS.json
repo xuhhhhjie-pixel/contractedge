@@ -1,0 +1,22 @@
+{
+  "category": "R3",
+  "members": 30,
+  "tag": "r3-v3.3-20261125",
+  "release_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r3-v3.3-20261125",
+  "public_overlay": {
+    "name": "r3-v3.3-20261125-public-overlay.tar.gz",
+    "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/r3-v3.3-20261125/r3-v3.3-20261125-public-overlay.tar.gz",
+    "bytes": 5075,
+    "sha256": "2c4163b8d1a530a0e813451cb5836d7950dd0db98b20accdea743d3d32cc4f8a"
+  },
+  "base_r3_archive": {
+    "tag": "benchmark-v1-20261019",
+    "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/benchmark-v1-20261019",
+    "sha256": "63a48a7a41e8cb80e317e3728376329212ef72a66d092fbb747b1437b7e910db",
+    "bytes": 4763700044
+  },
+  "scope": "public candidate input",
+  "administrator_assets": "distributed separately through controlled review storage",
+  "policy": "ContractEdge v3.3",
+  "legacy_release_retained": true
+}
