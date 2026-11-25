@@ -1,34 +1,24 @@
 {
-  "version": "r5-v3.3-subset-20261125-r2",
+  "version": "r5-v3.3-subset-20261125-r3",
   "category": "R5",
-  "release_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r5-v3.3-subset-20261125-r2",
+  "release_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r5-v3.3-subset-20261125-r3",
   "scope": "QUALIFIED_SUBSET",
   "full_category_ready": false,
   "registered_members": 30,
-  "behavior_members": 18,
-  "gt_members": 18,
-  "dual_members": 18,
-  "member_manifest": "r5-v3.3-subset-20261125-r2-members.jsonl",
-  "member_manifest_sha256": "15b08e4df3cdb54f18afdd982c03b0b9c786927b390357a1a512df794f96571b",
+  "behavior_members": 28,
+  "gt_members": 28,
+  "dual_members": 28,
+  "member_manifest": "r5-v3.3-subset-20261125-r3-members.jsonl",
+  "member_manifest_sha256": "50bec36e686daf8af0f680a6dcc1c7a218979b4af5763c22cb0ff38407288df6",
   "asset": {
-    "name": "r5-v3.3-subset-20261125-r2-public-overlay.tar.gz",
-    "download_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/r5-v3.3-subset-20261125-r2/r5-v3.3-subset-20261125-r2-public-overlay.tar.gz",
-    "sha256": "f05fe64cf65d38222d5ac483b2d365dc92620acb4cc02374661e706d3c24ae91",
-    "bytes": 3644
+    "name": "r5-v3.3-subset-20261125-r3-public-overlay.tar.gz",
+    "download_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/r5-v3.3-subset-20261125-r3/r5-v3.3-subset-20261125-r3-public-overlay.tar.gz",
+    "sha256": "95f1c1f507be95924b17c407239eaeb5e60415c017ad584fab1cd8b9f756c533",
+    "bytes": 6721
   },
   "historical_release": "benchmark-v1-20261019",
   "excluded": {
-    "RW-ALLOY-6818": "Technical verification is complete. Reproducible release packaging is pending.",
-    "CRI-O-7954": "Technical verification is complete. Reproducible release packaging is pending.",
     "RW-COREDNS-7562": "Technical verification is incomplete.",
-    "RW-DAPR-10220": "Technical verification is complete. Reproducible release packaging is pending.",
-    "RW-ISTIO-2944": "Technical verification is complete. Reproducible release packaging is pending.",
-    "RW-KYVERNO-17310": "Technical verification is incomplete.",
-    "RW-OPENCLAW-111511": "Technical verification is complete. Reproducible release packaging is pending.",
-    "RW-OTEL-OPERATOR-2171": "Technical verification is complete. Reproducible release packaging is pending.",
-    "RW-PROMETHEUS-19838": "Technical verification is complete. Reproducible release packaging is pending.",
-    "RW-HAPROXY-0D540394": "Technical verification is complete. Reproducible release packaging is pending.",
-    "RW-HAPROXY-REDIRECT-QS-001": "Technical verification is complete. Reproducible release packaging is pending.",
-    "RW-HAPROXY-HASH-NUMERIC-001": "Technical verification is complete. Reproducible release packaging is pending."
+    "RW-KYVERNO-17310": "Technical verification is incomplete."
   }
 }
