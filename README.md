@@ -1,12 +1,22 @@
 # ContractEdge
 
-真实云原生声明式部署与配置缺陷修复 Benchmark。当前冻结资源为 **R1–R5各30条，共150条**；R1另27条备用保留于原资源池，不进入本实验分母。
+真实云原生声明式部署与配置缺陷修复 Benchmark。历史完整发布包含 **R1–R5 各 30 条，共 150 条**。R1 另有 27 条备用案例，保留于原资源池。
 
-**完整实验包已发布。** 仓库保存说明、成员索引与下载工具；五类完整包见 [Benchmark v1 Release](https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/benchmark-v1-20261019)。每个上传附件的远端SHA-256已与服务器产生的字节核对。
+## 当前 v3.3 验收版
+
+| 类别 | 行为与 GT 双指标合格 | 当前发布范围 | 入口 |
+|---|---:|---|---|
+| R3 | 30/30 | 完整类别 | [成员与资产](benchmark/R3/README.md) · [Release](https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r3-v3.3-20261125) |
+| R4 | 27/30 | 合格子集 | [成员与资产](benchmark/R4/README.md) · [Release](https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r4-v3.3-subset-20261125-r3) |
+| R5 | 28/30 | 合格子集 | [成员与资产](benchmark/R5/README.md) · [Release](https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r5-v3.3-subset-20261125-r3) |
+
+按类别页的公开输入覆盖包、成员清单和说明取得验收版。当前子集仅纳入清单所列案例。管理员评价和 GT 材料由实验管理者按同一版本提供。技术验收采用 Codex 辅助审查、自动校准和单一维护者授权。
+
+历史完整实验包和历史成绩用于复现。下载脚本的默认发布标签为 `benchmark-v1-20261019`。 [历史完整 Release](https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/benchmark-v1-20261019)
 
 ## Benchmark分类
 
-| 类别 | 生产故障边界 | 正式案例 |
+| 类别 | 生产故障边界 | 历史登记成员 |
 |---|---|---:|
 | [R1](benchmark/R1/) | Helm chart 生成 | 30 |
 | [R2](benchmark/R2/) | Kubernetes控制器调和 | 30 |
@@ -16,12 +26,12 @@
 
 五类是本项目的操作性分类，不是Kubernetes、Helm或某篇论文规定的标准。共同范围为“声明/事件 → 生产执行路径 → 被破坏的协调关系 → 可观察结果”。完整规范见[分类说明](benchmark/RULES_AND_TAXONOMY.md)。
 
-## 下载完整实验包
+## 下载历史完整实验包
 
 ```bash
 git clone https://github.com/xuhhhhjie-pixel/contractedge.git
 cd contractedge
-python3 tools/download_benchmark.py --class R1 --dest ./datasets --extract
+python3 tools/download_benchmark.py --tag benchmark-v1-20261019 --class R1 --dest ./datasets --extract
 # 其余类别将R1替换为R2、R3、R4或R5；也可以使用 --class all。
 ```
 
@@ -39,7 +49,7 @@ GitHub Release单个附件必须小于2GiB，本项目较大的包会分卷。�
 
 ## 版本、分区与来源
 
-来源：`ContractEdge-benchmark150-v1-20261019`。每类以各自manifest为唯一成员入口；旧case状态用于历史追溯，不覆盖当前发布入口。继承仓库/修复家族分区及开发暴露记录；公开历史训练暴露UNKNOWN，不把全部150条称为未见盲测。
+历史完整包来源为 `ContractEdge-benchmark150-v1-20261019`。v3.3 验收版以对应 Release 清单确定成员与分母。各版继承仓库／修复家族分区及开发暴露记录，公开历史训练暴露为 UNKNOWN。
 
 第三方源码和镜像的原始许可证随对应归档保留，见[来源与许可说明](THIRD_PARTY_NOTICES.md)。
 
