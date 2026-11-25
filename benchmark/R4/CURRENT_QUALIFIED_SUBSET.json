@@ -1,27 +1,25 @@
 {
-  "version": "r4-v3.3-subset-20261125",
+  "version": "r4-v3.3-subset-20261125-r2",
   "category": "R4",
-  "release_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r4-v3.3-subset-20261125",
+  "release_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r4-v3.3-subset-20261125-r2",
   "scope": "QUALIFIED_SUBSET",
   "full_category_ready": false,
   "registered_members": 30,
-  "behavior_members": 23,
-  "gt_members": 23,
-  "dual_members": 23,
-  "member_manifest": "r4-v3.3-subset-20261125-members.jsonl",
-  "member_manifest_sha256": "67e3a05d035e2c0fc84b10b60656525483ebf8a22fab5af64cfddd5fa9ee9fbf",
+  "behavior_members": 25,
+  "gt_members": 25,
+  "dual_members": 25,
+  "member_manifest": "r4-v3.3-subset-20261125-r2-members.jsonl",
+  "member_manifest_sha256": "5775daa6ce3985113f8f9c10916b2dc0b39ca0545504757858ddb061dbd97376",
   "asset": {
-    "name": "r4-v3.3-subset-20261125-public-overlay.tar.gz",
-    "download_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/r4-v3.3-subset-20261125/r4-v3.3-subset-20261125-public-overlay.tar.gz",
-    "sha256": "e9a1a845d3fcd42ed285f464fcfcf14451bdee128424cf56cac694720881f0be",
-    "bytes": 6778
+    "name": "r4-v3.3-subset-20261125-r2-public-overlay.tar.gz",
+    "download_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/r4-v3.3-subset-20261125-r2/r4-v3.3-subset-20261125-r2-public-overlay.tar.gz",
+    "sha256": "27ecceb30e5bb273f755655ae8616a5450d10af6ac83036c3702c4526ea90fd8",
+    "bytes": 6990
   },
   "historical_release": "benchmark-v1-20261019",
   "excluded": {
     "R4-AWS-LBC-4876": "Technical verification is complete. Reproducible release packaging is pending.",
-    "R4-CAPA-5111": "Technical verification is complete. Reproducible release packaging is pending.",
     "R4-CERTMANAGER-9204": "Technical verification is incomplete.",
-    "R4-EXTERNAL-DNS-6082": "Technical verification is complete. Reproducible release packaging is pending.",
     "R4-EXTERNAL-SECRETS-6821": "Technical verification is incomplete.",
     "R4-PROVIDER-UPJET-AWS-2182": "Technical verification is complete. Reproducible release packaging is pending.",
     "R4-PROVIDER-UPJET-GCP-1015": "Technical verification is incomplete."
