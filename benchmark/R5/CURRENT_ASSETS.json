@@ -1,0 +1,19 @@
+{
+  "tag": "r5-v3.4-rebuilt-20261126",
+  "category": "R5",
+  "release_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r5-v3.4-rebuilt-20261126",
+  "members": 30,
+  "behavior_members": 30,
+  "gt_members": 30,
+  "old_tasks_retained": 28,
+  "rebuilt_tasks": 2,
+  "asset": {
+    "name": "r5-v3.4-rebuilt-20261126-public.tar.gz",
+    "sha256": "5ff0a903232618b15560de972071c4ca7162226dee4d10457696911bd2c235f4",
+    "bytes": 387210507,
+    "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/r5-v3.4-rebuilt-20261126/r5-v3.4-rebuilt-20261126-public.tar.gz"
+  },
+  "manifest_sha256": "2bd2963ee878118cc414e1eff1deec373956f16564eba4eb7725be418625965c",
+  "scope": "COMPLETE_WITH_VERSIONED_REBUILDS",
+  "member_manifest": "r5-v3.4-rebuilt-20261126-members.jsonl"
+}
