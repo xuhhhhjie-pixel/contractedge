@@ -1,0 +1,24 @@
+{
+  "schema_version": "contractedge.r2_release_digests.v1",
+  "version": "R2-quality30-full-20261019-v2-frozen-20261126",
+  "status": "FROZEN_SUBSET_NO_QUALIFICATION_GRANTED",
+  "frozen_date": "2026-11-26",
+  "frozen_case_count": 21,
+  "not_frozen_cases": [
+    "RW-CERTMANAGER-9118",
+    "RW-SOURCE-CONTROLLER-1904",
+    "R4-KEDA-8033",
+    "RW-ARGO-CD-23823",
+    "RW-ARGO-CD-29827",
+    "RW-CERTMANAGER-9116",
+    "RW-CERTMANAGER-9128",
+    "RW-HELM-CONTROLLER-1412",
+    "RW-PROMETHEUS-OPERATOR-8739"
+  ],
+  "public_manifest_sha256": "7e4e4e8eec5987b15f11269e50bf6e7934e7a2a5b90de1a2d7e2eb1bac33917d",
+  "original_public_manifest_note": "identical to the original R2-quality30-full-20261019 public manifest: no public input changed",
+  "package_SHA256SUMS_sha256": "62ed34d4a6e57a93a379c55e5e3677dd066874e8bf85aca9e1d65aff9848ada0",
+  "package_RELEASE_ENTRY_sha256": "33be06f47cad1aa820629ce529cc71a6c9dac437231dcedc3f50b936002462bf",
+  "package_FREEZE_LIST_sha256": "af39d680b0aa4a71ec436ab60c5dcc01ea5824717895953ab6231121b24893dc",
+  "package_distribution": "not uploaded to GitHub Releases yet; benchmark/RELEASE_INDEX.json still describes the v1 assets"
+}
