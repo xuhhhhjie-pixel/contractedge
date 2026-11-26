@@ -1,0 +1,19 @@
+{
+  "tag": "r4-v3.4-rebuilt-20261126",
+  "category": "R4",
+  "release_url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r4-v3.4-rebuilt-20261126",
+  "members": 30,
+  "behavior_members": 30,
+  "gt_members": 30,
+  "old_tasks_retained": 27,
+  "rebuilt_tasks": 3,
+  "asset": {
+    "name": "r4-v3.4-rebuilt-20261126-public.tar.gz",
+    "sha256": "066a63947ce9f5ffd6047422c77fc079a2d99c3bd65593940d380783ef3fab31",
+    "bytes": 584332673,
+    "url": "https://github.com/xuhhhhjie-pixel/contractedge/releases/download/r4-v3.4-rebuilt-20261126/r4-v3.4-rebuilt-20261126-public.tar.gz"
+  },
+  "manifest_sha256": "3c7ca81422244c5491dd7128d19b800dfdb97afd51ae5502ea5230b61d08b015",
+  "scope": "COMPLETE_WITH_VERSIONED_REBUILDS",
+  "member_manifest": "r4-v3.4-rebuilt-20261126-members.jsonl"
+}

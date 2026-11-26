@@ -1,6 +1,12 @@
 # R4 · 外部控制平面资源协调
 
-## 当前合格子集
+## 当前 v3.4 验收版
+
+完整类别共 30 条，延续 27 条已验收合同，采用 3 条独立重建合同。行为与 GT 轨道各 30 条。
+
+[成员清单](r4-v3.4-rebuilt-20261126-members.jsonl) · [资产及摘要](CURRENT_ASSETS.json) · [当前 Release](https://github.com/xuhhhhjie-pixel/contractedge/releases/tag/r4-v3.4-rebuilt-20261126) · [下载](https://github.com/xuhhhhjie-pixel/contractedge/releases/download/r4-v3.4-rebuilt-20261126/r4-v3.4-rebuilt-20261126-public.tar.gz)
+
+## v3.3 历史合格子集
 
 R4 历史登记 30 条。r4-v3.3-subset-20261125-r3 冻结行为 27 条、GT 27 条，名单一致。其余登记成员的未纳入原因见资产索引。完整类别发布仍沿用下方历史入口。
 
