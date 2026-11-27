@@ -93,9 +93,9 @@ def clean() -> dict:
 
 
 def public_result(tree: str, timeout: int) -> dict:
-    cached = checkpoint.results().get(tree, {}).get('public')
-    if cached is not None:
-        return {**cached, 'cached': True}
+    # The tree identifies candidate source only. Live observations and previous
+    # checks can differ in input, runner, or environment even for the same tree.
+    # Keep results as evidence and execute each explicit system check afresh.
     began = time.monotonic()
     try:
         done = subprocess.run(['ce-public'], cwd=state.WORKSPACE, capture_output=True, timeout=timeout)

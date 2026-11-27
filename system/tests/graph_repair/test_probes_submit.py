@@ -76,6 +76,27 @@ def test_submit_only_variant_checks_public_and_policy(workspace):
     assert check(w)['passed']
 
 
+def test_submit_check_does_not_reuse_output_for_changed_public_inputs(workspace):
+    w = workspace
+    w.configure('submit-only')
+    (w.root / 'app.txt').write_text('state=fixed\n')
+    (w.bin / 'ce-public').write_text('#!/bin/sh\nexec grep -qx green "$CE_INPUTS/fixture"\n')
+    fixture = w.inputs / 'fixture'
+    fixture.write_text('green\n')
+    first = check(w)
+    assert first['passed']
+
+    fixture.write_text('red\n')
+    second = check(w)
+    assert second['tree'] == first['tree']
+    assert second['checks']['public']['exit_code'] == 1
+
+    (w.bin / 'ce-public').write_text('#!/bin/sh\nexit 7\n')
+    third = check(w)
+    assert third['tree'] == first['tree']
+    assert third['checks']['public']['exit_code'] == 7
+
+
 def test_probe_budget_disables_probes(workspace):
     w = workspace
     graph_with_edge(w)
