@@ -13,6 +13,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+common-live = ["mini-swe-agent==1.17.5"]
 pilot = ["transformers>=4.45"]
 topomen = [
   "pydantic>=2,<3",
@@ -27,6 +28,7 @@ topomen = [
 
 [project.scripts]
 contractedge = "contractedge.cli:main"
+contractedge-common-live = "contractedge.graph_repair.harness.common_entry:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

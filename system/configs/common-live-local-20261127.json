@@ -1,0 +1,42 @@
+{
+  "schema": "contractedge.common_live_local.v1",
+  "case": {
+    "id": "R3-KUBESPAWNER-654",
+    "case_version": "v1-ce-v3.3-20261124",
+    "task_manifest_sha256": "831a711c1b467d88f9ab8ff612758b89645eeffeed232dd071ac2bfb198b872a",
+    "source_sha256": "8b4a0a6b769c7d7939e0ed6ced2f8a8e7fe3bd5248535cc8bd58e85b735c5f76",
+    "dataset_main": "c23f3baab3e1e59371912b6f783ddbbc37e969e4",
+    "dataset_release": "r3-v3.3-20261125"
+  },
+  "live_yaml_sha256": "fb7d55796071a7652b7a4bb796e218e1074df3e02788aef576573c46d7846b0e",
+  "tools_sha256": "7205f53d288810079f64379b45bcaf3815b518f9f6ec9934ee710e7259d0594a",
+  "method_image": "sha256:a688600ca24f8a4d3ca77f95b0dd40704a9fc787c826660eb7ba0b641b8b175d",
+  "model": {
+    "id": "deepseek-flash",
+    "temperature": 0,
+    "max_output_tokens": 16384,
+    "request_seconds": 120
+  },
+  "budget": {
+    "calls": 80,
+    "tokens": 120000,
+    "wall_seconds": 1800,
+    "finalization_seconds": 90
+  },
+  "tools": {
+    "shell_seconds": 120,
+    "public_seconds": 300
+  },
+  "resources": {
+    "cpus": 1,
+    "memory_bytes": 1073741824,
+    "pids": 128
+  },
+  "pricing": {
+    "version": "common-local-synthetic-v1",
+    "usage_kind": "SYNTHETIC_LOCAL",
+    "limit_cny": "6.25",
+    "input_cny_per_million": "2",
+    "output_cny_per_million": "8"
+  }
+}

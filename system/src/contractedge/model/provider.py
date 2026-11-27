@@ -298,8 +298,9 @@ class OpenAICompatibleProvider(_IdentityProvider):
     def prepare_request(self, request: ModelRequest):
         format_value, metadata, wire = self._format(request)
         payload = {'model': request.model, 'messages': list(request.messages),
-                   'max_tokens': request.max_output_tokens, 'temperature': request.temperature,
-                   'response_format': format_value}
+                   'max_tokens': request.max_output_tokens, 'temperature': request.temperature}
+        if format_value is not None:
+            payload['response_format'] = format_value
         if request.thinking not in {None, 'enabled', 'disabled'}:
             raise ValueError('Request thinking override must be enabled or disabled')
         thinking = self.thinking if request.thinking is None else request.thinking
@@ -315,6 +316,12 @@ class OpenAICompatibleProvider(_IdentityProvider):
             json.dumps(format_value, ensure_ascii=False) if wire is not None else '',
             copy.deepcopy(request.output_schema), wire)
 
+    def _api_key(self):
+        return os.environ.get(self.api_key_env)
+
+    def _open_request(self, request, timeout):
+        return urllib.request.urlopen(request, timeout=timeout)
+
     def complete_json(self, request: ModelRequest) -> ModelResponse:
         prepared = self._prepared_for(request)
         metadata, wire = dict(prepared.metadata), prepared.wire_schema
@@ -328,7 +335,7 @@ class OpenAICompatibleProvider(_IdentityProvider):
                 count += int(self.token_counter(prepared.overhead)) if prepared.overhead else 0
                 if count + request.max_output_tokens > self.context_tokens:
                     raise ValueError('Serialized output schema and messages exceed the configured model context')
-            api_key = os.environ.get(self.api_key_env)
+            api_key = self._api_key()
             if not api_key:
                 raise RuntimeError(f'model API key env var {self.api_key_env!r} is not configured')
             http_request = urllib.request.Request(self.base_url + '/chat/completions', data=body,
@@ -354,7 +361,7 @@ class OpenAICompatibleProvider(_IdentityProvider):
                 }
             raise
         try:
-            with urllib.request.urlopen(http_request, timeout=self.timeout_seconds) as response:
+            with self._open_request(http_request, self.timeout_seconds) as response:
                 body = _read_response_with_deadline(response, self.timeout_seconds)
                 raw = json.loads(body.decode('utf-8'))
         except Exception as exc:
