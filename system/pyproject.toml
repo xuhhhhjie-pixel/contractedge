@@ -38,6 +38,7 @@ version = {attr = "contractedge.__version__"}
 
 [tool.setuptools.package-data]
 "contractedge.contracts" = ["schema/*.json"]
+"contractedge.experiments" = ["m1-*.txt"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

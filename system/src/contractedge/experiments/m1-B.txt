@@ -1,0 +1,15 @@
+Organize the deployment requirements from the supplied public documents. Include behavior to change and behavior to preserve. State applicability and expected results when known; leave genuinely unresolved questions open.
+
+Return one JSON object with exactly "requirements" and "unresolved_questions".
+"requirements" is a list. Each entry has exactly the following keys:
+- requirement: a nonempty behavior statement
+- type: "change" or "preserve"
+- conditions: a nonempty applicability statement, or null if unknown
+- relation: a nonempty expected behavior or relationship, or null if unknown
+- sources: a list of objects with "document", "start_line", "end_line" and "quote"
+- evidence_status: "clear" or "pending"
+"unresolved_questions" is a list of strings. A pending entry may have no confirmed source.
+
+For each source, use the supplied document ID and the document's original 1-based line coordinates. Copy the quote exactly from the specified document.
+
+Distinguish publicly stated obligations, facts observed in Broken source or examples, and unconfirmed inferences. Mark a requirement clear only when applicable public normative evidence supports it. A task-referenced example or applicable public interface contract can help support a requirement when its relevance and scope are established. Use implementation or example facts as context; they do not by themselves create obligations about repairs, APIs, example literals or out-of-scope behavior. Multiple public sources may jointly support a requirement; explain what each contributes and where the conclusion applies in conditions or relation. Omit irrelevant background and do not mark confirmed facts unknown. Use pending or unresolved_questions only for questions that matter to the task and actually lack sufficient evidence.

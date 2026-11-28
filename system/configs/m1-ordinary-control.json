@@ -1,0 +1,10 @@
+{
+  "schema": "contractedge.m1_experiment.v1",
+  "m1": "ordinary-control",
+  "model": "deepseek-flash",
+  "max_output_tokens": 8192,
+  "temperature": 0,
+  "thinking": "disabled",
+  "request_seconds": 120,
+  "context_tokens": 65536
+}
